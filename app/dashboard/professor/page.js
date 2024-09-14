@@ -60,26 +60,29 @@ export default function AddProfessor() {
       return newState;
     });
   };
-
+  
+  const isValidFileType = (file) => ['image/jpeg', 'image/png'].includes(file.type);
+  const isValidFileSize = (file) => file.size <= 5 * 1024 * 1024;
+  
   const handleArrayFileChange = (setter, index, field, file) => {
     setter((prevState) => {
       const newState = [...prevState];
-      
-      // Validate file size and type
-      if (file && file.size > 5 * 1024 * 1024) {
-        toast.error('File size exceeds 5 MB.');
-        return prevState;
-      }
-
-      if (file && !['image/jpeg', 'image/png'].includes(file.type)) {
-        toast.error('Invalid file type. Only JPG, JPEG, and PNG are allowed.');
-        return prevState;
-      }
-
+  
       if (file) {
+        if (!isValidFileSize(file)) {
+          toast.error('File size exceeds 5 MB.');
+          return prevState;
+        }
+  
+        if (!isValidFileType(file)) {
+          toast.error('Invalid file type. Only JPG, JPEG, and PNG are allowed.');
+          return prevState;
+        }
+  
         newState[index][field] = file;
+        toast.success('File uploaded successfully.'); // Optional success feedback
       }
-
+  
       return newState;
     });
   };
@@ -116,25 +119,25 @@ export default function AddProfessor() {
       leaving_year: job.leaving_year ? parseInt(job.leaving_year, 10) : null
     }));
   
-    const formattedAwards = awards.map(award => ({
-      ...award,
-      year: award.year ? parseInt(award.year, 10) : null
-    }));
-  
     // Append formatted data to FormData
     data.append('education', JSON.stringify(formattedEducation));
     data.append('career', JSON.stringify(formattedCareer));
     data.append('citations', JSON.stringify(citations));
   
-    // Handle awards and include photos if available
-    formattedAwards.forEach((award, index) => {
-      data.append(`awards[${index}][title]`, award.title || '');
-      data.append(`awards[${index}][year]`, award.year || '');
-      data.append(`awards[${index}][details]`, award.details || '');
-      if (award.awardPhoto) {
-        data.append(`awards[${index}][photo]`, award.awardPhoto);
-      }
-    });
+    // Check if awards is defined and is an array
+    if (Array.isArray(awards) && awards.length > 0) {
+      // Handle awards and include photos if available
+      awards.forEach((award, index) => {
+        data.append(`awards[${index}][title]`, award.title || '');
+        data.append(`awards[${index}][year]`, award.year || '');
+        data.append(`awards[${index}][details]`, award.details || '');
+        
+        // If award photo exists, append it to FormData
+        if (award.awardPhoto) {
+          data.append(`awards[${index}][photo]`, award.awardPhoto);
+        }
+      });
+    }
   
     // Send request
     try {
@@ -154,6 +157,7 @@ export default function AddProfessor() {
       toast.error('Failed to add professor');
     }
   };
+  
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
