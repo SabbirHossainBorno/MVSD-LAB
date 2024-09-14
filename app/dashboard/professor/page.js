@@ -67,22 +67,23 @@ export default function AddProfessor() {
   const handleArrayFileChange = (setter, index, field, file) => {
     setter((prevState) => {
       const newState = [...prevState];
-  
+
       if (file) {
         if (!isValidFileSize(file)) {
           toast.error('File size exceeds 5 MB.');
           return prevState;
         }
-  
+
         if (!isValidFileType(file)) {
           toast.error('Invalid file type. Only JPG, JPEG, and PNG are allowed.');
           return prevState;
         }
-  
+
         newState[index][field] = file;
+        console.log(`Updated ${field} for award ${index}:`, file); // Debugging log
         toast.success('File uploaded successfully.'); // Optional success feedback
       }
-  
+
       return newState;
     });
   };
