@@ -56,7 +56,6 @@ const saveFile = async (file, professorId, type, index = null) => {
   return `/home/mvsd-lab/Storage/Images/Professor/${filename}`; // Return the URL to be stored in the database
 };
 
-
 export async function POST(req) {
   const client = await pool.connect();
   try {
@@ -82,33 +81,32 @@ export async function POST(req) {
 
     // Handle file uploads
     const photoFile = formData.get('photo');
-// Extract awards data
-const awards = [];
-const awardFiles = [];
+    const awards = [];
+    const awardFiles = [];
 
-console.log('Processing awards and award files...');
-for (const [key, value] of formData.entries()) {
-  console.log(`Processing entry - Key: ${key}, Value: ${value}`);
+    console.log('Processing awards and award files...');
+    for (const [key, value] of formData.entries()) {
+      console.log(`Processing entry - Key: ${key}, Value: ${value}`);
 
-  // Ensure the key is related to awards
-  if (key.startsWith('awards[')) {
-    const index = key.match(/\d+/)[0]; // Extract the index number (e.g., awards[0])
-    const field = key.match(/\[(.*?)\]/)[1]; // Extract the field (e.g., 'title', 'year', 'photo')
+      // Ensure the key is related to awards
+      if (key.startsWith('awards[')) {
+        const index = key.match(/\d+/)[0]; // Extract the index number (e.g., awards[0])
+        const field = key.match(/\[(.*?)\]/)[1]; // Extract the field (e.g., 'title', 'year', 'photo')
 
-    // Initialize the award object at this index if it doesn't exist
-    if (!awards[index]) awards[index] = {};
+        // Initialize the award object at this index if it doesn't exist
+        if (!awards[index]) awards[index] = {};
 
-    if (field === 'photo' && value instanceof File) {
-      console.log(`File detected for award ${index}:`, value);
-      awardFiles[index] = value; // Collect the file for this award
-    } else {
-      awards[index][field] = value; // Collect the field data for this award
+        if (field === 'photo' && value instanceof File) {
+          console.log(`File detected for award ${index}:`, value);
+          awardFiles[index] = value; // Collect the file for this award
+        } else {
+          awards[index][field] = value; // Collect the field data for this award
+        }
+      }
     }
-  }
-}
 
-console.log('Awards:', awards);
-console.log('Award files:', awardFiles);
+    console.log('Awards:', awards);
+    console.log('Award files:', awardFiles);
 
     // Check if email already exists in member table
     console.log('Checking if email exists in member table...');
@@ -149,24 +147,27 @@ console.log('Award files:', awardFiles);
       console.warn('No profile photo uploaded');
     }
 
-// Save award files
-const awardUrls = [];
-for (let i = 0; i < awardFiles.length; i++) {
-  const awardFile = awardFiles[i];
-  if (awardFile) {
-    try {
-      console.log('Saving award photo...');
-      const awardUrl = await saveFile(awardFile, professorId, 'AWARD', i + 1);
-      awardUrls.push(awardUrl);
-      console.log('Award photo saved as:', awardUrl);
-    } catch (error) {
-      console.error('Error saving award photo:', error);
-      return NextResponse.json({ message: 'Error saving award photo' }, { status: 500 });
+    // Save award files
+    const awardUrls = [];
+    for (let i = 0; i < awardFiles.length; i++) {
+      const awardFile = awardFiles[i];
+      if (awardFile) {
+        try {
+          console.log('Saving award photo...');
+          const awardUrl = await saveFile(awardFile, professorId, 'AWARD', i + 1);
+          awardUrls.push(awardUrl);
+          console.log('Award photo saved as:', awardUrl);
+        } catch (error) {
+          console.error('Error saving award photo:', error);
+          return NextResponse.json({ message: 'Error saving award photo' }, { status: 500 });
+        }
+      } else {
+        awardUrls.push(null);
+      }
     }
-  } else {
-    awardUrls.push(null);
-  }
-}
+
+    // Print award URLs to console
+    console.log('Award URLs:', awardUrls);
 
     // Start a transaction
     await client.query('BEGIN');
@@ -278,36 +279,33 @@ for (let i = 0; i < awardFiles.length; i++) {
         ]);
       }
 
-// Handle award info
-const insertAwardQuery = `
-  INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
-  VALUES ($1, $2, $3, $4, $5)
-  RETURNING *;
-`;
+      // Handle award info
+      const insertAwardQuery = `
+        INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING *;
+      `;
 
-for (let i = 0; i < awards.length; i++) {
-  const award = awards[i];
-  const photoUrl = awardUrls[i] || null;
+      for (let i = 0; i < awards.length; i++) {
+        const award = awards[i];
+        const photoUrl = awardUrls[i] || null;
 
-  console.log('Inserting award:', award);
-  const year = parseInt(award.year, 10);
+        console.log('Inserting award:', award);
+        const year = parseInt(award.year, 10);
 
-  for (let i = 0; i < awards.length; i++) {
-    const award = awards[i];
-    if (!award.year) {
-      console.error(`Invalid year in award data for award ${i}:`, award);
-      return NextResponse.json({ message: 'Invalid year in award data' }, { status: 400 });
-    }
-  }
+        if (!award.year) {
+          console.error(`Invalid year in award data for award ${i}:`, award);
+          return NextResponse.json({ message: 'Invalid year in award data' }, { status: 400 });
+        }
 
-  await client.query(insertAwardQuery, [
-    professorId,
-    award.title,
-    year,
-    award.details || null,
-    photoUrl,
-  ]);
-}
+        await client.query(insertAwardQuery, [
+          professorId,
+          award.title,
+          year,
+          award.details || null,
+          photoUrl,
+        ]);
+      }
 
       // Commit the transaction
       await client.query('COMMIT');
