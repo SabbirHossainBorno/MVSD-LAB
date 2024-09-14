@@ -1,0 +1,122 @@
+'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+    const result = await res.json();
+    if (result.success) {
+      if (result.type === 'admin') {
+        toast.success('Welcome! BOSS');
+        router.push('/dashboard');
+      } else {
+        toast.success('Welcome! MVSD LAB MEMBER');
+        router.push('/upload');
+      }
+    } else {
+      toast.error('Invalid Access. Email/Password Is Wrong');
+    }
+  };
+
+  return (
+    <div className="bg-cover bg-center min-h-screen flex items-center justify-center text-white" style={{ backgroundImage: "url('/images/background_img_login.jpg')" }}>
+      <div className="flex flex-col md:flex-row bg-white/10 backdrop-blur-lg rounded-lg shadow-lg max-w-4xl w-full p-6 md:p-0">
+        {/* Left Side Image */}
+        <div className="hidden md:block md:w-1/2">
+          <img src="/images/login_img.jpg" alt="Login Visual" className="h-full w-full object-cover rounded-l-lg" />
+        </div>
+
+        {/* Right Side Form */}
+        <div className="flex flex-col items-center justify-center md:w-1/2 p-6">
+          {/* Logo Section */}
+          <div className="mb-8 text-center">
+            <img src="/images/logo.png" alt="Logo" className="h-32 w-auto mx-auto" />
+            <h2 className="text-xl font-bold leading-6 mt-2" style={{ color: '#012970' }}>AUTOMOTIVE MEETS AI</h2>
+          </div>
+
+          <div className="relative w-full max-w-sm">
+            <div className="bg-white-800 p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold leading-6 tracking-tighter text-center" style={{ color: '#012970' }}>Login</h3>
+              <p className="mt-1.5 text-sm font-medium text-gray-400 text-center">Welcome MVSD LAB, Enter Your Credentials To Continue.</p>
+
+              <form onSubmit={handleLogin} className="mt-6">
+                <div>
+                  <div className="group relative rounded-lg border px-3 pb-1.5 pt-2.5 duration-200 focus-within:ring" style={{ borderColor: '#012970', boxShadow: '0 0 0 1px rgba(1, 41, 112, 0.3)' }}>
+                    <div className="flex justify-between">
+                      <label className="text-xs font-medium text-gray-400">Email</label>
+                    </div>
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Enter Your Email"
+                      autoComplete="off"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="block w-full border-0 bg-transparent p-0 text-sm placeholder:text-gray-400/60 focus:outline-none focus:ring-0 sm:leading-7 text-gray-900"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="group relative rounded-lg border px-3 pb-1.5 pt-2.5 duration-200 focus-within:ring" style={{ borderColor: '#012970', boxShadow: '0 0 0 1px rgba(1, 41, 112, 0.3)' }}>
+                    <div className="flex justify-between">
+                      <label className="text-xs font-medium text-gray-400">Password</label>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        name="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Enter Your Password"
+                        className="block w-full border-0 bg-transparent p-0 text-sm placeholder:text-gray-400/60 focus:outline-none focus:ring-0 sm:leading-7 text-gray-900"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center justify-between">
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" name="remember" className="outline-none focus:outline focus:outline-sky-300" />
+                    <span className="text-xs" style={{ color: '#012970' }}>Remember Me</span>
+                  </label>
+                  <a className="text-sm font-medium text-white underline" href="/forgot-password" style={{ color: '#012970' }}>Forgot Password?</a>
+                </div>
+                <div className="mt-4 flex items-center justify-end gap-x-2">
+                  <a className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-transparent border-2 border-[#012970] text-[#012970] hover:bg-[#012970] hover:text-white px-4 py-2 transition-all" href="/signup">
+                    Create Account
+                  </a>
+                  <button
+                    type="submit"
+                    className="inline-flex items-center justify-center rounded-md bg-[#012970] px-4 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-[#012970] hover:bg-[#01408F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
+                  >
+                    Login
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Toast Container */}
+      <ToastContainer />
+    </div>
+  );
+}
