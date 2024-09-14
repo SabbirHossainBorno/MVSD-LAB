@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import the styles
@@ -22,7 +22,6 @@ export default function AddProfessor() {
     status: 'Active', // Non-editable
   });
 
-  // Dynamic fields for education, career, citations, awards
   const [education, setEducation] = useState([{ degree: '', institution: '', passing_year: '' }]);
   const [career, setCareer] = useState([{ position: '', organization: '', joining_year: '', leaving_year: '' }]);
   const [citations, setCitations] = useState([{ title: '', link: '', organization: '' }]);
@@ -30,7 +29,8 @@ export default function AddProfessor() {
 
   const router = useRouter();
 
-  const handleChange = (e) => {
+  // Use useCallback for memoizing handlers
+  const handleChange = useCallback((e) => {
     const { name, value, files } = e.target;
   
     if (name === 'photo' && files.length > 0) {
@@ -51,20 +51,20 @@ export default function AddProfessor() {
     } else {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
-  };
+  }, []);
 
-  const handleArrayChange = (setter, index, field, value) => {
+  const handleArrayChange = useCallback((setter, index, field, value) => {
     setter((prevState) => {
       const newState = [...prevState];
       newState[index][field] = value;
       return newState;
     });
-  };
+  }, []);
   
   const isValidFileType = (file) => ['image/jpeg', 'image/png'].includes(file.type);
   const isValidFileSize = (file) => file.size <= 5 * 1024 * 1024;
   
-  const handleArrayFileChange = (setter, index, field, file) => {
+  const handleArrayFileChange = useCallback((setter, index, field, file) => {
     setter((prevState) => {
       const newState = [...prevState];
 
@@ -80,17 +80,16 @@ export default function AddProfessor() {
         }
 
         newState[index][field] = file;
-        console.log(`Updated ${field} for award ${index}:`, file); // Debugging log
-        toast.success('File uploaded successfully.'); // Optional success feedback
+        toast.success('File uploaded successfully.');
       }
 
       return newState;
     });
-  };
+  }, []);
 
-  const addNewField = (setter, newItem) => {
+  const addNewField = useCallback((setter, newItem) => {
     setter((prevState) => [...prevState, newItem]);
-  };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -157,8 +156,7 @@ export default function AddProfessor() {
     } catch (error) {
       toast.error('Failed to add professor');
     }
-  };
-  
+  };  
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
