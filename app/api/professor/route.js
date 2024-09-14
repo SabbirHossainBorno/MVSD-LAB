@@ -56,26 +56,6 @@ const saveFile = async (file, professorId, type, index = null) => {
   return `/home/mvsd-lab/Storage/Images/Professor/${filename}`; // Return the URL to be stored in the database
 };
 
-// Helper function to save an award photo
-const saveAwardPhoto = async (file, professorId, index) => {
-  console.log('Attempting to save award photo...');
-  const filename = `${professorId}_Award_${index}${path.extname(file.name)}`;
-  const targetPath = path.join('/home/mvsd-lab/Storage/Images/Professor', filename);
-
-  console.log(`Saving award photo to: ${targetPath}`);
-
-  try {
-    const buffer = await file.arrayBuffer();
-    fs.writeFileSync(targetPath, Buffer.from(buffer)); // Save file to target directory
-    console.log('Award photo saved successfully:', filename);
-  } catch (error) {
-    console.error('Error saving award photo:', error);
-    throw new Error(`Failed to save award photo: ${error.message}`);
-  }
-
-  return `/home/mvsd-lab/Storage/Images/Professor/${filename}`; // Return the URL to be stored in the database
-};
-
 // Main function to handle the POST request
 export async function POST(req) {
   const client = await pool.connect();
@@ -99,35 +79,23 @@ export async function POST(req) {
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
     const citations = JSON.parse(formData.get('citations') || '[]');
+    const awards = JSON.parse(formData.get('awards') || '[]');
 
     // Handle file uploads
     const photoFile = formData.get('photo');
-    const awards = [];
-    const awardFiles = [];
-
-    console.log('Processing awards and award files...');
-    for (const [key, value] of formData.entries()) {
-      console.log(`Processing entry - Key: ${key}, Value: ${value}`);
-
-      // Ensure the key is related to awards
-      if (key.startsWith('awards[')) {
-        const index = key.match(/\d+/)[0]; // Extract the index number (e.g., awards[0])
-        const field = key.match(/\[(.*?)\]/)[1]; // Extract the field (e.g., 'title', 'year', 'photo')
-
-        // Initialize the award object at this index if it doesn't exist
-        if (!awards[index]) awards[index] = {};
-
-        if (field === 'photo' && value instanceof File) {
-          console.log(`File detected for award ${index}:`, value);
-          awardFiles[index] = value; // Collect the file for this award
-        } else {
-          awards[index][field] = value; // Collect the field data for this award
-        }
+    let photoUrl = null;
+    if (photoFile) {
+      try {
+        console.log('Saving profile photo...');
+        photoUrl = await saveFile(photoFile, professorId, 'DP');
+        console.log('Profile photo saved as:', photoUrl);
+      } catch (error) {
+        console.error('Error saving profile photo:', error);
+        return NextResponse.json({ message: 'Error saving profile photo' }, { status: 500 });
       }
+    } else {
+      console.warn('No profile photo uploaded');
     }
-
-    console.log('Awards:', awards);
-    console.log('Award files:', awardFiles);
 
     // Check if email already exists in member table
     console.log('Checking if email exists in member table...');
@@ -153,29 +121,15 @@ export async function POST(req) {
     const professorId = await generateProfessorId();
     console.log('Generated Professor ID:', professorId);
 
-    // Save profile photo
-    let photoUrl = null;
-    if (photoFile) {
-      try {
-        console.log('Saving profile photo...');
-        photoUrl = await saveFile(photoFile, professorId, 'DP');
-        console.log('Profile photo saved as:', photoUrl);
-      } catch (error) {
-        console.error('Error saving profile photo:', error);
-        return NextResponse.json({ message: 'Error saving profile photo' }, { status: 500 });
-      }
-    } else {
-      console.warn('No profile photo uploaded');
-    }
-
-    // Save award files
+    // Save award photos
     const awardUrls = [];
-    for (let i = 0; i < awardFiles.length; i++) {
-      const awardFile = awardFiles[i];
+    for (let i = 0; i < awards.length; i++) {
+      const award = awards[i];
+      const awardFile = formData.get(`award_photo_${i}`);
       if (awardFile) {
         try {
-          console.log('Saving award photo...');
-          const awardUrl = await saveAwardPhoto(awardFile, professorId, i + 1);
+          console.log(`Saving award photo for award ${i}...`);
+          const awardUrl = await saveFile(awardFile, professorId, `Award_${i + 1}`);
           awardUrls.push(awardUrl);
           console.log('Award photo saved as:', awardUrl);
         } catch (error) {
@@ -261,6 +215,7 @@ export async function POST(req) {
           passingYear,
         ]);
       }
+
       // Handle career info
       const insertCareerQuery = `
         INSERT INTO professor_career_info (professor_id, position, organization_name, joining_year, leaving_year)
@@ -282,69 +237,71 @@ export async function POST(req) {
         ]);
       }
 
-      // Handle citation info
-      const insertCitationQuery = `
-        INSERT INTO professor_citations_info (professor_id, title, link, organization_name)
-        VALUES ($1, $2, $3, $4)
-        RETURNING *;
-      `;
-      for (const citation of citations) {
-        console.log('Inserting citation:', citation);
-        const organizationName = citation.organization || null;
-        await client.query(insertCitationQuery, [
-          professorId,
-          citation.title,
-          citation.link,
-          organizationName,
-        ]);
-      }
-
-      // Insert awards
-      if (awards.length > 0) {
-        const insertAwardQuery = `
-          INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
-          VALUES ($1, $2, $3, $4, $5)
-          RETURNING *;
-        `;
-        
-        for (let i = 0; i < awards.length; i++) {
-          const award = awards[i];
-          const awardPhoto = awardUrls[i] || null; // Get the corresponding photo URL
-          const details = award.details || null; // Handle optional details
-
-          console.log('Inserting award:', {
-            professor_id: professorId,
-            title: award.title,
-            year: award.year,
-            details: details,
-            award_photo: awardPhoto,
-          });
-
-          await client.query(insertAwardQuery, [
-            professorId,
-            award.title,
-            award.year,
-            details,
-            awardPhoto,
-          ]);
+            // Handle citation info
+            const insertCitationQuery = `
+            INSERT INTO professor_citations_info (professor_id, title, link, organization_name)
+            VALUES ($1, $2, $3, $4)
+            RETURNING *;
+          `;
+          for (const citation of citations) {
+            console.log('Inserting citation:', citation);
+            const organizationName = citation.organization || null;
+            await client.query(insertCitationQuery, [
+              professorId,
+              citation.title,
+              citation.link,
+              organizationName,
+            ]);
+          }
+    
+          // Insert awards
+          if (awards.length > 0) {
+            const insertAwardQuery = `
+              INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
+              VALUES ($1, $2, $3, $4, $5)
+              RETURNING *;
+            `;
+            
+            for (let i = 0; i < awards.length; i++) {
+              const award = awards[i];
+              const awardPhoto = awardUrls[i] || null; // Get the corresponding photo URL
+              const details = award.details || null; // Handle optional details
+    
+              // Detailed debug logs for award fields
+              console.log('Award details before insertion:', {
+                professor_id: professorId,
+                title: award.title,
+                year: award.year,
+                details: details,
+                award_photo: awardPhoto,
+              });
+    
+              await client.query(insertAwardQuery, [
+                professorId,
+                award.title,
+                award.year,
+                details,
+                awardPhoto,
+              ]);
+            }
+          }
+    
+          // Commit transaction
+          await client.query('COMMIT');
+          console.log('Professor data inserted successfully');
+          return NextResponse.json({ message: 'Professor data inserted successfully' }, { status: 200 });
+    
+        } catch (error) {
+          console.error('Error inserting data:', error);
+          await client.query('ROLLBACK');
+          return NextResponse.json({ message: 'Error inserting data' }, { status: 500 });
         }
+    
+      } catch (error) {
+        console.error('Error processing request:', error);
+        return NextResponse.json({ message: 'Error processing request' }, { status: 500 });
+      } finally {
+        client.release();
       }
-
-      // Commit transaction
-      await client.query('COMMIT');
-      console.log('Professor data inserted successfully');
-      return NextResponse.json({ message: 'Professor data inserted successfully' }, { status: 200 });
-
-    } catch (error) {
-      console.error('Error inserting data:', error);
-      await client.query('ROLLBACK');
-      return NextResponse.json({ message: 'Error inserting data' }, { status: 500 });
     }
-
-  } catch (error) {
-    console.error('Error processing request:', error);
-    return NextResponse.json({ message: 'Error processing request' }, { status: 500 });
-  } finally {
-    client.release();
-  }
-}
+    

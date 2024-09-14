@@ -134,7 +134,7 @@ export default function AddProfessor() {
         
         // If award photo exists, append it to FormData
         if (award.awardPhoto) {
-          data.append(`awards[${index}][photo]`, award.awardPhoto);
+          data.append(`award_photo_${index}`, award.awardPhoto);
         }
       });
     }
@@ -156,7 +156,7 @@ export default function AddProfessor() {
     } catch (error) {
       toast.error('Failed to add professor');
     }
-  };  
+  }; 
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
