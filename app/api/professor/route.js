@@ -76,6 +76,7 @@ const saveAwardPhoto = async (file, professorId, index) => {
   return `/home/mvsd-lab/Storage/Images/Professor/${filename}`; // Return the URL to be stored in the database
 };
 
+// Main function to handle the POST request
 export async function POST(req) {
   const client = await pool.connect();
   try {
@@ -260,7 +261,6 @@ export async function POST(req) {
           passingYear,
         ]);
       }
-
       // Handle career info
       const insertCareerQuery = `
         INSERT INTO professor_career_info (professor_id, position, organization_name, joining_year, leaving_year)
@@ -300,36 +300,35 @@ export async function POST(req) {
       }
 
       // Insert awards
-if (awards.length > 0) {
-  const insertAwardQuery = `
-    INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
-    VALUES ($1, $2, $3, $4, $5)
-    RETURNING *;
-  `;
-  
-  for (let i = 0; i < awards.length; i++) {
-    const award = awards[i];
-    const awardPhoto = awardUrls[i] || null; // Get the corresponding photo URL
-    const details = award.details || null; // Handle optional details
+      if (awards.length > 0) {
+        const insertAwardQuery = `
+          INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
+          VALUES ($1, $2, $3, $4, $5)
+          RETURNING *;
+        `;
+        
+        for (let i = 0; i < awards.length; i++) {
+          const award = awards[i];
+          const awardPhoto = awardUrls[i] || null; // Get the corresponding photo URL
+          const details = award.details || null; // Handle optional details
 
-    console.log('Inserting award:', {
-      professor_id: professorId,
-      title: award.title,
-      year: award.year,
-      details: details,
-      award_photo: awardPhoto,
-    });
+          console.log('Inserting award:', {
+            professor_id: professorId,
+            title: award.title,
+            year: award.year,
+            details: details,
+            award_photo: awardPhoto,
+          });
 
-    await client.query(insertAwardQuery, [
-      professorId,
-      award.title,
-      award.year,
-      details,
-      awardPhoto,
-    ]);
-  }
-}
-
+          await client.query(insertAwardQuery, [
+            professorId,
+            award.title,
+            award.year,
+            details,
+            awardPhoto,
+          ]);
+        }
+      }
 
       // Commit transaction
       await client.query('COMMIT');
