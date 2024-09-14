@@ -225,104 +225,104 @@ export async function POST(req) {
 
       // Handle education info
       const insertEducationQuery = `
-        INSERT INTO professor_education_info (professor_id, degree, institution, passing_year)
-        VALUES ($1, $2, $3, $4)
-        RETURNING *;
-      `;
+      INSERT INTO professor_education_info (professor_id, degree, institution, passing_year)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *;
+    `;
 
-      for (const edu of education) {
-        console.log('Inserting education:', edu);
-        const passingYear = parseInt(edu.passing_year, 10);
-        await client.query(insertEducationQuery, [
-          professorId,
-          edu.degree,
-          edu.institution,
-          passingYear,
-        ]);
-      }
-
-      // Handle career info
-      const insertCareerQuery = `
-        INSERT INTO professor_career_info (professor_id, position, organization_name, joining_year, leaving_year)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING *;
-      `;
-
-      for (const car of career) {
-        console.log('Inserting career info:', car);
-        const joiningYear = parseInt(car.joining_year, 10);
-        const leavingYear = car.leaving_year ? parseInt(car.leaving_year, 10) : null;
-        const organizationName = car.organization || null;
-        await client.query(insertCareerQuery, [
-          professorId,
-          car.position,
-          organizationName,
-          joiningYear,
-          leavingYear,
-        ]);
-      }
-
-      // Handle citation info
-      const insertCitationQuery = `
-        INSERT INTO professor_citations_info (professor_id, title, link, organization_name)
-        VALUES ($1, $2, $3, $4)
-        RETURNING *;
-      `;
-      for (const citation of citations) {
-        console.log('Inserting citation:', citation);
-        const organizationName = citation.organization || null;
-        await client.query(insertCitationQuery, [
-          professorId,
-          citation.title,
-          citation.link,
-          organizationName,
-        ]);
-      }
-
-      // Handle award info
-      const insertAwardQuery = `
-        INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING *;
-      `;
-
-      for (let i = 0; i < awards.length; i++) {
-        const award = awards[i];
-        const photoUrl = awardUrls[i] || null;
-
-        console.log('Inserting award:', award);
-        const year = parseInt(award.year, 10);
-
-        if (!award.year) {
-          console.error(`Invalid year in award data for award ${i}:`, award);
-          return NextResponse.json({ message: 'Invalid year in award data' }, { status: 400 });
-        }
-
-        await client.query(insertAwardQuery, [
-          professorId,
-          award.title,
-          year,
-          award.details || null,
-          photoUrl,
-        ]);
-      }
-
-      // Commit the transaction
-      await client.query('COMMIT');
-
-      return NextResponse.json({ message: 'Professor added successfully', professorId });
-
-    } catch (insertError) {
-      // Rollback the transaction in case of an error
-      await client.query('ROLLBACK');
-      console.error('Error during transaction:', insertError);
-      return NextResponse.json({ message: 'Failed to insert data', error: insertError.message }, { status: 500 });
+    for (const edu of education) {
+      console.log('Inserting education:', edu);
+      const passingYear = parseInt(edu.passing_year, 10);
+      await client.query(insertEducationQuery, [
+        professorId,
+        edu.degree,
+        edu.institution,
+        passingYear,
+      ]);
     }
 
-  } catch (error) {
-    console.error('Unexpected error:', error);
-    return NextResponse.json({ message: 'Internal Server Error', error: error.message }, { status: 500 });
-  } finally {
-    client.release();
+    // Handle career info
+    const insertCareerQuery = `
+      INSERT INTO professor_career_info (professor_id, position, organization_name, joining_year, leaving_year)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *;
+    `;
+
+    for (const car of career) {
+      console.log('Inserting career info:', car);
+      const joiningYear = parseInt(car.joining_year, 10);
+      const leavingYear = car.leaving_year ? parseInt(car.leaving_year, 10) : null;
+      const organizationName = car.organization || null;
+      await client.query(insertCareerQuery, [
+        professorId,
+        car.position,
+        organizationName,
+        joiningYear,
+        leavingYear,
+      ]);
+    }
+
+    // Handle citation info
+    const insertCitationQuery = `
+      INSERT INTO professor_citations_info (professor_id, title, link, organization_name)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *;
+    `;
+    for (const citation of citations) {
+      console.log('Inserting citation:', citation);
+      const organizationName = citation.organization || null;
+      await client.query(insertCitationQuery, [
+        professorId,
+        citation.title,
+        citation.link,
+        organizationName,
+      ]);
+    }
+
+    // Handle award info
+    const insertAwardQuery = `
+      INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *;
+    `;
+
+    for (let i = 0; i < awards.length; i++) {
+      const award = awards[i];
+      const photoUrl = awardUrls[i] || null;
+
+      console.log('Inserting award:', award);
+      const year = parseInt(award.year, 10);
+
+      if (!award.year) {
+        console.error(`Invalid year in award data for award ${i}:`, award);
+        return NextResponse.json({ message: 'Invalid year in award data' }, { status: 400 });
+      }
+
+      await client.query(insertAwardQuery, [
+        professorId,
+        award.title,
+        year,
+        award.details || null,
+        photoUrl,
+      ]);
+    }
+
+    // Commit the transaction
+    await client.query('COMMIT');
+
+    return NextResponse.json({ message: 'Professor added successfully', professorId });
+
+  } catch (insertError) {
+    // Rollback the transaction in case of an error
+    await client.query('ROLLBACK');
+    console.error('Error during transaction:', insertError);
+    return NextResponse.json({ message: 'Failed to insert data', error: insertError.message }, { status: 500 });
   }
+
+} catch (error) {
+  console.error('Unexpected error:', error);
+  return NextResponse.json({ message: 'Internal Server Error', error: error.message }, { status: 500 });
+} finally {
+  client.release();
+}
 }
