@@ -123,25 +123,24 @@ export async function POST(req) {
       console.log(`Profile photo URL: ${photoUrl}`);
     }
 
-    // Handle awards processing
-    const awardUrls = [];
-    if (awards.length > 0) {
-      for (let i = 0; i < awards.length; i++) {
-        const awardFile = formData.get(`award_photo_${i}`);
-        if (awardFile) {
-          const awardUrl = await saveAwardPhoto(awardFile, professorId, i + 1);
-          awardUrls.push(awardUrl);
-        } else {
-          awardUrls.push(null);
-        }
-      }
+   // Handle awards processing
+const awardUrls = [];
+if (awards.length > 0) {
+  for (let i = 0; i < awards.length; i++) {
+    const awardFile = formData.get(`award_photo_${i}`);
+    console.log(`Processing award photo ${i}:`, awardFile); // Log the award file
+    if (awardFile) {
+      const awardUrl = await saveAwardPhoto(awardFile, professorId, i + 1);
+      awardUrls.push(awardUrl);
+    } else {
+      awardUrls.push(null);
     }
-    // Validate awards data
-    if (awardUrls.length === 0) {
-      // Rollback transaction and return a message
-      await client.query('ROLLBACK');
-      return NextResponse.json({ message: 'Awards URL is empty' }, { status: 400 });
-    }
+  }
+}
+console.log('Award URLs:', awardUrls); // Log the award URLs
+
+
+
 
 
 
@@ -204,34 +203,35 @@ export async function POST(req) {
       }
 
       // Insert awards info
-      console.log('Inserting awards info...');
-      const insertAwardsQuery = `INSERT INTO professor_award_info (professor_id, title, year, details, award_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
-      for (let i = 0; i < awards.length; i++) {
-        const award = awards[i];
-        const awardUrl = awardUrls[i]; // Get the URL of the saved award photo
+console.log('Inserting awards info...');
+const insertAwardsQuery = `INSERT INTO professor_award_info (professor_id, title, year, details, award_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
+for (let i = 0; i < awards.length; i++) {
+  const award = awards[i];
+  const awardUrl = awardUrls[i]; // Get the URL of the saved award photo
 
-        try {
-          const awardInsertResult = await client.query(insertAwardsQuery, [
-            professorId, award.title, parseInt(award.year), award.details, awardUrl,
-          ]);
+  try {
+    const awardInsertResult = await client.query(insertAwardsQuery, [
+      professorId, award.title, parseInt(award.year), award.details, awardUrl,
+    ]);
 
-          // Log all the award data
-          console.log('Award info inserted:', {
-            id: awardInsertResult.rows[0].id, // Assuming ID is returned from the query
-            professor_id: professorId,
-            title: award.title,
-            year: award.year,
-            details: award.details,
-            award_photo: awardUrl
-          });
+    // Log all the award data
+    console.log('Award info inserted:', {
+      id: awardInsertResult.rows[0].id, // Assuming ID is returned from the query
+      professor_id: professorId,
+      title: award.title,
+      year: award.year,
+      details: award.details,
+      award_photo: awardUrl
+    });
 
-        } catch (error) {
-          console.error('Error inserting award info:', {
-            award,
-            error: error.message
-          });
-        }
-      }
+  } catch (error) {
+    console.error('Error inserting award info:', {
+      award,
+      error: error.message
+    });
+    throw error; // Throw error to trigger rollback
+  }
+}
 
 
       // Commit transaction
