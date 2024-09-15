@@ -2,26 +2,51 @@ import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 import path from 'path';
 import fs from 'fs';
+import axios from 'axios';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
+const logFilePath = '/home/mvsd-lab/Log/mvsd_lab.log';
+
+// Helper function to write logs to the log file
+const writeLog = (message) => {
+  const logMessage = `${new Date().toISOString()} - ${message}\n`;
+  fs.appendFileSync(logFilePath, logMessage);
+};
+
+// Helper function to send a Telegram alert
+const sendTelegramAlert = async (message) => {
+  const apiKey = '7489554804:AAFZs1eZmjZ8H634tBPhtL54UsLZOi3vCxg';
+  const groupId = '-4285248556';
+  const url = `https://api.telegram.org/bot${apiKey}/sendMessage`;
+
+  try {
+    await axios.post(url, {
+      chat_id: groupId,
+      text: message,
+    });
+    writeLog(`Telegram alert sent successfully: ${message}`);
+  } catch (error) {
+    writeLog(`Failed to send Telegram alert: ${error.message}`);
+  }
+};
+
 // Helper function to generate the next Professor ID
 const generateProfessorId = async () => {
   const client = await pool.connect();
   try {
-    console.log('Generating Professor ID...');
+    writeLog('Initiating Professor ID generation...');
     const result = await client.query('SELECT MAX(id) AS max_id FROM professor_basic_info');
     const maxId = result.rows[0]?.max_id || 'P00MVSD';
-    console.log(`Current Max Professor ID: ${maxId}`);
     const numericPart = parseInt(maxId.substring(1, 3), 10) || 0;
     const nextId = numericPart + 1;
     const formattedId = `P${String(nextId).padStart(2, '0')}MVSD`;
-    console.log('Generated Professor ID:', formattedId);
+    writeLog(`Professor ID generated successfully: ${formattedId}`);
     return formattedId;
   } catch (error) {
-    console.error('Error generating Professor ID:', error);
+    writeLog(`Error occurred during Professor ID generation: ${error.message}`);
     throw error;
   } finally {
     client.release();
@@ -34,13 +59,13 @@ const saveProfilePhoto = async (file, professorId) => {
   const targetPath = path.join('/home/mvsd-lab/Storage/Images/Professor', filename);
 
   try {
-    console.log(`Saving profile photo: ${filename} to ${targetPath}`);
+    writeLog(`Saving profile photo with filename: ${filename} at path: ${targetPath}`);
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
-    console.log(`Profile photo saved successfully at: ${targetPath}`);
+    writeLog(`Profile photo saved successfully at path: ${targetPath}`);
     return `/home/mvsd-lab/Storage/Images/Professor/${filename}`;
   } catch (error) {
-    console.error('Error saving profile photo:', error);
+    writeLog(`Error occurred while saving profile photo: ${error.message}`);
     throw new Error(`Failed to save profile photo: ${error.message}`);
   }
 };
@@ -51,13 +76,13 @@ const saveAwardPhoto = async (file, professorId, index) => {
   const targetPath = path.join('/home/mvsd-lab/Storage/Images/Professor', filename);
 
   try {
-    console.log(`Saving award photo: ${filename} to ${targetPath}`);
+    writeLog(`Saving award photo with filename: ${filename} at path: ${targetPath}`);
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
-    console.log(`Award photo saved successfully at: ${targetPath}`);
+    writeLog(`Award photo saved successfully at path: ${targetPath}`);
     return `/home/mvsd-lab/Storage/Images/Professor/${filename}`;
   } catch (error) {
-    console.error('Error saving award photo:', error);
+    writeLog(`Error occurred while saving award photo: ${error.message}`);
     throw new Error(`Failed to save award photo: ${error.message}`);
   }
 };
@@ -66,7 +91,7 @@ const saveAwardPhoto = async (file, professorId, index) => {
 export async function POST(req) {
   const client = await pool.connect();
   try {
-    console.log('Receiving form data...');
+    writeLog('Receiving form data...');
     const formData = await req.formData();
 
     // Extract form data
@@ -92,35 +117,30 @@ export async function POST(req) {
         awardPhoto: formData.get(`awards[${i}][awardPhoto]`)
       });
     }
-    console.log('Parsed Awards Data:', awards);
-
-    console.log('Received Form Data:', {
-      first_name, last_name, phone, dob, email, short_bio, joining_date, leaving_date, type, education, career, citations, awards,
-    });
 
     // Check if email or phone already exists
-    console.log(`Checking if email (${email}) or phone (${phone}) already exists...`);
+    writeLog(`Checking if email (${email}) or phone (${phone}) already exists in the database...`);
     const emailCheckResult = await client.query('SELECT id FROM member WHERE email = $1', [email]);
     if (emailCheckResult.rows.length > 0) {
-      console.log(`Email already exists: ${email}`);
+      writeLog(`Email already exists in the database: ${email}`);
       return NextResponse.json({ message: 'Email already exists' }, { status: 400 });
     }
 
     const phoneCheckResult = await client.query('SELECT id FROM member WHERE phone = $1', [phone]);
     if (phoneCheckResult.rows.length > 0) {
-      console.log(`Phone Number already exists: ${phone}`);
+      writeLog(`Phone number already exists in the database: ${phone}`);
       return NextResponse.json({ message: 'Phone Number already exists' }, { status: 400 });
     }
 
     const professorId = await generateProfessorId();
-    console.log(`New Professor ID: ${professorId}`);
+    writeLog(`New Professor ID generated: ${professorId}`);
 
     // Save profile photo if available
     let photoUrl = null;
     const photoFile = formData.get('photo');
     if (photoFile) {
       photoUrl = await saveProfilePhoto(photoFile, professorId);
-      console.log(`Profile photo URL: ${photoUrl}`);
+      writeLog(`Profile photo URL generated successfully: ${photoUrl}`);
     }
 
     // Handle awards processing
@@ -128,25 +148,22 @@ export async function POST(req) {
     if (awards.length > 0) {
       for (let i = 0; i < awards.length; i++) {
         const awardFile = awards[i].awardPhoto;
-        console.log(`Processing award photo ${i}:`, awardFile); // Log the award file
         if (awardFile) {
           const awardUrl = await saveAwardPhoto(awardFile, professorId, i + 1);
           awardUrls.push(awardUrl);
         } else {
-          console.error('Award photo is missing for award:', awards[i]);
+          writeLog(`Award photo is missing for award: ${awards[i].title}`);
           throw new Error('Award photo is missing');
         }
       }
     }
-    console.log('Award URLs:', awardUrls); // Log the award URLs
 
     try {
       // Begin transaction
       await client.query('BEGIN');
-      console.log('Transaction started...');
+      writeLog('Transaction started...');
 
       // Insert professor info
-      console.log('Inserting professor basic info...');
       const insertProfessorQuery = `
         INSERT INTO professor_basic_info 
           (id, first_name, last_name, phone, dob, email, password, short_bio, joining_date, leaving_date, photo, status, type) 
@@ -156,10 +173,9 @@ export async function POST(req) {
       const professorInsertResult = await client.query(insertProfessorQuery, [
         professorId, first_name, last_name, phone, dob, email, password, short_bio, joining_date, leaving_date, photoUrl, type,
       ]);
-      console.log('Professor info inserted:', professorInsertResult.rows[0]);
+      writeLog('Professor information inserted successfully.');
 
       // Insert member info
-      console.log('Inserting member info...');
       const insertMemberQuery = `
         INSERT INTO member 
           (id, first_name, last_name, phone, dob, email, password, short_bio, joining_date, leaving_date, photo, status, type) 
@@ -169,43 +185,39 @@ export async function POST(req) {
       const memberInsertResult = await client.query(insertMemberQuery, [
         professorId, first_name, last_name, phone, dob, email, password, short_bio, joining_date, leaving_date, photoUrl, type,
       ]);
-      console.log('Member info inserted:', memberInsertResult.rows[0]);
+      writeLog('Member information inserted successfully.');
 
       // Insert education info
-      console.log('Inserting education info...');
       const insertEducationQuery = `INSERT INTO professor_education_info (professor_id, degree, institution, passing_year) VALUES ($1, $2, $3, $4) RETURNING *;`;
       for (const edu of education) {
         const eduInsertResult = await client.query(insertEducationQuery, [professorId, edu.degree, edu.institution, parseInt(edu.passing_year)]);
-        console.log('Education info inserted:', eduInsertResult.rows[0]);
+        writeLog('Education information inserted successfully.');
       }
 
       // Insert career info
-      console.log('Inserting career info...');
       const insertCareerQuery = `INSERT INTO professor_career_info (professor_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
       for (const car of career) {
         const carInsertResult = await client.query(insertCareerQuery, [
           professorId, car.position, car.organization, parseInt(car.joining_year), parseInt(car.leaving_year),
         ]);
-        console.log('Career info inserted:', carInsertResult.rows[0]);
+        writeLog('Career information inserted successfully.');
       }
 
       // Insert citation info
-      console.log('Inserting citation info...');
       const insertCitationQuery = `INSERT INTO professor_citations_info (professor_id, title, link, organization_name) VALUES ($1, $2, $3, $4) RETURNING *;`;
       for (const citation of citations) {
         const citationInsertResult = await client.query(insertCitationQuery, [professorId, citation.title, citation.link, citation.organization]);
-        console.log('Citation info inserted:', citationInsertResult.rows[0]);
+        writeLog('Citation information inserted successfully.');
       }
 
       // Insert awards info
-      console.log('Inserting awards info...');
       const insertAwardsQuery = `INSERT INTO professor_award_info (professor_id, title, year, details, award_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
       for (let i = 0; i < awards.length; i++) {
         const award = awards[i];
         const awardUrl = awardUrls[i]; // Get the URL of the saved award photo
 
         if (!awardUrl) {
-          console.error('Award URL is null for award:', award);
+          writeLog(`Award URL is null for award: ${award.title}`);
           throw new Error('Award URL is null');
         }
 
@@ -215,45 +227,36 @@ export async function POST(req) {
           ]);
 
           // Log all the award data
-          console.log('Award info inserted:', {
-            id: awardInsertResult.rows[0].id, // Assuming ID is returned from the query
-            professor_id: professorId,
-            title: award.title,
-            year: award.year,
-            details: award.details,
-            award_photo: awardUrl
-          });
+          writeLog('Award information inserted successfully.');
 
         } catch (error) {
-          console.error('Error inserting award info:', {
-            award,
-            error: error.message
-          });
+          writeLog(`Error inserting award information for award: ${award.title}, Error: ${error.message}`);
           throw error; // Throw error to trigger rollback
         }
       }
 
       // Insert notification
-      console.log('Inserting notification...');
-      const insertNotificationQuery = `INSERT INTO notification (title, status) VALUES ($1, $2) RETURNING *;`;
+      const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
+      const Id = `${professorId}`; 
       const notificationTitle = `A New Professor Added [${professorId}]`;
       const notificationStatus = 'Unread';
-      const notificationInsertResult = await client.query(insertNotificationQuery, [notificationTitle, notificationStatus]);
-      console.log('Notification inserted:', notificationInsertResult.rows[0]);
+      const notificationInsertResult = await client.query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
+      writeLog('Notification inserted successfully.');
 
       // Commit transaction
       await client.query('COMMIT');
-      console.log('Transaction committed successfully!');
-      return NextResponse.json({ message: 'Professor info added successfully!' }, { status: 200 });
+      writeLog('Transaction committed successfully.');
+      sendTelegramAlert(`A new professor has been added with ID: ${professorId}`);
+      return NextResponse.json({ message: 'Professor information added successfully!' }, { status: 200 });
 
     } catch (error) {
-      console.error('Error during transaction:', error);
+      writeLog(`Error during transaction: ${error.message}`);
       await client.query('ROLLBACK');
       return NextResponse.json({ message: `Transaction failed: ${error.message}` }, { status: 500 });
     }
 
   } catch (error) {
-    console.error('Error processing form data:', error);
+    writeLog(`Error processing form data: ${error.message}`);
     return NextResponse.json({ message: `Failed to process form data: ${error.message}` }, { status: 500 });
   } finally {
     client.release();
