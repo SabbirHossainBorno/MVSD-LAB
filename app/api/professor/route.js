@@ -123,33 +123,28 @@ export async function POST(req) {
       console.log(`Profile photo URL: ${photoUrl}`);
     }
 
-   // Handle awards processing
-const awardUrls = [];
-if (awards.length > 0) {
-  for (let i = 0; i < awards.length; i++) {
-    const awardFile = formData.get(`award_photo_${i}`);
-    console.log(`Processing award photo ${i}:`, awardFile); // Log the award file
-    if (awardFile) {
-      const awardUrl = await saveAwardPhoto(awardFile, professorId, i + 1);
-      awardUrls.push(awardUrl);
-    } else {
-      awardUrls.push(null);
+    // Handle awards processing
+    const awardUrls = [];
+    if (awards.length > 0) {
+      for (let i = 0; i < awards.length; i++) {
+        const awardFile = awards[i].awardPhoto;
+        console.log(`Processing award photo ${i}:`, awardFile); // Log the award file
+        if (awardFile) {
+          const awardUrl = await saveAwardPhoto(awardFile, professorId, i + 1);
+          awardUrls.push(awardUrl);
+        } else {
+          console.error('Award photo is missing for award:', awards[i]);
+          throw new Error('Award photo is missing');
+        }
+      }
     }
-  }
-}
-console.log('Award URLs:', awardUrls); // Log the award URLs
-
-
-
-
-
+    console.log('Award URLs:', awardUrls); // Log the award URLs
 
     try {
-    // Begin transaction
-    await client.query('BEGIN');
-    console.log('Transaction started...');
+      // Begin transaction
+      await client.query('BEGIN');
+      console.log('Transaction started...');
 
-    
       // Insert professor info
       console.log('Inserting professor basic info...');
       const insertProfessorQuery = `
@@ -203,36 +198,48 @@ console.log('Award URLs:', awardUrls); // Log the award URLs
       }
 
       // Insert awards info
-console.log('Inserting awards info...');
-const insertAwardsQuery = `INSERT INTO professor_award_info (professor_id, title, year, details, award_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
-for (let i = 0; i < awards.length; i++) {
-  const award = awards[i];
-  const awardUrl = awardUrls[i]; // Get the URL of the saved award photo
+      console.log('Inserting awards info...');
+      const insertAwardsQuery = `INSERT INTO professor_award_info (professor_id, title, year, details, award_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
+      for (let i = 0; i < awards.length; i++) {
+        const award = awards[i];
+        const awardUrl = awardUrls[i]; // Get the URL of the saved award photo
 
-  try {
-    const awardInsertResult = await client.query(insertAwardsQuery, [
-      professorId, award.title, parseInt(award.year), award.details, awardUrl,
-    ]);
+        if (!awardUrl) {
+          console.error('Award URL is null for award:', award);
+          throw new Error('Award URL is null');
+        }
 
-    // Log all the award data
-    console.log('Award info inserted:', {
-      id: awardInsertResult.rows[0].id, // Assuming ID is returned from the query
-      professor_id: professorId,
-      title: award.title,
-      year: award.year,
-      details: award.details,
-      award_photo: awardUrl
-    });
+        try {
+          const awardInsertResult = await client.query(insertAwardsQuery, [
+            professorId, award.title, parseInt(award.year), award.details, awardUrl,
+          ]);
 
-  } catch (error) {
-    console.error('Error inserting award info:', {
-      award,
-      error: error.message
-    });
-    throw error; // Throw error to trigger rollback
-  }
-}
+          // Log all the award data
+          console.log('Award info inserted:', {
+            id: awardInsertResult.rows[0].id, // Assuming ID is returned from the query
+            professor_id: professorId,
+            title: award.title,
+            year: award.year,
+            details: award.details,
+            award_photo: awardUrl
+          });
 
+        } catch (error) {
+          console.error('Error inserting award info:', {
+            award,
+            error: error.message
+          });
+          throw error; // Throw error to trigger rollback
+        }
+      }
+
+      // Insert notification
+      console.log('Inserting notification...');
+      const insertNotificationQuery = `INSERT INTO notification (title, status) VALUES ($1, $2) RETURNING *;`;
+      const notificationTitle = `A New Professor Added [${professorId}]`;
+      const notificationStatus = 'Unread';
+      const notificationInsertResult = await client.query(insertNotificationQuery, [notificationTitle, notificationStatus]);
+      console.log('Notification inserted:', notificationInsertResult.rows[0]);
 
       // Commit transaction
       await client.query('COMMIT');
