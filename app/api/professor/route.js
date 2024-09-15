@@ -3,6 +3,7 @@ import { Pool } from 'pg';
 import path from 'path';
 import fs from 'fs';
 import axios from 'axios';
+import { format } from 'date-fns-tz';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -12,7 +13,8 @@ const logFilePath = '/home/mvsd-lab/Log/mvsd_lab.log';
 
 // Helper function to write logs to the log file
 const writeLog = (message) => {
-  const logMessage = `${new Date().toISOString()} - ${message}\n`;
+  const timeZone = 'Asia/Dhaka'; // Bangladesh Standard Time (BST)
+  const logMessage = `${format(new Date(), 'yyyy-MM-dd HH:mm:ssXXX', { timeZone })} - ${message}\n`;
   fs.appendFileSync(logFilePath, logMessage);
 };
 
@@ -161,7 +163,7 @@ export async function POST(req) {
     try {
       // Begin transaction
       await client.query('BEGIN');
-      writeLog('Transaction started...');
+      writeLog('A New Professor Adding Process Execution Started...');
 
       // Insert professor info
       const insertProfessorQuery = `
@@ -245,8 +247,9 @@ export async function POST(req) {
 
       // Commit transaction
       await client.query('COMMIT');
-      writeLog('Transaction committed successfully.');
-      sendTelegramAlert(`A new professor has been added with ID: ${professorId}`);
+      writeLog('Execution committed successfully.');
+      writeLog(`A New Professor Added Successfully ID : ${professorId}`);
+      sendTelegramAlert(`MVSD LAB DASHBOARD\n----------------------------------\nA New Professor Added.\nID : ${professorId}`);
       return NextResponse.json({ message: 'Professor information added successfully!' }, { status: 200 });
 
     } catch (error) {

@@ -2411,3 +2411,50 @@ Untracked files:
 
 no changes added to commit (use "git add" and/or "git commit -a")
 Detected Changes: app/api/professor/route.js git_push.log Log/ Storage/Images/Professor/P27MVSD_Award_1.png Storage/Images/Professor/P27MVSD_Award_2.png Storage/Images/Professor/P27MVSD_DP.jpeg Storage/Images/Professor/P28MVSD_Award_1.png Storage/Images/Professor/P28MVSD_DP.jpeg 
+Commit Output: [main 389fa02] Automated commit: Mon Sep 16 04:00:02 AM +06 2024
+ Committer: root <root@srv563309.hstgr.cloud>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 8 files changed, 103 insertions(+), 57 deletions(-)
+ create mode 100644 Log/mvsd_lab.log
+ create mode 100644 Storage/Images/Professor/P27MVSD_Award_1.png
+ create mode 100644 Storage/Images/Professor/P27MVSD_Award_2.png
+ create mode 100644 Storage/Images/Professor/P27MVSD_DP.jpeg
+ create mode 100644 Storage/Images/Professor/P28MVSD_Award_1.png
+ create mode 100644 Storage/Images/Professor/P28MVSD_DP.jpeg
+Push Output: To github.com:SabbirHossainBorno/MVSD-LAB.git
+   ada4325..389fa02  main -> main
+Push Successful
+Current Status: On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   Log/mvsd_lab.log
+	modified:   app/api/professor/route.js
+	modified:   git_push.log
+	modified:   package-lock.json
+	modified:   package.json
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	Storage/Images/Professor/P29MVSD_Award_1.jpeg
+	Storage/Images/Professor/P29MVSD_DP.jpeg
+	Storage/Images/Professor/P30MVSD_Award_1.jpeg
+	Storage/Images/Professor/P30MVSD_DP.jpeg
+	Storage/Images/Professor/P31MVSD_Award_1.png
+	Storage/Images/Professor/P31MVSD_DP.jpeg
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Detected Changes: Log/mvsd_lab.log app/api/professor/route.js git_push.log package-lock.json package.json Storage/Images/Professor/P29MVSD_Award_1.jpeg Storage/Images/Professor/P29MVSD_DP.jpeg Storage/Images/Professor/P30MVSD_Award_1.jpeg Storage/Images/Professor/P30MVSD_DP.jpeg Storage/Images/Professor/P31MVSD_Award_1.png Storage/Images/Professor/P31MVSD_DP.jpeg 

@@ -1,0 +1,64 @@
+2024-09-15T22:01:20.938Z - Receiving form data...
+2024-09-15T22:01:20.942Z - Checking if email (test4@gmail.com) or phone (9376872463444) already exists in the database...
+2024-09-15T22:01:20.950Z - Initiating Professor ID generation...
+2024-09-15T22:01:20.951Z - Professor ID generated successfully: P29MVSD
+2024-09-15T22:01:20.951Z - New Professor ID generated: P29MVSD
+2024-09-15T22:01:20.951Z - Saving profile photo with filename: P29MVSD_DP.jpeg at path: /home/mvsd-lab/Storage/Images/Professor/P29MVSD_DP.jpeg
+2024-09-15T22:01:20.952Z - Profile photo saved successfully at path: /home/mvsd-lab/Storage/Images/Professor/P29MVSD_DP.jpeg
+2024-09-15T22:01:20.952Z - Profile photo URL generated successfully: /home/mvsd-lab/Storage/Images/Professor/P29MVSD_DP.jpeg
+2024-09-15T22:01:20.952Z - Saving award photo with filename: P29MVSD_Award_1.jpeg at path: /home/mvsd-lab/Storage/Images/Professor/P29MVSD_Award_1.jpeg
+2024-09-15T22:01:20.952Z - Award photo saved successfully at path: /home/mvsd-lab/Storage/Images/Professor/P29MVSD_Award_1.jpeg
+2024-09-15T22:01:20.953Z - Transaction started...
+2024-09-15T22:01:20.954Z - Professor information inserted successfully.
+2024-09-15T22:01:20.954Z - Member information inserted successfully.
+2024-09-15T22:01:20.955Z - Education information inserted successfully.
+2024-09-15T22:01:20.956Z - Career information inserted successfully.
+2024-09-15T22:01:20.957Z - Citation information inserted successfully.
+2024-09-15T22:01:20.957Z - Award information inserted successfully.
+2024-09-15T22:01:20.958Z - Notification inserted successfully.
+2024-09-15T22:01:20.959Z - Transaction committed successfully.
+2024-09-15T22:01:21.554Z - Telegram alert sent successfully: A new professor has been added with ID: P29MVSD
+2024-09-16 04:11:05+06:00 - Receiving form data...
+2024-09-16 04:11:05+06:00 - Checking if email (test5@gmail.com) or phone (9376872463555) already exists in the database...
+2024-09-16 04:11:05+06:00 - Initiating Professor ID generation...
+2024-09-16 04:11:05+06:00 - Professor ID generated successfully: P30MVSD
+2024-09-16 04:11:05+06:00 - New Professor ID generated: P30MVSD
+2024-09-16 04:11:05+06:00 - Saving profile photo with filename: P30MVSD_DP.jpeg at path: /home/mvsd-lab/Storage/Images/Professor/P30MVSD_DP.jpeg
+2024-09-16 04:11:05+06:00 - Profile photo saved successfully at path: /home/mvsd-lab/Storage/Images/Professor/P30MVSD_DP.jpeg
+2024-09-16 04:11:05+06:00 - Profile photo URL generated successfully: /home/mvsd-lab/Storage/Images/Professor/P30MVSD_DP.jpeg
+2024-09-16 04:11:05+06:00 - Saving award photo with filename: P30MVSD_Award_1.jpeg at path: /home/mvsd-lab/Storage/Images/Professor/P30MVSD_Award_1.jpeg
+2024-09-16 04:11:05+06:00 - Award photo saved successfully at path: /home/mvsd-lab/Storage/Images/Professor/P30MVSD_Award_1.jpeg
+2024-09-16 04:11:05+06:00 - Transaction started...
+2024-09-16 04:11:05+06:00 - Professor information inserted successfully.
+2024-09-16 04:11:05+06:00 - Member information inserted successfully.
+2024-09-16 04:11:05+06:00 - Education information inserted successfully.
+2024-09-16 04:11:05+06:00 - Career information inserted successfully.
+2024-09-16 04:11:05+06:00 - Citation information inserted successfully.
+2024-09-16 04:11:05+06:00 - Award information inserted successfully.
+2024-09-16 04:11:05+06:00 - Notification inserted successfully.
+2024-09-16 04:11:05+06:00 - Transaction committed successfully.
+2024-09-16 04:11:06+06:00 - Telegram alert sent successfully: A new professor has been added with ID: P30MVSD
+2024-09-16 04:24:17+06:00 - Receiving form data...
+2024-09-16 04:24:18+06:00 - Checking if email (test6@gmail.com) or phone (9376872466666) already exists in the database...
+2024-09-16 04:24:18+06:00 - Initiating Professor ID generation...
+2024-09-16 04:24:18+06:00 - Professor ID generated successfully: P31MVSD
+2024-09-16 04:24:18+06:00 - New Professor ID generated: P31MVSD
+2024-09-16 04:24:18+06:00 - Saving profile photo with filename: P31MVSD_DP.jpeg at path: /home/mvsd-lab/Storage/Images/Professor/P31MVSD_DP.jpeg
+2024-09-16 04:24:18+06:00 - Profile photo saved successfully at path: /home/mvsd-lab/Storage/Images/Professor/P31MVSD_DP.jpeg
+2024-09-16 04:24:18+06:00 - Profile photo URL generated successfully: /home/mvsd-lab/Storage/Images/Professor/P31MVSD_DP.jpeg
+2024-09-16 04:24:18+06:00 - Saving award photo with filename: P31MVSD_Award_1.png at path: /home/mvsd-lab/Storage/Images/Professor/P31MVSD_Award_1.png
+2024-09-16 04:24:18+06:00 - Award photo saved successfully at path: /home/mvsd-lab/Storage/Images/Professor/P31MVSD_Award_1.png
+2024-09-16 04:24:18+06:00 - A New Professor Adding Process Execution Started...
+2024-09-16 04:24:18+06:00 - Professor information inserted successfully.
+2024-09-16 04:24:18+06:00 - Member information inserted successfully.
+2024-09-16 04:24:18+06:00 - Education information inserted successfully.
+2024-09-16 04:24:18+06:00 - Career information inserted successfully.
+2024-09-16 04:24:18+06:00 - Citation information inserted successfully.
+2024-09-16 04:24:18+06:00 - Award information inserted successfully.
+2024-09-16 04:24:18+06:00 - Notification inserted successfully.
+2024-09-16 04:24:18+06:00 - Execution committed successfully.
+2024-09-16 04:24:18+06:00 - A New Professor Added Successfully ID : P31MVSD
+2024-09-16 04:24:18+06:00 - Telegram alert sent successfully: MVSD LAB DASHBOARD
+------------------------------
+A New Professor Added.
+ID : P31MVSD
