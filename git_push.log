@@ -2118,3 +2118,40 @@ Untracked files:
 
 no changes added to commit (use "git add" and/or "git commit -a")
 Detected Changes: git_push.log Storage/Images/Professor/P13MVSD_DP.jpeg Storage/Images/Professor/P14MVSD_DP.jpeg 
+Commit Output: [main 9b0d1e8] Automated commit: Mon Sep 16 12:00:01 AM +06 2024
+ Committer: root <root@srv563309.hstgr.cloud>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 3 files changed, 33 insertions(+)
+ create mode 100644 Storage/Images/Professor/P13MVSD_DP.jpeg
+ create mode 100644 Storage/Images/Professor/P14MVSD_DP.jpeg
+Push Output: To github.com:SabbirHossainBorno/MVSD-LAB.git
+   deba8cb..9b0d1e8  main -> main
+Push Successful
+Current Status: On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   app/api/professor/route.js
+	modified:   app/dashboard/professor/page.js
+	modified:   git_push.log
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	Storage/Images/Professor/P15MVSD_DP.jpeg
+	Storage/Images/Professor/P16MVSD_DP.jpeg
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Detected Changes: app/api/professor/route.js app/dashboard/professor/page.js git_push.log Storage/Images/Professor/P15MVSD_DP.jpeg Storage/Images/Professor/P16MVSD_DP.jpeg 

@@ -125,19 +125,19 @@ export default function AddProfessor() {
     data.append('citations', JSON.stringify(citations));
   
     // Check if awards is defined and is an array
-    if (Array.isArray(awards) && awards.length > 0) {
-      // Handle awards and include photos if available
-      awards.forEach((award, index) => {
-        data.append(`awards[${index}][title]`, award.title || '');
-        data.append(`awards[${index}][year]`, award.year || '');
-        data.append(`awards[${index}][details]`, award.details || '');
-        
-        // If award photo exists, append it to FormData
-        if (award.awardPhoto) {
-          data.append(`award_photo_${index}`, award.awardPhoto);
-        }
-      });
+if (Array.isArray(awards) && awards.length > 0) {
+  // Handle awards and include photos if available
+  awards.forEach((award, index) => {
+    data.append(`awards[${index}][title]`, award.title || '');
+    data.append(`awards[${index}][year]`, award.year || '');
+    data.append(`awards[${index}][details]`, award.details || '');
+    
+    // If award photo exists, append it to FormData
+    if (award.awardPhoto) {
+      data.append(`award_photo_${index}`, award.awardPhoto);
     }
+  });
+}
   
     // Send request
     try {
