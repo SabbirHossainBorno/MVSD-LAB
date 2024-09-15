@@ -1,4 +1,3 @@
-// Add this line at the very top of your file
 "use client";
 
 import { useState, useCallback } from 'react';
@@ -30,6 +29,7 @@ export default function AddProfessor() {
 
   const router = useRouter();
 
+  // Use useCallback for memoizing handlers
   const handleChange = useCallback((e) => {
     const { name, value, files } = e.target;
 
@@ -99,6 +99,7 @@ export default function AddProfessor() {
       data.append(`awards[${index}][details]`, award.details || '');
       if (award.awardPhoto) {
         data.append(`award_photo_${index}`, award.awardPhoto);
+        
       }
     });
 

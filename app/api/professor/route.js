@@ -32,13 +32,13 @@ const generateProfessorId = async () => {
 const saveFile = async (file, professorId, type, index = null) => {
   const filename = index !== null ? `${professorId}_Award_${index}${path.extname(file.name)}` : `${professorId}_${type}${path.extname(file.name)}`;
   const targetPath = path.join('/home/mvsd-lab/Storage/Images/Professor', filename);
-  
+
   try {
     console.log(`Saving file: ${filename} to ${targetPath}`);
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
     console.log(`File saved successfully at: ${targetPath}`);
-    return filename;
+    return `/home/mvsd-lab/Storage/Images/Professor/${filename}`;
   } catch (error) {
     console.error('Error saving file:', error);
     throw new Error(`Failed to save file: ${error.message}`);
@@ -97,16 +97,18 @@ export async function POST(req) {
       console.log(`Profile photo URL: ${photoUrl}`);
     }
 
-    // Save award photos
+    // Save award photos if awards exist
     const awardUrls = [];
-    for (let i = 0; i < awards.length; i++) {
-      const awardFile = formData.get(`award_photo_${i}`);
-      if (awardFile) {
-        const awardUrl = await saveFile(awardFile, professorId, `Award_${i + 1}`, i);
-        console.log(`Saved award photo ${i + 1}: ${awardUrl}`);
-        awardUrls.push(awardUrl);
-      } else {
-        awardUrls.push(null);
+    if (awards.length > 0) {
+      for (let i = 0; i < awards.length; i++) {
+        const awardFile = formData.get(`award_photo_${i}`);
+        if (awardFile) {
+          const awardUrl = await saveFile(awardFile, professorId, `Award_${i + 1}`);
+          console.log(`Saved award photo ${i + 1}: ${awardUrl}`);
+          awardUrls.push(awardUrl);
+        } else {
+          awardUrls.push(null);
+        }
       }
     }
 
@@ -167,34 +169,28 @@ export async function POST(req) {
         console.log('Citation info inserted:', citationInsertResult.rows[0]);
       }
 
-      // Insert award info
+      // Insert award info if awards exist
       if (awards.length > 0) {
         console.log('Inserting award info...');
-        const insertAwardQuery = `INSERT INTO professor_awards_info (professor_id, title, description, year, photo) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
+        const insertAwardQuery = `INSERT INTO professor_awards_info (professor_id, award, award_photo) VALUES ($1, $2, $3) RETURNING *;`;
         for (let i = 0; i < awards.length; i++) {
-          const award = awards[i];
-          const awardUrl = awardUrls[i];
-          const awardInsertResult = await client.query(insertAwardQuery, [
-            professorId, award.title, award.description, parseInt(award.year), awardUrl,
-          ]);
-          console.log('Award info inserted:', awardInsertResult.rows[0]);
+          await client.query(insertAwardQuery, [professorId, awards[i].award_name, awardUrls[i] || null]);
+          console.log(`Award info inserted for award ${i + 1}`);
         }
       }
 
       // Commit transaction
       await client.query('COMMIT');
       console.log('Transaction committed successfully.');
-      return NextResponse.json({ message: 'Data inserted successfully' }, { status: 200 });
-
+      return NextResponse.json({ message: 'Professor info inserted successfully' });
     } catch (error) {
-      console.error('Error during transaction, rolling back...', error);
       await client.query('ROLLBACK');
-      return NextResponse.json({ message: 'Transaction failed, rolled back', error: error.message }, { status: 500 });
+      console.error('Error during transaction:', error);
+      return NextResponse.json({ message: 'Error inserting professor info', error: error.message }, { status: 500 });
     }
-
   } catch (error) {
     console.error('Error in POST request:', error);
-    return NextResponse.json({ message: 'An error occurred', error: error.message }, { status: 500 });
+    return NextResponse.json({ message: 'Server error', error: error.message }, { status: 500 });
   } finally {
     client.release();
   }
