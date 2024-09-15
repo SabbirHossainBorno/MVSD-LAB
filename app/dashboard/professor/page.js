@@ -1,4 +1,5 @@
-'use client';
+// Add this line at the very top of your file
+"use client";
 
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -13,13 +14,13 @@ export default function AddProfessor() {
     dob: '',
     email: '',
     password: '',
-    confirm_password: '', // Add this field for confirmation
+    confirm_password: '',
     short_bio: '',
     joining_date: '',
-    leaving_date: '', // Can be empty
+    leaving_date: '',
     photo: '',
-    type: 'Professor', // Non-editable
-    status: 'Active', // Non-editable
+    type: 'Professor',
+    status: 'Active',
   });
 
   const [education, setEducation] = useState([{ degree: '', institution: '', passing_year: '' }]);
@@ -29,24 +30,22 @@ export default function AddProfessor() {
 
   const router = useRouter();
 
-  // Use useCallback for memoizing handlers
   const handleChange = useCallback((e) => {
     const { name, value, files } = e.target;
-  
+
     if (name === 'photo' && files.length > 0) {
       const file = files[0];
-  
-      // Validate file size and type
+
       if (file.size > 5 * 1024 * 1024) {
         toast.error('File size exceeds 5 MB.');
         return;
       }
-  
+
       if (!['image/jpeg', 'image/png'].includes(file.type)) {
         toast.error('Invalid file type. Only JPG, JPEG, and PNG are allowed.');
         return;
       }
-  
+
       setFormData((prevData) => ({ ...prevData, [name]: file }));
     } else {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -61,91 +60,54 @@ export default function AddProfessor() {
     });
   }, []);
   
-  const isValidFileType = (file) => ['image/jpeg', 'image/png'].includes(file.type);
-  const isValidFileSize = (file) => file.size <= 5 * 1024 * 1024;
-  
-  const handleArrayFileChange = useCallback((setter, index, field, file) => {
-    setter((prevState) => {
-      const newState = [...prevState];
-
-      if (file) {
-        if (!isValidFileSize(file)) {
-          toast.error('File size exceeds 5 MB.');
-          return prevState;
-        }
-
-        if (!isValidFileType(file)) {
-          toast.error('Invalid file type. Only JPG, JPEG, and PNG are allowed.');
-          return prevState;
-        }
-
-        newState[index][field] = file;
-        toast.success('File uploaded successfully.');
-      }
-
-      return newState;
-    });
-  }, []);
-
   const addNewField = useCallback((setter, newItem) => {
     setter((prevState) => [...prevState, newItem]);
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Ensure passwords match
+
     if (formData.password !== formData.confirm_password) {
       toast.error('Passwords do not match');
       return;
     }
-  
+
     const data = new FormData();
     
-    // Add formData fields to FormData
     for (const key in formData) {
       data.append(key, formData[key]);
     }
-  
-    // Format education, career, and awards data
+
     const formattedEducation = education.map(edu => ({
       ...edu,
-      passing_year: edu.passing_year ? parseInt(edu.passing_year, 10) : null  // Handle empty values
+      passing_year: edu.passing_year ? parseInt(edu.passing_year, 10) : null
     }));
-  
+
     const formattedCareer = career.map(job => ({
       ...job,
       joining_year: job.joining_year ? parseInt(job.joining_year, 10) : null,
       leaving_year: job.leaving_year ? parseInt(job.leaving_year, 10) : null
     }));
-  
-    // Append formatted data to FormData
+
     data.append('education', JSON.stringify(formattedEducation));
     data.append('career', JSON.stringify(formattedCareer));
     data.append('citations', JSON.stringify(citations));
-  
-    // Check if awards is defined and is an array
-if (Array.isArray(awards) && awards.length > 0) {
-  // Handle awards and include photos if available
-  awards.forEach((award, index) => {
-    data.append(`awards[${index}][title]`, award.title || '');
-    data.append(`awards[${index}][year]`, award.year || '');
-    data.append(`awards[${index}][details]`, award.details || '');
     
-    // If award photo exists, append it to FormData
-    if (award.awardPhoto) {
-      data.append(`award_photo_${index}`, award.awardPhoto);
-    }
-  });
-}
-  
-    // Send request
+    awards.forEach((award, index) => {
+      data.append(`awards[${index}][title]`, award.title || '');
+      data.append(`awards[${index}][year]`, award.year || '');
+      data.append(`awards[${index}][details]`, award.details || '');
+      if (award.awardPhoto) {
+        data.append(`award_photo_${index}`, award.awardPhoto);
+      }
+    });
+
     try {
       const response = await fetch('/api/professor', {
         method: 'POST',
         body: data,
       });
-  
+
       if (response.ok) {
         toast.success('Professor added successfully!');
         router.push('/dashboard');
@@ -156,7 +118,7 @@ if (Array.isArray(awards) && awards.length > 0) {
     } catch (error) {
       toast.error('Failed to add professor');
     }
-  }; 
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
@@ -357,7 +319,7 @@ if (Array.isArray(awards) && awards.length > 0) {
                 name="passing_year"
                 placeholder="Passing Year"
                 value={edu.passing_year}
-                onChange={(e) => handleArrayChange(setEducation, index, 'passing_year', parseInt(e.target.value, 10))} // Convert to integer here
+                onChange={(e) => handleArrayChange(setEducation, index, 'passing_year', parseInt(e.target.value, 10))}
                 className="w-full p-3 rounded bg-gray-700"
                 min="1900"
                 max={new Date().getFullYear()}
@@ -402,7 +364,7 @@ if (Array.isArray(awards) && awards.length > 0) {
                 name="joining_year"
                 placeholder="Joining Year"
                 value={job.joining_year}
-                onChange={(e) => handleArrayChange(setCareer, index, 'joining_year', e.target.value)}
+                onChange={(e) => handleArrayChange(setCareer, index, 'joining_year', parseInt(e.target.value, 10))}
                 className="w-full p-3 rounded bg-gray-700"
                 min="1900"
                 max={new Date().getFullYear()}
@@ -413,23 +375,22 @@ if (Array.isArray(awards) && awards.length > 0) {
                 name="leaving_year"
                 placeholder="Leaving Year"
                 value={job.leaving_year}
-                onChange={(e) => handleArrayChange(setCareer, index, 'leaving_year', e.target.value)}
+                onChange={(e) => handleArrayChange(setCareer, index, 'leaving_year', parseInt(e.target.value, 10))}
                 className="w-full p-3 rounded bg-gray-700"
                 min="1900"
                 max={new Date().getFullYear()}
-                required
               />
             </div>
           ))}
           <button
             type="button"
-            onClick={() => addNewField(setCareer, { position: '', institution: '', joining_year: '', leaving_year: '' })}
+            onClick={() => addNewField(setCareer, { position: '', organization: '', joining_year: '', leaving_year: '' })}
             className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
           >
-            Add Another Career
+            Add Another Job
           </button>
         </div>
-  
+
         {/* Citations Section */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Citations</h3>
@@ -477,7 +438,7 @@ if (Array.isArray(awards) && awards.length > 0) {
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Awards</h3>
           {awards.map((award, index) => (
-            <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+            <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <input
                 type="text"
                 name="title"
@@ -492,46 +453,49 @@ if (Array.isArray(awards) && awards.length > 0) {
                 name="year"
                 placeholder="Year"
                 value={award.year}
-                onChange={(e) => handleArrayChange(setAwards, index, 'year', e.target.value)}
+                onChange={(e) => handleArrayChange(setAwards, index, 'year', parseInt(e.target.value, 10))}
                 className="w-full p-3 rounded bg-gray-700"
                 min="1900"
                 max={new Date().getFullYear()}
                 required
               />
-              
-              <textarea
+              <input
+                type="text"
                 name="details"
                 placeholder="Details"
                 value={award.details}
                 onChange={(e) => handleArrayChange(setAwards, index, 'details', e.target.value)}
                 className="w-full p-3 rounded bg-gray-700"
+                required
               />
               <input
                 type="file"
                 name="awardPhoto"
-                accept=".jpg, .jpeg, .png"
-                onChange={(e) => handleArrayFileChange(setAwards, index, 'awardPhoto', e.target.files[0])}
+                onChange={(e) => handleArrayChange(setAwards, index, 'awardPhoto', e.target.files[0])}
                 className="w-full p-3 rounded bg-gray-700"
               />
             </div>
           ))}
-                  <button
-          type="button"
-          onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: '' })}
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-        >
-          Add Another Award
-        </button>
-      </div>
+          <button
+            type="button"
+            onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: '' })}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          >
+            Add Another Award
+          </button>
+        </div>
 
-      <button
-        type="submit"
-        className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded w-full"
-      >
-        Add Professor
-      </button>
-    </form>
-    <ToastContainer />
-  </div>
-);
+        {/* Submit Button */}
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          >
+            Add Professor
+          </button>
+        </div>
+      </form>
+      <ToastContainer />
+    </div>
+  );
 }
