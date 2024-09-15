@@ -64,6 +64,18 @@ export default function AddProfessor() {
     setter((prevState) => [...prevState, newItem]);
   }, []);
 
+  // Remove an item from the array
+  const removeField = useCallback((setter, index) => {
+    setter((prevState) => {
+      // Ensure at least one entry remains
+      if (prevState.length > 1) {
+        return prevState.filter((_, i) => i !== index);
+      }
+      return prevState;
+    });
+  }, []);
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -209,33 +221,6 @@ export default function AddProfessor() {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="photo" className="block text-gray-300 mb-2">
-                Photo
-              </label>
-              <input
-                type="file"
-                id="photo"
-                name="photo"
-                accept=".jpg, .jpeg, .png"
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="leaving_date" className="block text-gray-300 mb-2">
-              Leaving Date
-              </label>
-              <input
-                type="date"
-                name="leaving_date"
-                value={formData.leaving_date}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                readOnly
-              />
-            </div>
-            <div className="mb-4">
               <label htmlFor="password" className="block text-gray-300 mb-2">
               Password
               </label>
@@ -288,53 +273,76 @@ export default function AddProfessor() {
                 required
               />
             </div>
+            <div className="mb-4">
+              <label htmlFor="leaving_date" className="block text-gray-300 mb-2">
+                Leaving Date
+              </label>
+              <input
+                type="date"
+                name="leaving_date"
+                value={formData.leaving_date}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-gray-700 text-gray-300 cursor-not-allowed"
+                readOnly
+              />
+            </div>
           </div>
         </div>
   
         {/* Education Section */}
         <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4">Education</h3>
-          {education.map((edu, index) => (
-            <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <input
-                type="text"
-                name="degree"
-                placeholder="Degree"
-                value={edu.degree}
-                onChange={(e) => handleArrayChange(setEducation, index, 'degree', e.target.value)}
-                className="w-full p-3 rounded bg-gray-700"
-                required
-              />
-              <input
-                type="text"
-                name="institution"
-                placeholder="Institution"
-                value={edu.institution}
-                onChange={(e) => handleArrayChange(setEducation, index, 'institution', e.target.value)}
-                className="w-full p-3 rounded bg-gray-700"
-                required
-              />
-              <input
-                type="number"
-                name="passing_year"
-                placeholder="Passing Year"
-                value={edu.passing_year}
-                onChange={(e) => handleArrayChange(setEducation, index, 'passing_year', parseInt(e.target.value, 10))}
-                className="w-full p-3 rounded bg-gray-700"
-                min="1900"
-                max={new Date().getFullYear()}
-                required
-              />
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={() => addNewField(setEducation, { degree: '', institution: '', passing_year: '' })}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-          >
-            Add Another Education
-          </button>
+      <h3 className="text-xl font-bold mb-4">Education</h3>
+      {education.map((edu, index) => (
+        <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
+          <input
+            type="text"
+            name="degree"
+            placeholder="Degree"
+            value={edu.degree}
+            onChange={(e) => handleArrayChange(setEducation, index, 'degree', e.target.value)}
+            className="w-full p-3 rounded bg-gray-700"
+            required
+          />
+          <input
+            type="text"
+            name="institution"
+            placeholder="Institution"
+            value={edu.institution}
+            onChange={(e) => handleArrayChange(setEducation, index, 'institution', e.target.value)}
+            className="w-full p-3 rounded bg-gray-700"
+            required
+          />
+          <input
+            type="number"
+            name="passing_year"
+            placeholder="Passing Year"
+            value={edu.passing_year}
+            onChange={(e) => handleArrayChange(setEducation, index, 'passing_year', parseInt(e.target.value, 10))}
+            className="w-full p-3 rounded bg-gray-700"
+            min="1900"
+            max={new Date().getFullYear()}
+            required
+          />
+          {/* Remove Button */}
+          {education.length > 1 && (
+            <button
+              type="button"
+              onClick={() => removeField(setEducation, index)}
+              className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+            >
+              Remove
+            </button>
+          )}
         </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => addNewField(setEducation, { degree: '', institution: '', passing_year: '' })}
+        className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+      >
+        Add Another Education
+      </button>
+    </div>
   
         {/* Career Section */}
         <div className="mb-8">
