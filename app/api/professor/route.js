@@ -29,7 +29,7 @@ const sendTelegramAlert = async (message) => {
       chat_id: groupId,
       text: message,
     });
-    writeLog(`Telegram alert sent successfully: ${message}`);
+    writeLog('Telegram alert sent successfully');
   } catch (error) {
     writeLog(`Failed to send Telegram alert: ${error.message}`);
   }
@@ -161,7 +161,7 @@ export async function POST(req) {
     }
 
     try {
-      // Begin transaction
+      // Begin Execution
       await client.query('BEGIN');
       writeLog('A New Professor Adding Process Execution Started...');
 
@@ -245,17 +245,17 @@ export async function POST(req) {
       const notificationInsertResult = await client.query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
       writeLog('Notification inserted successfully.');
 
-      // Commit transaction
+      // Commit Execution
       await client.query('COMMIT');
       writeLog('Execution committed successfully.');
       writeLog(`A New Professor Added Successfully ID : ${professorId}`);
-      sendTelegramAlert(`MVSD LAB DASHBOARD\n----------------------------------\nA New Professor Added.\nID : ${professorId}`);
+      sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nA New Professor Added.\nID : ${professorId}`);
       return NextResponse.json({ message: 'Professor information added successfully!' }, { status: 200 });
 
     } catch (error) {
-      writeLog(`Error during transaction: ${error.message}`);
+      writeLog(`Error during execution: ${error.message}`);
       await client.query('ROLLBACK');
-      return NextResponse.json({ message: `Transaction failed: ${error.message}` }, { status: 500 });
+      return NextResponse.json({ message: `Execution failed: ${error.message}` }, { status: 500 });
     }
 
   } catch (error) {
