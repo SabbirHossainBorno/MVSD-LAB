@@ -94,13 +94,6 @@ export async function POST(req) {
     }
     console.log('Parsed Awards Data:', awards);
 
-    // Validate awards data
-    if (awards.length === 0) {
-      // Rollback transaction and return a message
-      await client.query('ROLLBACK');
-      return NextResponse.json({ message: 'Awards data is empty' }, { status: 400 });
-    }
-
     console.log('Received Form Data:', {
       first_name, last_name, phone, dob, email, short_bio, joining_date, leaving_date, type, education, career, citations, awards,
     });
@@ -143,12 +136,21 @@ export async function POST(req) {
         }
       }
     }
+    // Validate awards data
+    if (awardUrls.length === 0) {
+      // Rollback transaction and return a message
+      await client.query('ROLLBACK');
+      return NextResponse.json({ message: 'Awards URL is empty' }, { status: 400 });
+    }
 
+
+
+    try {
     // Begin transaction
     await client.query('BEGIN');
     console.log('Transaction started...');
 
-    try {
+    
       // Insert professor info
       console.log('Inserting professor basic info...');
       const insertProfessorQuery = `
@@ -193,17 +195,17 @@ export async function POST(req) {
         console.log('Career info inserted:', carInsertResult.rows[0]);
       }
 
-      // Insert citations info
-      console.log('Inserting citations info...');
-      const insertCitationsQuery = `INSERT INTO professor_citations_info (professor_id, citation) VALUES ($1, $2) RETURNING *;`;
+      // Insert citation info
+      console.log('Inserting citation info...');
+      const insertCitationQuery = `INSERT INTO professor_citations_info (professor_id, title, link, organization_name) VALUES ($1, $2, $3, $4) RETURNING *;`;
       for (const citation of citations) {
-        const citationInsertResult = await client.query(insertCitationsQuery, [professorId, citation]);
-        console.log('Citations info inserted:', citationInsertResult.rows[0]);
+        const citationInsertResult = await client.query(insertCitationQuery, [professorId, citation.title, citation.link, citation.organization]);
+        console.log('Citation info inserted:', citationInsertResult.rows[0]);
       }
 
       // Insert awards info
       console.log('Inserting awards info...');
-      const insertAwardsQuery = `INSERT INTO professor_awards_info (professor_id, title, year, details, award_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
+      const insertAwardsQuery = `INSERT INTO professor_award_info (professor_id, title, year, details, award_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
       for (let i = 0; i < awards.length; i++) {
         const award = awards[i];
         const awardUrl = awardUrls[i]; // Get the URL of the saved award photo
