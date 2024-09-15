@@ -28,7 +28,7 @@ export default function AddProfessor() {
   const [awards, setAwards] = useState([{ title: '', year: '', details: '', awardPhoto: '' }]);
 
   const router = useRouter();
-
+  
   // Use useCallback for memoizing handlers
   const handleChange = useCallback((e) => {
     const { name, value, files } = e.target;
@@ -98,8 +98,7 @@ export default function AddProfessor() {
       data.append(`awards[${index}][year]`, award.year || '');
       data.append(`awards[${index}][details]`, award.details || '');
       if (award.awardPhoto) {
-        data.append(`award_photo_${index}`, award.awardPhoto);
-        
+        data.append(`awards[${index}][awardPhoto]`, award.awardPhoto);
       }
     });
 

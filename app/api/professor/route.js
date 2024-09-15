@@ -28,20 +28,37 @@ const generateProfessorId = async () => {
   }
 };
 
-// Helper function to save a file
-const saveFile = async (file, professorId, type, index = null) => {
-  const filename = index !== null ? `${professorId}_Award_${index}${path.extname(file.name)}` : `${professorId}_${type}${path.extname(file.name)}`;
+// Helper function to save profile photo
+const saveProfilePhoto = async (file, professorId) => {
+  const filename = `${professorId}_DP${path.extname(file.name)}`;
   const targetPath = path.join('/home/mvsd-lab/Storage/Images/Professor', filename);
 
   try {
-    console.log(`Saving file: ${filename} to ${targetPath}`);
+    console.log(`Saving profile photo: ${filename} to ${targetPath}`);
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
-    console.log(`File saved successfully at: ${targetPath}`);
+    console.log(`Profile photo saved successfully at: ${targetPath}`);
     return `/home/mvsd-lab/Storage/Images/Professor/${filename}`;
   } catch (error) {
-    console.error('Error saving file:', error);
-    throw new Error(`Failed to save file: ${error.message}`);
+    console.error('Error saving profile photo:', error);
+    throw new Error(`Failed to save profile photo: ${error.message}`);
+  }
+};
+
+// Helper function to save award photo
+const saveAwardPhoto = async (file, professorId, index) => {
+  const filename = `${professorId}_Award_${index}${path.extname(file.name)}`;
+  const targetPath = path.join('/home/mvsd-lab/Storage/Images/Professor', filename);
+
+  try {
+    console.log(`Saving award photo: ${filename} to ${targetPath}`);
+    const buffer = await file.arrayBuffer();
+    fs.writeFileSync(targetPath, Buffer.from(buffer));
+    console.log(`Award photo saved successfully at: ${targetPath}`);
+    return `/home/mvsd-lab/Storage/Images/Professor/${filename}`;
+  } catch (error) {
+    console.error('Error saving award photo:', error);
+    throw new Error(`Failed to save award photo: ${error.message}`);
   }
 };
 
@@ -66,7 +83,23 @@ export async function POST(req) {
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
     const citations = JSON.parse(formData.get('citations') || '[]');
-    const awards = JSON.parse(formData.get('awards') || '[]');
+    const awards = [];
+    for (let i = 0; formData.has(`awards[${i}][title]`); i++) {
+      awards.push({
+        title: formData.get(`awards[${i}][title]`),
+        year: formData.get(`awards[${i}][year]`),
+        details: formData.get(`awards[${i}][details]`),
+        awardPhoto: formData.get(`awards[${i}][awardPhoto]`)
+      });
+    }
+    console.log('Parsed Awards Data:', awards);
+
+    // Validate awards data
+    if (awards.length === 0) {
+      // Rollback transaction and return a message
+      await client.query('ROLLBACK');
+      return NextResponse.json({ message: 'Awards data is empty' }, { status: 400 });
+    }
 
     console.log('Received Form Data:', {
       first_name, last_name, phone, dob, email, short_bio, joining_date, leaving_date, type, education, career, citations, awards,
@@ -93,18 +126,17 @@ export async function POST(req) {
     let photoUrl = null;
     const photoFile = formData.get('photo');
     if (photoFile) {
-      photoUrl = await saveFile(photoFile, professorId, 'DP');
+      photoUrl = await saveProfilePhoto(photoFile, professorId);
       console.log(`Profile photo URL: ${photoUrl}`);
     }
 
-    // Save award photos if awards exist
+    // Handle awards processing
     const awardUrls = [];
     if (awards.length > 0) {
       for (let i = 0; i < awards.length; i++) {
         const awardFile = formData.get(`award_photo_${i}`);
         if (awardFile) {
-          const awardUrl = await saveFile(awardFile, professorId, `Award_${i + 1}`);
-          console.log(`Saved award photo ${i + 1}: ${awardUrl}`);
+          const awardUrl = await saveAwardPhoto(awardFile, professorId, i + 1);
           awardUrls.push(awardUrl);
         } else {
           awardUrls.push(null);
@@ -156,41 +188,64 @@ export async function POST(req) {
       const insertCareerQuery = `INSERT INTO professor_career_info (professor_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
       for (const car of career) {
         const carInsertResult = await client.query(insertCareerQuery, [
-          professorId, car.position, car.organization, parseInt(car.joining_year), car.leaving_year ? parseInt(car.leaving_year) : null,
+          professorId, car.position, car.organization, parseInt(car.joining_year), parseInt(car.leaving_year),
         ]);
         console.log('Career info inserted:', carInsertResult.rows[0]);
       }
 
-      // Insert citation info
-      console.log('Inserting citation info...');
-      const insertCitationQuery = `INSERT INTO professor_citations_info (professor_id, title, link, organization_name) VALUES ($1, $2, $3, $4) RETURNING *;`;
+      // Insert citations info
+      console.log('Inserting citations info...');
+      const insertCitationsQuery = `INSERT INTO professor_citations_info (professor_id, citation) VALUES ($1, $2) RETURNING *;`;
       for (const citation of citations) {
-        const citationInsertResult = await client.query(insertCitationQuery, [professorId, citation.title, citation.link, citation.organization]);
-        console.log('Citation info inserted:', citationInsertResult.rows[0]);
+        const citationInsertResult = await client.query(insertCitationsQuery, [professorId, citation]);
+        console.log('Citations info inserted:', citationInsertResult.rows[0]);
       }
 
-      // Insert award info if awards exist
-      if (awards.length > 0) {
-        console.log('Inserting award info...');
-        const insertAwardQuery = `INSERT INTO professor_awards_info (professor_id, award, award_photo) VALUES ($1, $2, $3) RETURNING *;`;
-        for (let i = 0; i < awards.length; i++) {
-          await client.query(insertAwardQuery, [professorId, awards[i].award_name, awardUrls[i] || null]);
-          console.log(`Award info inserted for award ${i + 1}`);
+      // Insert awards info
+      console.log('Inserting awards info...');
+      const insertAwardsQuery = `INSERT INTO professor_awards_info (professor_id, title, year, details, award_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
+      for (let i = 0; i < awards.length; i++) {
+        const award = awards[i];
+        const awardUrl = awardUrls[i]; // Get the URL of the saved award photo
+
+        try {
+          const awardInsertResult = await client.query(insertAwardsQuery, [
+            professorId, award.title, parseInt(award.year), award.details, awardUrl,
+          ]);
+
+          // Log all the award data
+          console.log('Award info inserted:', {
+            id: awardInsertResult.rows[0].id, // Assuming ID is returned from the query
+            professor_id: professorId,
+            title: award.title,
+            year: award.year,
+            details: award.details,
+            award_photo: awardUrl
+          });
+
+        } catch (error) {
+          console.error('Error inserting award info:', {
+            award,
+            error: error.message
+          });
         }
       }
 
+
       // Commit transaction
       await client.query('COMMIT');
-      console.log('Transaction committed successfully.');
-      return NextResponse.json({ message: 'Professor info inserted successfully' });
+      console.log('Transaction committed successfully!');
+      return NextResponse.json({ message: 'Professor info added successfully!' }, { status: 200 });
+
     } catch (error) {
-      await client.query('ROLLBACK');
       console.error('Error during transaction:', error);
-      return NextResponse.json({ message: 'Error inserting professor info', error: error.message }, { status: 500 });
+      await client.query('ROLLBACK');
+      return NextResponse.json({ message: `Transaction failed: ${error.message}` }, { status: 500 });
     }
+
   } catch (error) {
-    console.error('Error in POST request:', error);
-    return NextResponse.json({ message: 'Server error', error: error.message }, { status: 500 });
+    console.error('Error processing form data:', error);
+    return NextResponse.json({ message: `Failed to process form data: ${error.message}` }, { status: 500 });
   } finally {
     client.release();
   }
