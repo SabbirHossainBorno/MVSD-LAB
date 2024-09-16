@@ -110,3 +110,26 @@ ID : P31MVSD
 ----------------------------------
 A New Professor Added.
 ID : P32MVSD
+2024-09-16 05:37:13+06:00 - Receiving form data...
+2024-09-16 05:37:13+06:00 - Checking if email (test14@gmail.com) or phone (01928837414) already exists in the database...
+2024-09-16 05:37:13+06:00 - Initiating Professor ID generation...
+2024-09-16 05:37:13+06:00 - Professor ID generated successfully: P33MVSD
+2024-09-16 05:37:13+06:00 - New Professor ID generated: P33MVSD
+2024-09-16 05:37:13+06:00 - Saving profile photo with filename: P33MVSD_DP.jpeg at path: /home/mvsd-lab/Storage/Images/Professor/P33MVSD_DP.jpeg
+2024-09-16 05:37:13+06:00 - Profile photo saved successfully at path: /home/mvsd-lab/Storage/Images/Professor/P33MVSD_DP.jpeg
+2024-09-16 05:37:13+06:00 - Profile photo URL generated successfully: /home/mvsd-lab/Storage/Images/Professor/P33MVSD_DP.jpeg
+2024-09-16 05:37:13+06:00 - Saving award photo with filename: P33MVSD_Award_1.png at path: /home/mvsd-lab/Storage/Images/Professor/P33MVSD_Award_1.png
+2024-09-16 05:37:13+06:00 - Award photo saved successfully at path: /home/mvsd-lab/Storage/Images/Professor/P33MVSD_Award_1.png
+2024-09-16 05:37:13+06:00 - A New Professor Adding Process Execution Started...
+2024-09-16 05:37:13+06:00 - Professor information inserted successfully.
+2024-09-16 05:37:13+06:00 - Member information inserted successfully.
+2024-09-16 05:37:13+06:00 - Education information inserted successfully.
+2024-09-16 05:37:13+06:00 - Education information inserted successfully.
+2024-09-16 05:37:13+06:00 - Career information inserted successfully.
+2024-09-16 05:37:13+06:00 - Citation information inserted successfully.
+2024-09-16 05:37:13+06:00 - Citation information inserted successfully.
+2024-09-16 05:37:13+06:00 - Award information inserted successfully.
+2024-09-16 05:37:13+06:00 - Notification inserted successfully.
+2024-09-16 05:37:13+06:00 - Execution committed successfully.
+2024-09-16 05:37:13+06:00 - A New Professor Added Successfully ID : P33MVSD
+2024-09-16 05:37:14+06:00 - Telegram alert sent successfully
