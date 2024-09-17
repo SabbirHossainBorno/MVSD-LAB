@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
+import withAuth from '../components/withAuth';
 
-export default function Dashboard() {
+const Dashboard = () => {
   const [subscribers, setSubscribers] = useState(0);
   const [users, setUsers] = useState([]);
   const [professorsCount, setProfessorsCount] = useState(0);
@@ -58,6 +59,7 @@ export default function Dashboard() {
       toast.error('Failed to update user status');
     }
   };
+
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-gray-100">
@@ -240,3 +242,4 @@ export default function Dashboard() {
     </div>
   );
 }
+export default withAuth(Dashboard);
