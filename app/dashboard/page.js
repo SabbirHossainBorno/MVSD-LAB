@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
@@ -14,9 +13,6 @@ export default function Dashboard() {
   const [recentProfessors, setRecentProfessors] = useState([]);
   const [recentSubscribers, setRecentSubscribers] = useState([]);
   const [notifications, setNotifications] = useState([]);
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     async function fetchData() {
@@ -30,10 +26,6 @@ export default function Dashboard() {
           setRecentSubscribers(result.recentSubscribers);
           setRecentUsers(result.recentUsers);
           setRecentProfessors(result.recentProfessors);
-          setNotifications([
-            { id: 1, message: 'New subscriber added', read: false },
-            { id: 2, message: 'User profile updated', read: false },
-          ]);
         } else {
           toast.error(result.message);
         }
@@ -45,20 +37,6 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/logout', { method: 'POST' });
-      router.push('/login');
-    } catch (error) {
-      toast.error('Logout failed');
-    }
-  };
-
-  const handleNotificationClick = (notificationId) => {
-    setNotifications(notifications.map(notification =>
-      notification.id === notificationId ? { ...notification, read: true } : notification
-    ));
-  };
 
   const updateUserStatus = async (userId, newStatus) => {
     try {
