@@ -1,3 +1,4 @@
+// app/api/signup/route.js
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 import { v4 as uuidv4 } from 'uuid';
@@ -41,7 +42,7 @@ export async function POST(request) {
     const { firstName, lastName, phone, dob, email, password, confirmPassword } = await request.json();
 
     log(`Signup attempt for email: ${email}`, sessionId, { ip, userAgent });
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nSignup attempt for email: ${email}`);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nSignup Attempt.\nEmail : ${email}`);
 
     // Validate required fields
     const errors = {};
@@ -106,7 +107,7 @@ export async function POST(request) {
       );
 
       log(`User registered successfully for email: ${email}`, sessionId);
-      await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nUser Registered Successfully.\nEmail : ${email}`);
+      await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nUser Registered Successfully.\nEmail : ${email}`);
 
       // Return success response
       return NextResponse.json({ success: true, message: 'User registered successfully.' }, { status: 200 });

@@ -145,3 +145,5 @@ ID : P32MVSD
 2024-09-17T20:43:24.108Z [Session ID: e5f97492-bd32-4ecb-ab8d-bc078d3b6e66] Admin login successful for email: admin@mvsdlab.com
 2024-09-17T20:57:44.562Z [Session ID: 8d3975b6-e96c-4c94-99e2-e851cbf2f377] Signup attempt for email: alamgirhossain@gmail.com {"ip":"103.180.244.251","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0"}
 2024-09-17T20:57:45.055Z [Session ID: 8d3975b6-e96c-4c94-99e2-e851cbf2f377] User registered successfully for email: alamgirhossain@gmail.com {}
+2024-09-17T21:01:32.600Z [Session ID: 34c17d6c-0311-4344-8d70-21bf02af84e2] Login attempt for email: admin@mvsdlab.com
+2024-09-17T21:01:33.025Z [Session ID: 34c17d6c-0311-4344-8d70-21bf02af84e2] Admin login successful for email: admin@mvsdlab.com
