@@ -15,7 +15,9 @@ export default function DashboardNavbar({ toggleSidebar }) {
         const response = await fetch('/api/notification');
         const result = await response.json();
         if (response.ok) {
-          setNotifications(result);
+          // Sort notifications so that unread ones come first
+          const sortedNotifications = result.sort((a, b) => a.status === 'Unread' ? -1 : 1);
+          setNotifications(sortedNotifications);
         } else {
           console.error(result.message);
         }
@@ -40,12 +42,12 @@ export default function DashboardNavbar({ toggleSidebar }) {
 
   const handleNotificationClick = async (notificationId) => {
     try {
-      await fetch(`/api/notification/${notificationId}`, {
+      await fetch(`/api/notification`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: 'Read' }),
+        body: JSON.stringify({ notificationId, status: 'Read' }),
       });
 
       setNotifications(notifications.map(notification =>

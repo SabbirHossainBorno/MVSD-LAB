@@ -12,7 +12,6 @@ export default function Dashboard() {
   const [recentUsers, setRecentUsers] = useState([]);
   const [recentProfessors, setRecentProfessors] = useState([]);
   const [recentSubscribers, setRecentSubscribers] = useState([]);
-  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -36,7 +35,6 @@ export default function Dashboard() {
 
     fetchData();
   }, []);
-
 
   const updateUserStatus = async (userId, newStatus) => {
     try {
@@ -144,24 +142,31 @@ export default function Dashboard() {
           </div>
 
           {/* Recent Professors */}
-          <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
-            <div className="relative">
-              <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-500">
-                Recent Professors
-              </h2>
-              <hr className="border-0 h-1 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-full mb-6" />
-            </div>
-            <ul className="space-y-2">
-              {recentProfessors.map(professor => (
-                <li
-                  key={professor.email}
-                  className="flex items-center justify-between p-3 bg-gray-700 rounded-lg border border-gray-600 shadow-sm hover:bg-gray-600 transition"
+        <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
+          <div className="relative">
+            <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-500">
+              Recent Professors
+            </h2>
+            <hr className="border-0 h-1 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-full mb-6" />
+          </div>
+          <ul className="space-y-2">
+            {recentProfessors.map(professor => (
+              <li
+                key={professor.id}
+                className="flex items-center justify-between p-3 bg-gray-700 rounded-lg border border-gray-600 shadow-sm hover:bg-gray-600 transition"
+              >
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-gray-200">
+                    <strong>ID:</strong> {professor.id} - {professor.email}
+                  </span>
+                </div>
+                <button
+                  disabled
+                  className="bg-green-600 text-white hover:bg-green-700 rounded px-4 py-1 text-xs font-medium cursor-not-allowed opacity-50"
                 >
-                  <span className="text-sm text-gray-200">{professor.email}</span>
-                  <button className="bg-green-600 text-white hover:bg-green-700 rounded px-4 py-1 text-xs font-medium">
-                    Active
-                  </button>
-                </li>
+                  Active
+                </button>
+              </li>
               ))}
             </ul>
             <Link href="/dashboard/professors_list" className="block mt-3 text-center text-blue-400 hover:text-blue-500 text-sm">View All</Link>

@@ -12,9 +12,9 @@ export async function GET() {
     const subscriberCountQuery = 'SELECT COUNT(*) FROM subscriber';
     const userDetailsQuery = 'SELECT * FROM users';
     const professorDetailsQuery = 'SELECT COUNT(*) AS count FROM professor_basic_info'; // Total professors count
+    const recentProfessorsQuery = 'SELECT id, first_name, last_name, phone, dob, email, short_bio, joining_date, leaving_date, photo, status, type FROM professor_basic_info ORDER BY id DESC LIMIT 5';
     const recentSubscribersQuery = 'SELECT * FROM subscriber ORDER BY date DESC LIMIT 7';
     const recentUsersQuery = 'SELECT * FROM users WHERE status = \'approved\' ORDER BY id DESC LIMIT 5';
-    const recentProfessorsQuery = 'SELECT * FROM professor_basic_info ORDER BY id DESC LIMIT 5'; // Recent professors
 
     const subscriberCount = await client.query(subscriberCountQuery);
     const userDetails = await client.query(userDetailsQuery);
