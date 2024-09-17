@@ -1,14 +1,47 @@
-// app/api/signup/route.js
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
+import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
+import path from 'path';
+import axios from 'axios';
+import bcrypt from 'bcrypt';
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL, // Ensure this is correct
+  connectionString: process.env.DATABASE_URL,
 });
 
+const logFilePath = path.join('/home/mvsd-lab/Log', 'mvsd_lab.log');
+
+const TELEGRAM_API_KEY = process.env.TELEGRAM_API_KEY;
+const TELEGRAM_GROUP_ID = process.env.TELEGRAM_GROUP_ID;
+
+const log = (message, sessionId, details = {}) => {
+  const logMessage = `${new Date().toISOString()} [Session ID: ${sessionId}] ${message} ${JSON.stringify(details)}\n`;
+  fs.appendFileSync(logFilePath, logMessage);
+};
+
+const sendTelegramAlert = async (message) => {
+  const url = `https://api.telegram.org/bot${TELEGRAM_API_KEY}/sendMessage`;
+  try {
+    await axios.post(url, {
+      chat_id: TELEGRAM_GROUP_ID,
+      text: message,
+    });
+  } catch (error) {
+    console.error('Failed to send Telegram alert:', error);
+  }
+};
+
 export async function POST(request) {
+  const sessionId = uuidv4(); // Generate a unique session ID for this signup attempt
+  const ip = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr');
+  const userAgent = request.headers.get('user-agent');
+
   try {
     const { firstName, lastName, phone, dob, email, password, confirmPassword } = await request.json();
+
+    log(`Signup attempt for email: ${email}`, sessionId, { ip, userAgent });
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nSignup attempt for email: ${email}`);
 
     // Validate required fields
     const errors = {};
@@ -21,6 +54,7 @@ export async function POST(request) {
     if (!confirmPassword) errors.confirmPassword = 'Confirm password is required.';
 
     if (Object.keys(errors).length > 0) {
+      log(`Validation errors for email: ${email}`, sessionId, { errors });
       return NextResponse.json({ success: false, errors }, { status: 400 });
     }
 
@@ -49,6 +83,7 @@ export async function POST(request) {
     }
 
     if (Object.keys(errors).length > 0) {
+      log(`Validation errors for email: ${email}`, sessionId, { errors });
       return NextResponse.json({ success: false, errors }, { status: 400 });
     }
 
@@ -57,27 +92,34 @@ export async function POST(request) {
       // Check if email already exists
       const emailCheckResult = await client.query('SELECT email FROM users WHERE email = $1', [email]);
       if (emailCheckResult.rows.length > 0) {
+        log(`Email already exists for email: ${email}`, sessionId);
         return NextResponse.json({ success: false, errors: { email: 'A user with that email already exists, please try with another email.' } }, { status: 400 });
       }
+
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10);
 
       // Insert new user
       await client.query(
         'INSERT INTO users (first_name, last_name, phone, dob, email, password, status) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-        [firstName, lastName, phone, dob, email, password, 'pending']
+        [firstName, lastName, phone, dob, email, hashedPassword, 'pending']
       );
 
-      // Redirect to login page
-      //return NextResponse.redirect('/login');
+      log(`User registered successfully for email: ${email}`, sessionId);
+      await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nUser Registered Successfully.\nEmail : ${email}`);
+
       // Return success response
       return NextResponse.json({ success: true, message: 'User registered successfully.' }, { status: 200 });
     } catch (error) {
-      console.error('Database error:', error);
+      log(`Database error during signup for email: ${email} - ${error.message}`, sessionId);
+      await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nDatabase Error During User Signup.\nEmail : ${email} - ${error.message}`);
       return NextResponse.json({ success: false, errors: { general: 'Database error' } }, { status: 500 });
     } finally {
       client.release();
     }
   } catch (error) {
-    console.error('Request error:', error);
+    log(`Request error during signup for email: ${email} - ${error.message}`, sessionId);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nRequest Error During User Signup.\nEmail : ${email} - ${error.message}`);
     return NextResponse.json({ success: false, errors: { general: 'Invalid request' } }, { status: 400 });
   }
 }

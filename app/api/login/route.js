@@ -39,13 +39,13 @@ export async function POST(request) {
 
   try {
     log(`Login attempt for email: ${email}`, sessionId);
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nLogin attempt for email: ${email}`);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nLogin Attempt.\nEmail : ${email}`);
 
     // Check user in admin table
     const adminRes = await client.query('SELECT * FROM admin WHERE email = $1 AND password = $2', [email, password]);
     if (adminRes.rows.length > 0) {
       log(`Admin login successful for email: ${email}`, sessionId);
-      await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nAdmin login successful for email: ${email}`);
+      await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nAdmin Login Successful.\nEmail : ${email}`);
       const response = NextResponse.json({ success: true, type: 'admin' });
       response.cookies.set('email', email, { httpOnly: true });
       response.cookies.set('sessionId', sessionId, { httpOnly: true });
@@ -56,7 +56,7 @@ export async function POST(request) {
     const userRes = await client.query('SELECT * FROM users WHERE email = $1 AND password = $2', [email, password]);
     if (userRes.rows.length > 0) {
       log(`User login successful for email: ${email}`, sessionId);
-      await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nUser login successful for email: ${email}`);
+      await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nLogin Successful.\nEmail : ${email}`);
       const response = NextResponse.json({ success: true, type: 'user' });
       response.cookies.set('email', email, { httpOnly: true });
       response.cookies.set('sessionId', sessionId, { httpOnly: true });
@@ -64,15 +64,13 @@ export async function POST(request) {
     }
 
     log(`Login failed for email: ${email}`, sessionId);
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nLogin failed for email: ${email}`);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nLogin Failed.\nEmail : ${email}`);
     return NextResponse.json({ success: false, message: 'Invalid email or password' });
   } catch (error) {
     log(`Error during login for email: ${email} - ${error.message}`, sessionId);
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nError during login for email: ${email} - ${error.message}`);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nError During Login.\nEmail : ${email} - ${error.message}`);
     return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
   } finally {
     client.release();
   }
 }
-
-
