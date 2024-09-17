@@ -93,30 +93,43 @@ export default function DashboardNavbar({ toggleSidebar }) {
           onClick={() => setShowNotifications(!showNotifications)}
           className="relative text-white hover:bg-gray-800 p-2 rounded-full transition-colors flex items-center"
         >
-          <img src="/images/notification.png" alt="Notifications" className="w-6 h-6"/>
+          <img src="/images/notification.png" alt="Notifications" className="w-6 h-6" />
           {notifications.some(notification => notification.status === 'Unread') && (
             <span className="absolute top-0 right-0 w-3 h-3 bg-red-600 rounded-full"></span>
           )}
         </button>
 
         {showNotifications && (
-          <div className="absolute top-full right-0 mt-2 w-64 bg-gray-800 shadow-lg rounded-lg border border-gray-700 overflow-hidden z-20">
-            <ul className="max-h-60 overflow-y-auto">
+          <div className="absolute top-full right-0 mt-2 w-11/12 max-w-sm bg-gray-900 shadow-xl rounded border border-gray-700 overflow-hidden z-30 sm:w-80"> {/* Responsive width control */}
+            <div className="p-4 bg-gray-800 border-b border-gray-700">
+              <h4 className="text-lg text-white font-semibold">Notifications</h4>
+            </div>
+            <ul className="max-h-60 overflow-y-auto divide-y divide-gray-700">
               {notifications.map(notification => (
                 <li
                   key={notification.id}
-                  className={`p-4 ${notification.status === 'Read' ? 'bg-gray-700' : 'bg-gray-600'} border-b border-gray-700 cursor-pointer hover:bg-gray-500 transition-colors`}
+                  className={`p-4 transition-all cursor-pointer hover:bg-gray-700 ${notification.status === 'Read' ? 'bg-gray-800' : 'bg-gray-700'} `}
                   onClick={() => handleNotificationClick(notification.id)}
                 >
-                  {notification.title}
+                  <div className="flex justify-between items-center">
+                    <span className={`text-sm font-medium ${notification.status === 'Unread' ? 'text-white' : 'text-gray-400'}`}>
+                      {notification.title}
+                    </span>
+                    {notification.status === 'Unread' && <span className="w-2 h-2 bg-blue-500 rounded-full"></span>}
+                  </div>
+                  <p className="text-xs text-gray-400 mt-1">{notification.timeAgo}</p>
                 </li>
               ))}
               {notifications.length === 0 && (
-                <li className="p-4 text-gray-400">No notifications</li>
+                <li className="p-4 text-gray-500 text-sm text-center">You have no notifications</li>
               )}
             </ul>
+            <div className="p-3 bg-gray-800 text-center border-t border-gray-700">
+              <button className="text-sm text-blue-500 hover:text-blue-400">Mark all as read</button>
+            </div>
           </div>
         )}
+
 
         <button
           onClick={handleLogout}
