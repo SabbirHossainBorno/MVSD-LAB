@@ -1,11 +1,10 @@
-// app/componenets/withAuth.js
+// components/withAuth.js
 'use client'; // Ensure this file is treated as a client-side component
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; // Updated import
 import Cookies from 'js-cookie';
 
-// Higher Order Component for Authentication
 const withAuth = (WrappedComponent) => {
   const Wrapper = (props) => {
     const [isClient, setIsClient] = useState(false);
@@ -61,7 +60,7 @@ const withAuth = (WrappedComponent) => {
     }, [isClient, router]);
 
     if (!isClient) {
-      return null; // Optionally add a loading spinner or placeholder
+      return <LoadingSpinner />; // Show loading spinner while checking auth
     }
 
     return <WrappedComponent {...props} />;
