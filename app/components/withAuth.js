@@ -1,12 +1,15 @@
-// app/components/withAuth.js
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import Cookies from 'js-cookie';
+'use client'; // Ensure this file is treated as a client-side component
 
-export const withAuth = (WrappedComponent) => {
-  return (props) => {
-    const router = useRouter();
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation'; // Updated import
+import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
+
+// Higher Order Component for Authentication
+const withAuth = (WrappedComponent) => {
+  const Wrapper = (props) => {
     const [isClient, setIsClient] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
       setIsClient(true);
@@ -25,42 +28,46 @@ export const withAuth = (WrappedComponent) => {
         }
       };
 
-      checkAuth();
+      if (isClient) {
+        checkAuth();
 
-      const handleActivity = () => {
-        Cookies.set('lastActivity', new Date().toISOString());
-      };
+        const handleActivity = () => {
+          Cookies.set('lastActivity', new Date().toISOString());
+        };
 
-      window.addEventListener('mousemove', handleActivity);
-      window.addEventListener('keydown', handleActivity);
+        window.addEventListener('mousemove', handleActivity);
+        window.addEventListener('keydown', handleActivity);
 
-      const interval = setInterval(() => {
-        const lastActivity = Cookies.get('lastActivity');
-        if (lastActivity) {
-          const now = new Date();
-          const lastActivityDate = new Date(lastActivity);
-          const diff = now - lastActivityDate;
-          if (diff > 10 * 60 * 1000) { // 10 minutes
-            Cookies.remove('email');
-            Cookies.remove('sessionId');
-            router.push('/login');
+        const interval = setInterval(() => {
+          const lastActivity = Cookies.get('lastActivity');
+          if (lastActivity) {
+            const now = new Date();
+            const lastActivityDate = new Date(lastActivity);
+            const diff = now - lastActivityDate;
+            if (diff > 10 * 60 * 1000) { // 10 minutes
+              Cookies.remove('email');
+              Cookies.remove('sessionId');
+              router.push('/login');
+            }
           }
-        }
-      }, 1000);
+        }, 1000);
 
-      return () => {
-        clearInterval(interval);
-        window.removeEventListener('mousemove', handleActivity);
-        window.removeEventListener('keydown', handleActivity);
-      };
-    }, [router]);
+        return () => {
+          clearInterval(interval);
+          window.removeEventListener('mousemove', handleActivity);
+          window.removeEventListener('keydown', handleActivity);
+        };
+      }
+    }, [isClient, router]);
 
     if (!isClient) {
-      return null; // Return nothing or a loader until client-side check is done
+      return null; // Optionally add a loading spinner or placeholder
     }
 
     return <WrappedComponent {...props} />;
   };
+
+  return Wrapper;
 };
 
 export default withAuth;
