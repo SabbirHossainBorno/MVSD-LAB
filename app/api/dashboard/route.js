@@ -1,4 +1,3 @@
-// app/api/dashboard/route.js
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 import { v4 as uuidv4 } from 'uuid';
@@ -36,12 +35,12 @@ export async function GET(request) {
   const sessionId = uuidv4(); // Generate a unique session ID for this request
   const ip = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr');
   const userAgent = request.headers.get('user-agent');
-  const email = request.cookies.get('email');
-  const lastActivity = request.cookies.get('lastActivity');
+  const email = request.cookies.get('email')?.value;
+  const lastActivity = request.cookies.get('lastActivity')?.value;
 
   if (!email || !sessionId) {
     log(`Unauthorized access attempt to dashboard`, sessionId, { ip, userAgent });
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nUnauthorized access attempt to dashboard`);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nUnauthorized Access Attempt To Dashboard`);
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
@@ -51,7 +50,7 @@ export async function GET(request) {
 
   if (diff > 10 * 60 * 1000) { // 10 minutes
     log(`Session expired for email: ${email}`, sessionId, { ip, userAgent });
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nSession expired for email: ${email}`);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nSession Expired.\nEmail : ${email}`);
     return NextResponse.json({ message: 'Session expired' }, { status: 401 });
   }
 
@@ -74,7 +73,7 @@ export async function GET(request) {
     const recentProfessors = await client.query(recentProfessorsQuery);
 
     log(`Dashboard data fetched successfully for email: ${email}`, sessionId);
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nDashboard data fetched successfully for email: ${email}`);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nDashboard Data Fetched Successfully.\nEmail : ${email}`);
 
     return NextResponse.json({
       subscribers: subscriberCount.rows[0].count,
@@ -86,7 +85,7 @@ export async function GET(request) {
     });
   } catch (error) {
     log(`Error fetching dashboard data for email: ${email} - ${error.message}`, sessionId);
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nError fetching dashboard data for email: ${email} - ${error.message}`);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nError Fetching Dashboard Data.\nEmail : ${email} - ${error.message}`);
     return NextResponse.json({ message: 'Failed to fetch data' }, { status: 500 });
   } finally {
     client.release();
@@ -97,12 +96,12 @@ export async function POST(request) {
   const sessionId = uuidv4(); // Generate a unique session ID for this request
   const ip = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr');
   const userAgent = request.headers.get('user-agent');
-  const email = request.cookies.get('email');
-  const lastActivity = request.cookies.get('lastActivity');
+  const email = request.cookies.get('email')?.value;
+  const lastActivity = request.cookies.get('lastActivity')?.value;
 
   if (!email || !sessionId) {
     log(`Unauthorized access attempt to update user status`, sessionId, { ip, userAgent });
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nUnauthorized access attempt to update user status`);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nUnauthorized Access Attempt To Update User Status.`);
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
@@ -115,7 +114,7 @@ export async function POST(request) {
     const updatedUser = await client.query(updateStatusQuery, [newStatus, userId]);
 
     log(`User status updated successfully for userId: ${userId} by email: ${email}`, sessionId);
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nUser status updated successfully for userId: ${userId} by email: ${email}`);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nUser Status Updated Successfully.\nUser ID : ${userId} \nBy Email : ${email}`);
 
     return NextResponse.json({
       message: 'User status updated successfully',
@@ -123,7 +122,7 @@ export async function POST(request) {
     });
   } catch (error) {
     log(`Error updating user status for userId: ${userId} by email: ${email} - ${error.message}`, sessionId);
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nError updating user status for userId: ${userId} by email: ${email} - ${error.message}`);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nError Updating User Status.\nUser ID : ${userId} \nBy Email : ${email} - ${error.message}`);
     return NextResponse.json({ message: 'Failed to update user status' }, { status: 500 });
   } finally {
     client.release();
