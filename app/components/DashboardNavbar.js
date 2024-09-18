@@ -84,9 +84,11 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
         </svg>
       </button>
 
-      <div className="flex items-center flex-1 justify-center text-red-500 text-xl font-sans font-bold md:text-2xl">
-  DASHBOARD
-</div>
+      <div className="flex items-center justify-center flex-1 text-[#4A90E2] text-xl lg:text-2xl font-bold tracking-tight md:text-2xl">
+        <span className="uppercase">
+          Dashboard
+        </span>
+      </div>
 
 
       <div className="relative flex items-center space-x-4 md:space-x-6">

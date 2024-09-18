@@ -224,23 +224,22 @@ const Dashboard = () => {
               <hr className="border-0 h-1 bg-gradient-to-r from-pink-500 to-orange-500 rounded-full mb-6" />
             </div>
             <ul className="space-y-2">
-  {users.filter(user => user.status === 'rejected').map(user => (
-    <li key={user.id} className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition">
-      <div className="flex items-center space-x-3">
-        <div>
-          <p className="text-sm font-semibold text-red-500">{user.email}</p>
-        </div>
-      </div>
-      <button
-        onClick={() => updateUserStatus(user.id, 'approved')}
-        className="bg-yellow-600 text-white hover:bg-yellow-700 rounded px-2 py-1 text-xs font-medium"
-      >
-        Force Approve
-      </button>
-    </li>
-  ))}
-</ul>
-
+              {users.filter(user => user.status === 'rejected').map(user => (
+                <li key={user.id} className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition">
+                  <div className="flex items-center space-x-3">
+                    <div>
+                      <p className="text-sm font-semibold text-red-500">{user.email}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => updateUserStatus(user.id, 'approved')}
+                    className="bg-yellow-600 text-white hover:bg-yellow-700 rounded px-2 py-1 text-xs font-medium"
+                  >
+                    Force Approve
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </main>
