@@ -51,7 +51,7 @@ export async function GET(request) {
   if (diff > 10 * 60 * 1000) { // 10 minutes
     log(`Session expired for email: ${email}`, sessionId, { ip, userAgent });
     await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nSession Expired.\nPlease Login Again.\nEmail : ${email}`);
-    return NextResponse.json({ message: 'Session Expired.' }, { status: 401 });
+    return NextResponse.json({ message: 'Session Expired! Please Login Again!' }, { status: 401 });
   }
 
   const client = await pool.connect();
