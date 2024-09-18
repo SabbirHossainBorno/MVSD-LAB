@@ -1,8 +1,9 @@
+// app/components/withAuth.js
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 
-const withAuth = (WrappedComponent) => {
+export const withAuth = (WrappedComponent) => {
   return (props) => {
     const router = useRouter();
 
@@ -43,10 +44,10 @@ const withAuth = (WrappedComponent) => {
         window.removeEventListener('mousemove', handleActivity);
         window.removeEventListener('keydown', handleActivity);
       };
-    }, [router]);
+    }, []);
 
     return <WrappedComponent {...props} />;
   };
 };
 
-export default withAuth;
+

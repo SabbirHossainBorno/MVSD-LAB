@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
-import withAuth from '../../components/withAuth';
+import withAuth from '../components/withAuth';
 
 const Dashboard = () => {
   const [subscribers, setSubscribers] = useState(0);
@@ -59,6 +59,7 @@ const Dashboard = () => {
       toast.error('Failed to update user status');
     }
   };
+
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-gray-100">
@@ -159,14 +160,22 @@ const Dashboard = () => {
                   <div className="flex items-center space-x-3">
                     <span className="text-sm text-gray-200">{professor.email}</span>
                   </div>
+                  {/* Buttons container */}
                   <div className="flex space-x-2">
-                    <div className="bg-yellow-500 text-white rounded px-2 py-1 text-xs font-medium transition duration-300 ease-in-out hover:bg-yellow-600">
-                      {professor.id}
-                    </div>
-                    <div className="bg-green-500 text-white rounded px-2 py-1 text-xs font-medium transition duration-300 ease-in-out hover:bg-green-600">
-                      {professor.status}
-                    </div>
+                  {/* Professor ID div */}
+                  <div
+                    className="bg-yellow-500 text-white rounded px-2 py-1 text-xs font-medium transition duration-300 ease-in-out hover:bg-yellow-600"
+                  >
+                    {professor.id}
                   </div>
+
+                  {/* Professor Status div */}
+                  <div
+                    className="bg-green-500 text-white rounded px-2 py-1 text-xs font-medium transition duration-300 ease-in-out hover:bg-green-600"
+                  >
+                    {professor.status}
+                  </div>
+                </div>
                 </li>
               ))}
             </ul>
@@ -174,8 +183,8 @@ const Dashboard = () => {
           </div>
         </div>
 
-                {/* Approved Users and Users Waiting for Approval Side by Side */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        {/* Approved Users and Users Waiting for Approval Side by Side */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
           {/* Users Waiting for Approval */}
           <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
             <div className="relative">
@@ -233,5 +242,4 @@ const Dashboard = () => {
     </div>
   );
 }
-
 export default withAuth(Dashboard);
