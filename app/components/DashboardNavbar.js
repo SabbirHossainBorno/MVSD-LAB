@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 
-export default function DashboardNavbar({ toggleSidebar }) {
+export default function DashboardNavbar({ toggleDashboardSidebar }) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -76,7 +76,7 @@ export default function DashboardNavbar({ toggleSidebar }) {
   return (
     <nav className="bg-gray-900 p-4 flex items-center justify-between shadow-md relative z-10">
       <button
-        onClick={toggleSidebar}
+        onClick={toggleDashboardSidebar}
         className="text-white md:hidden focus:outline-none hover:bg-gray-800 p-2 rounded transition-colors"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

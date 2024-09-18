@@ -3,14 +3,14 @@
 import Link from 'next/link';
 import { useEffect, useCallback, useState } from 'react';
 
-export default function Sidebar({ isOpen, toggleSidebar }) {
+export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleClickOutside = useCallback((event) => {
     if (!event.target.closest('aside') && isOpen) {
-      toggleSidebar();
+      toggleDashboardSidebar();
     }
-  }, [isOpen, toggleSidebar]);
+  }, [isOpen, toggleDashboardSidebar]);
 
   useEffect(() => {
     document.addEventListener('click', handleClickOutside);
@@ -21,9 +21,9 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     <aside className={`fixed top-0 left-0 w-64 bg-gray-900 text-white h-full p-6 transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:w-64 md:flex md:flex-col z-50 shadow-lg`}>
       {/* Close Button */}
       <button
-        onClick={toggleSidebar}
+        onClick={toggleDashboardSidebar}
         className="text-white md:hidden absolute top-4 right-4 z-60 bg-indigo-800 rounded-full p-2 transition-transform transform hover:scale-105"
-        aria-label="Close Sidebar"
+        aria-label="Close DashboardSidebar"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>

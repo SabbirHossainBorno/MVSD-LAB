@@ -74,19 +74,19 @@ const Dashboard = () => {
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-5">
           {/* Total Users Card */}
-          <div className="bg-gradient-to-r from-blue-400 to-blue-600 p-6 rounded-lg shadow-lg text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
+          <div className="bg-gradient-to-r from-blue-400 to-blue-600 p-6 rounded shadow-lg text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
             <p className="text-sm font-medium text-gray-100 uppercase">Total Users</p>
             <p className="text-3xl font-bold text-white mt-2">{users.length}</p>
           </div>
 
           {/* Total Subscribers Card */}
-          <div className="bg-gradient-to-r from-green-400 to-green-600 p-6 rounded-lg shadow-lg text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
+          <div className="bg-gradient-to-r from-green-400 to-green-600 p-6 rounded shadow-lg text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
             <p className="text-sm font-medium text-gray-100 uppercase">Total Subscribers</p>
             <p className="text-3xl font-bold text-white mt-2">{subscribers}</p>
           </div>
 
           {/* Total Professors Card */}
-          <div className="bg-gradient-to-r from-purple-400 to-purple-600 p-6 rounded-lg shadow-lg text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
+          <div className="bg-gradient-to-r from-purple-400 to-purple-600 p-6 rounded shadow-lg text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
             <p className="text-sm font-medium text-gray-100 uppercase">Total Professors</p>
             <p className="text-3xl font-bold text-white mt-2">{professorsCount}</p>
           </div>
@@ -95,7 +95,7 @@ const Dashboard = () => {
         {/* Recent Users and Recent Subscribers Side by Side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
           {/* Recent Users */}
-          <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
+          <div className="bg-gray-800 p-4 rounded shadow-lg">
             <div className="relative">
               <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-teal-500">
                 Recent Approved Users
@@ -106,12 +106,9 @@ const Dashboard = () => {
               {recentUsers.map(user => (
                 <li
                   key={user.email}
-                  className="flex items-center justify-between p-3 rounded-lg bg-gray-700 border border-gray-600 shadow-sm hover:bg-gray-600 transition"
+                  className="flex items-center justify-between p-3 rounded bg-gray-700 border border-gray-600 shadow-sm hover:bg-gray-600 transition"
                 >
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-lg font-bold">
-                      {user.email[0].toUpperCase()}
-                    </div>
                     <div>
                       <p className="text-sm font-medium text-gray-200">{user.email}</p>
                       <p className="text-xs text-gray-400">Joined recently</p>
@@ -127,7 +124,7 @@ const Dashboard = () => {
           </div>
 
           {/* Recent Subscribers */}
-          <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
+          <div className="bg-gray-800 p-4 rounded shadow-lg">
             <div className="relative">
               <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">
                 Recent Subscribers
@@ -138,7 +135,7 @@ const Dashboard = () => {
               {recentSubscribers.map(subscriber => (
                 <li
                   key={subscriber.email}
-                  className="flex items-center justify-between p-3 bg-gray-700 rounded-lg border border-gray-600 shadow-sm hover:bg-gray-600 transition"
+                  className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition"
                 >
                   <span className="text-sm text-gray-200">{subscriber.email}</span>
                   <button className="bg-blue-600 text-white hover:bg-blue-700 rounded px-4 py-1 text-xs font-medium">
@@ -151,7 +148,7 @@ const Dashboard = () => {
           </div>
 
           {/* Recent Professors */}
-          <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
+          <div className="bg-gray-800 p-4 rounded shadow-lg">
             <div className="relative">
               <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-500">
                 Recent Professors
@@ -162,7 +159,7 @@ const Dashboard = () => {
               {recentProfessors.map(professor => (
                 <li
                   key={professor.id}
-                  className="flex items-center justify-between p-3 bg-gray-700 rounded-lg border border-gray-600 shadow-sm hover:bg-gray-600 transition"
+                  className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition"
                 >
                   <div className="flex items-center space-x-3">
                     <span className="text-sm text-gray-200">{professor.email}</span>
@@ -192,7 +189,7 @@ const Dashboard = () => {
         {/* Approved Users and Users Waiting for Approval Side by Side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
           {/* Users Waiting for Approval */}
-          <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
+          <div className="bg-gray-800 p-4 rounded shadow-lg">
             <div className="relative">
               <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500">
                 Waiting for Approval
@@ -201,11 +198,8 @@ const Dashboard = () => {
             </div>
             <ul className="space-y-2">
               {users.filter(user => user.status === 'pending').map(user => (
-                <li key={user.id} className="flex items-center justify-between p-3 bg-gray-700 rounded-lg border border-gray-600 shadow-sm hover:bg-gray-600 transition">
+                <li key={user.id} className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-lg font-bold">
-                      {user.email[0].toUpperCase()}
-                    </div>
                     <div>
                       <p className="text-base font-semibold text-gray-200">{user.email}</p>
                     </div>
@@ -222,26 +216,31 @@ const Dashboard = () => {
           </div>
 
           {/* Rejected Users */}
-          <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
+          <div className="bg-gray-800 p-4 rounded shadow-lg">
             <div className="relative">
               <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-orange-500">
                 Rejected Users
               </h2>
               <hr className="border-0 h-1 bg-gradient-to-r from-pink-500 to-orange-500 rounded-full mb-6" />
             </div>
-            <ul>
-              {users.filter(user => user.status === 'rejected').map(user => (
-                <li key={user.id} className="flex justify-between items-center border-b border-gray-600 py-1 text-gray-200 text-sm">
-                  {user.email}
-                  <button
-                    onClick={() => updateUserStatus(user.id, 'approved')}
-                    className="bg-yellow-600 text-white hover:bg-yellow-700 rounded px-3 py-1 text-xs"
-                  >
-                    Force Approve
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <ul className="space-y-2">
+  {users.filter(user => user.status === 'rejected').map(user => (
+    <li key={user.id} className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition">
+      <div className="flex items-center space-x-3">
+        <div>
+          <p className="text-base font-semibold text-red-500">{user.email}</p>
+        </div>
+      </div>
+      <button
+        onClick={() => updateUserStatus(user.id, 'approved')}
+        className="bg-yellow-600 text-white hover:bg-yellow-700 rounded px-4 py-1 text-xs font-medium"
+      >
+        Force Approve
+      </button>
+    </li>
+  ))}
+</ul>
+
           </div>
         </div>
       </main>
