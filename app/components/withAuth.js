@@ -1,17 +1,26 @@
 // app/components/withAuth.js
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 
 export const withAuth = (WrappedComponent) => {
   return (props) => {
     const router = useRouter();
+    const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
+      setIsClient(true);
+
       const checkAuth = async () => {
-        const response = await fetch('/api/check-auth');
-        const result = await response.json();
-        if (!result.authenticated) {
+        try {
+          const response = await fetch('/api/check-auth');
+          if (!response.ok) throw new Error('Failed to fetch auth status');
+          const result = await response.json();
+          if (!result.authenticated) {
+            router.push('/login');
+          }
+        } catch (error) {
+          console.error('Authentication check failed:', error);
           router.push('/login');
         }
       };
@@ -44,10 +53,14 @@ export const withAuth = (WrappedComponent) => {
         window.removeEventListener('mousemove', handleActivity);
         window.removeEventListener('keydown', handleActivity);
       };
-    }, []);
+    }, [router]);
+
+    if (!isClient) {
+      return null; // Return nothing or a loader until client-side check is done
+    }
 
     return <WrappedComponent {...props} />;
   };
 };
 
-
+export default withAuth;

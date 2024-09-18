@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
-import withAuth from '../components/withAuth';
+import withAuth from '../components/withAuth'; // Ensure correct path
+import LoadingSpinner from '../components/LoadingSpinner'; // Add a loading spinner component
 
 const Dashboard = () => {
   const [subscribers, setSubscribers] = useState(0);
@@ -13,9 +14,11 @@ const Dashboard = () => {
   const [recentUsers, setRecentUsers] = useState([]);
   const [recentProfessors, setRecentProfessors] = useState([]);
   const [recentSubscribers, setRecentSubscribers] = useState([]);
+  const [loading, setLoading] = useState(true); // State to manage loading
 
   useEffect(() => {
     async function fetchData() {
+      setLoading(true); // Start loading
       try {
         const response = await fetch('/api/dashboard');
         const result = await response.json();
@@ -31,6 +34,8 @@ const Dashboard = () => {
         }
       } catch (error) {
         toast.error('Failed to fetch data');
+      } finally {
+        setLoading(false); // End loading
       }
     }
 
@@ -59,6 +64,8 @@ const Dashboard = () => {
       toast.error('Failed to update user status');
     }
   };
+
+  if (loading) return <LoadingSpinner />;
 
 
   return (
@@ -162,26 +169,26 @@ const Dashboard = () => {
                   </div>
                   {/* Buttons container */}
                   <div className="flex space-x-2">
-                  {/* Professor ID div */}
-                  <div
-                    className="bg-yellow-500 text-white rounded px-2 py-1 text-xs font-medium transition duration-300 ease-in-out hover:bg-yellow-600"
-                  >
-                    {professor.id}
+                    {/* Professor ID div */}
+                    <div
+                      className="bg-yellow-500 text-white rounded px-2 py-1 text-xs font-medium"
+                    >
+                      ID: {professor.id}
+                    </div>
+                    {/* Button to edit professor */}
+                    <button
+                      onClick={() => updateUserStatus(professor.id, 'approved')}
+                      className="bg-green-600 text-white hover:bg-green-700 rounded px-2 py-1 text-xs font-medium"
+                    >
+                      Approve
+                    </button>
                   </div>
-
-                  {/* Professor Status div */}
-                  <div
-                    className="bg-green-500 text-white rounded px-2 py-1 text-xs font-medium transition duration-300 ease-in-out hover:bg-green-600"
-                  >
-                    {professor.status}
-                  </div>
-                </div>
                 </li>
               ))}
             </ul>
             <Link href="/dashboard/professors_list" className="block mt-3 text-center text-blue-400 hover:text-blue-500 text-sm">View All</Link>
           </div>
-        </div>
+          </div>
 
         {/* Approved Users and Users Waiting for Approval Side by Side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
