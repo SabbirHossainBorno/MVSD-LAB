@@ -1,4 +1,3 @@
-// app/api/check-access/route.js
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 
@@ -23,9 +22,32 @@ export async function GET(request) {
     return NextResponse.json({ success: false, message: 'Session expired' });
   }
 
-  if (email === 'admin@mvsdlab.com') {
-    return NextResponse.json({ success: true });
-  } else {
-    return NextResponse.json({ success: false });
+  try {
+    const client = await pool.connect();
+
+    // Validate session ID
+    const sessionResult = await client.query('SELECT * FROM sessions WHERE session_id = $1 AND email = $2', [sessionId, email]);
+    if (sessionResult.rowCount === 0) {
+      client.release();
+      return NextResponse.json({ success: false, message: 'Invalid session' });
+    }
+
+    // Check user role
+    const userResult = await client.query('SELECT role FROM users WHERE email = $1', [email]);
+    client.release();
+
+    if (userResult.rowCount === 0) {
+      return NextResponse.json({ success: false, message: 'User not found' });
+    }
+
+    const userRole = userResult.rows[0].role;
+    if (userRole === 'admin') {
+      return NextResponse.json({ success: true });
+    } else {
+      return NextResponse.json({ success: false, message: 'Access denied' });
+    }
+  } catch (error) {
+    console.error('Database query failed:', error);
+    return NextResponse.json({ success: false, message: 'Internal server error' });
   }
 }

@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; // Updated import
 import Cookies from 'js-cookie';
-import { toast } from 'react-toastify';
 
 // Higher Order Component for Authentication
 const withAuth = (WrappedComponent) => {

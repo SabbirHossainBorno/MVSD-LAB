@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Cookies from 'js-cookie';
 
 export default function DashboardNavbar({ toggleSidebar }) {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -61,11 +62,16 @@ export default function DashboardNavbar({ toggleSidebar }) {
   const handleLogout = async () => {
     try {
       await fetch('/api/logout', { method: 'POST' });
+      Cookies.remove('email');
+      Cookies.remove('sessionId');
+      Cookies.remove('lastActivity');
       window.location.href = '/login';
     } catch (error) {
       console.error('Logout failed:', error);
     }
   };
+  
+  
 
   return (
     <nav className="bg-gray-900 p-4 flex items-center justify-between shadow-md relative z-10">
@@ -100,7 +106,7 @@ export default function DashboardNavbar({ toggleSidebar }) {
         </button>
 
         {showNotifications && (
-          <div className="absolute top-full right-0 mt-2 w-11/12 max-w-sm bg-gray-900 shadow-xl rounded border border-gray-700 overflow-hidden z-30 sm:w-80"> {/* Responsive width control */}
+          <div className="absolute top-full right-0 mt-2 w-11/12 max-w-sm bg-gray-900 shadow-xl rounded border border-gray-700 overflow-hidden z-30 sm:w-80">
             <div className="p-4 bg-gray-800 border-b border-gray-700">
               <h4 className="text-lg text-white font-semibold">Notifications</h4>
             </div>
@@ -129,7 +135,6 @@ export default function DashboardNavbar({ toggleSidebar }) {
             </div>
           </div>
         )}
-
 
         <button
           onClick={handleLogout}

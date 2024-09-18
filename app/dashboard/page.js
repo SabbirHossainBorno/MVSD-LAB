@@ -171,17 +171,16 @@ const Dashboard = () => {
                   <div className="flex space-x-2">
                     {/* Professor ID div */}
                     <div
-                      className="bg-yellow-500 text-white rounded px-2 py-1 text-xs font-medium"
+                      className="bg-yellow-600 text-white rounded px-2 py-1 text-xs font-medium"
                     >
-                      ID: {professor.id}
+                      {professor.id}
                     </div>
-                    {/* Button to edit professor */}
-                    <button
-                      onClick={() => updateUserStatus(professor.id, 'approved')}
-                      className="bg-green-600 text-white hover:bg-green-700 rounded px-2 py-1 text-xs font-medium"
+                    {/* Professor Status div */}
+                    <div
+                      className="bg-green-600 text-white rounded px-2 py-1 text-xs font-medium"
                     >
-                      Approve
-                    </button>
+                      {professor.status}
+                    </div>
                   </div>
                 </li>
               ))}
