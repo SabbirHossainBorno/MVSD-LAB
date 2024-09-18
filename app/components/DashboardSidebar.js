@@ -39,37 +39,37 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
       {/* Navigation Links */}
       <nav className="flex-1 mt-4 space-y-2">
         <Link href="/dashboard">
-          <div className="block p-3 rounded-lg transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+          <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
             <img src="/icons/dashboard.png" alt="Dashboard" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Dashboard</span>
           </div>
         </Link>
         <Link href="/home">
-          <div className="block p-3 rounded-lg transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+          <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
             <img src="/icons/home.png" alt="Home" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Home</span>
           </div>
         </Link>
         <Link href="/dashboard/professor">
-          <div className="block p-3 rounded-lg transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+          <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
             <img src="/icons/add_professor.png" alt="Add Professor" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Add Professor</span>
           </div>
         </Link>
         <Link href="/dashboard/users_list">
-          <div className="block p-3 rounded-lg transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+          <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
             <img src="/icons/user_list.png" alt="Users List" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Users List</span>
           </div>
         </Link>
         <Link href="/dashboard/subscribers_list">
-          <div className="block p-3 rounded-lg transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+          <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
             <img src="/icons/subscriber_list.png" alt="Subscriber List" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Subscriber List</span>
           </div>
         </Link>
         <Link href="/dashboard/professors_list">
-          <div className="block p-3 rounded-lg transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+          <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
             <img src="/icons/professor_list.png" alt="Professors List" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Professors List</span>
           </div>
@@ -79,7 +79,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         <div className="relative">
           <button
             onClick={() => setShowDropdown(!showDropdown)}
-            className="block w-full p-3 rounded-lg transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer"
+            className="block w-full p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer"
           >
             <img src="/icons/add_member.png" alt="Add Member" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Add Member</span>
@@ -88,19 +88,19 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
             </svg>
           </button>
           {showDropdown && (
-            <div className="absolute left-0 w-full mt-2 bg-gray-800 rounded-lg shadow-lg z-10">
+            <div className="absolute left-0 w-full mt-2 bg-gray-800 rounded shadow-lg z-10">
               <Link href="/dashboard/add_member/staff">
-                <div className="block p-3 rounded-lg transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+                <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
                   <span className="text-lg font-medium">Staff</span>
                 </div>
               </Link>
               <Link href="/dashboard/add_member/post_doc_candidate">
-                <div className="block p-3 rounded-lg transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+                <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
                   <span className="text-lg font-medium">Post Doc Candidate</span>
                 </div>
               </Link>
               <Link href="/dashboard/add_member/masc_candidate">
-                <div className="block p-3 rounded-lg transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+                <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
                   <span className="text-lg font-medium">MASc Candidate</span>
                 </div>
               </Link>

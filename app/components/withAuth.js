@@ -1,3 +1,4 @@
+// app/componenets/withAuth.js
 'use client'; // Ensure this file is treated as a client-side component
 
 import { useEffect, useState } from 'react';

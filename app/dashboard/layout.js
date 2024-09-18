@@ -3,20 +3,21 @@
 import { useState } from 'react';
 import Sidebar from '../components/DashboardSidebar';
 import DashboardNavbar from '../components/DashboardNavbar';
+import withAuth from '../components/withAuth'; // Ensure correct path
 import '../../app/globals.css';
 
-export default function DashboardLayout({ children }) {
+function DashboardLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const toggleSidebar = () => {
+  const toggleDashboardSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-900 text-gray-100">
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <Sidebar isOpen={isSidebarOpen} toggleDashboardSidebar={toggleDashboardSidebar} />
       <div className="flex-1 flex flex-col">
-        <DashboardNavbar toggleSidebar={toggleSidebar} />
+        <DashboardNavbar toggleDashboardSidebar={toggleDashboardSidebar} />
         <main className="flex-1 overflow-y-auto bg-gray-900 p-4">
           {children}
         </main>
@@ -24,3 +25,5 @@ export default function DashboardLayout({ children }) {
     </div>
   );
 }
+
+export default withAuth(DashboardLayout);

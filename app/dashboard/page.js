@@ -110,7 +110,7 @@ const Dashboard = () => {
                 >
                   <div className="flex items-center space-x-3">
                     <div>
-                      <p className="text-sm font-medium text-gray-200">{user.email}</p>
+                      <p className="text-sm font-semibold font-medium text-gray-200">{user.email}</p>
                       <p className="text-xs text-gray-400">Joined recently</p>
                     </div>
                   </div>
@@ -137,7 +137,7 @@ const Dashboard = () => {
                   key={subscriber.email}
                   className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition"
                 >
-                  <span className="text-sm text-gray-200">{subscriber.email}</span>
+                  <span className="text-sm font-semibold text-gray-200">{subscriber.email}</span>
                   <button className="bg-blue-600 text-white hover:bg-blue-700 rounded px-4 py-1 text-xs font-medium">
                     Subscribed
                   </button>
@@ -162,7 +162,7 @@ const Dashboard = () => {
                   className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition"
                 >
                   <div className="flex items-center space-x-3">
-                    <span className="text-sm text-gray-200">{professor.email}</span>
+                    <span className="text-sm font-semibold text-gray-200">{professor.email}</span>
                   </div>
                   {/* Buttons container */}
                   <div className="flex space-x-2">
@@ -201,7 +201,7 @@ const Dashboard = () => {
                 <li key={user.id} className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition">
                   <div className="flex items-center space-x-3">
                     <div>
-                      <p className="text-base font-semibold text-gray-200">{user.email}</p>
+                      <p className="text-sm font-semibold text-gray-200">{user.email}</p>
                     </div>
                   </div>
                   <button
@@ -228,12 +228,12 @@ const Dashboard = () => {
     <li key={user.id} className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition">
       <div className="flex items-center space-x-3">
         <div>
-          <p className="text-base font-semibold text-red-500">{user.email}</p>
+          <p className="text-sm font-semibold text-red-500">{user.email}</p>
         </div>
       </div>
       <button
         onClick={() => updateUserStatus(user.id, 'approved')}
-        className="bg-yellow-600 text-white hover:bg-yellow-700 rounded px-4 py-1 text-xs font-medium"
+        className="bg-yellow-600 text-white hover:bg-yellow-700 rounded px-2 py-1 text-xs font-medium"
       >
         Force Approve
       </button>

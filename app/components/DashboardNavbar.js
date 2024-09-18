@@ -84,13 +84,15 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
         </svg>
       </button>
 
-      <div className="flex items-center flex-1 justify-center text-white text-xl font-semibold hidden md:flex">
-        DASHBOARD
-      </div>
+      <div className="flex items-center flex-1 justify-center text-red-500 text-xl font-sans font-bold md:text-2xl">
+  DASHBOARD
+</div>
+
 
       <div className="relative flex items-center space-x-4 md:space-x-6">
+        
         <div className="text-white text-lg hidden md:flex items-center">
-          <div className="flex items-center space-x-2 bg-gray-800 p-2 rounded-lg shadow-md">
+          <div className="flex items-center space-x-2 bg-gray-800 p-2 rounded shadow-md">
             <span className="font-mono text-xl">{currentTime}</span>
           </div>
         </div>
