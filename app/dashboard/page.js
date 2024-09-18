@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
+import withAuth from '../components/withAuth'; // Ensure correct path
+import LoadingSpinner from '../components/LoadingSpinner'; // Add a loading spinner component
 
 const Dashboard = () => {
   const [subscribers, setSubscribers] = useState(0);
@@ -244,4 +246,4 @@ const Dashboard = () => {
     </div>
   );
 }
-export default Dashboard;
+export default withAuth(Dashboard);
