@@ -11,26 +11,41 @@ export async function GET(req) {
   try {
     const url = new URL(req.url);
     const search = url.searchParams.get('search') || '';
+    const filter = url.searchParams.get('filter') || 'all';
     const page = parseInt(url.searchParams.get('page'), 10) || 1;
     const resultsPerPage = 10;
     const offset = (page - 1) * resultsPerPage;
 
-    const searchQuery = `
+    let searchQuery = `
       SELECT * FROM professor_basic_info
-      WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR email ILIKE $1
-      LIMIT $2 OFFSET $3
+      WHERE (first_name ILIKE $1 OR last_name ILIKE $1 OR email ILIKE $1)
     `;
-    const countQuery = `
+    let countQuery = `
       SELECT COUNT(*) FROM professor_basic_info
-      WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR email ILIKE $1
+      WHERE (first_name ILIKE $1 OR last_name ILIKE $1 OR email ILIKE $1)
     `;
 
     const searchValue = `%${search}%`;
-    const professorsResult = await client.query(searchQuery, [searchValue, resultsPerPage, offset]);
-    const countResult = await client.query(countQuery, [searchValue]);
+    let queryParams = [searchValue, resultsPerPage, offset];
+
+    if (filter !== 'all') {
+      searchQuery += ` AND status = $2`;
+      countQuery += ` AND status = $2`;
+      searchQuery += ` ORDER BY id LIMIT $3 OFFSET $4`;
+      queryParams = [searchValue, filter, resultsPerPage, offset];
+    } else {
+      searchQuery += ` ORDER BY id LIMIT $2 OFFSET $3`;
+      queryParams = [searchValue, resultsPerPage, offset];
+    }
+
+    console.log('Executing search query:', searchQuery, queryParams);
+    const professorsResult = await client.query(searchQuery, queryParams);
+    const countResult = await client.query(countQuery, filter === 'all' ? [searchValue] : [searchValue, filter]);
 
     const totalProfessors = parseInt(countResult.rows[0].count, 10);
     const totalPages = Math.ceil(totalProfessors / resultsPerPage);
+
+    console.log('Professors fetched:', professorsResult.rows);
 
     return NextResponse.json({
       professors: professorsResult.rows,

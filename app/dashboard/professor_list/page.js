@@ -93,15 +93,22 @@ const ProfessorsList = () => {
               key={professor.id}
               className="bg-white shadow-md rounded-lg p-4 transition-all hover:shadow-lg hover:bg-gray-100"
             >
-              <p className="font-semibold text-lg text-gray-900 mb-2">{professor.first_name} {professor.last_name}</p>
-              <p className="text-gray-600 mb-2">{professor.email}</p>
-              <p className="text-gray-500 mb-4">ID: {professor.id}</p>
-              <button
-                onClick={() => handleEdit(professor.id)}
-                className="bg-blue-500 text-white py-2 px-4 rounded-lg transition-all hover:bg-blue-600"
-              >
-                Edit
-              </button>
+              <img
+                src={`/images/${professor.photo.split('/').pop()}`}
+                alt={`${professor.first_name} ${professor.last_name}`}
+                className="w-24 h-24 rounded-full mx-auto mb-4"
+              />
+              <p className="font-semibold text-lg text-gray-900 mb-2 text-center">{professor.first_name} {professor.last_name}</p>
+              <p className="text-gray-600 mb-2 text-center">{professor.email}</p>
+              <p className="text-gray-500 mb-4 text-center">ID: {professor.id}</p>
+              <div className="flex justify-center">
+                <button
+                  onClick={() => handleEdit(professor.id)}
+                  className="bg-blue-500 text-white py-2 px-4 rounded-lg transition-all hover:bg-blue-600"
+                >
+                  Edit
+                </button>
+              </div>
             </div>
           ))
         ) : (
