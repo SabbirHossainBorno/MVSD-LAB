@@ -41,35 +41,34 @@ export async function POST(request) {
   const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
 
   try {
-    log(`Login attempt for email: ${email}`, sessionId);
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nLogin Attempt.\nEmail: ${email}`);
+    log(`Login attempt for email: ${email} from IP: ${ipAddress}, Device: ${userAgent}`, sessionId);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nLogin Attempt.\nEmail: ${email}\nIP: ${ipAddress}`);
 
-    const adminRes = await client.query('SELECT * FROM admin WHERE email = $1 AND password = $2', [email, password]);
-    if (adminRes.rows.length > 0) {
-      log(`Admin login successful for email: ${email}`, sessionId);
-      await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nAdmin Login Successful.\nEmail: ${email}`);
-      const response = NextResponse.json({ success: true, type: 'admin' });
-      response.cookies.set('email', email, { httpOnly: true });
-      response.cookies.set('sessionId', sessionId, { httpOnly: true });
-      return response;
-    }
+    const checkUser = async (table) => {
+      const res = await client.query(`SELECT * FROM ${table} WHERE email = $1 AND password = $2`, [email, password]);
+      if (res.rows.length > 0) {
+        log(`${table === 'admin' ? 'Admin' : 'User'} login successful for email: ${email} from IP: ${ipAddress}, Device: ${userAgent}`, sessionId);
+        await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\n${table === 'admin' ? 'Admin' : 'User'} Login Successful.\nEmail: ${email}\nIP: ${ipAddress}`);
+        const response = NextResponse.json({ success: true, type: table === 'admin' ? 'admin' : 'user' });
+        response.cookies.set('email', email, { httpOnly: true });
+        response.cookies.set('sessionId', sessionId, { httpOnly: true });
+        return response;
+      }
+      return null;
+    };
 
-    const userRes = await client.query('SELECT * FROM users WHERE email = $1 AND password = $2', [email, password]);
-    if (userRes.rows.length > 0) {
-      log(`User login successful for email: ${email} from IP: ${ipAddress}, Device: ${userAgent}`, sessionId);
-      await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nLogin Successful.\nEmail: ${email}\nIP: ${ipAddress}\nDevice: ${userAgent}`);
-      const response = NextResponse.json({ success: true, type: 'user' });
-      response.cookies.set('email', email, { httpOnly: true });
-      response.cookies.set('sessionId', sessionId, { httpOnly: true });
-      return response;
-    }
+    const adminResponse = await checkUser('admin');
+    if (adminResponse) return adminResponse;
+
+    const userResponse = await checkUser('users');
+    if (userResponse) return userResponse;
 
     log(`Login failed for email: ${email} from IP: ${ipAddress}, Device: ${userAgent}`, sessionId);
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nLogin Failed.\nEmail: ${email}\nIP: ${ipAddress}\nDevice: ${userAgent}`);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nLogin Failed.\nEmail: ${email}\nIP: ${ipAddress}`);
     return NextResponse.json({ success: false, message: 'Invalid email or password' });
   } catch (error) {
     log(`Error during login for email: ${email} from IP: ${ipAddress}, Device: ${userAgent} - ${error.message}`, sessionId);
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nError During Login.\nEmail: ${email}\nIP: ${ipAddress}\nDevice: ${userAgent}\nError: ${error.message}`);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nError During Login.\nEmail: ${email}\nIP: ${ipAddress}\nError: ${error.message}`);
     return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
   } finally {
     client.release();
