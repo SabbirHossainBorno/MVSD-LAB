@@ -32,7 +32,7 @@ const sendTelegramAlert = async (message) => {
 };
 
 export async function POST(request) {
-  const { email, password } = await request.json();
+  const { email, password, rememberMe } = await request.json();
   const client = await pool.connect();
   const sessionId = uuidv4();
 
@@ -52,6 +52,9 @@ export async function POST(request) {
         const response = NextResponse.json({ success: true, type: table === 'admin' ? 'admin' : 'user' });
         response.cookies.set('email', email, { httpOnly: true });
         response.cookies.set('sessionId', sessionId, { httpOnly: true });
+        if (rememberMe) {
+          response.cookies.set('rememberMe', 'true', { httpOnly: true, maxAge: 30 * 24 * 60 * 60 }); // 30 days
+        }
         return response;
       }
       return null;
