@@ -1,4 +1,3 @@
-// app/components/withAuth.js
 'use client'; // Ensure this file is treated as a client-side component
 
 import { useEffect, useState } from 'react';
@@ -44,13 +43,17 @@ const withAuth = (WrappedComponent) => {
 
         const interval = setInterval(() => {
           const lastActivity = Cookies.get('lastActivity');
+          const rememberMe = Cookies.get('rememberMe');
+          const sessionExpiry = rememberMe === 'true' ? 30 * 24 * 60 * 60 * 1000 : 10 * 60 * 1000; // 30 days or 10 minutes
+
           if (lastActivity) {
             const now = new Date();
             const lastActivityDate = new Date(lastActivity);
             const diff = now - lastActivityDate;
-            if (diff > 10 * 60 * 1000) { // 10 minutes
+            if (diff > sessionExpiry) {
               Cookies.remove('email');
               Cookies.remove('sessionId');
+              Cookies.remove('rememberMe');
               router.push('/login');
             }
           }

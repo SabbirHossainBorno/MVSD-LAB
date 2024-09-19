@@ -1,4 +1,3 @@
-// app/api/check-access/route.js
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 
@@ -10,6 +9,7 @@ export async function GET(request) {
   const email = request.cookies.get('email');
   const sessionId = request.cookies.get('sessionId');
   const lastActivity = request.cookies.get('lastActivity');
+  const rememberMe = request.cookies.get('rememberMe');
 
   if (!email || !sessionId) {
     return NextResponse.json({ success: false, message: 'Unauthorized' });
@@ -19,7 +19,9 @@ export async function GET(request) {
   const lastActivityDate = new Date(lastActivity);
   const diff = now - lastActivityDate;
 
-  if (diff > 10 * 60 * 1000) { // 10 minutes
+  const sessionExpiry = rememberMe === 'true' ? 30 * 24 * 60 * 60 * 1000 : 10 * 60 * 1000; // 30 days or 10 minutes
+
+  if (diff > sessionExpiry) {
     return NextResponse.json({ success: false, message: 'Session expired' });
   }
 
@@ -43,7 +45,9 @@ export async function GET(request) {
 
     const userRole = userResult.rows[0].role;
     if (userRole === 'admin') {
-      return NextResponse.json({ success: true });
+      const response = NextResponse.json({ success: true });
+      response.cookies.set('lastActivity', new Date().toISOString(), { httpOnly: true });
+      return response;
     } else {
       return NextResponse.json({ success: false, message: 'Access denied' });
     }
