@@ -12,6 +12,7 @@ const ProfessorsList = () => {
   const [professors, setProfessors] = useState([]);
   const [loading, setLoading] = useState(true); 
   const [searchTerm, setSearchTerm] = useState('');
+  const [filter, setFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
@@ -22,7 +23,7 @@ const ProfessorsList = () => {
     async function fetchProfessors() {
       setLoading(true); 
       try {
-        const res = await fetch(`/api/professor_list?page=${currentPage}&search=${searchTerm}`);
+        const res = await fetch(`/api/professor_list?page=${currentPage}&search=${searchTerm}&filter=${filter}`);
         const data = await res.json();
         if (res.ok) {
           setProfessors(data.professors);
@@ -38,7 +39,7 @@ const ProfessorsList = () => {
     }
 
     fetchProfessors();
-  }, [currentPage, searchTerm]);
+  }, [currentPage, searchTerm, filter]);
 
   const handleEdit = (id) => {
     router.push(`/professors/${id}/edit`);
@@ -49,6 +50,11 @@ const ProfessorsList = () => {
     setCurrentPage(1); 
   };
 
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+    setCurrentPage(1);
+  };
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -56,77 +62,73 @@ const ProfessorsList = () => {
   if (loading) return <LoadingSpinner />;
 
   return (
-    <div className="container mx-auto p-6 lg:p-12">
-      <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Professors List</h1>
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-6 text-center">Professors List</h1>
 
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+      {/* Search and Filter Bar */}
+      <div className="flex flex-col md:flex-row justify-between mb-6">
         <input
           type="text"
           placeholder="Search by name or email"
           value={searchTerm}
           onChange={handleSearch}
-          className="w-full md:w-1/3 p-3 rounded-lg border border-gray-300 shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-500 transition-all"
+          className="w-full md:w-1/3 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 md:mb-0"
         />
+        <select
+          value={filter}
+          onChange={handleFilterChange}
+          className="w-full md:w-1/4 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="all">All</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
       </div>
 
-      <div className="overflow-x-auto">
-      <table className="min-w-full bg-white rounded-lg shadow-lg">
-  <thead>
-    <tr className="bg-blue-600 text-white">
-      <th className="py-4 px-6 text-left">ID</th>
-      <th className="py-4 px-6 text-left">First Name</th>
-      <th className="py-4 px-6 text-left">Last Name</th>
-      <th className="py-4 px-6 text-left">Email</th>
-      <th className="py-4 px-6 text-left">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {professors.length > 0 ? (
-      professors.map((professor, index) => (
-        <tr
-          key={professor.id}
-          className={`${
-            index % 2 === 0 ? 'bg-gray-100' : 'bg-white'
-          } text-gray-900 hover:bg-gray-200 transition-all border-b`}
-        >
-          <td className="py-4 px-6">{professor.id}</td>
-          <td className="py-4 px-6">{professor.first_name}</td>
-          <td className="py-4 px-6">{professor.last_name}</td>
-          <td className="py-4 px-6">{professor.email}</td>
-          <td className="py-4 px-6">
-            <button
-              onClick={() => handleEdit(professor.id)}
-              className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
+      {/* Professors List */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {professors.length > 0 ? (
+          professors.map((professor) => (
+            <div
+              key={professor.id}
+              className="bg-white shadow-md rounded-lg p-4 transition-all hover:shadow-lg hover:bg-gray-100"
             >
-              Edit
-            </button>
-          </td>
-        </tr>
-      ))
-    ) : (
-      <tr>
-        <td colSpan="5" className="py-4 px-6 text-center text-gray-500">
-          No Professors Found
-        </td>
-      </tr>
-    )}
-  </tbody>
-</table>
-
+              <p className="font-semibold text-lg text-gray-900 mb-2">{professor.first_name} {professor.last_name}</p>
+              <p className="text-gray-600 mb-2">{professor.email}</p>
+              <p className="text-gray-500 mb-4">ID: {professor.id}</p>
+              <button
+                onClick={() => handleEdit(professor.id)}
+                className="bg-blue-500 text-white py-2 px-4 rounded-lg transition-all hover:bg-blue-600"
+              >
+                Edit
+              </button>
+            </div>
+          ))
+        ) : (
+          <div className="col-span-full text-center text-gray-500">
+            No Professors Found
+          </div>
+        )}
       </div>
 
       {/* Pagination */}
-      <div className="mt-6 flex justify-center space-x-2">
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button
-            key={index}
-            onClick={() => handlePageChange(index + 1)}
-            className={`px-4 py-2 rounded-lg transition-all ${currentPage === index + 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
-          >
-            {index + 1}
-          </button>
-        ))}
-      </div>
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-6">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(index + 1)}
+              className={`mx-1 px-4 py-2 rounded-lg ${
+                currentPage === index + 1
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 text-gray-600'
+              } transition-all`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
