@@ -667,3 +667,41 @@ ID : P32MVSD
 2024-09-18T21:33:48.716Z [Session ID: 10a0671b-0caf-4f8e-a202-974da21f5327] Dashboard data fetched successfully for email: admin@mvsdlab.com {}
 2024-09-18T21:40:48.667Z [Session ID: 02576e8d-44a4-4d15-abfa-37095529ed5a] Fetching dashboard data for email: admin@mvsdlab.com {"ip":"103.180.244.251","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0"}
 2024-09-18T21:40:48.672Z [Session ID: 02576e8d-44a4-4d15-abfa-37095529ed5a] Dashboard data fetched successfully for email: admin@mvsdlab.com {}
+2024-09-19T05:41:10.656Z [Session ID: 15638ec2-49bf-4908-8daf-29916a18eda2] Login attempt for email: admin@mvsdlab.com
+2024-09-19T05:41:11.202Z [Session ID: 15638ec2-49bf-4908-8daf-29916a18eda2] Admin login successful for email: admin@mvsdlab.com
+2024-09-19T05:41:13.654Z [Session ID: 5e3de6f3-f99b-4e89-bcdd-a121cef7f76f] Session expired for email: admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0"}
+2024-09-19T05:42:24.459Z [Session ID: 68d7e583-432b-42de-b9a6-34e3bab7f8c3] Login attempt for email: admin@mvsdlab.com
+2024-09-19T05:42:24.878Z [Session ID: 68d7e583-432b-42de-b9a6-34e3bab7f8c3] Admin login successful for email: admin@mvsdlab.com
+2024-09-19T05:42:26.587Z [Session ID: 7cd567a6-ae28-43ca-8b49-d67c8aca9515] Session expired for email: admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0"}
+2024-09-19T05:43:05.690Z [Session ID: 970736d4-a2f7-43bc-950a-08482d1a1074] Login attempt for email: admin@mvsdlab.com
+2024-09-19T05:43:06.093Z [Session ID: 970736d4-a2f7-43bc-950a-08482d1a1074] Admin login successful for email: admin@mvsdlab.com
+2024-09-19T05:43:07.667Z [Session ID: 20712d83-080e-48b7-ab69-7a915b6e3eec] Fetching dashboard data for email: admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0"}
+2024-09-19T05:43:07.676Z [Session ID: 20712d83-080e-48b7-ab69-7a915b6e3eec] Dashboard data fetched successfully for email: admin@mvsdlab.com {}
+2024-09-19 11:47:07+06:00 - Receiving form data...
+2024-09-19 11:47:09+06:00 - Checking if email (test15@gmail.com) or phone (01928837455) already exists in the database...
+2024-09-19 11:47:09+06:00 - Initiating Professor ID generation...
+2024-09-19 11:47:09+06:00 - Professor ID generated successfully: P34MVSD
+2024-09-19 11:47:09+06:00 - New Professor ID generated: P34MVSD
+2024-09-19 11:47:09+06:00 - Saving profile photo with filename: P34MVSD_DP.jpeg at path: /home/mvsd-lab/Storage/Images/Professor/P34MVSD_DP.jpeg
+2024-09-19 11:47:09+06:00 - Profile photo saved successfully at path: /home/mvsd-lab/Storage/Images/Professor/P34MVSD_DP.jpeg
+2024-09-19 11:47:09+06:00 - Profile photo URL generated successfully: /home/mvsd-lab/Storage/Images/Professor/P34MVSD_DP.jpeg
+2024-09-19 11:47:09+06:00 - Saving award photo with filename: P34MVSD_Award_1.png at path: /home/mvsd-lab/Storage/Images/Professor/P34MVSD_Award_1.png
+2024-09-19 11:47:09+06:00 - Award photo saved successfully at path: /home/mvsd-lab/Storage/Images/Professor/P34MVSD_Award_1.png
+2024-09-19 11:47:09+06:00 - Saving award photo with filename: P34MVSD_Award_2.png at path: /home/mvsd-lab/Storage/Images/Professor/P34MVSD_Award_2.png
+2024-09-19 11:47:09+06:00 - Award photo saved successfully at path: /home/mvsd-lab/Storage/Images/Professor/P34MVSD_Award_2.png
+2024-09-19 11:47:09+06:00 - A New Professor Adding Process Execution Started...
+2024-09-19 11:47:09+06:00 - Professor information inserted successfully.
+2024-09-19 11:47:09+06:00 - Member information inserted successfully.
+2024-09-19 11:47:09+06:00 - Education information inserted successfully.
+2024-09-19 11:47:09+06:00 - Career information inserted successfully.
+2024-09-19 11:47:09+06:00 - Citation information inserted successfully.
+2024-09-19 11:47:09+06:00 - Award information inserted successfully.
+2024-09-19 11:47:09+06:00 - Award information inserted successfully.
+2024-09-19 11:47:09+06:00 - Notification inserted successfully.
+2024-09-19 11:47:09+06:00 - Execution committed successfully.
+2024-09-19 11:47:09+06:00 - A New Professor Added Successfully ID : P34MVSD
+2024-09-19 11:47:09+06:00 - Telegram alert sent successfully
+2024-09-19T05:47:10.520Z [Session ID: 016a6ee4-231b-434d-a910-394f93d30704] Fetching dashboard data for email: admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0"}
+2024-09-19T05:47:10.524Z [Session ID: 016a6ee4-231b-434d-a910-394f93d30704] Dashboard data fetched successfully for email: admin@mvsdlab.com {}
+2024-09-19T05:49:09.138Z [Session ID: 752db377-181c-4e17-a38d-d320f8ad1cb2] Fetching dashboard data for email: admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0"}
+2024-09-19T05:49:09.142Z [Session ID: 752db377-181c-4e17-a38d-d320f8ad1cb2] Dashboard data fetched successfully for email: admin@mvsdlab.com {}
