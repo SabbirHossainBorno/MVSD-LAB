@@ -182,7 +182,7 @@ const Dashboard = () => {
                 </li>
               ))}
             </ul>
-            <Link href="/dashboard/professors_list" className="block mt-3 text-center text-blue-400 hover:text-blue-500 text-sm">View All</Link>
+            <Link href="/dashboard/professor_list" className="block mt-3 text-center text-blue-400 hover:text-blue-500 text-sm">View All</Link>
           </div>
           </div>
 
