@@ -74,8 +74,8 @@ const ProfessorsList = () => {
   if (loading) return <LoadingSpinner />;
 
   return (
-    <div className="p-4 bg-gray-900 text-white min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center">Professors List</h1>
+    <div className="p-6 bg-gray-900 text-white min-h-screen">
+      <h1 className="text-4xl font-extrabold mb-6 text-center text-blue-400">Professors List</h1>
 
       {/* Search and Filter Bar */}
       <div className="flex flex-col md:flex-row justify-between mb-6">
@@ -84,12 +84,12 @@ const ProfessorsList = () => {
           placeholder="Search by name or email"
           value={searchTerm}
           onChange={handleSearch}
-          className="w-full md:w-1/3 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 md:mb-0 bg-gray-800 text-white"
+          className="w-full md:w-1/3 px-4 py-2 rounded-lg border border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 md:mb-0 bg-gray-800 text-white"
         />
         <select
           value={filter}
           onChange={handleFilterChange}
-          className="w-full md:w-1/4 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 md:mb-0 bg-gray-800 text-white"
+          className="w-full md:w-1/4 px-4 py-2 rounded-lg border border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 md:mb-0 bg-gray-800 text-white"
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -99,7 +99,7 @@ const ProfessorsList = () => {
         <select
           value={sortOrder}
           onChange={handleSortOrderChange}
-          className="w-full md:w-1/4 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-white"
+          className="w-full md:w-1/4 px-4 py-2 rounded-lg border border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-white"
         >
           <option value="asc">Ascending</option>
           <option value="desc">Descending</option>
@@ -107,42 +107,45 @@ const ProfessorsList = () => {
       </div>
 
       {/* Professors List */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {professors.length > 0 ? (
           professors.map((professor) => (
             <div
               key={professor.id}
-              className="bg-gray-800 shadow-md rounded-lg p-4 flex items-center transition-all hover:shadow-lg hover:bg-gray-700 h-28"
+              className="bg-gray-800 shadow-lg rounded-lg p-6 flex flex-col transition-transform transform hover:scale-105"
             >
-              <div className="w-1/4">
-                <img
-                  src={`/Storage/Images/Professor/${professor.photo.split('/').pop()}`}
-                  alt={`${professor.first_name} ${professor.last_name}`}
-                  className="w-full h-auto rounded-lg"
-                />
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center">
+                  <img
+                    src={`/Storage/Images/Professor/${professor.photo.split('/').pop()}`}
+                    alt={`${professor.first_name} ${professor.last_name}`}
+                    className="w-16 h-16 rounded-full object-cover border-2 border-blue-500"
+                  />
+                  <div className="ml-4">
+                    <div className="flex items-center text-sm">
+                      <span className="font-bold text-blue-500 mr-2">{professor.id}</span>
+                      <span className="ml-2  text-gray-400">{professor.status}</span>
+                      <span className={`w-4 h-4 rounded-full ${professor.status === 'Active' ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                    </div>
+                    <p className="font-semibold text-lg text-white">{professor.first_name} {professor.last_name}</p>
+                    <p className="text-gray-400">{professor.email}</p>
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-col justify-between w-3/4 pl-4">
-                <div className="relative">
-                  <span className={`absolute top-0 right-0 w-4 h-4 rounded-full ${professor.status === 'Active' ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></span>
-                  <span className="ml-2 text-sm text-green-500">{professor.status === 'Active' ? 'Active' : 'Inactive'}</span>
-                </div>
-                <div className="text-sm font-bold text-blue-500 mb-1">P0{professor.id}MVSD</div>
-                <p className="font-semibold text-lg text-white mb-1">{professor.first_name} {professor.last_name}</p>
-                <p className="text-gray-400">{professor.email}</p>
-                <div className="flex justify-end mt-4 space-x-2">
-                  <button
-                    onClick={() => handleView(professor.id)}
-                    className="bg-green-500 text-white py-1 px-2 rounded-lg text-sm transition-all hover:bg-green-600"
-                  >
-                    View
-                  </button>
-                  <button
-                    onClick={() => handleEdit(professor.id)}
-                    className="bg-blue-500 text-white py-1 px-2 rounded-lg text-sm transition-all hover:bg-blue-600"
-                  >
-                    Edit
-                  </button>
-                </div>
+
+              <div className="flex justify-end mt-4 space-x-2">
+                <button
+                  onClick={() => handleView(professor.id)}
+                  className="bg-green-600 text-white py-2 px-4 rounded-lg text-sm transition-all hover:bg-green-700"
+                >
+                  View
+                </button>
+                <button
+                  onClick={() => handleEdit(professor.id)}
+                  className="bg-blue-600 text-white py-2 px-4 rounded-lg text-sm transition-all hover:bg-blue-700"
+                >
+                  Edit
+                </button>
               </div>
             </div>
           ))
@@ -160,11 +163,11 @@ const ProfessorsList = () => {
             <button
               key={index}
               onClick={() => handlePageChange(index + 1)}
-              className={`mx-1 px-4 py-2 rounded-lg ${
+              className={`mx-1 px-4 py-2 rounded-lg transition-all ${
                 currentPage === index + 1
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-700 text-gray-400'
-              } transition-all`}
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-700 text-gray-400 hover:bg-blue-500 hover:text-white'
+              }`}
             >
               {index + 1}
             </button>
