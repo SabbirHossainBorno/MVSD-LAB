@@ -1,12 +1,13 @@
-//app/professor_add/page.js
-"use client";
+'use client';
 
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Import the styles
+import 'react-toastify/dist/ReactToastify.css';
+import withAuth from '../../components/withAuth';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
-export default function AddProfessor() {
+const AddProfessor = () => {
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -27,10 +28,10 @@ export default function AddProfessor() {
   const [career, setCareer] = useState([{ position: '', organization: '', joining_year: '', leaving_year: '' }]);
   const [citations, setCitations] = useState([{ title: '', link: '', organization: '' }]);
   const [awards, setAwards] = useState([{ title: '', year: '', details: '', awardPhoto: '' }]);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  
-  // Use useCallback for memoizing handlers
+
   const handleChange = useCallback((e) => {
     const { name, value, files } = e.target;
 
@@ -60,33 +61,32 @@ export default function AddProfessor() {
       return newState;
     });
   }, []);
-  
+
   const addNewField = useCallback((setter, newItem) => {
     setter((prevState) => [...prevState, newItem]);
   }, []);
 
-  // Remove an item from the array
   const removeField = useCallback((setter, index) => {
     setter((prevState) => {
-      // Ensure at least one entry remains
       if (prevState.length > 1) {
         return prevState.filter((_, i) => i !== index);
       }
       return prevState;
     });
   }, []);
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (formData.password !== formData.confirm_password) {
       toast.error('Passwords do not match');
+      setLoading(false);
       return;
     }
 
     const data = new FormData();
-    
+
     for (const key in formData) {
       data.append(key, formData[key]);
     }
@@ -105,7 +105,7 @@ export default function AddProfessor() {
     data.append('education', JSON.stringify(formattedEducation));
     data.append('career', JSON.stringify(formattedCareer));
     data.append('citations', JSON.stringify(citations));
-    
+
     awards.forEach((award, index) => {
       data.append(`awards[${index}][title]`, award.title || '');
       data.append(`awards[${index}][year]`, award.year || '');
@@ -130,8 +130,12 @@ export default function AddProfessor() {
       }
     } catch (error) {
       toast.error('Failed to add professor');
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) return <LoadingSpinner />;
 
 
   return (
@@ -560,3 +564,4 @@ export default function AddProfessor() {
     </div>
   );
 }
+export default withAuth(AddProfessor);

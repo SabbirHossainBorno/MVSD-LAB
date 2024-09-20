@@ -1,9 +1,10 @@
-//app/components/withAuth.js
 'use client'; // Ensure this file is treated as a client-side component
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; // Updated import
 import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner'; // Add a loading spinner component
 
 // Higher Order Component for Authentication
@@ -22,10 +23,12 @@ const withAuth = (WrappedComponent) => {
           if (!response.ok) throw new Error('Failed to fetch auth status');
           const result = await response.json();
           if (!result.authenticated) {
+            toast.error(result.message || 'Session Expired. Please Login Again!');
             router.push('/login');
           }
         } catch (error) {
           console.error('Authentication check failed:', error);
+          toast.error('Failed to check authentication');
           router.push('/login');
         } finally {
           setLoading(false); // End loading
@@ -51,6 +54,7 @@ const withAuth = (WrappedComponent) => {
             if (diff > 10 * 60 * 1000) { // 10 minutes
               Cookies.remove('email');
               Cookies.remove('sessionId');
+              toast.error('Session Expired. Please Login Again!');
               router.push('/login');
             }
           }

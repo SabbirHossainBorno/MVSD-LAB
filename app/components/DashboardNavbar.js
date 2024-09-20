@@ -3,6 +3,34 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
+import axios from 'axios';
+import { format } from 'date-fns-tz';
+
+const logFilePath = '/home/mvsd-lab/Log/mvsd_lab.log';
+
+// Helper function to write logs to the log file
+const writeLog = (message) => {
+  const timeZone = 'Asia/Dhaka'; // Bangladesh Standard Time (BST)
+  const logMessage = `${format(new Date(), 'yyyy-MM-dd HH:mm:ssXXX', { timeZone })} - ${message}\n`;
+  fs.appendFileSync(logFilePath, logMessage);
+};
+
+// Helper function to send a Telegram alert
+const sendTelegramAlert = async (message) => {
+  const apiKey = '7489554804:AAFZs1eZmjZ8H634tBPhtL54UsLZOi3vCxg';
+  const groupId = '-4285248556';
+  const url = `https://api.telegram.org/bot${apiKey}/sendMessage`;
+
+  try {
+    await axios.post(url, {
+      chat_id: groupId,
+      text: message,
+    });
+    writeLog('Telegram alert sent successfully');
+  } catch (error) {
+    writeLog(`Failed to send Telegram alert: ${error.message}`);
+  }
+};
 
 export default function DashboardNavbar({ toggleDashboardSidebar }) {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -61,6 +89,14 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
 
   const handleLogout = async () => {
     try {
+      // Send a Telegram message
+      const message = 'MVSD LAB DASHBOARD\n-------------------------------------\nLoged Out.';
+      await sendTelegramAlert(message);
+
+      // Write log
+      writeLog('User has logged out');
+
+      // Perform logout
       await fetch('/api/logout', { method: 'POST' });
       Cookies.remove('email');
       Cookies.remove('sessionId');
@@ -68,10 +104,9 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
       window.location.href = '/login';
     } catch (error) {
       console.error('Logout failed:', error);
+      writeLog(`Logout failed: ${error.message}`);
     }
   };
-  
-  
 
   return (
     <nav className="bg-gray-900 p-4 flex items-center justify-between shadow-md relative z-10">
@@ -90,9 +125,7 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
         </span>
       </div>
 
-
       <div className="relative flex items-center space-x-4 md:space-x-6">
-        
         <div className="text-white text-lg hidden md:flex items-center">
           <div className="flex items-center space-x-2 bg-gray-800 p-2 rounded shadow-md">
             <span className="font-mono text-xl">{currentTime}</span>
@@ -131,11 +164,11 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
                 </li>
               ))}
               {notifications.length === 0 && (
-                <li className="p-4 text-gray-500 text-sm text-center">You have no notifications</li>
+                <li className="p-4 text-gray-500 text-sm text-center">You Have No Notifications</li>
               )}
             </ul>
             <div className="p-3 bg-gray-800 text-center border-t border-gray-700">
-              <button className="text-sm text-blue-500 hover:text-blue-400">Mark all as read</button>
+              <button className="text-sm text-blue-500 hover:text-blue-400">Mark All As Read</button>
             </div>
           </div>
         )}
