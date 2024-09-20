@@ -13,6 +13,7 @@ const ProfessorsList = () => {
   const [loading, setLoading] = useState(true); 
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
+  const [sortOrder, setSortOrder] = useState('asc');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
@@ -20,10 +21,10 @@ const ProfessorsList = () => {
   const resultsPerPage = 10;
 
   useEffect(() => {
-    async function fetchProfessors() {
+    const fetchProfessors = async () => {
       setLoading(true); 
       try {
-        const res = await fetch(`/api/professor_list?page=${currentPage}&search=${searchTerm}&filter=${filter}`);
+        const res = await fetch(`/api/professor_list?page=${currentPage}&search=${searchTerm}&filter=${filter}&sortOrder=${sortOrder}`);
         const data = await res.json();
         if (res.ok) {
           setProfessors(data.professors);
@@ -36,10 +37,12 @@ const ProfessorsList = () => {
       } finally {
         setLoading(false);
       }
-    }
+    };
 
-    fetchProfessors();
-  }, [currentPage, searchTerm, filter]);
+    const debounceFetch = setTimeout(fetchProfessors, 300); // Debounce for 300ms
+
+    return () => clearTimeout(debounceFetch);
+  }, [currentPage, searchTerm, filter, sortOrder]);
 
   const handleEdit = (id) => {
     router.push(`/professors/${id}/edit`);
@@ -52,6 +55,11 @@ const ProfessorsList = () => {
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleSortOrderChange = (e) => {
+    setSortOrder(e.target.value);
     setCurrentPage(1);
   };
 
@@ -77,11 +85,20 @@ const ProfessorsList = () => {
         <select
           value={filter}
           onChange={handleFilterChange}
-          className="w-full md:w-1/4 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full md:w-1/4 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 md:mb-0"
         >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>
+          <option value="id">ID</option>
+        </select>
+        <select
+          value={sortOrder}
+          onChange={handleSortOrderChange}
+          className="w-full md:w-1/4 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
         </select>
       </div>
 
@@ -100,7 +117,7 @@ const ProfessorsList = () => {
               />
               <p className="font-semibold text-lg text-gray-900 mb-2 text-center">{professor.first_name} {professor.last_name}</p>
               <p className="text-gray-600 mb-2 text-center">{professor.email}</p>
-              <p className="text-gray-500 mb-4 text-center">ID: {professor.id}</p>
+              <p className="text-gray-500 mb-4 text-center"><strong>ID: {professor.id}</strong></p>
               <div className="flex justify-center">
                 <button
                   onClick={() => handleEdit(professor.id)}
