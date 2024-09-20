@@ -1,4 +1,4 @@
-// app/components/withAuth.js
+//app/components/withAuth.js
 'use client'; // Ensure this file is treated as a client-side component
 
 import { useEffect, useState } from 'react';
@@ -54,7 +54,7 @@ const withAuth = (WrappedComponent) => {
               router.push('/login');
             }
           }
-        }, 1000);
+        }, 60000); // Check every minute instead of every second
 
         return () => {
           clearInterval(interval);
