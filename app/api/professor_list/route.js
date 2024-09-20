@@ -1,4 +1,3 @@
-// app/api/professor_list/route.js
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 
@@ -13,6 +12,7 @@ export async function GET(req) {
     const search = url.searchParams.get('search') || '';
     const filter = url.searchParams.get('filter') || 'all';
     const page = parseInt(url.searchParams.get('page'), 10) || 1;
+    const sortOrder = url.searchParams.get('sortOrder') || 'asc'; // Get sortOrder from query params
     const resultsPerPage = 10;
     const offset = (page - 1) * resultsPerPage;
 
@@ -31,10 +31,10 @@ export async function GET(req) {
     if (filter !== 'all') {
       searchQuery += ` AND status = $2`;
       countQuery += ` AND status = $2`;
-      searchQuery += ` ORDER BY id LIMIT $3 OFFSET $4`;
+      searchQuery += ` ORDER BY substring(id from '[0-9]+')::int ${sortOrder}, id ${sortOrder} LIMIT $3 OFFSET $4`;
       queryParams = [searchValue, filter, resultsPerPage, offset];
     } else {
-      searchQuery += ` ORDER BY id LIMIT $2 OFFSET $3`;
+      searchQuery += ` ORDER BY substring(id from '[0-9]+')::int ${sortOrder}, id ${sortOrder} LIMIT $2 OFFSET $3`;
       queryParams = [searchValue, resultsPerPage, offset];
     }
 
