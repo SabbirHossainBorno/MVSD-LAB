@@ -1,3 +1,4 @@
+// app/api/check-access/route.js
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 
@@ -9,7 +10,6 @@ export async function GET(request) {
   const email = request.cookies.get('email');
   const sessionId = request.cookies.get('sessionId');
   const lastActivity = request.cookies.get('lastActivity');
-  const rememberMe = request.cookies.get('rememberMe');
 
   if (!email || !sessionId) {
     return NextResponse.json({ success: false, message: 'Unauthorized' });
@@ -19,10 +19,8 @@ export async function GET(request) {
   const lastActivityDate = new Date(lastActivity);
   const diff = now - lastActivityDate;
 
-  const sessionExpiry = rememberMe === 'true' ? 30 * 24 * 60 * 60 * 1000 : 10 * 60 * 1000; // 30 days or 10 minutes
-
-  if (diff > sessionExpiry) {
-    return NextResponse.json({ success: false, message: 'Session expired' });
+  if (diff > 10 * 60 * 1000) { // 10 minutes
+    return NextResponse.json({ success: false, message: 'Session Expired. Login Again!' });
   }
 
   try {
@@ -32,7 +30,7 @@ export async function GET(request) {
     const sessionResult = await client.query('SELECT * FROM sessions WHERE session_id = $1 AND email = $2', [sessionId, email]);
     if (sessionResult.rowCount === 0) {
       client.release();
-      return NextResponse.json({ success: false, message: 'Invalid session' });
+      return NextResponse.json({ success: false, message: 'Invalid Session' });
     }
 
     // Check user role
@@ -45,11 +43,9 @@ export async function GET(request) {
 
     const userRole = userResult.rows[0].role;
     if (userRole === 'admin') {
-      const response = NextResponse.json({ success: true });
-      response.cookies.set('lastActivity', new Date().toISOString(), { httpOnly: true });
-      return response;
+      return NextResponse.json({ success: true });
     } else {
-      return NextResponse.json({ success: false, message: 'Access denied' });
+      return NextResponse.json({ success: false, message: 'Access Denied' });
     }
   } catch (error) {
     console.error('Database query failed:', error);
