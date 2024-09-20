@@ -39,7 +39,7 @@ export default function LoginPage() {
     <div className="bg-cover bg-center min-h-screen flex items-center justify-center text-white" style={{ backgroundImage: "url('/images/background_img_login.jpg')" }}>
       <div className="flex flex-col md:flex-row bg-white/10 backdrop-blur-lg rounded shadow-lg max-w-4xl w-full p-6 md:p-0">
         {/* Left Side Image */}
-        <div className="hidden md:block md:w-1/2">
+        <div className="hidden md:block md:w-1/2 relative">
           <Image src="/images/login_img.jpg" alt="Login Visual" layout="fill" objectFit="cover" className="rounded" />
         </div>
 
