@@ -121,6 +121,58 @@ export async function POST(req) {
       });
     }
 
+// Password validation
+writeLog('Validating password...');
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?`~\-])[A-Za-z\d!@#$%^&*()_+[\]{};':"\\|,.<>/?`~\-]{8,}$/;
+console.log('Password:', password); // Debugging line to log the password
+if (!passwordRegex.test(password)) {
+  writeLog('Password validation failed');
+  return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
+}
+
+    // Date of Birth validation
+writeLog(`Validating date of birth (${dob})...`);
+const currentDate = new Date();
+const dobDate = new Date(dob);
+let age = currentDate.getFullYear() - dobDate.getFullYear();
+const monthDifference = currentDate.getMonth() - dobDate.getMonth();
+if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < dobDate.getDate())) {
+  age--;
+}
+if (age < 18) {
+  writeLog(`Date of birth validation failed: Age is ${age}, which is less than 18`);
+  return NextResponse.json({ message: 'Professor must be at least 18 years old.' }, { status: 400 });
+}
+
+    // Joining Date validation
+    writeLog(`Validating joining date (${joining_date})...`);
+    const joiningYear = new Date(joining_date).getFullYear();
+    if (joiningYear > currentDate.getFullYear()) {
+      writeLog(`Joining date validation failed: Joining year (${joiningYear}) is greater than the current year (${currentDate.getFullYear()})`);
+      return NextResponse.json({ message: 'Joining date cannot be greater than the current year.' }, { status: 400 });
+    }
+
+    // Year validations for education, career, and awards
+    const validateYear = (year) => year <= currentDate.getFullYear();
+
+    writeLog('Validating education years...');
+    if (!education.every(edu => validateYear(edu.passing_year))) {
+      writeLog('Education year validation failed: Passing year is greater than the current year');
+      return NextResponse.json({ message: 'Passing year cannot be greater than the current year.' }, { status: 400 });
+    }
+
+    writeLog('Validating career years...');
+    if (!career.every(car => validateYear(car.joining_year) && (!car.leaving_year || validateYear(car.leaving_year)))) {
+      writeLog('Career year validation failed: Joining year or leaving year is greater than the current year');
+      return NextResponse.json({ message: 'Joining year and leaving year cannot be greater than the current year.' }, { status: 400 });
+    }
+
+    writeLog('Validating award years...');
+    if (!awards.every(award => validateYear(award.year))) {
+      writeLog('Award year validation failed: Award year is greater than the current year');
+      return NextResponse.json({ message: 'Award year cannot be greater than the current year.' }, { status: 400 });
+    }
+
     // Check if email or phone already exists
     writeLog(`Checking if email (${email}) or phone (${phone}) already exists in the database...`);
     const emailCheckResult = await client.query('SELECT id FROM member WHERE email = $1', [email]);

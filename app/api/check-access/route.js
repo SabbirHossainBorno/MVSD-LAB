@@ -21,7 +21,7 @@ export async function GET(request) {
     const diff = now - lastActivityDate;
 
     if (diff > 10 * 60 * 1000) { // 10 minutes
-      return NextResponse.json({ success: false, message: 'Session Expired. Login Again!' });
+      return NextResponse.json({ success: false, message: 'Session Expired. Please Login Again!' });
     }
 
     const client = await pool.connect();
