@@ -1,4 +1,3 @@
-// app/dashboard/professor_list/page.js
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -79,13 +78,6 @@ const ProfessorsList = () => {
 
       {/* Search and Filter Bar */}
       <div className="flex flex-col md:flex-row justify-between mb-6">
-        <input
-          type="text"
-          placeholder="Search by name or email"
-          value={searchTerm}
-          onChange={handleSearch}
-          className="w-full md:w-1/3 px-4 py-2 rounded border border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 md:mb-0 bg-gray-800 text-white"
-        />
         <select
           value={filter}
           onChange={handleFilterChange}
@@ -94,8 +86,14 @@ const ProfessorsList = () => {
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>
-          <option value="id">ID</option>
         </select>
+        <input
+          type="text"
+          placeholder="Search by name or email"
+          value={searchTerm}
+          onChange={handleSearch}
+          className="w-full md:w-1/3 px-4 py-2 rounded border border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 md:mb-0 bg-gray-800 text-white"
+        />
         <select
           value={sortOrder}
           onChange={handleSortOrderChange}
@@ -112,27 +110,27 @@ const ProfessorsList = () => {
           professors.map((professor) => (
             <div
               key={professor.id}
-              className="bg-gray-800 shadow-lg rounded p-6 flex flex-col transition-transform transform hover:scale-105"
+              className="bg-gray-800 shadow-lg rounded p-4 flex flex-col transition-transform transform hover:scale-105"
             >
-              <div className="flex justify-between items-center mb-4">
-                <div className="flex items-center">
-                <img
-                src={`/Storage/Images/Professor/${professor.photo.split('/').pop()}`}
-                alt={`${professor.first_name} ${professor.last_name}`}
-                className="w-24 h-24 rounded object-cover border-2 border-blue-500" // Increased size to w-24 and h-24
-                />
-                  <div className="ml-4">
-                    <div className="flex items-center text-sm">
-                      <span className="font-bold text-blue-500 mr-2">{professor.id}</span>
-                      <span className={`w-4 h-4 rounded-full ${professor.status === 'Active' ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                    </div>
-                    <p className="font-semibold text-lg text-white">{professor.first_name} {professor.last_name}</p>
-                    <p className="text-gray-400">{professor.email}</p>
+              <div className="flex items-center mb-2">
+                <div className="w-24 h-24 relative overflow-hidden border-2 border-blue-500 rounded">
+                  <img
+                    src={`/Storage/Images/Professor/${professor.photo.split('/').pop()}`}
+                    alt={`${professor.first_name} ${professor.last_name}`}
+                    className="object-cover w-full h-full transition-transform duration-200 ease-in-out transform hover:scale-105"
+                  />
+                </div>
+                <div className="ml-4">
+                  <div className="flex items-center text-sm">
+                    <span className="font-bold text-blue-500 mr-2">{professor.id}</span>
+                    <span className={`w-4 h-4 rounded-full ${professor.status === 'Active' ? 'bg-green-500' : 'bg-red-500'}`}></span>
                   </div>
+                  <p className="font-semibold text-lg text-white">{professor.first_name} {professor.last_name}</p>
+                  <p className="text-gray-400">{professor.email}</p>
                 </div>
               </div>
 
-              <div className="flex justify-end mt-4 space-x-2">
+              <div className="flex justify-end mt-2 space-x-2">
                 <button
                   onClick={() => handleView(professor.id)}
                   className="bg-green-600 text-white py-1 px-2 rounded text-sm transition-all hover:bg-green-700"
