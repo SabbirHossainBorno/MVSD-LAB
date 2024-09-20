@@ -94,7 +94,7 @@ const ProfessorsList = () => {
               className="bg-white shadow-md rounded-lg p-4 transition-all hover:shadow-lg hover:bg-gray-100"
             >
               <img
-                src={`/images/${professor.photo.split('/').pop()}`}
+                src={`/Storage/Images/Professor/${professor.photo.split('/').pop()}`}
                 alt={`${professor.first_name} ${professor.last_name}`}
                 className="w-24 h-24 rounded-full mx-auto mb-4"
               />
