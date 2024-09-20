@@ -50,7 +50,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
             <span className="text-lg font-medium">Home</span>
           </div>
         </Link>
-        <Link href="/dashboard/professor">
+        <Link href="/dashboard/professor_add">
           <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
             <img src="/icons/add_professor.png" alt="Add Professor" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Add Professor</span>

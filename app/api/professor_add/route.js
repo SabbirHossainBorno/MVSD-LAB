@@ -1,4 +1,4 @@
-//app/api/professor/route.js
+//app/api/professor_add/route.js
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 import path from 'path';
@@ -59,14 +59,14 @@ const generateProfessorId = async () => {
 // Helper function to save profile photo
 const saveProfilePhoto = async (file, professorId) => {
   const filename = `${professorId}_DP${path.extname(file.name)}`;
-  const targetPath = path.join('/home/mvsd-lab/Storage/Images/Professor', filename);
+  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
 
   try {
     writeLog(`Saving profile photo with filename: ${filename} at path: ${targetPath}`);
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
     writeLog(`Profile photo saved successfully at path: ${targetPath}`);
-    return `/home/mvsd-lab/Storage/Images/Professor/${filename}`;
+    return `/Storage/Images/Professor/${filename}`;
   } catch (error) {
     writeLog(`Error occurred while saving profile photo: ${error.message}`);
     throw new Error(`Failed to save profile photo: ${error.message}`);
@@ -76,14 +76,14 @@ const saveProfilePhoto = async (file, professorId) => {
 // Helper function to save award photo
 const saveAwardPhoto = async (file, professorId, index) => {
   const filename = `${professorId}_Award_${index}${path.extname(file.name)}`;
-  const targetPath = path.join('/home/mvsd-lab/Storage/Images/Professor', filename);
+  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
 
   try {
     writeLog(`Saving award photo with filename: ${filename} at path: ${targetPath}`);
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
     writeLog(`Award photo saved successfully at path: ${targetPath}`);
-    return `/home/mvsd-lab/Storage/Images/Professor/${filename}`;
+    return `/Storage/Images/Professor/${filename}`;
   } catch (error) {
     writeLog(`Error occurred while saving award photo: ${error.message}`);
     throw new Error(`Failed to save award photo: ${error.message}`);
