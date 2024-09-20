@@ -3,34 +3,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
-import axios from 'axios';
-import { format } from 'date-fns-tz';
-
-const logFilePath = '/home/mvsd-lab/Log/mvsd_lab.log';
-
-// Helper function to write logs to the log file
-const writeLog = (message) => {
-  const timeZone = 'Asia/Dhaka'; // Bangladesh Standard Time (BST)
-  const logMessage = `${format(new Date(), 'yyyy-MM-dd HH:mm:ssXXX', { timeZone })} - ${message}\n`;
-  fs.appendFileSync(logFilePath, logMessage);
-};
-
-// Helper function to send a Telegram alert
-const sendTelegramAlert = async (message) => {
-  const apiKey = '7489554804:AAFZs1eZmjZ8H634tBPhtL54UsLZOi3vCxg';
-  const groupId = '-4285248556';
-  const url = `https://api.telegram.org/bot${apiKey}/sendMessage`;
-
-  try {
-    await axios.post(url, {
-      chat_id: groupId,
-      text: message,
-    });
-    writeLog('Telegram alert sent successfully');
-  } catch (error) {
-    writeLog(`Failed to send Telegram alert: ${error.message}`);
-  }
-};
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function DashboardNavbar({ toggleDashboardSidebar }) {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -44,7 +19,6 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
         const response = await fetch('/api/notification');
         const result = await response.json();
         if (response.ok) {
-          // Sort notifications so that unread ones come first
           const sortedNotifications = result.sort((a, b) => a.status === 'Unread' ? -1 : 1);
           setNotifications(sortedNotifications);
         } else {
@@ -88,27 +62,41 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
   };
 
   const handleLogout = async () => {
+    setLoading(true); // Show spinner
     try {
-      // Send a Telegram message
-      const message = 'MVSD LAB DASHBOARD\n-------------------------------------\nLoged Out.';
-      await sendTelegramAlert(message);
-
-      // Write log
-      writeLog('User has logged out');
-
-      // Perform logout
-      await fetch('/api/logout', { method: 'POST' });
-      Cookies.remove('email');
-      Cookies.remove('sessionId');
-      Cookies.remove('lastActivity');
-      window.location.href = '/login';
+      const response = await fetch('/api/logout', { method: 'POST' });
+      if (response.ok) {
+        Cookies.remove('email');
+        Cookies.remove('sessionId');
+        Cookies.remove('lastActivity');
+        document.cookie.split(";").forEach(cookie => {
+          document.cookie = cookie.trim().replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
+        toast.success('Logout successful', {
+          position: 'top-right',
+        });
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 2000);
+      } else {
+        toast.error('Logout failed', {
+          position: 'top-right',
+        });
+      }
     } catch (error) {
-      console.error('Logout failed:', error);
-      writeLog(`Logout failed: ${error.message}`);
+      toast.error('Logout failed', {
+        position: 'top-right',
+      });
+    } finally {
+      setLoading(false); // Hide spinner after process is complete
     }
   };
 
   return (
+    <>
+    {loading ? (
+      <LoadingSpinner />
+    ) : (
     <nav className="bg-gray-900 p-4 flex items-center justify-between shadow-md relative z-10">
       <button
         onClick={toggleDashboardSidebar}
@@ -120,9 +108,7 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
       </button>
 
       <div className="flex items-center justify-center flex-1 text-[#4A90E2] text-xl lg:text-2xl font-bold tracking-tight md:text-2xl">
-        <span className="uppercase">
-          Dashboard
-        </span>
+        <span className="uppercase">Dashboard</span>
       </div>
 
       <div className="relative flex items-center space-x-4 md:space-x-6">
@@ -164,11 +150,11 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
                 </li>
               ))}
               {notifications.length === 0 && (
-                <li className="p-4 text-gray-500 text-sm text-center">You Have No Notifications</li>
+                <li className="p-4 text-gray-500 text-sm text-center">You have no notifications</li>
               )}
             </ul>
             <div className="p-3 bg-gray-800 text-center border-t border-gray-700">
-              <button className="text-sm text-blue-500 hover:text-blue-400">Mark All As Read</button>
+              <button className="text-sm text-blue-500 hover:text-blue-400">Mark all as read</button>
             </div>
           </div>
         )}
@@ -209,5 +195,8 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
         </div>
       </div>
     </nav>
+    )}
+    <ToastContainer />
+    </>
   );
 }
