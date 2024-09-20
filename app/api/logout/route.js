@@ -38,7 +38,7 @@ export async function POST(req) {
     log(`User ${email} logged out successfully.`, sessionId);
 
     // Send the Telegram alert
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nLogged Out Successfully!\Email : ${email}\nIP : ${ipAddress}`);
+    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nLogged Out Successfully!\nEmail : ${email}\nIP : ${ipAddress}`);
 
     // Clear cookies
     const response = NextResponse.json({ message: 'Logout successful' });

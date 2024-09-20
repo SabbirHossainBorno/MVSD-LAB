@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import LoadingSpinner from '../components/LoadingSpinner';
+
 
 export default function DashboardNavbar({ toggleDashboardSidebar }) {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -62,41 +62,38 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
   };
 
   const handleLogout = async () => {
-    setLoading(true); // Show spinner
     try {
       const response = await fetch('/api/logout', { method: 'POST' });
       if (response.ok) {
         Cookies.remove('email');
         Cookies.remove('sessionId');
         Cookies.remove('lastActivity');
+        // Clear all cookies
         document.cookie.split(";").forEach(cookie => {
           document.cookie = cookie.trim().replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
         });
         toast.success('Logout successful', {
-          position: 'top-right',
+          position: 'top-right', // Show toast message on success
         });
         setTimeout(() => {
           window.location.href = '/login';
-        }, 2000);
+        }, 2000); // Redirect after a delay for the toast to appear
       } else {
         toast.error('Logout failed', {
           position: 'top-right',
         });
+        console.error('Logout failed');
       }
     } catch (error) {
       toast.error('Logout failed', {
         position: 'top-right',
       });
-    } finally {
-      setLoading(false); // Hide spinner after process is complete
+      console.error('Logout failed:', error);
     }
   };
 
   return (
     <>
-    {loading ? (
-      <LoadingSpinner />
-    ) : (
     <nav className="bg-gray-900 p-4 flex items-center justify-between shadow-md relative z-10">
       <button
         onClick={toggleDashboardSidebar}
@@ -195,7 +192,6 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
         </div>
       </div>
     </nav>
-    )}
     <ToastContainer />
     </>
   );
