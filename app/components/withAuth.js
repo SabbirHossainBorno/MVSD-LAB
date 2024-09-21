@@ -36,11 +36,11 @@ const withAuth = (WrappedComponent) => {
             const email = Cookies.get('email');
             const sessionId = Cookies.get('sessionId');
             toast.error(result.message || 'Session Expired. Please Login Again!');
-            await logAndAlert('Session expired', sessionId, { email });
+            await logAndAlert('MVSD LAB DASHBOARD\n-----------------------------------\nSession Expired!', sessionId, { email });
             router.push('/login');
           }
         } catch (error) {
-          console.error('Authentication check failed:', error);
+          console.error('Authentication Check Failed:', error);
           toast.error('Failed to check authentication');
           router.push('/login');
         } finally {
@@ -70,7 +70,7 @@ const withAuth = (WrappedComponent) => {
               Cookies.remove('email');
               Cookies.remove('sessionId');
               toast.error('Session Expired. Please Login Again!');
-              await logAndAlert('Session expired due to inactivity', sessionId, { email });
+              await logAndAlert('MVSD LAB DASHBOARD\n-----------------------------------\nSession Expired Due To Inactivity', sessionId, { email });
               router.push('/login');
             }
           }

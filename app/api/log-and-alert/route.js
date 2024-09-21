@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { utcToZonedTime } from 'date-fns-tz';
+import { toZonedTime } from 'date-fns-tz';
 
 const logFilePath = path.join('/home/mvsd-lab/Log', 'mvsd_lab.log');
 
@@ -17,12 +17,13 @@ if (!TELEGRAM_API_KEY || !TELEGRAM_GROUP_ID || !process.env.DATABASE_URL) {
 
 const log = (message, sessionId, details = {}) => {
   const timeZone = 'Asia/Dhaka'; // Set your server's time zone
-  const zonedDate = utcToZonedTime(new Date(), timeZone);
+  const zonedDate = toZonedTime(new Date(), timeZone);
   const formattedDate = format(zonedDate, 'yyyy-MM-dd HH:mm:ssXXX', { timeZone });
 
   const logMessage = `${formattedDate} [Session ID: ${sessionId}] ${message} ${JSON.stringify(details)}\n`;
   fs.appendFileSync(logFilePath, logMessage);
 };
+
 
 const sendTelegramAlert = async (message) => {
   const url = `https://api.telegram.org/bot${TELEGRAM_API_KEY}/sendMessage`;

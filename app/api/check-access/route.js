@@ -9,7 +9,8 @@ const pool = new Pool({
 
 const logAndAlert = async (message, sessionId, details = {}) => {
   try {
-    await axios.post('/api/log-and-alert', { message, sessionId, details });
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    await axios.post(`${siteUrl}/api/log-and-alert`, { message, sessionId, details });
   } catch (error) {
     console.error('Failed to log and send alert:', error);
   }
@@ -30,7 +31,7 @@ export async function GET(request) {
     const diff = now - lastActivityDate;
 
     if (diff > 10 * 60 * 1000) { // 10 minutes
-      await logAndAlert('Session expired', sessionId, { email });
+      await logAndAlert('MVSD LAB DASHBOARD\n-----------------------------------\nSession Expired!', sessionId, { email });
       return NextResponse.json({ success: false, message: 'Session Expired. Please Login Again!' });
     }
 

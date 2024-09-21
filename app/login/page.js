@@ -31,7 +31,7 @@ export default function LoginPage() {
         router.push('/upload');
       }
     } else {
-      toast.error('Invalid Access. Email/Password Is Wrong');
+      toast.error('Invalid Access! Email/Password Is Wrong');
     }
   };
 
