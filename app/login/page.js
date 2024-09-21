@@ -1,6 +1,7 @@
+// app/pages/login.js
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { toast, ToastContainer } from 'react-toastify';
@@ -11,6 +12,12 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (router.query.sessionExpired) {
+      toast.error('Session Expired. Please Login Again!');
+    }
+  }, [router.query.sessionExpired]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
