@@ -8,6 +8,9 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner';
 import axios from 'axios';
+import Slider from 'react-slick';
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -59,12 +62,48 @@ function LoginPage() {
     }
   }, [router.query]);
 
+  const ImageSlider = () => {
+    const images = [
+      '/images/login_banner/login_left (1).jpg',
+      '/images/login_banner/login_left (2).jpg',
+      '/images/login_banner/login_left (3).jpg',
+      '/images/login_banner/login_left (4).jpg',
+      '/images/login_banner/login_left (5).jpg',
+      '/images/login_banner/login_left (6).jpg',
+      '/images/login_banner/login_left (7).jpg',
+      '/images/login_banner/login_left (8).jpg',
+      '/images/login_banner/login_left (9).jpg',
+      '/images/login_banner/login_left (10).jpg',
+      '/images/login_banner/login_left (11).jpg'
+    ];
+
+    const settings = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 3000,
+    };
+
+    return (
+      <Slider {...settings}>
+        {images.map((image, index) => (
+          <div key={index}>
+            <Image src={image} alt={`Login Visual ${index + 1}`} fill style={{ objectFit: 'cover' }} className="rounded" />
+          </div>
+        ))}
+      </Slider>
+    );
+  };
+
   return (
     <div className="bg-cover bg-center min-h-screen flex items-center justify-center text-white" style={{ backgroundImage: "url('/images/background_img_login.jpg')" }}>
       <div className="flex flex-col md:flex-row bg-white/10 backdrop-blur-lg rounded shadow-lg max-w-4xl w-full p-6 md:p-0">
         {/* Left Side Image */}
         <div className="hidden md:block md:w-1/2 relative">
-          <Image src="/images/login_img.jpg" alt="Login Visual" fill style={{ objectFit: 'cover' }} className="rounded" />
+          <ImageSlider />
         </div>
 
         {/* Right Side Form */}

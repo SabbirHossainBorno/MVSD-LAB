@@ -29,15 +29,6 @@ const validateSession = (request) => {
     throw new Error('Unauthorized');
   }
 
-  const now = new Date();
-  const lastActivityDate = new Date(lastActivity);
-  const diff = now - lastActivityDate;
-
-  if (diff > 10 * 60 * 1000) { // 10 minutes
-    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!-dashboard\nEmail : ${email}`, sessionId, { ip, userAgent });
-    throw new Error('Session Expired!');
-  }
-
   return { sessionId, ip, userAgent, email };
 };
 

@@ -25,11 +25,6 @@ export async function GET(request) {
     const lastActivityDate = new Date(lastActivity);
     const diff = now - lastActivityDate;
 
-    if (diff > 10 * 60 * 1000) { // 10 minutes
-      await logAndAlert('MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!-check auth', sessionId, { email });
-      return NextResponse.json({ authenticated: false, message: 'Session Expired. Please Login Again!' });
-    }
-
     return NextResponse.json({ authenticated: true });
   } catch (error) {
     console.error('Error during authentication check:', error);
