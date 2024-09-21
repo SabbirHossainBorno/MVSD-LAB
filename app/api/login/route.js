@@ -16,11 +16,7 @@ const logAndAlert = async (message, sessionId, details = {}) => {
     console.error('Failed to log and send alert:', error);
   }
 };
-useEffect(() => {
-  if (router.query.sessionExpired) {
-    toast.error('Session Expired. Please Login Again!');
-  }
-}, [router.query.sessionExpired]);
+  
 
 export async function POST(request) {
   const { email, password } = await request.json();

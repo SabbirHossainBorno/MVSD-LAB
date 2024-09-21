@@ -1,4 +1,3 @@
-// app/pages/login.js
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -6,18 +5,13 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import withAuth from '../components/withAuth';
 
-export default function LoginPage() {
+function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    if (router.query.sessionExpired) {
-      toast.error('Session Expired. Please Login Again!');
-    }
-  }, [router.query.sessionExpired]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -41,6 +35,12 @@ export default function LoginPage() {
       toast.error('Invalid Access! Email/Password Is Wrong');
     }
   };
+
+  useEffect(() => {
+    if (router.query.sessionExpired) {
+      toast.error('Session Expired. Please Login Again!');
+    }
+  }, [router.query.sessionExpired]);
 
   return (
     <div className="bg-cover bg-center min-h-screen flex items-center justify-center text-white" style={{ backgroundImage: "url('/images/background_img_login.jpg')" }}>
@@ -131,3 +131,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+export default withAuth(LoginPage);

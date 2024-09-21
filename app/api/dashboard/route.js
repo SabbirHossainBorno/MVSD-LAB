@@ -33,7 +33,7 @@ const validateSession = (request) => {
   const lastActivityDate = new Date(lastActivity);
   const diff = now - lastActivityDate;
 
-  if (diff > 1 * 60 * 1000) { // 10 minutes
+  if (diff > 10 * 60 * 1000) { // 10 minutes
     logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!-dashboard\nEmail : ${email}`, sessionId, { ip, userAgent });
     throw new Error('Session Expired!');
   }
