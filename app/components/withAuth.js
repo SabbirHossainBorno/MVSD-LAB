@@ -1,4 +1,5 @@
-'use client'; // Ensure this file is treated as a client-side component
+//app/components/withAuth.js
+'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; // Updated import
