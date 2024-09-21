@@ -17,13 +17,17 @@ function DashboardLayout({ children }) {
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-900 text-gray-100">
-      <Sidebar isOpen={isSidebarOpen} toggleDashboardSidebar={toggleDashboardSidebar} />
-      <div className="flex-1 flex flex-col">
-        <DashboardNavbar toggleDashboardSidebar={toggleDashboardSidebar} />
-        <main className="flex-1 overflow-y-auto bg-gray-900 p-4">
-          {children}
-        </main>
-      </div>
+      {isAuthenticated && (
+        <>
+          <Sidebar isOpen={isSidebarOpen} toggleDashboardSidebar={toggleDashboardSidebar} />
+          <div className="flex-1 flex flex-col">
+            <DashboardNavbar toggleDashboardSidebar={toggleDashboardSidebar} />
+            <main className="flex-1 overflow-y-auto bg-gray-900 p-4">
+              {children}
+            </main>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -33,4 +37,3 @@ DashboardLayout.propTypes = {
 };
 
 export default withAuth(DashboardLayout);
-  

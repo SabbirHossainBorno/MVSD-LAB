@@ -12,23 +12,18 @@ const withAuth = (WrappedComponent) => {
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
-    const logAndAlert = async (message, sessionId, details = {}) => {
-      try {
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-        await axios.post(`${siteUrl}/api/log-and-alert`, { message, sessionId, details });
-      } catch (error) {
-        console.error('Failed to log and send alert:', error);
-      }
-    };
-
     const handleSessionExpiration = async () => {
       const email = Cookies.get('email');
       const sessionId = Cookies.get('sessionId');
       Cookies.remove('email');
       Cookies.remove('sessionId');
-      toast.error('Session Expired. Please Login Again!');
-      await logAndAlert('MVSD LAB DASHBOARD\n------------------------------------\nSession Expired Due To Inactivity', sessionId, { email });
+      toast.error('Session Expired! Please Login Again.');
       router.push('/login?sessionExpired=true');
+    };
+
+    const handleUnauthorizedAccess = () => {
+      toast.error('Authentication Required! Need To Login.');
+      router.push('/login');
     };
 
     useEffect(() => {
@@ -40,12 +35,12 @@ const withAuth = (WrappedComponent) => {
           if (!response.ok) throw new Error('Failed to fetch auth status');
           const result = await response.json();
           if (!result.authenticated) {
-            handleSessionExpiration();
+            handleUnauthorizedAccess();
           }
         } catch (error) {
           console.error('Authentication Check Failed:', error);
           toast.error('Failed to check authentication');
-          router.push('/login');
+          handleUnauthorizedAccess();
         } finally {
           setLoading(false);
         }
@@ -68,7 +63,7 @@ const withAuth = (WrappedComponent) => {
             const lastActivityDate = new Date(lastActivity);
             const diff = now - lastActivityDate;
             if (diff > 10 * 60 * 1000) { // 10 minutes
-              handleSessionExpiration();
+              await handleSessionExpiration();
             }
           }
         }, 60000); // Check every minute
@@ -83,7 +78,7 @@ const withAuth = (WrappedComponent) => {
 
     useEffect(() => {
       if (router.query && router.query.sessionExpired) {
-        toast.error('Session Expired. Please Login Again!');
+        toast.error('Session Expired! Please Login Again.');
       }
     }, [router.query]);
 
