@@ -55,3 +55,11 @@ export async function GET(request) {
       } else {
         return NextResponse.json({ success: false, message: 'Access Denied' });
       }
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Database query failed:', error);
+    return NextResponse.json({ success: false, message: 'Internal server error' });
+  }
+}

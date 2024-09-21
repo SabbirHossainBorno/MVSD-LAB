@@ -47,4 +47,3 @@ export async function POST(request) {
     return NextResponse.json({ success: false, message: 'Internal server error' });
   }
 }
-

@@ -47,7 +47,7 @@ export default function LoginPage() {
         <div className="flex flex-col items-center justify-center md:w-1/2 p-6">
           {/* Logo Section */}
           <div className="mb-8 text-center">
-            <Image src="/images/logo.png" alt="Logo" width={128} height={128} className="mx-auto" />
+            <Image src="/images/logo.png" alt="Logo" width={128} height={128} className="mx-auto" priority />
             <h2 className="text-xl font-bold leading-6 mt-2 text-[#012970]">AUTOMOTIVE MEETS AI</h2>
           </div>
 

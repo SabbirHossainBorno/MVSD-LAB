@@ -4,7 +4,8 @@ import axios from 'axios';
 
 const logAndAlert = async (message, sessionId, details = {}) => {
   try {
-    await axios.post('/api/log-and-alert', { message, sessionId, details });
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    await axios.post(`${siteUrl}/api/log-and-alert`, { message, sessionId, details });
   } catch (error) {
     console.error('Failed to log and send alert:', error);
   }
