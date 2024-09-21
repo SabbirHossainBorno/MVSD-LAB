@@ -8,25 +8,27 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner';
 import axios from 'axios';
-import Slider from 'react-slick';
-import "slick-carousel/slick/slick.css"; 
-import "slick-carousel/slick/slick-theme.css";
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [randomImage, setRandomImage] = useState('');
   const router = useRouter();
 
-  const logAndAlert = async (message, sessionId, details = {}) => {
+  const fetchRandomImage = async () => {
     try {
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-      await axios.post(`${siteUrl}/api/log-and-alert`, { message, sessionId, details });
+      const response = await axios.get('/api/random-image');
+      setRandomImage(response.data.imageUrl);
     } catch (error) {
-      console.error('Failed to log and send alert:', error);
+      console.error('Failed to fetch random image:', error);
     }
   };
+
+  useEffect(() => {
+    fetchRandomImage();
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -62,51 +64,17 @@ function LoginPage() {
     }
   }, [router.query]);
 
-  const ImageSlider = () => {
-    const images = [
-      '/images/login_banner/login_left (1).jpg',
-      '/images/login_banner/login_left (2).jpg',
-      // ... (other images)
-    ];
-  
-    const settings = {
-      infinite: true,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      autoplay: true,
-      autoplaySpeed: 3000,
-      arrows: false,
-      dots: false,
-    };
-  
-    return (
-      <Slider {...settings}>
-        {images.map((image, index) => (
-          <div key={index} className="relative w-full h-full"> {/* Changed height to h-full */}
-            <Image
-              src={image}
-              alt={`Login Visual ${index + 1}`}
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              style={{ objectFit: 'cover' }}
-              className="rounded"
-            />
-          </div>
-        ))}
-      </Slider>
-    );
-  };
-  
-
   return (
     <div className="bg-cover bg-center min-h-screen flex items-center justify-center text-white" style={{ backgroundImage: "url('/images/background_img_login.jpg')" }}>
       <div className="flex flex-col md:flex-row bg-white/10 backdrop-blur-lg rounded shadow-lg max-w-4xl w-full p-6 md:p-0">
         {/* Left Side Image */}
-        // Adjust the parent div for the ImageSlider
-<div className="hidden md:block md:w-1/2 relative h-full"> {/* Ensure height is set to h-full */}
-  <ImageSlider />
-</div>
+        <div className="hidden md:block md:w-1/2 relative">
+          {randomImage ? (
+            <Image src={randomImage} alt="Login Visual" fill style={{ objectFit: 'cover' }} className="rounded" />
+          ) : (
+            <div>Loading image...</div>
+          )}
+        </div>
 
         {/* Right Side Form */}
         <div className="flex flex-col items-center justify-center md:w-1/2 p-6">
@@ -124,7 +92,9 @@ function LoginPage() {
               <form onSubmit={handleLogin} className="mt-6">
                 <div>
                   <div className="group relative rounded border px-3 pb-1.5 pt-2.5 duration-200 focus-within:ring border-[#012970] shadow-[0_0_0_1px_rgba(1,41,112,0.3)]">
-                    <label className="text-xs font-medium text-gray-400">Email</label>
+                    <div className="flex justify-between">
+                      <label className="text-xs font-medium text-gray-400">Email</label>
+                    </div>
                     <input
                       type="email"
                       name="email"
@@ -139,7 +109,9 @@ function LoginPage() {
                 </div>
                 <div className="mt-4">
                   <div className="group relative rounded border px-3 pb-1.5 pt-2.5 duration-200 focus-within:ring border-[#012970] shadow-[0_0_0_1px_rgba(1,41,112,0.3)]">
-                    <label className="text-xs font-medium text-gray-400">Password</label>
+                    <div className="flex justify-between">
+                      <label className="text-xs font-medium text-gray-400">Password</label>
+                    </div>
                     <div className="flex items-center">
                       <input
                         type={showPassword ? 'text' : 'password'}
@@ -193,3 +165,4 @@ function LoginPage() {
 }
 
 export default LoginPage;
+

@@ -18,6 +18,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true); // State to manage loading
 
   useEffect(() => {
+    console.log('Dashboard component mounted');
     let isMounted = true; // Track if the component is mounted
 
     async function fetchData() {
@@ -45,9 +46,10 @@ const Dashboard = () => {
     fetchData();
 
     return () => {
+      console.log('Dashboard component unmounted');
       isMounted = false; // Cleanup function to set isMounted to false
     };
-  }, []);
+  }, []); // Empty dependency array ensures this runs only once
 
   const updateUserStatus = async (userId, newStatus) => {
     try {
