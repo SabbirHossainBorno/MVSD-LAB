@@ -30,8 +30,8 @@ export async function GET(request) {
     const lastActivityDate = new Date(lastActivity);
     const diff = now - lastActivityDate;
 
-    if (diff > 10 * 60 * 1000) { // 10 minutes
-      await logAndAlert('MVSD LAB DASHBOARD\n-----------------------------------\nSession Expired!-check access', sessionId, { email });
+    if (diff > 1 * 60 * 1000) { // 10 minutes
+      await logAndAlert('MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!-check access', sessionId, { email });
       return NextResponse.json({ success: false, message: 'Session Expired. Please Login Again!' });
     }
 

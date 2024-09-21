@@ -27,12 +27,12 @@ export async function POST(request) {
   const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
 
   try {
-    await logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nLogin Attempt!\nEmail : ${email}\nIP : ${ipAddress}, Device INFO : ${userAgent}, Device INFO : ${userAgent}`, sessionId);
+    await logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nLogin Attempt!\nEmail : ${email}\nIP : ${ipAddress}\nDevice INFO : ${userAgent}`, sessionId);
 
     const checkUser = async (table) => {
       const res = await client.query(`SELECT * FROM ${table} WHERE email = $1 AND password = $2`, [email, password]);
       if (res.rows.length > 0) {
-        await logAndAlert(`${table === 'admin' ? 'MVSD LAB DASHBOARD\n------------------------------------\nAdmin' : 'User'} Login Successful.\nEmail : ${email}\nIP : ${ipAddress}, Device INFO : ${userAgent}`, sessionId);
+        await logAndAlert(`${table === 'admin' ? 'MVSD LAB DASHBOARD\n------------------------------------\nAdmin' : 'User'} Login Successful.\nEmail : ${email}\nIP : ${ipAddress}\nDevice INFO : ${userAgent}`, sessionId);
         const response = NextResponse.json({ success: true, type: table === 'admin' ? 'admin' : 'user' });
         response.cookies.set('email', email, { httpOnly: true });
         response.cookies.set('sessionId', sessionId, { httpOnly: true });
@@ -47,7 +47,7 @@ export async function POST(request) {
     const userResponse = await checkUser('users');
     if (userResponse) return userResponse;
 
-    await logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nLogin Failed!\nEmail : ${email}\nIP : ${ipAddress},\nDevice INFO : ${userAgent}`, sessionId);
+    await logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nLogin Failed!\nEmail : ${email}\nIP : ${ipAddress}\nDevice INFO : ${userAgent}`, sessionId);
     return NextResponse.json({ success: false, message: 'Invalid email or password' });
   } catch (error) {
     await logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nError During Login!\nEmail : ${email}\nIP : ${ipAddress},\nDevice INFO : ${userAgent} - ${error.message}`, sessionId);

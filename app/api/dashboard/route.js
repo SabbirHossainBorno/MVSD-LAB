@@ -25,7 +25,7 @@ const validateSession = (request) => {
   const lastActivity = request.cookies.get('lastActivity')?.value;
 
   if (!email || !sessionId) {
-    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nUnauthorized Access Attempt!`, sessionId, { ip, userAgent });
+    logAndAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nUnauthorized Access Attempt!`, sessionId, { ip, userAgent });
     throw new Error('Unauthorized');
   }
 
@@ -33,8 +33,8 @@ const validateSession = (request) => {
   const lastActivityDate = new Date(lastActivity);
   const diff = now - lastActivityDate;
 
-  if (diff > 10 * 60 * 1000) { // 10 minutes
-    logAndAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nSession Expired!-dashboard\nEmail : ${email}`, sessionId, { ip, userAgent });
+  if (diff > 1 * 60 * 1000) { // 10 minutes
+    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!-dashboard\nEmail : ${email}`, sessionId, { ip, userAgent });
     throw new Error('Session Expired!');
   }
 
@@ -47,7 +47,7 @@ export async function GET(request) {
     const { sessionId, ip, userAgent, email } = validateSession(request);
     client = await pool.connect();
 
-    logAndAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nFetching Dashboard Data.\nEmail : ${email}`, sessionId, { ip, userAgent });
+    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : ${email}`, sessionId, { ip, userAgent });
 
     const subscriberCountQuery = 'SELECT COUNT(*) FROM subscriber';
     const userDetailsQuery = 'SELECT * FROM users';
@@ -65,7 +65,7 @@ export async function GET(request) {
       client.query(recentProfessorsQuery),
     ]);
 
-    logAndAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nDashboard Data Fetched Successfully.\nEmail : ${email}`, sessionId);
+    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : ${email}`, sessionId);
     return NextResponse.json({
       subscribers: subscriberCount.rows[0].count,
       users: userDetails.rows,
@@ -75,7 +75,7 @@ export async function GET(request) {
       recentProfessors: recentProfessors.rows,
     });
   } catch (error) {
-    logAndAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nError Fetching Dashboard Data - ${error.message}`, sessionId);
+    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nError Fetching Dashboard Data - ${error.message}`, sessionId);
     return NextResponse.json({ message: 'Failed To Fetch Data' }, { status: 500 });
   } finally {
     if (client) client.release();
@@ -89,18 +89,18 @@ export async function POST(request) {
     const { userId, newStatus } = await request.json();
 
     client = await pool.connect();
-    logAndAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nUpdating User Status.\nUSER ID : ${userId} To ${newStatus}\nBy Email : ${email}`, sessionId, { ip, userAgent });
+    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nUpdating User Status.\nUSER ID : ${userId} To ${newStatus}\nBy Email : ${email}`, sessionId, { ip, userAgent });
 
     const updateStatusQuery = 'UPDATE users SET status = $1 WHERE id = $2 RETURNING *';
     const updatedUser = await client.query(updateStatusQuery, [newStatus, userId]);
 
-    logAndAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nUser Status Updated Successfully.\nUSER ID : ${userId}\nBy Email : ${email}`, sessionId);
+    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nUser Status Updated Successfully.\nUSER ID : ${userId}\nBy Email : ${email}`, sessionId);
     return NextResponse.json({
       message: 'User Status Updated Successfully',
       user: updatedUser.rows[0],
     });
   } catch (error) {
-    logAndAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nError Updating User Status - ${error.message}`, sessionId);
+    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nError Updating User Status - ${error.message}`, sessionId);
     return NextResponse.json({ message: 'Failed to update user status' }, { status: 500 });
   } finally {
     if (client) client.release();
