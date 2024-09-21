@@ -5,16 +5,19 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LoadingSpinner from '../components/LoadingSpinner';
 import withAuth from '../components/withAuth';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const res = await fetch('/api/login', {
       method: 'POST',
       headers: {
@@ -23,6 +26,7 @@ function LoginPage() {
       body: JSON.stringify({ email, password }),
     });
     const result = await res.json();
+    setLoading(false);
     if (result.success) {
       if (result.type === 'admin') {
         toast.success('Welcome! BOSS');
@@ -37,10 +41,10 @@ function LoginPage() {
   };
 
   useEffect(() => {
-    if (router.query.sessionExpired) {
+    if (router.query && router.query.sessionExpired) {
       toast.error('Session Expired. Please Login Again!');
     }
-  }, [router.query.sessionExpired]);
+  }, [router.query]);
 
   return (
     <div className="bg-cover bg-center min-h-screen flex items-center justify-center text-white" style={{ backgroundImage: "url('/images/background_img_login.jpg')" }}>
@@ -125,6 +129,12 @@ function LoginPage() {
           </div>
         </div>
       </div>
+
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
+          <LoadingSpinner />
+        </div>
+      )}
 
       {/* Toast Container */}
       <ToastContainer />

@@ -1,6 +1,3 @@
-// app/components/withAuth.js
-'use client';
-
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
@@ -83,6 +80,12 @@ const withAuth = (WrappedComponent) => {
         };
       }
     }, [isClient, router]);
+
+    useEffect(() => {
+      if (router.query && router.query.sessionExpired) {
+        toast.error('Session Expired. Please Login Again!');
+      }
+    }, [router.query]);
 
     if (loading) return <LoadingSpinner />;
 
