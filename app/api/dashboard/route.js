@@ -25,7 +25,7 @@ const validateSession = (request) => {
   const lastActivity = request.cookies.get('lastActivity')?.value;
 
   if (!email || !sessionId) {
-    logAndAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nUnauthorized Access Attempt!`, sessionId, { ip, userAgent });
+    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nUnauthorized Access Attempt!`, sessionId, { ip, userAgent });
     throw new Error('Unauthorized');
   }
 
@@ -34,7 +34,7 @@ const validateSession = (request) => {
   const diff = now - lastActivityDate;
 
   if (diff > 10 * 60 * 1000) { // 10 minutes
-    logAndAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nSession Expired!\nEmail : ${email}`, sessionId, { ip, userAgent });
+    logAndAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nSession Expired!-dashboard\nEmail : ${email}`, sessionId, { ip, userAgent });
     throw new Error('Session Expired!');
   }
 
@@ -47,7 +47,7 @@ export async function GET(request) {
     const { sessionId, ip, userAgent, email } = validateSession(request);
     client = await pool.connect();
 
-    logAndAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nFetching dashboard data for email: ${email}`, sessionId, { ip, userAgent });
+    logAndAlert(`MVSD LAB DASHBOARD\n-----------------------------------\nFetching Dashboard Data.\nEmail : ${email}`, sessionId, { ip, userAgent });
 
     const subscriberCountQuery = 'SELECT COUNT(*) FROM subscriber';
     const userDetailsQuery = 'SELECT * FROM users';

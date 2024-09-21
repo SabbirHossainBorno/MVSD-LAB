@@ -36,7 +36,7 @@ const withAuth = (WrappedComponent) => {
             const email = Cookies.get('email');
             const sessionId = Cookies.get('sessionId');
             toast.error(result.message || 'Session Expired. Please Login Again!');
-            await logAndAlert('MVSD LAB DASHBOARD\n-----------------------------------\nSession Expired!', sessionId, { email });
+            await logAndAlert('MVSD LAB DASHBOARD\n-----------------------------------\nSession Expired!-withAuth', sessionId, { email });
             router.push('/login');
           }
         } catch (error) {
