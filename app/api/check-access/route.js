@@ -1,10 +1,19 @@
 // app/api/check-access/route.js
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
+import axios from 'axios';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
+
+const logAndAlert = async (message, sessionId, details = {}) => {
+  try {
+    await axios.post('/api/log-and-alert', { message, sessionId, details });
+  } catch (error) {
+    console.error('Failed to log and send alert:', error);
+  }
+};
 
 export async function GET(request) {
   try {
@@ -21,6 +30,7 @@ export async function GET(request) {
     const diff = now - lastActivityDate;
 
     if (diff > 10 * 60 * 1000) { // 10 minutes
+      await logAndAlert('Session expired', sessionId, { email });
       return NextResponse.json({ success: false, message: 'Session Expired. Please Login Again!' });
     }
 
@@ -45,11 +55,3 @@ export async function GET(request) {
       } else {
         return NextResponse.json({ success: false, message: 'Access Denied' });
       }
-    } finally {
-      client.release();
-    }
-  } catch (error) {
-    console.error('Database query failed:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' });
-  }
-}

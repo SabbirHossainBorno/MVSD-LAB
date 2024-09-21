@@ -1,5 +1,14 @@
 // app/api/check-auth/route.js
 import { NextResponse } from 'next/server';
+import axios from 'axios';
+
+const logAndAlert = async (message, sessionId, details = {}) => {
+  try {
+    await axios.post('/api/log-and-alert', { message, sessionId, details });
+  } catch (error) {
+    console.error('Failed to log and send alert:', error);
+  }
+};
 
 export async function GET(request) {
   try {
@@ -16,6 +25,7 @@ export async function GET(request) {
     const diff = now - lastActivityDate;
 
     if (diff > 10 * 60 * 1000) { // 10 minutes
+      await logAndAlert('Session expired', sessionId, { email });
       return NextResponse.json({ authenticated: false, message: 'Session Expired. Please Login Again!' });
     }
 

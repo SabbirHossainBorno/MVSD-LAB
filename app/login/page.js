@@ -1,4 +1,3 @@
-//app/login/page.js
 'use client';
 
 import { useState } from 'react';
@@ -41,7 +40,7 @@ export default function LoginPage() {
       <div className="flex flex-col md:flex-row bg-white/10 backdrop-blur-lg rounded shadow-lg max-w-4xl w-full p-6 md:p-0">
         {/* Left Side Image */}
         <div className="hidden md:block md:w-1/2 relative">
-          <Image src="/images/login_img.jpg" alt="Login Visual" layout="fill" objectFit="cover" className="rounded" />
+          <Image src="/images/login_img.jpg" alt="Login Visual" fill style={{ objectFit: 'cover' }} className="rounded" />
         </div>
 
         {/* Right Side Form */}
@@ -90,6 +89,13 @@ export default function LoginPage() {
                         className="block w-full border-0 bg-transparent p-0 text-sm placeholder:text-gray-400/60 focus:outline-none focus:ring-0 sm:leading-7 text-gray-900"
                         required
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="ml-2 text-sm text-gray-400 hover:text-gray-600 focus:outline-none"
+                      >
+                        {showPassword ? 'Hide' : 'Show'}
+                      </button>
                     </div>
                   </div>
                 </div>

@@ -1,19 +1,27 @@
-//app/components/withAuth.js
+// app/components/withAuth.js
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation'; // Updated import
+import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import LoadingSpinner from '../components/LoadingSpinner'; // Add a loading spinner component
+import LoadingSpinner from '../components/LoadingSpinner';
+import axios from 'axios';
 
-// Higher Order Component for Authentication
 const withAuth = (WrappedComponent) => {
   const Wrapper = (props) => {
     const [isClient, setIsClient] = useState(false);
-    const [loading, setLoading] = useState(true); // Define loading state
+    const [loading, setLoading] = useState(true);
     const router = useRouter();
+
+    const logAndAlert = async (message, sessionId, details = {}) => {
+      try {
+        await axios.post('/api/log-and-alert', { message, sessionId, details });
+      } catch (error) {
+        console.error('Failed to log and send alert:', error);
+      }
+    };
 
     useEffect(() => {
       setIsClient(true);
@@ -24,7 +32,10 @@ const withAuth = (WrappedComponent) => {
           if (!response.ok) throw new Error('Failed to fetch auth status');
           const result = await response.json();
           if (!result.authenticated) {
+            const email = Cookies.get('email');
+            const sessionId = Cookies.get('sessionId');
             toast.error(result.message || 'Session Expired. Please Login Again!');
+            await logAndAlert('Session expired', sessionId, { email });
             router.push('/login');
           }
         } catch (error) {
@@ -32,7 +43,7 @@ const withAuth = (WrappedComponent) => {
           toast.error('Failed to check authentication');
           router.push('/login');
         } finally {
-          setLoading(false); // End loading
+          setLoading(false);
         }
       };
 
@@ -46,20 +57,23 @@ const withAuth = (WrappedComponent) => {
         window.addEventListener('mousemove', handleActivity);
         window.addEventListener('keydown', handleActivity);
 
-        const interval = setInterval(() => {
+        const interval = setInterval(async () => {
           const lastActivity = Cookies.get('lastActivity');
           if (lastActivity) {
             const now = new Date();
             const lastActivityDate = new Date(lastActivity);
             const diff = now - lastActivityDate;
             if (diff > 10 * 60 * 1000) { // 10 minutes
+              const email = Cookies.get('email');
+              const sessionId = Cookies.get('sessionId');
               Cookies.remove('email');
               Cookies.remove('sessionId');
               toast.error('Session Expired. Please Login Again!');
+              await logAndAlert('Session expired due to inactivity', sessionId, { email });
               router.push('/login');
             }
           }
-        }, 60000); // Check every minute instead of every second
+        }, 60000); // Check every minute
 
         return () => {
           clearInterval(interval);
