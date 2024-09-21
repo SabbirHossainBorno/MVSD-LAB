@@ -35,20 +35,20 @@ export async function POST(req) {
     const ipAddress = req.headers.get('x-forwarded-for') || req.connection.remoteAddress;
 
     // Log the logout event
-    log(`User ${email} logged out successfully.`, sessionId);
+    log(`User ${email} logged Out Successfully.`, sessionId);
 
     // Send the Telegram alert
     await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nLogged Out Successfully!\nEmail : ${email}\nIP : ${ipAddress}`);
 
     // Clear cookies
-    const response = NextResponse.json({ message: 'Logout successful' });
+    const response = NextResponse.json({ message: 'Logout Successful' });
     response.cookies.set('email', '', { maxAge: 0 });
     response.cookies.set('sessionId', '', { maxAge: 0 });
     response.cookies.set('lastActivity', '', { maxAge: 0 });
 
     return response;
   } catch (error) {
-    console.error('Logout failed:', error);
-    return NextResponse.json({ message: 'Logout failed' }, { status: 500 });
+    console.error('Logout Failed:', error);
+    return NextResponse.json({ message: 'Logout Failed' }, { status: 500 });
   }
 }

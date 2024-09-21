@@ -72,23 +72,23 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
         document.cookie.split(";").forEach(cookie => {
           document.cookie = cookie.trim().replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
         });
-        toast.success('Logout successful', {
+        toast.success('Logout Successful', {
           position: 'top-right', // Show toast message on success
         });
         setTimeout(() => {
           window.location.href = '/login';
         }, 2000); // Redirect after a delay for the toast to appear
       } else {
-        toast.error('Logout failed', {
+        toast.error('Logout Failed', {
           position: 'top-right',
         });
-        console.error('Logout failed');
+        console.error('Logout Failed');
       }
     } catch (error) {
-      toast.error('Logout failed', {
+      toast.error('Logout Failed', {
         position: 'top-right',
       });
-      console.error('Logout failed:', error);
+      console.error('Logout Failed:', error);
     }
   };
 

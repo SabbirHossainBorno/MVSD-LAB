@@ -18,12 +18,14 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true); // State to manage loading
 
   useEffect(() => {
+    let isMounted = true; // Track if the component is mounted
+
     async function fetchData() {
       setLoading(true); // Start loading
       try {
         const response = await fetch('/api/dashboard');
         const result = await response.json();
-        if (response.ok) {
+        if (response.ok && isMounted) {
           setSubscribers(result.subscribers);
           setUsers(result.users);
           setProfessorsCount(result.professorCount);
@@ -36,11 +38,15 @@ const Dashboard = () => {
       } catch (error) {
         toast.error('Failed to fetch data');
       } finally {
-        setLoading(false); // End loading
+        if (isMounted) setLoading(false); // End loading
       }
     }
 
     fetchData();
+
+    return () => {
+      isMounted = false; // Cleanup function to set isMounted to false
+    };
   }, []);
 
   const updateUserStatus = async (userId, newStatus) => {

@@ -65,7 +65,7 @@ export async function GET(request) {
       client.query(recentProfessorsQuery),
     ]);
 
-    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : ${email}`, sessionId);
+    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : ${email}`, sessionId, { ip, userAgent });
     return NextResponse.json({
       subscribers: subscriberCount.rows[0].count,
       users: userDetails.rows,
@@ -75,12 +75,13 @@ export async function GET(request) {
       recentProfessors: recentProfessors.rows,
     });
   } catch (error) {
-    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nError Fetching Dashboard Data - ${error.message}`, sessionId);
+    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nError Fetching Dashboard Data - ${error.message}`, sessionId, { ip, userAgent });
     return NextResponse.json({ message: 'Failed To Fetch Data' }, { status: 500 });
   } finally {
     if (client) client.release();
   }
 }
+
 
 export async function POST(request) {
   let client;
