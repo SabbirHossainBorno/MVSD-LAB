@@ -1,4 +1,3 @@
-// app/api/log-and-alert/route.js
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
@@ -23,7 +22,6 @@ const log = (message, sessionId, details = {}) => {
   const logMessage = `${formattedDate} [Session ID: ${sessionId}] ${message} ${JSON.stringify(details)}\n`;
   fs.appendFileSync(logFilePath, logMessage);
 };
-
 
 const sendTelegramAlert = async (message) => {
   const url = `https://api.telegram.org/bot${TELEGRAM_API_KEY}/sendMessage`;
