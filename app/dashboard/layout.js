@@ -1,4 +1,5 @@
-"use client";
+// app/dashboard/layout.js
+'use client';
 
 import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
@@ -32,3 +33,4 @@ DashboardLayout.propTypes = {
 };
 
 export default withAuth(DashboardLayout);
+  

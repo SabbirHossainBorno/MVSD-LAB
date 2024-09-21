@@ -1,4 +1,4 @@
-//app/api/log-and-alert/route
+// app/api/log-and-alert/route.js
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';

@@ -1,4 +1,4 @@
-//app/login/page.js
+// app/login/page.js
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner';
-import withAuth from '../components/withAuth';
+import axios from 'axios';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -15,6 +15,15 @@ function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const logAndAlert = async (message, sessionId, details = {}) => {
+    try {
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+      await axios.post(`${siteUrl}/api/log-and-alert`, { message, sessionId, details });
+    } catch (error) {
+      console.error('Failed to log and send alert:', error);
+    }
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -43,7 +52,10 @@ function LoginPage() {
 
   useEffect(() => {
     if (router.query && router.query.sessionExpired) {
+      const email = Cookies.get('email');
+      const sessionId = Cookies.get('sessionId');
       toast.error('Session Expired. Please Login Again!');
+      logAndAlert('MVSD LAB DASHBOARD\n------------------------------------\nSession Expired Due To Inactivity', sessionId, { email });
     }
   }, [router.query]);
 
@@ -143,4 +155,4 @@ function LoginPage() {
   );
 }
 
-export default withAuth(LoginPage);
+export default LoginPage;

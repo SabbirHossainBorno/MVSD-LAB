@@ -16,7 +16,6 @@ const logAndAlert = async (message, sessionId, details = {}) => {
     console.error('Failed to log and send alert:', error);
   }
 };
-  
 
 export async function POST(request) {
   const { email, password } = await request.json();

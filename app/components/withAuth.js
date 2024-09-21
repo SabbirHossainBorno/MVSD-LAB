@@ -21,6 +21,16 @@ const withAuth = (WrappedComponent) => {
       }
     };
 
+    const handleSessionExpiration = async () => {
+      const email = Cookies.get('email');
+      const sessionId = Cookies.get('sessionId');
+      Cookies.remove('email');
+      Cookies.remove('sessionId');
+      toast.error('Session Expired. Please Login Again!');
+      await logAndAlert('MVSD LAB DASHBOARD\n------------------------------------\nSession Expired Due To Inactivity', sessionId, { email });
+      router.push('/login?sessionExpired=true');
+    };
+
     useEffect(() => {
       setIsClient(true);
 
@@ -30,11 +40,7 @@ const withAuth = (WrappedComponent) => {
           if (!response.ok) throw new Error('Failed to fetch auth status');
           const result = await response.json();
           if (!result.authenticated) {
-            const email = Cookies.get('email');
-            const sessionId = Cookies.get('sessionId');
-            toast.error(result.message || 'Session Expired. Please Login Again!');
-            await logAndAlert('MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!-withAuth', sessionId, { email });
-            router.push('/login?sessionExpired=true');
+            handleSessionExpiration();
           }
         } catch (error) {
           console.error('Authentication Check Failed:', error);
@@ -62,13 +68,7 @@ const withAuth = (WrappedComponent) => {
             const lastActivityDate = new Date(lastActivity);
             const diff = now - lastActivityDate;
             if (diff > 10 * 60 * 1000) { // 10 minutes
-              const email = Cookies.get('email');
-              const sessionId = Cookies.get('sessionId');
-              Cookies.remove('email');
-              Cookies.remove('sessionId');
-              toast.error('Session Expired. Please Login Again!');
-              await logAndAlert('MVSD LAB DASHBOARD\n------------------------------------\nSession Expired Due To Inactivity', sessionId, { email });
-              router.push('/login?sessionExpired=true');
+              handleSessionExpiration();
             }
           }
         }, 60000); // Check every minute
