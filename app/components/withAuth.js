@@ -10,6 +10,7 @@ const withAuth = (WrappedComponent) => {
   const Wrapper = (props) => {
     const [isClient, setIsClient] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const router = useRouter();
 
     const handleSessionExpiration = async () => {
@@ -23,7 +24,7 @@ const withAuth = (WrappedComponent) => {
 
     const handleUnauthorizedAccess = () => {
       toast.error('Authentication Required! Need To Login.');
-      router.push('/login');
+      router.push('/login?authRequired=true');
     };
 
     useEffect(() => {
@@ -34,7 +35,9 @@ const withAuth = (WrappedComponent) => {
           const response = await fetch('/api/check-auth');
           if (!response.ok) throw new Error('Failed to fetch auth status');
           const result = await response.json();
-          if (!result.authenticated) {
+          if (result.authenticated) {
+            setIsAuthenticated(true);
+          } else {
             handleUnauthorizedAccess();
           }
         } catch (error) {
@@ -84,7 +87,7 @@ const withAuth = (WrappedComponent) => {
 
     if (loading) return <LoadingSpinner />;
 
-    return <WrappedComponent {...props} />;
+    return <WrappedComponent {...props} isAuthenticated={isAuthenticated} />;
   };
 
   return Wrapper;

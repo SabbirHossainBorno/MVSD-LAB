@@ -8,7 +8,7 @@ import DashboardNavbar from '../components/DashboardNavbar';
 import withAuth from '../components/withAuth'; // Ensure correct path
 import '../../app/globals.css';
 
-function DashboardLayout({ children }) {
+function DashboardLayout({ children, isAuthenticated }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleDashboardSidebar = useCallback(() => {
@@ -34,6 +34,7 @@ function DashboardLayout({ children }) {
 
 DashboardLayout.propTypes = {
   children: PropTypes.node.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
 };
 
 export default withAuth(DashboardLayout);

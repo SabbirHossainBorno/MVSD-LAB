@@ -1,8 +1,7 @@
-// app/login/page.js
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,6 +15,7 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [randomImage, setRandomImage] = useState('');
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const fetchRandomImage = async () => {
     try {
@@ -56,13 +56,12 @@ function LoginPage() {
   };
 
   useEffect(() => {
-    if (router.query && router.query.sessionExpired) {
-      const email = Cookies.get('email');
-      const sessionId = Cookies.get('sessionId');
-      toast.error('Session Expired. Please Login Again!');
-      logAndAlert('MVSD LAB DASHBOARD\n------------------------------------\nSession Expired Due To Inactivity', sessionId, { email });
+    if (searchParams.get('sessionExpired')) {
+      toast.error('Session Expired! Please Login Again.');
+    } else if (searchParams.get('authRequired')) {
+      toast.error('Authentication Required! Need To Login.');
     }
-  }, [router.query]);
+  }, [searchParams]);
 
   return (
     <div className="bg-cover bg-center min-h-screen flex items-center justify-center text-white" style={{ backgroundImage: "url('/images/background_img_login.jpg')" }}>
@@ -165,4 +164,3 @@ function LoginPage() {
 }
 
 export default LoginPage;
-

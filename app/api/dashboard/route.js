@@ -18,14 +18,13 @@ const logAndAlert = async (message, sessionId, details = {}) => {
 };
 
 const validateSession = (request) => {
-  const sessionId = uuidv4();
+  const sessionId = request.cookies.get('sessionId');
   const ip = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr');
   const userAgent = request.headers.get('user-agent');
-  const email = request.cookies.get('email')?.value;
-  const lastActivity = request.cookies.get('lastActivity')?.value;
+  const email = request.cookies.get('email');
 
   if (!email || !sessionId) {
-    logAndAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nUnauthorized Access Attempt!`, sessionId, { ip, userAgent });
+    logAndAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nUnauthorized Access Attempt!\nIP: ${ip}`, sessionId, { ip, userAgent });
     throw new Error('Unauthorized');
   }
 
@@ -72,7 +71,6 @@ export async function GET(request) {
     if (client) client.release();
   }
 }
-
 
 export async function POST(request) {
   let client;
