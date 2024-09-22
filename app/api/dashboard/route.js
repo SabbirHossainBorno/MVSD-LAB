@@ -23,13 +23,16 @@ const validateSession = (request) => {
   const userAgent = request.headers.get('user-agent');
   const email = request.cookies.get('email');
 
+  console.log('Email value:', email); // Debugging line
+
   if (!email || !sessionId) {
     logAndAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nUnauthorized Access Attempt!\nIP: ${ip}`, sessionId, { ip, userAgent });
     throw new Error('Unauthorized');
   }
 
-  return { sessionId, ip, userAgent, email };
+  return { sessionId, ip, userAgent, email: email.toString() };
 };
+
 
 export async function GET(request) {
   let client;
