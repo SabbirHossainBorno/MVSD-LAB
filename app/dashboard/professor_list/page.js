@@ -49,7 +49,7 @@ const ProfessorsList = () => {
   };
 
   const handleView = (id) => {
-    router.push(`/professors/${id}`);
+    router.push(`/dashboard/professor_details/${id}`);
   };
 
   const handleSearch = (e) => {

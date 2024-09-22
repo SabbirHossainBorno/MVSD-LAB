@@ -2,15 +2,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import LoadingSpinner from '../../components/LoadingSpinner';
-import withAuth from '../../components/withAuth';
+import { useParams } from 'next/navigation';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import withAuth from '../../../components/withAuth';
 
-const ProfessorDetails = ({ params }) => {
+const ProfessorDetails = () => {
   const [professorDetails, setProfessorDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  const { id } = params;
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchProfessorDetails = async () => {
@@ -30,7 +29,7 @@ const ProfessorDetails = ({ params }) => {
 
   if (loading) return <LoadingSpinner />;
 
-  if (!professorDetails) return <div>Professor not found</div>;
+  if (!professorDetails || !professorDetails.basicInfo) return <div>Professor not found</div>;
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
@@ -79,7 +78,7 @@ const ProfessorDetails = ({ params }) => {
         {/* Social Media Section */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Social Media</h3>
-          {professorDetails.socialMedia.map((sm, index) => (
+          {professorDetails.socialMedia && professorDetails.socialMedia.map((sm, index) => (
             <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{sm.socialMedia_name}</div>
               <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{sm.link}</div>
@@ -90,7 +89,7 @@ const ProfessorDetails = ({ params }) => {
         {/* Education Section */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Education</h3>
-          {professorDetails.education.map((edu, index) => (
+          {professorDetails.education && professorDetails.education.map((edu, index) => (
             <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{edu.degree}</div>
               <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{edu.institution}</div>
@@ -102,7 +101,7 @@ const ProfessorDetails = ({ params }) => {
         {/* Career Section */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Career</h3>
-          {professorDetails.career.map((job, index) => (
+          {professorDetails.career && professorDetails.career.map((job, index) => (
             <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{job.position}</div>
               <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{job.organization_name}</div>
@@ -115,7 +114,7 @@ const ProfessorDetails = ({ params }) => {
         {/* Citations Section */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Citations</h3>
-          {professorDetails.citations.map((citation, index) => (
+          {professorDetails.citations && professorDetails.citations.map((citation, index) => (
             <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{citation.title}</div>
               <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{citation.link}</div>
@@ -127,7 +126,7 @@ const ProfessorDetails = ({ params }) => {
         {/* Awards Section */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Awards</h3>
-          {professorDetails.awards.map((award, index) => (
+          {professorDetails.awards && professorDetails.awards.map((award, index) => (
             <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{award.title}</div>
               <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{award.year}</div>
