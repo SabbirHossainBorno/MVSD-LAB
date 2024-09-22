@@ -11,6 +11,7 @@ const pool = new Pool({
 const logAndAlert = async (message, sessionId, details = {}) => {
   try {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    console.log('Sending alert:', message); // Debugging line
     await axios.post(`${siteUrl}/api/log-and-alert`, { message, sessionId, details });
   } catch (error) {
     console.error('Failed to log and send alert:', error);
@@ -21,17 +22,23 @@ const validateSession = (request) => {
   const sessionId = request.cookies.get('sessionId');
   const ip = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr');
   const userAgent = request.headers.get('user-agent');
-  const email = request.cookies.get('email');
+  const emailCookie = request.cookies.get('email');
+  const email = emailCookie ? emailCookie.value : null;
 
+  console.log('Session ID:', sessionId); // Debugging line
+  console.log('IP Address:', ip); // Debugging line
+  console.log('User Agent:', userAgent); // Debugging line
   console.log('Email value:', email); // Debugging line
 
   if (!email || !sessionId) {
+    console.log('Unauthorized access detected'); // Debugging line
     logAndAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nUnauthorized Access Attempt!\nIP: ${ip}`, sessionId, { ip, userAgent });
     throw new Error('Unauthorized');
   }
 
-  return { sessionId, ip, userAgent, email: email.toString() };
+  return { sessionId, ip, userAgent, email };
 };
+
 
 
 export async function GET(request) {
