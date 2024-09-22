@@ -4,7 +4,6 @@ import { Pool } from 'pg';
 import path from 'path';
 import fs from 'fs';
 import axios from 'axios';
-import { format } from 'date-fns-tz';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -13,11 +12,8 @@ const pool = new Pool({
 // Helper function to call logAndAlert API
 const logAndAlert = async (message, sessionId, details = {}) => {
   try {
-    await axios.post('/api/log-and-alert', {
-      message,
-      sessionId,
-      details,
-    });
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    await axios.post(`${siteUrl}/api/log-and-alert`, { message, sessionId, details });
   } catch (error) {
     console.error('Failed to log and send alert:', error);
   }
@@ -95,6 +91,7 @@ export async function POST(req) {
     const joining_date = formData.get('joining_date');
     const leaving_date = formData.get('leaving_date') || null;
     const type = formData.get('type') || 'Professor';
+    const socialMedia = JSON.parse(formData.get('socialMedia') || '[]');
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
     const citations = JSON.parse(formData.get('citations') || '[]');
@@ -215,6 +212,13 @@ export async function POST(req) {
         professorId, first_name, last_name, phone, dob, email, password, short_bio, joining_date, leaving_date, photoUrl, type,
       ]);
       await logAndAlert('Professor information inserted successfully.', 'SYSTEM');
+
+      // Insert social media info
+      const insertSocialMediaQuery = `INSERT INTO professor_socialMedia_info (id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
+      for (const sm of socialMedia) {
+        const smInsertResult = await client.query(insertSocialMediaQuery, [professorId, sm.socialMedia_name, sm.link]);
+        await logAndAlert('Social media information inserted successfully.', 'SYSTEM');
+      }
 
       // Insert member info
       const insertMemberQuery = `
