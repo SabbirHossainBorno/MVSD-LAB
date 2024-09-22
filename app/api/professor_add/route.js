@@ -214,7 +214,7 @@ export async function POST(req) {
       await logAndAlert('Professor information inserted successfully.', 'SYSTEM');
 
       // Insert social media info
-      const insertSocialMediaQuery = `INSERT INTO professor_socialMedia_info (id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
+      const insertSocialMediaQuery = `INSERT INTO professor_socialMedia_info (professor_id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
       for (const sm of socialMedia) {
         const smInsertResult = await client.query(insertSocialMediaQuery, [professorId, sm.socialMedia_name, sm.link]);
         await logAndAlert('Social media information inserted successfully.', 'SYSTEM');

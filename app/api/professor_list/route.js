@@ -1,3 +1,4 @@
+// app/api/professor_list/route.js
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 
