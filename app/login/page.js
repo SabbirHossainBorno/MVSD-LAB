@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { toast, ToastContainer } from 'react-toastify';
@@ -163,4 +163,10 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+const LoginWrapper = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <LoginPage />
+  </Suspense>
+);
+
+export default LoginWrapper;
