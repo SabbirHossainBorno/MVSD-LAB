@@ -25,17 +25,6 @@ const validateSession = (request) => {
   const emailCookie = request.cookies.get('email');
   const email = emailCookie ? emailCookie.value : null;
 
-  console.log('Session ID:', sessionId); // Debugging line
-  console.log('IP Address:', ip); // Debugging line
-  console.log('User Agent:', userAgent); // Debugging line
-  console.log('Email value:', email); // Debugging line
-
-  if (!email || !sessionId) {
-    console.log('Unauthorized access detected'); // Debugging line
-    logAndAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nUnauthorized Access Attempt!\nIP: ${ip}`, sessionId, { ip, userAgent });
-    throw new Error('Unauthorized');
-  }
-
   return { sessionId, ip, userAgent, email };
 };
 

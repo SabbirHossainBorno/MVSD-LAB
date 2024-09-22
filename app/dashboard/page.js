@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
 import withAuth from '../components/withAuth'; // Ensure correct path
 import LoadingSpinner from '../components/LoadingSpinner'; // Add a loading spinner component
+import axios from 'axios';
 
 const Dashboard = () => {
   const [subscribers, setSubscribers] = useState(0);
@@ -23,20 +24,21 @@ const Dashboard = () => {
     async function fetchData() {
       setLoading(true); // Start loading
       try {
-        const response = await fetch('/api/dashboard');
-        const result = await response.json();
-        if (response.ok && isMounted) {
+        console.log('MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com');
+        const response = await axios.get('/api/dashboard');
+        const result = response.data;
+        if (isMounted) {
           setSubscribers(result.subscribers);
           setUsers(result.users);
           setProfessorsCount(result.professorCount);
           setRecentSubscribers(result.recentSubscribers);
           setRecentUsers(result.recentUsers);
           setRecentProfessors(result.recentProfessors);
-        } else {
-          toast.error(result.message);
+          console.log('MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com');
         }
       } catch (error) {
         toast.error('Failed to fetch data');
+        console.error('Error fetching dashboard data:', error);
       } finally {
         if (isMounted) setLoading(false); // End loading
       }
@@ -51,24 +53,18 @@ const Dashboard = () => {
 
   const updateUserStatus = async (userId, newStatus) => {
     try {
-      const response = await fetch('/api/dashboard', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId, newStatus }),
-      });
+      const response = await axios.post('/api/dashboard', { userId, newStatus });
 
-      if (response.ok) {
-        const updatedUser = await response.json();
+      if (response.status === 200) {
+        const updatedUser = response.data;
         setUsers(users.map(user => (user.id === updatedUser.user.id ? updatedUser.user : user)));
         toast.success('User status updated successfully!');
       } else {
-        const result = await response.json();
-        toast.error(result.message);
+        toast.error(response.data.message);
       }
     } catch (error) {
       toast.error('Failed to update user status');
+      console.error('Error updating user status:', error);
     }
   };
 

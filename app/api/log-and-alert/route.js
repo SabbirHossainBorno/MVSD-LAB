@@ -31,7 +31,9 @@ const sendTelegramAlert = async (message) => {
       chat_id: TELEGRAM_GROUP_ID,
       text: message,
     });
+    log('Telegram alert sent successfully', 'SYSTEM', { message });
   } catch (error) {
+    log('Failed to send Telegram alert', 'SYSTEM', { error: error.message });
     console.error('Failed to send Telegram alert:', error);
   }
 };
@@ -43,6 +45,7 @@ export async function POST(request) {
     await sendTelegramAlert(message);
     return NextResponse.json({ success: true });
   } catch (error) {
+    log('Error in log-and-alert API', 'SYSTEM', { error: error.message });
     console.error('Error in log-and-alert API:', error);
     return NextResponse.json({ success: false, message: 'Internal server error' });
   }

@@ -12,21 +12,25 @@ const logAndAlert = async (message, sessionId, details = {}) => {
 };
 
 export async function GET(request) {
+  const email = request.cookies.get('email');
+  const sessionId = request.cookies.get('sessionId');
+  const lastActivity = request.cookies.get('lastActivity');
+
+  if (!email || !sessionId) {
+    await logAndAlert('MVSD LAB DASHBOARD\n------------------------------------\nUnauthorized Access Attempt!', sessionId, { email });
+    return NextResponse.json({ authenticated: false });
+  }
+
   try {
-    const email = request.cookies.get('email');
-    const sessionId = request.cookies.get('sessionId');
-    const lastActivity = request.cookies.get('lastActivity');
-
-    if (!email || !sessionId) {
-      return NextResponse.json({ authenticated: false });
-    }
-
     const now = new Date();
     const lastActivityDate = new Date(lastActivity);
     const diff = now - lastActivityDate;
 
+    await logAndAlert('MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful', sessionId, { email, lastActivity });
+
     return NextResponse.json({ authenticated: true });
   } catch (error) {
+    await logAndAlert('Error during authentication check', sessionId, { error: error.message });
     console.error('Error during authentication check:', error);
     return NextResponse.json({ authenticated: false, message: 'Internal server error' });
   }

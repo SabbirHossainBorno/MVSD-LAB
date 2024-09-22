@@ -1,3 +1,4 @@
+// app/components/withAuth.js
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
@@ -19,11 +20,13 @@ const withAuth = (WrappedComponent) => {
       Cookies.remove('email');
       Cookies.remove('sessionId');
       toast.error('Session Expired! Please Login Again.');
+      await axios.post('/api/log-and-alert', { message: 'MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\n', sessionId, details: { email } });
       router.push('/login?sessionExpired=true');
     };
 
-    const handleUnauthorizedAccess = () => {
+    const handleUnauthorizedAccess = async () => {
       toast.error('Authentication Required! Need To Login.');
+      await axios.post('/api/log-and-alert', { message: 'MVSD LAB DASHBOARD\n------------------------------------\nUnauthorized Access Attempt-withAuth!', sessionId: Cookies.get('sessionId'), details: { email: Cookies.get('email') } });
       router.push('/login?authRequired=true');
     };
 
@@ -38,12 +41,12 @@ const withAuth = (WrappedComponent) => {
           if (result.authenticated) {
             setIsAuthenticated(true);
           } else {
-            handleUnauthorizedAccess();
+            await handleUnauthorizedAccess();
           }
         } catch (error) {
           console.error('Authentication Check Failed:', error);
           toast.error('Failed to check authentication');
-          handleUnauthorizedAccess();
+          await handleUnauthorizedAccess();
         } finally {
           setLoading(false);
         }
