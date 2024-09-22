@@ -1,4 +1,4 @@
-//app/api/professor_add/route.js
+// app/api/professor_add/route.js
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 import path from 'path';
@@ -10,29 +10,16 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-const logFilePath = '/home/mvsd-lab/Log/mvsd_lab.log';
-
-// Helper function to write logs to the log file
-const writeLog = (message) => {
-  const timeZone = 'Asia/Dhaka'; // Bangladesh Standard Time (BST)
-  const logMessage = `${format(new Date(), 'yyyy-MM-dd HH:mm:ssXXX', { timeZone })} - ${message}\n`;
-  fs.appendFileSync(logFilePath, logMessage);
-};
-
-// Helper function to send a Telegram alert
-const sendTelegramAlert = async (message) => {
-  const apiKey = '7489554804:AAFZs1eZmjZ8H634tBPhtL54UsLZOi3vCxg';
-  const groupId = '-4285248556';
-  const url = `https://api.telegram.org/bot${apiKey}/sendMessage`;
-
+// Helper function to call logAndAlert API
+const logAndAlert = async (message, sessionId, details = {}) => {
   try {
-    await axios.post(url, {
-      chat_id: groupId,
-      text: message,
+    await axios.post('/api/log-and-alert', {
+      message,
+      sessionId,
+      details,
     });
-    writeLog('Telegram alert sent successfully');
   } catch (error) {
-    writeLog(`Failed to send Telegram alert: ${error.message}`);
+    console.error('Failed to log and send alert:', error);
   }
 };
 
@@ -40,16 +27,16 @@ const sendTelegramAlert = async (message) => {
 const generateProfessorId = async () => {
   const client = await pool.connect();
   try {
-    writeLog('Initiating Professor ID generation...');
+    await logAndAlert('Initiating Professor ID generation...', 'SYSTEM');
     const result = await client.query('SELECT MAX(id) AS max_id FROM professor_basic_info');
     const maxId = result.rows[0]?.max_id || 'P00MVSD';
     const numericPart = parseInt(maxId.substring(1, 3), 10) || 0;
     const nextId = numericPart + 1;
     const formattedId = `P${String(nextId).padStart(2, '0')}MVSD`;
-    writeLog(`Professor ID generated successfully: ${formattedId}`);
+    await logAndAlert(`Professor ID generated successfully: ${formattedId}`, 'SYSTEM');
     return formattedId;
   } catch (error) {
-    writeLog(`Error occurred during Professor ID generation: ${error.message}`);
+    await logAndAlert(`Error occurred during Professor ID generation: ${error.message}`, 'SYSTEM');
     throw error;
   } finally {
     client.release();
@@ -62,13 +49,13 @@ const saveProfilePhoto = async (file, professorId) => {
   const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
 
   try {
-    writeLog(`Saving profile photo with filename: ${filename} at path: ${targetPath}`);
+    await logAndAlert(`Saving profile photo with filename: ${filename} at path: ${targetPath}`, 'SYSTEM');
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
-    writeLog(`Profile photo saved successfully at path: ${targetPath}`);
+    await logAndAlert(`Profile photo saved successfully at path: ${targetPath}`, 'SYSTEM');
     return `/Storage/Images/Professor/${filename}`;
   } catch (error) {
-    writeLog(`Error occurred while saving profile photo: ${error.message}`);
+    await logAndAlert(`Error occurred while saving profile photo: ${error.message}`, 'SYSTEM');
     throw new Error(`Failed to save profile photo: ${error.message}`);
   }
 };
@@ -79,13 +66,13 @@ const saveAwardPhoto = async (file, professorId, index) => {
   const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
 
   try {
-    writeLog(`Saving award photo with filename: ${filename} at path: ${targetPath}`);
+    await logAndAlert(`Saving award photo with filename: ${filename} at path: ${targetPath}`, 'SYSTEM');
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
-    writeLog(`Award photo saved successfully at path: ${targetPath}`);
+    await logAndAlert(`Award photo saved successfully at path: ${targetPath}`, 'SYSTEM');
     return `/Storage/Images/Professor/${filename}`;
   } catch (error) {
-    writeLog(`Error occurred while saving award photo: ${error.message}`);
+    await logAndAlert(`Error occurred while saving award photo: ${error.message}`, 'SYSTEM');
     throw new Error(`Failed to save award photo: ${error.message}`);
   }
 };
@@ -94,7 +81,7 @@ const saveAwardPhoto = async (file, professorId, index) => {
 export async function POST(req) {
   const client = await pool.connect();
   try {
-    writeLog('Receiving form data...');
+    await logAndAlert('Receiving form data...', 'SYSTEM');
     const formData = await req.formData();
 
     // Extract form data
@@ -117,85 +104,84 @@ export async function POST(req) {
         title: formData.get(`awards[${i}][title]`),
         year: formData.get(`awards[${i}][year]`),
         details: formData.get(`awards[${i}][details]`),
-        awardPhoto: formData.get(`awards[${i}][awardPhoto]`)
+        awardPhoto: formData.get(`awards[${i}][awardPhoto]`),
       });
     }
 
-// Password validation
-writeLog('Validating password...');
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?`~\-])[A-Za-z\d!@#$%^&*()_+[\]{};':"\\|,.<>/?`~\-]{8,}$/;
-console.log('Password:', password); // Debugging line to log the password
-if (!passwordRegex.test(password)) {
-  writeLog('Password validation failed');
-  return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
-}
+    // Password validation
+    await logAndAlert('Validating password...', 'SYSTEM');
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      await logAndAlert('Password validation failed', 'SYSTEM');
+      return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
+    }
 
     // Date of Birth validation
-writeLog(`Validating date of birth (${dob})...`);
-const currentDate = new Date();
-const dobDate = new Date(dob);
-let age = currentDate.getFullYear() - dobDate.getFullYear();
-const monthDifference = currentDate.getMonth() - dobDate.getMonth();
-if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < dobDate.getDate())) {
-  age--;
-}
-if (age < 18) {
-  writeLog(`Date of birth validation failed: Age is ${age}, which is less than 18`);
-  return NextResponse.json({ message: 'Professor must be at least 18 years old.' }, { status: 400 });
-}
+    await logAndAlert(`Validating date of birth (${dob})...`, 'SYSTEM');
+    const currentDate = new Date();
+    const dobDate = new Date(dob);
+    let age = currentDate.getFullYear() - dobDate.getFullYear();
+    const monthDifference = currentDate.getMonth() - dobDate.getMonth();
+    if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < dobDate.getDate())) {
+      age--;
+    }
+    if (age < 18) {
+      await logAndAlert(`Date of birth validation failed: Age is ${age}, which is less than 18`, 'SYSTEM');
+      return NextResponse.json({ message: 'Professor must be at least 18 years old.' }, { status: 400 });
+    }
 
     // Joining Date validation
-    writeLog(`Validating joining date (${joining_date})...`);
+    await logAndAlert(`Validating joining date (${joining_date})...`, 'SYSTEM');
     const joiningYear = new Date(joining_date).getFullYear();
     if (joiningYear > currentDate.getFullYear()) {
-      writeLog(`Joining date validation failed: Joining year (${joiningYear}) is greater than the current year (${currentDate.getFullYear()})`);
+      await logAndAlert(`Joining date validation failed: Joining year (${joiningYear}) is greater than the current year (${currentDate.getFullYear()})`, 'SYSTEM');
       return NextResponse.json({ message: 'Joining date cannot be greater than the current year.' }, { status: 400 });
     }
 
     // Year validations for education, career, and awards
     const validateYear = (year) => year <= currentDate.getFullYear();
 
-    writeLog('Validating education years...');
+    await logAndAlert('Validating education years...', 'SYSTEM');
     if (!education.every(edu => validateYear(edu.passing_year))) {
-      writeLog('Education year validation failed: Passing year is greater than the current year');
+      await logAndAlert('Education year validation failed: Passing year is greater than the current year', 'SYSTEM');
       return NextResponse.json({ message: 'Passing year cannot be greater than the current year.' }, { status: 400 });
     }
 
-    writeLog('Validating career years...');
+    await logAndAlert('Validating career years...', 'SYSTEM');
     if (!career.every(car => validateYear(car.joining_year) && (!car.leaving_year || validateYear(car.leaving_year)))) {
-      writeLog('Career year validation failed: Joining year or leaving year is greater than the current year');
+      await logAndAlert('Career year validation failed: Joining year or leaving year is greater than the current year', 'SYSTEM');
       return NextResponse.json({ message: 'Joining year and leaving year cannot be greater than the current year.' }, { status: 400 });
     }
 
-    writeLog('Validating award years...');
+    await logAndAlert('Validating award years...', 'SYSTEM');
     if (!awards.every(award => validateYear(award.year))) {
-      writeLog('Award year validation failed: Award year is greater than the current year');
+      await logAndAlert('Award year validation failed: Award year is greater than the current year', 'SYSTEM');
       return NextResponse.json({ message: 'Award year cannot be greater than the current year.' }, { status: 400 });
     }
 
     // Check if email or phone already exists
-    writeLog(`Checking if email (${email}) or phone (${phone}) already exists in the database...`);
+    await logAndAlert(`Checking if email (${email}) or phone (${phone}) already exists in the database...`, 'SYSTEM');
     const emailCheckResult = await client.query('SELECT id FROM member WHERE email = $1', [email]);
     if (emailCheckResult.rows.length > 0) {
-      writeLog(`Email already exists in the database: ${email}`);
+      await logAndAlert(`Email already exists in the database: ${email}`, 'SYSTEM');
       return NextResponse.json({ message: 'Email already exists' }, { status: 400 });
     }
 
     const phoneCheckResult = await client.query('SELECT id FROM member WHERE phone = $1', [phone]);
     if (phoneCheckResult.rows.length > 0) {
-      writeLog(`Phone number already exists in the database: ${phone}`);
+      await logAndAlert(`Phone number already exists in the database: ${phone}`, 'SYSTEM');
       return NextResponse.json({ message: 'Phone Number already exists' }, { status: 400 });
     }
 
     const professorId = await generateProfessorId();
-    writeLog(`New Professor ID generated: ${professorId}`);
+    await logAndAlert(`New Professor ID generated: ${professorId}`, 'SYSTEM');
 
     // Save profile photo if available
     let photoUrl = null;
     const photoFile = formData.get('photo');
     if (photoFile) {
       photoUrl = await saveProfilePhoto(photoFile, professorId);
-      writeLog(`Profile photo URL generated successfully: ${photoUrl}`);
+      await logAndAlert(`Profile photo URL generated successfully: ${photoUrl}`, 'SYSTEM');
     }
 
     // Handle awards processing
@@ -207,7 +193,7 @@ if (age < 18) {
           const awardUrl = await saveAwardPhoto(awardFile, professorId, i + 1);
           awardUrls.push(awardUrl);
         } else {
-          writeLog(`Award photo is missing for award: ${awards[i].title}`);
+          await logAndAlert(`Award photo is missing for award: ${awards[i].title}`, 'SYSTEM');
           throw new Error('Award photo is missing');
         }
       }
@@ -216,7 +202,7 @@ if (age < 18) {
     try {
       // Begin Execution
       await client.query('BEGIN');
-      writeLog('A New Professor Adding Process Execution Started...');
+      await logAndAlert('A New Professor Adding Process Execution Started...', 'SYSTEM');
 
       // Insert professor info
       const insertProfessorQuery = `
@@ -228,7 +214,7 @@ if (age < 18) {
       const professorInsertResult = await client.query(insertProfessorQuery, [
         professorId, first_name, last_name, phone, dob, email, password, short_bio, joining_date, leaving_date, photoUrl, type,
       ]);
-      writeLog('Professor information inserted successfully.');
+      await logAndAlert('Professor information inserted successfully.', 'SYSTEM');
 
       // Insert member info
       const insertMemberQuery = `
@@ -240,13 +226,13 @@ if (age < 18) {
       const memberInsertResult = await client.query(insertMemberQuery, [
         professorId, first_name, last_name, phone, dob, email, password, short_bio, joining_date, leaving_date, photoUrl, type,
       ]);
-      writeLog('Member information inserted successfully.');
+      await logAndAlert('Member information inserted successfully.', 'SYSTEM');
 
       // Insert education info
       const insertEducationQuery = `INSERT INTO professor_education_info (professor_id, degree, institution, passing_year) VALUES ($1, $2, $3, $4) RETURNING *;`;
       for (const edu of education) {
         const eduInsertResult = await client.query(insertEducationQuery, [professorId, edu.degree, edu.institution, parseInt(edu.passing_year)]);
-        writeLog('Education information inserted successfully.');
+        await logAndAlert('Education information inserted successfully.', 'SYSTEM');
       }
 
       // Insert career info
@@ -255,14 +241,14 @@ if (age < 18) {
         const carInsertResult = await client.query(insertCareerQuery, [
           professorId, car.position, car.organization, parseInt(car.joining_year), parseInt(car.leaving_year),
         ]);
-        writeLog('Career information inserted successfully.');
+        await logAndAlert('Career information inserted successfully.', 'SYSTEM');
       }
 
       // Insert citation info
       const insertCitationQuery = `INSERT INTO professor_citations_info (professor_id, title, link, organization_name) VALUES ($1, $2, $3, $4) RETURNING *;`;
       for (const citation of citations) {
         const citationInsertResult = await client.query(insertCitationQuery, [professorId, citation.title, citation.link, citation.organization]);
-        writeLog('Citation information inserted successfully.');
+        await logAndAlert('Citation information inserted successfully.', 'SYSTEM');
       }
 
       // Insert awards info
@@ -272,7 +258,7 @@ if (age < 18) {
         const awardUrl = awardUrls[i]; // Get the URL of the saved award photo
 
         if (!awardUrl) {
-          writeLog(`Award URL is null for award: ${award.title}`);
+          await logAndAlert(`Award URL is null for award: ${award.title}`, 'SYSTEM');
           throw new Error('Award URL is null');
         }
 
@@ -280,12 +266,9 @@ if (age < 18) {
           const awardInsertResult = await client.query(insertAwardsQuery, [
             professorId, award.title, parseInt(award.year), award.details, awardUrl,
           ]);
-
-          // Log all the award data
-          writeLog('Award information inserted successfully.');
-
+          await logAndAlert('Award information inserted successfully.', 'SYSTEM');
         } catch (error) {
-          writeLog(`Error inserting award information for award: ${award.title}, Error: ${error.message}`);
+          await logAndAlert(`Error inserting award information for award: ${award.title}, Error: ${error.message}`, 'SYSTEM');
           throw error; // Throw error to trigger rollback
         }
       }
@@ -296,23 +279,23 @@ if (age < 18) {
       const notificationTitle = `A New Professor Added [${professorId}]`;
       const notificationStatus = 'Unread';
       const notificationInsertResult = await client.query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
-      writeLog('Notification inserted successfully.');
+      await logAndAlert('Notification inserted successfully.', 'SYSTEM');
 
       // Commit Execution
       await client.query('COMMIT');
-      writeLog('Execution committed successfully.');
-      writeLog(`A New Professor Added Successfully ID : ${professorId}`);
-      sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nA New Professor Added.\nID : ${professorId}`);
+      await logAndAlert('Execution committed successfully.', 'SYSTEM');
+      await logAndAlert(`A New Professor Added Successfully ID : ${professorId}`, 'SYSTEM');
+      await logAndAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nA New Professor Added.\nID : ${professorId}`, 'SYSTEM');
       return NextResponse.json({ message: 'Professor information added successfully!' }, { status: 200 });
 
     } catch (error) {
-      writeLog(`Error during execution: ${error.message}`);
+      await logAndAlert(`Error during execution: ${error.message}`, 'SYSTEM');
       await client.query('ROLLBACK');
       return NextResponse.json({ message: `Execution failed: ${error.message}` }, { status: 500 });
     }
 
   } catch (error) {
-    writeLog(`Error processing form data: ${error.message}`);
+    await logAndAlert(`Error processing form data: ${error.message}`, 'SYSTEM');
     return NextResponse.json({ message: `Failed to process form data: ${error.message}` }, { status: 500 });
   } finally {
     client.release();
