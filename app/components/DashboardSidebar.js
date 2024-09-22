@@ -2,9 +2,11 @@
 
 import Link from 'next/link';
 import { useEffect, useCallback, useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
   const [showDropdown, setShowDropdown] = useState(false);
+  const router = useRouter();
 
   const handleClickOutside = useCallback((event) => {
     if (!event.target.closest('aside') && isOpen) {
@@ -16,6 +18,8 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, [handleClickOutside]);
+
+  const isActive = (path) => router.pathname === path;
 
   return (
     <aside className={`fixed top-0 left-0 w-64 bg-gray-900 text-white h-full p-6 transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:w-64 md:flex md:flex-col z-50 shadow-lg`}>
@@ -39,37 +43,37 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
       {/* Navigation Links */}
       <nav className="flex-1 mt-4 space-y-2">
         <Link href="/dashboard">
-          <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+          <div className={`block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer ${isActive('/dashboard') ? 'bg-indigo-700' : ''}`}>
             <img src="/icons/dashboard.png" alt="Dashboard" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Dashboard</span>
           </div>
         </Link>
         <Link href="/home">
-          <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+          <div className={`block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer ${isActive('/home') ? 'bg-indigo-700' : ''}`}>
             <img src="/icons/home.png" alt="Home" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Home</span>
           </div>
         </Link>
         <Link href="/dashboard/professor_add">
-          <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+          <div className={`block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer ${isActive('/dashboard/professor_add') ? 'bg-indigo-700' : ''}`}>
             <img src="/icons/add_professor.png" alt="Add Professor" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Add Professor</span>
           </div>
         </Link>
         <Link href="/dashboard/users_list">
-          <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+          <div className={`block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer ${isActive('/dashboard/users_list') ? 'bg-indigo-700' : ''}`}>
             <img src="/icons/user_list.png" alt="Users List" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Users List</span>
           </div>
         </Link>
         <Link href="/dashboard/subscribers_list">
-          <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+          <div className={`block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer ${isActive('/dashboard/subscribers_list') ? 'bg-indigo-700' : ''}`}>
             <img src="/icons/subscriber_list.png" alt="Subscriber List" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Subscriber List</span>
           </div>
         </Link>
         <Link href="/dashboard/professor_list">
-          <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+          <div className={`block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer ${isActive('/dashboard/professor_list') ? 'bg-indigo-700' : ''}`}>
             <img src="/icons/professor_list.png" alt="Professors List" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Professor List</span>
           </div>
@@ -79,7 +83,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         <div className="relative">
           <button
             onClick={() => setShowDropdown(!showDropdown)}
-            className="block w-full p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer"
+            className={`block w-full p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer ${isActive('/dashboard/add_member') ? 'bg-indigo-700' : ''}`}
           >
             <img src="/icons/add_member.png" alt="Add Member" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Add Member</span>
@@ -90,17 +94,17 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
           {showDropdown && (
             <div className="absolute left-0 w-full mt-2 bg-gray-800 rounded shadow-lg z-10">
               <Link href="/dashboard/add_member/staff">
-                <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+                <div className={`block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer ${isActive('/dashboard/add_member/staff') ? 'bg-indigo-700' : ''}`}>
                   <span className="text-lg font-medium">Staff</span>
                 </div>
               </Link>
               <Link href="/dashboard/add_member/post_doc_candidate">
-                <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+                <div className={`block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer ${isActive('/dashboard/add_member/post_doc_candidate') ? 'bg-indigo-700' : ''}`}>
                   <span className="text-lg font-medium">Post Doc Candidate</span>
                 </div>
               </Link>
               <Link href="/dashboard/add_member/masc_candidate">
-                <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+                <div className={`block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer ${isActive('/dashboard/add_member/masc_candidate') ? 'bg-indigo-700' : ''}`}>
                   <span className="text-lg font-medium">MASc Candidate</span>
                 </div>
               </Link>

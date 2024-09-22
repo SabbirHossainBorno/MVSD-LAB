@@ -24,7 +24,6 @@ const Dashboard = () => {
     async function fetchData() {
       setLoading(true); // Start loading
       try {
-        console.log('MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com');
         const response = await axios.get('/api/dashboard');
         const result = response.data;
         if (isMounted) {
@@ -34,7 +33,6 @@ const Dashboard = () => {
           setRecentSubscribers(result.recentSubscribers);
           setRecentUsers(result.recentUsers);
           setRecentProfessors(result.recentProfessors);
-          console.log('MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com');
         }
       } catch (error) {
         toast.error('Failed to fetch data');

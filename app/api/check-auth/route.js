@@ -15,9 +15,11 @@ export async function GET(request) {
   const email = request.cookies.get('email');
   const sessionId = request.cookies.get('sessionId');
   const lastActivity = request.cookies.get('lastActivity');
+  const userIp = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr') || 'Unknown IP';
 
   if (!email || !sessionId) {
-    await logAndAlert('MVSD LAB DASHBOARD\n------------------------------------\nUnauthorized Access Attempt!', sessionId, { email });
+    const alertMessage = `MVSD LAB DASHBOARD\n------------------------------------\nUnauthorized Access Attempt!\nIP : ${userIp}`;
+    await logAndAlert(alertMessage, sessionId, { email, userIp });
     return NextResponse.json({ authenticated: false });
   }
 
@@ -26,11 +28,13 @@ export async function GET(request) {
     const lastActivityDate = new Date(lastActivity);
     const diff = now - lastActivityDate;
 
-    await logAndAlert('MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful', sessionId, { email, lastActivity });
+    const alertMessage = `MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : ${userIp}`;
+    await logAndAlert(alertMessage, sessionId, { email, lastActivity, userIp });
 
     return NextResponse.json({ authenticated: true });
   } catch (error) {
-    await logAndAlert('Error during authentication check', sessionId, { error: error.message });
+    const alertMessage = `Error during authentication check\nIP: ${userIp}`;
+    await logAndAlert(alertMessage, sessionId, { error: error.message, userIp });
     console.error('Error during authentication check:', error);
     return NextResponse.json({ authenticated: false, message: 'Internal server error' });
   }

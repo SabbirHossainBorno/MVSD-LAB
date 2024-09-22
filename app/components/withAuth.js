@@ -20,13 +20,12 @@ const withAuth = (WrappedComponent) => {
       Cookies.remove('email');
       Cookies.remove('sessionId');
       toast.error('Session Expired! Please Login Again.');
-      await axios.post('/api/log-and-alert', { message: 'MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\n', sessionId, details: { email } });
+      await axios.post('/api/log-and-alert', { message: 'MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\nPlease Login Again.', sessionId, details: { email } });
       router.push('/login?sessionExpired=true');
     };
 
     const handleUnauthorizedAccess = async () => {
       toast.error('Authentication Required! Need To Login.');
-      await axios.post('/api/log-and-alert', { message: 'MVSD LAB DASHBOARD\n------------------------------------\nUnauthorized Access Attempt-withAuth!', sessionId: Cookies.get('sessionId'), details: { email: Cookies.get('email') } });
       router.push('/login?authRequired=true');
     };
 
