@@ -45,7 +45,7 @@ const ProfessorsList = () => {
   }, [currentPage, searchTerm, filter, sortOrder]);
 
   const handleEdit = (id) => {
-    router.push(`/professors/${id}/edit`);
+    router.push(`/dashboard/professor_edit/${id}`);
   };
 
   const handleView = (id) => {
