@@ -1,3 +1,4 @@
+//api/professor_details/[id]/route.js
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 import axios from 'axios';

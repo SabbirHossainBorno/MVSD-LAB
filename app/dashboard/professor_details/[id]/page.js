@@ -1,3 +1,4 @@
+//app/dashboard/professor_details/[id]/page.js
 'use client';
 
 import { useEffect, useState } from 'react';
