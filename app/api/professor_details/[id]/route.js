@@ -1,4 +1,3 @@
-// app/api/professor_details/[id]/route.js
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 import axios from 'axios';
@@ -23,23 +22,37 @@ export async function GET(req, { params }) {
   try {
     await logAndAlert(`Fetching details for professor ID: ${id}`, 'SYSTEM');
 
-    const professorQuery = `
-      SELECT * FROM professor_basic_info WHERE id = $1;
-      SELECT * FROM professor_education_info WHERE professor_id = $1;
-      SELECT * FROM professor_career_info WHERE professor_id = $1;
-      SELECT * FROM professor_citations_info WHERE professor_id = $1;
-      SELECT * FROM professor_award_info WHERE professor_id = $1;
-      SELECT * FROM professor_socialMedia_info WHERE professor_id = $1;
-    `;
-    const result = await client.query(professorQuery, [id]);
+    // Fetch professor basic info
+    const professorBasicInfoQuery = `SELECT * FROM professor_basic_info WHERE id = $1;`;
+    const professorBasicInfoResult = await client.query(professorBasicInfoQuery, [id]);
+
+    // Fetch professor education info
+    const professorEducationQuery = `SELECT * FROM professor_education_info WHERE professor_id = $1;`;
+    const professorEducationResult = await client.query(professorEducationQuery, [id]);
+
+    // Fetch professor career info
+    const professorCareerQuery = `SELECT * FROM professor_career_info WHERE professor_id = $1;`;
+    const professorCareerResult = await client.query(professorCareerQuery, [id]);
+
+    // Fetch professor citations
+    const professorCitationsQuery = `SELECT * FROM professor_citations_info WHERE professor_id = $1;`;
+    const professorCitationsResult = await client.query(professorCitationsQuery, [id]);
+
+    // Fetch professor awards
+    const professorAwardsQuery = `SELECT * FROM professor_award_info WHERE professor_id = $1;`;
+    const professorAwardsResult = await client.query(professorAwardsQuery, [id]);
+
+    // Fetch professor social media info
+    const professorSocialMediaQuery = `SELECT * FROM professor_socialMedia_info WHERE professor_id = $1;`;
+    const professorSocialMediaResult = await client.query(professorSocialMediaQuery, [id]);
 
     const professorDetails = {
-      basicInfo: result[0].rows[0],
-      education: result[1].rows,
-      career: result[2].rows,
-      citations: result[3].rows,
-      awards: result[4].rows,
-      socialMedia: result[5].rows,
+      basicInfo: professorBasicInfoResult.rows[0],
+      education: professorEducationResult.rows,
+      career: professorCareerResult.rows,
+      citations: professorCitationsResult.rows,
+      awards: professorAwardsResult.rows,
+      socialMedia: professorSocialMediaResult.rows,
     };
 
     await logAndAlert(`Successfully fetched details for professor ID: ${id}`, 'SYSTEM', professorDetails);
