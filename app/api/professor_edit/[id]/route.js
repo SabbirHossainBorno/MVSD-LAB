@@ -182,4 +182,19 @@ export async function updatePassword(req, { params }) {
     const { password } = await req.json();
 
     // Password validation
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
+    }
+
+    const updatePasswordQuery = 'UPDATE professor_basic_info SET password = $1 WHERE id = $2';
+    await client.query(updatePasswordQuery, [password, id]);
+
+    return NextResponse.json({ message: 'Password updated successfully!' }, { status: 200 });
+  } catch (error) {
+    console.error('Error updating password:', error);
+    return NextResponse.json({ message: 'Error updating password' }, { status: 500 });
+  } finally {
+    client.release();
+  }
+}
