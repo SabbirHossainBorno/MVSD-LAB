@@ -260,242 +260,223 @@ const EditProfessor = () => {
                 value={formData.leaving_date}
                 onChange={handleChange}
                 className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                />
-              </div>
-            </div>
-          </div>
-  
-          {/* Profile Photo Section */}
-          <div className="mb-8">
-            <h3 className="text-xl font-bold mb-4">Profile Photo</h3>
-            <div className="flex items-center mb-4">
-              {formData.photo && (
-                <img
-                  src={`/Storage/Images/Professor/${formData.photo.split('/').pop()}`}
-                  alt="Profile Photo"
-                  className="w-24 h-24 rounded-full mr-4"
-                />
-              )}
-              <input
-                type="file"
-                id="photo"
-                name="photo"
-                accept=".jpg, .jpeg, .png"
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
               />
             </div>
           </div>
-  
-          {/* Social Media Section */}
-          <div className="mb-8">
-            <h3 className="text-xl font-bold mb-4">Social Media</h3>
-            {socialMedia.map((sm, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 relative">
-                <select
-                  name="socialMedia_name"
-                  value={sm.socialMedia_name}
-                  onChange={(e) => handleArrayChange(setSocialMedia, index, 'socialMedia_name', e.target.value)}
-                  className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                  required
+        </div>
+
+        {/* Profile Photo Section */}
+        <div className="mb-8">
+          <h3 className="text-xl font-bold mb-4">Profile Photo</h3>
+          <div className="flex items-center mb-4">
+            {formData.photo && (
+              <img
+                src={`/Storage/Images/Professor/${formData.photo.split('/').pop()}`}
+                alt="Profile Photo"
+                className="w-24 h-24 rounded-full mr-4"
+              />
+            )}
+            <input
+              type="file"
+              id="photo"
+              name="photo"
+              accept=".jpg, .jpeg, .png"
+              onChange={handleChange}
+              className="w-full p-3 rounded bg-gray-700 text-gray-300"
+            />
+          </div>
+        </div>
+
+        {/* Social Media Section */}
+        <div className="mb-8">
+          <h3 className="text-xl font-bold mb-4">Social Media</h3>
+          {socialMedia.map((sm, index) => (
+            <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 relative">
+              <input
+                type="text"
+                name="socialMedia_name"
+                value={sm.socialMedia_name}
+                readOnly
+                className="w-full p-3 rounded bg-gray-700 text-gray-300"
+              />
+              <input
+                type="url"
+                name="link"
+                value={sm.link}
+                readOnly
+                className="w-full p-3 rounded bg-gray-700 text-gray-300"
+              />
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addNewField(setSocialMedia, { socialMedia_name: '', link: '' })}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          >
+            Add Another Social Media
+          </button>
+        </div>
+
+        {/* Education Section */}
+        <div className="mb-8">
+          <h3 className="text-xl font-bold mb-4">Education</h3>
+          {education.map((edu, index) => (
+            <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
+              <input
+                type="text"
+                name="degree"
+                placeholder="Degree"
+                value={edu.degree}
+                onChange={(e) => handleArrayChange(setEducation, index, 'degree', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700"
+                required
+              />
+              <input
+                type="text"
+                name="institution"
+                placeholder="Institution"
+                value={edu.institution}
+                onChange={(e) => handleArrayChange(setEducation, index, 'institution', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700"
+                required
+              />
+              <input
+                type="number"
+                name="passing_year"
+                placeholder="Passing Year"
+                value={edu.passing_year}
+                onChange={(e) => handleArrayChange(setEducation, index, 'passing_year', parseInt(e.target.value, 10))}
+                className="w-full p-3 rounded bg-gray-700"
+                min="1900"
+                max={new Date().getFullYear()}
+                required
+              />
+              {education.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeField(setEducation, index)}
+                  className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
                 >
-                  <option value="">Select Social Media</option>
-                  <option value="Facebook">Facebook</option>
-                  <option value="X">X</option>
-                  <option value="Instagram">Instagram</option>
-                  <option value="Linkedin">Linkedin</option>
-                  <option value="GitHub">GitHub</option>
-                  <option value="Website">Website</option>
-                </select>
-                <input
-                  type="url"
-                  name="link"
-                  placeholder="Link"
-                  value={sm.link}
-                  onChange={(e) => handleArrayChange(setSocialMedia, index, 'link', e.target.value)}
-                  className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                  required
-                />
-                {socialMedia.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeField(setSocialMedia, index)}
-                    className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => addNewField(setSocialMedia, { socialMedia_name: '', link: '' })}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-            >
-              Add Another Social Media
-            </button>
-          </div>
-  
-          {/* Education Section */}
-          <div className="mb-8">
-            <h3 className="text-xl font-bold mb-4">Education</h3>
-            {education.map((edu, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
-                <input
-                  type="text"
-                  name="degree"
-                  placeholder="Degree"
-                  value={edu.degree}
-                  onChange={(e) => handleArrayChange(setEducation, index, 'degree', e.target.value)}
-                  className="w-full p-3 rounded bg-gray-700"
-                  required
-                />
-                <input
-                  type="text"
-                  name="institution"
-                  placeholder="Institution"
-                  value={edu.institution}
-                  onChange={(e) => handleArrayChange(setEducation, index, 'institution', e.target.value)}
-                  className="w-full p-3 rounded bg-gray-700"
-                  required
-                />
-                <input
-                  type="number"
-                  name="passing_year"
-                  placeholder="Passing Year"
-                  value={edu.passing_year}
-                  onChange={(e) => handleArrayChange(setEducation, index, 'passing_year', parseInt(e.target.value, 10))}
-                  className="w-full p-3 rounded bg-gray-700"
-                  min="1900"
-                  max={new Date().getFullYear()}
-                  required
-                />
-                {education.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeField(setEducation, index)}
-                    className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => addNewField(setEducation, { degree: '', institution: '', passing_year: '' })}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-            >
-              Add Another Education
-            </button>
-          </div>
-  
-          {/* Career Section */}
-          <div className="mb-8">
-            <h3 className="text-xl font-bold mb-4">Career</h3>
-            {career.map((job, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 relative">
-                <input
-                  type="text"
-                  name="position"
-                  placeholder="Position"
-                  value={job.position}
-                  onChange={(e) => handleArrayChange(setCareer, index, 'position', e.target.value)}
-                  className="w-full p-3 rounded bg-gray-700"
-                  required
-                />
-                <input
-                  type="text"
-                  name="organization"
-                  placeholder="Organization"
-                  value={job.organization}
-                  onChange={(e) => handleArrayChange(setCareer, index, 'organization', e.target.value)}
-                  className="w-full p-3 rounded bg-gray-700"
-                  required
-                />
-                <input
-                  type="number"
-                  name="joining_year"
-                  placeholder="Joining Year"
-                  value={job.joining_year}
-                  onChange={(e) => handleArrayChange(setCareer, index, 'joining_year', parseInt(e.target.value, 10))}
-                  className="w-full p-3 rounded bg-gray-700"
-                  min="1900"
-                  max={new Date().getFullYear()}
-                  required
-                />
-                <input
-                  type="number"
-                  name="leaving_year"
-                  placeholder="Leaving Year"
-                  value={job.leaving_year}
-                  onChange={(e) => handleArrayChange(setCareer, index, 'leaving_year', parseInt(e.target.value, 10))}
-                  className="w-full p-3 rounded bg-gray-700"
-                  min="1900"
-                  max={new Date().getFullYear()}
-                />
-                {career.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeField(setCareer, index)}
-                    className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => addNewField(setCareer, { position: '', organization: '', joining_year: '', leaving_year: '' })}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-            >
-              Add Another Job
-            </button>
-          </div>
-  
-          {/* Citations Section */}
-          <div className="mb-8">
-            <h3 className="text-xl font-bold mb-4">Citations</h3>
-            {citations.map((citation, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
-                <input
-                  type="text"
-                  name="title"
-                  placeholder="Title"
-                  value={citation.title}
-                  onChange={(e) => handleArrayChange(setCitations, index, 'title', e.target.value)}
-                  className="w-full p-3 rounded bg-gray-700"
-                  required
-                />
-                <input
-                  type="text"
-                  name="link"
-                  placeholder="Link"
-                  value={citation.link}
-                  onChange={(e) => handleArrayChange(setCitations, index, 'link', e.target.value)}
-                  className="w-full p-3 rounded bg-gray-700"
-                  required
-                />
-                <input
-                  type="text"
-                  name="organization"
-                  placeholder="Organization"
-                  value={citation.organization}
-                  onChange={(e) => handleArrayChange(setCitations, index, 'organization', e.target.value)}
-                  className="w-full p-3 rounded bg-gray-700"
-                  required
-                />
-                {citations.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeField(setCitations, index)}
-                    className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-                  >
-                    Remove
-                  </button>
-                )}
-                          </div>
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addNewField(setEducation, { degree: '', institution: '', passing_year: '' })}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          >
+            Add Another Education
+          </button>
+        </div>
+
+        {/* Career Section */}
+        <div className="mb-8">
+          <h3 className="text-xl font-bold mb-4">Career</h3>
+          {career.map((job, index) => (
+            <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 relative">
+              <input
+                type="text"
+                name="position"
+                placeholder="Position"
+                value={job.position}
+                onChange={(e) => handleArrayChange(setCareer, index, 'position', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700"
+                required
+              />
+              <input
+                type="text"
+                name="organization"
+                placeholder="Organization"
+                value={job.organization}
+                onChange={(e) => handleArrayChange(setCareer, index, 'organization', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700"
+                required
+              />
+              <input
+                type="number"
+                name="joining_year"
+                placeholder="Joining Year"
+                value={job.joining_year}
+                onChange={(e) => handleArrayChange(setCareer, index, 'joining_year', parseInt(e.target.value, 10))}
+                className="w-full p-3 rounded bg-gray-700"
+                min="1900"
+                max={new Date().getFullYear()}
+                required
+              />
+              <input
+                type="number"
+                name="leaving_year"
+                placeholder="Leaving Year"
+                value={job.leaving_year}
+                onChange={(e) => handleArrayChange(setCareer, index, 'leaving_year', parseInt(e.target.value, 10))}
+                className="w-full p-3 rounded bg-gray-700"
+                min="1900"
+                max={new Date().getFullYear()}
+              />
+              {career.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeField(setCareer, index)}
+                  className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addNewField(setCareer, { position: '', organization: '', joining_year: '', leaving_year: '' })}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          >
+            Add Another Job
+          </button>
+        </div>
+
+        {/* Citations Section */}
+        <div className="mb-8">
+          <h3 className="text-xl font-bold mb-4">Citations</h3>
+          {citations.map((citation, index) => (
+            <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
+              <input
+                type="text"
+                name="title"
+                placeholder="Title"
+                value={citation.title}
+                onChange={(e) => handleArrayChange(setCitations, index, 'title', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700"
+                required
+              />
+              <input
+                type="text"
+                name="link"
+                placeholder="Link"
+                value={citation.link}
+                onChange={(e) => handleArrayChange(setCitations, index, 'link', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700"
+                required
+              />
+              <input
+                type="text"
+                name="organization"
+                placeholder="Organization"
+                value={citation.organization}
+                onChange={(e) => handleArrayChange(setCitations, index, 'organization', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700"
+                required
+              />
+              {citations.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeField(setCitations, index)}
+                  className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
           ))}
           <button
             type="button"
@@ -516,117 +497,98 @@ const EditProfessor = () => {
                 name="title"
                 placeholder="Award Title"
                 value={award.title}
-                onChange={(e) => handleArrayChange(setAwards, index, 'title', e.target.value)}
+                readOnly
                 className="w-full p-3 rounded bg-gray-700"
-                required
               />
               <input
-                type="number"
-                name="year"
-                placeholder="Year"
-                value={award.year}
-                onChange={(e) => handleArrayChange(setAwards, index, 'year', parseInt(e.target.value, 10))}
-                className="w-full p-3 rounded bg-gray-700"
-                min="1900"
-                max={new Date().getFullYear()}
-                required
-              />
-              <input
-                type="text"
-                name="details"
-                placeholder="Details"
-                value={award.details}
-                onChange={(e) => handleArrayChange(setAwards, index, 'details', e.target.value)}
-                className="w-full p-3 rounded bg-gray-700"
-                required
-              />
-              {award.awardPhoto && (
-                <img
-                  src={`/Storage/Images/Professor/${award.awardPhoto.split('/').pop()}`}
-                  alt="Award Photo"
-                  className="w-24 h-24 rounded-full mr-4"
-                />
-              )}
-              <input
-                type="file"
-                name="awardPhoto"
-                onChange={(e) => handleArrayChange(setAwards, index, 'awardPhoto', e.target.files[0])}
-                className="w-full p-3 rounded bg-gray-700"
-              />
-              {awards.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => removeField(setAwards, index)}
-                  className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-                >
-                  Remove
-                </button>
-              )}
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: '' })}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-          >
-            Add Another Award
-          </button>
-        </div>
-
-        {/* Submit Button */}
-        <div className="flex justify-center">
-          <button
-            type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-          >
-            Update Professor
-          </button>
-        </div>
-      </form>
-
-      {/* Password Update Section */}
-      <form onSubmit={handlePasswordChange} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto mt-8">
-        <h3 className="text-xl font-bold mb-4">Update Password</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-300 mb-2">
-              New Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 rounded bg-gray-700 text-gray-300"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="confirm_password" className="block text-gray-300 mb-2">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              name="confirm_password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full p-3 rounded bg-gray-700 text-gray-300"
-              required
-            />
-          </div>
-        </div>
-        <div className="flex justify-center">
-          <button
-            type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-          >
-            Update Password
-          </button>
-        </div>
-      </form>
-      <ToastContainer />
-    </div>
-  );
-};
-
-export default withAuth(EditProfessor);
+                                type="number"
+                                name="year"
+                                placeholder="Year"
+                                value={award.year}
+                                readOnly
+                                className="w-full p-3 rounded bg-gray-700"
+                              />
+                              <input
+                                type="text"
+                                name="details"
+                                placeholder="Details"
+                                value={award.details}
+                                readOnly
+                                className="w-full p-3 rounded bg-gray-700"
+                              />
+                              {award.awardPhoto && (
+                                <img
+                                  src={`/Storage/Images/Professor/${award.awardPhoto.split('/').pop()}`}
+                                  alt="Award Photo"
+                                  className="w-24 h-24 rounded-full mr-4"
+                                />
+                              )}
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: '' })}
+                            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+                          >
+                            Add Another Award
+                          </button>
+                        </div>
+                
+                        {/* Submit Button */}
+                        <div className="flex justify-center">
+                          <button
+                            type="submit"
+                            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+                          >
+                            Update Professor
+                          </button>
+                        </div>
+                      </form>
+                
+                      {/* Password Update Section */}
+                      <form onSubmit={handlePasswordChange} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto mt-8">
+                        <h3 className="text-xl font-bold mb-4">Update Password</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="mb-4">
+                            <label htmlFor="password" className="block text-gray-300 mb-2">
+                              New Password
+                            </label>
+                            <input
+                              type="password"
+                              name="password"
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                              className="w-full p-3 rounded bg-gray-700 text-gray-300"
+                              required
+                            />
+                          </div>
+                          <div className="mb-4">
+                            <label htmlFor="confirm_password" className="block text-gray-300 mb-2">
+                              Confirm Password
+                            </label>
+                            <input
+                              type="password"
+                              name="confirm_password"
+                              value={confirmPassword}
+                              onChange={(e) => setConfirmPassword(e.target.value)}
+                              className="w-full p-3 rounded bg-gray-700 text-gray-300"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="flex justify-center">
+                          <button
+                            type="submit"
+                            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+                          >
+                            Update Password
+                          </button>
+                        </div>
+                      </form>
+                      <ToastContainer />
+                    </div>
+                  );
+                };
+                
+                export default withAuth(EditProfessor);
+                
