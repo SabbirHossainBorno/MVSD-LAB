@@ -33,97 +33,119 @@ const ProfessorDetails = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
       <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold mb-6 text-center">Professor Details</h2>
 
-        {/* Basic Info Section */}
-        <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4">Basic Info</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {['first_name', 'last_name', 'phone', 'email', 'dob', 'joining_date', 'leaving_date', 'short_bio'].map((field) => (
-              <div key={field} className="mb-4">
-                <label className="block text-gray-300 mb-2 capitalize">{field.replace('_', ' ')}</label>
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">
-                  {professorDetails.basicInfo?.[field] || 'N/A'}
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* Professor Photo and Basic Info */}
+        <div className="text-center mb-10">
+          <img
+            src={professorDetails.basicInfo.photo}
+            alt={`${professorDetails.basicInfo.first_name} ${professorDetails.basicInfo.last_name}`}
+            className="w-40 h-40 rounded-full mx-auto shadow-lg mb-4"
+          />
+          <h2 className="text-4xl font-extrabold text-blue-500">{`${professorDetails.basicInfo.first_name} ${professorDetails.basicInfo.last_name}`}</h2>
+          <p className="text-gray-400 text-lg mt-4">{professorDetails.basicInfo.short_bio || 'No bio available'}</p>
         </div>
 
         {/* Social Media Section */}
-        {professorDetails.socialMedia && professorDetails.socialMedia.length > 0 && (
-          <div className="mb-8">
-            <h3 className="text-xl font-bold mb-4">Social Media</h3>
-            {professorDetails.socialMedia.map((sm, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{sm.socialMedia_name}</div>
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{sm.link}</div>
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="flex justify-center space-x-6 mb-10">
+          {professorDetails.basicInfo.linkedin && (
+            <a href={professorDetails.basicInfo.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400">
+              <i className="fab fa-linkedin fa-2x"></i>
+            </a>
+          )}
+          {professorDetails.basicInfo.twitter && (
+            <a href={professorDetails.basicInfo.twitter} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">
+              <i className="fab fa-twitter fa-2x"></i>
+            </a>
+          )}
+          {professorDetails.basicInfo.facebook && (
+            <a href={professorDetails.basicInfo.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-500">
+              <i className="fab fa-facebook fa-2x"></i>
+            </a>
+          )}
+          {professorDetails.basicInfo.github && (
+            <a href={professorDetails.basicInfo.github} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-gray-400">
+              <i className="fab fa-github fa-2x"></i>
+            </a>
+          )}
+        </div>
+
+        {/* Basic Info Section */}
+        <div className="mb-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {['phone', 'email', 'dob', 'joining_date', 'leaving_date'].map((field) => (
+            <div key={field} className="bg-gray-700 p-4 rounded-lg shadow-lg">
+              <h4 className="text-lg font-semibold text-indigo-400 capitalize">{field.replace('_', ' ')}</h4>
+              <p className="text-gray-300 mt-2">{professorDetails.basicInfo[field] || 'N/A'}</p>
+            </div>
+          ))}
+        </div>
 
         {/* Education Section */}
         {professorDetails.education && professorDetails.education.length > 0 && (
-          <div className="mb-8">
-            <h3 className="text-xl font-bold mb-4">Education</h3>
-            {professorDetails.education.map((edu, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{edu.degree}</div>
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{edu.institution}</div>
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{edu.passing_year}</div>
-              </div>
-            ))}
+          <div className="mb-10">
+            <h3 className="text-2xl font-semibold text-indigo-400 mb-5">Education</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {professorDetails.education.map((edu, index) => (
+                <div key={index} className="bg-gray-700 p-4 rounded-lg shadow-lg">
+                  <h4 className="text-lg font-semibold text-blue-500">{edu.degree}</h4>
+                  <p className="text-gray-300 mt-2">{edu.institution}</p>
+                  <p className="text-gray-400">{edu.passing_year}</p>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
         {/* Career Section */}
         {professorDetails.career && professorDetails.career.length > 0 && (
-          <div className="mb-8">
-            <h3 className="text-xl font-bold mb-4">Career</h3>
-            {professorDetails.career.map((job, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{job.position}</div>
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{job.organization_name}</div>
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{job.joining_year}</div>
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{job.leaving_year}</div>
-              </div>
-            ))}
+          <div className="mb-10">
+            <h3 className="text-2xl font-semibold text-indigo-400 mb-5">Career</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {professorDetails.career.map((job, index) => (
+                <div key={index} className="bg-gray-700 p-4 rounded-lg shadow-lg">
+                  <h4 className="text-lg font-semibold text-blue-500">{job.position}</h4>
+                  <p className="text-gray-300 mt-2">{job.organization_name}</p>
+                  <p className="text-gray-400">{job.joining_year} - {job.leaving_year || 'Present'}</p>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
         {/* Citations Section */}
         {professorDetails.citations && professorDetails.citations.length > 0 && (
-          <div className="mb-8">
-            <h3 className="text-xl font-bold mb-4">Citations</h3>
-            {professorDetails.citations.map((citation, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{citation.title}</div>
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{citation.link}</div>
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{citation.organization_name}</div>
-              </div>
-            ))}
+          <div className="mb-10">
+            <h3 className="text-2xl font-semibold text-indigo-400 mb-5">Citations</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {professorDetails.citations.map((citation, index) => (
+                <div key={index} className="bg-gray-700 p-4 rounded-lg shadow-lg">
+                  <h4 className="text-lg font-semibold text-blue-500">{citation.title}</h4>
+                  <p className="text-gray-300 mt-2">{citation.organization_name}</p>
+                  <a href={citation.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                    View Citation
+                  </a>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
         {/* Awards Section */}
         {professorDetails.awards && professorDetails.awards.length > 0 && (
-          <div className="mb-8">
-            <h3 className="text-xl font-bold mb-4">Awards</h3>
-            {professorDetails.awards.map((award, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{award.title}</div>
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{award.year}</div>
-                <div className="w-full p-3 rounded bg-gray-700 text-gray-300">{award.details}</div>
-                {award.award_photo && (
-                  <div className="w-full p-3 rounded bg-gray-700 text-gray-300">
-                    <img src={award.award_photo} alt={award.title} className="w-full h-auto" loading="lazy" />
-                  </div>
-                )}
-              </div>
-            ))}
+          <div className="mb-10">
+            <h3 className="text-2xl font-semibold text-indigo-400 mb-5">Awards</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {professorDetails.awards.map((award, index) => (
+                <div key={index} className="bg-gray-700 p-4 rounded-lg shadow-lg">
+                  <h4 className="text-lg font-semibold text-blue-500">{award.title}</h4>
+                  <p className="text-gray-300 mt-2">{award.details}</p>
+                  <p className="text-gray-400">{award.year}</p>
+                  <img src={award.photo} alt={award.title} className="w-20 h-20 mt-4 rounded-lg" />
+                </div>
+              ))}
+            </div>
           </div>
         )}
+
       </div>
     </div>
   );

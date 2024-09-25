@@ -4516,3 +4516,246 @@ IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastA
 2024-09-25 18:29:06+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P01MVSD"}
 2024-09-25 18:29:06+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P01MVSD {"basicInfo":{"id":"P01MVSD","first_name":"Omar Faruk","last_name":"Joney","phone":"31928777819","dob":"2024-08-31T18:00:00.000Z","email":"omarfarukjoney@gmail.com","password":"qwe","short_bio":"dwadsa","joining_date":"2024-09-09T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P01MVSD_DP.jpeg","status":"Active","type":"Professor"},"education":[{"serial":1,"professor_id":"P01MVSD","degree":"BSc","institution":"Seoul National University, School of Electrical and Electronic Engineering","passing_year":2001},{"serial":2,"professor_id":"P01MVSD","degree":"msc","institution":"dsdsada","passing_year":2002}],"career":[{"serial":1,"professor_id":"P01MVSD","position":"Researcher","organization_name":null,"joining_year":2006,"leaving_year":2006},{"serial":2,"professor_id":"P01MVSD","position":"dsadsa","organization_name":null,"joining_year":2002,"leaving_year":2001}],"citations":[{"serial":1,"professor_id":"P01MVSD","title":"Packet error rate analysis of ZigBee under WLAN and Bluetooth interferences","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":null},{"serial":2,"professor_id":"P01MVSD","title":"dsadadsada","link":"dsdsdsad","organization_name":null}],"awards":[],"socialMedia":[]}
 2024-09-25 18:29:06+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P01MVSD"}
+2024-09-25 18:39:42+06:00 [Session ID: undefined] MVSD LAB DASHBOARD
+------------------------------------
+Session Expired!
+Please Login Again. {}
+2024-09-25 18:39:42+06:00 [Session ID: undefined] MVSD LAB DASHBOARD
+------------------------------------
+Session Expired!
+Please Login Again. {}
+2024-09-25 18:39:42+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\nPlease Login Again."}
+2024-09-25 18:39:42+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\nPlease Login Again."}
+2024-09-25 18:48:10+06:00 [Session ID: b1b305ea-750a-4a2e-8b90-be28bbcf247d] MVSD LAB DASHBOARD
+------------------------------------
+Login Attempt!
+Email : admin@mvsdlab.com
+IP : 103.220.204.28
+Device INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0 {}
+2024-09-25 18:48:10+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nLogin Attempt!\nEmail : admin@mvsdlab.com\nIP : 103.220.204.28\nDevice INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-25 18:48:12+06:00 [Session ID: b1b305ea-750a-4a2e-8b90-be28bbcf247d] MVSD LAB DASHBOARD
+------------------------------------
+Admin Login Successful.
+Email : admin@mvsdlab.com
+IP : 103.220.204.28
+Device INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0 {}
+2024-09-25 18:48:12+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAdmin Login Successful.\nEmail : admin@mvsdlab.com\nIP : 103.220.204.28\nDevice INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-25 18:48:16+06:00 [Session ID: 163bbe2c-8850-40d4-a001-eb5064741bd3] MVSD LAB DASHBOARD
+------------------------------------
+Login Attempt!
+Email : admin@mvsdlab.com
+IP : 103.220.204.28
+Device INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0 {}
+2024-09-25 18:48:16+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nLogin Attempt!\nEmail : admin@mvsdlab.com\nIP : 103.220.204.28\nDevice INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-25 18:48:16+06:00 [Session ID: 163bbe2c-8850-40d4-a001-eb5064741bd3] MVSD LAB DASHBOARD
+------------------------------------
+Admin Login Successful.
+Email : admin@mvsdlab.com
+IP : 103.220.204.28
+Device INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0 {}
+2024-09-25 18:48:17+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAdmin Login Successful.\nEmail : admin@mvsdlab.com\nIP : 103.220.204.28\nDevice INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-25 18:48:19+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-25T12:29:32.249Z"},"userIp":"103.220.204.28"}
+2024-09-25 18:48:19+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-25 18:48:20+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-25T12:48:19.638Z"},"userIp":"103.220.204.28"}
+2024-09-25 18:48:20+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-25 18:48:21+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-25 18:48:21+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-25 18:48:21+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-25 18:48:21+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-25 18:48:21+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-25 18:48:21+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-25 18:48:22+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-25 18:48:22+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-25 18:48:24+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-25T12:48:24.340Z"},"userIp":"103.220.204.28"}
+2024-09-25 18:48:24+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-25 18:48:35+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-25T12:48:32.986Z"},"userIp":"103.220.204.28"}
+2024-09-25 18:48:35+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-25 18:48:36+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P37MVSD {}
+2024-09-25 18:48:36+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P37MVSD"}
+2024-09-25 18:48:36+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P37MVSD {"basicInfo":{"id":"P37MVSD","first_name":"Test17","last_name":"Professor","phone":"23321321321","dob":"1996-02-06T18:00:00.000Z","email":"test17@gmail.com","password":"#qweASDzxc6655","short_bio":"dasdsa d sadsadadsadwqdasdwqd d wasdawdawd","joining_date":"2024-09-10T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P37MVSD_DP.jpeg","status":"Active","type":"Professor"},"education":[{"serial":107,"professor_id":"P37MVSD","degree":"BSc","institution":"Seoul National University, School of Electrical and Electronic Engineering","passing_year":2001}],"career":[{"serial":103,"professor_id":"P37MVSD","position":"Researcher","organization_name":"NAGAD Limited","joining_year":2006,"leaving_year":2006}],"citations":[{"serial":96,"professor_id":"P37MVSD","title":"SabbirHossainBorno","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"NAGAD Limited"}],"awards":[{"serial":28,"professor_id":"P37MVSD","title":"Packet error rate analysis of ZigBee under WLAN and Bluetooth interferences","year":2022,"details":"dsadasdas","award_photo":"/Storage/Images/Professor/P37MVSD_Award_1.jpeg"}],"socialMedia":[{"professor_id":"P37MVSD","socialmedia_name":"Facebook","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"GitHub","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Instagram","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Linkedin","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Website","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"X","link":"https://www.google.com/"}]}
+2024-09-25 18:48:37+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P37MVSD"}
+2024-09-25 18:48:37+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P37MVSD {}
+2024-09-25 18:48:37+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P37MVSD"}
+2024-09-25 18:48:37+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P37MVSD {"basicInfo":{"id":"P37MVSD","first_name":"Test17","last_name":"Professor","phone":"23321321321","dob":"1996-02-06T18:00:00.000Z","email":"test17@gmail.com","password":"#qweASDzxc6655","short_bio":"dasdsa d sadsadadsadwqdasdwqd d wasdawdawd","joining_date":"2024-09-10T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P37MVSD_DP.jpeg","status":"Active","type":"Professor"},"education":[{"serial":107,"professor_id":"P37MVSD","degree":"BSc","institution":"Seoul National University, School of Electrical and Electronic Engineering","passing_year":2001}],"career":[{"serial":103,"professor_id":"P37MVSD","position":"Researcher","organization_name":"NAGAD Limited","joining_year":2006,"leaving_year":2006}],"citations":[{"serial":96,"professor_id":"P37MVSD","title":"SabbirHossainBorno","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"NAGAD Limited"}],"awards":[{"serial":28,"professor_id":"P37MVSD","title":"Packet error rate analysis of ZigBee under WLAN and Bluetooth interferences","year":2022,"details":"dsadasdas","award_photo":"/Storage/Images/Professor/P37MVSD_Award_1.jpeg"}],"socialMedia":[{"professor_id":"P37MVSD","socialmedia_name":"Facebook","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"GitHub","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Instagram","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Linkedin","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Website","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"X","link":"https://www.google.com/"}]}
+2024-09-25 18:48:38+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P37MVSD"}
+2024-09-25T12:49:47.770Z [Session ID: 163bbe2c-8850-40d4-a001-eb5064741bd3] User admin@mvsdlab.com logged Out Successfully.
+2024-09-25 18:50:53+06:00 [Session ID: b05bb41a-f62a-45ad-b0aa-6027807a88f4] MVSD LAB DASHBOARD
+------------------------------------
+Login Attempt!
+Email : admin@mvsdlab.com
+IP : 119.30.39.49
+Device INFO : Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/129.0.6668.69 Mobile/15E148 Safari/604.1 {}
+2024-09-25 18:50:53+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nLogin Attempt!\nEmail : admin@mvsdlab.com\nIP : 119.30.39.49\nDevice INFO : Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/129.0.6668.69 Mobile/15E148 Safari/604.1"}
+2024-09-25 18:50:53+06:00 [Session ID: b05bb41a-f62a-45ad-b0aa-6027807a88f4] MVSD LAB DASHBOARD
+------------------------------------
+Admin Login Successful.
+Email : admin@mvsdlab.com
+IP : 119.30.39.49
+Device INFO : Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/129.0.6668.69 Mobile/15E148 Safari/604.1 {}
+2024-09-25 18:50:53+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAdmin Login Successful.\nEmail : admin@mvsdlab.com\nIP : 119.30.39.49\nDevice INFO : Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/129.0.6668.69 Mobile/15E148 Safari/604.1"}
+2024-09-25 18:51:05+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 119.30.39.49 {"email":{"name":"email","value":"admin@mvsdlab.com"},"userIp":"119.30.39.49"}
+2024-09-25 18:51:06+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 119.30.39.49"}
+2024-09-25 18:51:07+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 119.30.39.49 {"email":{"name":"email","value":"admin@mvsdlab.com"},"userIp":"119.30.39.49"}
+2024-09-25 18:51:07+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 119.30.39.49"}
+2024-09-25 18:51:08+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"119.30.39.49","userAgent":"Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/129.0.6668.69 Mobile/15E148 Safari/604.1"}
+2024-09-25 18:51:08+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"119.30.39.49","userAgent":"Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/129.0.6668.69 Mobile/15E148 Safari/604.1"}
+2024-09-25 18:51:08+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-25 18:51:09+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-25 18:52:16+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 119.30.39.49 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-25T12:52:12.774Z"},"userIp":"119.30.39.49"}
+2024-09-25 18:52:17+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 119.30.39.49"}
+2024-09-25 18:53:25+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 119.30.39.49 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-25T12:53:05.354Z"},"userIp":"119.30.39.49"}
+2024-09-25 18:53:25+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 119.30.39.49"}
+2024-09-25 18:53:27+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P37MVSD {}
+2024-09-25 18:53:27+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P37MVSD {}
+2024-09-25 18:53:27+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P37MVSD"}
+2024-09-25 18:53:27+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P37MVSD {"basicInfo":{"id":"P37MVSD","first_name":"Test17","last_name":"Professor","phone":"23321321321","dob":"1996-02-06T18:00:00.000Z","email":"test17@gmail.com","password":"#qweASDzxc6655","short_bio":"dasdsa d sadsadadsadwqdasdwqd d wasdawdawd","joining_date":"2024-09-10T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P37MVSD_DP.jpeg","status":"Active","type":"Professor"},"education":[{"serial":107,"professor_id":"P37MVSD","degree":"BSc","institution":"Seoul National University, School of Electrical and Electronic Engineering","passing_year":2001}],"career":[{"serial":103,"professor_id":"P37MVSD","position":"Researcher","organization_name":"NAGAD Limited","joining_year":2006,"leaving_year":2006}],"citations":[{"serial":96,"professor_id":"P37MVSD","title":"SabbirHossainBorno","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"NAGAD Limited"}],"awards":[{"serial":28,"professor_id":"P37MVSD","title":"Packet error rate analysis of ZigBee under WLAN and Bluetooth interferences","year":2022,"details":"dsadasdas","award_photo":"/Storage/Images/Professor/P37MVSD_Award_1.jpeg"}],"socialMedia":[{"professor_id":"P37MVSD","socialmedia_name":"Facebook","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"GitHub","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Instagram","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Linkedin","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Website","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"X","link":"https://www.google.com/"}]}
+2024-09-25 18:53:27+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P37MVSD"}
+2024-09-25 18:53:27+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P37MVSD {"basicInfo":{"id":"P37MVSD","first_name":"Test17","last_name":"Professor","phone":"23321321321","dob":"1996-02-06T18:00:00.000Z","email":"test17@gmail.com","password":"#qweASDzxc6655","short_bio":"dasdsa d sadsadadsadwqdasdwqd d wasdawdawd","joining_date":"2024-09-10T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P37MVSD_DP.jpeg","status":"Active","type":"Professor"},"education":[{"serial":107,"professor_id":"P37MVSD","degree":"BSc","institution":"Seoul National University, School of Electrical and Electronic Engineering","passing_year":2001}],"career":[{"serial":103,"professor_id":"P37MVSD","position":"Researcher","organization_name":"NAGAD Limited","joining_year":2006,"leaving_year":2006}],"citations":[{"serial":96,"professor_id":"P37MVSD","title":"SabbirHossainBorno","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"NAGAD Limited"}],"awards":[{"serial":28,"professor_id":"P37MVSD","title":"Packet error rate analysis of ZigBee under WLAN and Bluetooth interferences","year":2022,"details":"dsadasdas","award_photo":"/Storage/Images/Professor/P37MVSD_Award_1.jpeg"}],"socialMedia":[{"professor_id":"P37MVSD","socialmedia_name":"Facebook","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"GitHub","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Instagram","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Linkedin","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Website","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"X","link":"https://www.google.com/"}]}
+2024-09-25 18:53:27+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P37MVSD"}
+2024-09-25 18:53:27+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P37MVSD"}
+2024-09-25 18:54:23+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 119.30.39.49 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-25T12:53:44.773Z"},"userIp":"119.30.39.49"}
+2024-09-25 18:54:24+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 119.30.39.49"}
+2024-09-25 18:54:25+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 119.30.39.49 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-25T12:53:44.773Z"},"userIp":"119.30.39.49"}
+2024-09-25 18:54:25+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 119.30.39.49"}
+2024-09-25 18:54:26+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P37MVSD {}
+2024-09-25 18:54:26+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P37MVSD {}
+2024-09-25 18:54:26+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P37MVSD"}
+2024-09-25 18:54:26+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P37MVSD {"basicInfo":{"id":"P37MVSD","first_name":"Test17","last_name":"Professor","phone":"23321321321","dob":"1996-02-06T18:00:00.000Z","email":"test17@gmail.com","password":"#qweASDzxc6655","short_bio":"dasdsa d sadsadadsadwqdasdwqd d wasdawdawd","joining_date":"2024-09-10T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P37MVSD_DP.jpeg","status":"Active","type":"Professor"},"education":[{"serial":107,"professor_id":"P37MVSD","degree":"BSc","institution":"Seoul National University, School of Electrical and Electronic Engineering","passing_year":2001}],"career":[{"serial":103,"professor_id":"P37MVSD","position":"Researcher","organization_name":"NAGAD Limited","joining_year":2006,"leaving_year":2006}],"citations":[{"serial":96,"professor_id":"P37MVSD","title":"SabbirHossainBorno","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"NAGAD Limited"}],"awards":[{"serial":28,"professor_id":"P37MVSD","title":"Packet error rate analysis of ZigBee under WLAN and Bluetooth interferences","year":2022,"details":"dsadasdas","award_photo":"/Storage/Images/Professor/P37MVSD_Award_1.jpeg"}],"socialMedia":[{"professor_id":"P37MVSD","socialmedia_name":"Facebook","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"GitHub","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Instagram","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Linkedin","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Website","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"X","link":"https://www.google.com/"}]}
+2024-09-25 18:54:26+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P37MVSD"}
+2024-09-25 18:54:26+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P37MVSD"}
+2024-09-25T12:54:27.279Z [Session ID: b05bb41a-f62a-45ad-b0aa-6027807a88f4] User admin@mvsdlab.com logged Out Successfully.
+2024-09-25 18:54:27+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P37MVSD {"basicInfo":{"id":"P37MVSD","first_name":"Test17","last_name":"Professor","phone":"23321321321","dob":"1996-02-06T18:00:00.000Z","email":"test17@gmail.com","password":"#qweASDzxc6655","short_bio":"dasdsa d sadsadadsadwqdasdwqd d wasdawdawd","joining_date":"2024-09-10T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P37MVSD_DP.jpeg","status":"Active","type":"Professor"},"education":[{"serial":107,"professor_id":"P37MVSD","degree":"BSc","institution":"Seoul National University, School of Electrical and Electronic Engineering","passing_year":2001}],"career":[{"serial":103,"professor_id":"P37MVSD","position":"Researcher","organization_name":"NAGAD Limited","joining_year":2006,"leaving_year":2006}],"citations":[{"serial":96,"professor_id":"P37MVSD","title":"SabbirHossainBorno","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"NAGAD Limited"}],"awards":[{"serial":28,"professor_id":"P37MVSD","title":"Packet error rate analysis of ZigBee under WLAN and Bluetooth interferences","year":2022,"details":"dsadasdas","award_photo":"/Storage/Images/Professor/P37MVSD_Award_1.jpeg"}],"socialMedia":[{"professor_id":"P37MVSD","socialmedia_name":"Facebook","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"GitHub","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Instagram","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Linkedin","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Website","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"X","link":"https://www.google.com/"}]}
+2024-09-25 18:54:30+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P37MVSD"}
+2024-09-25 18:55:01+06:00 [Session ID: undefined] MVSD LAB DASHBOARD
+------------------------------------
+Unauthorized Access Attempt!
+IP : 119.30.39.49 {"userIp":"119.30.39.49"}
+2024-09-25 18:55:02+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nUnauthorized Access Attempt!\nIP : 119.30.39.49"}
+2024-09-25 18:57:22+06:00 [Session ID: 82129af6-461b-47f4-86c5-91a2154080af] MVSD LAB DASHBOARD
+------------------------------------
+Login Attempt!
+Email : admin@mvsdlab.com
+IP : 103.220.204.28
+Device INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0 {}
+2024-09-25 18:57:22+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nLogin Attempt!\nEmail : admin@mvsdlab.com\nIP : 103.220.204.28\nDevice INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-25 18:57:22+06:00 [Session ID: 82129af6-461b-47f4-86c5-91a2154080af] MVSD LAB DASHBOARD
+------------------------------------
+Admin Login Successful.
+Email : admin@mvsdlab.com
+IP : 103.220.204.28
+Device INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0 {}
+2024-09-25 18:57:23+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAdmin Login Successful.\nEmail : admin@mvsdlab.com\nIP : 103.220.204.28\nDevice INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-25 18:57:26+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-25T12:49:49.344Z"},"userIp":"103.220.204.28"}
+2024-09-25 18:57:26+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-25 18:57:27+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-25T12:49:49.344Z"},"userIp":"103.220.204.28"}
+2024-09-25 18:57:27+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-25 18:57:28+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-25 18:57:28+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-25 18:57:29+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-25 18:57:29+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-25 18:57:29+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-25 18:57:29+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-25 18:57:29+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-25 18:57:29+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-25 18:57:31+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-25T12:57:31.488Z"},"userIp":"103.220.204.28"}
+2024-09-25 18:57:35+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-25 18:57:44+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-25T12:57:42.919Z"},"userIp":"103.220.204.28"}
+2024-09-25 18:57:44+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-25 18:57:45+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P37MVSD {}
+2024-09-25 18:57:45+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P37MVSD"}
+2024-09-25 18:57:45+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P37MVSD {"basicInfo":{"id":"P37MVSD","first_name":"Test17","last_name":"Professor","phone":"23321321321","dob":"1996-02-06T18:00:00.000Z","email":"test17@gmail.com","password":"#qweASDzxc6655","short_bio":"dasdsa d sadsadadsadwqdasdwqd d wasdawdawd","joining_date":"2024-09-10T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P37MVSD_DP.jpeg","status":"Active","type":"Professor"},"education":[{"serial":107,"professor_id":"P37MVSD","degree":"BSc","institution":"Seoul National University, School of Electrical and Electronic Engineering","passing_year":2001}],"career":[{"serial":103,"professor_id":"P37MVSD","position":"Researcher","organization_name":"NAGAD Limited","joining_year":2006,"leaving_year":2006}],"citations":[{"serial":96,"professor_id":"P37MVSD","title":"SabbirHossainBorno","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"NAGAD Limited"}],"awards":[{"serial":28,"professor_id":"P37MVSD","title":"Packet error rate analysis of ZigBee under WLAN and Bluetooth interferences","year":2022,"details":"dsadasdas","award_photo":"/Storage/Images/Professor/P37MVSD_Award_1.jpeg"}],"socialMedia":[{"professor_id":"P37MVSD","socialmedia_name":"Facebook","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"GitHub","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Instagram","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Linkedin","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Website","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"X","link":"https://www.google.com/"}]}
+2024-09-25 18:57:46+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P37MVSD"}
+2024-09-25 18:57:46+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P37MVSD {}
+2024-09-25 18:57:46+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P37MVSD"}
+2024-09-25 18:57:46+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P37MVSD {"basicInfo":{"id":"P37MVSD","first_name":"Test17","last_name":"Professor","phone":"23321321321","dob":"1996-02-06T18:00:00.000Z","email":"test17@gmail.com","password":"#qweASDzxc6655","short_bio":"dasdsa d sadsadadsadwqdasdwqd d wasdawdawd","joining_date":"2024-09-10T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P37MVSD_DP.jpeg","status":"Active","type":"Professor"},"education":[{"serial":107,"professor_id":"P37MVSD","degree":"BSc","institution":"Seoul National University, School of Electrical and Electronic Engineering","passing_year":2001}],"career":[{"serial":103,"professor_id":"P37MVSD","position":"Researcher","organization_name":"NAGAD Limited","joining_year":2006,"leaving_year":2006}],"citations":[{"serial":96,"professor_id":"P37MVSD","title":"SabbirHossainBorno","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"NAGAD Limited"}],"awards":[{"serial":28,"professor_id":"P37MVSD","title":"Packet error rate analysis of ZigBee under WLAN and Bluetooth interferences","year":2022,"details":"dsadasdas","award_photo":"/Storage/Images/Professor/P37MVSD_Award_1.jpeg"}],"socialMedia":[{"professor_id":"P37MVSD","socialmedia_name":"Facebook","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"GitHub","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Instagram","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Linkedin","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Website","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"X","link":"https://www.google.com/"}]}
+2024-09-25 18:57:47+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P37MVSD"}
+2024-09-25 18:58:46+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-25T12:58:43.800Z"},"userIp":"103.220.204.28"}
+2024-09-25 18:58:47+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-25 18:58:48+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-25T12:58:43.800Z"},"userIp":"103.220.204.28"}
+2024-09-25 18:58:48+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-25 18:58:49+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P37MVSD {}
+2024-09-25 18:58:49+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P37MVSD"}
+2024-09-25 18:58:49+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P37MVSD {"basicInfo":{"id":"P37MVSD","first_name":"Test17","last_name":"Professor","phone":"23321321321","dob":"1996-02-06T18:00:00.000Z","email":"test17@gmail.com","password":"#qweASDzxc6655","short_bio":"dasdsa d sadsadadsadwqdasdwqd d wasdawdawd","joining_date":"2024-09-10T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P37MVSD_DP.jpeg","status":"Active","type":"Professor"},"education":[{"serial":107,"professor_id":"P37MVSD","degree":"BSc","institution":"Seoul National University, School of Electrical and Electronic Engineering","passing_year":2001}],"career":[{"serial":103,"professor_id":"P37MVSD","position":"Researcher","organization_name":"NAGAD Limited","joining_year":2006,"leaving_year":2006}],"citations":[{"serial":96,"professor_id":"P37MVSD","title":"SabbirHossainBorno","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"NAGAD Limited"}],"awards":[{"serial":28,"professor_id":"P37MVSD","title":"Packet error rate analysis of ZigBee under WLAN and Bluetooth interferences","year":2022,"details":"dsadasdas","award_photo":"/Storage/Images/Professor/P37MVSD_Award_1.jpeg"}],"socialMedia":[{"professor_id":"P37MVSD","socialmedia_name":"Facebook","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"GitHub","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Instagram","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Linkedin","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Website","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"X","link":"https://www.google.com/"}]}
+2024-09-25 18:58:49+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P37MVSD"}
+2024-09-25 18:58:50+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P37MVSD {}
+2024-09-25 18:58:50+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P37MVSD"}
+2024-09-25 18:58:50+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P37MVSD {"basicInfo":{"id":"P37MVSD","first_name":"Test17","last_name":"Professor","phone":"23321321321","dob":"1996-02-06T18:00:00.000Z","email":"test17@gmail.com","password":"#qweASDzxc6655","short_bio":"dasdsa d sadsadadsadwqdasdwqd d wasdawdawd","joining_date":"2024-09-10T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P37MVSD_DP.jpeg","status":"Active","type":"Professor"},"education":[{"serial":107,"professor_id":"P37MVSD","degree":"BSc","institution":"Seoul National University, School of Electrical and Electronic Engineering","passing_year":2001}],"career":[{"serial":103,"professor_id":"P37MVSD","position":"Researcher","organization_name":"NAGAD Limited","joining_year":2006,"leaving_year":2006}],"citations":[{"serial":96,"professor_id":"P37MVSD","title":"SabbirHossainBorno","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"NAGAD Limited"}],"awards":[{"serial":28,"professor_id":"P37MVSD","title":"Packet error rate analysis of ZigBee under WLAN and Bluetooth interferences","year":2022,"details":"dsadasdas","award_photo":"/Storage/Images/Professor/P37MVSD_Award_1.jpeg"}],"socialMedia":[{"professor_id":"P37MVSD","socialmedia_name":"Facebook","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"GitHub","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Instagram","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Linkedin","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Website","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"X","link":"https://www.google.com/"}]}
+2024-09-25 18:58:53+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P37MVSD"}
