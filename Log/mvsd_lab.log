@@ -6713,3 +6713,13 @@ IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastA
 2024-09-26 16:28:58+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor details fetched successfully"}
 2024-09-26 16:29:08+06:00 [Session ID: P37MVSD] Error updating professor details {"error":"The \"path\" argument must be of type string. Received undefined"}
 2024-09-26 16:29:08+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Error updating professor details"}
+2024-09-26 16:39:42+06:00 [Session ID: undefined] MVSD LAB DASHBOARD
+------------------------------------
+Session Expired!
+Please Login Again. {}
+2024-09-26 16:39:42+06:00 [Session ID: undefined] MVSD LAB DASHBOARD
+------------------------------------
+Session Expired!
+Please Login Again. {}
+2024-09-26 16:39:42+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\nPlease Login Again."}
+2024-09-26 16:39:42+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\nPlease Login Again."}
