@@ -73,7 +73,7 @@ export async function GET(req, { params }) {
     const professor = professorResult.rows[0];
 
     const socialMediaQuery = `
-      SELECT * FROM professor_socialMedia_info WHERE professor_id = $1;
+      SELECT * FROM professor_socialmedia_info WHERE professor_id = $1;
     `;
     const socialMediaResult = await client.query(socialMediaQuery, [id]);
 
@@ -188,13 +188,13 @@ export async function POST(req, { params }) {
       await logAndAlert('Updating social media...', 'SYSTEM');
       console.log('Updating social media...');
       const deleteSocialMediaQuery = `
-        DELETE FROM professor_socialMedia_info
+        DELETE FROM professor_socialmedia_info
         WHERE professor_id = $1
       `;
       await client.query(deleteSocialMediaQuery, [id]);
 
       const insertSocialMediaQuery = `
-        INSERT INTO professor_socialMedia_info (professor_id, socialmedia_name, link)
+        INSERT INTO professor_socialmedia_info (professor_id, socialmedia_name, link)
         VALUES ($1, $2, $3)
       `;
       for (const sm of socialMedia) {
@@ -208,7 +208,7 @@ export async function POST(req, { params }) {
       console.log('Updating education...');
       const deleteEducationQuery = `
         DELETE FROM professor_education_info
-        WHERE professor_id = $1
+                WHERE professor_id = $1
       `;
       await client.query(deleteEducationQuery, [id]);
 
@@ -236,7 +236,7 @@ export async function POST(req, { params }) {
         VALUES ($1, $2, $3, $4, $5)
       `;
       for (const job of career) {
-        await client.query(insertCareerQuery, [id, job.position, job.organization_name, job.joining_year, job.leaving_year]);
+        await client.query(insertCareerQuery, [id, job.position, job.organization, job.joining_year, job.leaving_year]);
       }
     }
 

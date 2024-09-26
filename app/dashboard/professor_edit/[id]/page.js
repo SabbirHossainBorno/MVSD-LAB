@@ -115,6 +115,8 @@ const EditProfessor = () => {
       data.append('citations', JSON.stringify(citations));
     } else if (section === 'awards') {
       data.append('awards', JSON.stringify(awards));
+    } else if (section === 'password') {
+      data.append('password', formData.password);
     }
 
     try {
@@ -218,7 +220,7 @@ const EditProfessor = () => {
           <button
             type="button"
             onClick={() => handleSubmit('basicInfo')}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mr-2"
           >
             Update Basic Info
           </button>
@@ -231,22 +233,22 @@ const EditProfessor = () => {
             <img src={photo} alt="Profile Photo" className="w-32 h-32 rounded-full mx-auto" />
           </div>
           <div className="mb-4">
-          <input
-            type="file"
-            id="photo"
-            name="photo"
-            accept=".jpg, .jpeg, .png"
-            onChange={handleChange}
-            className="w-full p-3 rounded bg-gray-700 text-gray-300"
-          />
+            <input
+              type="file"
+              id="photo"
+              name="photo"
+              accept=".jpg, .jpeg, .png"
+              onChange={handleChange}
+              className="w-full p-3 rounded bg-gray-700 text-gray-300"
+            />
+          </div>
           <button
             type="button"
             onClick={() => handleSubmit('photo')}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
           >
             Change Profile Photo
           </button>
-        </div>
         </div>
 
         {/* Social Media Section */}
@@ -292,14 +294,14 @@ const EditProfessor = () => {
           <button
             type="button"
             onClick={() => addNewField(setSocialMedia, { socialmedia_name: '', link: '' })}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mr-2"
           >
             Add Another Social Media
           </button>
           <button
             type="button"
             onClick={() => handleSubmit('socialMedia')}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
           >
             Update Social Media
           </button>
@@ -339,7 +341,7 @@ const EditProfessor = () => {
                 max={new Date().getFullYear()}
                 required
               />
-              {education.length > 1 && (
+                            {education.length > 1 && (
                 <button
                   type="button"
                   onClick={() => removeField(setEducation, index)}
@@ -353,14 +355,14 @@ const EditProfessor = () => {
           <button
             type="button"
             onClick={() => addNewField(setEducation, { degree: '', institution: '', passing_year: '' })}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mr-2"
           >
             Add Another Education
           </button>
           <button
             type="button"
             onClick={() => handleSubmit('education')}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
           >
             Update Education
           </button>
@@ -424,14 +426,14 @@ const EditProfessor = () => {
           <button
             type="button"
             onClick={() => addNewField(setCareer, { position: '', organization_name: '', joining_year: '', leaving_year: '' })}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mr-2"
           >
             Add Another Job
           </button>
           <button
             type="button"
             onClick={() => handleSubmit('career')}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
           >
             Update Career
           </button>
@@ -469,7 +471,7 @@ const EditProfessor = () => {
                 className="w-full p-3 rounded bg-gray-700"
                 required
               />
-                            {citations.length > 1 && (
+              {citations.length > 1 && (
                 <button
                   type="button"
                   onClick={() => removeField(setCitations, index)}
@@ -482,15 +484,15 @@ const EditProfessor = () => {
           ))}
           <button
             type="button"
-            onClick={() => addNewField(setCitations, { title: '', link: '', organization: '' })}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+            onClick={() => addNewField(setCitations, { title: '', link: '', organization_name: '' })}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mr-2"
           >
             Add Another Citation
           </button>
           <button
             type="button"
             onClick={() => handleSubmit('citations')}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
           >
             Update Citations
           </button>
@@ -507,14 +509,14 @@ const EditProfessor = () => {
           <button
             type="button"
             onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: '' })}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mr-2"
           >
             Add Another Award
           </button>
           <button
             type="button"
             onClick={() => handleSubmit('awards')}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
           >
             Update Awards
           </button>
