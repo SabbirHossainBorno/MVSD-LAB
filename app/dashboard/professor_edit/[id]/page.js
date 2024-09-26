@@ -284,23 +284,23 @@ const EditProfessor = () => {
         {/* Profile Photo Section */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Profile Photo</h3>
-          <div className="flex items-center mb-4">
-            {formData.photo && (
-              <img
-                src={`/Storage/Images/Professor/${formData.photo.split('/').pop()}`}
-                alt="Profile Photo"
-                className="w-24 h-24 rounded-full mr-4"
-              />
-            )}
-            <input
-              type="file"
-              id="photo"
-              name="photo"
-              accept=".jpg, .jpeg, .png"
-              onChange={handleChange}
-              className="w-full p-3 rounded bg-gray-700 text-gray-300"
-            />
-          </div>
+            <div className="flex items-center mb-4">
+                {formData.photo && (
+                <img
+                    src={`/Storage/Images/Professor/${formData.photo.split('/').pop()}`}
+                    alt="Profile Photo"
+                    className="w-24 h-24 rounded-full mr-4"
+                />
+                )}
+                <input
+                type="file"
+                id="photo"
+                name="photo"
+                accept=".jpg, .jpeg, .png"
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-gray-700 text-gray-300"
+                />
+            </div>
         </div>
 
         {/* Social Media Section */}

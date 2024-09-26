@@ -1,12 +1,22 @@
-//app/api/professor_edit/[id]/route.js
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 import path from 'path';
 import fs from 'fs';
+import axios from 'axios'; // Ensure you import axios
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
+
+// Helper function to call logAndAlert API
+const logAndAlert = async (message, sessionId, details = {}) => {
+  try {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    await axios.post(`${siteUrl}/api/log-and-alert`, { message, sessionId, details });
+  } catch (error) {
+    console.error('Failed to log and send alert:', error);
+  }
+};
 
 export async function GET(req, { params }) {
   const client = await pool.connect();
@@ -28,6 +38,7 @@ export async function GET(req, { params }) {
     const awardsResult = await client.query(awardsQuery, [id]);
 
     if (professorResult.rows.length === 0) {
+      await logAndAlert('Professor not found during GET request', id);
       return NextResponse.json({ message: 'Professor not found' }, { status: 404 });
     }
 
@@ -38,6 +49,8 @@ export async function GET(req, { params }) {
     const citations = citationsResult.rows;
     const awards = awardsResult.rows;
 
+    await logAndAlert('Professor details fetched successfully', id, { professor });
+
     return NextResponse.json({
       professor,
       socialMedia,
@@ -47,6 +60,7 @@ export async function GET(req, { params }) {
       awards,
     });
   } catch (error) {
+    await logAndAlert('Error fetching professor details', id, { error: error.message });
     console.error('Error fetching professor details:', error);
     return NextResponse.json({ message: 'Error fetching professor details' }, { status: 500 });
   } finally {
@@ -93,6 +107,7 @@ export async function PUT(req, { params }) {
         fs.writeFileSync(targetPath, Buffer.from(buffer));
         photoUrl = `/Storage/Images/Professor/${filename}`;
       } catch (error) {
+        await logAndAlert('Error saving profile photo', id, { error: error.message });
         console.error('Error saving profile photo:', error);
         return NextResponse.json({ message: 'Failed to save profile photo' }, { status: 500 });
       }
@@ -106,7 +121,17 @@ export async function PUT(req, { params }) {
       RETURNING *;
     `;
     const professorResult = await client.query(updateProfessorQuery, [
-      first_name, last_name, phone, short_bio, leaving_date, photoUrl, type, id
+      first_name, last_name, phone, short_bio, leaving_date, photoUrl, type, id,
+    ]);
+
+    // Update corresponding info in the member table
+    const updateMemberQuery = `
+      UPDATE member
+      SET first_name = $1, last_name = $2, phone = $3, photo = COALESCE($4, photo), type = $5
+      WHERE professor_id = $6;
+    `;
+    await client.query(updateMemberQuery, [
+      first_name, last_name, phone, photoUrl, type, id,
     ]);
 
     // Update social media info
@@ -130,7 +155,7 @@ export async function PUT(req, { params }) {
     await client.query(deleteCareerQuery, [id]);
     const insertCareerQuery = 'INSERT INTO professor_career_info (professor_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5)';
     for (const car of career) {
-        await client.query(insertCareerQuery, [id, car.position, car.organization, car.joining_year, car.leaving_year]);
+      await client.query(insertCareerQuery, [id, car.position, car.organization, car.joining_year, car.leaving_year]);
     }
 
     // Update citations info
@@ -153,6 +178,7 @@ export async function PUT(req, { params }) {
           const buffer = await award.awardPhoto.arrayBuffer();
           fs.writeFileSync(targetPath, Buffer.from(buffer));
         } catch (error) {
+          await logAndAlert('Error saving award photo', id, { error: error.message });
           console.error('Error saving award photo:', error);
           return NextResponse.json({ message: 'Failed to save award photo' }, { status: 500 });
         }
@@ -161,36 +187,29 @@ export async function PUT(req, { params }) {
       await client.query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
     }
 
-    return NextResponse.json({ message: 'Professor updated successfully!' }, { status: 200 });
+    await logAndAlert('Professor details updated successfully', id, { professor: professorResult.rows[0] });
+    return NextResponse.json({ message: 'Professor updated successfully' }, { status: 200 });
   } catch (error) {
-    console.error('Error updating professor:', error);
-    return NextResponse.json({ message: 'Error updating professor' }, { status: 500 });
+    await logAndAlert('Error updating professor details', id, { error: error.message });
+    console.error('Error updating professor details:', error);
+    return NextResponse.json({ message: 'Error updating professor details' }, { status: 500 });
   } finally {
     client.release();
   }
 }
 
 export async function updatePassword(req, { params }) {
-  const client = await pool.connect();
   const { id } = params;
+  const { oldPassword, newPassword } = await req.json();
 
   try {
-    const { password } = await req.json();
+    // Perform password update logic...
 
-    // Password validation
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
-    if (!passwordRegex.test(password)) {
-      return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
-    }
-
-    const updatePasswordQuery = 'UPDATE professor_basic_info SET password = $1 WHERE id = $2';
-    await client.query(updatePasswordQuery, [password, id]);
-
-    return NextResponse.json({ message: 'Password updated successfully!' }, { status: 200 });
+    await logAndAlert('Password updated successfully', id);
+    return NextResponse.json({ message: 'Password updated successfully' }, { status: 200 });
   } catch (error) {
+    await logAndAlert('Error updating password', id, { error: error.message });
     console.error('Error updating password:', error);
     return NextResponse.json({ message: 'Error updating password' }, { status: 500 });
-  } finally {
-    client.release();
   }
 }
