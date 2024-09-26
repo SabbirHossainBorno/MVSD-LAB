@@ -7183,3 +7183,13 @@ IP : 103.180.244.251 {"email":{"name":"email","value":"admin@mvsdlab.com"},"last
 2024-09-26 20:52:21+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor details fetched successfully"}
 2024-09-26 20:52:21+06:00 [Session ID: P37MVSD] Professor details fetched successfully {"professor":{"id":"P37MVSD","first_name":"Test17","last_name":"Professor","phone":"23321321321","dob":"1996-02-06T18:00:00.000Z","email":"test17@gmail.com","password":"#qweASDzxc6655","short_bio":"dasdsa d sadsadadsadwqdasdwqd d wasdawdawd","joining_date":"2024-09-10T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P37MVSD_DP.jpeg","status":"Active","type":"Professor"}}
 2024-09-26 20:52:22+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor details fetched successfully"}
+2024-09-26 21:03:03+06:00 [Session ID: undefined] MVSD LAB DASHBOARD
+------------------------------------
+Session Expired!
+Please Login Again. {}
+2024-09-26 21:03:03+06:00 [Session ID: undefined] MVSD LAB DASHBOARD
+------------------------------------
+Session Expired!
+Please Login Again. {}
+2024-09-26 21:03:04+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\nPlease Login Again."}
+2024-09-26 21:03:04+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\nPlease Login Again."}
