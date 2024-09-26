@@ -451,186 +451,230 @@ const EditProfessor = () => {
                 max={new Date().getFullYear()}
               />
               {career.length > 1 && (
-                                <button
-                                type="button"
-                                onClick={() => removeField(setCareer, index)}
-                                className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-                              >
-                                Remove
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                        <button
-                          type="button"
-                          onClick={() => addNewField(setCareer, { position: '', organization_name: '', joining_year: '', leaving_year: '' })}
-                          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-                        >
-                          Add Another Job
-                        </button>
-                      </div>
-              
-                      {/* Citations Section */}
-                      <div className="mb-8">
-                        <h3 className="text-xl font-bold mb-4">Citations</h3>
-                        {citations.map((citation, index) => (
-                          <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
-                            <input
-                              type="text"
-                              name="title"
-                              placeholder="Title"
-                              value={citation.title}
-                              onChange={(e) => handleArrayChange(setCitations, index, 'title', e.target.value)}
-                              className="w-full p-3 rounded bg-gray-700"
-                              required
-                            />
-                            <input
-                              type="text"
-                              name="link"
-                              placeholder="Link"
-                              value={citation.link}
-                              onChange={(e) => handleArrayChange(setCitations, index, 'link', e.target.value)}
-                              className="w-full p-3 rounded bg-gray-700"
-                              required
-                            />
-                            <input
-                              type="text"
-                              name="organization_name"
-                              placeholder="Organization"
-                              value={citation.organization_name}
-                              onChange={(e) => handleArrayChange(setCitations, index, 'organization_name', e.target.value)}
-                              className="w-full p-3 rounded bg-gray-700"
-                              required
-                            />
-                            {citations.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => removeField(setCitations, index)}
-                                className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-                              >
-                                Remove
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                        <button
-                          type="button"
-                          onClick={() => addNewField(setCitations, { title: '', link: '', organization_name: '' })}
-                          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-                        >
-                          Add Another Citation
-                        </button>
-                      </div>
-              
-                      {/* Awards Section */}
-                      <div className="mb-8">
-                        <h3 className="text-xl font-bold mb-4">Awards</h3>
-                        {awards.map((award, index) => (
-                          <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
-                            <input
-                              type="text"
-                              name="title"
-                              placeholder="Award Title"
-                              value={award.title}
-                              readOnly
-                              className="w-full p-3 rounded bg-gray-700"
-                            />
-                            <input
-                              type="number"
-                              name="year"
-                              placeholder="Year"
-                              value={award.year}
-                              readOnly
-                              className="w-full p-3 rounded bg-gray-700"
-                            />
-                            <input
-                              type="text"
-                              name="details"
-                              placeholder="Details"
-                              value={award.details}
-                              readOnly
-                              className="w-full p-3 rounded bg-gray-700"
-                            />
-                            {award.awardPhoto && (
-                              <img
-                                src={award.awardPhoto}
-                                alt="Award Photo"
-                                className="w-24 h-24 rounded-full mr-4"
-                              />
-                            )}
-                            <button
-                              type="button"
-                              onClick={() => removeField(setAwards, index)}
-                              className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        ))}
-                        <button
-                          type="button"
-                          onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: '' })}
-                          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-                        >
-                          Add Another Award
-                        </button>
-                      </div>
-              
-                      {/* Submit Button */}
-                      <div className="flex justify-center">
-                        <button
-                          type="submit"
-                          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-                        >
-                          Update Professor
-                        </button>
-                      </div>
-                    </form>
-              
-                    {/* Password Update Section */}
-                    <form onSubmit={handlePasswordChange} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto mt-8">
-                      <h3 className="text-xl font-bold mb-4">Update Password</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="mb-4">
-                          <label htmlFor="password" className="block text-gray-300 mb-2">
-                            New Password
-                          </label>
-                          <input
-                            type="password"
-                            name="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                            required
-                          />
-                        </div>
-                        <div className="mb-4">
-                          <label htmlFor="confirm_password" className="block text-gray-300 mb-2">
-                            Confirm Password
-                          </label>
-                          <input
-                            type="password"
-                            name="confirm_password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="flex justify-center">
-                        <button
-                          type="submit"
-                          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-                        >
-                          Update Password
-                        </button>
-                      </div>
-                    </form>
-                    <ToastContainer />
-                  </div>
-                );
-              };
-              
-              export default withAuth(EditProfessor);
-              
+                <button
+                  type="button"
+                  onClick={() => removeField(setCareer, index)}
+                  className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addNewField(setCareer, { position: '', organization_name: '', joining_year: '', leaving_year: '' })}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          >
+            Add Another Job
+          </button>
+        </div>
+
+        {/* Citations Section */}
+        <div className="mb-8">
+          <h3 className="text-xl font-bold mb-4">Citations</h3>
+          {citations.map((citation, index) => (
+            <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
+              <input
+                type="text"
+                name="title"
+                placeholder="Title"
+                value={citation.title}
+                onChange={(e) => handleArrayChange(setCitations, index, 'title', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700"
+                required
+              />
+              <input
+                type="text"
+                name="link"
+                placeholder="Link"
+                value={citation.link}
+                onChange={(e) => handleArrayChange(setCitations, index, 'link', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700"
+                required
+              />
+              <input
+                type="text"
+                name="organization_name"
+                placeholder="Organization"
+                value={citation.organization_name}
+                onChange={(e) => handleArrayChange(setCitations, index, 'organization_name', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700"
+                required
+              />
+              {citations.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeField(setCitations, index)}
+                  className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addNewField(setCitations, { title: '', link: '', organization_name: '' })}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          >
+            Add Another Citation
+          </button>
+        </div>
+
+        {/* Awards Section */}
+<div className="mb-8">
+  <h3 className="text-xl font-bold mb-4">Awards</h3>
+  {awards.map((award, index) => (
+    <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
+      {award.title && award.year && award.details ? (
+        <>
+          <input
+            type="text"
+            name="title"
+            placeholder="Award Title"
+            value={award.title}
+            readOnly
+            className="w-full p-3 rounded bg-gray-700"
+          />
+          <input
+            type="number"
+            name="year"
+            placeholder="Year"
+            value={award.year}
+            readOnly
+            className="w-full p-3 rounded bg-gray-700"
+          />
+          <input
+            type="text"
+            name="details"
+            placeholder="Details"
+            value={award.details}
+            readOnly
+            className="w-full p-3 rounded bg-gray-700"
+          />
+          {award.awardPhoto && (
+            <img
+              src={award.awardPhoto}
+              alt="Award Photo"
+              className="w-24 h-24 rounded-full mr-4"
+            />
+          )}
+        </>
+      ) : (
+        <>
+          <input
+            type="text"
+            name="title"
+            placeholder="Award Title"
+            value={award.title}
+            onChange={(e) => handleArrayChange(setAwards, index, 'title', e.target.value)}
+            className="w-full p-3 rounded bg-gray-700"
+            required
+          />
+          <input
+            type="number"
+            name="year"
+            placeholder="Year"
+            value={award.year}
+            onChange={(e) => handleArrayChange(setAwards, index, 'year', parseInt(e.target.value, 10))}
+            className="w-full p-3 rounded bg-gray-700"
+            min="1900"
+            max={new Date().getFullYear()}
+            required
+          />
+          <input
+            type="text"
+            name="details"
+            placeholder="Details"
+            value={award.details}
+            onChange={(e) => handleArrayChange(setAwards, index, 'details', e.target.value)}
+            className="w-full p-3 rounded bg-gray-700"
+            required
+          />
+          <input
+            type="file"
+            name="awardPhoto"
+            onChange={(e) => handleArrayChange(setAwards, index, 'awardPhoto', e.target.files[0])}
+            className="w-full p-3 rounded bg-gray-700"
+          />
+          {awards.length > 1 && (
+            <button
+              type="button"
+              onClick={() => removeField(setAwards, index)}
+              className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+            >
+              Remove
+            </button>
+          )}
+        </>
+      )}
+    </div>
+  ))}
+  <button
+    type="button"
+    onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: '' })}
+    className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+  >
+    Add Another Award
+  </button>
+</div>
+
+
+        {/* Submit Button */}
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          >
+            Update Professor
+          </button>
+        </div>
+      </form>
+
+      {/* Password Update Section */}
+      <form onSubmit={handlePasswordChange} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto mt-8">
+        <h3 className="text-xl font-bold mb-4">Update Password</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-gray-300 mb-2">
+              New Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 rounded bg-gray-700 text-gray-300"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="confirm_password" className="block text-gray-300 mb-2">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              name="confirm_password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full p-3 rounded bg-gray-700 text-gray-300"
+              required
+            />
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          >
+            Update Password
+          </button>
+        </div>
+      </form>
+      <ToastContainer />
+    </div>
+  );
+};
+
+export default withAuth(EditProfessor);
