@@ -24,7 +24,8 @@ const EditProfessor = () => {
   const [education, setEducation] = useState([{ degree: '', institution: '', passing_year: '' }]);
   const [career, setCareer] = useState([{ position: '', organization_name: '', joining_year: '', leaving_year: '' }]);
   const [citations, setCitations] = useState([{ title: '', link: '', organization_name: '' }]);
-  const [awards, setAwards] = useState([{ title: '', year: '', details: '', awardPhoto: '' }]);
+  const [awards, setAwards] = useState([]);
+  const [newAward, setNewAward] = useState({ title: '', year: '', details: '', awardPhoto: '' });
   const [loading, setLoading] = useState(true);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -523,108 +524,107 @@ const EditProfessor = () => {
         </div>
 
         {/* Awards Section */}
-<div className="mb-8">
-  <h3 className="text-xl font-bold mb-4">Awards</h3>
-  
-  {/* Display existing awards */}
-  {awards.length > 0 ? (
-    awards.map((award, index) => (
-      <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
-        {/* Displaying the award details */}
-        <input
-          type="text"
-          name="title"
-          placeholder="Award Title"
-          value={award.title}
-          readOnly
-          className="w-full p-3 rounded bg-gray-700"
-        />
-        <input
-          type="number"
-          name="year"
-          placeholder="Year"
-          value={award.year}
-          readOnly
-          className="w-full p-3 rounded bg-gray-700"
-        />
-        <input
-          type="text"
-          name="details"
-          placeholder="Details"
-          value={award.details}
-          readOnly
-          className="w-full p-3 rounded bg-gray-700"
-        />
-        {/* Displaying the award photo */}
-        {award.award_photo && (
-          <div className="flex items-center">
-            <img
-              src={`/Storage/Images/Professor/${award.award_photo.split('/').pop()}`} // Ensure the path is correct
-              alt="Award Photo"
-              className="w-24 h-24 rounded-full mr-4"
-            />
-          </div>
-        )}
-      </div>
-    ))
-  ) : (
-    <p>No awards found for this professor.</p> // Message if no awards are present
-  )}
+        <div className="mb-8">
+          <h3 className="text-xl font-bold mb-4">Awards</h3>
+          
+          {/* Display existing awards */}
+          {awards.length > 0 ? (
+            awards.map((award, index) => (
+              <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
+                {/* Displaying the award details */}
+                <input
+                  type="text"
+                  name="title"
+                  placeholder="Award Title"
+                  value={award.title}
+                  readOnly
+                  className="w-full p-3 rounded bg-gray-700"
+                />
+                <input
+                  type="number"
+                  name="year"
+                  placeholder="Year"
+                  value={award.year}
+                  readOnly
+                  className="w-full p-3 rounded bg-gray-700"
+                />
+                <input
+                  type="text"
+                  name="details"
+                  placeholder="Details"
+                  value={award.details}
+                  readOnly
+                  className="w-full p-3 rounded bg-gray-700"
+                />
+                {/* Displaying the award photo */}
+                {award.award_photo && (
+                  <div className="flex items-center">
+                    <img
+                      src={`/Storage/Images/Professor/${award.award_photo.split('/').pop()}`} // Ensure the path is correct
+                      alt="Award Photo"
+                      className="w-24 h-24 rounded-full mr-4"
+                    />
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <p>No awards found for this professor.</p> // Message if no awards are present
+          )}
 
-  {/* Button to add another award */}
-  <button
-    type="button"
-    onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: '' })}
-    className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
-  >
-    Add Another Award
-  </button>
+          {/* Button to add another award */}
+          <button
+            type="button"
+            onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: '' })}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+          >
+            Add Another Award
+          </button>
 
-  {/* Section for new awards input */}
-  {awards.length > 0 && awards.map((award, index) => (
-    <div key={`new-${index}`} className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-      <input
-        type="text"
-        name="title"
-        placeholder="New Award Title"
-        className="w-full p-3 rounded bg-gray-700"
-        onChange={(e) => handleArrayChange(setAwards, awards.length, 'title', e.target.value)}
-      />
-      <input
-        type="number"
-        name="year"
-        placeholder="New Award Year"
-        className="w-full p-3 rounded bg-gray-700"
-        onChange={(e) => handleArrayChange(setAwards, awards.length, 'year', parseInt(e.target.value, 10))}
-        min="1900"
-        max={new Date().getFullYear()}
-      />
-      <input
-        type="text"
-        name="details"
-        placeholder="New Award Details"
-        className="w-full p-3 rounded bg-gray-700"
-        onChange={(e) => handleArrayChange(setAwards, awards.length, 'details', e.target.value)}
-      />
-      <input
-        type="file"
-        name="newAwardPhoto"
-        className="w-full p-3 rounded bg-gray-700"
-        onChange={(e) => handleArrayChange(setAwards, awards.length, 'awardPhoto', e.target.files[0])}
-      />
-      {awards.length > 1 && (
-        <button
-          type="button"
-          onClick={() => removeField(setAwards, index)} // Adjust remove logic as needed
-          className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-        >
-          Remove
-        </button>
-      )}
-    </div>
-  ))}
-</div>
-
+          {/* Section for new awards input */}
+          {awards.length > 0 && awards.map((award, index) => (
+            <div key={`new-${index}`} className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              <input
+                type="text"
+                name="title"
+                placeholder="New Award Title"
+                className="w-full p-3 rounded bg-gray-700"
+                onChange={(e) => handleArrayChange(setAwards, awards.length, 'title', e.target.value)}
+              />
+              <input
+                type="number"
+                name="year"
+                placeholder="New Award Year"
+                className="w-full p-3 rounded bg-gray-700"
+                onChange={(e) => handleArrayChange(setAwards, awards.length, 'year', parseInt(e.target.value, 10))}
+                min="1900"
+                max={new Date().getFullYear()}
+              />
+              <input
+                type="text"
+                name="details"
+                placeholder="New Award Details"
+                className="w-full p-3 rounded bg-gray-700"
+                onChange={(e) => handleArrayChange(setAwards, awards.length, 'details', e.target.value)}
+              />
+              <input
+                type="file"
+                name="newAwardPhoto"
+                className="w-full p-3 rounded bg-gray-700"
+                onChange={(e) => handleArrayChange(setAwards, awards.length, 'awardPhoto', e.target.files[0])}
+              />
+              {awards.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeField(setAwards, index)} // Adjust remove logic as needed
+                  className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
 
         {/* Submit Button */}
         <div className="flex justify-center">
