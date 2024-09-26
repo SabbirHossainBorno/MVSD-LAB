@@ -626,9 +626,6 @@ const EditProfessor = () => {
 </div>
 
 
-
-
-
         {/* Submit Button */}
         <div className="flex justify-center">
           <button
