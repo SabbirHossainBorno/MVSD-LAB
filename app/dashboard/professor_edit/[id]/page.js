@@ -590,50 +590,6 @@ const EditProfessor = () => {
   >
     Add Another Award
   </button>
-
-  {/* Section for new awards input */}
-  {awards.slice(-1).map((award, index) => (
-    <div key={`new-${index}`} className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-      <input
-        type="text"
-        name="title"
-        placeholder="New Award Title"
-        className="w-full p-3 rounded bg-gray-700"
-        onChange={(e) => handleArrayChange(setAwards, awards.length - 1, 'title', e.target.value)}
-      />
-      <input
-        type="number"
-        name="year"
-        placeholder="New Award Year"
-        className="w-full p-3 rounded bg-gray-700"
-        onChange={(e) => handleArrayChange(setAwards, awards.length - 1, 'year', parseInt(e.target.value, 10))}
-        min="1900"
-        max={new Date().getFullYear()}
-      />
-      <input
-        type="text"
-        name="details"
-        placeholder="New Award Details"
-        className="w-full p-3 rounded bg-gray-700"
-        onChange={(e) => handleArrayChange(setAwards, awards.length - 1, 'details', e.target.value)}
-      />
-      <input
-        type="file"
-        name="awardPhoto"
-        className="w-full p-3 rounded bg-gray-700"
-        onChange={(e) => handleArrayChange(setAwards, awards.length - 1, 'awardPhoto', e.target.files[0])}
-      />
-      {awards.length > 1 && (
-        <button
-          type="button"
-          onClick={() => removeField(setAwards, awards.length - 1)}
-          className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-        >
-          Remove
-        </button>
-      )}
-    </div>
-  ))}
 </div>
 
 
