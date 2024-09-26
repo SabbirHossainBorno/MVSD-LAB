@@ -553,13 +553,15 @@ const EditProfessor = () => {
             readOnly
             className="w-full p-3 rounded bg-gray-700"
           />
-          {award.awardPhoto && (
-            <img
-              src={`/Storage/Images/Professor/${award.awardPhoto.split('/').pop()}`}
-              alt="Award Photo"
-              className="w-24 h-24 rounded-full mr-4"
-            />
-          )}
+          <div className="flex items-center">
+            {award.awardPhoto && (
+              <img
+                src={`/Storage/Images/Professor/${award.awardPhoto.split('/').pop()}`}
+                alt="Award Photo"
+                className="w-24 h-24 rounded-full mr-4"
+              />
+            )}
+          </div>
         </>
       ) : (
         <>
@@ -614,11 +616,12 @@ const EditProfessor = () => {
   <button
     type="button"
     onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: '' })}
-    className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4" // Added margin-top for spacing
+    className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
   >
     Add Another Award
   </button>
 </div>
+
 
 
 
