@@ -1,7 +1,7 @@
 //app/dashboard/professor_edit/[id]/page.js
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,71 +9,67 @@ import withAuth from '../../../components/withAuth';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 
 const EditProfessor = () => {
-  const { id } = useParams();
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
     phone: '',
     short_bio: '',
-    leaving_date: '',
-    photo: '',
-    type: 'Professor',
     status: 'Active',
+    leaving_date: '',
   });
-  const [socialMedia, setSocialMedia] = useState([{ socialmedia_name: '', link: '' }]);
-  const [education, setEducation] = useState([{ degree: '', institution: '', passing_year: '' }]);
-  const [career, setCareer] = useState([{ position: '', organization_name: '', joining_year: '', leaving_year: '' }]);
-  const [citations, setCitations] = useState([{ title: '', link: '', organization_name: '' }]);
+  const [photo, setPhoto] = useState(null);
+  const [socialMedia, setSocialMedia] = useState([]);
+  const [education, setEducation] = useState([]);
+  const [career, setCareer] = useState([]);
+  const [citations, setCitations] = useState([]);
   const [awards, setAwards] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
   const router = useRouter();
+  const { id } = useParams();
 
   useEffect(() => {
-    const fetchProfessor = async () => {
-      setLoading(true);
+    const fetchProfessorData = async () => {
       try {
-        const res = await fetch(`/api/professor_edit/${id}`);
-        const data = await res.json();
-        if (res.ok) {
-          setFormData(data.professor);
-          setSocialMedia(data.socialMedia);
-          setEducation(data.education);
-          setCareer(data.career);
-          setCitations(data.citations);
-          setAwards(data.awards);
-        } else {
-          toast.error(data.message);
-        }
+        const response = await fetch(`/api/professor_edit/${id}`);
+        const data = await response.json();
+        setFormData({
+          first_name: data.first_name,
+          last_name: data.last_name,
+          phone: data.phone,
+          short_bio: data.short_bio,
+          status: data.status,
+          leaving_date: data.leaving_date,
+        });
+        setPhoto(data.photo);
+        setSocialMedia(data.socialMedia);
+        setEducation(data.education);
+        setCareer(data.career);
+        setCitations(data.citations);
+        setAwards(data.awards);
       } catch (error) {
-        toast.error('Failed to fetch professor details');
+        toast.error('Failed to fetch professor data');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProfessor();
+    fetchProfessorData();
   }, [id]);
 
   const handleChange = useCallback((e) => {
     const { name, value, files } = e.target;
-
     if (name === 'photo' && files.length > 0) {
       const file = files[0];
-
       if (file.size > 5 * 1024 * 1024) {
         toast.error('File size exceeds 5 MB.');
         return;
       }
-
       if (!['image/jpeg', 'image/png'].includes(file.type)) {
         toast.error('Invalid file type. Only JPG, JPEG, and PNG are allowed.');
         return;
       }
-
-      setFormData((prevData) => ({ ...prevData, [name]: file }));
+      setPhoto(file);
     } else {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
@@ -100,50 +96,36 @@ const EditProfessor = () => {
     });
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (section) => {
     setLoading(true);
-
     const data = new FormData();
-
-    for (const key in formData) {
-      data.append(key, formData[key]);
-    }
-
-    const formattedEducation = education.map(edu => ({
-      ...edu,
-      passing_year: edu.passing_year ? parseInt(edu.passing_year, 10) : null
-    }));
-
-    const formattedCareer = career.map(job => ({
-      ...job,
-      joining_year: job.joining_year ? parseInt(job.joining_year, 10) : null,
-      leaving_year: job.leaving_year ? parseInt(job.leaving_year, 10) : null
-    }));
-
-    data.append('socialMedia', JSON.stringify(socialMedia));
-    data.append('education', JSON.stringify(formattedEducation));
-    data.append('career', JSON.stringify(formattedCareer));
-    data.append('citations', JSON.stringify(citations));
-
-    awards.forEach((award, index) => {
-      data.append(`awards[${index}][title]`, award.title || '');
-      data.append(`awards[${index}][year]`, award.year || '');
-      data.append(`awards[${index}][details]`, award.details || '');
-      if (award.awardPhoto) {
-        data.append(`awards[${index}][awardPhoto]`, award.awardPhoto);
+    if (section === 'basicInfo') {
+      for (const key in formData) {
+        data.append(key, formData[key]);
       }
-    });
+    } else if (section === 'photo') {
+      data.append('photo', photo);
+    } else if (section === 'socialMedia') {
+      data.append('socialMedia', JSON.stringify(socialMedia));
+    } else if (section === 'education') {
+      data.append('education', JSON.stringify(education));
+    } else if (section === 'career') {
+      data.append('career', JSON.stringify(career));
+    } else if (section === 'citations') {
+      data.append('citations', JSON.stringify(citations));
+    } else if (section === 'awards') {
+      data.append('awards', JSON.stringify(awards));
+    }
 
     try {
       const response = await fetch(`/api/professor_edit/${id}`, {
-        method: 'PUT',
+        method: 'POST',
         body: data,
       });
 
       if (response.ok) {
         toast.success('Professor updated successfully!');
-        router.push('/dashboard/professor_list');
+        router.push('/dashboard');
       } else {
         const result = await response.json();
         toast.error(result.message || 'An error occurred while updating the professor.');
@@ -155,55 +137,19 @@ const EditProfessor = () => {
     }
   };
 
-  const handlePasswordChange = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const response = await fetch(`/api/professor_edit/${id}/password`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ password }),
-      });
-
-      if (response.ok) {
-        toast.success('Password updated successfully!');
-        setPassword('');
-        setConfirmPassword('');
-      } else {
-        const result = await response.json();
-        toast.error(result.message || 'An error occurred while updating the password.');
-      }
-    } catch (error) {
-      toast.error('Failed to update password');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   if (loading) return <LoadingSpinner />;
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
-      <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto">
+      <form className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-6 text-center">Edit Professor</h2>
 
         {/* Basic Info Section */}
         <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4">Basic Info</h3>
+          <h3 className="text-xl font-bold mb-4">Professor Basic Info</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="mb-4">
-              <label htmlFor="first_name" className="block text-gray-300 mb-2">
-                First Name
-              </label>
+              <label htmlFor="first_name" className="block text-gray-300 mb-2">First Name</label>
               <input
                 type="text"
                 name="first_name"
@@ -214,9 +160,7 @@ const EditProfessor = () => {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="last_name" className="block text-gray-300 mb-2">
-                Last Name
-              </label>
+              <label htmlFor="last_name" className="block text-gray-300 mb-2">Last Name</label>
               <input
                 type="text"
                 name="last_name"
@@ -227,9 +171,7 @@ const EditProfessor = () => {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="phone" className="block text-gray-300 mb-2">
-                Phone No
-              </label>
+              <label htmlFor="phone" className="block text-gray-300 mb-2">Phone No</label>
               <input
                 type="number"
                 name="phone"
@@ -240,9 +182,7 @@ const EditProfessor = () => {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="short_bio" className="block text-gray-300 mb-2">
-                Short Bio
-              </label>
+              <label htmlFor="short_bio" className="block text-gray-300 mb-2">Short Bio</label>
               <textarea
                 name="short_bio"
                 value={formData.short_bio}
@@ -252,9 +192,7 @@ const EditProfessor = () => {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="status" className="block text-gray-300 mb-2">
-                Status
-              </label>
+              <label htmlFor="status" className="block text-gray-300 mb-2">Status</label>
               <select
                 name="status"
                 value={formData.status}
@@ -267,9 +205,7 @@ const EditProfessor = () => {
               </select>
             </div>
             <div className="mb-4">
-              <label htmlFor="leaving_date" className="block text-gray-300 mb-2">
-                Leaving Date
-              </label>
+              <label htmlFor="leaving_date" className="block text-gray-300 mb-2">Leaving Date</label>
               <input
                 type="date"
                 name="leaving_date"
@@ -279,28 +215,38 @@ const EditProfessor = () => {
               />
             </div>
           </div>
+          <button
+            type="button"
+            onClick={() => handleSubmit('basicInfo')}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          >
+            Update Basic Info
+          </button>
         </div>
 
         {/* Profile Photo Section */}
         <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4">Profile Photo</h3>
-            <div className="flex items-center mb-4">
-                {formData.photo && (
-                <img
-                    src={`/Storage/Images/Professor/${formData.photo.split('/').pop()}`}
-                    alt="Profile Photo"
-                    className="w-24 h-24 rounded-full mr-4"
-                />
-                )}
-                <input
-                type="file"
-                id="photo"
-                name="photo"
-                accept=".jpg, .jpeg, .png"
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                />
-            </div>
+          <h3 className="text-xl font-bold mb-4">Edit Profile Photo</h3>
+          <div className="mb-4">
+            <img src={photo} alt="Profile Photo" className="w-32 h-32 rounded-full mx-auto" />
+          </div>
+          <div className="mb-4">
+          <input
+            type="file"
+            id="photo"
+            name="photo"
+            accept=".jpg, .jpeg, .png"
+            onChange={handleChange}
+            className="w-full p-3 rounded bg-gray-700 text-gray-300"
+          />
+          <button
+            type="button"
+            onClick={() => handleSubmit('photo')}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+          >
+            Change Profile Photo
+          </button>
+        </div>
         </div>
 
         {/* Social Media Section */}
@@ -349,6 +295,13 @@ const EditProfessor = () => {
             className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
           >
             Add Another Social Media
+          </button>
+          <button
+            type="button"
+            onClick={() => handleSubmit('socialMedia')}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+          >
+            Update Social Media
           </button>
         </div>
 
@@ -403,6 +356,13 @@ const EditProfessor = () => {
             className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
           >
             Add Another Education
+          </button>
+          <button
+            type="button"
+            onClick={() => handleSubmit('education')}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+          >
+            Update Education
           </button>
         </div>
 
@@ -468,6 +428,13 @@ const EditProfessor = () => {
           >
             Add Another Job
           </button>
+          <button
+            type="button"
+            onClick={() => handleSubmit('career')}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+          >
+            Update Career
+          </button>
         </div>
 
         {/* Citations Section */}
@@ -502,7 +469,7 @@ const EditProfessor = () => {
                 className="w-full p-3 rounded bg-gray-700"
                 required
               />
-              {citations.length > 1 && (
+                            {citations.length > 1 && (
                 <button
                   type="button"
                   onClick={() => removeField(setCitations, index)}
@@ -515,137 +482,74 @@ const EditProfessor = () => {
           ))}
           <button
             type="button"
-            onClick={() => addNewField(setCitations, { title: '', link: '', organization_name: '' })}
+            onClick={() => addNewField(setCitations, { title: '', link: '', organization: '' })}
             className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
           >
             Add Another Citation
+          </button>
+          <button
+            type="button"
+            onClick={() => handleSubmit('citations')}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+          >
+            Update Citations
           </button>
         </div>
 
         {/* Awards Section */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Awards</h3>
-
-          {/* Display existing awards */}
-          {awards.length > 0 ? (
-            <div className="mb-4">
-              <h4 className="text-lg font-semibold mb-2">Existing Awards</h4>
-              <ul className="list-disc list-inside">
-                {awards.map((award, index) => (
-                  <li key={index} className="mb-2">
-                    {award.title}
-                  </li>
-                ))}
-              </ul>
+          {awards.map((award, index) => (
+            <div key={index} className="mb-4">
+              <p className="text-gray-300">{index + 1}. {award.title}</p>
             </div>
-          ) : (
-            <p>No awards found for this professor.</p> // Message if no awards are present
-          )}
-
-          {/* Button to add another award */}
+          ))}
           <button
             type="button"
-            onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: '', isNew: true })}
+            onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: '' })}
             className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
           >
             Add Another Award
           </button>
-
-          {/* New award input fields */}
-          {awards.map((award, index) => (
-            award.isNew && (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
-                <input
-                  type="text"
-                  name="title"
-                  placeholder="Award Title"
-                  value={award.title}
-                  onChange={(e) => handleArrayChange(setAwards, index, 'title', e.target.value)}
-                  className="w-full p-3 rounded bg-gray-700"
-                  required
-                />
-                <input
-                  type="number"
-                  name="year"
-                  placeholder="Year"
-                  value={award.year}
-                  onChange={(e) => handleArrayChange(setAwards, index, 'year', parseInt(e.target.value, 10))}
-                  className="w-full p-3 rounded bg-gray-700"
-                  min="1900"
-                  max={new Date().getFullYear()}
-                  required
-                />
-                <input
-                  type="text"
-                  name="details"
-                  placeholder="Details"
-                  value={award.details}
-                  onChange={(e) => handleArrayChange(setAwards, index, 'details', e.target.value)}
-                  className="w-full p-3 rounded bg-gray-700"
-                  required
-                />
-                <input
-                  type="file"
-                  name="awardPhoto"
-                  onChange={(e) => handleArrayChange(setAwards, index, 'awardPhoto', e.target.files[0])}
-                  className="w-full p-3 rounded bg-gray-700"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeField(setAwards, index)}
-                  className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-                >
-                  Remove
-                </button>
-              </div>
-            )
-          ))}
-        </div>
-        {/* Submit Button */}
-        <div className="flex justify-center">
           <button
-            type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+            type="button"
+            onClick={() => handleSubmit('awards')}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
           >
-            Update Professor
+            Update Awards
           </button>
         </div>
-      </form>
 
-      {/* Password Update Section */}
-      <form onSubmit={handlePasswordChange} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto mt-8">
-        <h3 className="text-xl font-bold mb-4">Update Password</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-300 mb-2">
-              New Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 rounded bg-gray-700 text-gray-300"
-              required
-            />
+        {/* Password Section */}
+        <div className="mb-8">
+          <h3 className="text-xl font-bold mb-4">Password</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="mb-4">
+              <label htmlFor="password" className="block text-gray-300 mb-2">New Password</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-gray-700 text-gray-300"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="confirm_password" className="block text-gray-300 mb-2">Confirm Password</label>
+              <input
+                type="password"
+                name="confirm_password"
+                value={formData.confirm_password}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-gray-700 text-gray-300"
+                required
+              />
+            </div>
           </div>
-          <div className="mb-4">
-            <label htmlFor="confirm_password" className="block text-gray-300 mb-2">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              name="confirm_password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full p-3 rounded bg-gray-700 text-gray-300"
-              required
-            />
-          </div>
-        </div>
-        <div className="flex justify-center">
           <button
-            type="submit"
+            type="button"
+            onClick={() => handleSubmit('password')}
             className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
           >
             Update Password

@@ -19,208 +19,304 @@ const logAndAlert = async (message, sessionId, details = {}) => {
   }
 };
 
+// Helper function to save profile photo
+const saveProfilePhoto = async (file, professorId) => {
+  const filename = `${professorId}_DP${path.extname(file.name)}`;
+  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
+
+  try {
+    await logAndAlert(`Saving profile photo with filename: ${filename} at path: ${targetPath}`, 'SYSTEM');
+    const buffer = await file.arrayBuffer();
+    fs.writeFileSync(targetPath, Buffer.from(buffer));
+    await logAndAlert(`Profile photo saved successfully at path: ${targetPath}`, 'SYSTEM');
+    return `/Storage/Images/Professor/${filename}`;
+  } catch (error) {
+    await logAndAlert(`Error occurred while saving profile photo: ${error.message}`, 'SYSTEM');
+    throw new Error(`Failed to save profile photo: ${error.message}`);
+  }
+};
+
+// Helper function to save award photo
+const saveAwardPhoto = async (file, professorId, index) => {
+  const filename = `${professorId}_Award_${index}${path.extname(file.name)}`;
+  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
+
+  try {
+    await logAndAlert(`Saving award photo with filename: ${filename} at path: ${targetPath}`, 'SYSTEM');
+    const buffer = await file.arrayBuffer();
+    fs.writeFileSync(targetPath, Buffer.from(buffer));
+    await logAndAlert(`Award photo saved successfully at path: ${targetPath}`, 'SYSTEM');
+    return `/Storage/Images/Professor/${filename}`;
+  } catch (error) {
+    await logAndAlert(`Error occurred while saving award photo: ${error.message}`, 'SYSTEM');
+    throw new Error(`Failed to save award photo: ${error.message}`);
+  }
+};
+
+// Main function to handle the GET request
 export async function GET(req, { params }) {
   const client = await pool.connect();
   const { id } = params;
 
   try {
-    const professorQuery = 'SELECT * FROM professor_basic_info WHERE id = $1';
-    const socialMediaQuery = 'SELECT * FROM professor_socialMedia_info WHERE professor_id = $1';
-    const educationQuery = 'SELECT * FROM professor_education_info WHERE professor_id = $1';
-    const careerQuery = 'SELECT * FROM professor_career_info WHERE professor_id = $1';
-    const citationsQuery = 'SELECT * FROM professor_citations_info WHERE professor_id = $1';
-    const awardsQuery = 'SELECT * FROM professor_award_info WHERE professor_id = $1';
-
+    await logAndAlert(`Fetching professor data for ID: ${id}`, 'SYSTEM');
+    const professorQuery = `
+      SELECT * FROM professor_basic_info WHERE id = $1;
+    `;
     const professorResult = await client.query(professorQuery, [id]);
-    const socialMediaResult = await client.query(socialMediaQuery, [id]);
-    const educationResult = await client.query(educationQuery, [id]);
-    const careerResult = await client.query(careerQuery, [id]);
-    const citationsResult = await client.query(citationsQuery, [id]);
-    const awardsResult = await client.query(awardsQuery, [id]);
 
     if (professorResult.rows.length === 0) {
-      await logAndAlert('Professor not found during GET request', id);
+      await logAndAlert(`No professor found with ID: ${id}`, 'SYSTEM');
       return NextResponse.json({ message: 'Professor not found' }, { status: 404 });
     }
 
     const professor = professorResult.rows[0];
-    const socialMedia = socialMediaResult.rows;
-    const education = educationResult.rows;
-    const career = careerResult.rows;
-    const citations = citationsResult.rows;
-    const awards = awardsResult.rows;
 
-    await logAndAlert('Professor details fetched successfully', id, { professor });
+    const socialMediaQuery = `
+      SELECT * FROM professor_socialMedia_info WHERE professor_id = $1;
+    `;
+    const socialMediaResult = await client.query(socialMediaQuery, [id]);
 
-    return NextResponse.json({
-      professor,
-      socialMedia,
-      education,
-      career,
-      citations,
-      awards,
-    });
+    const educationQuery = `
+      SELECT * FROM professor_education_info WHERE professor_id = $1;
+    `;
+    const educationResult = await client.query(educationQuery, [id]);
+
+    const careerQuery = `
+      SELECT * FROM professor_career_info WHERE professor_id = $1;
+    `;
+    const careerResult = await client.query(careerQuery, [id]);
+
+    const citationsQuery = `
+      SELECT * FROM professor_citations_info WHERE professor_id = $1;
+    `;
+    const citationsResult = await client.query(citationsQuery, [id]);
+
+    const awardsQuery = `
+      SELECT * FROM professor_award_info WHERE professor_id = $1;
+    `;
+    const awardsResult = await client.query(awardsQuery, [id]);
+
+    const responseData = {
+      ...professor,
+      socialMedia: socialMediaResult.rows,
+      education: educationResult.rows,
+      career: careerResult.rows,
+      citations: citationsResult.rows,
+      awards: awardsResult.rows,
+    };
+
+    await logAndAlert(`Professor data fetched successfully for ID: ${id}`, 'SYSTEM');
+    return NextResponse.json(responseData, { status: 200 });
+
   } catch (error) {
-    await logAndAlert('Error fetching professor details', id, { error: error.message });
-    console.error('Error fetching professor details:', error);
-    return NextResponse.json({ message: 'Error fetching professor details' }, { status: 500 });
+    await logAndAlert(`Error fetching professor data: ${error.message}`, 'SYSTEM');
+    console.error(`Error fetching professor data: ${error.message}`);
+    return NextResponse.json({ message: `Failed to fetch professor data: ${error.message}` }, { status: 500 });
   } finally {
     client.release();
   }
 }
 
-export async function PUT(req, { params }) {
+// Main function to handle the POST request
+export async function POST(req, { params }) {
   const client = await pool.connect();
   const { id } = params;
 
   try {
-    // Start a transaction
-    await client.query('BEGIN');
-    console.log('Transaction started for updating professor with ID:', id);
-
+    await logAndAlert('Receiving form data...', 'SYSTEM');
     const formData = await req.formData();
-    console.log('Form data received:', formData);
 
+    // Extract form data
     const first_name = formData.get('first_name');
     const last_name = formData.get('last_name');
     const phone = formData.get('phone');
     const short_bio = formData.get('short_bio');
-    const leaving_date = formData.get('leaving_date') || null;
-    const type = formData.get('type') || 'Professor';
+    const status = formData.get('status');
+    const leaving_date = formData.get('leaving_date');
+    const photo = formData.get('photo');
     const socialMedia = JSON.parse(formData.get('socialMedia') || '[]');
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
     const citations = JSON.parse(formData.get('citations') || '[]');
+    const awards = JSON.parse(formData.get('awards') || '[]');
+    const password = formData.get('password');
 
-    console.log('Parsed data:', {
-      first_name, last_name, phone, short_bio, leaving_date, type,
-      socialMedia, education, career, citations,
-    });
+    await client.query('BEGIN');
 
-    const awards = [];
-    for (let i = 0; formData.has(`awards[${i}][title]`); i++) {
-      awards.push({
-        title: formData.get(`awards[${i}][title]`),
-        year: formData.get(`awards[${i}][year]`),
-        details: formData.get(`awards[${i}][details]`),
-        awardPhoto: formData.get(`awards[${i}][awardPhoto]`),
-      });
+    // Update basic info
+    if (first_name || last_name || phone || short_bio || status || leaving_date) {
+      await logAndAlert('Updating basic info...', 'SYSTEM');
+      console.log('Updating basic info...');
+      const updateBasicInfoQuery = `
+        UPDATE professor_basic_info
+        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6
+        WHERE id = $7
+      `;
+      await client.query(updateBasicInfoQuery, [first_name, last_name, phone, short_bio, status, leaving_date, id]);
+
+      const updateMemberQuery = `
+        UPDATE member
+        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6
+        WHERE id = $7
+      `;
+      await client.query(updateMemberQuery, [first_name, last_name, phone, short_bio, status, leaving_date, id]);
     }
-    console.log('Parsed awards data:', awards);
 
-    // Save profile photo if available
-    let photoUrl = null;
-    const photoFile = formData.get('photo');
-    if (photoFile) {
-      const filename = `${id}_DP${path.extname(photoFile.name)}`;
-      const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
+    // Update profile photo
+    if (photo) {
+      await logAndAlert('Updating profile photo...', 'SYSTEM');
+      console.log('Updating profile photo...');
+      const photoUrl = await saveProfilePhoto(photo, id);
+      const updatePhotoQuery = `
+        UPDATE professor_basic_info
+        SET photo = $1
+        WHERE id = $2
+      `;
+      await client.query(updatePhotoQuery, [photoUrl, id]);
 
-      try {
-        const buffer = await photoFile.arrayBuffer();
-        fs.writeFileSync(targetPath, Buffer.from(buffer));
-        photoUrl = `/Storage/Images/Professor/${filename}`;
-        console.log('Profile photo saved at:', targetPath);
-      } catch (error) {
-        await logAndAlert('Error saving profile photo', id, { error: error.message });
-        console.error('Error saving profile photo:', error);
+      const updateMemberPhotoQuery = `
+        UPDATE member
+        SET photo = $1
+        WHERE id = $2
+      `;
+      await client.query(updateMemberPhotoQuery, [photoUrl, id]);
+    }
+
+    // Update social media
+    if (socialMedia.length > 0) {
+      await logAndAlert('Updating social media...', 'SYSTEM');
+      console.log('Updating social media...');
+      const deleteSocialMediaQuery = `
+        DELETE FROM professor_socialMedia_info
+        WHERE professor_id = $1
+      `;
+      await client.query(deleteSocialMediaQuery, [id]);
+
+      const insertSocialMediaQuery = `
+        INSERT INTO professor_socialMedia_info (professor_id, socialmedia_name, link)
+        VALUES ($1, $2, $3)
+      `;
+      for (const sm of socialMedia) {
+        await client.query(insertSocialMediaQuery, [id, sm.socialmedia_name, sm.link]);
+      }
+    }
+
+    // Update education
+    if (education.length > 0) {
+      await logAndAlert('Updating education...', 'SYSTEM');
+      console.log('Updating education...');
+      const deleteEducationQuery = `
+        DELETE FROM professor_education_info
+        WHERE professor_id = $1
+      `;
+      await client.query(deleteEducationQuery, [id]);
+
+      const insertEducationQuery = `
+        INSERT INTO professor_education_info (professor_id, degree, institution, passing_year)
+        VALUES ($1, $2, $3, $4)
+      `;
+      for (const edu of education) {
+        await client.query(insertEducationQuery, [id, edu.degree, edu.institution, edu.passing_year]);
+      }
+    }
+
+    // Update career
+    if (career.length > 0) {
+      await logAndAlert('Updating career...', 'SYSTEM');
+      console.log('Updating career...');
+      const deleteCareerQuery = `
+        DELETE FROM professor_career_info
+        WHERE professor_id = $1
+      `;
+      await client.query(deleteCareerQuery, [id]);
+
+      const insertCareerQuery = `
+        INSERT INTO professor_career_info (professor_id, position, organization_name, joining_year, leaving_year)
+        VALUES ($1, $2, $3, $4, $5)
+      `;
+      for (const job of career) {
+        await client.query(insertCareerQuery, [id, job.position, job.organization_name, job.joining_year, job.leaving_year]);
+      }
+    }
+
+    // Update citations
+    if (citations.length > 0) {
+      await logAndAlert('Updating citations...', 'SYSTEM');
+      console.log('Updating citations...');
+      const deleteCitationsQuery = `
+        DELETE FROM professor_citations_info
+        WHERE professor_id = $1
+      `;
+      await client.query(deleteCitationsQuery, [id]);
+
+      const insertCitationsQuery = `
+        INSERT INTO professor_citations_info (professor_id, title, link, organization_name)
+        VALUES ($1, $2, $3, $4)
+      `;
+      for (const citation of citations) {
+        await client.query(insertCitationsQuery, [id, citation.title, citation.link, citation.organization_name]);
+      }
+    }
+
+    // Update awards
+    if (awards.length > 0) {
+      await logAndAlert('Updating awards...', 'SYSTEM');
+      console.log('Updating awards...');
+      const deleteAwardsQuery = `
+        DELETE FROM professor_award_info
+        WHERE professor_id = $1
+      `;
+      await client.query(deleteAwardsQuery, [id]);
+
+      const insertAwardsQuery = `
+        INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
+        VALUES ($1, $2, $3, $4, $5)
+      `;
+      for (let i = 0; i < awards.length; i++) {
+        const award = awards[i];
+        const awardUrl = await saveAwardPhoto(award.awardPhoto, id, i + 1);
+        await client.query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
+      }
+    }
+
+    // Update password
+    if (password) {
+      await logAndAlert('Updating password...', 'SYSTEM');
+      console.log('Updating password...');
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
+      if (!passwordRegex.test(password)) {
+        await logAndAlert('Password validation failed', 'SYSTEM');
+        console.log('Password validation failed');
         await client.query('ROLLBACK');
-        return NextResponse.json({ message: 'Failed to save profile photo' }, { status: 500 });
+        return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
       }
+      const updatePasswordQuery = `
+        UPDATE professor_basic_info
+        SET password = $1
+        WHERE id = $2
+      `;
+      await client.query(updatePasswordQuery, [password, id]);
+
+      const updateMemberPasswordQuery = `
+        UPDATE member
+        SET password = $1
+        WHERE id = $2
+      `;
+      await client.query(updateMemberPasswordQuery, [password, id]);
     }
 
-    // Update professor info
-    const updateProfessorQuery = `
-      UPDATE professor_basic_info
-      SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, leaving_date = $5, photo = COALESCE($6, photo), type = $7
-      WHERE id = $8
-      RETURNING *;
-    `;
-    const professorResult = await client.query(updateProfessorQuery, [
-      first_name, last_name, phone, short_bio, leaving_date, photoUrl, type, id,
-    ]);
-    console.log('Professor basic info updated:', professorResult.rows[0]);
-
-    // Update corresponding info in the member table
-    const updateMemberQuery = `
-      UPDATE member
-      SET first_name = $1, last_name = $2, phone = $3, photo = COALESCE($4, photo), type = $5
-      WHERE professor_id = $6;
-    `;
-    await client.query(updateMemberQuery, [
-      first_name, last_name, phone, photoUrl, type, id,
-    ]);
-    console.log('Member info updated for professor ID:', id);
-
-    // Update social media info
-    await client.query('DELETE FROM professor_socialMedia_info WHERE professor_id = $1', [id]);
-    const insertSocialMediaQuery = 'INSERT INTO professor_socialMedia_info (professor_id, socialMedia_name, link) VALUES ($1, $2, $3)';
-    for (const sm of socialMedia) {
-      await client.query(insertSocialMediaQuery, [id, sm.socialMedia_name, sm.link]);
-    }
-    console.log('Social media info updated for professor ID:', id);
-
-    // Update education info
-    await client.query('DELETE FROM professor_education_info WHERE professor_id = $1', [id]);
-    const insertEducationQuery = 'INSERT INTO professor_education_info (professor_id, degree, institution, passing_year) VALUES ($1, $2, $3, $4)';
-    for (const edu of education) {
-      await client.query(insertEducationQuery, [id, edu.degree, edu.institution, edu.passing_year]);
-    }
-    console.log('Education info updated for professor ID:', id);
-
-    // Update career info
-    await client.query('DELETE FROM professor_career_info WHERE professor_id = $1', [id]);
-    const insertCareerQuery = 'INSERT INTO professor_career_info (professor_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5)';
-    for (const car of career) {
-      await client.query(insertCareerQuery, [id, car.position, car.organization, car.joining_year, car.leaving_year]);
-    }
-    console.log('Career info updated for professor ID:', id);
-
-    // Update citations info
-    await client.query('DELETE FROM professor_citations_info WHERE professor_id = $1', [id]);
-    const insertCitationsQuery = 'INSERT INTO professor_citations_info (professor_id, title, link, organization_name) VALUES ($1, $2, $3, $4)';
-    for (const citation of citations) {
-      await client.query(insertCitationsQuery, [id, citation.title, citation.link, citation.organization]);
-    }
-    console.log('Citations info updated for professor ID:', id);
-
-    // Insert new awards info
-    const insertAwardsQuery = 'INSERT INTO professor_award_info (professor_id, title, year, details, award_photo) VALUES ($1, $2, $3, $4, $5)';
-    for (let i = 0; i < awards.length; i++) {
-      const award = awards[i];
-      const awardUrl = award.awardPhoto ? `/Storage/Images/Professor/${id}_Award_${i + 1}${path.extname(award.awardPhoto.name)}` : null;
-
-      if (award.awardPhoto) {
-        const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', `${id}_Award_${i + 1}${path.extname(award.awardPhoto.name)}`);
-        try {
-          const buffer = await award.awardPhoto.arrayBuffer();
-          fs.writeFileSync(targetPath, Buffer.from(buffer));
-          console.log('Award photo saved at:', targetPath);
-        } catch (error) {
-          await logAndAlert('Error saving award photo', id, { error: error.message });
-          console.error('Error saving award photo:', error);
-          await client.query('ROLLBACK');
-          return NextResponse.json({ message: 'Failed to save award photo' }, { status: 500 });
-        }
-      }
-
-      await client.query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
-    }
-    console.log('Awards info updated for professor ID:', id);
-
-    // Commit transaction after all queries are successful
     await client.query('COMMIT');
-    console.log('Transaction committed for professor ID:', id);
+    await logAndAlert(`Professor information updated successfully for ID: ${id}`, 'SYSTEM');
+    console.log(`Professor information updated successfully for ID: ${id}`);
+    return NextResponse.json({ message: 'Professor information updated successfully!' }, { status: 200 });
 
-    await logAndAlert('Professor details updated successfully', id, { professor: professorResult.rows[0] });
-    return NextResponse.json({ message: 'Professor updated successfully' }, { status: 200 });
   } catch (error) {
-    // Rollback transaction in case of an error
+    await logAndAlert(`Error during execution: ${error.message}`, 'SYSTEM');
+    console.error(`Error during execution: ${error.message}`);
     await client.query('ROLLBACK');
-    await logAndAlert('Error updating professor details', id, { error: error.message });
-    console.error('Error updating professor details:', error);
-    return NextResponse.json({ message: 'Error updating professor details' }, { status: 500 });
+    return NextResponse.json({ message: `Execution failed: ${error.message}` }, { status: 500 });
   } finally {
     client.release();
-    console.log('Database connection released for professor ID:', id);
   }
 }
