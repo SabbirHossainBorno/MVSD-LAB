@@ -555,7 +555,7 @@ const EditProfessor = () => {
           />
           {award.awardPhoto && (
             <img
-              src={award.awardPhoto}
+              src={`/Storage/Images/Professor/${award.awardPhoto.split('/').pop()}`}
               alt="Award Photo"
               className="w-24 h-24 rounded-full mr-4"
             />
@@ -614,11 +614,12 @@ const EditProfessor = () => {
   <button
     type="button"
     onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: '' })}
-    className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+    className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4" // Added margin-top for spacing
   >
     Add Another Award
   </button>
 </div>
+
 
 
         {/* Submit Button */}
