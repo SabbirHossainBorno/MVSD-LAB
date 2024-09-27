@@ -503,77 +503,100 @@ const EditProfessor = () => {
   <h3 className="text-xl font-bold mb-4">Awards</h3>
   {awards.map((award, index) => (
     <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
-      {/* Award Title */}
-      <input
-        type="text"
-        name="title"
-        placeholder="Award Title"
-        value={award.title}
-        onChange={(e) => handleArrayChange(setAwards, index, 'title', e.target.value)}
-        className="w-full p-3 rounded bg-gray-700"
-        required
-      />
-      {/* Award Year */}
-      <input
-        type="number"
-        name="year"
-        placeholder="Year"
-        value={award.year}
-        onChange={(e) => handleArrayChange(setAwards, index, 'year', parseInt(e.target.value, 10))}
-        className="w-full p-3 rounded bg-gray-700"
-        min="1900"
-        max={new Date().getFullYear()}
-        required
-      />
-      {/* Award Details */}
-      <input
-        type="text"
-        name="details"
-        placeholder="Details"
-        value={award.details}
-        onChange={(e) => handleArrayChange(setAwards, index, 'details', e.target.value)}
-        className="w-full p-3 rounded bg-gray-700"
-        required
-      />
-      {/* Existing Award Photo */}
-      {award.awardPhoto && (
-        <div className="w-full md:col-span-3">
-          <p className="text-gray-400 mb-2">Current Award Photo:</p>
-          <img
-            src={award.awardPhoto} // Assuming the `award.awardPhoto` contains the full path
-            alt="Award Photo"
-            className="w-32 h-32 object-cover mb-4"
+      {/* Existing Awards */}
+      {award.existing ? (
+        <>
+          <input
+            type="text"
+            name="title"
+            placeholder="Award Title"
+            value={award.title}
+            className="w-full p-3 rounded bg-gray-700"
+            readOnly
           />
-        </div>
-      )}
-      {/* Award Photo Upload */}
-      <input
-        type="file"
-        name="awardPhoto"
-        onChange={(e) => handleArrayChange(setAwards, index, 'awardPhoto', e.target.files[0])}
-        className="w-full p-3 rounded bg-gray-700"
-      />
-      {/* Remove Button */}
-      {awards.length > 1 && (
-        <button
-          type="button"
-          onClick={() => removeField(setAwards, index)}
-          className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-        >
-          Remove
-        </button>
+          <input
+            type="number"
+            name="year"
+            placeholder="Year"
+            value={award.year}
+            className="w-full p-3 rounded bg-gray-700"
+            readOnly
+          />
+          <input
+            type="text"
+            name="details"
+            placeholder="Details"
+            value={award.details}
+            className="w-full p-3 rounded bg-gray-700"
+            readOnly
+          />
+          {award.awardPhoto && (
+            <div className="w-full md:col-span-3">
+              <p className="text-gray-400 mb-2">Current Award Photo:</p>
+              <img
+                src={award.awardPhoto}
+                alt="Award Photo"
+                className="w-32 h-32 object-cover mb-4"
+              />
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          <input
+            type="text"
+            name="title"
+            placeholder="Award Title"
+            value={award.title}
+            onChange={(e) => handleArrayChange(setAwards, index, 'title', e.target.value)}
+            className="w-full p-3 rounded bg-gray-700"
+            required
+          />
+          <input
+            type="number"
+            name="year"
+            placeholder="Year"
+            value={award.year}
+            onChange={(e) => handleArrayChange(setAwards, index, 'year', parseInt(e.target.value, 10))}
+            className="w-full p-3 rounded bg-gray-700"
+            min="1900"
+            max={new Date().getFullYear()}
+            required
+          />
+          <input
+            type="text"
+            name="details"
+            placeholder="Details"
+            value={award.details}
+            onChange={(e) => handleArrayChange(setAwards, index, 'details', e.target.value)}
+            className="w-full p-3 rounded bg-gray-700"
+            required
+          />
+          <input
+            type="file"
+            name="awardPhoto"
+            onChange={(e) => handleArrayChange(setAwards, index, 'awardPhoto', e.target.files[0])}
+            className="w-full p-3 rounded bg-gray-700"
+          />
+          <button
+            type="button"
+            onClick={() => removeField(setAwards, index)}
+            className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+          >
+            Remove
+          </button>
+        </>
       )}
     </div>
   ))}
-  {/* Add Another Award Button */}
   <button
-    type="button"
-    onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: '' })}
-    className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mr-2"
-  >
-    Add Another Award
-  </button>
-  {/* Update Awards Button */}
+  type="button"
+  onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: null, existing: false })}
+  className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mr-2"
+>
+  Add Another Award
+</button>
+
   <button
     type="button"
     onClick={() => handleSubmit('awards')}
@@ -582,6 +605,7 @@ const EditProfessor = () => {
     Update Awards
   </button>
 </div>
+
 
 
 

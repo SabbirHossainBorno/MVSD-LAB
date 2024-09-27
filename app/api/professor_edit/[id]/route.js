@@ -36,8 +36,11 @@ const saveProfilePhoto = async (file, professorId) => {
   }
 };
 
-// Helper function to save award photo
 const saveAwardPhoto = async (file, professorId, index) => {
+  if (!file) {
+    throw new Error('No file provided for award photo');
+  }
+
   const filename = `${professorId}_Award_${index}${path.extname(file.name)}`;
   const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
 
@@ -53,6 +56,8 @@ const saveAwardPhoto = async (file, professorId, index) => {
   }
 };
 
+
+// Main function to handle the GET request
 // Main function to handle the GET request
 export async function GET(req, { params }) {
   const client = await pool.connect();
@@ -103,7 +108,7 @@ export async function GET(req, { params }) {
       education: educationResult.rows,
       career: careerResult.rows,
       citations: citationsResult.rows,
-      awards: awardsResult.rows,
+      awards: awardsResult.rows.map(award => ({ ...award, existing: true })),
     };
 
     await logAndAlert(`Professor data fetched successfully for ID: ${id}`, 'SYSTEM');
@@ -117,6 +122,7 @@ export async function GET(req, { params }) {
     client.release();
   }
 }
+
 
 // Main function to handle the POST request
 export async function POST(req, { params }) {
@@ -259,26 +265,29 @@ export async function POST(req, { params }) {
       }
     }
 
-    // Update awards
-    if (awards.length > 0) {
-      await logAndAlert('Updating awards...', 'SYSTEM');
-      console.log('Updating awards...');
-      const deleteAwardsQuery = `
-        DELETE FROM professor_award_info
-        WHERE professor_id = $1
-      `;
-      await client.query(deleteAwardsQuery, [id]);
+// Update awards
+if (awards.length > 0) {
+  await logAndAlert('Updating awards...', 'SYSTEM');
+  console.log('Updating awards...');
 
-      const insertAwardsQuery = `
-        INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
-        VALUES ($1, $2, $3, $4, $5)
-      `;
-      for (let i = 0; i < awards.length; i++) {
-        const award = awards[i];
-        const awardUrl = await saveAwardPhoto(award.awardPhoto, id, i + 1);
-        await client.query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
-      }
+  // Filter new awards
+  const newAwards = awards.filter(award => !award.existing);
+
+  const insertAwardsQuery = `
+    INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
+    VALUES ($1, $2, $3, $4, $5)
+  `;
+  for (let i = 0; i < newAwards.length; i++) {
+    const award = newAwards[i];
+    let awardUrl = null;
+    if (award.awardPhoto) {
+      awardUrl = await saveAwardPhoto(award.awardPhoto, id, i + 1);
     }
+    await client.query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
+  }
+}
+
+
 
     // Update password
     if (password) {
