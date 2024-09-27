@@ -7991,3 +7991,339 @@ Session Expired!
 Please Login Again. {}
 2024-09-27 10:51:39+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\nPlease Login Again."}
 2024-09-27 10:51:39+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\nPlease Login Again."}
+2024-09-27 11:03:18+06:00 [Session ID: 9401ef8f-8d31-434b-8a48-83fcbdb0240d] MVSD LAB DASHBOARD
+------------------------------------
+Login Attempt!
+Email : admin@mvsdlab.com
+IP : 103.220.204.28
+Device INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0 {}
+2024-09-27 11:03:18+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nLogin Attempt!\nEmail : admin@mvsdlab.com\nIP : 103.220.204.28\nDevice INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 11:03:18+06:00 [Session ID: 9401ef8f-8d31-434b-8a48-83fcbdb0240d] MVSD LAB DASHBOARD
+------------------------------------
+Admin Login Successful.
+Email : admin@mvsdlab.com
+IP : 103.220.204.28
+Device INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0 {}
+2024-09-27 11:03:19+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAdmin Login Successful.\nEmail : admin@mvsdlab.com\nIP : 103.220.204.28\nDevice INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 11:03:20+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T04:40:39.262Z"},"userIp":"103.220.204.28"}
+2024-09-27 11:03:20+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 11:03:23+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T05:03:21.938Z"},"userIp":"103.220.204.28"}
+2024-09-27 11:03:23+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 11:03:23+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 11:03:23+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 11:03:24+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-27 11:03:24+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 11:03:24+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 11:03:24+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-27 11:03:24+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-27 11:03:24+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-27 11:03:27+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T05:03:27.570Z"},"userIp":"103.220.204.28"}
+2024-09-27 11:03:28+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 11:03:34+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T05:03:33.886Z"},"userIp":"103.220.204.28"}
+2024-09-27 11:03:34+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 11:03:35+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P01MVSD {}
+2024-09-27 11:03:35+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P01MVSD"}
+2024-09-27 11:03:35+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P01MVSD {"basicInfo":{"id":"P01MVSD","first_name":"Omar Faruk","last_name":"Joney","phone":"31928777819","dob":"2024-08-31T18:00:00.000Z","email":"omarfarukjoney@gmail.com","password":"qwe","short_bio":"dwadsa","joining_date":"2024-09-09T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P01MVSD_DP.jpeg","status":"Active","type":"Professor"},"education":[{"serial":1,"professor_id":"P01MVSD","degree":"BSc","institution":"Seoul National University, School of Electrical and Electronic Engineering","passing_year":2001},{"serial":2,"professor_id":"P01MVSD","degree":"msc","institution":"dsdsada","passing_year":2002}],"career":[{"serial":1,"professor_id":"P01MVSD","position":"Researcher","organization_name":null,"joining_year":2006,"leaving_year":2006},{"serial":2,"professor_id":"P01MVSD","position":"dsadsa","organization_name":null,"joining_year":2002,"leaving_year":2001}],"citations":[{"serial":1,"professor_id":"P01MVSD","title":"Packet error rate analysis of ZigBee under WLAN and Bluetooth interferences","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":null},{"serial":2,"professor_id":"P01MVSD","title":"dsadadsada","link":"dsdsdsad","organization_name":null}],"awards":[],"socialMedia":[]}
+2024-09-27 11:03:36+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P01MVSD"}
+2024-09-27 11:03:36+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P01MVSD {}
+2024-09-27 11:03:36+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P01MVSD"}
+2024-09-27 11:03:36+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P01MVSD {"basicInfo":{"id":"P01MVSD","first_name":"Omar Faruk","last_name":"Joney","phone":"31928777819","dob":"2024-08-31T18:00:00.000Z","email":"omarfarukjoney@gmail.com","password":"qwe","short_bio":"dwadsa","joining_date":"2024-09-09T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P01MVSD_DP.jpeg","status":"Active","type":"Professor"},"education":[{"serial":1,"professor_id":"P01MVSD","degree":"BSc","institution":"Seoul National University, School of Electrical and Electronic Engineering","passing_year":2001},{"serial":2,"professor_id":"P01MVSD","degree":"msc","institution":"dsdsada","passing_year":2002}],"career":[{"serial":1,"professor_id":"P01MVSD","position":"Researcher","organization_name":null,"joining_year":2006,"leaving_year":2006},{"serial":2,"professor_id":"P01MVSD","position":"dsadsa","organization_name":null,"joining_year":2002,"leaving_year":2001}],"citations":[{"serial":1,"professor_id":"P01MVSD","title":"Packet error rate analysis of ZigBee under WLAN and Bluetooth interferences","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":null},{"serial":2,"professor_id":"P01MVSD","title":"dsadadsada","link":"dsdsdsad","organization_name":null}],"awards":[],"socialMedia":[]}
+2024-09-27 11:03:37+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P01MVSD"}
+2024-09-27 11:03:48+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T05:03:48.034Z"},"userIp":"103.220.204.28"}
+2024-09-27 11:03:49+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 11:03:55+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T05:03:55.676Z"},"userIp":"103.220.204.28"}
+2024-09-27 11:03:56+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 11:03:56+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P37MVSD {}
+2024-09-27 11:03:56+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P37MVSD"}
+2024-09-27 11:03:56+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P37MVSD {"basicInfo":{"id":"P37MVSD","first_name":"Test17","last_name":"Professor","phone":"23321321321","dob":"1996-02-06T18:00:00.000Z","email":"test17@gmail.com","password":"#qweASDzxc6655","short_bio":"dasdsa d sadsadadsadwqdasdwqd d wasdawdawd","joining_date":"2024-09-10T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P37MVSD_DP.jpeg","status":"Active","type":"Professor"},"education":[{"serial":107,"professor_id":"P37MVSD","degree":"BSc","institution":"Seoul National University, School of Electrical and Electronic Engineering","passing_year":2001}],"career":[{"serial":103,"professor_id":"P37MVSD","position":"Researcher","organization_name":"NAGAD Limited","joining_year":2006,"leaving_year":2006}],"citations":[{"serial":96,"professor_id":"P37MVSD","title":"SabbirHossainBorno","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"NAGAD Limited"}],"awards":[{"serial":28,"professor_id":"P37MVSD","title":"Packet error rate analysis of ZigBee under WLAN and Bluetooth interferences","year":2022,"details":"dsadasdas","award_photo":"/Storage/Images/Professor/P37MVSD_Award_1.jpeg"}],"socialMedia":[{"professor_id":"P37MVSD","socialmedia_name":"Facebook","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"GitHub","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Instagram","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Linkedin","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Website","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"X","link":"https://www.google.com/"}]}
+2024-09-27 11:03:57+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P37MVSD"}
+2024-09-27 11:03:57+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P37MVSD {}
+2024-09-27 11:03:57+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P37MVSD"}
+2024-09-27 11:03:57+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P37MVSD {"basicInfo":{"id":"P37MVSD","first_name":"Test17","last_name":"Professor","phone":"23321321321","dob":"1996-02-06T18:00:00.000Z","email":"test17@gmail.com","password":"#qweASDzxc6655","short_bio":"dasdsa d sadsadadsadwqdasdwqd d wasdawdawd","joining_date":"2024-09-10T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P37MVSD_DP.jpeg","status":"Active","type":"Professor"},"education":[{"serial":107,"professor_id":"P37MVSD","degree":"BSc","institution":"Seoul National University, School of Electrical and Electronic Engineering","passing_year":2001}],"career":[{"serial":103,"professor_id":"P37MVSD","position":"Researcher","organization_name":"NAGAD Limited","joining_year":2006,"leaving_year":2006}],"citations":[{"serial":96,"professor_id":"P37MVSD","title":"SabbirHossainBorno","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"NAGAD Limited"}],"awards":[{"serial":28,"professor_id":"P37MVSD","title":"Packet error rate analysis of ZigBee under WLAN and Bluetooth interferences","year":2022,"details":"dsadasdas","award_photo":"/Storage/Images/Professor/P37MVSD_Award_1.jpeg"}],"socialMedia":[{"professor_id":"P37MVSD","socialmedia_name":"Facebook","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"GitHub","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Instagram","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Linkedin","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"Website","link":"https://www.google.com/"},{"professor_id":"P37MVSD","socialmedia_name":"X","link":"https://www.google.com/"}]}
+2024-09-27 11:03:58+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P37MVSD"}
+2024-09-27 11:04:08+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T05:04:07.932Z"},"userIp":"103.220.204.28"}
+2024-09-27 11:04:08+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:04:15+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T05:04:15.431Z"},"userIp":"103.220.204.28"}
+2024-09-27 11:04:19+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 11:13:18+06:00 [Session ID: SYSTEM] Receiving form data... {}
+2024-09-27 11:13:18+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Receiving form data..."}
+2024-09-27 11:13:18+06:00 [Session ID: SYSTEM] Validating password... {}
+2024-09-27 11:13:19+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating password..."}
+2024-09-27 11:13:19+06:00 [Session ID: SYSTEM] Validating date of birth (1993-02-03)... {}
+2024-09-27 11:13:19+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating date of birth (1993-02-03)..."}
+2024-09-27 11:13:19+06:00 [Session ID: SYSTEM] Validating joining date (2024-09-01)... {}
+2024-09-27 11:13:19+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating joining date (2024-09-01)..."}
+2024-09-27 11:13:19+06:00 [Session ID: SYSTEM] Validating education years... {}
+2024-09-27 11:13:20+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating education years..."}
+2024-09-27 11:13:20+06:00 [Session ID: SYSTEM] Validating career years... {}
+2024-09-27 11:13:26+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating career years..."}
+2024-09-27 11:13:26+06:00 [Session ID: SYSTEM] Validating award years... {}
+2024-09-27 11:13:26+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating award years..."}
+2024-09-27 11:13:26+06:00 [Session ID: SYSTEM] Checking if email (anisulislamabid@hotmail.com) or phone (04948377829879831) already exists in the database... {}
+2024-09-27 11:13:27+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Checking if email (anisulislamabid@hotmail.com) or phone (04948377829879831) already exists in the database..."}
+2024-09-27 11:13:27+06:00 [Session ID: SYSTEM] Initiating Professor ID generation... {}
+2024-09-27 11:13:27+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Initiating Professor ID generation..."}
+2024-09-27 11:13:27+06:00 [Session ID: SYSTEM] Professor ID generated successfully: P38MVSD {}
+2024-09-27 11:13:27+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor ID generated successfully: P38MVSD"}
+2024-09-27 11:13:27+06:00 [Session ID: SYSTEM] New Professor ID generated: P38MVSD {}
+2024-09-27 11:13:34+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"New Professor ID generated: P38MVSD"}
+2024-09-27 11:13:34+06:00 [Session ID: SYSTEM] Saving profile photo with filename: P38MVSD_DP.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg {}
+2024-09-27 11:13:34+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Saving profile photo with filename: P38MVSD_DP.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg"}
+2024-09-27 11:13:34+06:00 [Session ID: SYSTEM] Profile photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg {}
+2024-09-27 11:13:35+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Profile photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg"}
+2024-09-27 11:13:35+06:00 [Session ID: SYSTEM] Profile photo URL generated successfully: /Storage/Images/Professor/P38MVSD_DP.jpg {}
+2024-09-27 11:13:35+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Profile photo URL generated successfully: /Storage/Images/Professor/P38MVSD_DP.jpg"}
+2024-09-27 11:13:35+06:00 [Session ID: SYSTEM] Saving award photo with filename: P38MVSD_Award_1.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_1.jpg {}
+2024-09-27 11:13:36+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Saving award photo with filename: P38MVSD_Award_1.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_1.jpg"}
+2024-09-27 11:13:36+06:00 [Session ID: SYSTEM] Award photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_1.jpg {}
+2024-09-27 11:13:42+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Award photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_1.jpg"}
+2024-09-27 11:13:42+06:00 [Session ID: SYSTEM] Saving award photo with filename: P38MVSD_Award_2.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_2.jpg {}
+2024-09-27 11:13:43+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Saving award photo with filename: P38MVSD_Award_2.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_2.jpg"}
+2024-09-27 11:13:43+06:00 [Session ID: SYSTEM] Award photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_2.jpg {}
+2024-09-27 11:13:43+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Award photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_2.jpg"}
+2024-09-27 11:13:43+06:00 [Session ID: SYSTEM] A New Professor Adding Process Execution Started... {}
+2024-09-27 11:13:43+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"A New Professor Adding Process Execution Started..."}
+2024-09-27 11:13:43+06:00 [Session ID: SYSTEM] Error during execution: value too long for type character varying(15) {}
+2024-09-27 11:13:43+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Error during execution: value too long for type character varying(15)"}
+2024-09-27 11:15:08+06:00 [Session ID: SYSTEM] Receiving form data... {}
+2024-09-27 11:15:09+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Receiving form data..."}
+2024-09-27 11:15:10+06:00 [Session ID: SYSTEM] Validating password... {}
+2024-09-27 11:15:10+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating password..."}
+2024-09-27 11:15:10+06:00 [Session ID: SYSTEM] Validating date of birth (1993-02-03)... {}
+2024-09-27 11:15:10+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating date of birth (1993-02-03)..."}
+2024-09-27 11:15:10+06:00 [Session ID: SYSTEM] Validating joining date (2024-09-01)... {}
+2024-09-27 11:15:10+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating joining date (2024-09-01)..."}
+2024-09-27 11:15:10+06:00 [Session ID: SYSTEM] Validating education years... {}
+2024-09-27 11:15:11+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating education years..."}
+2024-09-27 11:15:11+06:00 [Session ID: SYSTEM] Validating career years... {}
+2024-09-27 11:15:14+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating career years..."}
+2024-09-27 11:15:14+06:00 [Session ID: SYSTEM] Validating award years... {}
+2024-09-27 11:15:15+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating award years..."}
+2024-09-27 11:15:15+06:00 [Session ID: SYSTEM] Checking if email (anisulislamabid@hotmail.com) or phone (04948377829879831) already exists in the database... {}
+2024-09-27 11:15:15+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Checking if email (anisulislamabid@hotmail.com) or phone (04948377829879831) already exists in the database..."}
+2024-09-27 11:15:15+06:00 [Session ID: SYSTEM] Initiating Professor ID generation... {}
+2024-09-27 11:15:15+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Initiating Professor ID generation..."}
+2024-09-27 11:15:15+06:00 [Session ID: SYSTEM] Professor ID generated successfully: P38MVSD {}
+2024-09-27 11:15:15+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor ID generated successfully: P38MVSD"}
+2024-09-27 11:15:15+06:00 [Session ID: SYSTEM] New Professor ID generated: P38MVSD {}
+2024-09-27 11:15:22+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"New Professor ID generated: P38MVSD"}
+2024-09-27 11:15:22+06:00 [Session ID: SYSTEM] Saving profile photo with filename: P38MVSD_DP.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg {}
+2024-09-27 11:15:22+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Saving profile photo with filename: P38MVSD_DP.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg"}
+2024-09-27 11:15:23+06:00 [Session ID: SYSTEM] Profile photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg {}
+2024-09-27 11:15:23+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Profile photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg"}
+2024-09-27 11:15:23+06:00 [Session ID: SYSTEM] Profile photo URL generated successfully: /Storage/Images/Professor/P38MVSD_DP.jpg {}
+2024-09-27 11:15:23+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Profile photo URL generated successfully: /Storage/Images/Professor/P38MVSD_DP.jpg"}
+2024-09-27 11:15:23+06:00 [Session ID: SYSTEM] Saving award photo with filename: P38MVSD_Award_1.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_1.jpg {}
+2024-09-27 11:15:24+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Saving award photo with filename: P38MVSD_Award_1.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_1.jpg"}
+2024-09-27 11:15:24+06:00 [Session ID: SYSTEM] Award photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_1.jpg {}
+2024-09-27 11:15:27+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Award photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_1.jpg"}
+2024-09-27 11:15:27+06:00 [Session ID: SYSTEM] Saving award photo with filename: P38MVSD_Award_2.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_2.jpg {}
+2024-09-27 11:15:28+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Saving award photo with filename: P38MVSD_Award_2.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_2.jpg"}
+2024-09-27 11:15:28+06:00 [Session ID: SYSTEM] Award photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_2.jpg {}
+2024-09-27 11:15:28+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Award photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_2.jpg"}
+2024-09-27 11:15:28+06:00 [Session ID: SYSTEM] A New Professor Adding Process Execution Started... {}
+2024-09-27 11:15:28+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"A New Professor Adding Process Execution Started..."}
+2024-09-27 11:15:28+06:00 [Session ID: SYSTEM] Error during execution: value too long for type character varying(15) {}
+2024-09-27 11:15:29+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Error during execution: value too long for type character varying(15)"}
+2024-09-27 11:17:45+06:00 [Session ID: SYSTEM] Receiving form data... {}
+2024-09-27 11:17:45+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Receiving form data..."}
+2024-09-27 11:17:52+06:00 [Session ID: SYSTEM] Validating password... {}
+2024-09-27 11:17:52+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating password..."}
+2024-09-27 11:17:52+06:00 [Session ID: SYSTEM] Validating date of birth (1993-02-03)... {}
+2024-09-27 11:17:52+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating date of birth (1993-02-03)..."}
+2024-09-27 11:17:52+06:00 [Session ID: SYSTEM] Validating joining date (2024-09-01)... {}
+2024-09-27 11:17:53+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating joining date (2024-09-01)..."}
+2024-09-27 11:17:53+06:00 [Session ID: SYSTEM] Validating education years... {}
+2024-09-27 11:17:53+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating education years..."}
+2024-09-27 11:17:53+06:00 [Session ID: SYSTEM] Validating career years... {}
+2024-09-27 11:17:53+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating career years..."}
+2024-09-27 11:17:53+06:00 [Session ID: SYSTEM] Validating award years... {}
+2024-09-27 11:17:58+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Validating award years..."}
+2024-09-27 11:17:58+06:00 [Session ID: SYSTEM] Checking if email (anisulislamabid@hotmail.com) or phone (49483778296) already exists in the database... {}
+2024-09-27 11:17:58+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Checking if email (anisulislamabid@hotmail.com) or phone (49483778296) already exists in the database..."}
+2024-09-27 11:17:58+06:00 [Session ID: SYSTEM] Initiating Professor ID generation... {}
+2024-09-27 11:17:58+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Initiating Professor ID generation..."}
+2024-09-27 11:17:58+06:00 [Session ID: SYSTEM] Professor ID generated successfully: P38MVSD {}
+2024-09-27 11:17:59+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor ID generated successfully: P38MVSD"}
+2024-09-27 11:17:59+06:00 [Session ID: SYSTEM] New Professor ID generated: P38MVSD {}
+2024-09-27 11:17:59+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"New Professor ID generated: P38MVSD"}
+2024-09-27 11:17:59+06:00 [Session ID: SYSTEM] Saving profile photo with filename: P38MVSD_DP.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg {}
+2024-09-27 11:18:03+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Saving profile photo with filename: P38MVSD_DP.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg"}
+2024-09-27 11:18:03+06:00 [Session ID: SYSTEM] Profile photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg {}
+2024-09-27 11:18:04+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Profile photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg"}
+2024-09-27 11:18:04+06:00 [Session ID: SYSTEM] Profile photo URL generated successfully: /Storage/Images/Professor/P38MVSD_DP.jpg {}
+2024-09-27 11:18:04+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Profile photo URL generated successfully: /Storage/Images/Professor/P38MVSD_DP.jpg"}
+2024-09-27 11:18:04+06:00 [Session ID: SYSTEM] Saving award photo with filename: P38MVSD_Award_1.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_1.jpg {}
+2024-09-27 11:18:04+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Saving award photo with filename: P38MVSD_Award_1.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_1.jpg"}
+2024-09-27 11:18:05+06:00 [Session ID: SYSTEM] Award photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_1.jpg {}
+2024-09-27 11:18:05+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Award photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_1.jpg"}
+2024-09-27 11:18:05+06:00 [Session ID: SYSTEM] Saving award photo with filename: P38MVSD_Award_2.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_2.jpg {}
+2024-09-27 11:18:08+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Saving award photo with filename: P38MVSD_Award_2.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_2.jpg"}
+2024-09-27 11:18:08+06:00 [Session ID: SYSTEM] Award photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_2.jpg {}
+2024-09-27 11:18:09+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Award photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_Award_2.jpg"}
+2024-09-27 11:18:09+06:00 [Session ID: SYSTEM] A New Professor Adding Process Execution Started... {}
+2024-09-27 11:18:09+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"A New Professor Adding Process Execution Started..."}
+2024-09-27 11:18:09+06:00 [Session ID: SYSTEM] Professor information inserted successfully. {}
+2024-09-27 11:18:09+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor information inserted successfully."}
+2024-09-27 11:18:09+06:00 [Session ID: SYSTEM] Social media information inserted successfully. {}
+2024-09-27 11:18:10+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:10+06:00 [Session ID: SYSTEM] Social media information inserted successfully. {}
+2024-09-27 11:18:10+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:10+06:00 [Session ID: SYSTEM] Social media information inserted successfully. {}
+2024-09-27 11:18:10+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:10+06:00 [Session ID: SYSTEM] Member information inserted successfully. {}
+2024-09-27 11:18:11+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:11+06:00 [Session ID: SYSTEM] Education information inserted successfully. {}
+2024-09-27 11:18:11+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:11+06:00 [Session ID: SYSTEM] Education information inserted successfully. {}
+2024-09-27 11:18:11+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:11+06:00 [Session ID: SYSTEM] Career information inserted successfully. {}
+2024-09-27 11:18:11+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:11+06:00 [Session ID: SYSTEM] Career information inserted successfully. {}
+2024-09-27 11:18:12+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:12+06:00 [Session ID: SYSTEM] Citation information inserted successfully. {}
+2024-09-27 11:18:12+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:12+06:00 [Session ID: SYSTEM] Citation information inserted successfully. {}
+2024-09-27 11:18:12+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:12+06:00 [Session ID: SYSTEM] Award information inserted successfully. {}
+2024-09-27 11:18:13+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:13+06:00 [Session ID: SYSTEM] Award information inserted successfully. {}
+2024-09-27 11:18:13+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:13+06:00 [Session ID: SYSTEM] Notification inserted successfully. {}
+2024-09-27 11:18:13+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:13+06:00 [Session ID: SYSTEM] Execution committed successfully. {}
+2024-09-27 11:18:13+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:13+06:00 [Session ID: SYSTEM] A New Professor Added Successfully ID : P38MVSD {}
+2024-09-27 11:18:14+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:14+06:00 [Session ID: SYSTEM] MVSD LAB DASHBOARD
+-------------------------------------
+A New Professor Added.
+ID : P38MVSD {}
+2024-09-27 11:18:14+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:16+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T05:17:45.394Z"},"userIp":"103.220.204.28"}
+2024-09-27 11:18:16+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:17+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 11:18:17+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 11:18:17+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:17+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 11:18:17+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 11:18:17+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:18+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:18+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:22+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T05:18:21.756Z"},"userIp":"103.220.204.28"}
+2024-09-27 11:18:22+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 11:18:41+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T05:18:41.787Z"},"userIp":"103.220.204.28"}
+2024-09-27 11:18:48+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 11:18:49+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 11:18:49+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 11:18:49+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 11:18:50+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 11:18:50+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 11:18:50+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 11:18:50+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 11:18:51+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 11:19:14+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T05:19:13.733Z"},"userIp":"103.220.204.28"}
+2024-09-27 11:19:14+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 11:19:26+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T05:19:25.849Z"},"userIp":"103.220.204.28"}
+2024-09-27 11:19:26+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 11:19:27+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P38MVSD {}
+2024-09-27 11:19:27+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P38MVSD"}
+2024-09-27 11:19:27+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P38MVSD {"basicInfo":{"id":"P38MVSD","first_name":"Anisul Islam","last_name":"Abid","phone":"49483778296","dob":"1993-02-02T18:00:00.000Z","email":"anisulislamabid@hotmail.com","password":"#qweASDzxc6655","short_bio":"Soo Young Shin (M’07–SM’17) received his Ph.D. degrees in electrical engineering and computer science from Seoul National University on 2006. He was with Samsung Electronics, Suwon, South Korea from 2007 to 2010. He joined as full-time professor to School of Electronics Engineering/Dept. of IT Convergence Engineering, Kumoh National Institute of Technology, Gumi, South Korea from 2010. His research interests include future wireless communications, signal processing, unmanned mobility, quantum neural network, Internet of things, AI/Deep learning applications, etc.","joining_date":"2024-08-31T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P38MVSD_DP.jpg","status":"Active","type":"Professor"},"education":[{"serial":108,"professor_id":"P38MVSD","degree":"BSc","institution":"American International University-Bangladesh","passing_year":2001},{"serial":109,"professor_id":"P38MVSD","degree":"MASc","institution":"Dhaka University","passing_year":2006}],"career":[{"serial":104,"professor_id":"P38MVSD","position":"Web Developer","organization_name":"Therap BD","joining_year":2009,"leaving_year":2010},{"serial":105,"professor_id":"P38MVSD","position":"QA Engineer","organization_name":"Google","joining_year":2011,"leaving_year":2023}],"citations":[{"serial":97,"professor_id":"P38MVSD","title":"Google","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"Google"},{"serial":98,"professor_id":"P38MVSD","title":"Research Gateway","link":"https://citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"Research gateway"}],"awards":[{"serial":29,"professor_id":"P38MVSD","title":"Employee Of The Year","year":2022,"details":"Sit dolorum debitis veritatis natus dolores. Quasi ratione sint. Sit quaerat ipsum dolorem.","award_photo":"/Storage/Images/Professor/P38MVSD_Award_1.jpg"},{"serial":30,"professor_id":"P38MVSD","title":"Best Engineer Of The Google","year":2023,"details":"Sit quaerat ipsum dolorem.","award_photo":"/Storage/Images/Professor/P38MVSD_Award_2.jpg"}],"socialMedia":[{"professor_id":"P38MVSD","socialmedia_name":"Facebook","link":"http://www.facebook.com"},{"professor_id":"P38MVSD","socialmedia_name":"GitHub","link":"http://www.github.com"},{"professor_id":"P38MVSD","socialmedia_name":"Linkedin","link":"http://www.linkedin.com"}]}
+2024-09-27 11:19:28+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P38MVSD"}
+2024-09-27 11:19:28+06:00 [Session ID: SYSTEM] Fetching details for professor ID: P38MVSD {}
+2024-09-27 11:19:28+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching details for professor ID: P38MVSD"}
+2024-09-27 11:19:28+06:00 [Session ID: SYSTEM] Successfully fetched details for professor ID: P38MVSD {"basicInfo":{"id":"P38MVSD","first_name":"Anisul Islam","last_name":"Abid","phone":"49483778296","dob":"1993-02-02T18:00:00.000Z","email":"anisulislamabid@hotmail.com","password":"#qweASDzxc6655","short_bio":"Soo Young Shin (M’07–SM’17) received his Ph.D. degrees in electrical engineering and computer science from Seoul National University on 2006. He was with Samsung Electronics, Suwon, South Korea from 2007 to 2010. He joined as full-time professor to School of Electronics Engineering/Dept. of IT Convergence Engineering, Kumoh National Institute of Technology, Gumi, South Korea from 2010. His research interests include future wireless communications, signal processing, unmanned mobility, quantum neural network, Internet of things, AI/Deep learning applications, etc.","joining_date":"2024-08-31T18:00:00.000Z","leaving_date":null,"photo":"/Storage/Images/Professor/P38MVSD_DP.jpg","status":"Active","type":"Professor"},"education":[{"serial":108,"professor_id":"P38MVSD","degree":"BSc","institution":"American International University-Bangladesh","passing_year":2001},{"serial":109,"professor_id":"P38MVSD","degree":"MASc","institution":"Dhaka University","passing_year":2006}],"career":[{"serial":104,"professor_id":"P38MVSD","position":"Web Developer","organization_name":"Therap BD","joining_year":2009,"leaving_year":2010},{"serial":105,"professor_id":"P38MVSD","position":"QA Engineer","organization_name":"Google","joining_year":2011,"leaving_year":2023}],"citations":[{"serial":97,"professor_id":"P38MVSD","title":"Google","link":"https://scholar.google.co.kr/citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"Google"},{"serial":98,"professor_id":"P38MVSD","title":"Research Gateway","link":"https://citations?view_op=view_citation&hl=en&user=c8JDiHYAAAAJ&citation_for_view=c8JDiHYAAAAJ:d1gkVwhDpl0C","organization_name":"Research gateway"}],"awards":[{"serial":29,"professor_id":"P38MVSD","title":"Employee Of The Year","year":2022,"details":"Sit dolorum debitis veritatis natus dolores. Quasi ratione sint. Sit quaerat ipsum dolorem.","award_photo":"/Storage/Images/Professor/P38MVSD_Award_1.jpg"},{"serial":30,"professor_id":"P38MVSD","title":"Best Engineer Of The Google","year":2023,"details":"Sit quaerat ipsum dolorem.","award_photo":"/Storage/Images/Professor/P38MVSD_Award_2.jpg"}],"socialMedia":[{"professor_id":"P38MVSD","socialmedia_name":"Facebook","link":"http://www.facebook.com"},{"professor_id":"P38MVSD","socialmedia_name":"GitHub","link":"http://www.github.com"},{"professor_id":"P38MVSD","socialmedia_name":"Linkedin","link":"http://www.linkedin.com"}]}
+2024-09-27 11:19:28+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Successfully fetched details for professor ID: P38MVSD"}
+2024-09-27 11:20:18+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T05:20:18.451Z"},"userIp":"103.220.204.28"}
+2024-09-27 11:20:19+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 11:25:28+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T05:25:27.102Z"},"userIp":"103.220.204.28"}
+2024-09-27 11:25:28+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 11:25:30+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 11:25:30+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 11:25:30+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 11:25:31+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 11:25:31+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 11:25:31+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 11:25:31+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 11:25:32+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 11:25:50+06:00 [Session ID: SYSTEM] Receiving form data... {}
+2024-09-27 11:25:51+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Receiving form data..."}
+2024-09-27 11:25:51+06:00 [Session ID: SYSTEM] Updating basic info... {}
+2024-09-27 11:25:51+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Updating basic info..."}
+2024-09-27 11:25:51+06:00 [Session ID: SYSTEM] Error during execution: invalid input syntax for type date: "null" {}
+2024-09-27 11:25:51+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Error during execution: invalid input syntax for type date: \"null\""}
+2024-09-27 11:27:36+06:00 [Session ID: SYSTEM] Receiving form data... {}
+2024-09-27 11:27:37+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Receiving form data..."}
+2024-09-27 11:27:37+06:00 [Session ID: SYSTEM] Updating basic info... {}
+2024-09-27 11:27:37+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Updating basic info..."}
+2024-09-27 11:27:37+06:00 [Session ID: SYSTEM] Error during execution: could not determine data type of parameter $6 {}
+2024-09-27 11:27:37+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Error during execution: could not determine data type of parameter $6"}
