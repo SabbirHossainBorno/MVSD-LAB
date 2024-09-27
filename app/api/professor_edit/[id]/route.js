@@ -310,22 +310,24 @@ export async function POST(req, { params }) {
       }
     }
 
-    // Update awards
+// Update awards
 if (awards.length > 0) {
   console.log('Updating awards...');
   await logAndAlert('Updating awards...', 'SYSTEM');
 
   // Filter new awards
   const newAwards = awards.filter(award => !award.existing);
+  console.log('New awards to insert:', newAwards);  // Debug: Check if newAwards is empty
 
   const insertAwardsQuery = `
     INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
     VALUES ($1, $2, $3, $4, $5)
   `;
-  console.log('Awards:', awards);
+
   for (let i = 0; i < newAwards.length; i++) {
     const award = newAwards[i];
     console.log(`Processing award ${i + 1}:`, award);
+    
     let awardUrl = null;
     if (award.awardPhoto) {
       try {
@@ -334,12 +336,26 @@ if (awards.length > 0) {
       } catch (error) {
         console.error(`Error saving award photo for award ${i + 1}: ${error.message}`);
         await logAndAlert(`Error saving award photo for award ${i + 1}: ${error.message}`, 'SYSTEM');
-        throw error; // Re-throw error to be handled later if needed
+        await client.query('ROLLBACK');  // Ensure rollback in case of error
+        throw error;
       }
     }
-    await client.query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
+    
+    // Debug: Log the actual data being inserted
+    console.log('Inserting award:', { professor_id: id, title: award.title, year: award.year, details: award.details, awardPhoto: awardUrl });
+
+    // Insert the award
+    try {
+      await client.query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
+    } catch (insertError) {
+      console.error(`Error inserting award ${i + 1}: ${insertError.message}`);
+      await logAndAlert(`Error inserting award ${i + 1}: ${insertError.message}`, 'SYSTEM');
+      await client.query('ROLLBACK');  // Rollback the transaction on error
+      throw insertError;
+    }
   }
 }
+
 
 
     // Update password
