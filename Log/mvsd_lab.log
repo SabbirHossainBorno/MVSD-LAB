@@ -8905,3 +8905,486 @@ Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windo
 ------------------------------------
 Dashboard Data Fetched Successfully.
 Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:30:02+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:30:02+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:30:02+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:30:03+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:30:01.956Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:30:03+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:30:12+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:30:10.454Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:30:12+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:30:12+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:30:13+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 12:30:13+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:30:13+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 12:30:13+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:30:14+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 12:30:14+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:30:14+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 12:30:17+06:00 [Session ID: SYSTEM] Receiving form data... {}
+2024-09-27 12:30:17+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:30:17+06:00 [Session ID: SYSTEM] Updating basic info... {}
+2024-09-27 12:30:17+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:30:17+06:00 [Session ID: SYSTEM] Professor information updated successfully for ID: P38MVSD {}
+2024-09-27 12:30:18+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:30:18+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:30:18.356Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:30:18+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:30:19+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:30:19+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:30:19+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:30:19+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:30:19+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:30:19+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:30:20+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:30:20+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:30:22+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:30:21.853Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:30:22+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:30:26+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:30:26.656Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:30:27+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:30:27+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:30:27+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:30:27+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:30:28+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:30:28+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:30:28+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:30:28+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:30:29+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:30:44+06:00 [Session ID: SYSTEM] Receiving form data... {}
+2024-09-27 12:30:45+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Receiving form data..."}
+2024-09-27 12:30:54+06:00 [Session ID: SYSTEM] Updating profile photo... {}
+2024-09-27 12:30:55+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Updating profile photo..."}
+2024-09-27 12:30:55+06:00 [Session ID: SYSTEM] Saving profile photo with filename: P38MVSD_DP.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg {}
+2024-09-27 12:30:55+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Saving profile photo with filename: P38MVSD_DP.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg"}
+2024-09-27 12:30:55+06:00 [Session ID: SYSTEM] Profile photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg {}
+2024-09-27 12:30:55+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Profile photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg"}
+2024-09-27 12:30:55+06:00 [Session ID: SYSTEM] Updating basic info... {}
+2024-09-27 12:30:56+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Updating basic info..."}
+2024-09-27 12:30:56+06:00 [Session ID: SYSTEM] Error during execution: null value in column "first_name" of relation "professor_basic_info" violates not-null constraint {}
+2024-09-27 12:30:56+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Error during execution: null value in column \"first_name\" of relation \"professor_basic_info\" violates not-null constraint"}
+2024-09-27 12:41:39+06:00 [Session ID: undefined] MVSD LAB DASHBOARD
+------------------------------------
+Session Expired!
+Please Login Again. {}
+2024-09-27 12:41:39+06:00 [Session ID: undefined] MVSD LAB DASHBOARD
+------------------------------------
+Session Expired!
+Please Login Again. {}
+2024-09-27 12:41:39+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\nPlease Login Again."}
+2024-09-27 12:41:39+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\nPlease Login Again."}
+2024-09-27 12:52:39+06:00 [Session ID: 1f4857a3-7107-46b8-b7d5-22123cec174b] MVSD LAB DASHBOARD
+------------------------------------
+Login Attempt!
+Email : admin@mvsdlab.com
+IP : 103.220.204.28
+Device INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0 {}
+2024-09-27 12:52:40+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nLogin Attempt!\nEmail : admin@mvsdlab.com\nIP : 103.220.204.28\nDevice INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:52:40+06:00 [Session ID: 1f4857a3-7107-46b8-b7d5-22123cec174b] MVSD LAB DASHBOARD
+------------------------------------
+Admin Login Successful.
+Email : admin@mvsdlab.com
+IP : 103.220.204.28
+Device INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0 {}
+2024-09-27 12:52:40+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAdmin Login Successful.\nEmail : admin@mvsdlab.com\nIP : 103.220.204.28\nDevice INFO : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:52:41+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:31:00.881Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:52:42+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:52:43+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:31:00.881Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:52:43+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:52:43+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:52:43+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:52:44+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:52:44+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:52:44+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:52:44+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:52:44+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:52:44+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:53:07+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:53:06.720Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:53:07+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:53:19+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:53:19.086Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:53:19+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:53:20+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:53:21+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 12:53:21+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:53:21+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 12:53:21+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:53:22+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 12:53:22+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:53:22+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 12:53:25+06:00 [Session ID: SYSTEM] Receiving form data... {}
+2024-09-27 12:53:25+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Receiving form data..."}
+2024-09-27 12:53:25+06:00 [Session ID: SYSTEM] Updating basic info... {}
+2024-09-27 12:53:25+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Updating basic info..."}
+2024-09-27 12:53:25+06:00 [Session ID: SYSTEM] Professor information updated successfully for ID: P38MVSD {}
+2024-09-27 12:53:26+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor information updated successfully for ID: P38MVSD"}
+2024-09-27 12:53:27+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:53:27.051Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:53:27+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:53:27+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:53:27+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:53:28+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:53:28+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:53:28+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:53:30+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:53:29.718Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:53:31+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:53:31+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:53:31+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:53:31+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:53:36+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:53:35.850Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:53:36+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:53:36+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:53:37+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 12:53:37+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:53:37+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 12:53:37+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:53:38+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 12:53:38+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:53:38+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 12:53:44+06:00 [Session ID: SYSTEM] Receiving form data... {}
+2024-09-27 12:53:45+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Receiving form data..."}
+2024-09-27 12:53:45+06:00 [Session ID: SYSTEM] Updating basic info... {}
+2024-09-27 12:53:45+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:53:45+06:00 [Session ID: SYSTEM] Professor information updated successfully for ID: P38MVSD {}
+2024-09-27 12:53:46+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:53:46+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:53:45.949Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:53:46+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:53:47+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:53:47+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:53:47+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:53:47+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:53:47+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:53:47+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:53:47+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:53:47+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:53:49+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:53:48.899Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:53:50+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:53:55+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:53:54.648Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:53:56+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:53:56+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:53:56+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:53:56+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:53:57+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:53:57+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:53:57+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:53:57+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:53:57+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:54:04+06:00 [Session ID: SYSTEM] Receiving form data... {}
+2024-09-27 12:54:05+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:54:06+06:00 [Session ID: SYSTEM] Updating profile photo... {}
+2024-09-27 12:54:06+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:54:06+06:00 [Session ID: SYSTEM] Saving profile photo with filename: P38MVSD_DP.jpg at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg {}
+2024-09-27 12:54:07+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:54:07+06:00 [Session ID: SYSTEM] Profile photo saved successfully at path: /home/mvsd-lab/public/Storage/Images/Professor/P38MVSD_DP.jpg {}
+2024-09-27 12:54:07+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:54:07+06:00 [Session ID: SYSTEM] Professor information updated successfully for ID: P38MVSD {}
+2024-09-27 12:54:07+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:54:08+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:54:08.781Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:54:09+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:54:09+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:54:09+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:54:09+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:54:09+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:54:09+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:54:09+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:54:10+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:54:10+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:54:17+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:54:17.612Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:54:21+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:54:35+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:54:34.126Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:54:35+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:54:36+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:54:36+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 12:54:36+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:54:36+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 12:54:37+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:54:37+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 12:54:37+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:54:37+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 12:54:50+06:00 [Session ID: SYSTEM] Receiving form data... {}
+2024-09-27 12:54:51+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Receiving form data..."}
+2024-09-27 12:54:51+06:00 [Session ID: SYSTEM] Updating social media... {}
+2024-09-27 12:54:51+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Updating social media..."}
+2024-09-27 12:54:51+06:00 [Session ID: SYSTEM] Professor information updated successfully for ID: P38MVSD {}
+2024-09-27 12:54:51+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor information updated successfully for ID: P38MVSD"}
+2024-09-27 12:54:52+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:54:51.807Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:54:53+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:54:53+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:54:53+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:54:53+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:54:53+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:54:53+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:54:57+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:54:57+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:54:57+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:54:58+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:54:58.492Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:54:58+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:55:03+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:55:03.022Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:55:03+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:55:03+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:55:04+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 12:55:04+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:55:04+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 12:55:04+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:55:05+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 12:55:05+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:55:05+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 12:55:26+06:00 [Session ID: SYSTEM] Receiving form data... {}
+2024-09-27 12:55:27+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Receiving form data..."}
+2024-09-27 12:55:27+06:00 [Session ID: SYSTEM] Updating password... {}
+2024-09-27 12:55:27+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Updating password..."}
+2024-09-27 12:55:27+06:00 [Session ID: SYSTEM] Professor information updated successfully for ID: P38MVSD {}
+2024-09-27 12:55:27+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor information updated successfully for ID: P38MVSD"}
+2024-09-27 12:55:28+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:55:28.036Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:55:29+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:55:29+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:55:29+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:55:29+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:55:29+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:55:29+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:55:33+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:55:33+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:55:33+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:55:46+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:55:45.833Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:55:46+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:58:31+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:58:28.795Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:58:31+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:58:33+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:58:33+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 12:58:33+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:58:33+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 12:58:34+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:58:34+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 12:58:34+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:58:34+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 12:58:45+06:00 [Session ID: SYSTEM] Receiving form data... {}
+2024-09-27 12:58:46+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Receiving form data..."}
+2024-09-27 12:58:46+06:00 [Session ID: SYSTEM] Updating social media... {}
+2024-09-27 12:58:46+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Updating social media..."}
+2024-09-27 12:58:46+06:00 [Session ID: SYSTEM] Professor information updated successfully for ID: P38MVSD {}
+2024-09-27 12:58:46+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor information updated successfully for ID: P38MVSD"}
+2024-09-27 12:58:47+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:58:47.177Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:58:47+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:58:48+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:58:48+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:58:48+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:58:48+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:58:48+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:58:50+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:58:50.244Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:58:52+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:58:52+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:58:52+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:58:52+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:58:57+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:58:56.693Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:58:57+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:58:57+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:58:57+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 12:58:57+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:58:58+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 12:58:58+06:00 [Session ID: SYSTEM] Fetching professor data for ID: P38MVSD {}
+2024-09-27 12:58:58+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Fetching professor data for ID: P38MVSD"}
+2024-09-27 12:58:58+06:00 [Session ID: SYSTEM] Professor data fetched successfully for ID: P38MVSD {}
+2024-09-27 12:58:59+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor data fetched successfully for ID: P38MVSD"}
+2024-09-27 12:59:21+06:00 [Session ID: SYSTEM] Receiving form data... {}
+2024-09-27 12:59:27+06:00 [Session ID: SYSTEM] Failed to send Telegram alert {"error":"Request failed with status code 429"}
+2024-09-27 12:59:27+06:00 [Session ID: SYSTEM] Updating basic info... {}
+2024-09-27 12:59:28+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Updating basic info..."}
+2024-09-27 12:59:28+06:00 [Session ID: SYSTEM] Professor information updated successfully for ID: P38MVSD {}
+2024-09-27 12:59:28+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"Professor information updated successfully for ID: P38MVSD"}
+2024-09-27 12:59:29+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Authentication Check Successful
+IP : 103.220.204.28 {"email":{"name":"email","value":"admin@mvsdlab.com"},"lastActivity":{"name":"lastActivity","value":"2024-09-27T06:59:29.288Z"},"userIp":"103.220.204.28"}
+2024-09-27 12:59:29+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : 103.220.204.28"}
+2024-09-27 12:59:30+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:59:30+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:59:30+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:59:30+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Fetching Dashboard Data.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:59:30+06:00 [Session ID: [object Object]] MVSD LAB DASHBOARD
+------------------------------------
+Dashboard Data Fetched Successfully.
+Email : admin@mvsdlab.com {"ip":"103.220.204.28","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}
+2024-09-27 12:59:33+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:59:34+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : admin@mvsdlab.com"}
+2024-09-27 12:59:34+06:00 [Session ID: SYSTEM] Telegram alert sent successfully {"message":"MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : admin@mvsdlab.com"}
