@@ -62,6 +62,7 @@ const saveAwardPhoto = async (file, professorId, index) => {
   }
 };
 
+
 // Main function to handle the GET request
 export async function GET(req, { params }) {
   const client = await pool.connect();
@@ -171,7 +172,7 @@ export async function POST(req, { params }) {
 
       const updateMemberPhotoQuery = `
         UPDATE member
-        SET photo = $1
+        SET photo = $1, updated_at = NOW() AT TIME ZONE 'Asia/Dhaka'
         WHERE id = $2
       `;
       await client.query(updateMemberPhotoQuery, [photoUrl, id]);
@@ -212,10 +213,10 @@ export async function POST(req, { params }) {
       }
 
       const updateMemberQuery = `
-        UPDATE member
-        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6, updated_at = NOW()
-        WHERE id = $7
-      `;
+      UPDATE member
+      SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6, updated_at = NOW() AT TIME ZONE 'Asia/Dhaka'
+      WHERE id = $7
+    `;
 
       try {
         await client.query(updateMemberQuery, [first_name, last_name, phone, short_bio, status, leavingDateParam, id]);
@@ -302,26 +303,36 @@ export async function POST(req, { params }) {
     }
 
     // Update awards
-    if (awards.length > 0) {
-      console.log('Updating awards...');
-      await logAndAlert('Updating awards...', 'SYSTEM');
+if (awards.length > 0) {
+  console.log('Updating awards...');
+  await logAndAlert('Updating awards...', 'SYSTEM');
 
-      // Filter new awards
-      const newAwards = awards.filter(award => !award.existing);
+  // Filter new awards
+  const newAwards = awards.filter(award => !award.existing);
 
-      const insertAwardsQuery = `
-        INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
-        VALUES ($1, $2, $3, $4, $5)
-      `;
-      for (let i = 0; i < newAwards.length; i++) {
-        const award = newAwards[i];
-        let awardUrl = null;
-        if (award.awardPhoto) {
-          awardUrl = await saveAwardPhoto(award.awardPhoto, id, i + 1);
-        }
-        await client.query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
+  const insertAwardsQuery = `
+    INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
+    VALUES ($1, $2, $3, $4, $5)
+  `;
+  console.log('Awards:', awards);
+  for (let i = 0; i < newAwards.length; i++) {
+    const award = newAwards[i];
+    console.log(`Processing award ${i + 1}:`, award);
+    let awardUrl = null;
+    if (award.awardPhoto) {
+      try {
+        console.log(`Award photo for award ${i + 1}:`, award.awardPhoto);
+        awardUrl = await saveAwardPhoto(award.awardPhoto, id, i + 1);
+      } catch (error) {
+        console.error(`Error saving award photo for award ${i + 1}: ${error.message}`);
+        await logAndAlert(`Error saving award photo for award ${i + 1}: ${error.message}`, 'SYSTEM');
+        throw error; // Re-throw error to be handled later if needed
       }
     }
+    await client.query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
+  }
+}
+
 
     // Update password
     if (password) {
