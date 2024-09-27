@@ -39,6 +39,7 @@ const saveProfilePhoto = async (file, professorId) => {
   }
 };
 
+// Function to save the award photo
 const saveAwardPhoto = async (file, professorId, index) => {
   if (!file) {
     throw new Error('No file provided for award photo');
@@ -50,10 +51,13 @@ const saveAwardPhoto = async (file, professorId, index) => {
   try {
     console.log(`Saving award photo with filename: ${filename} at path: ${targetPath}`);
     await logAndAlert(`Saving award photo with filename: ${filename} at path: ${targetPath}`, 'SYSTEM');
+
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
+
     console.log(`Award photo saved successfully at path: ${targetPath}`);
     await logAndAlert(`Award photo saved successfully at path: ${targetPath}`, 'SYSTEM');
+
     return `/Storage/Images/Professor/${filename}`;
   } catch (error) {
     console.error(`Error occurred while saving award photo: ${error.message}`);
@@ -302,36 +306,51 @@ export async function POST(req, { params }) {
       }
     }
 
-    // Update awards
-if (awards.length > 0) {
-  console.log('Updating awards...');
-  await logAndAlert('Updating awards...', 'SYSTEM');
+// Update awards function
+const updateAwards = async (awards, professorId) => {
+  if (awards.length > 0) {
+    console.log('Updating awards...');
+    await logAndAlert('Updating awards...', 'SYSTEM');
 
-  // Filter new awards
-  const newAwards = awards.filter(award => !award.existing);
+    // Filter new awards
+    const newAwards = awards.filter(award => !award.existing);
 
-  const insertAwardsQuery = `
-    INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
-    VALUES ($1, $2, $3, $4, $5)
-  `;
-  console.log('Awards:', awards);
-  for (let i = 0; i < newAwards.length; i++) {
-    const award = newAwards[i];
-    console.log(`Processing award ${i + 1}:`, award);
-    let awardUrl = null;
-    if (award.awardPhoto) {
+    const insertAwardsQuery =
+      `INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
+       VALUES ($1, $2, $3, $4, $5)`;
+
+    console.log('Awards:', awards);
+    
+    for (let i = 0; i < newAwards.length; i++) {
+      const award = newAwards[i];
+      console.log(`Processing award ${i + 1}:`, award);
+      
+      let awardUrl = null;
+      if (award.awardPhoto) {
+        try {
+          console.log(`Award photo for award ${i + 1}:`, award.awardPhoto);
+          awardUrl = await saveAwardPhoto(award.awardPhoto, professorId, i + 1);
+        } catch (error) {
+          console.error(`Error saving award photo for award ${i + 1}: ${error.message}`);
+          await logAndAlert(`Error saving award photo for award ${i + 1}: ${error.message}`, 'SYSTEM');
+          throw error; // Re-throw error to be handled later if needed
+        }
+      }
+
+      // Insert award details into the database
       try {
-        console.log(`Award photo for award ${i + 1}:`, award.awardPhoto);
-        awardUrl = await saveAwardPhoto(award.awardPhoto, id, i + 1);
-      } catch (error) {
-        console.error(`Error saving award photo for award ${i + 1}: ${error.message}`);
-        await logAndAlert(`Error saving award photo for award ${i + 1}: ${error.message}`, 'SYSTEM');
-        throw error; // Re-throw error to be handled later if needed
+        await client.query(insertAwardsQuery, [professorId, award.title, award.year, award.details, awardUrl]);
+        console.log(`Award ${i + 1} inserted successfully`);
+      } catch (dbError) {
+        console.error(`Database error inserting award ${i + 1}: ${dbError.message}`);
+        await logAndAlert(`Database error inserting award ${i + 1}: ${dbError.message}`, 'SYSTEM');
+        throw new Error(`Failed to insert award ${i + 1}: ${dbError.message}`);
       }
     }
-    await client.query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
+  } else {
+    console.log('No new awards to update.');
   }
-}
+};
 
 
     // Update password
