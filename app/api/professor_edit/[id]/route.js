@@ -39,7 +39,6 @@ const saveProfilePhoto = async (file, professorId) => {
   }
 };
 
-
 // Helper function to save award photo
 const saveAwardPhoto = async (file, professorId, index) => {
   if (!file) {
@@ -63,7 +62,6 @@ const saveAwardPhoto = async (file, professorId, index) => {
     throw new Error(`Failed to save award photo: ${error.message}`);
   }
 };
-
 
 // Main function to handle the GET request
 export async function GET(req, { params }) {
@@ -155,7 +153,15 @@ export async function POST(req, { params }) {
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
     const citations = JSON.parse(formData.get('citations') || '[]');
-    const awards = JSON.parse(formData.get('awards') || '[]');
+    const awards = [];
+    for (let i = 0; formData.has(`awards[${i}][title]`); i++) {
+      awards.push({
+        title: formData.get(`awards[${i}][title]`),
+        year: formData.get(`awards[${i}][year]`),
+        details: formData.get(`awards[${i}][details]`),
+        awardPhoto: formData.get(`awards[${i}][awardPhoto]`),
+      });
+    }
     const password = formData.get('password');
 
     await client.query('BEGIN');
