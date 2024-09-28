@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { exec } from 'child_process';
 import os from 'os';
-import fs from 'fs';
 import path from 'path';
 import { Tail } from 'tail';
 import { Server } from 'socket.io';
@@ -10,8 +9,11 @@ import { Server } from 'socket.io';
 const logFilePath = path.join('/home/mvsd-lab/Log/mvsd_lab.log');
 
 const monitoringData = {
-  cpuUsage: {},
-  ramUsage: {},
+  cpuUsage: [],
+  ramUsage: {
+    total: 0,
+    free: 0,
+  },
   storage: '',
   network: '',
   uptime: '',
@@ -50,7 +52,7 @@ const getUptime = () => {
   return new Promise((resolve, reject) => {
     exec('uptime -p', (error, stdout, stderr) => {
       if (error) {
-        console.error(`Error executing uptime: ${stderr}`); // Log stderr
+        console.error(`Error executing uptime: ${stderr}`);
         reject(`Error: ${stderr}`);
       } else {
         resolve(stdout.trim());
@@ -76,14 +78,14 @@ const getNetworkStats = () => {
 const startMonitoring = () => {
   setInterval(async () => {
     try {
-      // Update CPU and RAM usage
-      monitoringData.cpuUsage = os.loadavg(); // Gets 1, 5, and 15 minute load averages
+      const loadAvg = os.loadavg();
+      monitoringData.cpuUsage = loadAvg;
+
       monitoringData.ramUsage = {
         total: os.totalmem(),
         free: os.freemem(),
       };
 
-      // Update storage information
       monitoringData.storage = await new Promise((resolve, reject) => {
         exec('df -h', (error, stdout, stderr) => {
           if (error) {
@@ -94,12 +96,10 @@ const startMonitoring = () => {
         });
       });
 
-      // Fetch other monitoring data
       monitoringData.network = await getNetworkStats();
       monitoringData.uptime = await getUptime();
       monitoringData.topCommand = await getSystemInfo();
       monitoringData.currentLoginInfo = await getCurrentLoginInfo();
-
     } catch (error) {
       console.error('Error fetching system monitoring data:', error);
     }
@@ -115,7 +115,8 @@ const tail = new Tail(logFilePath);
 // Function to start tailing the log file
 const startTailingLog = (io) => {
   tail.on('line', (line) => {
-    io.emit('log', line); // Send log line to the client
+    io.emit('log', line);
+    console.log(line);
   });
 
   tail.on('error', (error) => {
