@@ -19,20 +19,6 @@ const monitoringData = {
   currentLoginInfo: '',
 };
 
-// Function to write logs to the log file
-const writeLog = (message, sessionId = 'SYSTEM') => {
-  if (message === 'Periodic system monitoring update') return; // Skip this specific message
-
-  const timestamp = new Date().toISOString();
-  const logLine = `${timestamp} - SID[${sessionId}] - [WARN] - System Monitor - ${message}\n`;
-
-  fs.appendFile(logFilePath, logLine, (err) => {
-    if (err) {
-      console.error('Error writing log:', err);
-    }
-  });
-};
-
 // Fetch system info
 const getSystemInfo = () => {
   return new Promise((resolve, reject) => {
@@ -117,11 +103,8 @@ const startMonitoring = () => {
       monitoringData.topCommand = await getSystemInfo();
       monitoringData.currentLoginInfo = await getCurrentLoginInfo();
 
-      // Log the monitoring data
-      writeLog('Periodic system monitoring update', 'SYSTEM');
     } catch (error) {
       console.error('Error fetching system monitoring data:', error);
-      writeLog(`Error fetching system monitoring data: ${error}`, 'SYSTEM');
     }
   }, 1000); // Adjust the interval as needed
 };
