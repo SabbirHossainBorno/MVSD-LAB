@@ -88,37 +88,36 @@ const getUptime = () => {
 
 // Fetch network statistics using sar and convert to Kbps
 const getNetworkStats = () => {
-    return new Promise((resolve, reject) => {
-      exec('sar -n DEV 1 1', (error, stdout, stderr) => {
-        if (error) {
-          reject(`Error: ${stderr}`);
+  return new Promise((resolve, reject) => {
+    exec('sar -n DEV 1 1', (error, stdout, stderr) => {
+      if (error) {
+        reject(`Error: ${stderr}`);
+      } else {
+        const lines = stdout.trim().split('\n');
+        const stats = lines.slice(-1)[0].trim().split(/\s+/);
+
+        // Assuming eth0 or a similar network interface is present
+        const ethIndex = stats.indexOf('eth0');
+        if (ethIndex !== -1) {
+          // The RX and TX bytes per second are typically in columns 5 and 6 in sar output for network interfaces
+          const rxBytesPerSec = parseFloat(stats[4]); // RX bytes
+          const txBytesPerSec = parseFloat(stats[5]); // TX bytes
+
+          // Convert to Kbps (bytes per second * 8 bits / 1000 to convert to kilobits per second)
+          const downloadSpeedKbps = (rxBytesPerSec * 8) / 1000;
+          const uploadSpeedKbps = (txBytesPerSec * 8) / 1000;
+
+          resolve({
+            downloadSpeed: `${downloadSpeedKbps.toFixed(2)} Kbps`, // Show to 2 decimal places
+            uploadSpeed: `${uploadSpeedKbps.toFixed(2)} Kbps`,
+          });
         } else {
-          const lines = stdout.trim().split('\n');
-          const stats = lines.slice(-1)[0].trim().split(/\s+/);
-  
-          // Assuming eth0 or a similar network interface is present
-          const ethIndex = stats.indexOf('eth0');
-          if (ethIndex !== -1) {
-            // The RX and TX bytes per second are typically in columns 5 and 6 in sar output for network interfaces
-            const rxBytesPerSec = parseFloat(stats[4]); // RX bytes
-            const txBytesPerSec = parseFloat(stats[5]); // TX bytes
-  
-            // Convert to Kbps (bytes per second * 8 bits / 1000 to convert to kilobits per second)
-            const downloadSpeedKbps = (rxBytesPerSec * 8) / 1000;
-            const uploadSpeedKbps = (txBytesPerSec * 8) / 1000;
-  
-            resolve({
-              downloadSpeed: `${downloadSpeedKbps.toFixed(2)} Kbps`, // Show to 2 decimal places
-              uploadSpeed: `${uploadSpeedKbps.toFixed(2)} Kbps`,
-            });
-          } else {
-            resolve({ downloadSpeed: 'N/A', uploadSpeed: 'N/A' });
-          }
+          resolve({ downloadSpeed: 'N/A', uploadSpeed: 'N/A' });
         }
-      });
+      }
     });
-  };
-  
+  });
+};
 
 // Continuous monitoring function
 const startMonitoring = () => {
@@ -169,7 +168,7 @@ io.on('connection', (socket) => {
 
   tailProcess.stdout.on('data', (data) => {
     io.emit('log', data); // Send log updates to the client
-    console.log(data);
+    console.log('Log data emitted:', data);
   });
 
   tailProcess.stderr.on('data', (data) => {

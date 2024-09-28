@@ -31,7 +31,12 @@ const SystemMonitoring = () => {
     // Set up WebSocket for real-time log updates
     const socket = new WebSocket('ws://localhost:3000'); // Ensure this matches the port used in your server-side code
 
+    socket.onopen = () => {
+      console.log('WebSocket connection established');
+    };
+
     socket.onmessage = (event) => {
+      console.log('Log data received:', event.data);
       setLogData((prevLogData) => [...prevLogData, event.data]);
     };
 
@@ -39,8 +44,13 @@ const SystemMonitoring = () => {
       console.error('WebSocket error:', error);
     };
 
+    socket.onclose = (event) => {
+      console.log('WebSocket connection closed:', event);
+    };
+
     // Cleanup on component unmount
     return () => {
+      console.log('Cleaning up WebSocket connection');
       socket.close();
     };
   }, []);
@@ -54,7 +64,7 @@ const SystemMonitoring = () => {
         <div className="bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">CPU Usage</h3>
           <p>Usage: {data?.cpuUsage ? `${data.cpuUsage}%` : 'Loading...'}</p>
-          <p>Load: {data?.cpuLoad ? `${data.cpuLoad}` : 'Loading...'}</p>
+          <p>Load: {data?.cpuLoad ? `${data.cpuLoad.oneMinute}, ${data.cpuLoad.fiveMinutes}, ${data.cpuLoad.fifteenMinutes}` : 'Loading...'}</p>
         </div>
         <div className="bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">RAM Usage</h3>
