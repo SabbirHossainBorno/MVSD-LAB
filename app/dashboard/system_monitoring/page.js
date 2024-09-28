@@ -29,7 +29,7 @@ const SystemMonitoring = () => {
     fetchData();
 
     // Set up WebSocket for real-time log updates
-    const socket = new WebSocket('ws://localhost:3001'); // Adjust the URL as needed
+    const socket = new WebSocket('ws://localhost:3000'); // Ensure this matches the port used in your server-side code
 
     socket.onmessage = (event) => {
       setLogData((prevLogData) => [...prevLogData, event.data]);
@@ -53,12 +53,12 @@ const SystemMonitoring = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">CPU Usage</h3>
-          <p>{Array.isArray(data?.cpuUsage) ? data.cpuUsage.join(', ') : 'Loading...'}</p>
+          <p>{data?.cpuUsage ? `${data.cpuUsage}%` : 'Loading...'}</p>
         </div>
         <div className="bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">RAM Usage</h3>
-          <p>Total: {data?.ramUsage.total || 'Loading...'} bytes</p>
-          <p>Free: {data?.ramUsage.free || 'Loading...'} bytes</p>
+          <p>Total: {data?.ramUsage.total ? `${data.ramUsage.total} GB` : 'Loading...'}</p>
+          <p>Free: {data?.ramUsage.free ? `${data.ramUsage.free} GB` : 'Loading...'}</p>
         </div>
         <div className="col-span-2 bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">Log Monitoring</h3>
@@ -70,7 +70,8 @@ const SystemMonitoring = () => {
         </div>
         <div className="bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">Network</h3>
-          <pre>{data?.network || 'Loading...'}</pre>
+          <p>Download Speed: {data?.network.downloadSpeed || 'Loading...'}</p>
+          <p>Upload Speed: {data?.network.uploadSpeed || 'Loading...'}</p>
         </div>
         <div className="bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">Storage</h3>

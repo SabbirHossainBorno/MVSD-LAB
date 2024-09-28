@@ -2,20 +2,22 @@ import { NextResponse } from 'next/server';
 import { exec } from 'child_process';
 import os from 'os';
 import path from 'path';
-import { Tail } from 'tail';
 import { Server } from 'socket.io';
 
 // Define the log file path
-const logFilePath = path.join('/home/mvsd-lab/Log/mvsd_lab.log');
+const logFilePath = path.join('/Log/mvsd_lab.log');
 
 const monitoringData = {
-  cpuUsage: [],
+  cpuUsage: 0,
   ramUsage: {
     total: 0,
     free: 0,
   },
   storage: '',
-  network: '',
+  network: {
+    downloadSpeed: '',
+    uploadSpeed: '',
+  },
   uptime: '',
   topCommand: '',
   currentLoginInfo: '',
@@ -64,11 +66,16 @@ const getUptime = () => {
 // Fetch network statistics
 const getNetworkStats = () => {
   return new Promise((resolve, reject) => {
-    exec('ip -s link', (error, stdout, stderr) => {
+    exec('ifstat -i eth0 1 1', (error, stdout, stderr) => { // Adjust the interface name as needed
       if (error) {
         reject(`Error: ${stderr}`);
       } else {
-        resolve(stdout);
+        const lines = stdout.trim().split('\n');
+        const stats = lines[lines.length - 1].trim().split(/\s+/);
+        resolve({
+          downloadSpeed: stats[0],
+          uploadSpeed: stats[1],
+        });
       }
     });
   });
@@ -79,11 +86,12 @@ const startMonitoring = () => {
   setInterval(async () => {
     try {
       const loadAvg = os.loadavg();
-      monitoringData.cpuUsage = loadAvg;
+      const cpuCount = os.cpus().length;
+      monitoringData.cpuUsage = ((loadAvg[0] / cpuCount) * 100).toFixed(2); // CPU usage in percentage
 
       monitoringData.ramUsage = {
-        total: os.totalmem(),
-        free: os.freemem(),
+        total: (os.totalmem() / (1024 ** 3)).toFixed(2), // Total memory in GB
+        free: (os.freemem() / (1024 ** 3)).toFixed(2), // Free memory in GB
       };
 
       monitoringData.storage = await new Promise((resolve, reject) => {
@@ -103,36 +111,33 @@ const startMonitoring = () => {
     } catch (error) {
       console.error('Error fetching system monitoring data:', error);
     }
-  }, 1000); // Adjust the interval as needed
+  }, 1); // Fetch data every millisecond
 };
 
 // Start monitoring when the module is loaded
 startMonitoring();
 
-// Initialize the Tail instance
-const tail = new Tail(logFilePath);
-
-// Function to start tailing the log file
-const startTailingLog = (io) => {
-  tail.on('line', (line) => {
-    io.emit('log', line);
-    console.log(line);
-  });
-
-  tail.on('error', (error) => {
-    console.error('Error tailing log file:', error);
-  });
-};
-
 // Initialize WebSocket server
-const io = new Server(3000); // Adjust the port as needed
+const io = new Server(3000); // Ensure this matches the port used in your client-side code
 
 io.on('connection', (socket) => {
   console.log('Client connected');
-  startTailingLog(io);
+
+  // Use tail -f command to monitor the log file
+  const tailProcess = exec(`tail -f ${logFilePath}`);
+
+  tailProcess.stdout.on('data', (data) => {
+    io.emit('log', data);
+    console.log(data);
+  });
+
+  tailProcess.stderr.on('data', (data) => {
+    console.error('Error tailing log file:', data);
+  });
 
   socket.on('disconnect', () => {
     console.log('Client disconnected');
+    tailProcess.kill(); // Stop the tail process when the client disconnects
   });
 });
 
