@@ -99,6 +99,7 @@ const EditProfessor = () => {
   const handleSubmit = async (section) => {
     setLoading(true);
     const data = new FormData();
+  
     if (section === 'basicInfo') {
       for (const key in formData) {
         data.append(key, formData[key]);
@@ -114,17 +115,25 @@ const EditProfessor = () => {
     } else if (section === 'citations') {
       data.append('citations', JSON.stringify(citations));
     } else if (section === 'awards') {
-      data.append('awards', JSON.stringify(awards));
+      awards.forEach((award, index) => {
+        data.append(`awards[${index}][title]`, award.title);
+        data.append(`awards[${index}][year]`, award.year);
+        data.append(`awards[${index}][details]`, award.details);
+        if (award.awardPhoto) {
+          data.append(`awards[${index}][awardPhoto]`, award.awardPhoto);
+        }
+        data.append(`awards[${index}][existing]`, award.existing ? 'true' : 'false');
+      });
     } else if (section === 'password') {
       data.append('password', formData.password);
     }
-
+  
     try {
       const response = await fetch(`/api/professor_edit/${id}`, {
         method: 'POST',
         body: data,
       });
-
+  
       if (response.ok) {
         toast.success('Professor updated successfully!');
         router.push('/dashboard');
@@ -138,6 +147,8 @@ const EditProfessor = () => {
       setLoading(false);
     }
   };
+  
+  
 
   if (loading) return <LoadingSpinner />;
 

@@ -160,6 +160,7 @@ export async function POST(req, { params }) {
         year: formData.get(`awards[${i}][year]`),
         details: formData.get(`awards[${i}][details]`),
         awardPhoto: formData.get(`awards[${i}][awardPhoto]`),
+        existing: formData.get(`awards[${i}][existing]`) === 'true',
       });
     }
     const password = formData.get('password');
@@ -221,10 +222,10 @@ export async function POST(req, { params }) {
       }
 
       const updateMemberQuery = `
-      UPDATE member
-      SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6, updated_at = NOW() AT TIME ZONE 'Asia/Dhaka'
-      WHERE id = $7
-    `;
+        UPDATE member
+        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6, updated_at = NOW() AT TIME ZONE 'Asia/Dhaka'
+        WHERE id = $7
+      `;
 
       try {
         await client.query(updateMemberQuery, [first_name, last_name, phone, short_bio, status, leavingDateParam, id]);
@@ -302,99 +303,138 @@ export async function POST(req, { params }) {
       await client.query(deleteCitationsQuery, [id]);
 
       const insertCitationsQuery = `
-        INSERT INTO professor_citations_info (professor_id, title, link, organization_name)
-        VALUES ($1, $2, $3, $4)
-      `;
-      for (const citation of citations) {
-        await client.query(insertCitationsQuery, [id, citation.title, citation.link, citation.organization_name]);
-      }
+      INSERT INTO professor_citations_info (professor_id, title, link, organization_name)
+      VALUES ($1, $2, $3, $4)
+    `;
+    for (const citation of citations) {
+      await client.query(insertCitationsQuery, [id, citation.title, citation.link, citation.organization_name]);
     }
+  }
 
-// Update awards
-if (awards.length > 0) {
-  console.log('Updating awards...');
-  await logAndAlert('Updating awards...', 'SYSTEM');
+  // Update awards
+  if (awards.length > 0) {
+    console.log('Updating awards...');
+    await logAndAlert('Updating awards...', 'SYSTEM');
 
-  // Filter new awards
-  const newAwards = awards.filter(award => !award.existing);
-  console.log('New awards to insert:', newAwards);  // Debug: Check if newAwards is empty
+    // Filter new awards
+    const newAwards = awards.filter(award => !award.existing);
+    console.log('New awards to insert:', newAwards);  // Debug: Check if newAwards is empty
 
-  const insertAwardsQuery = `
-    INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
-    VALUES ($1, $2, $3, $4, $5)
-  `;
+    const insertAwardsQuery = `
+      INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
+      VALUES ($1, $2, $3, $4, $5)
+    `;
 
-  for (let i = 0; i < newAwards.length; i++) {
-    const award = newAwards[i];
-    console.log(`Processing award ${i + 1}:`, award);
-    
-    let awardUrl = null;
-    if (award.awardPhoto) {
+    for (let i = 0; i < newAwards.length; i++) {
+      const award = newAwards[i];
+      console.log(`Processing award ${i + 1}:`, award);
+      
+      let awardUrl = null;
+      if (award.awardPhoto) {
+        try {
+          console.log(`Award photo for award ${i + 1}:`, award.awardPhoto);
+          awardUrl = await saveAwardPhoto(award.awardPhoto, id, i + 1);
+        } catch (error) {
+          console.error(`Error saving award photo for award ${i + 1}: ${error.message}`);
+          await logAndAlert(`Error saving award photo for award ${i + 1}: ${error.message}`, 'SYSTEM');
+          await client.query('ROLLBACK');  // Ensure rollback in case of error
+          throw error;
+        }
+      }
+      
+      // Debug: Log the actual data being inserted
+      console.log('Inserting award:', { professor_id: id, title: award.title, year: award.year, details: award.details, awardPhoto: awardUrl });
+
+      // Insert the award
       try {
-        console.log(`Award photo for award ${i + 1}:`, award.awardPhoto);
-        awardUrl = await saveAwardPhoto(award.awardPhoto, id, i + 1);
-      } catch (error) {
-        console.error(`Error saving award photo for award ${i + 1}: ${error.message}`);
-        await logAndAlert(`Error saving award photo for award ${i + 1}: ${error.message}`, 'SYSTEM');
-        await client.query('ROLLBACK');  // Ensure rollback in case of error
-        throw error;
+        await client.query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
+      } catch (insertError) {
+        console.error(`Error inserting award ${i + 1}: ${insertError.message}`);
+        await logAndAlert(`Error inserting award ${i + 1}: ${insertError.message}`, 'SYSTEM');
+        await client.query('ROLLBACK');  // Rollback the transaction on error
+        throw insertError;
       }
     }
-    
-    // Debug: Log the actual data being inserted
-    console.log('Inserting award:', { professor_id: id, title: award.title, year: award.year, details: award.details, awardPhoto: awardUrl });
 
-    // Insert the award
-    try {
-      await client.query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
-    } catch (insertError) {
-      console.error(`Error inserting award ${i + 1}: ${insertError.message}`);
-      await logAndAlert(`Error inserting award ${i + 1}: ${insertError.message}`, 'SYSTEM');
-      await client.query('ROLLBACK');  // Rollback the transaction on error
-      throw insertError;
+    // Update existing awards
+    const existingAwards = awards.filter(award => award.existing);
+    console.log('Existing awards to update:', existingAwards);  // Debug: Check if existingAwards is empty
+
+    const updateAwardsQuery = `
+      UPDATE professor_award_info
+      SET title = $1, year = $2, details = $3, award_photo = $4
+      WHERE professor_id = $5 AND title = $6
+    `;
+
+    for (let i = 0; i < existingAwards.length; i++) {
+      const award = existingAwards[i];
+      console.log(`Updating award ${i + 1}:`, award);
+      
+      let awardUrl = award.awardPhoto;
+      if (award.awardPhoto && typeof award.awardPhoto !== 'string') {
+        try {
+          console.log(`Award photo for award ${i + 1}:`, award.awardPhoto);
+          awardUrl = await saveAwardPhoto(award.awardPhoto, id, i + 1);
+        } catch (error) {
+          console.error(`Error saving award photo for award ${i + 1}: ${error.message}`);
+          await logAndAlert(`Error saving award photo for award ${i + 1}: ${error.message}`, 'SYSTEM');
+          await client.query('ROLLBACK');  // Ensure rollback in case of error
+          throw error;
+        }
+      }
+      
+      // Debug: Log the actual data being updated
+      console.log('Updating award:', { professor_id: id, title: award.title, year: award.year, details: award.details, awardPhoto: awardUrl });
+
+      // Update the award
+      try {
+        await client.query(updateAwardsQuery, [award.title, award.year, award.details, awardUrl, id, award.title]);
+      } catch (updateError) {
+        console.error(`Error updating award ${i + 1}: ${updateError.message}`);
+        await logAndAlert(`Error updating award ${i + 1}: ${updateError.message}`, 'SYSTEM');
+        await client.query('ROLLBACK');  // Rollback the transaction on error
+        throw updateError;
+      }
     }
   }
+
+  // Update password
+  if (password) {
+    console.log('Updating password...');
+    await logAndAlert('Updating password...', 'SYSTEM');
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      console.log('Password validation failed');
+      await logAndAlert('Password validation failed', 'SYSTEM');
+      await client.query('ROLLBACK');
+      return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
+    }
+    const updatePasswordQuery = `
+      UPDATE professor_basic_info
+      SET password = $1
+      WHERE id = $2
+    `;
+    await client.query(updatePasswordQuery, [password, id]);
+
+    const updateMemberPasswordQuery = `
+      UPDATE member
+      SET password = $1
+      WHERE id = $2
+    `;
+    await client.query(updateMemberPasswordQuery, [password, id]);
+  }
+
+  await client.query('COMMIT');
+  console.log(`Professor information updated successfully for ID: ${id}`);
+  await logAndAlert(`Professor information updated successfully for ID: ${id}`, 'SYSTEM');
+  return NextResponse.json({ message: 'Professor information updated successfully!' }, { status: 200 });
+
+} catch (error) {
+  console.error(`Error during execution: ${error.message}`);
+  await logAndAlert(`Error during execution: ${error.message}`, 'SYSTEM');
+  await client.query('ROLLBACK');
+  return NextResponse.json({ message: `Execution failed: ${error.message}` }, { status: 500 });
+} finally {
+  client.release();
 }
-
-
-
-    // Update password
-    if (password) {
-      console.log('Updating password...');
-      await logAndAlert('Updating password...', 'SYSTEM');
-      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
-      if (!passwordRegex.test(password)) {
-        console.log('Password validation failed');
-        await logAndAlert('Password validation failed', 'SYSTEM');
-        await client.query('ROLLBACK');
-        return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
-      }
-      const updatePasswordQuery = `
-        UPDATE professor_basic_info
-        SET password = $1
-        WHERE id = $2
-      `;
-      await client.query(updatePasswordQuery, [password, id]);
-
-      const updateMemberPasswordQuery = `
-        UPDATE member
-        SET password = $1
-        WHERE id = $2
-      `;
-      await client.query(updateMemberPasswordQuery, [password, id]);
-    }
-
-    await client.query('COMMIT');
-    console.log(`Professor information updated successfully for ID: ${id}`);
-    await logAndAlert(`Professor information updated successfully for ID: ${id}`, 'SYSTEM');
-    return NextResponse.json({ message: 'Professor information updated successfully!' }, { status: 200 });
-
-  } catch (error) {
-    console.error(`Error during execution: ${error.message}`);
-    await logAndAlert(`Error during execution: ${error.message}`, 'SYSTEM');
-    await client.query('ROLLBACK');
-    return NextResponse.json({ message: `Execution failed: ${error.message}` }, { status: 500 });
-  } finally {
-    client.release();
-  }
 }
