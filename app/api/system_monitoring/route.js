@@ -5,10 +5,12 @@ import path from 'path';
 import { Server } from 'socket.io';
 
 // Define the log file path
-const logFilePath = path.join('/Log/mvsd_lab.log');
+const logFilePath = path.join('/home/mvsd-lab/Log/mvsd_lab.log');
 
+// Monitoring data structure
 const monitoringData = {
   cpuUsage: 0,
+  cpuLoad: 0,
   ramUsage: {
     total: 0,
     free: 0,
@@ -21,6 +23,28 @@ const monitoringData = {
   uptime: '',
   topCommand: '',
   currentLoginInfo: '',
+};
+
+// Fetch CPU load
+const getCpuLoad = () => {
+  return new Promise((resolve, reject) => {
+    exec('uptime', (error, stdout, stderr) => {
+      if (error) {
+        reject(`Error: ${stderr}`);
+      } else {
+        const loadAverage = stdout.match(/load average: ([\d.]+), ([\d.]+), ([\d.]+)/);
+        if (loadAverage) {
+          resolve({
+            oneMinute: loadAverage[1],
+            fiveMinutes: loadAverage[2],
+            fifteenMinutes: loadAverage[3],
+          });
+        } else {
+          resolve({ oneMinute: 'N/A', fiveMinutes: 'N/A', fifteenMinutes: 'N/A' });
+        }
+      }
+    });
+  });
 };
 
 // Fetch system info
@@ -54,7 +78,6 @@ const getUptime = () => {
   return new Promise((resolve, reject) => {
     exec('uptime -p', (error, stdout, stderr) => {
       if (error) {
-        console.error(`Error executing uptime: ${stderr}`);
         reject(`Error: ${stderr}`);
       } else {
         resolve(stdout.trim());
@@ -63,35 +86,53 @@ const getUptime = () => {
   });
 };
 
-// Fetch network statistics
+// Fetch network statistics using sar and convert to Kbps
 const getNetworkStats = () => {
-  return new Promise((resolve, reject) => {
-    exec('ifstat -i eth0 1 1', (error, stdout, stderr) => { // Adjust the interface name as needed
-      if (error) {
-        reject(`Error: ${stderr}`);
-      } else {
-        const lines = stdout.trim().split('\n');
-        const stats = lines[lines.length - 1].trim().split(/\s+/);
-        resolve({
-          downloadSpeed: stats[0],
-          uploadSpeed: stats[1],
-        });
-      }
+    return new Promise((resolve, reject) => {
+      exec('sar -n DEV 1 1', (error, stdout, stderr) => {
+        if (error) {
+          reject(`Error: ${stderr}`);
+        } else {
+          const lines = stdout.trim().split('\n');
+          const stats = lines.slice(-1)[0].trim().split(/\s+/);
+  
+          // Assuming eth0 or a similar network interface is present
+          const ethIndex = stats.indexOf('eth0');
+          if (ethIndex !== -1) {
+            // The RX and TX bytes per second are typically in columns 5 and 6 in sar output for network interfaces
+            const rxBytesPerSec = parseFloat(stats[4]); // RX bytes
+            const txBytesPerSec = parseFloat(stats[5]); // TX bytes
+  
+            // Convert to Kbps (bytes per second * 8 bits / 1000 to convert to kilobits per second)
+            const downloadSpeedKbps = (rxBytesPerSec * 8) / 1000;
+            const uploadSpeedKbps = (txBytesPerSec * 8) / 1000;
+  
+            resolve({
+              downloadSpeed: `${downloadSpeedKbps.toFixed(2)} Kbps`, // Show to 2 decimal places
+              uploadSpeed: `${uploadSpeedKbps.toFixed(2)} Kbps`,
+            });
+          } else {
+            resolve({ downloadSpeed: 'N/A', uploadSpeed: 'N/A' });
+          }
+        }
+      });
     });
-  });
-};
+  };
+  
 
 // Continuous monitoring function
 const startMonitoring = () => {
   setInterval(async () => {
     try {
-      const loadAvg = os.loadavg();
+      const loadAvg = await getCpuLoad();
+      monitoringData.cpuLoad = loadAvg;
+
       const cpuCount = os.cpus().length;
-      monitoringData.cpuUsage = ((loadAvg[0] / cpuCount) * 100).toFixed(2); // CPU usage in percentage
+      monitoringData.cpuUsage = ((os.loadavg()[0] / cpuCount) * 100).toFixed(2);
 
       monitoringData.ramUsage = {
-        total: (os.totalmem() / (1024 ** 3)).toFixed(2), // Total memory in GB
-        free: (os.freemem() / (1024 ** 3)).toFixed(2), // Free memory in GB
+        total: (os.totalmem() / (1024 ** 3)).toFixed(2), // GB
+        free: (os.freemem() / (1024 ** 3)).toFixed(2),   // GB
       };
 
       monitoringData.storage = await new Promise((resolve, reject) => {
@@ -111,7 +152,7 @@ const startMonitoring = () => {
     } catch (error) {
       console.error('Error fetching system monitoring data:', error);
     }
-  }, 1); // Fetch data every millisecond
+  }, 1000); // Adjust the interval as needed
 };
 
 // Start monitoring when the module is loaded
@@ -127,7 +168,7 @@ io.on('connection', (socket) => {
   const tailProcess = exec(`tail -f ${logFilePath}`);
 
   tailProcess.stdout.on('data', (data) => {
-    io.emit('log', data);
+    io.emit('log', data); // Send log updates to the client
     console.log(data);
   });
 
@@ -141,6 +182,7 @@ io.on('connection', (socket) => {
   });
 });
 
+// HTTP GET API to send monitoring data
 export async function GET() {
   return NextResponse.json(monitoringData);
 }
