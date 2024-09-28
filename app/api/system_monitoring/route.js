@@ -1,35 +1,38 @@
 import { NextResponse } from 'next/server';
 import { exec } from 'child_process';
 import os from 'os';
-import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
 
-// Helper function to call logAndAlert API
-const logAndAlert = async (message, sessionId, details = {}) => {
-  try {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    await axios.post(`${siteUrl}/api/log-and-alert`, { message, sessionId, details });
-  } catch (error) {
-    console.error('Failed to log and send alert:', error);
-  }
+// Define the log file path
+const logFilePath = path.join('/home/mvsd-lab/Log/mvsd_lab.log');
+
+const monitoringData = {
+  cpuUsage: {},
+  ramUsage: {},
+  storage: '',
+  network: '',
+  uptime: '',
+  topCommand: '',
+  currentLoginInfo: '',
+};
+
+// Function to write logs to the log file
+const writeLog = (message, sessionId = 'SYSTEM') => {
+  const timestamp = new Date().toISOString();
+  const logLine = `${timestamp} - SID[${sessionId}] - [WARN] - System Monitor - ${message}\n`;
+
+  fs.appendFile(logFilePath, logLine, (err) => {
+    if (err) {
+      console.error('Error writing log:', err);
+    }
+  });
 };
 
 // Fetch system info
 const getSystemInfo = () => {
   return new Promise((resolve, reject) => {
     exec('top -b -n1 | head -n 10', (error, stdout, stderr) => {
-      if (error) {
-        reject(`Error: ${stderr}`);
-      } else {
-        resolve(stdout);
-      }
-    });
-  });
-};
-
-// Fetch log monitoring data
-const getLogMonitoring = () => {
-  return new Promise((resolve, reject) => {
-    exec('tail -n 100 /home/mvsd-lab/Log/mvsd_lab.log', (error, stdout, stderr) => {
       if (error) {
         reject(`Error: ${stderr}`);
       } else {
@@ -57,9 +60,11 @@ const getUptime = () => {
   return new Promise((resolve, reject) => {
     exec('uptime -p', (error, stdout, stderr) => {
       if (error) {
+        console.error(`Error executing uptime: ${stderr}`); // Log stderr
         reject(`Error: ${stderr}`);
       } else {
-        resolve(stdout);
+        console.log(`Uptime command output: ${stdout}`); // Log stdout
+        resolve(stdout.trim());
       }
     });
   });
@@ -68,7 +73,7 @@ const getUptime = () => {
 // Fetch network statistics
 const getNetworkStats = () => {
   return new Promise((resolve, reject) => {
-    exec('ifstat -q 1 1', (error, stdout, stderr) => {
+    exec('ip -s link', (error, stdout, stderr) => {
       if (error) {
         reject(`Error: ${stderr}`);
       } else {
@@ -78,54 +83,49 @@ const getNetworkStats = () => {
   });
 };
 
-// Set up an interval for sending alerts every 5 minutes (300000 ms)
-let logInterval = null;
+// Continuous monitoring function
+const startMonitoring = () => {
+  setInterval(async () => {
+    try {
+      console.log('Fetching system monitoring data...');
+
+      // Update CPU and RAM usage
+      monitoringData.cpuUsage = os.loadavg(); // Gets 1, 5, and 15 minute load averages
+      monitoringData.ramUsage = {
+        total: os.totalmem(),
+        free: os.freemem(),
+      };
+
+      // Update storage information
+      monitoringData.storage = await new Promise((resolve, reject) => {
+        exec('df -h', (error, stdout, stderr) => {
+          if (error) {
+            reject(`Error: ${stderr}`);
+          } else {
+            resolve(stdout);
+          }
+        });
+      });
+
+      // Fetch other monitoring data
+      monitoringData.network = await getNetworkStats();
+      monitoringData.uptime = await getUptime();
+      monitoringData.topCommand = await getSystemInfo();
+      monitoringData.currentLoginInfo = await getCurrentLoginInfo();
+
+      // Log the monitoring data
+      writeLog('Periodic system monitoring update', 'SYSTEM');
+    } catch (error) {
+      console.error('Error fetching system monitoring data:', error);
+      writeLog(`Error fetching system monitoring data: ${error}`, 'SYSTEM');
+    }
+  }, 1000); // Adjust the interval as needed
+};
+
+// Start monitoring when the module is loaded
+startMonitoring();
 
 export async function GET() {
-  try {
-    // Check if the interval is already running
-    if (!logInterval) {
-      logInterval = setInterval(async () => {
-        console.log('Sending periodic system monitoring log every 5 minutes...');
-        await logAndAlert('Periodic system monitoring log', 'SYSTEM');
-      }, 300000); // 5 minutes in milliseconds
-    }
-
-    console.log('Fetching system monitoring data...');
-    await logAndAlert('Fetching system monitoring data...', 'SYSTEM');
-
-    const cpuUsage = os.loadavg(); // Gets 1, 5, and 15 minute load averages
-    const ramUsage = {
-      total: os.totalmem(),
-      free: os.freemem(),
-    };
-
-    const storage = await new Promise((resolve, reject) => {
-      exec('df -h', (error, stdout, stderr) => {
-        if (error) {
-          reject(`Error: ${stderr}`);
-        } else {
-          resolve(stdout);
-        }
-      });
-    });
-
-    const network = await getNetworkStats();
-    const uptime = await getUptime();
-    const topCommand = await getSystemInfo();
-    const currentLoginInfo = await getCurrentLoginInfo();
-
-    return NextResponse.json({
-      cpuUsage,
-      ramUsage,
-      storage,
-      network,
-      uptime,
-      topCommand,
-      currentLoginInfo,
-    });
-  } catch (error) {
-    console.error('Error fetching system monitoring data:', error);
-    return NextResponse.error();
-  }
+  return NextResponse.json(monitoringData);
 }
+

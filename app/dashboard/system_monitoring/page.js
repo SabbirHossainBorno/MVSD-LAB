@@ -25,7 +25,7 @@ const SystemMonitoring = () => {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 1000); // Fetch data every 1 seconds
+    const interval = setInterval(fetchData, 1000); // Fetch data every 1 second
 
     return () => clearInterval(interval);
   }, []);
@@ -34,10 +34,12 @@ const SystemMonitoring = () => {
     const socket = io();
 
     socket.on('log', (data) => {
+      console.log('Received log:', data); // Debug log
       setLogs((prevLogs) => [...prevLogs, data]);
     });
 
     socket.on('topCommand', (data) => {
+      console.log('Received top command:', data); // Debug log
       setTopCommand(data);
     });
 
@@ -53,9 +55,9 @@ const SystemMonitoring = () => {
 
   const parseUptime = (uptimeString) => {
     const uptimeMatch = uptimeString.match(/up\s+((\d+)\s+days?,)?\s*(\d+):(\d+)/);
-    const days = uptimeMatch?.[2] || 0;
-    const hours = uptimeMatch?.[3] || 0;
-    const minutes = uptimeMatch?.[4] || 0;
+    const days = uptimeMatch?.[2] ? uptimeMatch[2] : 0;
+    const hours = uptimeMatch?.[3] ? uptimeMatch[3] : 0;
+    const minutes = uptimeMatch?.[4] ? uptimeMatch[4] : 0;
     return `${days} days, ${hours} hours, ${minutes} minutes`;
   };
 
