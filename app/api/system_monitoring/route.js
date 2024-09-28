@@ -3,6 +3,8 @@ import { exec } from 'child_process';
 import os from 'os';
 import fs from 'fs';
 import path from 'path';
+import { Tail } from 'tail';
+import { Server } from 'socket.io';
 
 // Define the log file path
 const logFilePath = path.join('/home/mvsd-lab/Log/mvsd_lab.log');
@@ -19,6 +21,8 @@ const monitoringData = {
 
 // Function to write logs to the log file
 const writeLog = (message, sessionId = 'SYSTEM') => {
+  if (message === 'Periodic system monitoring update') return; // Skip this specific message
+
   const timestamp = new Date().toISOString();
   const logLine = `${timestamp} - SID[${sessionId}] - [WARN] - System Monitor - ${message}\n`;
 
@@ -125,7 +129,32 @@ const startMonitoring = () => {
 // Start monitoring when the module is loaded
 startMonitoring();
 
+// Initialize the Tail instance
+const tail = new Tail(logFilePath);
+
+// Function to start tailing the log file
+const startTailingLog = (io) => {
+  tail.on('line', (line) => {
+    io.emit('log', line); // Send log line to the client
+  });
+
+  tail.on('error', (error) => {
+    console.error('Error tailing log file:', error);
+  });
+};
+
+// Initialize WebSocket server
+const io = new Server(3000); // Adjust the port as needed
+
+io.on('connection', (socket) => {
+  console.log('Client connected');
+  startTailingLog(io);
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+});
+
 export async function GET() {
   return NextResponse.json(monitoringData);
 }
-
