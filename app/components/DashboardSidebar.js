@@ -107,6 +107,14 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
             </div>
           )}
         </div>
+
+        <Link href="/dashboard/live_log_monitoring">
+          <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+            <img src="/icons/professor_list.png" alt="Professors List" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
+            <span className="text-lg font-medium">Professor List</span>
+          </div>
+        </Link>
+
       </nav>
     </aside>
   );

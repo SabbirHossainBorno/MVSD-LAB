@@ -325,6 +325,13 @@ export async function POST(req, { params }) {
       VALUES ($1, $2, $3, $4, $5)
     `;
 
+    // Get the current number of awards for the professor
+    const currentAwardsCountQuery = `
+      SELECT COUNT(*) FROM professor_award_info WHERE professor_id = $1
+    `;
+    const currentAwardsCountResult = await client.query(currentAwardsCountQuery, [id]);
+    const currentAwardsCount = parseInt(currentAwardsCountResult.rows[0].count, 10);
+
     for (let i = 0; i < newAwards.length; i++) {
       const award = newAwards[i];
       console.log(`Processing award ${i + 1}:`, award);
@@ -333,7 +340,7 @@ export async function POST(req, { params }) {
       if (award.awardPhoto) {
         try {
           console.log(`Award photo for award ${i + 1}:`, award.awardPhoto);
-          awardUrl = await saveAwardPhoto(award.awardPhoto, id, i + 1);
+          awardUrl = await saveAwardPhoto(award.awardPhoto, id, currentAwardsCount + i + 1);
         } catch (error) {
           console.error(`Error saving award photo for award ${i + 1}: ${error.message}`);
           await logAndAlert(`Error saving award photo for award ${i + 1}: ${error.message}`, 'SYSTEM');
@@ -353,47 +360,6 @@ export async function POST(req, { params }) {
         await logAndAlert(`Error inserting award ${i + 1}: ${insertError.message}`, 'SYSTEM');
         await client.query('ROLLBACK');  // Rollback the transaction on error
         throw insertError;
-      }
-    }
-
-    // Update existing awards
-    const existingAwards = awards.filter(award => award.existing);
-    console.log('Existing awards to update:', existingAwards);  // Debug: Check if existingAwards is empty
-
-    const updateAwardsQuery = `
-      UPDATE professor_award_info
-      SET title = $1, year = $2, details = $3, award_photo = $4
-      WHERE professor_id = $5 AND title = $6
-    `;
-
-    for (let i = 0; i < existingAwards.length; i++) {
-      const award = existingAwards[i];
-      console.log(`Updating award ${i + 1}:`, award);
-      
-      let awardUrl = award.awardPhoto;
-      if (award.awardPhoto && typeof award.awardPhoto !== 'string') {
-        try {
-          console.log(`Award photo for award ${i + 1}:`, award.awardPhoto);
-          awardUrl = await saveAwardPhoto(award.awardPhoto, id, i + 1);
-        } catch (error) {
-          console.error(`Error saving award photo for award ${i + 1}: ${error.message}`);
-          await logAndAlert(`Error saving award photo for award ${i + 1}: ${error.message}`, 'SYSTEM');
-          await client.query('ROLLBACK');  // Ensure rollback in case of error
-          throw error;
-        }
-      }
-      
-      // Debug: Log the actual data being updated
-      console.log('Updating award:', { professor_id: id, title: award.title, year: award.year, details: award.details, awardPhoto: awardUrl });
-
-      // Update the award
-      try {
-        await client.query(updateAwardsQuery, [award.title, award.year, award.details, awardUrl, id, award.title]);
-      } catch (updateError) {
-        console.error(`Error updating award ${i + 1}: ${updateError.message}`);
-        await logAndAlert(`Error updating award ${i + 1}: ${updateError.message}`, 'SYSTEM');
-        await client.query('ROLLBACK');  // Rollback the transaction on error
-        throw updateError;
       }
     }
   }
@@ -438,3 +404,4 @@ export async function POST(req, { params }) {
   client.release();
 }
 }
+
