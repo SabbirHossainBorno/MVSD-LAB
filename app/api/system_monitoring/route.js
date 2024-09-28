@@ -53,7 +53,6 @@ const getUptime = () => {
         console.error(`Error executing uptime: ${stderr}`); // Log stderr
         reject(`Error: ${stderr}`);
       } else {
-        console.log(`Uptime command output: ${stdout}`); // Log stdout
         resolve(stdout.trim());
       }
     });
@@ -77,8 +76,6 @@ const getNetworkStats = () => {
 const startMonitoring = () => {
   setInterval(async () => {
     try {
-      console.log('Fetching system monitoring data...');
-
       // Update CPU and RAM usage
       monitoringData.cpuUsage = os.loadavg(); // Gets 1, 5, and 15 minute load averages
       monitoringData.ramUsage = {
