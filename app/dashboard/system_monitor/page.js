@@ -123,7 +123,7 @@ const SystemMonitoring = () => {
         </div>
 
         {/* Login Info */}
-        <div className="bg-gray-800 p-4 md:p-6 rounded shadow-md mt-6">
+        <div className="bg-gray-800 p-4 md:p-6 rounded shadow-md">
           <h3 className="text-lg md:text-xl font-bold mb-4 text-blue-400">Current Login Info</h3>
           <div className="bg-gray-700 p-4 rounded">
             <pre className="text-gray-200">{data.loginInfo}</pre>
@@ -131,7 +131,7 @@ const SystemMonitoring = () => {
         </div>
 
         {/* Uptime */}
-        <div className="bg-gray-800 p-4 md:p-6 rounded shadow-md mt-6">
+        <div className="bg-gray-800 p-4 md:p-6 rounded shadow-md">
           <h3 className="text-lg md:text-xl font-bold mb-4 text-blue-400">Uptime</h3>
           <div className="bg-gray-700 p-4 rounded">
             <p className="text-md md:text-lg text-gray-200">{data.uptime}</p>
