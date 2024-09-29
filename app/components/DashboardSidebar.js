@@ -112,7 +112,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
 </div>
 
 {/* System Monitor Option */}
-<Link href="/dashboard/system_monitoring">
+<Link href="/dashboard/system_monitor">
   <div className="block p-3 mt-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
     <img src="/icons/SystemMonitor.png" alt="System Monitor" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
     <span className="text-lg font-medium">System Monitor</span>

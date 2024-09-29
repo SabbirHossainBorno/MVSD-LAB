@@ -1,3 +1,4 @@
+// app/dashboard/system_monitor/page.js
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -7,42 +8,23 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 const SystemMonitoring = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [logData, setLogData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch('/api/system_monitor');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
         const result = await response.json();
+        console.log('Fetched data:', result);
         setData(result);
-      } catch (error) {
-        console.error('Error fetching system monitoring data:', error);
-      } finally {
         setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
       }
     };
 
-    // Fetch initial data
-    fetchData();
+    const intervalId = setInterval(fetchData, 1000); // Fetch data every second
 
-    // Set up WebSocket for real-time log updates
-    const socket = new WebSocket('ws://localhost:3000'); // Ensure this matches the port used in your server-side code
-
-    socket.onmessage = (event) => {
-      setLogData((prevLogData) => [...prevLogData, event.data]);
-    };
-
-    socket.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    // Cleanup on component unmount
-    return () => {
-      socket.close();
-    };
+    return () => clearInterval(intervalId); // Cleanup interval on component unmount
   }, []);
 
   if (loading) return <LoadingSpinner />;
@@ -53,38 +35,38 @@ const SystemMonitoring = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">CPU Usage</h3>
-          <p>Usage: {data?.cpuUsage ? `${data.cpuUsage}%` : 'Loading...'}</p>
-          <p>Load: {data?.cpuLoad ? `${data.cpuLoad}` : 'Loading...'}</p>
+          <p>Usage: {data.cpu.usage.toFixed(2)}%</p>
+          <p>Load: {data.cpu.load.toFixed(2)}</p>
         </div>
         <div className="bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">RAM Usage</h3>
-          <p>Total: {data?.ramUsage.total ? `${data.ramUsage.total} GB` : 'Loading...'}</p>
-          <p>Free: {data?.ramUsage.free ? `${data.ramUsage.free} GB` : 'Loading...'}</p>
+          <p>Total: {data.ram.total} GB</p>
+          <p>Free: {data.ram.free} GB</p>
         </div>
         <div className="col-span-2 bg-gray-800 p-6 rounded shadow-md">
-          <h3 className="text-xl font-bold mb-4">Log Monitoring</h3>
-          <pre>{logData.length ? logData.join('\n') : 'No logs available...'}</pre>
+          <h3 className="text-xl font-bold mb-4">Website Live Log</h3>
+          <pre>{data.websiteLog.join('\n')}</pre>
         </div>
         <div className="col-span-2 bg-gray-800 p-6 rounded shadow-md">
-          <h3 className="text-xl font-bold mb-4">Top Command</h3>
-          <pre>{data?.topCommand || 'Loading...'}</pre>
+          <h3 className="text-xl font-bold mb-4">System Process</h3>
+          <pre>{data.process}</pre>
         </div>
         <div className="bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">Network</h3>
-          <p>Download Speed: {data?.network.downloadSpeed || 'Loading...'}</p>
-          <p>Upload Speed: {data?.network.uploadSpeed || 'Loading...'}</p>
+          <p>Download Speed: {data.network.download} kbps</p>
+          <p>Upload Speed: {data.network.upload} kbps</p>
         </div>
         <div className="bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">Storage</h3>
-          <pre>{data?.storage || 'Loading...'}</pre>
+          <pre>{data.storage}</pre>
         </div>
         <div className="bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">Current Login Info</h3>
-          <pre>{data?.currentLoginInfo || 'Loading...'}</pre>
+          <pre>{data.loginInfo}</pre>
         </div>
         <div className="bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">Uptime</h3>
-          <pre>{data?.uptime || 'Loading...'}</pre>
+          <p>{data.uptime}</p>
         </div>
       </div>
     </div>
