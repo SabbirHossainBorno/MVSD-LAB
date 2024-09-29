@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import withAuth from '../../components/withAuth';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { FaClock } from 'react-icons/fa'; // Importing an icon for better visuals
 
 const SystemMonitoring = () => {
   const [data, setData] = useState(null);
@@ -31,16 +32,16 @@ const SystemMonitoring = () => {
 
   // Determine CPU usage color
   const getCpuUsageColor = (usage) => {
-    if (usage < 70) return 'bg-green-500';
-    if (usage < 80) return 'bg-yellow-500';
-    return 'bg-red-500';
+    if (usage < 70) return 'bg-green-600';
+    if (usage < 80) return 'bg-yellow-600';
+    return 'bg-red-600';
   };
 
   // Determine RAM usage color
   const getRamUsageColor = (usage) => {
-    if (usage < 70) return 'bg-green-500';
-    if (usage < 80) return 'bg-yellow-500';
-    return 'bg-red-500';
+    if (usage < 70) return 'bg-green-600';
+    if (usage < 80) return 'bg-yellow-600';
+    return 'bg-red-600';
   };
 
   const cpuUsageColor = getCpuUsageColor(data.cpu.usage);
@@ -58,50 +59,62 @@ const SystemMonitoring = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
         <div className="bg-gray-800 p-6 rounded shadow-md">
-        <h3 className="text-xl font-bold mb-4">CPU Usage</h3>
+            <h3 className="text-xl font-bold mb-4 text-blue-400">CPU Usage</h3>
             <div className={`p-6 rounded shadow-md ${cpuUsageColor}`}>
                 <p>Current Usage : {data.cpu.usage.toFixed(0)}%</p>
             </div>
         </div>
 
         <div className="bg-gray-800 p-6 rounded shadow-md">
-        <h3 className="text-xl font-bold mb-4">RAM Usage</h3>
-            <div className={`p-6 rounded shadow-md ${ramUsageColor}`}>
-                <p>Total Memory Usage : {ramUsage.toFixed(2)}%</p>
-                <p>Total Server Ram   : {data.ram.total} GB</p>
-                <p>Available          : {data.ram.free} GB</p>
+            <h3 className="text-xl font-bold mb-4 text-blue-400">RAM Usage</h3>
+            <div className={`p-6 rounded mb-4 ${ramUsageColor}`}>
+                <p>Total Memory Usage: {ramUsage.toFixed(2)}%</p>
+            </div>
+            <div className="bg-gray-700 p-4 rounded">
+                <p>Total Server RAM: {data.ram.total} GB</p>
+                <p>Available: {data.ram.free} GB</p>
             </div>
         </div>
+
         
         <div className="col-span-2 bg-gray-800 p-6 rounded shadow-md">
-          <h3 className="text-xl font-bold mb-4">Website Live Log</h3>
+          <h3 className="text-xl font-bold mb-4 text-blue-400">Website Live Log</h3>
           <div className="bg-black p-4 rounded overflow-auto max-h-100">
             <pre className="text-green-400 whitespace-pre-wrap">{data.websiteLog.join('\n')}</pre>
           </div>
         </div>
+
         <div className="col-span-2 bg-gray-800 p-6 rounded shadow-md">
-          <h3 className="text-xl font-bold mb-4">System Process</h3>
+          <h3 className="text-xl font-bold mb-4 text-blue-400">System Process</h3>
           <div className="bg-black p-4 rounded overflow-auto max-h-96">
             <pre className="text-yellow-400 whitespace-pre-wrap font-mono">{data.process}</pre>
           </div>
         </div>
+
         <div className="bg-gray-800 p-6 rounded shadow-md">
-          <h3 className="text-xl font-bold mb-4">Network</h3>
+          <h3 className="text-xl font-bold mb-4 text-blue-400">Network</h3>
           <p>Download Speed: {formatNumber(data.network.download)} Mb/s</p>
           <p>Upload Speed: {formatNumber(data.network.upload)} Mb/s</p>
         </div>
+
         <div className="bg-gray-800 p-6 rounded shadow-md">
-          <h3 className="text-xl font-bold mb-4">Storage</h3>
+          <h3 className="text-xl font-bold mb-4 text-blue-400">Storage</h3>
           <pre>{data.storage}</pre>
         </div>
+
         <div className="bg-gray-800 p-6 rounded shadow-md">
-          <h3 className="text-xl font-bold mb-4">Current Login Info</h3>
+          <h3 className="text-xl font-bold mb-4 text-blue-400">Current Login Info</h3>
           <pre>{data.loginInfo}</pre>
         </div>
-        <div className="bg-gray-800 p-6 rounded shadow-md">
-          <h3 className="text-xl font-bold mb-4">Uptime</h3>
-          <p>{data.uptime}</p>
+
+        <div className="bg-gray-800 p-6 rounded shadow-md flex items-center">
+            <FaClock className="text-3xl text-blue-400 mr-4" />
+            <div>
+                <h3 className="text-xl font-bold mb-4 text-blue-400">Uptime</h3>
+                <p className="text-lg">{data.uptime}</p>
+            </div>
         </div>
+
       </div>
     </div>
   );
