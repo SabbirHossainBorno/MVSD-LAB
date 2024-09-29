@@ -56,16 +56,23 @@ const SystemMonitoring = () => {
     <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
       <h2 className="text-3xl font-bold mb-6 text-center">System Monitoring</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className={`p-6 rounded shadow-md ${cpuUsageColor}`}>
-          <h3 className="text-xl font-bold mb-4">CPU Usage</h3>
-          <p>Current Usage: {data.cpu.usage.toFixed(0)}%</p>
+
+        <div className="bg-gray-800 p-6 rounded shadow-md">
+        <h3 className="text-xl font-bold mb-4">CPU Usage</h3>
+            <div className={`p-6 rounded shadow-md ${cpuUsageColor}`}>
+                <p>Current Usage : {data.cpu.usage.toFixed(0)}%</p>
+            </div>
         </div>
-        <div className={`p-6 rounded shadow-md ${ramUsageColor}`}>
-          <h3 className="text-xl font-bold mb-4">RAM Usage</h3>
-          <p>Usage: {ramUsage.toFixed(2)}%</p>
-          <p>Total: {data.ram.total} GB</p>
-          <p>Free: {data.ram.free} GB</p>
+
+        <div className="bg-gray-800 p-6 rounded shadow-md">
+        <h3 className="text-xl font-bold mb-4">RAM Usage</h3>
+            <div className={`p-6 rounded shadow-md ${ramUsageColor}`}>
+                <p>Total Memory Usage : {ramUsage.toFixed(2)}%</p>
+                <p>Total Server Ram   : {data.ram.total} GB</p>
+                <p>Available          : {data.ram.free} GB</p>
+            </div>
         </div>
+        
         <div className="col-span-2 bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">Website Live Log</h3>
           <div className="bg-black p-4 rounded overflow-auto max-h-100">
@@ -80,8 +87,8 @@ const SystemMonitoring = () => {
         </div>
         <div className="bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">Network</h3>
-          <p>Download Speed: {formatNumber(data.network.download)} KB/s</p>
-          <p>Upload Speed: {formatNumber(data.network.upload)} KB/s</p>
+          <p>Download Speed: {formatNumber(data.network.download)} Mb/s</p>
+          <p>Upload Speed: {formatNumber(data.network.upload)} Mb/s</p>
         </div>
         <div className="bg-gray-800 p-6 rounded shadow-md">
           <h3 className="text-xl font-bold mb-4">Storage</h3>

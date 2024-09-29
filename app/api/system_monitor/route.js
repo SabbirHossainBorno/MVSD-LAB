@@ -45,20 +45,22 @@ export async function GET(request) {
     const processList = await execCommand('top -b -n 1');
     data.process = processList;
 
-    // Network
-    const networkStats = await execCommand('vnstat -i eth0 --json'); // Specify the interface
-    const networkData = JSON.parse(networkStats);
-    console.log('Network Data:', JSON.stringify(networkData, null, 2)); // Log the network data for debugging
-    const interfaceStats = networkData.interfaces[0].traffic.fiveminute;
-    const latestStats = interfaceStats[interfaceStats.length - 1];
-    const previousStats = interfaceStats[interfaceStats.length - 2];
-
-    const downloadSpeed = ((latestStats.rx - previousStats.rx) / 300).toFixed(2); // Convert to KB/s
-    const uploadSpeed = ((latestStats.tx - previousStats.tx) / 300).toFixed(2); // Convert to KB/s
+        // Network
+        const networkStats = await execCommand('vnstat -i eth0 --json'); // Specify the interface
+        const networkData = JSON.parse(networkStats);
+        const interfaceStats = networkData.interfaces[0].traffic.fiveminute;
+        const latestStats = interfaceStats[interfaceStats.length - 1];
+        const previousStats = interfaceStats[interfaceStats.length - 2];
+    
+        const downloadSpeedKBps = (latestStats.rx - previousStats.rx) / 300; // Convert to KB/s
+        const uploadSpeedKBps = (latestStats.tx - previousStats.tx) / 300; // Convert to KB/s
+    
+        const downloadSpeedMbps = (downloadSpeedKBps * 0.008).toFixed(2); // Convert to Mb/s
+        const uploadSpeedMbps = (uploadSpeedKBps * 0.008).toFixed(2); // Convert to Mb/s
 
     data.network = {
-      download: downloadSpeed,
-      upload: uploadSpeed
+      download: downloadSpeedMbps,
+      upload: uploadSpeedMbps
     };
 
     // Storage
@@ -75,7 +77,7 @@ export async function GET(request) {
     const hours = Math.floor((uptime % (3600 * 24)) / 3600);
     const minutes = Math.floor((uptime % 3600) / 60);
     const seconds = Math.floor(uptime % 60);
-    data.uptime = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    data.uptime = `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
 
     return NextResponse.json(data);
   } catch (error) {
