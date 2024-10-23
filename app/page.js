@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import the styles
+import LoadingSpinner from '../components/LoadingSpinner'; // Add a loading spinner component
 
 export default function HomePage() {
   const handleSubmit = async (event) => {
@@ -17,7 +18,7 @@ export default function HomePage() {
       });
       const result = await response.json();
       if (result.success) {
-        toast.success('Subscription successful!');
+        toast.success('Subscription Successful!');
         event.target.reset(); // Reset the form
       } else {
         toast.error(result.message || 'Something went wrong.');
@@ -28,6 +29,8 @@ export default function HomePage() {
       event.target.reset(); // Reset the form
     }
   };
+
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-900 to-black text-white p-6">
