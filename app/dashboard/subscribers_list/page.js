@@ -5,14 +5,17 @@ import Link from 'next/link';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { format } from 'date-fns';
+import withAuth from '../../components/withAuth'; 
+import LoadingSpinner from '../../components/LoadingSpinner'; 
 
-export default function SubscribersList() {
+function SubscribersList() {
   const [subscribers, setSubscribers] = useState([]);
   const [filteredSubscribers, setFilteredSubscribers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [domainFilter, setDomainFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
     async function fetchSubscribers() {
@@ -27,6 +30,8 @@ export default function SubscribersList() {
         }
       } catch (error) {
         toast.error('Failed to fetch subscriber data');
+      } finally {
+        setLoading(false); // Stop loading spinner
       }
     }
 
@@ -35,7 +40,8 @@ export default function SubscribersList() {
 
   useEffect(() => {
     let filtered = subscribers.filter(subscriber =>
-      subscriber.email.toLowerCase().includes(searchTerm.toLowerCase())
+      subscriber.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      subscriber.id.toString().includes(searchTerm)
     );
 
     if (domainFilter) {
@@ -63,6 +69,8 @@ export default function SubscribersList() {
 
   const paginatedSubscribers = paginate(filteredSubscribers, itemsPerPage, currentPage);
 
+  if (loading) return <LoadingSpinner />;
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
       <h1 className="text-4xl font-bold mb-6 text-gray-300">Subscriber List</h1>
@@ -70,7 +78,7 @@ export default function SubscribersList() {
         <div className="flex flex-col sm:flex-row sm:items-center mb-4 space-y-4 sm:space-y-0 sm:space-x-4">
           <input
             type="text"
-            placeholder="Search by email..."
+            placeholder="Search by email or ID..."
             className="w-full sm:w-1/3 p-3 rounded border border-gray-600 bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -98,6 +106,7 @@ export default function SubscribersList() {
         <table className="min-w-full bg-gray-700 rounded">
           <thead>
             <tr className="border-b border-gray-600">
+              <th className="p-4 text-left text-gray-300 font-medium">ID</th>
               <th className="p-4 text-left text-gray-300 font-medium">Email</th>
               <th className="p-4 text-left text-gray-300 font-medium">Date</th>
             </tr>
@@ -106,13 +115,14 @@ export default function SubscribersList() {
             {paginatedSubscribers.length > 0 ? (
               paginatedSubscribers.map((subscriber) => (
                 <tr key={subscriber.email} className="hover:bg-gray-600 transition-colors duration-200">
+                  <td className="p-4 text-gray-200">{subscriber.id}</td>
                   <td className="p-4 text-gray-200">{subscriber.email}</td>
                   <td className="p-4 text-gray-200">{formatDate(subscriber.date)}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="2" className="p-4 text-center text-gray-400">No subscribers found</td>
+                <td colSpan="3" className="p-4 text-center text-gray-400">No subscribers found</td>
               </tr>
             )}
           </tbody>
@@ -141,3 +151,5 @@ export default function SubscribersList() {
     </div>
   );
 }
+
+export default withAuth(SubscribersList);

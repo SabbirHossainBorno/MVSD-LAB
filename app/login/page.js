@@ -131,9 +131,6 @@ function LoginPage() {
                     </div>
                   </div>
                 </div>
-                <div className="mt-4 flex items-center justify-between">
-                  <a className="text-sm font-medium text-[#012970] underline" href="/forgot-password">Forgot Password?</a>
-                </div>
                 <div className="mt-4 flex items-center justify-end gap-x-2">
                   <a className="inline-flex items-center justify-center rounded text-sm font-medium bg-transparent border-2 border-[#012970] text-[#012970] hover:bg-[#012970] hover:text-white px-4 py-2 transition-all" href="/signup">
                     Create Account

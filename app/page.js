@@ -1,4 +1,3 @@
-// app/dashboard/subscrib/page.js
 'use client';
 
 import Image from 'next/image';
@@ -61,7 +60,7 @@ export default function HomePage() {
 
       <main className="flex flex-col items-center text-center space-y-8 mt-6 max-w-lg sm:max-w-xl md:max-w-2xl z-10">
         <p className="text-lg sm:text-xl md:text-2xl text-gray-400">
-          We're working on something amazing in the world of automotive engineering and AI innovation. Stay connected for future updates!
+          We&apos;re working on something amazing in the world of automotive engineering and AI innovation. Stay connected for future updates!
         </p>
 
         <div className="bg-opacity-50 p-8 rounded-lg shadow-xl backdrop-blur-md w-full max-w-md space-y-6 relative z-10">
