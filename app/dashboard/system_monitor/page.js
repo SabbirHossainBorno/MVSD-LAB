@@ -80,10 +80,11 @@ const SystemMonitoring = () => {
         {/* Live Log */}
         <div className="col-span-1 md:col-span-2 bg-gray-800 p-4 md:p-6 rounded shadow-md">
           <h3 className="text-lg md:text-xl font-bold mb-4 text-blue-400">Website Live Log</h3>
-          <div className="bg-black p-4 rounded overflow-auto max-h-48 md:max-h-100">
+          <div className="bg-black p-4 rounded overflow-auto max-h-96 md:max-h-128">
             <pre className="text-green-400 whitespace-pre-wrap">{data.websiteLog.join('\n')}</pre>
           </div>
         </div>
+
 
         {/* System Process */}
         <div className="col-span-1 md:col-span-2 bg-gray-800 p-4 md:p-6 rounded shadow-md">
@@ -115,29 +116,28 @@ const SystemMonitoring = () => {
         </div>
 
         {/* Storage Info */}
-        <div className="bg-gray-800 p-4 md:p-6 rounded shadow-md">
+        <div className="bg-gray-800 p-4 md:p-6 rounded shadow-md overflow-x-auto">
           <h3 className="text-lg md:text-xl font-bold mb-4 text-blue-400">Storage</h3>
-          <div className="bg-gray-700 p-4 rounded">
+          <div className="bg-gray-700 p-4 rounded overflow-x-auto">
             <pre className="text-gray-200">{data.storage}</pre>
           </div>
         </div>
 
         {/* Login Info */}
-        <div className="bg-gray-800 p-4 md:p-6 rounded shadow-md">
+        <div className="bg-gray-800 p-4 md:p-6 rounded shadow-md overflow-x-auto">
           <h3 className="text-lg md:text-xl font-bold mb-4 text-blue-400">Current Login Info</h3>
-          <div className="bg-gray-700 p-4 rounded">
+          <div className="bg-gray-700 p-4 rounded overflow-x-auto">
             <pre className="text-gray-200">{data.loginInfo}</pre>
           </div>
         </div>
 
         {/* Uptime */}
-        <div className="bg-gray-800 p-4 md:p-6 rounded shadow-md">
+        <div className="bg-gray-800 p-4 md:p-6 rounded shadow-md overflow-x-auto">
           <h3 className="text-lg md:text-xl font-bold mb-4 text-blue-400">Uptime</h3>
-          <div className="bg-gray-700 p-4 rounded">
+          <div className="bg-gray-700 p-4 rounded overflow-x-auto">
             <p className="text-md md:text-lg text-gray-200">{data.uptime}</p>
           </div>
         </div>
-        
       </div>
     </div>
   );

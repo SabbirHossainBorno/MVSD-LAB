@@ -1,3 +1,4 @@
+// app/dashboard/subscrib/page.js
 'use client';
 
 import Image from 'next/image';
@@ -35,14 +36,14 @@ export default function HomePage() {
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-bl from-teal-900 via-purple-900 to-pink-900 text-white p-6 overflow-hidden">
+    <div className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-bl from-gray-800 via-gray-900 to-black text-white p-6 overflow-hidden">
       {/* Background particle animation */}
       <div className="absolute inset-0 z-0">
         <div className="bg-particle-animation w-full h-full opacity-20"></div>
       </div>
 
       <header className="flex flex-col items-center text-center mb-10 z-10">
-        <div className="relative w-36 h-18 md:w-48 md:h-24 mb-6 animate-pulse">
+        <div className="relative w-48 h-24 md:w-64 md:h-32 mb-6">
           <Image
             src="/images/logo.png"
             alt="MVSD LAB Logo"
@@ -50,7 +51,7 @@ export default function HomePage() {
             objectFit="contain"
           />
         </div>
-        <h1 className="text-5xl sm:text-6xl font-extrabold mb-4 tracking-wider drop-shadow-lg animate-bounce">
+        <h1 className="text-5xl sm:text-6xl font-extrabold mb-4 tracking-wider drop-shadow-lg">
           MVSD LAB
         </h1>
         <h2 className="text-2xl sm:text-3xl font-medium text-gray-300">
@@ -64,7 +65,7 @@ export default function HomePage() {
         </p>
 
         <div className="bg-opacity-50 p-8 rounded-lg shadow-xl backdrop-blur-md w-full max-w-md space-y-6 relative z-10">
-          <h3 className="text-2xl sm:text-3xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-pink-600">
+          <h3 className="text-2xl sm:text-3xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-600">
             Stay Updated
           </h3>
           <form onSubmit={handleSubmit} className="flex flex-col items-center space-y-4">
@@ -72,17 +73,19 @@ export default function HomePage() {
               name="email"
               type="email"
               placeholder="Enter your email"
-              className="w-full p-4 rounded-lg bg-gray-900 bg-opacity-80 text-white border-none focus:ring-4 focus:ring-teal-500 placeholder-gray-500 transition-all"
+              className="w-full p-4 rounded-lg bg-gray-900 bg-opacity-80 text-white border-none focus:ring-4 focus:ring-gray-500 placeholder-gray-500 transition-all"
               required
             />
             <button
               type="submit"
-              className={`w-full py-3 bg-gradient-to-r from-teal-500 to-pink-700 rounded-lg text-white font-semibold transition-all duration-300 ${
-                loading ? 'opacity-50 cursor-not-allowed' : 'hover:from-teal-600 hover:to-pink-800'
+              className={`relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-mono font-medium tracking-tighter text-white bg-gray-800 rounded-lg group ${
+                loading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               disabled={loading}
             >
-              {loading ? 'Subscribing...' : 'Notify Me'}
+              <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-green-500 rounded-full group-hover:w-56 group-hover:h-56"></span>
+              <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-gray-700"></span>
+              <span className="relative">{loading ? 'Subscribing...' : 'Notify Me'}</span>
             </button>
           </form>
         </div>

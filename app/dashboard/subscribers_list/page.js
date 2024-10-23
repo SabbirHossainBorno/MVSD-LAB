@@ -1,3 +1,4 @@
+// app/dashboard/subscribe_list/page.js
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -65,17 +66,17 @@ export default function SubscribersList() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-gray-100 p-4 sm:p-6 md:p-8 lg:p-10">
       <h1 className="text-4xl font-bold mb-6 text-gray-300">Subscriber List</h1>
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
+      <div className="bg-gray-800 p-6 rounded shadow-lg mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center mb-4 space-y-4 sm:space-y-0 sm:space-x-4">
           <input
             type="text"
             placeholder="Search by email..."
-            className="w-full sm:w-1/3 p-3 rounded-lg border border-gray-600 bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full sm:w-1/3 p-3 rounded border border-gray-600 bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <select
-            className="w-full sm:w-1/3 p-3 rounded-lg border border-gray-600 bg-gray-700 text-gray-100"
+            className="w-full sm:w-1/3 p-3 rounded border border-gray-600 bg-gray-700 text-gray-100"
             value={domainFilter}
             onChange={(e) => setDomainFilter(e.target.value)}
           >
@@ -85,7 +86,7 @@ export default function SubscribersList() {
             <option value="outlook.com">Outlook</option>
           </select>
           <select
-            className="w-full sm:w-1/3 p-3 rounded-lg border border-gray-600 bg-gray-700 text-gray-100"
+            className="w-full sm:w-1/3 p-3 rounded border border-gray-600 bg-gray-700 text-gray-100"
             value={itemsPerPage}
             onChange={(e) => setItemsPerPage(parseInt(e.target.value, 10))}
           >
@@ -94,7 +95,7 @@ export default function SubscribersList() {
             <option value="50">50 per page</option>
           </select>
         </div>
-        <table className="min-w-full bg-gray-700 rounded-lg">
+        <table className="min-w-full bg-gray-700 rounded">
           <thead>
             <tr className="border-b border-gray-600">
               <th className="p-4 text-left text-gray-300 font-medium">Email</th>
@@ -120,13 +121,13 @@ export default function SubscribersList() {
           <div className="flex space-x-2">
             <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
             >
               Previous
             </button>
             <button
               onClick={() => setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(filteredSubscribers.length / itemsPerPage)))}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
             >
               Next
             </button>

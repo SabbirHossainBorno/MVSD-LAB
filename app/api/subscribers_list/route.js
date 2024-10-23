@@ -10,7 +10,7 @@ const pool = new Pool({
 export async function GET() {
   const client = await pool.connect();
   try {
-    const query = 'SELECT email, date FROM subscriber';
+    const query = 'SELECT id, email, date FROM subscriber';
     const result = await client.query(query);
 
     return NextResponse.json({ subscribers: result.rows });

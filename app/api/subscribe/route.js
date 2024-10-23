@@ -85,7 +85,7 @@ export async function POST(request) {
       const notificationStatus = 'Unread';
       const notificationInsertResult = await client.query(insertNotificationQuery, [subscriberId, notificationTitle, notificationStatus]);
 
-      await logAndAlert(`MVSD LAB - SYSTEM\n-----------------------------\nMVSD LAB GOT NEW SUBSCRIBER.\nID : ${subscriberId}`, 'SYSTEM');
+      await logAndAlert(`MVSD LAB - SYSTEM\n-------------------------------\nMVSD LAB GOT NEW SUBSCRIBER.\nID : ${subscriberId}`, 'SYSTEM');
 
       if (notificationInsertResult.rowCount > 0) {
         await logAndAlert(`Notification inserted successfully for Subscriber ID: ${subscriberId}`, sessionId);

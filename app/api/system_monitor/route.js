@@ -39,7 +39,7 @@ export async function GET(request) {
     // Website Live Log
     const logFilePath = '/home/mvsd-lab/Log/mvsd_lab.log';
     const logData = fs.readFileSync(logFilePath, 'utf-8');
-    data.websiteLog = logData.split('\n').slice(-10); // Get last 10 log entries
+    data.websiteLog = logData.split('\n').slice(-100); // Get last 10 log entries
 
     // System Process
     const processList = await execCommand('top -b -n 1');
