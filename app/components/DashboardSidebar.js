@@ -119,15 +119,6 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
   </div>
 </Link>
 
-{/* Roster Schedule Option */}
-<Link href="/dashboard/roster_schedule">
-  <div className="block p-3 mt-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
-    <img src="/icons/roster_schedule.png" alt="Roster Schedule" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
-    <span className="text-lg font-medium">Roster Schedule</span>
-  </div>
-</Link>
-
-
 
       </nav>
     </aside>
