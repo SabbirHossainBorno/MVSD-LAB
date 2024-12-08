@@ -15,7 +15,9 @@ export default function Home() {
 
       {/* Main Content */}
       <main style={{ paddingTop: navbarHeight }}> {/* Set padding-top directly */}
-        {/* Hero Section */}
+
+
+        {/* HERO SECTION */}
         <section className="hero h-screen flex flex-col md:flex-row items-center justify-center md:justify-between px-4 md:px-8 lg:px-12 py-6 md:py-12 bg-[url('/images/hero-bg.png')] bg-cover bg-center bg-blur-sm relative overflow-hidden">
           {/* Left Side */}
           <div className="flex-1 md:w-1/2 mb-6 md:mb-0 text-center md:text-left relative bg-gradient-to-br from-gray-50 to-gray-200 p-4 md:p-8 lg:p-12 overflow-hidden rounded-lg shadow-lg">
@@ -59,47 +61,257 @@ export default function Home() {
         </section>
 
 
-
-        <section id="about" class="about py-16 bg-gray-100">
+        {/* ABOUT SECTION */}
+        <section id="about" className="py-16 bg-gradient-to-r from-gray-100 to-gray-200">
           {/* Section Title */}
-          <div class="container mx-auto text-center mb-8">
-            <h2 class="text-4xl font-bold text-gray-800 mb-4">About</h2>
-            <p class="text-lg text-gray-600">Who We Are</p>
+          <div className="container mx-auto text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+              About Us
+            </h2>
+            <p className="text-lg md:text-xl text-gray-600">
+              Who We Are and What We Do
+            </p>
           </div>
 
-          <div class="container mx-auto">
-            <div class="flex flex-wrap items-center">
-              {/* Right Side Content*/}
-              <div class="w-full lg:w-1/2 flex flex-col justify-center p-6">
-                <div class="content">
-                  <h2 class="text-3xl font-semibold text-gray-800 mb-4">
-                    MVSD Lab specializes in Automotive Engineering, focusing on Ground Vehicles, Sports Vehicles, Drones, AI,
-                    and Autonomous Driving Systems.
-                  </h2>
-                  <p class="text-gray-600 text-lg mb-6">
-                    Our lab enhances vehicle performance, safety, and efficiency. We pioneer AI-driven automotive systems and
-                    advance self-driving technology, setting new industry standards. Join us as we push the boundaries of
-                    mobility and technology.
-                  </p>
-                  <div class="text-center lg:text-left">
-                    <a
-                      href="#"
-                      class="btn-read-more inline-flex items-center px-6 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition"
-                    >
-                      <span>Read More</span>
-                      <i class="bi bi-arrow-right ml-2"></i>
-                    </a>
-                  </div>
-                </div>
+          {/* Content Container */}
+          <div className="container mx-auto flex flex-wrap lg:flex-nowrap items-center">
+            {/* Left Side Content */}
+            <div className="w-full lg:w-1/2 flex flex-col justify-center p-6">
+              <h2 className="text-3xl md:text-4xl font-semibold text-gray-800 mb-6 leading-snug">
+                Shaping the Future of Automotive Engineering
+              </h2>
+              <p className="text-gray-600 text-lg md:text-xl mb-6">
+                MVSD Lab specializes in Light and Heavy Ground Vehicles, Sports Vehicles, Drones, AI, and Autonomous Driving Systems.
+                We innovate vehicle performance, safety, and efficiency while leading advancements in self-driving technology and AI-driven mobility systems.
+              </p>
+              <div className="text-center lg:text-left">
+                <a
+                  href="#"
+                  className="inline-flex items-center px-8 py-3 bg-blue-600 text-white font-semibold text-lg rounded-full shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out"
+                >
+                  <span>Read More</span>
+                  <i className="bi bi-arrow-right ml-3 text-lg"></i>
+                </a>
               </div>
+            </div>
 
-              {/* Right Side IMG*/}
-              <div class="w-full lg:w-1/2 flex justify-center items-center p-6">
-                <img src="/images/about.jpg" alt="About Image" className="rounded-lg shadow-lg" />
-              </div>
+            {/* Right Side Image */}
+            <div className="w-full lg:w-1/2 flex justify-center items-center p-6">
+              <img
+                src="/images/about.jpg"
+                alt="About MVSD Lab"
+                className="rounded-lg shadow-lg max-w-full h-auto object-cover"
+              />
             </div>
           </div>
         </section>
+
+
+
+        <section className="flex flex-col justify-center max-w-6xl min-h-screen px-4 py-10 mx-auto sm:px-6">
+  {/* Section Header */}
+  <div className="flex flex-wrap items-center justify-between mb-10">
+    <h2 className="text-4xl font-bold leading-tight text-gray-800 md:text-5xl">
+    Our Research Area
+    </h2>
+    <a
+      href="#"
+      className="text-base font-bold text-blue-600 uppercase border-b-2 border-transparent hover:border-blue-600 mt-4 md:mt-0"
+    >
+      Go To Research Area →
+    </a>
+  </div>
+
+  {/* Cards Container */}
+  <div className="flex flex-wrap -mx-4">
+    {/* Card 1 */}
+    <div className="w-full px-4 mb-8 sm:w-1/2 lg:w-1/3">
+    <div className="flex flex-col h-full overflow-hidden bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+        {/* Card Image */}
+        <div className="relative h-48 overflow-hidden rounded-t-lg">
+        <img
+          src="/images/research/research-1.jpg"
+          alt="Card img"
+          className="object-cover object-center w-full h-48"
+        />
+        {/* Card Content */}
+        <div className="flex flex-col justify-between flex-grow p-6 border-t">
+          {/* Card Header */}
+          <div>
+            <a
+              href="#"
+              className="text-xs font-bold uppercase text-blue-600 hover:underline mb-2 inline-block"
+            >
+              Reliable Schemas
+            </a>
+            <a
+              href="#"
+              className="block text-2xl font-bold leading-tight text-gray-800 hover:text-blue-600 hover:underline mb-4"
+            >
+              What Zombies Can Teach You About Food
+            </a>
+            <p className="text-gray-600 text-sm">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla delectus corporis commodi aperiam cupiditate.
+            </p>
+          </div>
+          {/* Read More Link */}
+          <div className="mt-4">
+            <a
+              href="#"
+              className="text-blue-600 text-base font-bold uppercase border-b-2 border-transparent hover:border-blue-600"
+            >
+              Read More →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Card 2 */}
+    <div className="w-full px-4 mb-8 sm:w-1/2 lg:w-1/3">
+      <div className="flex flex-col h-full overflow-hidden bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+        {/* Card Image */}
+        <div className="relative h-48 overflow-hidden rounded-t-lg">
+          <img
+            src="/images/research/research-2.jpg"
+            alt="Research Image"
+            className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-300"
+          />
+        </div>
+        
+        {/* Card Content */}
+        <div className="flex flex-col justify-between flex-grow p-6">
+          {/* Card Header */}
+          <div>
+            <a
+              href="#"
+              className="text-sm font-semibold uppercase text-blue-500 tracking-wide mb-2 inline-block hover:text-blue-600 transition-colors"
+            >
+              Client-based Adoption
+            </a>
+            <a
+              href="#"
+              className="block text-xl font-bold text-gray-800 hover:text-blue-600 transition-colors mb-4"
+            >
+              Old School Art
+            </a>
+            <p className="text-gray-600 text-sm leading-relaxed">
+              Discover the intersection of classic techniques and modern creativity in this thought-provoking exploration.
+            </p>
+          </div>
+          
+          {/* Read More Link */}
+          <div className="mt-6">
+            <a
+              href="#"
+              className="inline-flex items-center text-blue-500 font-medium hover:text-blue-600 transition-colors"
+            >
+              Read More
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-5 h-5 ml-1"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5l6 6m0 0l-6 6m6-6H3" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    {/* Card 3 */}
+    <div className="w-full px-4 mb-8 sm:w-1/2 lg:w-1/3">
+      <div className="flex flex-col h-full overflow-hidden bg-white rounded-lg shadow hover:shadow-lg transition">
+        {/* Card Image */}
+        <img
+          src="/images/research/research-3.jpg"
+          alt="Card img"
+          className="object-cover object-center w-full h-48"
+        />
+        {/* Card Content */}
+        <div className="flex flex-col justify-between flex-grow p-6 border-t">
+          {/* Card Header */}
+          <div>
+            <a
+              href="#"
+              className="text-xs font-bold uppercase text-blue-600 hover:underline mb-2 inline-block"
+            >
+              Intellectual Capital
+            </a>
+            <a
+              href="#"
+              className="block text-2xl font-bold leading-tight text-gray-800 hover:text-blue-600 hover:underline mb-4"
+            >
+              5 Things To Do About Rain
+            </a>
+            <p className="text-gray-600 text-sm">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione neque eius ea possimus.
+            </p>
+          </div>
+          {/* Read More Link */}
+          <div className="mt-4">
+            <a
+              href="#"
+              className="text-blue-600 text-base font-bold uppercase border-b-2 border-transparent hover:border-blue-600"
+            >
+              Read More →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Card 4 */}
+    <div className="w-full px-4 mb-8 sm:w-1/2 lg:w-1/3">
+      <div className="flex flex-col h-full overflow-hidden bg-white rounded-lg shadow hover:shadow-lg transition">
+        {/* Card Image */}
+        <img
+          src="/images/research/research-4.jpg"
+          alt="Card img"
+          className="object-cover object-center w-full h-48"
+        />
+        {/* Card Content */}
+        <div className="flex flex-col justify-between flex-grow p-6 border-t">
+          {/* Card Header */}
+          <div>
+            <a
+              href="#"
+              className="text-xs font-bold uppercase text-blue-600 hover:underline mb-2 inline-block"
+            >
+              Client-based Adoption
+            </a>
+            <a
+              href="#"
+              className="block text-2xl font-bold leading-tight text-gray-800 hover:text-blue-600 hover:underline mb-4"
+            >
+              Old School Art
+            </a>
+            <p className="text-gray-600 text-sm">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla delectus.
+            </p>
+          </div>
+          {/* Read More Link */}
+          <div className="mt-4">
+            <a
+              href="#"
+              className="text-blue-600 text-base font-bold uppercase border-b-2 border-transparent hover:border-blue-600"
+            >
+              Read More →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+        
+
 
       </main>
       <Footer />
