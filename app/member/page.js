@@ -1,3 +1,4 @@
+//app/members/page.js
 'use client';
 
 import Navbar from '../components/Navbar'; // Adjust the path as needed

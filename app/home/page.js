@@ -1,6 +1,8 @@
+//app/home/page.js
 'use client'; // Ensure this directive is at the top
 
 import Navbar from '../components/Navbar'; // Adjust the path as needed
+import Footer from '../components/Footer'; // Adjust the path as needed
 import Link from 'next/link';
 
 export default function Home() {
@@ -55,6 +57,7 @@ export default function Home() {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 }
