@@ -121,14 +121,14 @@ export default function Home() {
       Go To Research Area →
     </a>
   </div>
-
   {/* Cards Container */}
   <div className="flex flex-wrap -mx-4">
+
+    
     {/* Card 1 */}
     <div className="w-full px-4 mb-8 sm:w-1/2 lg:w-1/3">
-    <div className="flex flex-col h-full overflow-hidden bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+      <div className="flex flex-col h-full overflow-hidden bg-white rounded-lg shadow hover:shadow-lg transition">
         {/* Card Image */}
-        <div className="relative h-48 overflow-hidden rounded-t-lg">
         <img
           src="/images/research/research-1.jpg"
           alt="Card img"
