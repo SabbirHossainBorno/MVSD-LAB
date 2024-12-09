@@ -14,7 +14,7 @@ export default function Home() {
 
   const [activeIndex, setActiveIndex] = useState(null);
 
-  const toggleFaq = (index) => {
+  const toggleAnswer = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
@@ -452,63 +452,121 @@ export default function Home() {
         </section>
 
         {/* -------------------------------------------------STATE------------------------------------------------------------- */}
-        <section id="stats" className="py-16 bg-gradient-to-r from-blue-50 to-blue-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {/* Stats Item */}
-              <div className="stats-item flex flex-col items-center text-center bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-                <i className="bi bi-journal-richtext text-orange-500 text-4xl mb-4"></i>
-                <div>
-                  <span className="text-3xl font-bold text-gray-900">232</span>
-                  <p className="text-gray-600">Research Papers</p>
-                </div>
+        <section
+        id="stats"
+        className="py-20 bg-gradient-to-br from-blue-100 via-white to-blue-50"
+      >
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-800">Our Achievements</h2>
+            <p className="text-gray-600 mt-3 text-lg">
+              A quick glance at what we've accomplished so far.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            {/* Stats Item */}
+            <div
+              className="stats-item flex flex-col items-center text-center bg-white p-8 rounded-xl shadow-xl 
+                transition duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-2xl"
+            >
+              <div
+                className="bg-orange-100 p-4 rounded-full mb-6"
+              >
+                <i className="bi bi-journal-richtext text-orange-500 text-5xl"></i>
               </div>
-              {/* Stats Item */}
-              <div className="stats-item flex flex-col items-center text-center bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-                <i className="bi bi-people text-blue-500 text-4xl mb-4"></i>
-                <div>
-                  <span className="text-3xl font-bold text-gray-900">521</span>
-                  <p className="text-gray-600">Students</p>
-                </div>
+              <span className="text-4xl font-extrabold text-gray-800">232</span>
+              <p className="text-gray-600 text-lg mt-2">Research Papers</p>
+            </div>
+            {/* Stats Item */}
+            <div
+              className="stats-item flex flex-col items-center text-center bg-white p-8 rounded-xl shadow-xl 
+                transition duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-2xl"
+            >
+              <div
+                className="bg-blue-100 p-4 rounded-full mb-6"
+              >
+                <i className="bi bi-people text-blue-500 text-5xl"></i>
               </div>
-              {/* Stats Item */}
-              <div className="stats-item flex flex-col items-center text-center bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-                <i className="bi bi-person-badge text-green-500 text-4xl mb-4"></i>
-                <div>
-                  <span className="text-3xl font-bold text-gray-900">14</span>
-                  <p className="text-gray-600">Professors</p>
-                </div>
+              <span className="text-4xl font-extrabold text-gray-800">521</span>
+              <p className="text-gray-600 text-lg mt-2">Students</p>
+            </div>
+            {/* Stats Item */}
+            <div
+              className="stats-item flex flex-col items-center text-center bg-white p-8 rounded-xl shadow-xl 
+                transition duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-2xl"
+            >
+              <div
+                className="bg-green-100 p-4 rounded-full mb-6"
+              >
+                <i className="bi bi-person-badge text-green-500 text-5xl"></i>
               </div>
-              {/* Stats Item */}
-              <div className="stats-item flex flex-col items-center text-center bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-                <i className="bi bi-briefcase text-red-500 text-4xl mb-4"></i>
-                <div>
-                  <span className="text-3xl font-bold text-gray-900">15</span>
-                  <p className="text-gray-600">Projects</p>
-                </div>
+              <span className="text-4xl font-extrabold text-gray-800">14</span>
+              <p className="text-gray-600 text-lg mt-2">Professors</p>
+            </div>
+            {/* Stats Item */}
+            <div
+              className="stats-item flex flex-col items-center text-center bg-white p-8 rounded-xl shadow-xl 
+                transition duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-2xl"
+            >
+              <div
+                className="bg-red-100 p-4 rounded-full mb-6"
+              >
+                <i className="bi bi-briefcase text-red-500 text-5xl"></i>
               </div>
+              <span className="text-4xl font-extrabold text-gray-800">15</span>
+              <p className="text-gray-600 text-lg mt-2">Projects</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+        {/* ---------------------------------------------------FAQ------------------------------------------------------------- */}
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12">
+            <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">
+              Frequently Asked Questions
+            </h2>
+            <div className="space-y-6">
+              {faqData.map((faq, index) => (
+                <div
+                  key={index}
+                  className={`p-6 rounded-lg border transition-all duration-300 ease-in-out 
+                    ${activeIndex === index ? "bg-white border-blue-500 shadow-lg" : "bg-white border-gray-200 hover:shadow-md"} 
+                  cursor-pointer`}
+                  onClick={() => toggleAnswer(index)}
+                >
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-medium text-gray-900">
+                      {index + 1}. {faq.question}
+                    </h3>
+                    <button
+                      aria-label={activeIndex === index ? "Collapse Answer" : "Expand Answer"}
+                      className={`transition-transform duration-300 transform ${
+                        activeIndex === index ? "rotate-180" : "rotate-0"
+                      }`}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                        className="w-5 h-5 text-blue-500"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                  </div>
+                  {activeIndex === index && (
+                    <p className="text-gray-700 mt-4 leading-relaxed">{faq.answer}</p>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ---------------------------------------------------FAQ------------------------------------------------------------- */}
-        <section className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-extrabold text-gray-900 mb-12 text-center">Frequently Asked Questions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {faqData.map((faq, index) => (
-            <div
-              key={index}
-              className="bg-gray-100 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 cursor-pointer"
-              onClick={() => toggleAnswer(index)}
-            >
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">{faq.question}</h3>
-              {activeIndex === index && <p className="text-gray-600">{faq.answer}</p>}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
 
 
       </main>
