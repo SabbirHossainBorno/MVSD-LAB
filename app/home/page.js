@@ -329,11 +329,19 @@ export default function Home() {
       </div>
     </section>
 
-    <section>
-  <span className="hero-subtitle-gradient relative mb-4 font-medium text-sm inline-flex items-center gap-2 py-2 px-4.5 rounded-full">
-    <span className="hero-subtitle-text"> Some of Main Features </span>
+    <div className="wow fadeInUp text-center" style={{ visibility: "visible" }}>
+  <span className="hero-subtitle-gradient relative mb-4 font-medium text-sm inline-flex items-center gap-2 py-2 px-4 rounded-full">
+    <span className="hero-subtitle-text">Some of Main Features</span>
   </span>
-</section>
+  <h2 className="text-white mb-4 text-2xl font-extrabold sm:text-4xl xl:text-heading-2">
+    Key Features of Our Tool
+  </h2>
+  <p className="max-w-[714px] mx-auto mb-5 font-medium">
+    Our AI writing tool is designed to empower you with exceptional writing
+    capabilities, making the writing process more efficient, accurate, and
+    enjoyable.
+  </p>
+</div>
 
 
         
