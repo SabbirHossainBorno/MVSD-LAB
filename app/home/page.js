@@ -334,55 +334,111 @@ export default function Home() {
 
         {/* -------------------------------------------------FEATURES------------------------------------------------------------- */}
         <section className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto flex flex-wrap items-center">
-        {/* Left Side: Features List */}
-        <div className="w-full md:w-1/2 px-4">
-          <h2 className="text-3xl font-semibold text-gray-900 mb-4">Features</h2>
-          <p className="text-lg text-gray-600 mb-8">
-            Explore the amazing features that make our solution unique and powerful. 
-            Enjoy the seamless experience with these top-notch functionalities.
-          </p>
+          <div className="max-w-7xl mx-auto flex flex-wrap items-center">
+            {/* Left Side: Features List */}
+            <div className="w-full md:w-1/2 px-4">
+              <h2 className="text-5xl font-extrabold text-gray-900 mb-6 animate-fadeIn">Our Amazing Features</h2>
+              <p className="text-lg text-gray-700 mb-8 animate-fadeIn delay-200">
+                Discover the incredible features that make our solution stand out. Experience seamless functionality with these top-tier features.
+              </p>
 
-          <ul className="space-y-4">
-            <li className="flex items-center text-lg text-gray-800">
-              <input type="checkbox" id="feature1" checked className="mr-3 scale-125" />
-              <label htmlFor="feature1">Automotive Engineering</label>
-            </li>
-            <li className="flex items-center text-lg text-gray-800">
-              <input type="checkbox" id="feature2" checked className="mr-3 scale-125" />
-              <label htmlFor="feature2">Light and Heavy Ground Vehicles</label>
-            </li>
-            <li className="flex items-center text-lg text-gray-800">
-              <input type="checkbox" id="feature3" checked className="mr-3 scale-125" />
-              <label htmlFor="feature3">Sports Vehicles</label>
-            </li>
-            <li className="flex items-center text-lg text-gray-800">
-              <input type="checkbox" id="feature4" checked className="mr-3 scale-125" />
-              <label htmlFor="feature4">Drones</label>
-            </li>
-            <li className="flex items-center text-lg text-gray-800">
-              <input type="checkbox" id="feature5" checked className="mr-3 scale-125" />
-              <label htmlFor="feature5">Artificial Intelligence</label>
-            </li>
-            <li className="flex items-center text-lg text-gray-800">
-              <input type="checkbox" id="feature6" checked className="mr-3 scale-125" />
-              <label htmlFor="feature6">Autonomous Driving Systems</label>
-            </li>
-          </ul>
-        </div>
+              <ul className="space-y-6">
+                <li className="flex items-center text-lg text-gray-800 animate-slideInLeft">
+                  <input type="checkbox" id="feature1" checked className="mr-3 scale-125 accent-blue-600" />
+                  <label htmlFor="feature1">Automotive Engineering</label>
+                </li>
+                <li className="flex items-center text-lg text-gray-800 animate-slideInLeft delay-100">
+                  <input type="checkbox" id="feature2" checked className="mr-3 scale-125 accent-blue-600" />
+                  <label htmlFor="feature2">Light and Heavy Ground Vehicles</label>
+                </li>
+                <li className="flex items-center text-lg text-gray-800 animate-slideInLeft delay-200">
+                  <input type="checkbox" id="feature3" checked className="mr-3 scale-125 accent-blue-600" />
+                  <label htmlFor="feature3">Sports Vehicles</label>
+                </li>
+                <li className="flex items-center text-lg text-gray-800 animate-slideInLeft delay-300">
+                  <input type="checkbox" id="feature4" checked className="mr-3 scale-125 accent-blue-600" />
+                  <label htmlFor="feature4">Drones</label>
+                </li>
+                <li className="flex items-center text-lg text-gray-800 animate-slideInLeft delay-400">
+                  <input type="checkbox" id="feature5" checked className="mr-3 scale-125 accent-blue-600" />
+                  <label htmlFor="feature5">Artificial Intelligence</label>
+                </li>
+                <li className="flex items-center text-lg text-gray-800 animate-slideInLeft delay-500">
+                  <input type="checkbox" id="feature6" checked className="mr-3 scale-125 accent-blue-600" />
+                  <label htmlFor="feature6">Autonomous Driving Systems</label>
+                </li>
+              </ul>
+            </div>
 
-        {/* Right Side: Image */}
-        <div className="w-full md:w-1/2 px-4 mt-8 md:mt-0">
-          <Image
-            src="/images/features.png" // Use the correct image path
-            alt="Features"
-            width={500}
-            height={400}
-            className="rounded-lg shadow-xl"
-          />
-        </div>
-      </div>
-    </section>
+            {/* Right Side: Image */}
+            <div className="w-full md:w-1/2 px-4 mt-8 md:mt-0 animate-fadeIn delay-500">
+              <img
+                src="/images/features.png" // Use the correct image path
+                alt="Features"
+                className="rounded-lg shadow-xl w-full h-auto object-cover transition-transform duration-500 ease-in-out transform hover:scale-110"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* -------------------------------------------------FEATURES------------------------------------------------------------- */}
+        <section className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-figure text-primary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    className="inline-block h-8 w-8 stroke-current">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                  </svg>
+                </div>
+                <div className="stat-title">Total Likes</div>
+                <div className="stat-value text-primary">25.6K</div>
+                <div className="stat-desc">21% more than last month</div>
+              </div>
+
+              <div className="stat">
+                <div className="stat-figure text-secondary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    className="inline-block h-8 w-8 stroke-current">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                  </svg>
+                </div>
+                <div className="stat-title">Page Views</div>
+                <div className="stat-value text-secondary">2.6M</div>
+                <div className="stat-desc">21% more than last month</div>
+              </div>
+
+              <div className="stat">
+                <div className="stat-figure text-secondary">
+                  <div className="avatar online">
+                    <div className="w-16 rounded-full">
+                      <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="Avatar" />
+                    </div>
+                  </div>
+                </div>
+                <div className="stat-value">86%</div>
+                <div className="stat-title">Tasks done</div>
+                <div className="stat-desc text-secondary">31 tasks remaining</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
 
       </main>
       <Footer />
