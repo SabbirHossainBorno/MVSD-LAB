@@ -1,6 +1,7 @@
 //app/home/page.js
 'use client'; // Ensure this directive is at the top
 
+import { useState } from 'react'; // Import useState from React
 import Navbar from '../components/Navbar'; // Adjust the path as needed
 import Footer from '../components/Footer'; // Adjust the path as needed
 import Link from 'next/link';
@@ -10,6 +11,75 @@ import Image from 'next/image'; // Correct import statement
 export default function Home() {
   // Set a fixed height for the navbar
   const navbarHeight = '60px'; // Change this to your actual navbar height
+
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  const toggleFaq = (index) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
+
+  const faqData = [
+    {
+      question: "What is the primary focus of MVSD Lab?",
+      answer:
+        "Our primary focus is on Automotive Engineering, specializing in Light and Heavy Ground Vehicles, Sports Vehicles, Drones, Artificial Intelligence, and Autonomous Driving Systems. We aim to enhance vehicle performance, safety, and efficiency through innovative research and development.",
+    },
+    {
+      question: "What types of vehicles does MVSD Lab work on?",
+      answer:
+        "MVSD Lab works on a variety of vehicles, including Light and Heavy Ground Vehicles, Sports Vehicles, and Drones. We apply advanced technologies and AI to improve these vehicles' capabilities.",
+    },
+    {
+      question: "How does MVSD Lab contribute to the advancement of autonomous driving technology?",
+      answer:
+        "We pioneer AI-driven automotive systems and develop cutting-edge self-driving technologies. Our research aims to make autonomous driving safer, more reliable, and efficient, pushing the boundaries of what's possible in mobility.",
+    },
+    {
+      question: "What role does artificial intelligence play in MVSD Lab's research?",
+      answer:
+        "Artificial Intelligence is central to our research, particularly in developing AI-driven automotive systems and autonomous driving technologies. We leverage AI to enhance vehicle performance, improve safety measures, and create more efficient transportation solutions.",
+    },
+    {
+      question: "How does MVSD Lab ensure the safety of its innovations?",
+      answer:
+        "Safety is a top priority at MVSD Lab. Our innovations undergo rigorous testing and validation processes, combining theoretical analysis with experiments and simulations to ensure the highest safety and reliability standards.",
+    },
+    {
+      question: "Can academic or industrial partners collaborate with MVSD Lab?",
+      answer:
+        "Yes, MVSD Lab actively collaborates with academic institutions and industrial partners. We believe that partnerships are crucial for advancing research and development, and we welcome opportunities to work with others in the automotive and technology sectors.",
+    },
+    {
+      question: "What are some recent projects MVSD Lab has worked on?",
+      answer:
+        "Recent projects include developing AI-driven automotive systems, enhancing autonomous driving technologies, and improving the performance and efficiency of various ground and sports vehicles. We also work on integrating advanced AI and drone technologies.",
+    },
+    {
+      question: "How does MVSD Lab stay ahead in automotive innovation?",
+      answer:
+        "We stay ahead by continually investing in research and development, collaborating with leading academic and industrial partners, and staying abreast of the latest technological advancements in AI, autonomous systems, and vehicle engineering.",
+    },
+    {
+      question: "What is MVSD Lab's approach to sustainable automotive engineering?",
+      answer:
+        "MVSD Lab is committed to sustainability by developing efficient, environmentally-friendly technologies that reduce emissions and enhance fuel efficiency. Our research includes exploring alternative energy sources and optimizing vehicle designs for minimal environmental impact.",
+    },
+    {
+      question: "How can I get involved with MVSD Lab's research?",
+      answer:
+        "You can get involved by reaching out to us for potential collaboration opportunities, internships, or research partnerships. We welcome inquiries from individuals and organizations interested in contributing to our innovative projects.",
+    },
+    {
+      question: "What impact does MVSD Lab aim to have on the automotive industry?",
+      answer:
+        "MVSD Lab aims to revolutionize the automotive industry by introducing groundbreaking technologies that enhance vehicle performance, safety, and efficiency. Our innovations strive to set new standards in mobility and drive the future of transportation.",
+    },
+    {
+      question: "How does MVSD Lab handle data and privacy concerns in its research?",
+      answer:
+        "We prioritize data security and privacy in all our research activities. Our protocols ensure that all data is handled responsibly and ethically, complying with relevant regulations and standards to protect the privacy of individuals and partners involved in our projects.",
+    },
+  ];
 
   return (
     <div className="bg-gray-100 text-gray-900 min-h-screen">
@@ -381,63 +451,64 @@ export default function Home() {
           </div>
         </section>
 
-        {/* -------------------------------------------------FEATURES------------------------------------------------------------- */}
-        <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="stats shadow">
-              <div className="stat">
-                <div className="stat-figure text-primary">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    className="inline-block h-8 w-8 stroke-current">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                  </svg>
+        {/* -------------------------------------------------STATE------------------------------------------------------------- */}
+        <section id="stats" className="py-16 bg-gradient-to-r from-blue-50 to-blue-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {/* Stats Item */}
+              <div className="stats-item flex flex-col items-center text-center bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                <i className="bi bi-journal-richtext text-orange-500 text-4xl mb-4"></i>
+                <div>
+                  <span className="text-3xl font-bold text-gray-900">232</span>
+                  <p className="text-gray-600">Research Papers</p>
                 </div>
-                <div className="stat-title">Total Likes</div>
-                <div className="stat-value text-primary">25.6K</div>
-                <div className="stat-desc">21% more than last month</div>
               </div>
-
-              <div className="stat">
-                <div className="stat-figure text-secondary">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    className="inline-block h-8 w-8 stroke-current">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                  </svg>
+              {/* Stats Item */}
+              <div className="stats-item flex flex-col items-center text-center bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                <i className="bi bi-people text-blue-500 text-4xl mb-4"></i>
+                <div>
+                  <span className="text-3xl font-bold text-gray-900">521</span>
+                  <p className="text-gray-600">Students</p>
                 </div>
-                <div className="stat-title">Page Views</div>
-                <div className="stat-value text-secondary">2.6M</div>
-                <div className="stat-desc">21% more than last month</div>
               </div>
-
-              <div className="stat">
-                <div className="stat-figure text-secondary">
-                  <div className="avatar online">
-                    <div className="w-16 rounded-full">
-                      <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="Avatar" />
-                    </div>
-                  </div>
+              {/* Stats Item */}
+              <div className="stats-item flex flex-col items-center text-center bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                <i className="bi bi-person-badge text-green-500 text-4xl mb-4"></i>
+                <div>
+                  <span className="text-3xl font-bold text-gray-900">14</span>
+                  <p className="text-gray-600">Professors</p>
                 </div>
-                <div className="stat-value">86%</div>
-                <div className="stat-title">Tasks done</div>
-                <div className="stat-desc text-secondary">31 tasks remaining</div>
+              </div>
+              {/* Stats Item */}
+              <div className="stats-item flex flex-col items-center text-center bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                <i className="bi bi-briefcase text-red-500 text-4xl mb-4"></i>
+                <div>
+                  <span className="text-3xl font-bold text-gray-900">15</span>
+                  <p className="text-gray-600">Projects</p>
+                </div>
               </div>
             </div>
           </div>
         </section>
+
+        {/* ---------------------------------------------------FAQ------------------------------------------------------------- */}
+        <section className="py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-4xl font-extrabold text-gray-900 mb-12 text-center">Frequently Asked Questions</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {faqData.map((faq, index) => (
+            <div
+              key={index}
+              className="bg-gray-100 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 cursor-pointer"
+              onClick={() => toggleAnswer(index)}
+            >
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">{faq.question}</h3>
+              {activeIndex === index && <p className="text-gray-600">{faq.answer}</p>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
 
 
       </main>
@@ -445,3 +516,4 @@ export default function Home() {
     </div>
   );
 }
+  
