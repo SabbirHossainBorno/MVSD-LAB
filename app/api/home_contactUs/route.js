@@ -24,7 +24,7 @@ const generateContactUsId = async () => {
     await logAndAlert('Initiating Contact Us ID generation...', 'SYSTEM');
     const result = await client.query('SELECT MAX(id) AS max_id FROM home_contact_us');
     const maxId = result.rows[0]?.max_id || 'CONUS00MVSD';
-    const numericPart = parseInt(maxId.substring(3), 10) || 0;
+    const numericPart = parseInt(maxId.substring(5, 7), 10) || 0;
     const nextId = numericPart + 1;
     const formattedId = `CONUS${String(nextId).padStart(2, '0')}MVSD`;
     await logAndAlert(`Contact Us ID generated successfully: ${formattedId}`, 'SYSTEM');
@@ -65,14 +65,22 @@ export async function POST(request) {
       const { serial } = result.rows[0];
       await logAndAlert(`Contact Us entry inserted with Serial: ${serial}`, sessionId);
 
-      // Insert notification for the new subscriber
+      // Insert notification for the new contact us
       const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
-      const notificationTitle = `MVSD LAB Got New Message [${subscriberId}]`;
+      const notificationTitle = `MVSD LAB Got New Message [${contactUsId}]`;
       const notificationStatus = 'Unread';
       const notificationInsertResult = await client.query(insertNotificationQuery, [contactUsId, notificationTitle, notificationStatus]);
 
+      await logAndAlert(`MVSD LAB - SYSTEM\n-------------------------------\nMVSD LAB GOT NEW MESSAGE.\nID : ${contactUsId}`, 'SYSTEM');
+
+      if (notificationInsertResult.rowCount > 0) {
+        await logAndAlert(`Notification inserted successfully for Contact Us ID: ${contactUsId}`, sessionId);
+      } else {
+        await logAndAlert(`Failed to insert notification for Contact Us ID: ${contactUsId}`, sessionId);
+      }
+
       // Return success response
-      return NextResponse.json({ success: true, message: 'Message sent successfully!', serial });
+      return NextResponse.json({ success: true, message: 'Message Sent Successfully!', serial });
 
     } catch (error) {
       const errorMessage = `Database error: ${error.message}`;
