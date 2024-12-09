@@ -17,7 +17,7 @@ export default function Home() {
       <main style={{ paddingTop: navbarHeight }}> {/* Set padding-top directly */}
 
 
-        {/* HERO SECTION */}
+        {/* ----------------------------------------------HERO SECTION----------------------------------------------------------- */}
         <section className="hero h-screen flex flex-col md:flex-row items-center justify-center md:justify-between px-4 md:px-8 lg:px-12 py-6 md:py-12 bg-[url('/images/hero-bg.png')] bg-cover bg-center bg-blur-sm relative overflow-hidden">
           {/* Left Side */}
           <div className="flex-1 md:w-1/2 mb-6 md:mb-0 text-center md:text-left relative bg-gradient-to-br from-gray-50 to-gray-200 p-4 md:p-8 lg:p-12 overflow-hidden rounded-lg shadow-lg">
@@ -61,7 +61,7 @@ export default function Home() {
         </section>
 
 
-        {/* ABOUT SECTION */}
+        {/* ------------------------------------------------------------ABOUT SECTION--------------------------------------------------------------------- */}
         <section id="about" className="py-16 bg-gradient-to-r from-gray-100 to-gray-200">
           {/* Section Title */}
           <div className="container mx-auto text-center mb-12">
@@ -107,12 +107,12 @@ export default function Home() {
         </section>
 
 
-
+        {/* ----------------------------------------------------LATEST RESEARCHES------------------------------------------------------------------ */}
         <section className="flex flex-col justify-center max-w-6xl min-h-screen px-4 py-10 mx-auto sm:px-6">
           {/* Section Header */}
           <div className="flex flex-wrap items-center justify-between mb-10">
             <h2 className="text-4xl font-bold leading-tight text-gray-800 md:text-5xl">
-            Our Research Area
+            Latest Researches
             </h2>
             <a
               href="#"
@@ -328,6 +328,12 @@ export default function Home() {
 
       </div>
     </section>
+
+    <section>
+  <span className="hero-subtitle-gradient relative mb-4 font-medium text-sm inline-flex items-center gap-2 py-2 px-4.5 rounded-full">
+    <span className="hero-subtitle-text"> Some of Main Features </span>
+  </span>
+</section>
 
 
         
