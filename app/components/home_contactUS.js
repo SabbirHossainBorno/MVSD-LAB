@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import LoadingSpinner from '../components/LoadingSpinner'; // Import the LoadingSpinner component
 
 export default function HomeContactUs() {
   const [formData, setFormData] = useState({
@@ -15,6 +18,7 @@ export default function HomeContactUs() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Show loading spinner
     try {
       const response = await fetch("/api/home_contactUs", { 
         method: "POST",
@@ -25,14 +29,14 @@ export default function HomeContactUs() {
       });
       const result = await response.json();
       if (result.success) {
-        alert("Message sent successfully!");
+        toast.success("Message sent successfully!");
         setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
-        alert("Failed to send message.");
+        toast.error("Failed to send message.");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert("An error occurred. Please try again.");
+      toast.error("An error occurred. Please try again.");
     }
   };
 
@@ -171,6 +175,7 @@ export default function HomeContactUs() {
       </div>
     </div>
   </div>
+  <ToastContainer />
 </section>
 
   );
