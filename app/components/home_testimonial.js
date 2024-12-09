@@ -96,17 +96,17 @@ export default function HomeTestimonial() {
             ))}
             {/* Previous Card */}
             {testimonials[currentIndex - 1] && (
-              <div className="absolute left-0 transform -translate-x-1/2 opacity-50 z-0">
+              <div className="absolute left-0 transform -translate-x-1/4 scale-75 opacity-50 z-0">
                 <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg max-w-md mx-auto text-center">
                   <img
                     src={testimonials[currentIndex - 1].image}
                     alt={testimonials[currentIndex - 1].name}
-                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto mb-4 border-2 border-blue-500"
+                    className="w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-4 border-2 border-blue-500"
                   />
-                  <p className="text-sm sm:text-base italic text-gray-700 mb-4">
+                  <p className="text-xs sm:text-sm italic text-gray-700 mb-4">
                     "{testimonials[currentIndex - 1].quote}"
                   </p>
-                  <h4 className="text-lg sm:text-xl font-bold text-gray-800">
+                  <h4 className="text-base sm:text-lg font-bold text-gray-800">
                     {testimonials[currentIndex - 1].name}
                   </h4>
                   <span className="text-gray-500 text-xs sm:text-sm">
@@ -117,17 +117,17 @@ export default function HomeTestimonial() {
             )}
             {/* Next Card */}
             {testimonials[currentIndex + 1] && (
-              <div className="absolute right-0 transform translate-x-1/2 opacity-50 z-0">
+              <div className="absolute right-0 transform translate-x-1/4 scale-75 opacity-50 z-0">
                 <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg max-w-md mx-auto text-center">
                   <img
                     src={testimonials[currentIndex + 1].image}
                     alt={testimonials[currentIndex + 1].name}
-                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto mb-4 border-2 border-blue-500"
+                    className="w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-4 border-2 border-blue-500"
                   />
-                  <p className="text-sm sm:text-base italic text-gray-700 mb-4">
+                  <p className="text-xs sm:text-sm italic text-gray-700 mb-4">
                     "{testimonials[currentIndex + 1].quote}"
                   </p>
-                  <h4 className="text-lg sm:text-xl font-bold text-gray-800">
+                  <h4 className="text-base sm:text-lg font-bold text-gray-800">
                     {testimonials[currentIndex + 1].name}
                   </h4>
                   <span className="text-gray-500 text-xs sm:text-sm">

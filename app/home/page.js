@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar'; // Adjust the path as needed
 import Footer from '../components/Footer'; // Adjust the path as needed
 import Link from 'next/link';
 import HomeTestimonial from "../components/home_testimonial";
+import HomeClients from "../components/home_clients";
 import Image from 'next/image'; // Correct import statement
 
 
@@ -567,6 +568,9 @@ export default function Home() {
 
         {/* ----------------------------------------------TESTIMONIAL---------------------------------------------------------- */}
         <HomeTestimonial />
+
+        {/* ----------------------------------------------CLIENTS---------------------------------------------------------- */}
+        <HomeClients />
 
       </main>
       <Footer />
