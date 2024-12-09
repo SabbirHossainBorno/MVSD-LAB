@@ -4,7 +4,27 @@
 import Navbar from '../components/Navbar'; // Adjust the path as needed
 import Footer from '../components/Footer'; // Adjust the path as needed
 import Link from 'next/link';
+import Image from 'next/image'; // Correct import statement
 
+const checkIcon = (
+  <svg
+    width="16"
+    height="13"
+    viewBox="0 0 16 13"
+    className="fill-current text-primary transition-colors duration-300 ease-in-out"
+  >
+    <path d="M5.8535 12.6631C5.65824 12.8584 5.34166 12.8584 5.1464 12.6631L0.678505 8.1952C0.483242 7.99994 0.483242 7.68336 0.678505 7.4881L2.32921 5.83739C2.52467 5.64193 2.84166 5.64216 3.03684 5.83791L5.14622 7.95354C5.34147 8.14936 5.65859 8.14952 5.85403 7.95388L13.3797 0.420561C13.575 0.22513 13.8917 0.225051 14.087 0.420383L15.7381 2.07143C15.9333 2.26669 15.9333 2.58327 15.7381 2.77854L5.8535 12.6631Z" />
+  </svg>
+);
+
+const List = ({ text }) => (
+  <p className="mb-5 flex items-center text-lg font-medium text-body-color transition-transform duration-200 ease-in-out transform hover:translate-x-2">
+    <span className="mr-4 flex h-[30px] w-[30px] items-center justify-center rounded-full bg-primary bg-opacity-10 text-primary transition-all duration-300 ease-in-out hover:bg-primary hover:text-white">
+      {checkIcon}
+    </span>
+    {text}
+  </p>
+);
 export default function Home() {
   // Set a fixed height for the navbar
   const navbarHeight = '60px'; // Change this to your actual navbar height
@@ -13,11 +33,11 @@ export default function Home() {
     <div className="bg-gray-100 text-gray-900 min-h-screen">
       <Navbar />
 
-      {/* Main Content */}
+        {/* ----------------------------------------------------MAIN-------------------------------------------------------------- */}
       <main style={{ paddingTop: navbarHeight }}> {/* Set padding-top directly */}
 
 
-        {/* ----------------------------------------------HERO SECTION----------------------------------------------------------- */}
+        {/* -----------------------------------------------HERO SECTION----------------------------------------------------------- */}
         <section className="hero h-screen flex flex-col md:flex-row items-center justify-center md:justify-between px-4 md:px-8 lg:px-12 py-6 md:py-12 bg-[url('/images/hero-bg.png')] bg-cover bg-center bg-blur-sm relative overflow-hidden">
           {/* Left Side */}
           <div className="flex-1 md:w-1/2 mb-6 md:mb-0 text-center md:text-left relative bg-gradient-to-br from-gray-50 to-gray-200 p-4 md:p-8 lg:p-12 overflow-hidden rounded-lg shadow-lg">
@@ -61,7 +81,7 @@ export default function Home() {
         </section>
 
 
-        {/* ------------------------------------------------------------ABOUT SECTION--------------------------------------------------------------------- */}
+        {/* --------------------------------------------- ABOUT SECTION----------------------------------------------------------- */}
         <section id="about" className="py-16 bg-gradient-to-r from-gray-100 to-gray-200">
           {/* Section Title */}
           <div className="container mx-auto text-center mb-12">
@@ -107,7 +127,7 @@ export default function Home() {
         </section>
 
 
-        {/* ----------------------------------------------------LATEST RESEARCHES------------------------------------------------------------------ */}
+        {/* ------------------------------------------- LATEST RESEARCHES--------------------------------------------------------- */}
         <section className="flex flex-col justify-center max-w-6xl min-h-screen px-4 py-10 mx-auto sm:px-6">
           {/* Section Header */}
           <div className="flex flex-wrap items-center justify-between mb-10">
@@ -327,62 +347,54 @@ export default function Home() {
         </div>
 
       </div>
-    </section>
+        </section>
 
 
-    {/* ----------------------------------------------------FEATURES------------------------------------------------------------------ */}
-    <section id="about" className="pt-16 md:pt-20 lg:pt-28">
-      <div className="container">
-        <div className="border-b border-body-color/[.15] pb-16 dark:border-white/[.15] md:pb-20 lg:pb-28">
-          <div className="-mx-4 flex flex-wrap items-center">
-            <div className="w-full px-4 lg:w-1/2">
-              <SectionTitle
-                title="Crafted for Startup, SaaS and Business Sites."
-                paragraph="The main ‘thrust’ is to focus on educating attendees on how to best protect highly vulnerable business applications with interactive panel discussions and roundtables."
-                mb="44px"
-              />
-
-              <div
-                className="wow fadeInUp mb-12 max-w-[570px] lg:mb-0"
-                data-wow-delay=".15s"
-              >
-                <div className="mx-[-12px] flex flex-wrap">
-                  <div className="w-full px-3 sm:w-1/2 lg:w-full xl:w-1/2">
-                    <List text="Premium quality" />
-                    <List text="Tailwind CSS" />
-                    <List text="Use for lifetime" />
+        {/* -------------------------------------------------FEATURES------------------------------------------------------------- */}
+        <section id="features" className="pt-16 md:pt-20 lg:pt-28">
+          <div className="container mx-auto px-4">
+            <div className="border-b border-white/[.15] pb-16 md:pb-20 lg:pb-28">
+              <div className="-mx-4 flex flex-wrap items-center justify-between">
+                {/* Text Content */}
+                <div className="w-full px-4 lg:w-1/2">
+                  <h2 className="mb-4 text-4xl font-bold leading-tight sm:text-5xl md:text-[50px] text-white">
+                    Crafted for Startup, SaaS, and Business Sites.
+                  </h2>
+                  <p className="mb-8 text-lg leading-relaxed text-gray-300">
+                    The main ‘thrust’ is to focus on educating attendees on how to best protect
+                    highly vulnerable business applications with interactive panel discussions and
+                    roundtables.
+                  </p>
+                  <div className="flex flex-wrap gap-8">
+                    <div className="w-full sm:w-1/2">
+                      <List text="Premium quality" />
+                      <List text="Tailwind CSS" />
+                      <List text="Lifetime use" />
+                    </div>
+                    <div className="w-full sm:w-1/2">
+                      <List text="Next.js" />
+                      <List text="Rich documentation" />
+                      <List text="Developer friendly" />
+                    </div>
                   </div>
+                </div>
 
-                  <div className="w-full px-3 sm:w-1/2 lg:w-full xl:w-1/2">
-                    <List text="Next.js" />
-                    <List text="Rich documentation" />
-                    <List text="Developer friendly" />
+                {/* Image Content */}
+                <div className="w-full px-4 lg:w-1/2 mt-8 lg:mt-0">
+                  <div className="relative mx-auto aspect-[25/24] max-w-[500px] lg:mr-0 shadow-2xl rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 ease-in-out">
+                    <Image
+                      src="/images/features.png"
+                      alt="Features Image"
+                      width={500}
+                      height={500}
+                      className="w-full h-full object-cover rounded-xl"
+                    />
                   </div>
                 </div>
               </div>
             </div>
-
-            <div className="w-full px-4 lg:w-1/2">
-              <div
-                className="wow fadeInUp relative mx-auto aspect-[25/24] max-w-[500px] lg:mr-0"
-                data-wow-delay=".2s"
-              >
-                <Image
-                  src="/images/features.png"
-                  alt="about-image"
-                  fill
-                  className="drop-shadow-three mx-auto max-w-full dark:hidden dark:drop-shadow-none lg:mr-0"
-                />
-              </div>
-            </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-
-        
-
+        </section>
 
       </main>
       <Footer />
