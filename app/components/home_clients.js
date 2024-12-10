@@ -14,79 +14,74 @@ const clients = [
 export default function HomeClients() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const getDisplayedClients = (index) => {
+    const totalClients = clients.length;
+    return [
+      clients[(index - 2 + totalClients) % totalClients],
+      clients[(index - 1 + totalClients) % totalClients],
+      clients[index],
+      clients[(index + 1) % totalClients],
+      clients[(index + 2) % totalClients],
+    ];
+  };
+
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === clients.length - 1 ? 0 : prevIndex + 1
-      );
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % clients.length);
     }, 3000); // 3 seconds per slide
 
     return () => clearInterval(timer);
   }, []);
 
+  const displayedClients = getDisplayedClients(currentIndex);
+
   return (
     <section className="py-16 bg-gradient-to-r from-gray-50 to-blue-50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800">
-            We Work with the Best Clients
+          <h2 className="text-4xl font-extrabold text-gray-900">
+            Our Esteemed Clients
           </h2>
-          <p className="text-gray-600 mt-4 text-base sm:text-lg">
-            Here are some of the amazing clients we have worked with.
+          <p className="text-gray-600 mt-4 text-lg">
+            We are proud to have worked with these amazing clients.
           </p>
         </div>
 
         {/* Client Carousel */}
         <div className="relative">
-          <div className="flex items-center justify-center h-24 sm:h-32">
-            {clients.map((client, index) => (
-              <div
-                key={index}
-                className={`absolute transition-opacity duration-700 ease-in-out transform ${
-                  index === currentIndex
-                    ? "opacity-100 scale-100 z-10"
-                    : "opacity-0 scale-75"
-                }`}
-              >
-                <img
-                  src={client}
-                  alt={`Client ${index + 1}`}
-                  className="h-16 sm:h-20 md:h-24"
-                />
-              </div>
-            ))}
-            {/* Previous Client */}
-            {clients[currentIndex - 1] && (
-              <div className="absolute left-0 transform -translate-x-1/4 scale-50 opacity-50 z-0">
-                <img
-                  src={clients[currentIndex - 1]}
-                  alt={`Client ${currentIndex}`}
-                  className="h-12 sm:h-16 md:h-20"
-                />
-              </div>
-            )}
-            {/* Next Client */}
-            {clients[currentIndex + 1] && (
-              <div className="absolute right-0 transform translate-x-1/4 scale-50 opacity-50 z-0">
-                <img
-                  src={clients[currentIndex + 1]}
-                  alt={`Client ${currentIndex + 2}`}
-                  className="h-12 sm:h-16 md:h-20"
-                />
-              </div>
-            )}
+          <div className="flex items-center justify-center space-x-6">
+            {displayedClients.map((client, index) => {
+              const isCurrent = index === 2; // Middle index is the current client
+              const sizeClass = isCurrent
+                ? "h-24 sm:h-28 md:h-32"
+                : "h-16 sm:h-20 md:h-24";
+              const opacity = isCurrent ? "opacity-100 z-10" : "opacity-50";
+
+              return (
+                <div
+                  key={index}
+                  className={`transition-all duration-700 ease-in-out transform ${opacity}`}
+                >
+                  <img
+                    src={client}
+                    alt={`Client ${index}`}
+                    className={`object-contain ${sizeClass}`}
+                  />
+                </div>
+              );
+            })}
           </div>
 
           {/* Pagination */}
-          <div className="flex justify-center mt-6 space-x-2 sm:space-x-4">
+          <div className="flex justify-center mt-8 space-x-3">
             {clients.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className={`h-3 w-3 sm:h-4 sm:w-4 rounded-full transition-colors duration-300 focus:outline-none ${
+                className={`h-4 w-4 rounded-full transition-colors duration-300 focus:outline-none ${
                   index === currentIndex
-                    ? "bg-blue-500"
+                    ? "bg-blue-600"
                     : "bg-gray-300 hover:bg-gray-400"
                 }`}
               ></button>

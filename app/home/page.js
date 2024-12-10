@@ -7,6 +7,7 @@ import ScrollToTop from '../components/ScrollToTop';
 import Footer from '../components/Footer';
 import Link from 'next/link';
 import HomeTestimonial from "../components/home_testimonial";
+import HomeFeature from "../components/home_feature";
 import HomeLatestResearch from "../components/home_latestResearch";
 import HomeStats from "../components/home_stats";
 import HomeFAQ from "../components/home_faq";
@@ -119,55 +120,8 @@ export default function Home() {
         {/* ------------------------------------------- LATEST RESEARCHES--------------------------------------------------------- */}
         <HomeLatestResearch />
 
-
         {/* -------------------------------------------------FEATURES------------------------------------------------------------- */}
-        <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto flex flex-wrap items-center">
-            {/* Left Side: Features List */}
-            <div className="w-full md:w-1/2 px-4">
-              <h2 className="text-5xl font-extrabold text-gray-900 mb-6 animate-fadeIn">Our Amazing Features</h2>
-              <p className="text-lg text-gray-700 mb-8 animate-fadeIn delay-200">
-                Discover the incredible features that make our solution stand out. Experience seamless functionality with these top-tier features.
-              </p>
-
-              <ul className="space-y-6">
-                <li className="flex items-center text-lg text-gray-800 animate-slideInLeft">
-                  <input type="checkbox" id="feature1" checked className="mr-3 scale-125 accent-blue-600" />
-                  <label htmlFor="feature1">Automotive Engineering</label>
-                </li>
-                <li className="flex items-center text-lg text-gray-800 animate-slideInLeft delay-100">
-                  <input type="checkbox" id="feature2" checked className="mr-3 scale-125 accent-blue-600" />
-                  <label htmlFor="feature2">Light and Heavy Ground Vehicles</label>
-                </li>
-                <li className="flex items-center text-lg text-gray-800 animate-slideInLeft delay-200">
-                  <input type="checkbox" id="feature3" checked className="mr-3 scale-125 accent-blue-600" />
-                  <label htmlFor="feature3">Sports Vehicles</label>
-                </li>
-                <li className="flex items-center text-lg text-gray-800 animate-slideInLeft delay-300">
-                  <input type="checkbox" id="feature4" checked className="mr-3 scale-125 accent-blue-600" />
-                  <label htmlFor="feature4">Drones</label>
-                </li>
-                <li className="flex items-center text-lg text-gray-800 animate-slideInLeft delay-400">
-                  <input type="checkbox" id="feature5" checked className="mr-3 scale-125 accent-blue-600" />
-                  <label htmlFor="feature5">Artificial Intelligence</label>
-                </li>
-                <li className="flex items-center text-lg text-gray-800 animate-slideInLeft delay-500">
-                  <input type="checkbox" id="feature6" checked className="mr-3 scale-125 accent-blue-600" />
-                  <label htmlFor="feature6">Autonomous Driving Systems</label>
-                </li>
-              </ul>
-            </div>
-
-            {/* Right Side: Image */}
-            <div className="w-full md:w-1/2 px-4 mt-8 md:mt-0 animate-fadeIn delay-500">
-              <img
-                src="/images/features.png" // Use the correct image path
-                alt="Features"
-                className="rounded-lg shadow-xl w-full h-auto object-cover transition-transform duration-500 ease-in-out transform hover:scale-110"
-              />
-            </div>
-          </div>
-        </section>
+        <HomeFeature />
 
         {/* -------------------------------------------------STATE------------------------------------------------------------- */}
         <HomeStats />

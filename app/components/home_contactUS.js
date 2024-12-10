@@ -32,7 +32,7 @@ export default function HomeContactUs() {
       const result = await response.json();
       
       if (result.success) {
-        toast.success("Message sent successfully!");
+        toast.success("Message Sent Successfully!");
         setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
         toast.error(result.message || "Failed to send message.");
