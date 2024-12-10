@@ -3,7 +3,8 @@
 
 import { useState } from 'react'; // Import useState from React
 import Navbar from '../components/Navbar'; // Adjust the path as needed
-import Footer from '../components/Footer'; // Adjust the path as needed
+import ScrollToTop from '../components/ScrollToTop';
+import Footer from '../components/Footer';
 import Link from 'next/link';
 import HomeTestimonial from "../components/home_testimonial";
 import HomeStats from "../components/home_stats";
@@ -402,6 +403,7 @@ export default function Home() {
         <HomeContactUs />
 
       </main>
+      <ScrollToTop />
       <Footer />
     </div>
   );
