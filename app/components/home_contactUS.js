@@ -72,8 +72,12 @@ export default function HomeContactUs() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Card: Address */}
           <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
-            <div className="p-4 bg-blue-500 text-white rounded-full">
-              <i className="fas fa-map-marker-alt text-xl"></i>
+            <div>
+              <img
+                src="/images/contactUS_icon/address.png"
+                alt="Address Icon"
+                className="w-12 h-12"
+              />
             </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-800">Address</h3>
@@ -84,8 +88,12 @@ export default function HomeContactUs() {
 
           {/* Card: Call Us */}
           <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
-            <div className="p-4 bg-green-500 text-white rounded-full">
-              <i className="fas fa-phone-alt text-xl"></i>
+            <div>
+              <img
+                src="/images/contactUS_icon/callus.png"
+                alt="Call Us Icon"
+                className="w-12 h-12"
+              />
             </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-800">Call Us</h3>
@@ -96,8 +104,12 @@ export default function HomeContactUs() {
 
           {/* Card: Email */}
           <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
-            <div className="p-4 bg-yellow-500 text-white rounded-full">
-              <i className="fas fa-envelope text-xl"></i>
+            <div>
+              <img
+                src="/images/contactUS_icon/mail.png"
+                alt="Email Icon"
+                className="w-12 h-12"
+              />
             </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-800">Email Us</h3>
@@ -108,8 +120,12 @@ export default function HomeContactUs() {
 
           {/* Card: Open Hours */}
           <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
-            <div className="p-4 bg-purple-500 text-white rounded-full">
-              <i className="fas fa-clock text-xl"></i>
+            <div>
+              <img
+                src="/images/contactUS_icon/open.png"
+                alt="Open Hours Icon"
+                className="w-12 h-12"
+              />
             </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-800">Open Hours</h3>
