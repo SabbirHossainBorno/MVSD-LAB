@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar'; // Adjust the path as needed
 import Footer from '../components/Footer'; // Adjust the path as needed
 import Link from 'next/link';
 import HomeTestimonial from "../components/home_testimonial";
+import HomeStats from "../components/home_stats";
 import HomeFAQ from "../components/home_faq";
 import HomeClients from "../components/home_clients";
 import HomeContactUs from "../components/home_contactUS";
@@ -394,70 +395,7 @@ export default function Home() {
         </section>
 
         {/* -------------------------------------------------STATE------------------------------------------------------------- */}
-        <section id="stats" className="py-12 bg-gradient-to-br from-blue-100 via-white to-blue-50">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-800">Our Achievements</h2>
-              <p className="text-gray-600 mt-2 text-sm">
-                A quick glance at what we've accomplished so far.
-              </p>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-              {/* Stats Item */}
-              <div
-                className="stats-item flex flex-col items-center text-center bg-white p-4 rounded-lg shadow-md 
-                  transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div
-                  className="bg-orange-100 p-3 rounded-full mb-4"
-                >
-                  <i className="bi bi-journal-richtext text-orange-500 text-3xl"></i>
-                </div>
-                <span className="text-2xl font-bold text-gray-800">232</span>
-                <p className="text-gray-600 text-sm mt-1">Research Papers</p>
-              </div>
-              {/* Stats Item */}
-              <div
-                className="stats-item flex flex-col items-center text-center bg-white p-4 rounded-lg shadow-md 
-                  transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div
-                  className="bg-blue-100 p-3 rounded-full mb-4"
-                >
-                  <i className="bi bi-people text-blue-500 text-3xl"></i>
-                </div>
-                <span className="text-2xl font-bold text-gray-800">521</span>
-                <p className="text-gray-600 text-sm mt-1">Students</p>
-              </div>
-              {/* Stats Item */}
-              <div
-                className="stats-item flex flex-col items-center text-center bg-white p-4 rounded-lg shadow-md 
-                  transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div
-                  className="bg-green-100 p-3 rounded-full mb-4"
-                >
-                  <i className="bi bi-person-badge text-green-500 text-3xl"></i>
-                </div>
-                <span className="text-2xl font-bold text-gray-800">14</span>
-                <p className="text-gray-600 text-sm mt-1">Professors</p>
-              </div>
-              {/* Stats Item */}
-              <div
-                className="stats-item flex flex-col items-center text-center bg-white p-4 rounded-lg shadow-md 
-                  transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div
-                  className="bg-red-100 p-3 rounded-full mb-4"
-                >
-                  <i className="bi bi-briefcase text-red-500 text-3xl"></i>
-                </div>
-                <span className="text-2xl font-bold text-gray-800">15</span>
-                <p className="text-gray-600 text-sm mt-1">Projects</p>
-              </div>
-            </div>
-          </div>
-        </section>
+        <HomeStats />
 
         {/* ---------------------------------------------------FAQ------------------------------------------------------------- */}
         <HomeFAQ />
