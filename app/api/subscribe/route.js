@@ -1,8 +1,6 @@
 // app/api/subscribe/route.js
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
-import path from 'path';
-import fs from 'fs';
 import axios from 'axios';
 
 const pool = new Pool({

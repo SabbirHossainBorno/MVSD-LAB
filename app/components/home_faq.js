@@ -68,12 +68,10 @@ export default function HomeFAQ() {
   const [showMore, setShowMore] = useState(false);
 
   const toggleAnswer = (index) => {
-    console.log('Toggling answer for index:', index);  // Log for debugging
     setActiveIndex(activeIndex === index ? null : index);
   };
 
   const toggleShowMore = () => {
-    console.log('Toggling show more:', showMore);  // Log for debugging
     setShowMore(!showMore);
   };
 

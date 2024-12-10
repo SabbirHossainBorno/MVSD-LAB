@@ -166,7 +166,7 @@ export default function Footer() {
           {/* Social Media */}
           <div className="flex gap-6 mt-4 lg:mt-0">
             
-          <a href="javascript:;"
+          <a href="www.mvsdlab.com"
             class="p-1 rounded-lg flex items-center border border-gray-300 justify-center transition-all duration-500 hover:border-gray-200 hover:bg-gray-100 group">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 71 72" fill="none">
               <path
