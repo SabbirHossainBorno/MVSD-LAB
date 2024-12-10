@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner'; // Import the LoadingSpinner component
 
 export default function HomeContactUs() {
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,6 +20,7 @@ export default function HomeContactUs() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true); // Show loading spinner
+
     try {
       const response = await fetch("/api/home_contactUs", { 
         method: "POST",
@@ -37,78 +39,98 @@ export default function HomeContactUs() {
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false); // Hide loading spinner
     }
   };
 
   return (
-    <section className="py-16 bg-gradient-to-br from-gray-50 to-blue-100">
+    <section className="py-16 bg-gradient-to-br from-gray-100 via-blue-50 to-blue-100 relative">
   <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    {/* Loading State Overlay */}
+    {isLoading && (
+      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <LoadingSpinner />
+      </div>
+    )}
+
+    <div
+      className={`container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center ${
+        isLoading ? "opacity-50" : ""
+      }`}
+    >
       {/* Contact Information */}
-      <div>
-        <h2 className="text-4xl font-extrabold text-gray-800 mb-8">
-          Get in Touch with Us
+      <div className="space-y-8">
+        <h2 className="text-4xl font-bold text-gray-800">
+          Get in Touch With Us
         </h2>
-        <p className="text-lg text-gray-600 mb-12">
-          Reach out to us with any inquiries or feedback.
+        <p className="text-lg text-gray-600">
+          We'd love to hear from you! Reach out to us with any questions,
+          suggestions, or feedback.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Card: Address */}
-          <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
-            <div className="flex items-center mb-4">
-              <div className="p-4 rounded-full bg-blue-500 text-white">
-                <i className="fas fa-map-marker-alt text-xl"></i>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-800 ml-4">Address</h3>
+          <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
+            <div className="p-4 bg-blue-500 text-white rounded-full">
+              <i className="fas fa-map-marker-alt text-xl"></i>
             </div>
-            <p className="text-gray-600">A108 Adam Street</p>
-            <p className="text-gray-600">New York, NY 535022</p>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800">Address</h3>
+              <p className="text-gray-600">A108 Adam Street</p>
+              <p className="text-gray-600">New York, NY 535022</p>
+            </div>
           </div>
 
           {/* Card: Call Us */}
-          <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
-            <div className="flex items-center mb-4">
-              <div className="p-4 rounded-full bg-green-500 text-white">
-                <i className="fas fa-phone-alt text-xl"></i>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-800 ml-4">Call Us</h3>
+          <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
+            <div className="p-4 bg-green-500 text-white rounded-full">
+              <i className="fas fa-phone-alt text-xl"></i>
             </div>
-            <p className="text-gray-600">+1 5589 55488 55</p>
-            <p className="text-gray-600">+1 6678 254445 41</p>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800">Call Us</h3>
+              <p className="text-gray-600">+1 5589 55488 55</p>
+              <p className="text-gray-600">+1 6678 254445 41</p>
+            </div>
           </div>
 
-          {/* Card: Email Us */}
-          <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
-            <div className="flex items-center mb-4">
-              <div className="p-4 rounded-full bg-yellow-500 text-white">
-                <i className="fas fa-envelope text-xl"></i>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-800 ml-4">Email Us</h3>
+          {/* Card: Email */}
+          <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
+            <div className="p-4 bg-yellow-500 text-white rounded-full">
+              <i className="fas fa-envelope text-xl"></i>
             </div>
-            <p className="text-gray-600">info@mvsdlab.com</p>
-            <p className="text-gray-600">contact@mvsdlab.com</p>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800">Email Us</h3>
+              <p className="text-gray-600">info@mvsdlab.com</p>
+              <p className="text-gray-600">contact@mvsdlab.com</p>
+            </div>
           </div>
 
           {/* Card: Open Hours */}
-          <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
-            <div className="flex items-center mb-4">
-              <div className="p-4 rounded-full bg-purple-500 text-white">
-                <i className="fas fa-clock text-xl"></i>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-800 ml-4">Open Hours</h3>
+          <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
+            <div className="p-4 bg-purple-500 text-white rounded-full">
+              <i className="fas fa-clock text-xl"></i>
             </div>
-            <p className="text-gray-600">Monday - Friday</p>
-            <p className="text-gray-600">9:00AM - 05:00PM</p>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800">Open Hours</h3>
+              <p className="text-gray-600">Monday - Friday</p>
+              <p className="text-gray-600">9:00AM - 05:00PM</p>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Contact Form */}
-      <div className="bg-white p-8 shadow-lg rounded-lg">
+      <div className="bg-white shadow-lg rounded-lg p-8">
+        <h3 className="text-2xl font-semibold text-gray-800 mb-6">
+          Send Us a Message
+        </h3>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
               Your Name
             </label>
             <input
@@ -119,10 +141,14 @@ export default function HomeContactUs() {
               onChange={handleChange}
               required
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              disabled={isLoading}
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
               Your Email
             </label>
             <input
@@ -133,10 +159,14 @@ export default function HomeContactUs() {
               onChange={handleChange}
               required
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              disabled={isLoading}
             />
           </div>
           <div>
-            <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="subject"
+              className="block text-sm font-medium text-gray-700"
+            >
               Subject
             </label>
             <input
@@ -147,10 +177,14 @@ export default function HomeContactUs() {
               onChange={handleChange}
               required
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              disabled={isLoading}
             />
           </div>
           <div>
-            <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="message"
+              className="block text-sm font-medium text-gray-700"
+            >
               Message
             </label>
             <textarea
@@ -161,16 +195,16 @@ export default function HomeContactUs() {
               required
               rows="4"
               className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              disabled={isLoading}
             ></textarea>
           </div>
-          <div>
-            <button
-              type="submit"
-              className="w-full flex justify-center py-3 px-6 border border-transparent rounded-lg shadow text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              Send Message
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="w-full py-3 px-6 border border-transparent rounded-lg shadow text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            disabled={isLoading}
+          >
+            Send Message
+          </button>
         </form>
       </div>
     </div>
