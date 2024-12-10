@@ -34,7 +34,8 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-gradient-to-r from-gray-800 via-gray-900 to-black text-white py-12 px-6">
+    <footer className="relative bg-gradient-to-r from-gray-800 via-gray-900 to-black text-white py-12 px-6"
+    >
       
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
