@@ -15,7 +15,8 @@ export default function HomeFeature() {
             experience.
           </p>
 
-          <ul className="space-y-6">
+          {/* Features in divs */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
             {[
               "Automotive Engineering",
               "Light and Heavy Ground Vehicles",
@@ -24,14 +25,14 @@ export default function HomeFeature() {
               "Artificial Intelligence",
               "Autonomous Driving Systems",
             ].map((feature, index) => (
-              <li
+              <div
                 key={index}
-                className={`flex items-center text-lg text-gray-800 animate-slideInLeft delay-${
+                className={`flex items-center p-2 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 animate-fadeIn delay-${
                   index * 100
                 }`}
               >
                 <svg
-                  className="w-6 h-6 text-blue-600 mr-3"
+                  className="w-8 h-8 text-blue-600 mr-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -44,10 +45,10 @@ export default function HomeFeature() {
                     d="M5 13l4 4L19 7"
                   ></path>
                 </svg>
-                {feature}
-              </li>
+                <p className="text-lg text-gray-800">{feature}</p>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
 
         {/* Right Side: Image */}
