@@ -10,19 +10,11 @@ import HomeStats from "../components/home_stats";
 import HomeFAQ from "../components/home_faq";
 import HomeClients from "../components/home_clients";
 import HomeContactUs from "../components/home_contactUS";
-import Image from 'next/image'; // Correct import statement
 
 
 export default function Home() {
   // Set a fixed height for the navbar
   const navbarHeight = '60px'; // Change this to your actual navbar height
-
-  const [activeIndex, setActiveIndex] = useState(null);
-
-  const toggleAnswer = (index) => {
-    setActiveIndex(activeIndex === index ? null : index);
-  };
-
   
   return (
     <div className="bg-gray-100 text-gray-900 min-h-screen">

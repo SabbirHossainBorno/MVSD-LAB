@@ -47,7 +47,9 @@ export default function HomeContactUs() {
 
   return (
     <section className="py-16 bg-gradient-to-br from-gray-100 via-blue-50 to-blue-100 relative">
+      
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+        
         {/* Loading State Overlay */}
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -55,7 +57,8 @@ export default function HomeContactUs() {
           </div>
         )}
 
-        <div className={`container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center ${isLoading ? "opacity-50" : ""}`}>
+        <div className={`container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10 ${isLoading ? "opacity-50" : ""}`}>
+
           {/* Contact Information */}
           <div className="space-y-8">
             <h2 className="text-4xl font-bold text-gray-800">
@@ -221,6 +224,12 @@ export default function HomeContactUs() {
             </form>
           </div>
         </div>
+        {/* Loading Spinner */}
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+            <LoadingSpinner />
+          </div>
+        )}
       </div>
       <ToastContainer />
     </section>
