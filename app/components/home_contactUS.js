@@ -69,7 +69,7 @@ export default function HomeContactUs() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Card: Address */}
-            <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
+            <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded transition-transform transform hover:scale-105">
               <div>
                 <img
                   src="/images/contactUS_icon/address.png"
@@ -85,7 +85,7 @@ export default function HomeContactUs() {
             </div>
 
             {/* Card: Call Us */}
-            <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
+            <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded transition-transform transform hover:scale-105">
               <div>
                 <img
                   src="/images/contactUS_icon/callus.png"
@@ -101,7 +101,7 @@ export default function HomeContactUs() {
             </div>
 
             {/* Card: Email */}
-            <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
+            <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded transition-transform transform hover:scale-105">
               <div>
                 <img
                   src="/images/contactUS_icon/mail.png"
@@ -117,7 +117,7 @@ export default function HomeContactUs() {
             </div>
 
             {/* Card: Open Hours */}
-            <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded-lg transition-transform transform hover:scale-105">
+            <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded transition-transform transform hover:scale-105">
               <div>
                 <img
                   src="/images/contactUS_icon/open.png"
@@ -135,7 +135,7 @@ export default function HomeContactUs() {
         </div>
 
         {/* Contact Form */}
-        <div className="bg-white shadow-lg rounded-lg p-8 relative">
+        <div className="bg-white shadow-lg rounded p-8 relative">
           <h3 className="text-2xl font-semibold text-gray-800 mb-6">
             Send Us a Message
           </h3>
@@ -154,7 +154,7 @@ export default function HomeContactUs() {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 disabled={isLoading}
               />
             </div>
@@ -172,7 +172,7 @@ export default function HomeContactUs() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 disabled={isLoading}
               />
             </div>
@@ -190,7 +190,7 @@ export default function HomeContactUs() {
                 value={formData.subject}
                 onChange={handleChange}
                 required
-                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 disabled={isLoading}
               />
             </div>
@@ -208,13 +208,13 @@ export default function HomeContactUs() {
                 onChange={handleChange}
                 required
                 rows="4"
-                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 disabled={isLoading}
               ></textarea>
             </div>
             <button
               type="submit"
-              className="w-full py-3 px-6 border border-transparent rounded-lg shadow text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="w-full py-3 px-6 border border-transparent rounded shadow text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               disabled={isLoading}
             >
               Send Message

@@ -96,7 +96,7 @@ export default function HomeTestimonial() {
             ))}
             {/* Previous Card */}
             {testimonials[currentIndex - 1] && (
-              <div className="absolute left-0 transform -translate-x-1/4 scale-75 opacity-50 z-0">
+              <div className="absolute left-0 transform -translate-x-1/4 scale-75 opacity-50 z-0 hidden sm:block">
                 <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg max-w-md mx-auto text-center">
                   <img
                     src={testimonials[currentIndex - 1].image}
@@ -117,7 +117,7 @@ export default function HomeTestimonial() {
             )}
             {/* Next Card */}
             {testimonials[currentIndex + 1] && (
-              <div className="absolute right-0 transform translate-x-1/4 scale-75 opacity-50 z-0">
+              <div className="absolute right-0 transform translate-x-1/4 scale-75 opacity-50 z-0 hidden sm:block">
                 <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg max-w-md mx-auto text-center">
                   <img
                     src={testimonials[currentIndex + 1].image}
