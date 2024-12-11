@@ -63,7 +63,7 @@ export default function HomeContactUs() {
             Get in Touch With Us
           </h2>
           <p className="text-lg text-gray-600">
-            We'd love to hear from you! Reach out to us with any questions,
+            We&apos;d love to hear from you! Reach out to us with any questions,
             suggestions, or feedback.
           </p>
 
