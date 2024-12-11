@@ -83,7 +83,7 @@ export default function HomeTestimonial() {
                     className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto mb-4 border-2 border-blue-500"
                   />
                   <p className="text-sm sm:text-base italic text-gray-700 mb-4">
-                    "{testimonial.quote}"
+                  &quot;{testimonial.quote}&quot;
                   </p>
                   <h4 className="text-lg sm:text-xl font-bold text-gray-800">
                     {testimonial.name}
@@ -104,7 +104,7 @@ export default function HomeTestimonial() {
                     className="w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-4 border-2 border-blue-500"
                   />
                   <p className="text-xs sm:text-sm italic text-gray-700 mb-4">
-                    "{testimonials[currentIndex - 1].quote}"
+                  &quot;{testimonials[currentIndex - 1].quote}&quot;
                   </p>
                   <h4 className="text-base sm:text-lg font-bold text-gray-800">
                     {testimonials[currentIndex - 1].name}
@@ -125,7 +125,7 @@ export default function HomeTestimonial() {
                     className="w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-4 border-2 border-blue-500"
                   />
                   <p className="text-xs sm:text-sm italic text-gray-700 mb-4">
-                    "{testimonials[currentIndex + 1].quote}"
+                  &quot;{testimonials[currentIndex + 1].quote}&quot;
                   </p>
                   <h4 className="text-base sm:text-lg font-bold text-gray-800">
                     {testimonials[currentIndex + 1].name}

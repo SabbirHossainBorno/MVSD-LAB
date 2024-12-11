@@ -33,7 +33,7 @@ export default function HomeStats() {
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-semibold text-gray-800 mb-4">Our Achievements</h2>
-          <p className="text-gray-600 text-lg">A quick glance at what we've accomplished so far.</p>
+          <p className="text-gray-600 text-lg">A quick glance at what we&apos;ve accomplished so far.</p>
         </div>
 
         {/* Stats Grid */}
