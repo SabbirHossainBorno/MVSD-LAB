@@ -37,7 +37,7 @@ export default function Navbar() {
             className="h-10 transition-transform duration-300 hover:scale-110"
             alt="MVSD LAB Logo"
           />
-          <span className="self-center text-2xl font-bold tracking-wide">MVSD LAB</span>
+          <span className="self-center text-2xl font-bold tracking-wide text-[#012970]">MVSD LAB</span>
         </Link>
 
         {/* Right Section */}
@@ -78,7 +78,7 @@ export default function Navbar() {
             isMobileNavActive ? 'block' : 'hidden'
           } w-full md:flex md:w-auto md:order-1 transition-all duration-500 ease-in-out`}
         >
-          <ul className="flex flex-col p-4 mt-4 bg-white text-gray-900 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:bg-transparent md:text-white md:p-0">
+          <ul className="flex flex-col p-4 mt-4 bg-white text-gray-900 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:bg-transparent md:text-[#012970] md:p-0">
             <li>
               <Link
                 href="/home"
@@ -110,35 +110,37 @@ export default function Navbar() {
               </Link>
             </li>
             <li className="relative group">
-              <button
-                className="flex items-center py-2 px-3 w-full md:w-auto transition duration-300 hover:text-blue-500"
-              >
-                Member
-                <svg
-                  className="w-4 h-4 ml-1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div className="absolute left-0 hidden w-48 mt-2 rounded-md shadow-lg group-hover:block bg-white text-gray-900">
-                <ul className="py-2">
-                  <li>
-                    <Link href="/member/professor" className="block px-4 py-2 hover:bg-gray-100">Professor</Link>
-                  </li>
-                  <li>
-                    <Link href="/member/staff" className="block px-4 py-2 hover:bg-gray-100">Staff</Link>
-                  </li>
-                  <li>
-                    <Link href="/member/phd_candidate" className="block px-4 py-2 hover:bg-gray-100">Ph.D Candidate</Link>
-                  </li>
-                </ul>
-              </div>
-            </li>
+  <button
+    className="flex items-center py-2 px-3 w-full md:w-auto transition duration-300 hover:text-blue-500"
+  >
+    Member
+    <svg
+      className="w-4 h-4 ml-1"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+  <div
+    className="absolute left-0 hidden w-48 mt-2 rounded-md shadow-lg group-hover:block group-focus-within:block bg-white text-gray-900"
+  >
+    <ul className="py-2">
+      <li>
+        <Link href="/member/professor" className="block px-4 py-2 hover:bg-gray-100">Professor</Link>
+      </li>
+      <li>
+        <Link href="/member/staff" className="block px-4 py-2 hover:bg-gray-100">Staff</Link>
+      </li>
+      <li>
+        <Link href="/member/phd_candidate" className="block px-4 py-2 hover:bg-gray-100">Ph.D Candidate</Link>
+      </li>
+    </ul>
+  </div>
+</li>
           </ul>
         </div>
       </div>
