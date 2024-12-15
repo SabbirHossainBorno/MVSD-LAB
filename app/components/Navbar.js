@@ -109,7 +109,7 @@ export default function Navbar() {
                 Contact
               </Link>
             </li>
-            <li className="relative group">
+            <li className="relative">
   <button
     className="flex items-center py-2 px-3 w-full md:w-auto transition duration-300 hover:text-blue-500"
   >
@@ -126,7 +126,7 @@ export default function Navbar() {
     </svg>
   </button>
   <div
-    className="absolute left-0 hidden w-48 mt-2 rounded-md shadow-lg group-hover:block group-focus-within:block bg-white text-gray-900"
+    className="absolute left-0 hidden w-48 mt-2 rounded-md shadow-lg bg-white text-gray-900 group-hover:block hover:block"
   >
     <ul className="py-2">
       <li>
@@ -141,6 +141,7 @@ export default function Navbar() {
     </ul>
   </div>
 </li>
+
           </ul>
         </div>
       </div>
