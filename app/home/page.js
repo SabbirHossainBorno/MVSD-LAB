@@ -18,7 +18,7 @@ import HomeContactUs from "../components/home_contactUS";
 
 export default function Home() {
   // Set a fixed height for the navbar
-  const navbarHeight = '60px'; // Change this to your actual navbar height
+  const navbarHeight = '00px'; // Change this to your actual navbar height
   
   return (
     <div className="bg-gray-100 text-gray-900 min-h-screen">
