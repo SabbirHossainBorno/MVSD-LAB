@@ -44,20 +44,31 @@ export default function Navbar() {
 
         {/* Right Section */}
         <div className="flex md:order-2">
-          <Link href="/login">
-            <button
-              type="button"
-              className="flex items-center bg-blue-500 text-white font-medium rounded px-4 py-2 shadow-md hover:shadow-lg hover:bg-blue-600 transition duration-300 focus:ring-4 focus:outline-none focus:ring-blue-300"
-            >
-              <img src="/images/login.png" alt="Login Icon" className="w-5 h-5 mr-2" />
-              Login
-            </button>
-          </Link>
+        <Link href="/login">
+  <button
+    type="button"
+    className="relative inline-flex items-center justify-center px-6 py-2 overflow-hidden font-mono font-medium tracking-tighter text-white bg-gray-800 rounded-lg group"
+  >
+    {isMobileNavActive ? (
+      "Login"
+    ) : (
+      <>
+        <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-green-500 rounded-full group-hover:w-56 group-hover:h-56"></span>
+        <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-gray-700"></span>
+        <span className="relative flex items-center">
+          <img src="/images/login.png" alt="Login Icon" className="w-5 h-5 mr-2" />
+          Login
+        </span>
+      </>
+    )}
+  </button>
+</Link>
+
 
           {/* Mobile menu button */}
           <button
             type="button"
-            className="inline-flex items-center p-2 ml-3 w-10 h-10 text-white md:hidden hover:bg-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
+            className="inline-flex items-center p-2 ml-3 w-10 h-10 text-[#012970] md:hidden hover:bg-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
             onClick={toggleMobileNav}
           >
             <span className="sr-only">Open main menu</span>
