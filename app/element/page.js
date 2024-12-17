@@ -71,20 +71,7 @@ export function FontExamples() {
         <p>Source Sans Pro is a clean and versatile sans-serif font.</p>
       </div>
 
-      <div className="font-aguDisplay">
-      <h2 className="text-3xl font-semibold">Source Sans Pro Font</h2>
-      <p>Source Sans Pro is a clean and versatile sans-serif font.</p>
-    </div>
-
-    <div className="font-mPlusRounded">
-    <h2 className="text-3xl font-semibold">Source Sans Pro Font</h2>
-    <p>Source Sans Pro is a clean and versatile sans-serif font.</p>
-    </div>
-
-    <div className="font-varelaRound">
-    <h2 className="text-3xl font-semibold">Source Sans Pro Font</h2>
-        <p>Source Sans Pro is a clean and versatile sans-serif font.</p>
-    </div>
+        
 
 
 
