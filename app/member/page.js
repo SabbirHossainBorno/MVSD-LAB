@@ -115,7 +115,14 @@ export default function Member() {
       {/* Main Content */}
       <main>
 
-      <section className="relative flex items-center justify-center h-[25vh] md:h-[35vh] bg-cover bg-center" style={{ backgroundImage: "url('/images/hero-bg3.png')" }}>
+      <section className="relative flex items-center justify-center h-[35vh] md:h-[45vh] bg-cover bg-center">
+        {/* Background Overlay with Opacity */}
+        <div
+          className="absolute inset-0 bg-[url('/images/hero-bg3.png')] bg-cover bg-center"
+          style={{ opacity: 0.4 }} // Adjust the opacity value (0.0 - 1.0)
+        ></div>
+
+        {/* Content Layer */}
         <div className="relative z-10 text-center p-6 md:p-8 max-w-2xl mx-auto">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
             Member Of MVSD LAB
@@ -125,6 +132,7 @@ export default function Member() {
           </p>
         </div>
       </section>
+
 
 
 

@@ -261,7 +261,7 @@ export default function Navbar() {
                       pathname === '/publication' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Summery
+                    Summary
                   </Link>
                 </li>
 
@@ -346,7 +346,7 @@ export default function Navbar() {
                       pathname === '/patent' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Summery
+                    Summary
                   </Link>
                 </li>
 
@@ -400,7 +400,7 @@ export default function Navbar() {
                       pathname === '/project' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Summery
+                    Summary
                   </Link>
                 </li>
 
