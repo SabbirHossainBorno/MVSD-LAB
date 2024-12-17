@@ -272,7 +272,7 @@ export default function Navbar() {
                       pathname === '/publication/international_journals' ? 'text-blue-500' : ''
                     }`}
                   >
-                    International Journals
+                    International Journal
                   </Link>
                 </li>
                 <li>
@@ -282,7 +282,7 @@ export default function Navbar() {
                       pathname === '/publication/domestic_journals' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Domestic Journals
+                    Domestic Journal
                   </Link>
                 </li>
                 <li>
@@ -292,7 +292,7 @@ export default function Navbar() {
                       pathname === '/publication/international_conferences' ? 'text-blue-500' : ''
                     }`}
                   >
-                    International Conferences
+                    International Conference
                   </Link>
                 </li>
                 <li>
@@ -302,10 +302,246 @@ export default function Navbar() {
                       pathname === '/publication/domestic_conferences' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Domestic Conferences
+                    Domestic Conference
                   </Link>
                 </li>
 
+              </ul>
+            </div>
+          </li>
+
+
+          {/* Patent Dropdown */}
+          <li className="relative group">
+            <button
+              className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded ${
+                pathname.includes('/patent') ? 'text-blue-500' : ''
+              }`}
+              onClick={() => handleDropdown('patent')}
+            >
+              Patent
+              <svg
+                className={`w-4 h-4 ml-1 transition-transform duration-300 ${
+                  openDropdown === 'patent' ? 'rotate-180' : ''
+                }`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              className={`${
+                openDropdown === 'patent' ? 'block' : 'hidden'
+              } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded md:mt-2 md:left-0 w-full rounded transition-all duration-300`}
+            >
+              <ul className="rounded">
+              <li>
+                  <Link
+                    href="/patent"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/patent' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Summery
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/patent/registered_patent"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/patent/registered_patent' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Registered
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+
+          {/* Project Dropdown */}
+          <li className="relative group">
+            <button
+              className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded ${
+                pathname.includes('/project') ? 'text-blue-500' : ''
+              }`}
+              onClick={() => handleDropdown('project')}
+            >
+              Project
+              <svg
+                className={`w-4 h-4 ml-1 transition-transform duration-300 ${
+                  openDropdown === 'project' ? 'rotate-180' : ''
+                }`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              className={`${
+                openDropdown === 'project' ? 'block' : 'hidden'
+              } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded md:mt-2 md:left-0 w-full rounded transition-all duration-300`}
+            >
+              <ul className="rounded">
+              <li>
+                  <Link
+                    href="/project"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/project' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Summery
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/project/ongoing_project"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/project/ongoing_project' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Ongoing
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/project/completed_project"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/project/completed_project' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Completed
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+
+          {/* Course Dropdown */}
+          <li className="relative group">
+            <button
+              className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded ${
+                pathname.includes('/project') ? 'text-blue-500' : ''
+              }`}
+              onClick={() => handleDropdown('project')}
+            >
+              Project
+              <svg
+                className={`w-4 h-4 ml-1 transition-transform duration-300 ${
+                  openDropdown === 'project' ? 'rotate-180' : ''
+                }`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              className={`${
+                openDropdown === 'project' ? 'block' : 'hidden'
+              } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded md:mt-2 md:left-0 w-full rounded transition-all duration-300`}
+            >
+              <ul className="rounded">
+              <li>
+                  <Link
+                    href="/project"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/project' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Summery
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/project/ongoing_project"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/project/ongoing_project' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Ongoing
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/project/completed_project"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/project/completed_project' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Completed
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+
+          {/* Demo Dropdown */}
+          <li className="relative group">
+            <button
+              className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded ${
+                pathname.includes('/demo') ? 'text-blue-500' : ''
+              }`}
+              onClick={() => handleDropdown('demo')}
+            >
+              Demo
+              <svg
+                className={`w-4 h-4 ml-1 transition-transform duration-300 ${
+                  openDropdown === 'demo' ? 'rotate-180' : ''
+                }`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              className={`${
+                openDropdown === 'demo' ? 'block' : 'hidden'
+              } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded md:mt-2 md:left-0 w-full rounded transition-all duration-300`}
+            >
+              <ul className="rounded">
+              <li>
+                  <Link
+                    href="/demo"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/demo' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Summery
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/demo/demo_demo"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/demo/demo_demo' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Demo Demo
+                  </Link>
+                </li>
               </ul>
             </div>
           </li>
