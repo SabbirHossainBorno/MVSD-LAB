@@ -44,13 +44,15 @@ export default function Navbar() {
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         {/* Logo */}
         <Link href="/home" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <img
-            src="/images/logo.png"
-            className="h-10 transition-transform duration-300 hover:scale-110"
-            alt="MVSD LAB Logo"
-          />
-          <span className="self-center text-2xl font-bold tracking-wide text-[#012970]">MVSD LAB</span>
-        </Link>
+  <img
+    src="/images/logo.png"
+    className="h-10 transition-transform duration-300 hover:scale-110"
+    alt="MVSD LAB Logo"
+  />
+  <span className="self-center text-2xl font-bold tracking-wide text-[#012970] font-poppins">
+    MVSD LAB
+  </span>
+</Link>
 
         {/* Right Section */}
         <div className="flex md:order-2">
