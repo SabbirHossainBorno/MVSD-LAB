@@ -54,23 +54,37 @@ export default function Navbar() {
 
         {/* Right Section */}
         <div className="flex md:order-2">
-          <Link
-            href="/login"
-            className="relative inline-flex items-center justify-center p-2 px-3 py-1 overflow-hidden font-medium text-indigo-600 transition duration-300 ease-out border-2 border-purple-500 rounded shadow-md group"
-          >
-            <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-purple-500 group-hover:translate-x-0 ease">
-              Login
-            </span>
-            <span className="absolute flex items-center justify-center w-full h-full text-purple-500 transition-all duration-300 transform group-hover:translate-x-full ease">
-              Login
-            </span>
-            <span className="relative invisible">Login</span>
-          </Link>
+        <Link
+  href="/login"
+  className="relative inline-flex items-center justify-center p-2 px-3 py-1 overflow-hidden font-medium text-[#012970] transition duration-300 ease-out border-2 border-[#012970] rounded shadow-md group"
+>
+  <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-[#012970] group-hover:translate-x-0 ease">
+    <svg
+      className="w-4 h-4"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M14 5l7 7m0 0l-7 7m7-7H3"
+      />
+    </svg>
+  </span>
+  <span className="absolute flex items-center justify-center w-full h-full text-[#012970] transition-all duration-300 transform group-hover:translate-x-full ease">
+    Login
+  </span>
+  <span className="relative invisible">Login</span>
+</Link>
+
 
           {/* Mobile Menu Button */}
           <button
             type="button"
-            className="inline-flex items-center p-2 ml-3 w-10 h-10 text-[#012970] md:hidden hover:bg-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
+            className="inline-flex items-center p-2 ml-3 w-10 h-10 text-[#012970] md:hidden hover:bg-blue-600 rounded-md focus:outline-none focus:ring-2 focus:ring-white"
             onClick={toggleMobileNav}
           >
             <span className="sr-only">Open main menu</span>
@@ -94,107 +108,128 @@ export default function Navbar() {
             isMobileNavActive ? 'block' : 'hidden'
           } w-full md:flex md:w-auto md:order-1`}
         >
-          <ul className="flex flex-col p-4 mt-4 bg-white text-gray-900 rounded-lg md:flex-row md:space-x-1 md:mt-0 md:bg-transparent md:text-[#012970] md:p-0">
-            <li>
+          <ul className="flex flex-col p-4 mt-4 bg-white text-gray-900 rounded-md md:flex-row md:space-x-1 md:mt-0 md:bg-transparent md:text-[#012970] md:p-0">
+          <li>
             <Link
-                href="/home"
-                className={`flex items-center py-2 px-3 w-full md:w-auto transition duration-300 hover:text-blue-700 font-medium ${
-                  pathname === '/home' ? 'text-blue-500' : ''
-                }`}
-              >
-                Home
-              </Link>
-            </li>
-            <li>
+              href="/home"
+              className={`py-2 px-3 block hover:text-blue-700 font-medium ${
+                pathname === '/home' ? 'text-blue-500 font-medium' : ''
+              }`}
+            >
+              Home
+            </Link>
+          </li>
+          <li>
             <Link
-                href="/services"
-                className={`flex items-center py-2 px-3 w-full md:w-auto transition duration-300 hover:text-blue-700 font-medium ${
-                  pathname === '/services' ? 'text-blue-500' : ''
+              href="/services"
+              className={`py-2 px-3 block hover:text-blue-700 font-medium ${
+                pathname === '/services' ? 'text-blue-500 font-medium' : ''
+              }`}
+            >
+              Services
+            </Link>
+          </li>
+
+          {/* Member Dropdown */}
+          <li className="relative group">
+            <button
+              className="flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded-md"
+              onClick={() => handleDropdown('member')}
+            >
+              Member
+              <svg
+                className={`w-4 h-4 ml-1 transition-transform duration-300 ${
+                  openDropdown === 'member' ? 'rotate-180' : ''
                 }`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
               >
-                Services
-              </Link>
-            </li>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              className={`${
+                openDropdown === 'member' ? 'block' : 'hidden'
+              } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded-md md:mt-2 md:left-0 w-full rounded-md transition-all duration-300`}
+            >
+              <ul className="rounded-md">
+                <li>
+                  <Link
+                    href="/member/professor"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded-md ${
+                      pathname === '/member/professor' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Professor
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/member/staff"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded-md ${
+                      pathname === '/member/staff' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Staff
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </li>
 
-            {/* Member Dropdown */}
-            <li className="relative group">
-              <button
-                className="flex items-center py-2 px-3 w-full md:w-auto transition duration-300 hover:text-blue-700 font-medium"
-                onClick={() => handleDropdown('member')}
-              >
-                Member
-                <svg
-                  className={`w-4 h-4 ml-1 transition-transform duration-300 ${
-                    openDropdown === 'member' ? 'rotate-180' : ''
-                  }`}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div
-                className={`${
-                  openDropdown === 'member' ? 'block' : 'hidden'
-                } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded-lg md:mt-2 md:left-0 w-full`}
-              >
-                <ul>
-                  <li>
-                    <Link href="/member/professor" className="block px-4 py-2 hover:bg-gray-100 font-medium">
-                      Professor
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/member/staff" className="block px-4 py-2 hover:bg-gray-200">
-                      Staff
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </li>
 
-            {/* Test Dropdown */}
-            <li className="relative group">
-              <button
-                className="flex items-center justify-between py-2 px-3 w-full hover:text-blue-700"
-                onClick={() => handleDropdown('test')}
+          {/* Test Dropdown */}
+          <li className="relative group">
+            <button
+              className="flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded-md"
+              onClick={() => handleDropdown('test')}
+            >
+              Test
+              <svg
+                className={`w-4 h-4 ml-1 transition-transform duration-300 ${
+                  openDropdown === 'test' ? 'rotate-180' : ''
+                }`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
               >
-                Test
-                <svg
-                  className={`w-4 h-4 ml-1 transition-transform duration-300 ${
-                    openDropdown === 'test' ? 'rotate-180' : ''
-                  }`}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div
-                className={`${
-                  openDropdown === 'test' ? 'block' : 'hidden'
-                } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded-lg md:mt-2 md:left-0 w-full`}
-              >
-                <ul>
-                  <li>
-                    <Link href="/test/option1" className="block px-4 py-2 hover:bg-gray-200">
-                      Option 1
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/test/option2" className="block px-4 py-2 hover:bg-gray-200">
-                      Option 2
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </li>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              className={`${
+                openDropdown === 'test' ? 'block' : 'hidden'
+              } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded-md md:mt-2 md:left-0 w-full rounded-md transition-all duration-300`}
+            >
+              <ul className="rounded-md">
+                <li>
+                  <Link
+                    href="/test/option1"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded-md ${
+                      pathname === '/test/option1' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Option 1
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/test/option2"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded-md ${
+                      pathname === '/test/option2' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Option 2
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </li>
           </ul>
         </div>
       </div>
