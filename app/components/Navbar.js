@@ -433,14 +433,14 @@ export default function Navbar() {
           <li className="relative group">
             <button
               className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded ${
-                pathname.includes('/project') ? 'text-blue-500' : ''
+                pathname.includes('/course') ? 'text-blue-500' : ''
               }`}
-              onClick={() => handleDropdown('project')}
+              onClick={() => handleDropdown('course')}
             >
-              Project
+              Course
               <svg
                 className={`w-4 h-4 ml-1 transition-transform duration-300 ${
-                  openDropdown === 'project' ? 'rotate-180' : ''
+                  openDropdown === 'course' ? 'rotate-180' : ''
                 }`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -453,39 +453,39 @@ export default function Navbar() {
             </button>
             <div
               className={`${
-                openDropdown === 'project' ? 'block' : 'hidden'
+                openDropdown === 'course' ? 'block' : 'hidden'
               } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded md:mt-2 md:left-0 w-full rounded transition-all duration-300`}
             >
               <ul className="rounded">
               <li>
                   <Link
-                    href="/project"
+                    href="/course"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/project' ? 'text-blue-500' : ''
+                      pathname === '/course' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Summery
+                    All
                   </Link>
                 </li>
 
                 <li>
                   <Link
-                    href="/project/ongoing_project"
+                    href="/course/undergraduate_course"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/project/ongoing_project' ? 'text-blue-500' : ''
+                      pathname === '/course/undergraduate_course' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Ongoing
+                    Undergraduate
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/project/completed_project"
+                    href="/course/graduate_course"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/project/completed_project' ? 'text-blue-500' : ''
+                      pathname === '/course/graduate_course' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Completed
+                    Graduate
                   </Link>
                 </li>
               </ul>
@@ -493,18 +493,44 @@ export default function Navbar() {
           </li>
 
 
-          {/* Demo Dropdown */}
+          {/* Video */}
+          <li>
+            <Link
+              href="/video"
+              className={`py-2 px-3 block hover:text-blue-700 font-medium ${
+                pathname === '/video' ? 'text-blue-500 font-medium' : ''
+              }`}
+            >
+              Video
+            </Link>
+          </li>
+
+
+          {/* Gallery */}
+          <li>
+            <Link
+              href="/gallery"
+              className={`py-2 px-3 block hover:text-blue-700 font-medium ${
+                pathname === '/gallery' ? 'text-blue-500 font-medium' : ''
+              }`}
+            >
+              Gallery
+            </Link>
+          </li>
+
+
+          {/* Software Dropdown */}
           <li className="relative group">
             <button
               className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded ${
-                pathname.includes('/demo') ? 'text-blue-500' : ''
+                pathname.includes('/software') ? 'text-blue-500' : ''
               }`}
-              onClick={() => handleDropdown('demo')}
+              onClick={() => handleDropdown('software')}
             >
-              Demo
+              Software
               <svg
                 className={`w-4 h-4 ml-1 transition-transform duration-300 ${
-                  openDropdown === 'demo' ? 'rotate-180' : ''
+                  openDropdown === 'software' ? 'rotate-180' : ''
                 }`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -517,29 +543,39 @@ export default function Navbar() {
             </button>
             <div
               className={`${
-                openDropdown === 'demo' ? 'block' : 'hidden'
+                openDropdown === 'software' ? 'block' : 'hidden'
               } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded md:mt-2 md:left-0 w-full rounded transition-all duration-300`}
             >
               <ul className="rounded">
               <li>
                   <Link
-                    href="/demo"
+                    href="/software"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/demo' ? 'text-blue-500' : ''
+                      pathname === '/software' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Summery
+                    All
                   </Link>
                 </li>
 
                 <li>
                   <Link
-                    href="/demo/demo_demo"
+                    href="/software/software_noma_simulator"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/demo/demo_demo' ? 'text-blue-500' : ''
+                      pathname === '/software/software_noma_simulator' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Demo Demo
+                    Noma Simulator
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/software/software_massive_mimo_noma_simulator"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/software/software_massive_mimo_noma_simulator' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Massive Mimo-Noma Simulator
                   </Link>
                 </li>
               </ul>
