@@ -58,7 +58,7 @@ export default function Navbar() {
         <div className="flex md:order-2">
         <Link
           href="/login"
-          className="relative inline-flex items-center justify-center p-2 px-3 py-1 overflow-hidden font-medium text-[#012970] transition duration-300 ease-out border-2 border-[#012970] rounded-md shadow-md group"
+          className="relative inline-flex items-center justify-center p-2 px-3 py-1 overflow-hidden font-medium text-[#012970] transition duration-300 ease-out border-2 border-[#012970] rounded-sm shadow-md group"
         >
           <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-[#012970] group-hover:translate-x-0 ease">
             <svg
@@ -86,7 +86,7 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <button
             type="button"
-            className="inline-flex items-center p-2 ml-3 w-10 h-10 text-[#012970] md:hidden hover:bg-blue-600 rounded-md focus:outline-none focus:ring-2 focus:ring-white"
+            className="inline-flex items-center p-2 ml-3 w-10 h-10 text-[#012970] md:hidden hover:bg-blue-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-white"
             onClick={toggleMobileNav}
           >
             <span className="sr-only">Open main menu</span>
@@ -110,7 +110,7 @@ export default function Navbar() {
             isMobileNavActive ? 'block' : 'hidden'
           } w-full md:flex md:w-auto md:order-1`}
         >
-          <ul className="flex flex-col p-4 mt-4 bg-white text-gray-900 rounded-md md:flex-row md:space-x-1 md:mt-0 md:bg-transparent md:text-[#012970] md:p-0">
+          <ul className="flex flex-col p-4 mt-4 bg-white text-gray-900 rounded-sm md:flex-row md:space-x-1 md:mt-0 md:bg-transparent md:text-[#012970] md:p-0">
           
           <li>
             <Link
@@ -126,7 +126,9 @@ export default function Navbar() {
           {/* Member Dropdown */}
           <li className="relative group">
             <button
-              className="flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded-md"
+              className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded-sm ${
+                pathname.includes('/member') ? 'text-blue-500' : ''
+              }`}
               onClick={() => handleDropdown('member')}
             >
               Member
@@ -146,13 +148,24 @@ export default function Navbar() {
             <div
               className={`${
                 openDropdown === 'member' ? 'block' : 'hidden'
-              } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded-md md:mt-2 md:left-0 w-full rounded-md transition-all duration-300`}
+              } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded-sm md:mt-2 md:left-0 w-full rounded-sm transition-all duration-300`}
             >
-              <ul className="rounded-md">
+              <ul className="rounded-sm">
+              <li>
+                  <Link
+                    href="/member"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded-sm ${
+                      pathname === '/member' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    All
+                  </Link>
+                </li>
+
                 <li>
                   <Link
                     href="/member/professor"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded-md ${
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded-sm ${
                       pathname === '/member/professor' ? 'text-blue-500' : ''
                     }`}
                   >
@@ -162,7 +175,7 @@ export default function Navbar() {
                 <li>
                   <Link
                     href="/member/staff"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded-md ${
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded-sm ${
                       pathname === '/member/staff' ? 'text-blue-500' : ''
                     }`}
                   >
@@ -177,7 +190,7 @@ export default function Navbar() {
           {/* Test Dropdown */}
           <li className="relative group">
             <button
-              className="flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded-md"
+              className="flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded-sm"
               onClick={() => handleDropdown('test')}
             >
               Test
@@ -197,13 +210,13 @@ export default function Navbar() {
             <div
               className={`${
                 openDropdown === 'test' ? 'block' : 'hidden'
-              } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded-md md:mt-2 md:left-0 w-full rounded-md transition-all duration-300`}
+              } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded-sm md:mt-2 md:left-0 w-full rounded-sm transition-all duration-300`}
             >
-              <ul className="rounded-md">
+              <ul className="rounded-sm">
                 <li>
                   <Link
                     href="/test/option1"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded-md ${
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded-sm ${
                       pathname === '/test/option1' ? 'text-blue-500' : ''
                     }`}
                   >
@@ -213,7 +226,7 @@ export default function Navbar() {
                 <li>
                   <Link
                     href="/test/option2"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded-md ${
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded-sm ${
                       pathname === '/test/option2' ? 'text-blue-500' : ''
                     }`}
                   >

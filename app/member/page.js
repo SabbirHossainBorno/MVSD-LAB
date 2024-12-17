@@ -113,7 +113,7 @@ export default function Member() {
       <Navbar />
 
       {/* Main Content */}
-      <main className="pt-16">
+      <main>
 
       <section className="relative flex items-center justify-center h-[25vh] md:h-[35vh] bg-cover bg-center" style={{ backgroundImage: "url('/images/hero-bg3.png')" }}>
         <div className="relative z-10 text-center p-6 md:p-8 max-w-2xl mx-auto">
