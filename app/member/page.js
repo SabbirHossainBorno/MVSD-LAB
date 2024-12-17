@@ -119,7 +119,7 @@ export default function Member() {
         {/* Background Overlay with Opacity */}
         <div
           className="absolute inset-0 bg-[url('/images/hero-bg3.png')] bg-cover bg-center"
-          style={{ opacity: 0.4 }} // Adjust the opacity value (0.0 - 1.0)
+          style={{ opacity: 0.5 }} // Adjust the opacity value (0.0 - 1.0)
         ></div>
 
         {/* Content Layer */}
@@ -157,7 +157,7 @@ export default function Member() {
             <input
               type="text"
               placeholder="Search by name, ID, email, or designation..."
-              className="w-full pl-10 pr-4 py-2 rounded-lg bg-white placeholder-gray-400 text-gray-700 border border-gray-300"
+              className="w-full pl-10 pr-4 py-2 rounded bg-white placeholder-gray-400 text-gray-700 border border-gray-300"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
