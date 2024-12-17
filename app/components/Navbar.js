@@ -226,17 +226,18 @@ export default function Navbar() {
             </div>
           </li>
 
-
-          {/* Test Dropdown */}
+          {/* Publication Dropdown */}
           <li className="relative group">
             <button
-              className="flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded"
-              onClick={() => handleDropdown('test')}
+              className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded ${
+                pathname.includes('/publication') ? 'text-blue-500' : ''
+              }`}
+              onClick={() => handleDropdown('publication')}
             >
-              Test
+              Publication
               <svg
                 className={`w-4 h-4 ml-1 transition-transform duration-300 ${
-                  openDropdown === 'test' ? 'rotate-180' : ''
+                  openDropdown === 'publication' ? 'rotate-180' : ''
                 }`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -249,33 +250,73 @@ export default function Navbar() {
             </button>
             <div
               className={`${
-                openDropdown === 'test' ? 'block' : 'hidden'
+                openDropdown === 'publication' ? 'block' : 'hidden'
               } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded md:mt-2 md:left-0 w-full rounded transition-all duration-300`}
             >
               <ul className="rounded">
-                <li>
+              <li>
                   <Link
-                    href="/test/option1"
+                    href="/publication"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/test/option1' ? 'text-blue-500' : ''
+                      pathname === '/publication' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Option 1
+                    Summery
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/publication/international_journals"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/publication/international_journals' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    International Journals
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/test/option2"
+                    href="/publication/domestic_journals"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/test/option2' ? 'text-blue-500' : ''
+                      pathname === '/publication/domestic_journals' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Option 2
+                    Domestic Journals
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    href="/publication/international_conferences"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/publication/international_conferences' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    International Conferences
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/publication/domestic_conferences"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/publication/domestic_conferences' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Domestic Conferences
+                  </Link>
+                </li>
+
               </ul>
             </div>
           </li>
+
+
+          
+
+
+
+
+
           </ul>
         </div>
       </div>
