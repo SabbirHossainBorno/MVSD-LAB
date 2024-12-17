@@ -44,15 +44,15 @@ export default function Navbar() {
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         {/* Logo */}
         <Link href="/home" className="flex items-center space-x-3 rtl:space-x-reverse">
-  <img
-    src="/images/logo.png"
-    className="h-10 transition-transform duration-300 hover:scale-110"
-    alt="MVSD LAB Logo"
-  />
-  <span className="self-center text-2xl font-bold tracking-wide text-[#012970] font-poppins">
-    MVSD LAB
-  </span>
-</Link>
+          <img
+            src="/images/logo.png"
+            className="h-10 transition-transform duration-300 hover:scale-110"
+            alt="MVSD LAB Logo"
+          />
+          <span className="self-center text-2xl font-bold tracking-wide text-[#012970] font-poppins">
+            MVSD LAB
+          </span>
+        </Link>
 
         {/* Right Section */}
         <div className="flex md:order-2">
@@ -111,6 +111,7 @@ export default function Navbar() {
           } w-full md:flex md:w-auto md:order-1`}
         >
           <ul className="flex flex-col p-4 mt-4 bg-white text-gray-900 rounded-md md:flex-row md:space-x-1 md:mt-0 md:bg-transparent md:text-[#012970] md:p-0">
+          
           <li>
             <Link
               href="/home"
@@ -119,16 +120,6 @@ export default function Navbar() {
               }`}
             >
               Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/services"
-              className={`py-2 px-3 block hover:text-blue-700 font-medium ${
-                pathname === '/services' ? 'text-blue-500 font-medium' : ''
-              }`}
-            >
-              Services
             </Link>
           </li>
 
