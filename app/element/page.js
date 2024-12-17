@@ -70,12 +70,33 @@ export function FontExamples() {
         <h2 className="text-3xl font-semibold">Source Sans Pro Font</h2>
         <p>Source Sans Pro is a clean and versatile sans-serif font.</p>
       </div>
+
+      <div className="font-aguDisplay">
+      <h2 className="text-3xl font-semibold">Source Sans Pro Font</h2>
+      <p>Source Sans Pro is a clean and versatile sans-serif font.</p>
+    </div>
+
+    <div className="font-mPlusRounded">
+    <h2 className="text-3xl font-semibold">Source Sans Pro Font</h2>
+    <p>Source Sans Pro is a clean and versatile sans-serif font.</p>
+    </div>
+
+    <div className="font-varelaRound">
+    <h2 className="text-3xl font-semibold">Source Sans Pro Font</h2>
+        <p>Source Sans Pro is a clean and versatile sans-serif font.</p>
+    </div>
+
+
+
+
     </div>
   );
 }
 
 // Main Home Component
 export default function Home() {
+  // Set the actual height for the navbar
+  const navbarHeight = '64px'; // Change this to your actual navbar height
 
   return (
     <div className="bg-gray-100 text-gray-900 min-h-screen">
