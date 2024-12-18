@@ -2,6 +2,7 @@
 'use client';
 import Navbar from '../components/Navbar'; // Adjust the path as needed
 import Footer from '../components/Footer'; // Adjust the path as needed
+import ScrollToTop from '../components/ScrollToTop';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Slider from 'react-slick';
@@ -300,7 +301,7 @@ export default function Member() {
           </div>
         </section>
       </main>
-
+      
       <Footer />
     </div>
   );

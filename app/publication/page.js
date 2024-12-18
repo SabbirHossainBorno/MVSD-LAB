@@ -2,13 +2,10 @@
 'use client';
 import Navbar from '../components/Navbar'; // Adjust the path as needed
 import Footer from '../components/Footer'; // Adjust the path as needed
+import ScrollToTop from '../components/ScrollToTop';
 import Link from 'next/link';
 
-
-
 export default function Publication() {
-  
-
   return (
     <div className="bg-white text-gray-900 min-h-screen">
       <Navbar />
@@ -16,15 +13,12 @@ export default function Publication() {
       {/* Main Content */}
       <main>
         <section className="relative flex items-center justify-center h-[35vh] md:h-[45vh] bg-cover bg-center">
-          {/* Background Overlay with Opacity */}
           <div
             className="absolute inset-0 bg-[url('/images/hero-bg3.png')] bg-cover bg-center"
-            style={{ opacity: 0.5 }} // Adjust the opacity value (0.0 - 1.0)
+            style={{ opacity: 0.5 }} 
           ></div>
-
-          {/* Content Layer */}
           <div className="relative z-10 text-center p-6 md:p-8 max-w-2xl mx-auto">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 mt-10 leading-tight">
               Publication Summary Of MVSD LAB
             </h1>
             <p className="text-base md:text-lg lg:text-xl text-gray-800 mb-4">
@@ -35,7 +29,6 @@ export default function Publication() {
 
         <section className="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 py-4">
           <div className="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
-            {/* Breadcrumb Navigation */}
             <nav className="text-sm font-medium text-gray-800 mb-2 md:mb-0">
               <ol className="list-reset flex items-center space-x-2">
                 <li>
@@ -50,32 +43,70 @@ export default function Publication() {
             </nav>
           </div>
         </section>
+        
 
-        {/* Summary Section */}
-        <section className="pb-6">
-          
-          <div className="max-w-screen-xl mx-auto px-4">
-            {/* Professor Section with Carousel */}
-            <div className="mb-12">
-              <div className="flex justify-center items-center py-8">
-                <h2 className="flex items-center text-gray-900 dark:text-gray-100">
-                  <span className="flex-grow border-t border-gray-300 dark:border-gray-600"></span>
-                  <span className="mx-4 px-4 py-2 text-xl font-semibold bg-gray-800 text-white rounded">
-                    Meet Our Professor
-                  </span>
-                  <span className="flex-grow border-t border-gray-300 dark:border-gray-600"></span>
-                </h2>
-              </div>
-
-              
-
+        <section id="publication-summary" className="publication-summary section py-8 bg-gray-50">
+            <div className="container mx-auto">
+                <article className="article space-y-8">
+                <h2 className="text-3xl font-semibold text-gray-900 text-center">Publications : Summary</h2>
+                <div className="overflow-x-auto bg-white shadow-lg rounded-md border border-gray-300">
+                    <table className="min-w-full table-auto border-collapse">
+                    <thead className="bg-gradient-to-r from-blue-500 to-teal-500 text-white">
+                        <tr>
+                        <th rowSpan="3" className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">Summary</th>
+                        <th colSpan="4" className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">Journals</th>
+                        <th rowSpan="2" colSpan="2" className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">Conferences</th>
+                        </tr>
+                        <tr>
+                        <th colSpan="3" className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">International</th>
+                        <th rowSpan="2" className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">Domestic</th>
+                        </tr>
+                        <tr>
+                        <th className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">SCIE</th>
+                        <th className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">Non-SCIE</th>
+                        <th className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">IF (sum) *</th>
+                        <th className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">International</th>
+                        <th className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">Domestic</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-sm text-gray-800">
+                        <tr>
+                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">Recent 3 Years</td>
+                        <td className="py-4 px-6 text-center border border-gray-300">53</td>
+                        <td className="py-4 px-6 text-center border border-gray-300">2</td>
+                        <td className="py-4 px-6 text-center border border-gray-300">279.16</td>
+                        <td className="py-4 px-6 text-center border border-gray-300">12</td>
+                        <td className="py-4 px-6 text-center border border-gray-300">156</td>
+                        <td className="py-4 px-6 text-center border border-gray-300">156</td>
+                        </tr>
+                        <tr>
+                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">Recent 5 Years</td>
+                        <td className="py-4 px-6 text-center border border-gray-300">78</td>
+                        <td className="py-4 px-6 text-center border border-gray-300">4</td>
+                        <td className="py-4 px-6 text-center border border-gray-300">355.314</td>
+                        <td className="py-4 px-6 text-center border border-gray-300">27</td>
+                        <td className="py-4 px-6 text-center border border-gray-300">242</td>
+                        <td className="py-4 px-6 text-center border border-gray-300">156</td>
+                        </tr>
+                        <tr className="bg-gray-100">
+                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">Overall</td>
+                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">141</td>
+                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">14</td>
+                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">471.932</td>
+                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">72</td>
+                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">445</td>
+                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">156</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                </article>
             </div>
-
-            
-          </div>
         </section>
+
       </main>
 
+      <ScrollToTop /> {/* ScrollToTop Component */}
       <Footer />
     </div>
   );
