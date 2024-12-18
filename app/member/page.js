@@ -117,7 +117,7 @@ export default function Member() {
     ) || [];
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -227,20 +227,20 @@ export default function Member() {
                 </h2>
               </div>
 
-              <Slider {...settings}>
+              <Slider {...settings} className="max-w-lg mx-auto">
                 {professors.map((prof) => (
-                  <div key={prof.id} className="bg-white rounded-lg p-6 shadow-lg mx-auto">
+                  <div key={prof.id} className="bg-white rounded-lg p-6">
                     <div className="flex justify-center">
                       <img
                         src={prof.photo}
                         alt={`${prof.first_name} ${prof.last_name}`}
-                        className="w-48 h-48 rounded-full object-cover border-4 border-gray-300"
+                        className="w-32 h-32 rounded-full object-cover border-4 border-gray-300"
                       />
                     </div>
                     <div className="mt-6 text-center">
-                      <h4 className="text-gray-900 text-2xl font-semibold mb-2">{`${prof.first_name} ${prof.last_name}`}</h4>
-                      <p className="text-gray-600 text-sm mb-1">{prof.email}</p>
-                      <p className="text-gray-600 text-sm mb-1">ID: {prof.id}</p>
+                      <h4 className="text-gray-900 text-xl font-semibold mb-2">{`${prof.first_name} ${prof.last_name}`}</h4>
+                      <p className="text-gray-600 text-sm mb-1"><strong>Email:</strong> {prof.email}</p>
+                      <p className="text-blue-600 text-sm mb-1"><strong>ID:</strong> {prof.id}</p>
                       <p className="text-gray-600 text-sm mb-4">{prof.short_bio}</p>
                       <div className="flex justify-center space-x-4">
                         {prof.socialmedia && renderSocialMediaIcons(prof.socialmedia)}
@@ -249,6 +249,7 @@ export default function Member() {
                   </div>
                 ))}
               </Slider>
+
             </div>
 
             {/* Other Sections with Common Design */}
