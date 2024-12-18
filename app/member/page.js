@@ -220,7 +220,7 @@ export default function Member() {
               <div className="flex justify-center items-center py-8">
                 <h2 className="flex items-center text-gray-900 dark:text-gray-100">
                   <span className="flex-grow border-t border-gray-300 dark:border-gray-600"></span>
-                  <span className="mx-4 px-4 py-2 text-xl font-semibold bg-gray-800 text-white rounded-md">
+                  <span className="mx-4 px-4 py-2 text-xl font-semibold bg-gray-800 text-white rounded">
                     Meet Our Professor
                   </span>
                   <span className="flex-grow border-t border-gray-300 dark:border-gray-600"></span>
@@ -228,27 +228,27 @@ export default function Member() {
               </div>
 
               <Slider {...settings} className="max-w-4xl mx-auto relative min-h-[300px] pb-20"> {/* Added background color */}
-  {professors.map((prof) => (
-    <div key={prof.id} className="bg-gray-100 rounded p-8 transition-transform duration-300">
-      <div className="flex justify-center mb-6">
-        <img
-          src={prof.photo}
-          alt={`${prof.first_name} ${prof.last_name}`}
-          className="w-36 h-36 rounded-full object-cover border-4 border-gray-200 shadow-md"
-        />
-      </div>
-      <div className="text-center">
-        <h4 className="text-gray-900 text-2xl font-semibold mb-2">{`${prof.first_name} ${prof.last_name}`}</h4>
-        <p className="text-gray-600 text-sm mb-2"><strong>Email:</strong> {prof.email}</p>
-        <p className="text-blue-600 text-sm mb-2"><strong>ID:</strong> {prof.id}</p>
-        <p className="text-gray-600 text-base mb-6">{prof.short_bio}</p>
-        <div className="flex justify-center space-x-6">
-          {prof.socialmedia && renderSocialMediaIcons(prof.socialmedia)}
-        </div>
-      </div>
-    </div>
-  ))}
-</Slider>
+                {professors.map((prof) => (
+                  <div key={prof.id} className="bg-transparent border-2 border-gray-300 rounded p-8 hover:bg-gray-100 transition-all duration-300">
+                    <div className="flex justify-center mb-6">
+                      <img
+                        src={prof.photo}
+                        alt={`${prof.first_name} ${prof.last_name}`}
+                        className="w-44 h-44 rounded-full object-cover border-4 border-gray-200 shadow-md"
+                      />
+                    </div>
+                    <div className="text-center">
+                      <h4 className="text-gray-900 text-2xl font-semibold mb-2">{`${prof.first_name} ${prof.last_name}`}</h4>
+                      <p className="text-gray-600 text-sm mb-2"><strong>Email :</strong> {prof.email}</p>
+                      <p className="text-blue-600 text-sm mb-2"><strong>ID :</strong> {prof.id}</p>
+                      <p className="text-gray-600 text-base mb-6">{prof.short_bio}</p>
+                      <div className="flex justify-center space-x-6">
+                        {prof.socialmedia && renderSocialMediaIcons(prof.socialmedia)}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </Slider>
 
             </div>
 
@@ -257,19 +257,19 @@ export default function Member() {
               <div key={category} className="mb-12">
                 <div className="relative flex justify-center items-center mb-6">
                   <div className="absolute inset-x-0 top-1/2 h-[1px] bg-gray-400 dark:bg-gray-500"></div>
-                  <h2 className="relative z-10 px-6 py-3 text-lg md:text-2xl font-semibold text-gray-800 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105">
+                  <h2 className="relative z-10 px-6 py-3 text-lg md:text-2xl font-semibold text-gray-800 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded shadow-md transform transition-transform duration-300 hover:scale-105">
                     {category === 'postDoc' ? 'Post Doc Researcher' : category.charAt(0).toUpperCase() + category.slice(1)}
                   </h2>
                 </div>
 
                 <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-8 max-sm:justify-center text-center">
                   {filterMembers(category).map((member) => (
-                    <div key={member.id} className="bg-white rounded-lg p-6 shadow-md hover:scale-105 transition-all duration-500 mx-auto">
+                    <div key={member.id} className="bg-gray-100 rounded p-6 shadow-md hover:scale-105 transition-all duration-500 mx-auto">
                       <div className="lg:min-h-[250px]">
                         <img
                           src={member.img}
                           alt={member.name}
-                          className="w-full rounded-lg inline-block"
+                          className="w-full rounded inline-block"
                         />
                       </div>
                       <div className="mt-6">
