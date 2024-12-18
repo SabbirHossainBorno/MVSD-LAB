@@ -4,10 +4,16 @@ import Navbar from '../components/Navbar'; // Adjust the path as needed
 import Footer from '../components/Footer'; // Adjust the path as needed
 import ScrollToTop from '../components/ScrollToTop';
 import Link from 'next/link';
+import Head from 'next/head'; // Import Head component
+
 
 export default function Publication() {
   return (
     <div className="bg-white text-gray-900 min-h-screen">
+      <Head>
+        <title>Publication Summary Of MVSD LAB</title> {/* Set custom title */}
+      </Head>
+        
     <Navbar />
 
       {/* Main Content */}
@@ -48,26 +54,25 @@ export default function Publication() {
         <section id="publication-summary" className="publication-summary section py-8 bg-gray-50">
             <div className="container mx-auto">
                 <article className="article space-y-8">
-                <h2 className="text-3xl font-semibold text-gray-900 text-center">Publications : Summary</h2>
-                <h1 class="flex items-center text-5xl font-extrabold text-black">Publication : <span class="bg-blue-100 text-blue-800 text-2xl font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">Summary</span></h1>
+                <h1 class="mb-4 text-xl font-bold text-gray-900 text-black md:text-2xl lg:text-3xl text-center">Publication : <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Summary</span></h1>
                 <div className="overflow-x-auto bg-white shadow-lg rounded-md border border-gray-300">
                     <table className="min-w-full table-auto border-collapse">
                     <thead className="bg-gradient-to-r from-blue-500 to-teal-500 text-white">
                         <tr>
-                        <th rowSpan="3" className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">Summary</th>
-                        <th colSpan="4" className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">Journals</th>
-                        <th rowSpan="2" colSpan="2" className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">Conferences</th>
+                        <th rowSpan="3" className="py-4 px-6 text-center border text-m font-bold border-gray-300">Summary</th>
+                        <th colSpan="4" className="py-4 px-6 text-center border text-m font-bold border-gray-300">Journals</th>
+                        <th rowSpan="2" colSpan="2" className="py-4 px-6 text-center border text-m font-bold border-gray-300">Conferences</th>
                         </tr>
                         <tr>
-                        <th colSpan="3" className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">International</th>
-                        <th rowSpan="2" className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">Domestic</th>
+                        <th colSpan="3" className="py-4 px-6 text-center border text-m font-bold border-gray-300">International</th>
+                        <th rowSpan="2" className="py-4 px-6 text-center border text-m font-bold border-gray-300">Domestic</th>
                         </tr>
                         <tr>
-                        <th className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">SCIE</th>
-                        <th className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">Non-SCIE</th>
-                        <th className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">IF (sum) *</th>
-                        <th className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">International</th>
-                        <th className="py-4 px-6 text-center border text-sm font-semibold border-gray-300">Domestic</th>
+                        <th className="py-4 px-6 text-center border text-m font-bold border-gray-300">SCIE</th>
+                        <th className="py-4 px-6 text-center border text-m font-bold border-gray-300">Non-SCIE</th>
+                        <th className="py-4 px-6 text-center border text-m font-bold border-gray-300">IF (sum) *</th>
+                        <th className="py-4 px-6 text-center border text-m font-bold border-gray-300">International</th>
+                        <th className="py-4 px-6 text-center border text-m font-bold border-gray-300">Domestic</th>
                         </tr>
                     </thead>
                     <tbody className="text-sm text-gray-800">
