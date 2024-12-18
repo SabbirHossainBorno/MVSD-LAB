@@ -116,15 +116,15 @@ export default function Member() {
         member.designation.toLowerCase().includes(searchQuery.toLowerCase())
     ) || [];
 
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-  };
+    const settings = {
+      dots: true, 
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 3000,
+    };
 
   const renderSocialMediaIcons = (socialmedia) => {
     const iconMap = {
@@ -155,7 +155,7 @@ export default function Member() {
   };
 
   return (
-    <div className="bg-gray-100 text-gray-900 min-h-screen">
+    <div className="bg-white text-gray-900 min-h-screen">
       <Navbar />
 
       {/* Main Content */}
@@ -227,28 +227,28 @@ export default function Member() {
                 </h2>
               </div>
 
-              <Slider {...settings} className="max-w-lg mx-auto">
-                {professors.map((prof) => (
-                  <div key={prof.id} className="bg-white rounded-lg p-6">
-                    <div className="flex justify-center">
-                      <img
-                        src={prof.photo}
-                        alt={`${prof.first_name} ${prof.last_name}`}
-                        className="w-32 h-32 rounded-full object-cover border-4 border-gray-300"
-                      />
-                    </div>
-                    <div className="mt-6 text-center">
-                      <h4 className="text-gray-900 text-xl font-semibold mb-2">{`${prof.first_name} ${prof.last_name}`}</h4>
-                      <p className="text-gray-600 text-sm mb-1"><strong>Email:</strong> {prof.email}</p>
-                      <p className="text-blue-600 text-sm mb-1"><strong>ID:</strong> {prof.id}</p>
-                      <p className="text-gray-600 text-sm mb-4">{prof.short_bio}</p>
-                      <div className="flex justify-center space-x-4">
-                        {prof.socialmedia && renderSocialMediaIcons(prof.socialmedia)}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </Slider>
+              <Slider {...settings} className="max-w-4xl mx-auto relative min-h-[300px] pb-20"> {/* Added background color */}
+  {professors.map((prof) => (
+    <div key={prof.id} className="bg-gray-100 rounded p-8 transition-transform duration-300">
+      <div className="flex justify-center mb-6">
+        <img
+          src={prof.photo}
+          alt={`${prof.first_name} ${prof.last_name}`}
+          className="w-36 h-36 rounded-full object-cover border-4 border-gray-200 shadow-md"
+        />
+      </div>
+      <div className="text-center">
+        <h4 className="text-gray-900 text-2xl font-semibold mb-2">{`${prof.first_name} ${prof.last_name}`}</h4>
+        <p className="text-gray-600 text-sm mb-2"><strong>Email:</strong> {prof.email}</p>
+        <p className="text-blue-600 text-sm mb-2"><strong>ID:</strong> {prof.id}</p>
+        <p className="text-gray-600 text-base mb-6">{prof.short_bio}</p>
+        <div className="flex justify-center space-x-6">
+          {prof.socialmedia && renderSocialMediaIcons(prof.socialmedia)}
+        </div>
+      </div>
+    </div>
+  ))}
+</Slider>
 
             </div>
 
