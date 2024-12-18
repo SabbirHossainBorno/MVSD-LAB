@@ -8,7 +8,7 @@ import Link from 'next/link';
 export default function Publication() {
   return (
     <div className="bg-white text-gray-900 min-h-screen">
-      <Navbar />
+    <Navbar />
 
       {/* Main Content */}
       <main>
@@ -44,11 +44,12 @@ export default function Publication() {
           </div>
         </section>
         
-
+    
         <section id="publication-summary" className="publication-summary section py-8 bg-gray-50">
             <div className="container mx-auto">
                 <article className="article space-y-8">
                 <h2 className="text-3xl font-semibold text-gray-900 text-center">Publications : Summary</h2>
+                <h1 class="flex items-center text-5xl font-extrabold text-black">Publication : <span class="bg-blue-100 text-blue-800 text-2xl font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">Summary</span></h1>
                 <div className="overflow-x-auto bg-white shadow-lg rounded-md border border-gray-300">
                     <table className="min-w-full table-auto border-collapse">
                     <thead className="bg-gradient-to-r from-blue-500 to-teal-500 text-white">

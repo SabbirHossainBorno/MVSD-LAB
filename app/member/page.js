@@ -170,7 +170,7 @@ export default function Member() {
 
           {/* Content Layer */}
           <div className="relative z-10 text-center p-6 md:p-8 max-w-2xl mx-auto">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 mt-10 leading-tight">
               Member Of MVSD LAB
             </h1>
             <p className="text-base md:text-lg lg:text-xl text-gray-800 mb-4">
@@ -301,7 +301,7 @@ export default function Member() {
           </div>
         </section>
       </main>
-      
+      <ScrollToTop />
       <Footer />
     </div>
   );
