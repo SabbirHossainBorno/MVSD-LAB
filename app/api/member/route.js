@@ -1,5 +1,4 @@
 ///app/api/member/route.js
-
 import { Pool } from "pg";
 import axios from "axios";
 
@@ -28,9 +27,14 @@ export async function GET(request) {
     // Connect to the database
     const client = await pool.connect();
     
-    // Query to fetch professor details
+    // Query to fetch professor details ordered by ID
     const professorResult = await client.query(
-      "SELECT * FROM member WHERE type = 'Professor' AND status = 'Active'"
+      `SELECT m.*, json_agg(json_build_object('socialmedia_name', s.socialmedia_name, 'link', s.link)) AS socialmedia
+       FROM member m
+       LEFT JOIN professor_socialmedia_info s ON m.id = s.professor_id
+       WHERE m.type = 'Professor' AND m.status = 'Active'
+       GROUP BY m.id
+       ORDER BY m.id`
     );
     const professors = professorResult.rows;
 
