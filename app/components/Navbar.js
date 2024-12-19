@@ -400,7 +400,7 @@ export default function Navbar() {
                       pathname === '/project' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Summary
+                    All
                   </Link>
                 </li>
 
