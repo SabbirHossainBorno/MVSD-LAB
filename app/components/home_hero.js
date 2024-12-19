@@ -22,9 +22,10 @@ export default function HomeHero() {
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 text-gray-900 leading-tight">
               Where <span className="text-blue-600">Automotive</span> Meets <span className="text-green-600">AI</span>
             </h1>
-            <p className="text-base md:text-lg lg:text-xl mb-6 text-gray-700 leading-relaxed">
-              At <span className="font-semibold">MVSD Lab</span>, we innovate in Automotive Engineering, from Light and Heavy Ground Vehicles to Sports Cars, Drones, and Autonomous Driving Systems. Join us as we redefine vehicle performance, safety, and efficiency, shaping the future of mobility.
+            <p className="text-base md:text-lg lg:text-xl mb-6 text-gray-700 leading-relaxed text-justify">
+              <span className="font-semibold text-blue-500">MVSD Lab</span>, a leading research facility in Automotive Engineering. We specialize in Light and Heavy Ground Vehicles, Sports Vehicles, Drones, Artificial Intelligence, and Autonomous Driving Systems. Our innovations enhance vehicle performance, safety, and efficiency. From pioneering AI-driven automotive systems to advancing self-driving technology, we are committed to pushing the boundaries of mobility and technology. Join us as we explore new frontiers in the automotive industry.
             </p>
+
             <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center md:justify-start">
               <Link
                 href="/learn-more"
