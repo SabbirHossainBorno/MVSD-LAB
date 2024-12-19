@@ -22,7 +22,7 @@ export default function Footer() {
       const response = await axios.post('/api/subscribe', { email });
       if (response.data.success) {
         setIsSubscribed(true);
-        toast.success('Subscription successful!');
+        toast.success('Subscription Successful!');
       } else {
         toast.error(response.data.message);
       }

@@ -67,21 +67,21 @@ export default function Publication() {
                     <tr className="hover:bg-gray-100 transition-colors">
                       <td className="py-3 px-4 border border-gray-300">01</td>
                       <td className="py-3 px-4 border border-gray-300 hover:text-blue-500">
-                        <Link href="/projects_details">
+                        <Link href="/projects_details" className="font-bold text-blue-500">
                           Priority Research Centers Program: Civil-Military ICT Convergence Technology for Smart IoT Platform
                         </Link>
                       </td>
                       <td className="py-3 px-4 border border-gray-300">2026-05-31</td>
                       <td className="py-3 px-4 border border-gray-300">2018-06-01</td>
                       <td className="py-3 px-4 border border-gray-300">8 Years, 0 months</td>
-                      <td className="py-3 px-4 border border-gray-300 bg-red-100 text-red-600">
+                      <td className="py-3 px-4 border border-gray-300 bg-red-100 text-red-800 font-bold">
                         Ongoing
                       </td>
                     </tr>
                     <tr className="hover:bg-gray-100 transition-colors">
                       <td className="py-3 px-4 border border-gray-300">02</td>
                       <td className="py-3 px-4 border border-gray-300 hover:text-blue-500">
-                        <Link href="/projects_details">
+                        <Link href="/projects_details" className="font-bold text-blue-500">
                           (ITRC) Professional Human Resource Training Project for Glocal ICT Convergence Technology
                         </Link>
                       </td>
