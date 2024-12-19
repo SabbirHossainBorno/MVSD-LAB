@@ -43,27 +43,29 @@ export default function HomeAbout() {
       </div>
 
       <div className="container mx-auto flex flex-col lg:flex-row items-center justify-center">
-        <div className="w-full lg:w-1/2 p-6">
-          <h2 className="text-3xl md:text-4xl font-semibold text-gray-800 mb-6 leading-snug">
-            Shaping the Future of Automotive Engineering
-          </h2>
-          <p className="text-base md:text-lg lg:text-xl mb-6 text-gray-700 leading-relaxed text-justify">
-            MVSD Lab specializes in Light and Heavy Ground Vehicles, Sports Vehicles, Drones, AI, and Autonomous Driving Systems.
-            We innovate vehicle performance, safety, and efficiency while leading advancements in self-driving technology and AI-driven mobility systems.
-          </p>
-          <div className="text-center lg:text-left">
-            <a
-              href="#"
-              className="inline-flex items-center px-8 py-3 bg-blue-600 text-white font-semibold text-lg rounded shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out"
-            >
-              <span>Read More</span>
-              <i className="bi bi-arrow-right ml-3 text-lg"></i>
-            </a>
+        <div className="w-full lg:w-1/2 p-6 flex justify-center lg:justify-end lg:pr-32">
+          <div className="max-w-md">
+            <h2 className="text-3xl md:text-4xl font-semibold text-gray-800 mb-6 leading-snug">
+              Shaping the Future of Automotive Engineering
+            </h2>
+            <p className="text-base md:text-lg lg:text-xl mb-6 text-gray-700 leading-relaxed text-justify">
+              MVSD Lab specializes in Light and Heavy Ground Vehicles, Sports Vehicles, Drones, AI, and Autonomous Driving Systems.
+              We innovate vehicle performance, safety, and efficiency while leading advancements in self-driving technology and AI-driven mobility systems.
+            </p>
+            <div className="text-center lg:text-left">
+              <a
+                href="#"
+                className="inline-flex items-center px-8 py-3 bg-blue-600 text-white font-semibold text-lg rounded shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out"
+              >
+                <span>Read More</span>
+                <i className="bi bi-arrow-right ml-3 text-lg"></i>
+              </a>
+            </div>
           </div>
         </div>
 
-        <div className="w-full lg:w-1/2 p-6 flex justify-center items-center">
-          <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
+        <div className="w-full lg:w-1/2 p-6 flex justify-center lg:justify-start lg:pl-20">
+          <div className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
             <Slider {...settings}>
               {images.map((src, index) => (
                 <div key={index} className="flex justify-center">
