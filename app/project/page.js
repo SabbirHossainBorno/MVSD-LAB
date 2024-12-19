@@ -67,28 +67,28 @@ export default function Publication() {
                     <tr className="hover:bg-gray-100 transition-colors">
                       <td className="py-3 px-4 border border-gray-300">01</td>
                       <td className="py-3 px-4 border border-gray-300 hover:text-blue-500">
-                        <Link href="/projects_details" className="font-bold text-blue-500">
+                        <Link href="/projects_details" className="font-bold text-blue-400 hover:text-blue-500">
                           Priority Research Centers Program: Civil-Military ICT Convergence Technology for Smart IoT Platform
                         </Link>
                       </td>
                       <td className="py-3 px-4 border border-gray-300">2026-05-31</td>
                       <td className="py-3 px-4 border border-gray-300">2018-06-01</td>
                       <td className="py-3 px-4 border border-gray-300">8 Years, 0 months</td>
-                      <td className="py-3 px-4 border border-gray-300 bg-red-100 text-red-800 font-bold">
+                      <td className="py-3 px-4 border border-gray-300 bg-red-200 text-red-700 font-bold">
                         Ongoing
                       </td>
                     </tr>
                     <tr className="hover:bg-gray-100 transition-colors">
                       <td className="py-3 px-4 border border-gray-300">02</td>
                       <td className="py-3 px-4 border border-gray-300 hover:text-blue-500">
-                        <Link href="/projects_details" className="font-bold text-blue-500">
+                        <Link href="/projects_details" className="font-bold text-blue-400 hover:text-blue-500">
                           (ITRC) Professional Human Resource Training Project for Glocal ICT Convergence Technology
                         </Link>
                       </td>
                       <td className="py-3 px-4 border border-gray-300">2019-12-30</td>
                       <td className="py-3 px-4 border border-gray-300">2014-05-31</td>
                       <td className="py-3 px-4 border border-gray-300">5 Years, 6 Months, 29 Days</td>
-                      <td className="py-3 px-4 border border-gray-300 bg-green-100 text-green-600">
+                      <td className="py-3 px-4 border border-gray-300 bg-green-200 text-green-700 font-bold">
                         Completed
                       </td>
                     </tr>
