@@ -13,7 +13,7 @@ const Dashboard = () => {
   const [subscribers, setSubscribers] = useState(0);
   const [users, setUsers] = useState([]);
   const [professorsCount, setProfessorsCount] = useState(0);
-  const [messageCCount, setMessageCount] = useState(0);
+  const [messageCount, setMessagesCount] = useState(0);
   const [recentUsers, setRecentUsers] = useState([]);
   const [recentProfessors, setRecentProfessors] = useState([]);
   const [recentSubscribers, setRecentSubscribers] = useState([]);
@@ -31,7 +31,7 @@ const Dashboard = () => {
           setSubscribers(result.subscribers);
           setUsers(result.users);
           setProfessorsCount(result.professorCount);
-          setMessageCount(result.messageCount);
+          setMessagesCount(result.messageCount);
           setRecentSubscribers(result.recentSubscribers);
           setRecentUsers(result.recentUsers);
           setRecentProfessors(result.recentProfessors);
@@ -74,31 +74,65 @@ const Dashboard = () => {
     <div className="flex flex-col min-h-screen bg-gray-900 text-gray-100">
       <main className="flex-1 p-3 md:p-4 lg:p-6">
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-5">
-          {/* Total Users Card */}
-          <div className="bg-gradient-to-r from-blue-400 to-blue-600 p-6 rounded shadow-lg text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
-            <p className="text-sm font-medium text-gray-100 uppercase">Total Users</p>
-            <p className="text-3xl font-bold text-white mt-2">{users.length}</p>
-          </div>
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+  {/* Total Users Card */}
+  <div className="bg-gradient-to-tl from-blue-500 to-blue-700 p-6 rounded-xl shadow-xl text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
+    <div className="w-16 h-16 mb-4 bg-white rounded-full flex items-center justify-center shadow-md">
+      <img src="/icons/user_count.png" alt="Total Users Icon" className="w-10 h-10" />
+    </div>
+    <p className="text-sm font-medium text-gray-200 uppercase tracking-widest">Total Users</p>
+    <p className="text-4xl font-extrabold text-white mt-2">{users.length}</p>
+  </div>
 
-          {/* Total Subscribers Card */}
-          <div className="bg-gradient-to-r from-green-400 to-green-600 p-6 rounded shadow-lg text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
-            <p className="text-sm font-medium text-gray-100 uppercase">Total Subscribers</p>
-            <p className="text-3xl font-bold text-white mt-2">{subscribers}</p>
-          </div>
+  {/* Total Subscribers Card */}
+  <div className="bg-gradient-to-tl from-green-500 to-green-700 p-6 rounded-xl shadow-xl text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
+    <div className="w-16 h-16 mb-4 bg-white rounded-full flex items-center justify-center shadow-md">
+      <img src="/icons/subscribe_count.png" alt="Total Subscribers Icon" className="w-10 h-10" />
+    </div>
+    <p className="text-sm font-medium text-gray-200 uppercase tracking-widest">Total Subscribers</p>
+    <p className="text-4xl font-extrabold text-white mt-2">{subscribers}</p>
+  </div>
 
-          {/* Total Professors Card */}
-          <div className="bg-gradient-to-r from-purple-400 to-purple-600 p-6 rounded shadow-lg text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
-            <p className="text-sm font-medium text-gray-100 uppercase">Total Professors</p>
-            <p className="text-3xl font-bold text-white mt-2">{professorsCount}</p>
-          </div>
+  {/* Total Professors Card */}
+  <div className="bg-gradient-to-tl from-purple-500 to-purple-700 p-6 rounded-xl shadow-xl text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
+    <div className="w-16 h-16 mb-4 bg-white rounded-full flex items-center justify-center shadow-md">
+      <img src="/icons/professor_count.png" alt="Total Professors Icon" className="w-10 h-10" />
+    </div>
+    <p className="text-sm font-medium text-gray-200 uppercase tracking-widest">Total Professors</p>
+    <p className="text-4xl font-extrabold text-white mt-2">{professorsCount}</p>
+  </div>
 
-          {/* Total Message Card */}
-          <div className="bg-gradient-to-r from-purple-400 to-purple-600 p-6 rounded shadow-lg text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
-            <p className="text-sm font-medium text-gray-100 uppercase">Total Messages</p>
-            <p className="text-3xl font-bold text-white mt-2">{messageCount}</p>
-          </div>
-        </div>
+  {/* Total Messages Card */}
+  <div className="bg-gradient-to-tl from-pink-500 to-pink-700 p-6 rounded-xl shadow-xl text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
+    <div className="w-16 h-16 mb-4 bg-white rounded-full flex items-center justify-center shadow-md">
+      <img src="/icons/message_count.png" alt="Total Messages Icon" className="w-10 h-10" />
+    </div>
+    <p className="text-sm font-medium text-gray-200 uppercase tracking-widest">Total Messages</p>
+    <p className="text-4xl font-extrabold text-white mt-2">{messageCount}</p>
+  </div>
+
+
+
+
+<div class="main">
+<div class="card">
+  <div class="heading">UltraFlex</div>
+  <div class="details">Beste Design till date.<br>Flex it up as you wish,<br> but you can't break it.</div>
+  <div class="price">$299</div>
+  <button class="btn1">Buy</button>
+  <button class="btn2">Add to Cart</button>
+</div>
+
+<img src="/icons/message_count.png" alt="Total Messages Icon" className="w-10 h-10" />
+
+</div>
+
+
+
+
+
+
+</div>
 
         {/* Recent Users and Recent Subscribers Side by Side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
