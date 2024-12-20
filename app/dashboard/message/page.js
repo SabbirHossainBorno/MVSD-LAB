@@ -104,42 +104,42 @@ function Message() {
           </select>
         </div>
         <div className="space-y-4">
-  {paginatedMessage.length > 0 ? (
-    paginatedMessage.map((message) => (
-      <div
-        key={message.id}
-        className="bg-white/10 backdrop-blur-md p-6 rounded-lg shadow-lg border border-white/20"
-      >
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold text-white">
+        {paginatedMessage.length > 0 ? (
+            paginatedMessage.map((message) => (
+            <div
+                key={message.id}
+                className="bg-white/10 backdrop-blur-md p-6 rounded shadow-lg border border-white/20"
+            >
+                <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold text-blue-400">
             {message.subject}
           </h2>
-          <span className="text-sm text-gray-300">
+          <span className="text-sm bg-gray-800/50 px-3 py-1 rounded text-yellow-300 border border-gray-600 shadow">
             {formatDate(message.date)}
           </span>
         </div>
-        <div className="text-sm text-gray-200 space-y-2">
-          <p>
-            <strong className="text-gray-100">ID:</strong> {message.id}
-          </p>
-          <p>
-            <strong className="text-gray-100">Name:</strong> {message.name}
-          </p>
-          <p>
-            <strong className="text-gray-100">Email:</strong> {message.email}
-          </p>
-          <p>
-            <strong className="text-gray-100">Message:</strong> {message.message}
-          </p>
+                <div className="text-sm text-gray-200 space-y-2">
+                <p>
+                    <strong className="text-gray-100">ID :</strong> {message.id}
+                </p>
+                <p>
+                    <strong className="text-gray-100">Name :</strong> {message.name}
+                </p>
+                <p>
+                    <strong className="text-gray-100">Email :</strong> {message.email}
+                </p>
+                <p className="bg-gray-800/50 p-4 rounded border border-gray-600 shadow-inner">
+                    <strong className="text-purple-400">Message :</strong> <span className="text-gray-100">{message.message}</span>
+                </p>
+                </div>
+            </div>
+            ))
+        ) : (
+            <div className="text-center text-gray-400">
+            No Messages Found
+            </div>
+        )}
         </div>
-      </div>
-    ))
-  ) : (
-    <div className="text-center text-gray-400">
-      No Messages Found
-    </div>
-  )}
-</div>
         <div className="flex flex-col sm:flex-row justify-between items-center mt-6">
           <div className="flex space-x-2">
             <button

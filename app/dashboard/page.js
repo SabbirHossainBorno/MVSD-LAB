@@ -13,6 +13,7 @@ const Dashboard = () => {
   const [subscribers, setSubscribers] = useState(0);
   const [users, setUsers] = useState([]);
   const [professorsCount, setProfessorsCount] = useState(0);
+  const [messageCCount, setMessageCount] = useState(0);
   const [recentUsers, setRecentUsers] = useState([]);
   const [recentProfessors, setRecentProfessors] = useState([]);
   const [recentSubscribers, setRecentSubscribers] = useState([]);
@@ -30,6 +31,7 @@ const Dashboard = () => {
           setSubscribers(result.subscribers);
           setUsers(result.users);
           setProfessorsCount(result.professorCount);
+          setMessageCount(result.messageCount);
           setRecentSubscribers(result.recentSubscribers);
           setRecentUsers(result.recentUsers);
           setRecentProfessors(result.recentProfessors);
@@ -89,6 +91,12 @@ const Dashboard = () => {
           <div className="bg-gradient-to-r from-purple-400 to-purple-600 p-6 rounded shadow-lg text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
             <p className="text-sm font-medium text-gray-100 uppercase">Total Professors</p>
             <p className="text-3xl font-bold text-white mt-2">{professorsCount}</p>
+          </div>
+
+          {/* Total Message Card */}
+          <div className="bg-gradient-to-r from-purple-400 to-purple-600 p-6 rounded shadow-lg text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
+            <p className="text-sm font-medium text-gray-100 uppercase">Total Messages</p>
+            <p className="text-3xl font-bold text-white mt-2">{messageCount}</p>
           </div>
         </div>
 
