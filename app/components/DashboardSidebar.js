@@ -77,47 +77,47 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         </Link>
 
         {/* Add Member Dropdown */}
-<div className="relative">
-  <button
-    onClick={() => setShowDropdown(!showDropdown)}
-    className="block w-full p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer"
-  >
-    <img src="/icons/add_member.png" alt="Add Member" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
-    <span className="text-lg font-medium">Add Member</span>
-    <svg className={`w-4 h-4 ml-auto transition-transform transform ${showDropdown ? 'rotate-180' : 'rotate-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-    </svg>
-  </button>
+        <div className="relative">
+          <button
+            onClick={() => setShowDropdown(!showDropdown)}
+            className="block w-full p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer"
+          >
+            <img src="/icons/add_member.png" alt="Add Member" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
+            <span className="text-lg font-medium">Add Member</span>
+            <svg className={`w-4 h-4 ml-auto transition-transform transform ${showDropdown ? 'rotate-180' : 'rotate-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
 
-  {/* Dropdown Menu */}
-  {showDropdown && (
-    <div className="relative w-full mt-2 bg-gray-900 rounded-lg shadow-xl z-20">
-      <Link href="/dashboard/add_member/staff">
-        <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-          <span className="text-sm font-medium text-white">Staff</span>
+          {/* Dropdown Menu */}
+          {showDropdown && (
+            <div className="relative w-full mt-2 bg-gray-900 rounded-lg shadow-xl z-20">
+              <Link href="/dashboard/add_member/staff">
+                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                  <span className="text-sm font-medium text-white">Staff</span>
+                </div>
+              </Link>
+              <Link href="/dashboard/add_member/post_doc_candidate">
+                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                  <span className="text-sm font-medium text-white">Post Doc Candidate</span>
+                </div>
+              </Link>
+              <Link href="/dashboard/add_member/masc_candidate">
+                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                  <span className="text-sm font-medium text-white">MASc Candidate</span>
+                </div>
+              </Link>
+            </div>
+          )}
         </div>
-      </Link>
-      <Link href="/dashboard/add_member/post_doc_candidate">
-        <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-          <span className="text-sm font-medium text-white">Post Doc Candidate</span>
-        </div>
-      </Link>
-      <Link href="/dashboard/add_member/masc_candidate">
-        <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-          <span className="text-sm font-medium text-white">MASc Candidate</span>
-        </div>
-      </Link>
-    </div>
-  )}
-</div>
 
-{/* System Monitor Option */}
-<Link href="/dashboard/system_monitor">
-  <div className="block p-3 mt-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
-    <img src="/icons/SystemMonitor.png" alt="System Monitor" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
-    <span className="text-lg font-medium">System Monitor</span>
-  </div>
-</Link>
+        {/* System Monitor Option */}
+        <Link href="/dashboard/system_monitor">
+          <div className="block p-3 mt-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+            <img src="/icons/SystemMonitor.png" alt="System Monitor" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
+            <span className="text-lg font-medium">System Monitor</span>
+          </div>
+        </Link>
 
 
       </nav>
