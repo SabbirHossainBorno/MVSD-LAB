@@ -1,4 +1,4 @@
-//app/dashboard/message/page.js
+// /app/dashboard/message/page.js
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ function Message() {
   const [domainFilter, setDomainFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [loading, setLoading] = useState(true); // Added loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchMessage() {
@@ -31,7 +31,7 @@ function Message() {
       } catch (error) {
         toast.error('Failed to fetch messages');
       } finally {
-        setLoading(false); // Stop loading spinner
+        setLoading(false);
       }
     }
 
@@ -103,30 +103,43 @@ function Message() {
             <option value="50">50 per page</option>
           </select>
         </div>
-        <table className="min-w-full bg-gray-700 rounded">
-          <thead>
-            <tr className="border-b border-gray-600">
-              <th className="p-4 text-left text-gray-300 font-medium">ID</th>
-              <th className="p-4 text-left text-gray-300 font-medium">Email</th>
-              <th className="p-4 text-left text-gray-300 font-medium">Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedMessage.length > 0 ? (
-              paginatedMessage.map((message) => (
-                <tr key={message.email} className="hover:bg-gray-600 transition-colors duration-200">
-                  <td className="p-4 text-gray-200">{message.id}</td>
-                  <td className="p-4 text-gray-200">{message.email}</td>
-                  <td className="p-4 text-gray-200">{formatDate(message.date)}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="3" className="p-4 text-center text-gray-400">No Messages Found</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <div className="space-y-4">
+  {paginatedMessage.length > 0 ? (
+    paginatedMessage.map((message) => (
+      <div
+        key={message.id}
+        className="bg-white/10 backdrop-blur-md p-6 rounded-lg shadow-lg border border-white/20"
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-semibold text-white">
+            {message.subject}
+          </h2>
+          <span className="text-sm text-gray-300">
+            {formatDate(message.date)}
+          </span>
+        </div>
+        <div className="text-sm text-gray-200 space-y-2">
+          <p>
+            <strong className="text-gray-100">ID:</strong> {message.id}
+          </p>
+          <p>
+            <strong className="text-gray-100">Name:</strong> {message.name}
+          </p>
+          <p>
+            <strong className="text-gray-100">Email:</strong> {message.email}
+          </p>
+          <p>
+            <strong className="text-gray-100">Message:</strong> {message.message}
+          </p>
+        </div>
+      </div>
+    ))
+  ) : (
+    <div className="text-center text-gray-400">
+      No Messages Found
+    </div>
+  )}
+</div>
         <div className="flex flex-col sm:flex-row justify-between items-center mt-6">
           <div className="flex space-x-2">
             <button

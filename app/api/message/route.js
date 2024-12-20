@@ -24,14 +24,14 @@ const logAndAlert = async (message, sessionId, details = {}) => {
 export async function GET() {
   const client = await pool.connect();
   try {
-    const query = 'SELECT id, email, date FROM home_contact_us';
+    const query = 'SELECT id, name, email, subject, message, date FROM home_contact_us';
     const result = await client.query(query);
 
     return NextResponse.json({ message: result.rows });
   } catch (error) {
     console.error('Error fetching messages:', error);
     await logAndAlert('Error fetching message', null, { error: error.message });
-    return NextResponse.json({ message: 'Failed to fetch subscribers' }, { status: 500 });
+    return NextResponse.json({ message: 'Failed to fetch messages' }, { status: 500 });
   } finally {
     client.release();
   }
