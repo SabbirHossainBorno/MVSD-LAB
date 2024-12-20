@@ -74,55 +74,78 @@ const Dashboard = () => {
     <div className="flex flex-col min-h-screen bg-gray-900 text-gray-100">
       <main className="flex-1 p-3 md:p-4 lg:p-6">
         {/* Summary Cards */}
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-10">
   {/* Total Users Card */}
-  <div className="bg-gradient-to-tl from-blue-500 to-blue-700 p-6 rounded-xl shadow-xl text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
-    <div className="w-16 h-16 mb-4 bg-white rounded-full flex items-center justify-center shadow-md">
-      <img src="/icons/user_count.png" alt="Total Users Icon" className="w-10 h-10" />
+  <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out max-w-xs border-4 border-blue-500">
+    {/* Icon Section */}
+    <div className="w-20 h-20 mr-3 flex items-center justify-center">
+      <img src="/icons/user_count.png" alt="Total Users Icon" className="w-16 h-16" />
     </div>
-    <p className="text-sm font-medium text-gray-200 uppercase tracking-widest">Total Users</p>
-    <p className="text-4xl font-extrabold text-white mt-2">{users.length}</p>
+
+    {/* Content Section */}
+    <div className="flex flex-col items-start">
+      <p className="text-sm font-medium text-gray-700 uppercase tracking-widest">Total Users</p>
+      <p className="text-3xl font-extrabold text-black mt-1">{users.length}</p>
+    </div>
   </div>
 
   {/* Total Subscribers Card */}
-  <div className="bg-gradient-to-tl from-green-500 to-green-700 p-6 rounded-xl shadow-xl text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
-    <div className="w-16 h-16 mb-4 bg-white rounded-full flex items-center justify-center shadow-md">
-      <img src="/icons/subscribe_count.png" alt="Total Subscribers Icon" className="w-10 h-10" />
+  <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out max-w-xs border-4 border-green-500">
+    {/* Icon Section */}
+    <div className="w-20 h-20 mr-3 flex items-center justify-center">
+      <img src="/icons/subscribe_count.png" alt="Total Subscribers Icon" className="w-16 h-16" />
     </div>
-    <p className="text-sm font-medium text-gray-200 uppercase tracking-widest">Total Subscribers</p>
-    <p className="text-4xl font-extrabold text-white mt-2">{subscribers}</p>
+
+    {/* Content Section */}
+    <div className="flex flex-col items-start">
+      <p className="text-sm font-medium text-gray-700 uppercase tracking-widest">Total Subscribers</p>
+      <p className="text-3xl font-extrabold text-black mt-1">{subscribers}</p>
+    </div>
   </div>
 
   {/* Total Professors Card */}
-  <div className="bg-gradient-to-tl from-purple-500 to-purple-700 p-6 rounded-xl shadow-xl text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
-    <div className="w-16 h-16 mb-4 bg-white rounded-full flex items-center justify-center shadow-md">
-      <img src="/icons/professor_count.png" alt="Total Professors Icon" className="w-10 h-10" />
+  <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out max-w-xs border-4 border-purple-500">
+    {/* Icon Section */}
+    <div className="w-20 h-20 mr-3 flex items-center justify-center">
+      <img src="/icons/professor_count.png" alt="Total Professors Icon" className="w-16 h-16" />
     </div>
-    <p className="text-sm font-medium text-gray-200 uppercase tracking-widest">Total Professors</p>
-    <p className="text-4xl font-extrabold text-white mt-2">{professorsCount}</p>
+
+    {/* Content Section */}
+    <div className="flex flex-col items-start">
+      <p className="text-sm font-medium text-gray-700 uppercase tracking-widest">Total Professors</p>
+      <p className="text-3xl font-extrabold text-black mt-1">{professorsCount}</p>
+    </div>
   </div>
 
   {/* Total Messages Card */}
-  <div className="bg-gradient-to-tl from-pink-500 to-pink-700 p-6 rounded-xl shadow-xl text-center flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
-    <div className="w-16 h-16 mb-4 bg-white rounded-full flex items-center justify-center shadow-md">
-      <img src="/icons/message_count.png" alt="Total Messages Icon" className="w-10 h-10" />
+  <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out max-w-xs border-4 border-pink-500">
+    {/* Icon Section */}
+    <div className="w-20 h-20 mr-3 flex items-center justify-center">
+      <img src="/icons/message_count.png" alt="Total Messages Icon" className="w-16 h-16" />
     </div>
-    <p className="text-sm font-medium text-gray-200 uppercase tracking-widest">Total Messages</p>
-    <p className="text-4xl font-extrabold text-white mt-2">{messageCount}</p>
+
+    {/* Content Section */}
+    <div className="flex flex-col items-start">
+      <p className="text-sm font-medium text-gray-700 uppercase tracking-widest">Total Messages</p>
+      <p className="text-3xl font-extrabold text-black mt-1">{messageCount}</p>
+    </div>
   </div>
 
-  {/* Total Messages Card - Variant 1 */}
-<div className="bg-cover bg-center p-6 rounded-xl shadow-lg text-center flex flex-col items-center justify-center transform hover:scale-110 hover:shadow-2xl transition-transform duration-300 ease-in-out backdrop-blur-sm bg-white/30" style={{ backgroundImage: "url('/images/bg_1.png')" }}>
-  <div className="w-16 h-16 mb-4 bg-white rounded-full flex items-center justify-center shadow-md">
-    <img src="/icons/message_count.png" alt="Total Messages Icon" className="w-10 h-10" />
+  {/* Custom Card */}
+  <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out max-w-xs border-4 border-indigo-500">
+    {/* Icon Section */}
+    <div className="w-20 h-20 mr-3 flex items-center justify-center">
+      <img src="/icons/message_count.png" alt="Custom Icon" className="w-16 h-16" />
+    </div>
+
+    {/* Content Section */}
+    <div className="flex flex-col items-start">
+      <p className="text-sm font-medium text-gray-700 uppercase tracking-widest">Custom Label</p>
+      <p className="text-3xl font-extrabold text-black mt-1">Data</p>
+    </div>
   </div>
-  <p className="text-sm font-medium text-gray-100 uppercase tracking-widest">Total Messages</p>
-  <p className="text-4xl font-bold text-white mt-2">{messageCount}</p>
 </div>
 
-
-
-</div>
 
         {/* Recent Users and Recent Subscribers Side by Side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
