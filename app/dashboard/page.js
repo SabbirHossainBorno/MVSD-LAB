@@ -111,24 +111,14 @@ const Dashboard = () => {
     <p className="text-4xl font-extrabold text-white mt-2">{messageCount}</p>
   </div>
 
-
-
-
-<div class="main">
-<div class="card">
-  <div class="heading">UltraFlex</div>
-  <div class="details">Beste Design till date.<br>Flex it up as you wish,<br> but you can't break it.</div>
-  <div class="price">$299</div>
-  <button class="btn1">Buy</button>
-  <button class="btn2">Add to Cart</button>
+  {/* Total Messages Card - Variant 1 */}
+<div className="bg-cover bg-center p-6 rounded-xl shadow-lg text-center flex flex-col items-center justify-center transform hover:scale-110 hover:shadow-2xl transition-transform duration-300 ease-in-out backdrop-blur-sm bg-white/30" style={{ backgroundImage: "url('/images/bg_1.png')" }}>
+  <div className="w-16 h-16 mb-4 bg-white rounded-full flex items-center justify-center shadow-md">
+    <img src="/icons/message_count.png" alt="Total Messages Icon" className="w-10 h-10" />
+  </div>
+  <p className="text-sm font-medium text-gray-100 uppercase tracking-widest">Total Messages</p>
+  <p className="text-4xl font-bold text-white mt-2">{messageCount}</p>
 </div>
-
-<img src="/icons/message_count.png" alt="Total Messages Icon" className="w-10 h-10" />
-
-</div>
-
-
-
 
 
 
