@@ -119,6 +119,14 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
           </div>
         </Link>
 
+        {/* Message */}
+        <Link href="/dashboard/message">
+          <div className="block p-3 mt-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+            <img src="/icons/messages.png" alt="Message" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
+            <span className="text-lg font-medium">Message</span>
+          </div>
+        </Link>
+
 
       </nav>
     </aside>
