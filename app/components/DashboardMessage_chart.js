@@ -124,9 +124,18 @@ function DashboardMessageChart() {
         </div>
       </div>
       {loading ? (
-        <div className="text-white">Loading...</div>
-      ) : (
-        <div className="relative h-96">
+        <div className="flex justify-center items-center h-72">
+        <div className="spinner" style={{
+          border: '4px solid rgba(255, 255, 255, 0.3)',
+          borderTop: '4px solid #ffffff',
+          borderRadius: '50%',
+          width: '24px',
+          height: '24px',
+          animation: 'spin 1s linear infinite'
+        }}></div>
+      </div>
+    ) : (
+        <div className="relative h-72"> {/* Reduced height */}
           <Line data={chartDataFormatted} options={chartOptions} />
         </div>
       )}
@@ -134,19 +143,19 @@ function DashboardMessageChart() {
         <div className="flex justify-between items-center pt-5">
           <button
             onClick={() => handleDaysChange(7)}
-            className="text-sm font-medium text-gray-400 hover:text-white"
+            className={`text-sm font-medium ${selectedDays === 7 ? 'text-blue-500' : 'text-gray-400'} hover:text-white`}
           >
             Last 7 Days
           </button>
           <button
             onClick={() => handleDaysChange(30)}
-            className="text-sm font-medium text-gray-400 hover:text-white"
+            className={`text-sm font-medium ${selectedDays === 30 ? 'text-blue-500' : 'text-gray-400'} hover:text-white`}
           >
             Last 30 Days
           </button>
           <button
             onClick={() => handleDaysChange(90)}
-            className="text-sm font-medium text-gray-400 hover:text-white"
+            className={`text-sm font-medium ${selectedDays === 90 ? 'text-blue-500' : 'text-gray-400'} hover:text-white`}
           >
             Last 90 Days
           </button>
