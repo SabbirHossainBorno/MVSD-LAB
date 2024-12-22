@@ -29,7 +29,7 @@ const getMessagesChartData = async (days) => {
     const result = await client.query(query);
     return result.rows;
   } catch (error) {
-    console.error('Error fetching chart data:', error);
+    //console.error('Error fetching chart data:', error);
     throw new Error('Failed to fetch chart data');
   } finally {
     client.release();
@@ -51,7 +51,7 @@ const getTotalMessages = async (days) => {
     const result = await client.query(query);
     return parseInt(result.rows[0].count, 10);
   } catch (error) {
-    console.error('Error fetching total messages:', error);
+    //console.error('Error fetching total messages:', error);
     throw new Error('Failed to fetch total messages');
   } finally {
     client.release();
@@ -72,11 +72,11 @@ export async function GET(req) {
 
     const percentageChange = previousTotal === 0 ? 0 : ((currentTotal - previousTotal) / previousTotal) * 100;
 
-    console.log('Current Data:', currentData);
-    console.log('Previous Data:', previousData);
-    console.log('Current Total:', currentTotal);
-    console.log('Previous Total:', previousTotal);
-    console.log('Percentage Change:', percentageChange);
+    //console.log('Current Data:', currentData);
+    //console.log('Previous Data:', previousData);
+    //console.log('Current Total:', currentTotal);
+    //console.log('Previous Total:', previousTotal);
+    //console.log('Percentage Change:', percentageChange);
 
     return NextResponse.json({ data: currentData, totalMessages: currentTotal, percentageChange });
   } catch (error) {

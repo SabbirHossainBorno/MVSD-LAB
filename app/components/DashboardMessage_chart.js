@@ -106,7 +106,7 @@ function DashboardMessageChart() {
   const totalMessages = chartData.reduce((sum, item) => sum + parseInt(item.count, 10), 0);
 
   return (
-    <div className="max-w-full w-full bg-gray-800 rounded-lg shadow-md p-4 md:p-6">
+    <div className="max-w-full w-full bg-gray-800 rounded shadow-md p-4 md:p-6">
       <div className="flex justify-between items-center mb-4">
         <div>
           <h5 className="leading-none text-3xl font-bold text-white pb-2">

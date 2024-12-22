@@ -212,7 +212,7 @@ const Dashboard = () => {
               <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-yellow-500">
                 Message Statistics
               </h2>
-              <hr className="border-0 h-1 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full mb-6" />
+              <hr className="border-0 h-1 bg-gradient-to-r from-red-400 to-yellow-500 rounded-full mb-6" />
             </div>
             <DashboardMessageChart />
             
