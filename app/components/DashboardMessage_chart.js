@@ -17,6 +17,7 @@ function DashboardMessageChart() {
   const [chartData, setChartData] = useState(null);
   const [selectedDays, setSelectedDays] = useState(7); // Default to 7 days
   const [loading, setLoading] = useState(true);
+  const [percentageChange, setPercentageChange] = useState(0); // Assuming you have percentage change to display
 
   useEffect(() => {
     // Fetch chart data from the backend based on selectedDays
@@ -26,6 +27,7 @@ function DashboardMessageChart() {
         const data = await response.json();
         if (response.ok) {
           setChartData(data.data);
+          setPercentageChange(data.percentageChange); // Assuming the backend provides percentage change
         } else {
           console.error('Failed to fetch chart data:', data.message);
         }
@@ -49,6 +51,7 @@ function DashboardMessageChart() {
       title: {
         display: true,
         text: `Messages Sent Over the Last ${selectedDays} Days`,
+        color: '#ffffff', // Title color for dark theme
       },
       tooltip: {
         callbacks: {
@@ -63,12 +66,20 @@ function DashboardMessageChart() {
         title: {
           display: true,
           text: 'Date',
+          color: '#ffffff', // Axis title color for dark theme
+        },
+        ticks: {
+          color: '#ffffff', // Axis tick color for dark theme
         },
       },
       y: {
         title: {
           display: true,
           text: 'Message Count',
+          color: '#ffffff', // Axis title color for dark theme
+        },
+        ticks: {
+          color: '#ffffff', // Axis tick color for dark theme
         },
         beginAtZero: true,
       },
@@ -76,7 +87,7 @@ function DashboardMessageChart() {
   };
 
   const chartDataFormatted = {
-    labels: chartData ? chartData.map((item) => item.date) : [],
+    labels: chartData ? chartData.map((item) => new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })) : [],
     datasets: [
       {
         label: 'Messages Sent',
@@ -90,25 +101,50 @@ function DashboardMessageChart() {
   };
 
   return (
-    <div className="p-4 bg-white rounded shadow-md">
-      <div className="mb-4 flex items-center">
-        <label htmlFor="days" className="mr-2 text-gray-700">Select Days:</label>
-        <select
-          id="days"
-          value={selectedDays}
-          onChange={handleDaysChange}
-          className="p-2 border border-gray-300 rounded"
-        >
-          <option value={7}>Last 7 Days</option>
-          <option value={30}>Last 30 Days</option>
-          <option value={90}>Last 90 Days</option>
-        </select>
+    <div className="max-w-sm w-full bg-gray-800 rounded-lg shadow-md p-4 md:p-6">
+      <div className="flex justify-between">
+        <div>
+          <h5 className="leading-none text-3xl font-bold text-white pb-2">
+            {chartData ? chartData.reduce((sum, item) => sum + item.count, 0) : 0} messages
+          </h5>
+          <p className="text-base font-normal text-gray-400">
+            Messages in the last {selectedDays} days
+          </p>
+        </div>
+        <div className="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 text-center">
+          {percentageChange}%
+          <svg className="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
+          </svg>
+        </div>
       </div>
       {loading ? (
-        <div>Loading...</div>
+        <div className="text-white">Loading...</div>
       ) : (
         <Line data={chartDataFormatted} options={chartOptions} />
       )}
+      <div className="mt-4 grid grid-cols-1 items-center border-t border-gray-700">
+        <div className="flex justify-between items-center pt-5">
+          <button
+            onClick={(e) => setSelectedDays(7)}
+            className="text-sm font-medium text-gray-400 hover:text-white"
+          >
+            Last 7 days
+          </button>
+          <button
+            onClick={(e) => setSelectedDays(30)}
+            className="text-sm font-medium text-gray-400 hover:text-white"
+          >
+            Last 30 days
+          </button>
+          <button
+            onClick={(e) => setSelectedDays(90)}
+            className="text-sm font-medium text-gray-400 hover:text-white"
+          >
+            Last 90 days
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
