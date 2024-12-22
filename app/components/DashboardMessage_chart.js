@@ -14,7 +14,7 @@ ChartJS.register(
 );
 
 function DashboardMessageChart() {
-  const [chartData, setChartData] = useState(null);
+  const [chartData, setChartData] = useState([]);
   const [selectedDays, setSelectedDays] = useState(7); // Default to 7 days
   const [loading, setLoading] = useState(true);
   const [percentageChange, setPercentageChange] = useState(0); // Assuming you have percentage change to display
@@ -22,10 +22,12 @@ function DashboardMessageChart() {
   useEffect(() => {
     // Fetch chart data from the backend based on selectedDays
     async function fetchChartData() {
+      setLoading(true);
       try {
         const response = await fetch(`/api/chart?days=${selectedDays}`);
         const data = await response.json();
         if (response.ok) {
+          console.log('Fetched Data:', data);
           setChartData(data.data);
           setPercentageChange(data.percentageChange); // Assuming the backend provides percentage change
         } else {
@@ -41,22 +43,23 @@ function DashboardMessageChart() {
     fetchChartData();
   }, [selectedDays]);
 
-  const handleDaysChange = (event) => {
-    setSelectedDays(Number(event.target.value));
+  const handleDaysChange = (days) => {
+    setSelectedDays(days);
   };
 
   const chartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
-        text: `Messages Sent Over the Last ${selectedDays} Days`,
+        text: `Messages Sent Over The Last ${selectedDays} Days`,
         color: '#ffffff', // Title color for dark theme
       },
       tooltip: {
         callbacks: {
           label: function (context) {
-            return `${context.dataset.label}: ${context.raw} messages`;
+            return `${context.dataset.label}: ${context.raw} Messages`;
           },
         },
       },
@@ -87,11 +90,11 @@ function DashboardMessageChart() {
   };
 
   const chartDataFormatted = {
-    labels: chartData ? chartData.map((item) => new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })) : [],
+    labels: chartData.map((item) => new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })),
     datasets: [
       {
-        label: 'Messages Sent',
-        data: chartData ? chartData.map((item) => item.count) : [],
+        label: 'Messages Got',
+        data: chartData.map((item) => item.count),
         borderColor: '#3b82f6',
         backgroundColor: 'rgba(59, 130, 246, 0.2)',
         fill: true,
@@ -100,19 +103,21 @@ function DashboardMessageChart() {
     ],
   };
 
+  const totalMessages = chartData.reduce((sum, item) => sum + parseInt(item.count, 10), 0);
+
   return (
-    <div className="max-w-sm w-full bg-gray-800 rounded-lg shadow-md p-4 md:p-6">
-      <div className="flex justify-between">
+    <div className="max-w-full w-full bg-gray-800 rounded-lg shadow-md p-4 md:p-6">
+      <div className="flex justify-between items-center mb-4">
         <div>
           <h5 className="leading-none text-3xl font-bold text-white pb-2">
-            {chartData ? chartData.reduce((sum, item) => sum + item.count, 0) : 0} messages
+            {totalMessages} Messages
           </h5>
           <p className="text-base font-normal text-gray-400">
-            Messages in the last {selectedDays} days
+            Messages In The Last {selectedDays} Days
           </p>
         </div>
         <div className="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 text-center">
-          {percentageChange}%
+          {percentageChange.toFixed(2)}%
           <svg className="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
           </svg>
@@ -121,27 +126,29 @@ function DashboardMessageChart() {
       {loading ? (
         <div className="text-white">Loading...</div>
       ) : (
-        <Line data={chartDataFormatted} options={chartOptions} />
+        <div className="relative h-96">
+          <Line data={chartDataFormatted} options={chartOptions} />
+        </div>
       )}
       <div className="mt-4 grid grid-cols-1 items-center border-t border-gray-700">
         <div className="flex justify-between items-center pt-5">
           <button
-            onClick={(e) => setSelectedDays(7)}
+            onClick={() => handleDaysChange(7)}
             className="text-sm font-medium text-gray-400 hover:text-white"
           >
-            Last 7 days
+            Last 7 Days
           </button>
           <button
-            onClick={(e) => setSelectedDays(30)}
+            onClick={() => handleDaysChange(30)}
             className="text-sm font-medium text-gray-400 hover:text-white"
           >
-            Last 30 days
+            Last 30 Days
           </button>
           <button
-            onClick={(e) => setSelectedDays(90)}
+            onClick={() => handleDaysChange(90)}
             className="text-sm font-medium text-gray-400 hover:text-white"
           >
-            Last 90 days
+            Last 90 Days
           </button>
         </div>
       </div>

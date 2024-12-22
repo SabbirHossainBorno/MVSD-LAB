@@ -36,14 +36,49 @@ const getMessagesChartData = async (days) => {
   }
 };
 
+// Helper function to fetch total messages for a given period
+const getTotalMessages = async (days) => {
+  const client = await pool.connect();
+  try {
+    const query = `
+      SELECT 
+        COUNT(id) AS count
+      FROM 
+        home_contact_us 
+      WHERE 
+        date >= NOW() - INTERVAL '${days} days'
+    `;
+    const result = await client.query(query);
+    return parseInt(result.rows[0].count, 10);
+  } catch (error) {
+    console.error('Error fetching total messages:', error);
+    throw new Error('Failed to fetch total messages');
+  } finally {
+    client.release();
+  }
+};
+
 // API handler
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
-  const days = searchParams.get('days') || 7; // Default to 7 days if no parameter is provided
+  const days = parseInt(searchParams.get('days')) || 7; // Default to 7 days if no parameter is provided
 
   try {
-    const data = await getMessagesChartData(days);
-    return NextResponse.json({ data });
+    const currentData = await getMessagesChartData(days);
+    const previousData = await getMessagesChartData(days * 2); // Fetch data for the previous period
+
+    const currentTotal = currentData.reduce((sum, item) => sum + parseInt(item.count, 10), 0);
+    const previousTotal = previousData.reduce((sum, item) => sum + parseInt(item.count, 10), 0);
+
+    const percentageChange = previousTotal === 0 ? 0 : ((currentTotal - previousTotal) / previousTotal) * 100;
+
+    console.log('Current Data:', currentData);
+    console.log('Previous Data:', previousData);
+    console.log('Current Total:', currentTotal);
+    console.log('Previous Total:', previousTotal);
+    console.log('Percentage Change:', percentageChange);
+
+    return NextResponse.json({ data: currentData, totalMessages: currentTotal, percentageChange });
   } catch (error) {
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
