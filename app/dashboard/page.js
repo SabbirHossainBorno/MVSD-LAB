@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
 import withAuth from '../components/withAuth'; // Ensure correct path
 import LoadingSpinner from '../components/LoadingSpinner'; // Add a loading spinner component
+import DashboardMessageChart from '../components/DashboardMessage_chart'; // Add a loading spinner component
 import axios from 'axios';
 
 const Dashboard = () => {
@@ -213,20 +214,8 @@ const Dashboard = () => {
               </h2>
               <hr className="border-0 h-1 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full mb-6" />
             </div>
-            <ul className="space-y-2">
-              {recentSubscribers.map(subscriber => (
-                <li
-                  key={subscriber.email}
-                  className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition"
-                >
-                  <span className="text-sm font-semibold text-gray-200">{subscriber.email}</span>
-                  <button className="bg-blue-600 text-white hover:bg-blue-700 rounded px-4 py-1 text-xs font-medium">
-                    Subscribed
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <Link href="/dashboard/subscribers_list" className="block mt-3 text-center text-blue-400 hover:text-blue-500 text-sm">View All</Link>
+            <DashboardMessageChart />
+            
           </div>
 
 
