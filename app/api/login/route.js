@@ -1,88 +1,72 @@
-// app/api/login/route.js
 import { NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
-import { query } from '../../db'; // Centralized database query handling
-import { sendLogWrite } from '../log-write/route.js'; // Log-write API
-import { sendTelegramAlert } from '../telegram-alert/route.js'; // Telegram-alert API
+import { sendLogWrite } from '../log-write/route'; // Ensure the path is correct
+import { sendTelegramAlert } from '../telegram-alert/route'; // Ensure the path is correct
+import { query } from '../../../lib/db'; // Ensure correct DB query helper
 
 export async function POST(request) {
+  // Manually parse the incoming JSON body from the request
   const { email, password } = await request.json();
-  const sessionId = uuidv4(); // Create session ID
+  
+  const sessionId = uuidv4(); // Create a unique session ID for every request
   const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
 
   try {
-    // Check if user exists in admin or users table
+    // Query to check if the user exists in the database
     const userCheckQuery = 'SELECT * FROM users WHERE email = $1 AND password = $2';
-    const adminCheckQuery = 'SELECT * FROM admin WHERE email = $1 AND password = $2';
+    const res = await query(userCheckQuery, [email, password]);
 
-    let res = await query(adminCheckQuery, [email, password]); // Use centralized query function
     if (res.rows.length > 0) {
-      // Successful login for admin
-      await Promise.all([
-        sendLogWrite({
-          eid: sessionId,
-          sid: sessionId,
-          task: 'login',
-          details: { email, ipAddress, userAgent },
-          status: 'SUCCESS',
-        }),
-        sendTelegramAlert({
-          message: `Admin login successful: ${email} from IP: ${ipAddress}`,
-        }),
-      ]);
-      return NextResponse.json({ success: true, type: 'admin' });
-    }
+      // Successful login
+      await sendLogWrite({
+        eid: sessionId,  // Set the execution ID for successful login
+        sid: sessionId,  // Use session ID for logging
+        task: 'login',  // Specify task as 'login'
+        details: { email, ipAddress, userAgent },  // Log user info and request details
+        status: 'SUCCESS',  // Status of the operation
+      });
 
-    res = await query(userCheckQuery, [email, password]); // Use centralized query function
-    if (res.rows.length > 0) {
-      // Successful login for user
-      await Promise.all([
-        sendLogWrite({
-          eid: sessionId,
-          sid: sessionId,
-          task: 'login',
-          details: { email, ipAddress, userAgent },
-          status: 'SUCCESS',
-        }),
-        sendTelegramAlert({
-          message: `User login successful: ${email} from IP: ${ipAddress}`,
-        }),
-      ]);
+      // Send Telegram alert for successful login
+      await sendTelegramAlert({
+        message: `User login successful: ${email} from IP: ${ipAddress}`,
+      });
+
       return NextResponse.json({ success: true, type: 'user' });
     }
 
-    // Failed login
-    await Promise.all([
-      sendLogWrite({
-        eid: '',
-        sid: sessionId,
-        task: 'login',
-        details: { email, ipAddress, userAgent },
-        status: 'ERROR',
-      }),
-      sendTelegramAlert({
-        message: `Login failed for: ${email} from IP: ${ipAddress}`,
-      }),
-    ]);
+    // Failed login attempt
+    await sendLogWrite({
+      eid: '',  // No execution ID for failed login
+      sid: sessionId,  // Use session ID for logging
+      task: 'login',  // Task is still 'login'
+      details: { email, ipAddress, userAgent },  // Log user info and request details
+      status: 'ERROR',  // Status for failed login attempt
+    });
+
+    // Send Telegram alert for failed login
+    await sendTelegramAlert({
+      message: `Login failed for: ${email} from IP: ${ipAddress}`,
+    });
+
     return NextResponse.json({ success: false, message: 'Invalid email or password' });
 
   } catch (error) {
     console.error('Login error:', error);
 
-    // Log the error
-    await Promise.all([
-      sendLogWrite({
-        eid: '',
-        sid: sessionId,
-        task: 'login',
-        details: { email, ipAddress, userAgent, error: error.message },
-        status: 'ERROR',
-      }),
-      sendTelegramAlert({
-        message: `Error during login attempt for ${email}: ${error.message}`,
-      }),
-    ]);
+    // Log the error for any issues during login
+    await sendLogWrite({
+      eid: '',  // No execution ID for error logs
+      sid: sessionId,  // Use session ID for error logging
+      task: 'login',  // Task is still 'login'
+      details: { email, ipAddress, userAgent, error: error.message },  // Include error message in log
+      status: 'ERROR',  // Status for error logs
+    });
+
+    // Send Telegram alert for the error
+    await sendTelegramAlert({
+      message: `Error during login attempt for ${email}: ${error.message}`,
+    });
 
     return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
   }

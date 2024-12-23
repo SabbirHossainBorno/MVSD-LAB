@@ -1,9 +1,12 @@
 // app/api/log-write/route.js
 import { NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
 import { format } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
-import { getDbConnection } from '../../lib/db'; // Adjust path based on your project structure
-import { v4 as uuidv4 } from 'uuid';
+
+// Correct log file path
+const logFilePath = path.join('/home/mvsd-lab/Log', 'mvsd_lab.log'); // Correct log file location
 
 // Function to format log entry
 const formatLog = (eid, sid, task, details, status) => {
@@ -19,15 +22,15 @@ export async function POST(request) {
   // Prepare log entry
   const logEntry = formatLog(eid, sid, task, details, status);
 
-  // Save to database or file (based on your architecture)
+  // Write to log file
   try {
-    const client = await getDbConnection().connect();
-    await client.query('INSERT INTO logs (log_entry) VALUES ($1)', [logEntry]);
-    client.release();
-
+    fs.appendFileSync(logFilePath, logEntry); // Append log entry to the file
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error while writing log:', error);
     return NextResponse.json({ success: false, message: 'Internal Server Error' }, { status: 500 });
   }
 }
+
+// Export sendLogWrite function so it can be used elsewhere
+export const sendLogWrite = POST;
