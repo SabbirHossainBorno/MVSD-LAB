@@ -1,59 +1,89 @@
 // app/api/login/route.js
 import { NextResponse } from 'next/server';
-import { Pool } from 'pg';
 import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
-
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-
-const logAndAlert = async (message, sessionId, details = {}) => {
-  try {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    await axios.post(`${siteUrl}/api/log-and-alert`, { message, sessionId, details });
-  } catch (error) {
-    console.error('Failed to log and send alert:', error);
-  }
-};
+import { query } from '../../db'; // Centralized database query handling
+import { sendLogWrite } from '../log-write/route.js'; // Log-write API
+import { sendTelegramAlert } from '../telegram-alert/route.js'; // Telegram-alert API
 
 export async function POST(request) {
   const { email, password } = await request.json();
-  const client = await pool.connect();
-  const sessionId = uuidv4();
-
-  // Extract IP address and User-Agent
+  const sessionId = uuidv4(); // Create session ID
   const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
 
   try {
-    await logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nLogin Attempt!\nEmail : ${email}\nIP : ${ipAddress}\nDevice INFO : ${userAgent}`, sessionId);
+    // Check if user exists in admin or users table
+    const userCheckQuery = 'SELECT * FROM users WHERE email = $1 AND password = $2';
+    const adminCheckQuery = 'SELECT * FROM admin WHERE email = $1 AND password = $2';
 
-    const checkUser = async (table) => {
-      const res = await client.query(`SELECT * FROM ${table} WHERE email = $1 AND password = $2`, [email, password]);
-      if (res.rows.length > 0) {
-        await logAndAlert(`${table === 'admin' ? 'MVSD LAB DASHBOARD\n------------------------------------\nAdmin' : 'User'} Login Successful.\nEmail : ${email}\nIP : ${ipAddress}\nDevice INFO : ${userAgent}`, sessionId);
-        const response = NextResponse.json({ success: true, type: table === 'admin' ? 'admin' : 'user' });
-        response.cookies.set('email', email, { httpOnly: true });
-        response.cookies.set('sessionId', sessionId, { httpOnly: true });
-        return response;
-      }
-      return null;
-    };
+    let res = await query(adminCheckQuery, [email, password]); // Use centralized query function
+    if (res.rows.length > 0) {
+      // Successful login for admin
+      await Promise.all([
+        sendLogWrite({
+          eid: sessionId,
+          sid: sessionId,
+          task: 'login',
+          details: { email, ipAddress, userAgent },
+          status: 'SUCCESS',
+        }),
+        sendTelegramAlert({
+          message: `Admin login successful: ${email} from IP: ${ipAddress}`,
+        }),
+      ]);
+      return NextResponse.json({ success: true, type: 'admin' });
+    }
 
-    const adminResponse = await checkUser('admin');
-    if (adminResponse) return adminResponse;
+    res = await query(userCheckQuery, [email, password]); // Use centralized query function
+    if (res.rows.length > 0) {
+      // Successful login for user
+      await Promise.all([
+        sendLogWrite({
+          eid: sessionId,
+          sid: sessionId,
+          task: 'login',
+          details: { email, ipAddress, userAgent },
+          status: 'SUCCESS',
+        }),
+        sendTelegramAlert({
+          message: `User login successful: ${email} from IP: ${ipAddress}`,
+        }),
+      ]);
+      return NextResponse.json({ success: true, type: 'user' });
+    }
 
-    const userResponse = await checkUser('users');
-    if (userResponse) return userResponse;
-
-    await logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nLogin Failed!\nEmail : ${email}\nIP : ${ipAddress}\nDevice INFO : ${userAgent}`, sessionId);
+    // Failed login
+    await Promise.all([
+      sendLogWrite({
+        eid: '',
+        sid: sessionId,
+        task: 'login',
+        details: { email, ipAddress, userAgent },
+        status: 'ERROR',
+      }),
+      sendTelegramAlert({
+        message: `Login failed for: ${email} from IP: ${ipAddress}`,
+      }),
+    ]);
     return NextResponse.json({ success: false, message: 'Invalid email or password' });
+
   } catch (error) {
-    await logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nError During Login!\nEmail : ${email}\nIP : ${ipAddress},\nDevice INFO : ${userAgent} - ${error.message}`, sessionId);
+    console.error('Login error:', error);
+
+    // Log the error
+    await Promise.all([
+      sendLogWrite({
+        eid: '',
+        sid: sessionId,
+        task: 'login',
+        details: { email, ipAddress, userAgent, error: error.message },
+        status: 'ERROR',
+      }),
+      sendTelegramAlert({
+        message: `Error during login attempt for ${email}: ${error.message}`,
+      }),
+    ]);
+
     return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
-  } finally {
-    client.release();
   }
 }
