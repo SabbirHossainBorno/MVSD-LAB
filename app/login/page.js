@@ -131,17 +131,15 @@ function LoginPage() {
                     </div>
                   </div>
                 </div>
-                <div className="mt-4 flex items-center justify-end gap-x-2">
-                  <a className="inline-flex items-center justify-center rounded text-sm font-medium bg-transparent border-2 border-[#012970] text-[#012970] hover:bg-[#012970] hover:text-white px-4 py-2 transition-all" href="/signup">
-                    Create Account
-                  </a>
-                  <button
-                    type="submit"
-                    className="inline-flex items-center justify-center rounded bg-[#012970] px-4 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-[#012970] hover:bg-[#01408F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
-                  >
-                    Login
-                  </button>
-                </div>
+                <div className="mt-4 flex items-center justify-center gap-x-2">
+  <button
+    type="submit"
+    className="relative rounded px-8 py-3 overflow-hidden group bg-blue-800 hover:bg-gradient-to-r hover:from-blue-800 hover:to-blue-600 text-white hover:ring-2 hover:ring-offset-2 hover:ring-blue-500 transition-all ease-out duration-300 w-full max-w-[200px]"
+  >
+    <span className="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+    <span className="relative text-lg md:text-xl transition-transform duration-300 ease-in-out group-hover:scale-110">Login</span>
+  </button>
+</div>
               </form>
             </div>
           </div>
