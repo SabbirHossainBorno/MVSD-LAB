@@ -19,29 +19,45 @@ const validateSession = (request) => {
 };
 
 export async function GET(request) {
+  const { sessionId, eid, ip, userAgent, email } = validateSession(request);
+
+  if (!email || !sessionId) {
+    const alertMessage = formatAlertMessage('Unauthorized Access Attempt!', email, ip);
+    await sendTelegramAlert(alertMessage);
+
+    logger.warn('Unauthorized access attempt', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Auth Check',
+        details: `Unauthorized access attempt from IP ${ip} with User-Agent ${userAgent}`
+      }
+    });
+
+    return NextResponse.json({ authenticated: false });
+  }
+
   try {
-    const { sessionId, eid, ip, userAgent, email } = validateSession(request);
-
-    if (!email || !sessionId) {
-      const alertMessage = formatAlertMessage('Unauthorized Access Attempt!', email, ip);
-      await sendTelegramAlert(alertMessage);
-
-      logger.warn('Unauthorized access attempt', {
-        meta: {
-          eid,
-          sid: sessionId,
-          taskName: 'Auth Check',
-          details: `Unauthorized access attempt from IP ${ip} with User-Agent ${userAgent}`
-        }
-      });
-
-      return NextResponse.json({ authenticated: false });
-    }
-
     const now = new Date();
     const lastActivity = request.cookies.get('lastActivity')?.value;
     const lastActivityDate = new Date(lastActivity);
     const diff = now - lastActivityDate;
+
+    if (diff > 10 * 60 * 1000) { // 10 minutes
+      const alertMessage = formatAlertMessage('Session Expired', email, ip);
+      await sendTelegramAlert(alertMessage);
+
+      logger.info('Session expired', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Auth Check',
+          details: `Session expired for ${email} from IP ${ip} with User-Agent ${userAgent}`
+        }
+      });
+
+      return NextResponse.json({ authenticated: false, message: 'Session expired' });
+    }
 
     const alertMessage = formatAlertMessage('Authentication Check Successful', email, ip);
     await sendTelegramAlert(alertMessage);
