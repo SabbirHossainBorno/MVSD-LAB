@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "logs/.6108bd2bd02621e8436e3eb694f982cd5a75e89d-audit.json",
+    "files": [
+        {
+            "date": 1735011860130,
+            "name": "logs/mvsd-lab-errors-2024-12-24.log",
+            "hash": "6f7bb5e9ced15d7058769fffdf99ce5ab3005b6910f898cf2016812803d83baa"
+        }
+    ],
+    "hashType": "sha256"
+}
