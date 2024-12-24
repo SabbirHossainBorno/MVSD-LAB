@@ -11,3 +11,35 @@
 2024-12-23 21:47:21-EID[241913-MVSDLAB]-SID[cffd2841-307d-4258-b66c-bc09eb74caac]-[INFO] TASK[Login]-User admin@mvsdlab.com logged in successfully from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
 2024-12-23 21:47:47-EID[]-SID[cffd2841-307d-4258-b66c-bc09eb74caac]-[INFO] TASK[Logout]-User admin@mvsdlab.com logged out successfully from IP 123.200.7.106
 2024-12-23 21:47:48-EID[]-SID[]-[INFO] TASK[undefined]-undefined
+2024-12-23 22:08:36-EID[]-SID[]-[INFO] TASK[Unknown Task]-No details provided
+2024-12-23 22:12:36-EID[]-SID[]-[INFO] TASK[Unknown Task]-No details provided
+2024-12-23 22:12:36-EID[]-SID[5c20fc6a-a4de-4b92-b254-73efc1b2eeca]-[INFO] TASK[Login]-Login attempt for admin@mvsdlab.com from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-23 22:12:36-EID[]-SID[5c20fc6a-a4de-4b92-b254-73efc1b2eeca]-[INFO] TASK[Login]-Querying admin table for admin@mvsdlab.com
+2024-12-23 22:12:37-EID[]-SID[]-[INFO] TASK[Unknown Task]-No details provided
+2024-12-23 22:12:37-EID[535165-MVSDLAB]-SID[5c20fc6a-a4de-4b92-b254-73efc1b2eeca]-[INFO] TASK[Login]-User admin@mvsdlab.com logged in successfully from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-23 22:13:24-EID[535165-MVSDLAB]-SID[5c20fc6a-a4de-4b92-b254-73efc1b2eeca]-[INFO] TASK[Logout]-User admin@mvsdlab.com logged out successfully from IP 123.200.7.106
+2024-12-23 22:13:25-EID[]-SID[]-[INFO] TASK[Unknown Task]-No details provided
+2024-12-23 22:19:24-EID[]-SID[]-[INFO] TASK[Unknown Task]-No details provided
+2024-12-23 22:19:24-EID[]-SID[65d42f2a-3fbf-4359-89e2-faf440c133e4]-[INFO] TASK[Login]-Login attempt for admin@mvsdlab.com from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-23 22:19:24-EID[]-SID[65d42f2a-3fbf-4359-89e2-faf440c133e4]-[INFO] TASK[Login]-Querying admin table for admin@mvsdlab.com
+2024-12-23 22:19:24-EID[795972-MVSDLAB]-SID[65d42f2a-3fbf-4359-89e2-faf440c133e4]-[INFO] TASK[Generate EID]-Generated EID 795972-MVSDLAB for user admin@mvsdlab.com
+2024-12-23 22:19:24-EID[]-SID[]-[INFO] TASK[Unknown Task]-No details provided
+2024-12-23 22:19:24-EID[795972-MVSDLAB]-SID[65d42f2a-3fbf-4359-89e2-faf440c133e4]-[INFO] TASK[Login]-User admin@mvsdlab.com logged in successfully from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-23 22:20:00-EID[795972-MVSDLAB]-SID[65d42f2a-3fbf-4359-89e2-faf440c133e4]-[INFO] TASK[Logout]-User admin@mvsdlab.com logged out successfully from IP 123.200.7.106
+2024-12-23 22:20:01-EID[]-SID[]-[INFO] TASK[Unknown Task]-No details provided
+2024-12-23 22:24:06-EID[]-SID[]-[INFO] TASK[Unknown Task]-No details provided
+2024-12-23 22:24:06-EID[]-SID[67466754-a67b-4913-942a-60217186d52c]-[INFO] TASK[Login]-Login attempt for admin@mvsdlab.com from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-23 22:24:06-EID[]-SID[67466754-a67b-4913-942a-60217186d52c]-[INFO] TASK[Login]-Querying admin table for admin@mvsdlab.com
+2024-12-23 22:24:06-EID[712573-MVSDLAB]-SID[67466754-a67b-4913-942a-60217186d52c]-[INFO] TASK[Generate EID]-Generated EID 712573-MVSDLAB for user admin@mvsdlab.com
+2024-12-23 22:24:06-EID[]-SID[]-[INFO] TASK[Unknown Task]-No details provided
+2024-12-23 22:24:06-EID[712573-MVSDLAB]-SID[67466754-a67b-4913-942a-60217186d52c]-[INFO] TASK[Login]-User admin@mvsdlab.com logged in successfully from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-23 22:24:20-EID[712573-MVSDLAB]-SID[67466754-a67b-4913-942a-60217186d52c]-[INFO] TASK[Logout]-User admin@mvsdlab.com logged out successfully from IP 123.200.7.106
+2024-12-23 22:24:21-EID[]-SID[]-[INFO] TASK[Unknown Task]-No details provided
+2024-12-23 22:26:17-EID[]-SID[]-[INFO] TASK[Unknown Task]-No details provided
+2024-12-23 22:26:17-EID[]-SID[1c7c9de1-9e54-43aa-b12a-ec7ef55e41dc]-[INFO] TASK[Login]-Login attempt for admin@mvsdlab.com from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-23 22:26:17-EID[]-SID[1c7c9de1-9e54-43aa-b12a-ec7ef55e41dc]-[INFO] TASK[Login]-Querying admin table for admin@mvsdlab.com
+2024-12-23 22:26:17-EID[558643-MVSDLAB]-SID[1c7c9de1-9e54-43aa-b12a-ec7ef55e41dc]-[INFO] TASK[Generate EID]-Generated EID 558643-MVSDLAB for user admin@mvsdlab.com
+2024-12-23 22:26:17-EID[]-SID[]-[INFO] TASK[Unknown Task]-No details provided
+2024-12-23 22:26:17-EID[558643-MVSDLAB]-SID[1c7c9de1-9e54-43aa-b12a-ec7ef55e41dc]-[INFO] TASK[Login]-User admin@mvsdlab.com logged in successfully from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0
+2024-12-23 22:27:26-EID[558643-MVSDLAB]-SID[1c7c9de1-9e54-43aa-b12a-ec7ef55e41dc]-[INFO] TASK[Logout]-User admin@mvsdlab.com logged out successfully from IP 123.200.7.106
+2024-12-23 22:27:27-EID[]-SID[]-[INFO] TASK[Unknown Task]-No details provided

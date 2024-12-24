@@ -1,4 +1,4 @@
-//app/api/login/route.js
+// app/api/login/route.js
 
 import { NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
@@ -44,6 +44,17 @@ export async function POST(request) {
       const res = await query(`SELECT * FROM ${table} WHERE email = $1 AND password = $2`, [email, password]);
       if (res.rows.length > 0) {
         const eid = `${Math.floor(Math.random() * 1000000)}-MVSDLAB`; // Generate an execution ID
+
+        // Log the generation of the execution ID
+        logger.info('Generated execution ID', {
+          meta: {
+            eid,
+            sid: sessionId,
+            taskName: 'Generate EID',
+            details: `Generated EID ${eid} for user ${email}`
+          }
+        });
+
         const successMessage = formatAlertMessage(`${table === 'admin' ? 'Admin' : 'User'} Login Successful.`, email, ipAddress, userAgent, `\nEID: ${eid}`);
         await sendTelegramAlert(successMessage);
 
@@ -58,6 +69,7 @@ export async function POST(request) {
         const response = NextResponse.json({ success: true, type: table === 'admin' ? 'admin' : 'user' });
         response.cookies.set('email', email, { httpOnly: true });
         response.cookies.set('sessionId', sessionId, { httpOnly: true });
+        response.cookies.set('eid', eid, { httpOnly: true }); // Store EID in a cookie
         return response;
       }
       return null;
