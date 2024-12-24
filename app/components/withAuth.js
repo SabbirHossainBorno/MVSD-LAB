@@ -5,7 +5,12 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner';
-import axios from 'axios';
+import logger from '../../lib/logger'; // Import the logger
+import sendTelegramAlert from '../../lib/telegramAlert'; // Import the Telegram alert function
+
+const formatAlertMessage = (title, email, ipAddress) => {
+  return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}`;
+};
 
 const withAuth = (WrappedComponent) => {
   const Wrapper = (props) => {
@@ -17,15 +22,44 @@ const withAuth = (WrappedComponent) => {
     const handleSessionExpiration = async () => {
       const email = Cookies.get('email');
       const sessionId = Cookies.get('sessionId');
+      const ipAddress = Cookies.get('ipAddress');
       Cookies.remove('email');
       Cookies.remove('sessionId');
       toast.error('Session Expired! Please Login Again.');
-      await axios.post('/api/log-and-alert', { message: 'MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\nPlease Login Again.', sessionId, details: { email } });
+
+      const alertMessage = formatAlertMessage('Session Expired! Please Login Again.', email, ipAddress);
+      await sendTelegramAlert(alertMessage);
+
+      logger.warn('Session expired', {
+        meta: {
+          eid: '',
+          sid: sessionId,
+          taskName: 'Session Expiration',
+          details: `Session expired for ${email} from IP ${ipAddress}`
+        }
+      });
+
       router.push('/login?sessionExpired=true');
     };
 
     const handleUnauthorizedAccess = async () => {
+      const email = Cookies.get('email');
+      const sessionId = Cookies.get('sessionId');
+      const ipAddress = Cookies.get('ipAddress');
       toast.error('Authentication Required! Need To Login.');
+
+      const alertMessage = formatAlertMessage('Authentication Required! Need To Login.', email, ipAddress);
+      await sendTelegramAlert(alertMessage);
+
+      logger.warn('Unauthorized access', {
+        meta: {
+          eid: '',
+          sid: sessionId,
+          taskName: 'Unauthorized Access',
+          details: `Unauthorized access attempt from IP ${ipAddress}`
+        }
+      });
+
       router.push('/login?authRequired=true');
     };
 

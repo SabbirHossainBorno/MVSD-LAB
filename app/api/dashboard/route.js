@@ -4,8 +4,8 @@ import { query } from '../../../lib/db';
 import logger from '../../../lib/logger'; // Import the logger
 import sendTelegramAlert from '../../../lib/telegramAlert'; // Import the Telegram alert function
 
-const formatAlertMessage = (title, email, ipAddress, userAgent, additionalInfo = '') => {
-  return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}\nDevice INFO : ${userAgent}${additionalInfo}`;
+const formatAlertMessage = (title, email, ipAddress) => {
+  return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}`;
 };
 
 const validateSession = (request) => {
@@ -22,6 +22,10 @@ const validateSession = (request) => {
 export async function GET(request) {
   try {
     const { sessionId, eid, ip, userAgent, email } = validateSession(request);
+
+    // Log and alert fetching dashboard data
+    const fetchAttemptMessage = formatAlertMessage('Fetching Dashboard Data', email, ip);
+    await sendTelegramAlert(fetchAttemptMessage);
 
     logger.info('Fetching dashboard data', {
       meta: {
@@ -50,7 +54,8 @@ export async function GET(request) {
       query(recentProfessorsQuery),
     ]);
 
-    const successMessage = formatAlertMessage('Dashboard Data Fetched Successfully', email, ip, userAgent);
+    // Log and alert successful data fetch
+    const successMessage = formatAlertMessage('Dashboard Data Fetched Successfully', email, ip);
     await sendTelegramAlert(successMessage);
 
     logger.info('Dashboard data fetched successfully', {
@@ -72,7 +77,7 @@ export async function GET(request) {
       recentProfessors: recentProfessors.rows,
     });
   } catch (error) {
-    const errorMessage = formatAlertMessage('Error Fetching Dashboard Data', email, ip, userAgent, `\nError: ${error.message}`);
+    const errorMessage = formatAlertMessage('Error Fetching Dashboard Data', email, ip, `\nError: ${error.message}`);
     await sendTelegramAlert(errorMessage);
 
     logger.error('Error fetching dashboard data', {
@@ -93,7 +98,8 @@ export async function POST(request) {
     const { sessionId, eid, ip, userAgent, email } = validateSession(request);
     const { userId, newStatus } = await request.json();
 
-    const updateAttemptMessage = formatAlertMessage('Updating User Status', email, ip, userAgent, `\nUSER ID: ${userId} to ${newStatus}`);
+    // Log and alert updating user status
+    const updateAttemptMessage = formatAlertMessage('Updating User Status', email, ip, `\nUSER ID: ${userId} to ${newStatus}`);
     await sendTelegramAlert(updateAttemptMessage);
 
     logger.info('Updating user status', {
@@ -108,7 +114,8 @@ export async function POST(request) {
     const updateStatusQuery = 'UPDATE users SET status = $1 WHERE id = $2 RETURNING *';
     const updatedUser = await query(updateStatusQuery, [newStatus, userId]);
 
-    const successMessage = formatAlertMessage('User Status Updated Successfully', email, ip, userAgent, `\nUSER ID: ${userId}`);
+    // Log and alert successful status update
+    const successMessage = formatAlertMessage('User Status Updated Successfully', email, ip, `\nUSER ID: ${userId}`);
     await sendTelegramAlert(successMessage);
 
     logger.info('User status updated successfully', {
@@ -125,7 +132,7 @@ export async function POST(request) {
       user: updatedUser.rows[0],
     });
   } catch (error) {
-    const errorMessage = formatAlertMessage('Error Updating User Status', email, ip, userAgent, `\nError: ${error.message}`);
+    const errorMessage = formatAlertMessage('Error Updating User Status', email, ip, `\nError: ${error.message}`);
     await sendTelegramAlert(errorMessage);
 
     logger.error('Error updating user status', {

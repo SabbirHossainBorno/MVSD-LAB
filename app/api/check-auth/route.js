@@ -4,7 +4,7 @@ import logger from '../../../lib/logger'; // Import the logger
 import sendTelegramAlert from '../../../lib/telegramAlert'; // Import the Telegram alert function
 
 const formatAlertMessage = (title, email, ipAddress, additionalInfo = '') => {
-  return `MVSD LAB AUTH-CHECKER\n------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}${additionalInfo}`;
+  return `MVSD LAB AUTH-CHECKER\n--------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}${additionalInfo}`;
 };
 
 const validateSession = (request) => {
