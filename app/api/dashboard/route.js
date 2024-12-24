@@ -9,8 +9,8 @@ const formatAlertMessage = (title, email, ipAddress, userAgent, additionalInfo =
 };
 
 const validateSession = (request) => {
-  const sessionId = request.cookies.get('sessionId');
-  const eid = request.cookies.get('eid');
+  const sessionId = request.cookies.get('sessionId')?.value;
+  const eid = request.cookies.get('eid')?.value || ''; // Retrieve EID from cookies
   const ip = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr');
   const userAgent = request.headers.get('user-agent');
   const emailCookie = request.cookies.get('email');
