@@ -1,5 +1,4 @@
 // app/components/withAuth.js
-
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
@@ -7,6 +6,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner';
 import axios from 'axios';
+import { handleSessionExpiration } from '../../lib/sessionUtils'; // Import the utility function
 
 const withAuth = (WrappedComponent) => {
   const Wrapper = (props) => {
@@ -14,24 +14,6 @@ const withAuth = (WrappedComponent) => {
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const router = useRouter();
-
-    // Function to handle session expiration
-    const handleSessionExpiration = async () => {
-      const email = Cookies.get('email');
-      const sessionId = Cookies.get('sessionId');
-      Cookies.remove('email');
-      Cookies.remove('sessionId');
-      
-      toast.error('Session Expired! Please Login Again.');
-      
-      await axios.post('/api/log-and-alert', {
-        message: 'MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\nPlease Login Again.',
-        sessionId,
-        details: { email }
-      });
-
-      router.push('/login?sessionExpired=true');
-    };
 
     // Function to handle unauthorized access
     const handleUnauthorizedAccess = async () => {
@@ -79,7 +61,7 @@ const withAuth = (WrappedComponent) => {
           const diff = now - lastActivityDate;
 
           if (diff > 10 * 60 * 1000) { // 10 minutes
-            handleSessionExpiration();
+            handleSessionExpiration(router);
           }
         }
       }, 60000); // Check every minute

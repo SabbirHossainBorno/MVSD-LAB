@@ -2,6 +2,7 @@
 import { NextResponse } from 'next/server';
 import logger from '../../../lib/logger'; // Import the logger
 import sendTelegramAlert from '../../../lib/telegramAlert'; // Import the Telegram alert function
+import { handleSessionExpiration } from '../../../lib/sessionUtils'; // Import the utility function
 
 const formatAlertMessage = (title, email, ipAddress, additionalInfo = '') => {
   return `MVSD LAB AUTH-CHECKER\n----------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}${additionalInfo}`;
@@ -44,18 +45,7 @@ export async function GET(request) {
     const diff = now - lastActivityDate;
 
     if (diff > 10 * 60 * 1000) { // 10 minutes
-      const alertMessage = formatAlertMessage('Session Expired', email, ip);
-      await sendTelegramAlert(alertMessage);
-
-      logger.info('Session expired', {
-        meta: {
-          eid,
-          sid: sessionId,
-          taskName: 'Auth Check',
-          details: `Session expired for ${email} from IP ${ip} with User-Agent ${userAgent}`
-        }
-      });
-
+      await handleSessionExpiration(router);
       return NextResponse.json({ authenticated: false, message: 'Session expired' });
     }
 

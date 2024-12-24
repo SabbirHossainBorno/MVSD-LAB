@@ -20,9 +20,25 @@ const validateSession = (request) => {
 };
 
 export async function GET(request) {
-  try {
-    const { sessionId, eid, ip, userAgent, email } = validateSession(request);
+  const { sessionId, eid, ip, userAgent, email } = validateSession(request);
 
+  if (!email || !sessionId) {
+    const alertMessage = formatAlertMessage('Unauthorized Access Attempt!', email, ip);
+    await sendTelegramAlert(alertMessage);
+
+    logger.warn('Unauthorized access attempt', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch Dashboard Data',
+        details: `Unauthorized access attempt from IP ${ip} with User-Agent ${userAgent}`
+      }
+    });
+
+    return NextResponse.json({ authenticated: false });
+  }
+
+  try {
     // Log and alert fetching dashboard data
     const fetchAttemptMessage = formatAlertMessage('Fetching Dashboard Data', email, ip);
     await sendTelegramAlert(fetchAttemptMessage);
@@ -94,10 +110,26 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  try {
-    const { sessionId, eid, ip, userAgent, email } = validateSession(request);
-    const { userId, newStatus } = await request.json();
+  const { sessionId, eid, ip, userAgent, email } = validateSession(request);
+  const { userId, newStatus } = await request.json();
 
+  if (!email || !sessionId) {
+    const alertMessage = formatAlertMessage('Unauthorized Access Attempt!', email, ip);
+    await sendTelegramAlert(alertMessage);
+
+    logger.warn('Unauthorized access attempt', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Update User Status',
+        details: `Unauthorized access attempt from IP ${ip} with User-Agent ${userAgent}`
+      }
+    });
+
+    return NextResponse.json({ authenticated: false });
+  }
+
+  try {
     // Log and alert updating user status
     const updateAttemptMessage = formatAlertMessage('Updating User Status', email, ip, `\nUSER ID: ${userId} to ${newStatus}`);
     await sendTelegramAlert(updateAttemptMessage);
