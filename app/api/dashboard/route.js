@@ -23,9 +23,6 @@ export async function GET(request) {
   try {
     const { sessionId, eid, ip, userAgent, email } = validateSession(request);
 
-    const loginAttemptMessage = formatAlertMessage('Fetching Dashboard Data', email, ip, userAgent);
-    await sendTelegramAlert(loginAttemptMessage);
-
     logger.info('Fetching dashboard data', {
       meta: {
         eid,

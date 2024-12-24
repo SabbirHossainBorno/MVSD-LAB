@@ -1,41 +1,74 @@
 // app/api/check-auth/route.js
 import { NextResponse } from 'next/server';
-import axios from 'axios';
+import logger from '../../../lib/logger'; // Import the logger
+import sendTelegramAlert from '../../../lib/telegramAlert'; // Import the Telegram alert function
 
-const logAndAlert = async (message, sessionId, details = {}) => {
-  try {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    await axios.post(`${siteUrl}/api/log-and-alert`, { message, sessionId, details });
-  } catch (error) {
-    console.error('Failed to log and send alert:', error);
-  }
+const formatAlertMessage = (title, email, ipAddress, additionalInfo = '') => {
+  return `MVSD LAB AUTH-CHECKER\n------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}${additionalInfo}`;
+};
+
+const validateSession = (request) => {
+  const sessionId = request.cookies.get('sessionId')?.value;
+  const eid = request.cookies.get('eid')?.value || ''; // Retrieve EID from cookies
+  const ip = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr');
+  const userAgent = request.headers.get('user-agent');
+  const emailCookie = request.cookies.get('email');
+  const email = emailCookie ? emailCookie.value : null;
+
+  return { sessionId, eid, ip, userAgent, email };
 };
 
 export async function GET(request) {
-  const email = request.cookies.get('email');
-  const sessionId = request.cookies.get('sessionId');
-  const lastActivity = request.cookies.get('lastActivity');
-  const userIp = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr') || 'Unknown IP';
-
-  if (!email || !sessionId) {
-    const alertMessage = `MVSD LAB DASHBOARD\n------------------------------------\nUnauthorized Access Attempt!\nIP : ${userIp}`;
-    await logAndAlert(alertMessage, sessionId, { email, userIp });
-    return NextResponse.json({ authenticated: false });
-  }
-
   try {
+    const { sessionId, eid, ip, userAgent, email } = validateSession(request);
+
+    if (!email || !sessionId) {
+      const alertMessage = formatAlertMessage('Unauthorized Access Attempt!', email, ip);
+      await sendTelegramAlert(alertMessage);
+
+      logger.warn('Unauthorized access attempt', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Auth Check',
+          details: `Unauthorized access attempt from IP ${ip} with User-Agent ${userAgent}`
+        }
+      });
+
+      return NextResponse.json({ authenticated: false });
+    }
+
     const now = new Date();
+    const lastActivity = request.cookies.get('lastActivity')?.value;
     const lastActivityDate = new Date(lastActivity);
     const diff = now - lastActivityDate;
 
-    const alertMessage = `MVSD LAB DASHBOARD\n------------------------------------\nAuthentication Check Successful\nIP : ${userIp}`;
-    await logAndAlert(alertMessage, sessionId, { email, lastActivity, userIp });
+    const alertMessage = formatAlertMessage('Authentication Check Successful', email, ip);
+    await sendTelegramAlert(alertMessage);
+
+    logger.info('Authentication check successful', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Auth Check',
+        details: `Authentication check successful for ${email} from IP ${ip} with User-Agent ${userAgent}`
+      }
+    });
 
     return NextResponse.json({ authenticated: true });
   } catch (error) {
-    const alertMessage = `Error during authentication check\nIP: ${userIp}`;
-    await logAndAlert(alertMessage, sessionId, { error: error.message, userIp });
-    console.error('Error during authentication check:', error);
+    const alertMessage = formatAlertMessage('Error during authentication check', email, ip, `\nError: ${error.message}`);
+    await sendTelegramAlert(alertMessage);
+
+    logger.error('Error during authentication check', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Auth Check',
+        details: `Error during authentication check for ${email}: ${error.message} from IP ${ip} with User-Agent ${userAgent}`
+      }
+    });
+
     return NextResponse.json({ authenticated: false, message: 'Internal server error' });
   }
 }
