@@ -1,42 +1,39 @@
 // app/api/dashboard/route.js
 import { NextResponse } from 'next/server';
-import { Pool } from 'pg';
-import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
+import { query } from '../../../lib/db';
+import logger from '../../../lib/logger'; // Import the logger
+import sendTelegramAlert from '../../../lib/telegramAlert'; // Import the Telegram alert function
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-
-const logAndAlert = async (message, sessionId, details = {}) => {
-  try {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    console.log('Sending alert:', message); // Debugging line
-    await axios.post(`${siteUrl}/api/log-and-alert`, { message, sessionId, details });
-  } catch (error) {
-    console.error('Failed to log and send alert:', error);
-  }
+const formatAlertMessage = (title, email, ipAddress, userAgent, additionalInfo = '') => {
+  return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}\nDevice INFO : ${userAgent}${additionalInfo}`;
 };
 
 const validateSession = (request) => {
   const sessionId = request.cookies.get('sessionId');
+  const eid = request.cookies.get('eid');
   const ip = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr');
   const userAgent = request.headers.get('user-agent');
   const emailCookie = request.cookies.get('email');
   const email = emailCookie ? emailCookie.value : null;
 
-  return { sessionId, ip, userAgent, email };
+  return { sessionId, eid, ip, userAgent, email };
 };
 
-
-
 export async function GET(request) {
-  let client;
   try {
-    const { sessionId, ip, userAgent, email } = validateSession(request);
-    client = await pool.connect();
+    const { sessionId, eid, ip, userAgent, email } = validateSession(request);
 
-    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nFetching Dashboard Data.\nEmail : ${email}`, sessionId, { ip, userAgent });
+    const loginAttemptMessage = formatAlertMessage('Fetching Dashboard Data', email, ip, userAgent);
+    await sendTelegramAlert(loginAttemptMessage);
+
+    logger.info('Fetching dashboard data', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch Dashboard Data',
+        details: `Fetching dashboard data for ${email} from IP ${ip} with User-Agent ${userAgent}`
+      }
+    });
 
     const subscriberCountQuery = 'SELECT COUNT(*) FROM subscriber';
     const userDetailsQuery = 'SELECT * FROM users';
@@ -47,16 +44,27 @@ export async function GET(request) {
     const recentUsersQuery = 'SELECT * FROM users WHERE status = \'approved\' ORDER BY id DESC LIMIT 5';
 
     const [subscriberCount, userDetails, professorDetails, messageDetails, recentSubscribers, recentUsers, recentProfessors] = await Promise.all([
-      client.query(subscriberCountQuery),
-      client.query(userDetailsQuery),
-      client.query(professorDetailsQuery),
-      client.query(messageDetailsQuery),
-      client.query(recentSubscribersQuery),
-      client.query(recentUsersQuery),
-      client.query(recentProfessorsQuery),
+      query(subscriberCountQuery),
+      query(userDetailsQuery),
+      query(professorDetailsQuery),
+      query(messageDetailsQuery),
+      query(recentSubscribersQuery),
+      query(recentUsersQuery),
+      query(recentProfessorsQuery),
     ]);
 
-    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nDashboard Data Fetched Successfully.\nEmail : ${email}`, sessionId, { ip, userAgent });
+    const successMessage = formatAlertMessage('Dashboard Data Fetched Successfully', email, ip, userAgent);
+    await sendTelegramAlert(successMessage);
+
+    logger.info('Dashboard data fetched successfully', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch Dashboard Data',
+        details: `Dashboard data fetched successfully for ${email} from IP ${ip} with User-Agent ${userAgent}`
+      }
+    });
+
     return NextResponse.json({
       subscribers: subscriberCount.rows[0].count,
       users: userDetails.rows,
@@ -67,34 +75,71 @@ export async function GET(request) {
       recentProfessors: recentProfessors.rows,
     });
   } catch (error) {
-    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nError Fetching Dashboard Data - ${error.message}`, sessionId, { ip, userAgent });
+    const errorMessage = formatAlertMessage('Error Fetching Dashboard Data', email, ip, userAgent, `\nError: ${error.message}`);
+    await sendTelegramAlert(errorMessage);
+
+    logger.error('Error fetching dashboard data', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch Dashboard Data',
+        details: `Error fetching dashboard data for ${email}: ${error.message} from IP ${ip} with User-Agent ${userAgent}`
+      }
+    });
+
     return NextResponse.json({ message: 'Failed To Fetch Data' }, { status: 500 });
-  } finally {
-    if (client) client.release();
   }
 }
 
 export async function POST(request) {
-  let client;
   try {
-    const { sessionId, ip, userAgent, email } = validateSession(request);
+    const { sessionId, eid, ip, userAgent, email } = validateSession(request);
     const { userId, newStatus } = await request.json();
 
-    client = await pool.connect();
-    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nUpdating User Status.\nUSER ID : ${userId} To ${newStatus}\nBy Email : ${email}`, sessionId, { ip, userAgent });
+    const updateAttemptMessage = formatAlertMessage('Updating User Status', email, ip, userAgent, `\nUSER ID: ${userId} to ${newStatus}`);
+    await sendTelegramAlert(updateAttemptMessage);
+
+    logger.info('Updating user status', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Update User Status',
+        details: `Updating status for user ${userId} to ${newStatus} by ${email} from IP ${ip} with User-Agent ${userAgent}`
+      }
+    });
 
     const updateStatusQuery = 'UPDATE users SET status = $1 WHERE id = $2 RETURNING *';
-    const updatedUser = await client.query(updateStatusQuery, [newStatus, userId]);
+    const updatedUser = await query(updateStatusQuery, [newStatus, userId]);
 
-    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nUser Status Updated Successfully.\nUSER ID : ${userId}\nBy Email : ${email}`, sessionId);
+    const successMessage = formatAlertMessage('User Status Updated Successfully', email, ip, userAgent, `\nUSER ID: ${userId}`);
+    await sendTelegramAlert(successMessage);
+
+    logger.info('User status updated successfully', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Update User Status',
+        details: `User status updated successfully for ${userId} by ${email} from IP ${ip} with User-Agent ${userAgent}`
+      }
+    });
+
     return NextResponse.json({
       message: 'User Status Updated Successfully',
       user: updatedUser.rows[0],
     });
   } catch (error) {
-    logAndAlert(`MVSD LAB DASHBOARD\n------------------------------------\nError Updating User Status - ${error.message}`, sessionId);
+    const errorMessage = formatAlertMessage('Error Updating User Status', email, ip, userAgent, `\nError: ${error.message}`);
+    await sendTelegramAlert(errorMessage);
+
+    logger.error('Error updating user status', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Update User Status',
+        details: `Error updating user status for ${userId} by ${email}: ${error.message} from IP ${ip} with User-Agent ${userAgent}`
+      }
+    });
+
     return NextResponse.json({ message: 'Failed to update user status' }, { status: 500 });
-  } finally {
-    if (client) client.release();
   }
 }
