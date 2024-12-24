@@ -1,32 +1,13 @@
-import path from 'path';
-import fs from 'fs';
-import axios from 'axios';
+//app/api/logout/route.js
+
 import { NextResponse } from 'next/server';
+import logger from '../../../lib/logger';
+import sendTelegramAlert from '../../../lib/telegramAlert';
 
-const logFilePath = path.join('/home/mvsd-lab/Log', 'mvsd_lab.log');
-const TELEGRAM_API_KEY = process.env.TELEGRAM_API_KEY;
-const TELEGRAM_GROUP_ID = process.env.TELEGRAM_GROUP_ID;
-
-// Log function
-const log = (message, sessionId) => {
-  const logMessage = `${new Date().toISOString()} [Session ID: ${sessionId}] ${message}\n`;
-  fs.appendFileSync(logFilePath, logMessage);
+const formatAlertMessage = (title, email, ipAddress, additionalInfo = '') => {
+  return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}${additionalInfo}`;
 };
 
-// Send Telegram alert function
-const sendTelegramAlert = async (message) => {
-  const url = `https://api.telegram.org/bot${TELEGRAM_API_KEY}/sendMessage`;
-  try {
-    await axios.post(url, {
-      chat_id: TELEGRAM_GROUP_ID,
-      text: message,
-    });
-  } catch (error) {
-    console.error('Failed to send Telegram alert:', error);
-  }
-};
-
-// Export POST method for handling logout
 export async function POST(req) {
   try {
     // Retrieve cookies from the request
@@ -35,10 +16,18 @@ export async function POST(req) {
     const ipAddress = req.headers.get('x-forwarded-for') || req.connection.remoteAddress;
 
     // Log the logout event
-    log(`User ${email} logged Out Successfully.`, sessionId);
+    logger.info('User logged out successfully', {
+      meta: {
+        eid: '',
+        sid: sessionId,
+        taskName: 'Logout',
+        details: `User ${email} logged out successfully from IP ${ipAddress}`
+      }
+    });
 
     // Send the Telegram alert
-    await sendTelegramAlert(`MVSD LAB DASHBOARD\n-------------------------------------\nLogged Out Successfully!\nEmail : ${email}\nIP : ${ipAddress}`);
+    const logoutMessage = formatAlertMessage('Logged Out Successfully!', email, ipAddress);
+    await sendTelegramAlert(logoutMessage);
 
     // Clear cookies
     const response = NextResponse.json({ message: 'Logout Successful' });
@@ -48,7 +37,14 @@ export async function POST(req) {
 
     return response;
   } catch (error) {
-    console.error('Logout Failed:', error);
+    logger.error('Logout failed', {
+      meta: {
+        eid: '',
+        sid: '',
+        taskName: 'Logout',
+        details: `Logout failed for user ${email}: ${error.message}`
+      }
+    });
     return NextResponse.json({ message: 'Logout Failed' }, { status: 500 });
   }
 }
