@@ -1,16 +1,12 @@
 // app/components/withAuth.js
+
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner';
-import logger from '../../lib/logger'; // Import the logger
-import sendTelegramAlert from '../../lib/telegramAlert'; // Import the Telegram alert function
-
-const formatAlertMessage = (title, email, ipAddress) => {
-  return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}`;
-};
+import axios from 'axios';
 
 const withAuth = (WrappedComponent) => {
   const Wrapper = (props) => {
@@ -19,108 +15,97 @@ const withAuth = (WrappedComponent) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const router = useRouter();
 
+    // Function to handle session expiration
     const handleSessionExpiration = async () => {
       const email = Cookies.get('email');
       const sessionId = Cookies.get('sessionId');
-      const ipAddress = Cookies.get('ipAddress');
       Cookies.remove('email');
       Cookies.remove('sessionId');
+      
       toast.error('Session Expired! Please Login Again.');
-
-      const alertMessage = formatAlertMessage('Session Expired! Please Login Again.', email, ipAddress);
-      await sendTelegramAlert(alertMessage);
-
-      logger.warn('Session expired', {
-        meta: {
-          eid: '',
-          sid: sessionId,
-          taskName: 'Session Expiration',
-          details: `Session expired for ${email} from IP ${ipAddress}`
-        }
+      
+      await axios.post('/api/log-and-alert', {
+        message: 'MVSD LAB DASHBOARD\n------------------------------------\nSession Expired!\nPlease Login Again.',
+        sessionId,
+        details: { email }
       });
 
       router.push('/login?sessionExpired=true');
     };
 
+    // Function to handle unauthorized access
     const handleUnauthorizedAccess = async () => {
-      const email = Cookies.get('email');
-      const sessionId = Cookies.get('sessionId');
-      const ipAddress = Cookies.get('ipAddress');
       toast.error('Authentication Required! Need To Login.');
-
-      const alertMessage = formatAlertMessage('Authentication Required! Need To Login.', email, ipAddress);
-      await sendTelegramAlert(alertMessage);
-
-      logger.warn('Unauthorized access', {
-        meta: {
-          eid: '',
-          sid: sessionId,
-          taskName: 'Unauthorized Access',
-          details: `Unauthorized access attempt from IP ${ipAddress}`
-        }
-      });
-
       router.push('/login?authRequired=true');
     };
 
+    // Check authentication status from API
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/check-auth');
+        if (!response.ok) throw new Error('Failed to fetch auth status');
+        
+        const result = await response.json();
+        if (result.authenticated) {
+          setIsAuthenticated(true);
+        } else {
+          await handleUnauthorizedAccess();
+        }
+      } catch (error) {
+        console.error('Authentication Check Failed:', error);
+        toast.error('Failed to check authentication');
+        await handleUnauthorizedAccess();
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Track user activity and manage session timeout
     useEffect(() => {
       setIsClient(true);
 
-      const checkAuth = async () => {
-        try {
-          const response = await fetch('/api/check-auth');
-          if (!response.ok) throw new Error('Failed to fetch auth status');
-          const result = await response.json();
-          if (result.authenticated) {
-            setIsAuthenticated(true);
-          } else {
-            await handleUnauthorizedAccess();
-          }
-        } catch (error) {
-          console.error('Authentication Check Failed:', error);
-          toast.error('Failed to check authentication');
-          await handleUnauthorizedAccess();
-        } finally {
-          setLoading(false);
-        }
+      const handleActivity = () => {
+        Cookies.set('lastActivity', new Date().toISOString());
       };
 
-      if (isClient) {
-        checkAuth();
+      window.addEventListener('mousemove', handleActivity);
+      window.addEventListener('keydown', handleActivity);
 
-        const handleActivity = () => {
-          Cookies.set('lastActivity', new Date().toISOString());
-        };
+      const interval = setInterval(() => {
+        const lastActivity = Cookies.get('lastActivity');
+        if (lastActivity) {
+          const now = new Date();
+          const lastActivityDate = new Date(lastActivity);
+          const diff = now - lastActivityDate;
 
-        window.addEventListener('mousemove', handleActivity);
-        window.addEventListener('keydown', handleActivity);
-
-        const interval = setInterval(async () => {
-          const lastActivity = Cookies.get('lastActivity');
-          if (lastActivity) {
-            const now = new Date();
-            const lastActivityDate = new Date(lastActivity);
-            const diff = now - lastActivityDate;
-            if (diff > 10 * 60 * 1000) { // 10 minutes
-              await handleSessionExpiration();
-            }
+          if (diff > 10 * 60 * 1000) { // 10 minutes
+            handleSessionExpiration();
           }
-        }, 60000); // Check every minute
+        }
+      }, 60000); // Check every minute
 
-        return () => {
-          clearInterval(interval);
-          window.removeEventListener('mousemove', handleActivity);
-          window.removeEventListener('keydown', handleActivity);
-        };
-      }
+      return () => {
+        clearInterval(interval);
+        window.removeEventListener('mousemove', handleActivity);
+        window.removeEventListener('keydown', handleActivity);
+      };
     }, [isClient, router]);
 
+    // Check authentication status when component mounts
     useEffect(() => {
-      if (router.query && router.query.sessionExpired) {
+      if (isClient) {
+        checkAuth();
+      }
+    }, [isClient]);
+
+    // Display session expired message if URL query indicates so
+    useEffect(() => {
+      if (router.query?.sessionExpired) {
         toast.error('Session Expired! Please Login Again.');
       }
     }, [router.query]);
 
+    // Loading spinner until authentication check is complete
     if (loading) return <LoadingSpinner />;
 
     return <WrappedComponent {...props} isAuthenticated={isAuthenticated} />;
