@@ -166,17 +166,11 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
       </div>
 
       <div className="relative flex items-center space-x-4 md:space-x-6">
-      <div className="text-white text-lg hidden md:flex items-center justify-center">
-  <div className="relative flex items-center space-x-4 bg-gradient-to-r from-pink-500 via-purple-600 to-blue-500 p-3 rounded-lg shadow-xl hover:scale-105 transform transition-all duration-300 ease-in-out">
-    {/* Animated Background */}
-    <div className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-600 to-blue-500 animate-pulse rounded-lg blur-md opacity-50"></div>
-
-    {/* Main Content */}
-    <span className="font-mono text-3xl text-white z-10 animate-fadeIn">
-      {currentTime}
-    </span>
-  </div>
-</div>
+        <div className="text-white text-lg hidden md:flex items-center">
+          <div className="flex items-center space-x-2 bg-gray-800 p-2 rounded shadow-md">
+            <span className="font-mono text-xl">{currentTime}</span>
+          </div>
+        </div>
 
         <div className="relative flex items-center space-x-4 md:space-x-6">
           {/* Notification Button */}
