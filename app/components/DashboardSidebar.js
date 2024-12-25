@@ -19,27 +19,16 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
   }, [handleClickOutside]);
 
   return (
-    <aside className={`fixed top-0 left-0 w-64 bg-gray-900 text-white h-full p-6 transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:w-64 md:flex md:flex-col z-50 shadow-lg`}>
-      {/* Close Button */}
-      <button
-        onClick={toggleDashboardSidebar}
-        className="text-white md:hidden absolute top-4 right-4 z-60 bg-indigo-800 rounded-full p-2 transition-transform transform hover:scale-105"
-        aria-label="Close DashboardSidebar"
-      >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
-
-      {/* Logo and Title */}
-      <div className="flex flex-col items-center mb-2">
+    <aside className={`fixed top-0 left-0 w-64 bg-gray-900 text-white h-full p-6 transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:w-64 md:flex md:flex-col z-50 shadow-lg overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent`}>
+      {/* Logo and Title - Fixed */}
+      <div className="flex flex-col items-center mb-2 sticky top-0 bg-gray-900 p-6 z-40">
         <Image src="/images/logo.png" alt="Logo" width={80} height={80} className="object-contain mb-2"/>
         <h1 className="text-2xl font-semibold tracking-wider">MVSD LAB</h1>
         <hr className="w-full border-t-4 border-indigo-600 mt-2 rounded"/>
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-1 mt-4 space-y-2">
+      <nav className="flex-1 mt-4 space-y-2 overflow-y-auto pr-2">
         <Link href="/dashboard">
           <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
             <Image src="/icons/dashboard.png" alt="Dashboard" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
@@ -127,15 +116,6 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
             <span className="text-lg font-medium">Message</span>
           </div>
         </Link>
-        
-        {/* Message */}
-        <Link href="/dashboard/message">
-          <div className="block p-3 mt-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
-            <Image src="/icons/message.png" alt="Message" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-lg font-medium">Message</span>
-          </div>
-        </Link>
-
       </nav>
     </aside>
   );

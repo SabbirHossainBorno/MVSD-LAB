@@ -1,4 +1,3 @@
-// tailwind.config.js
 module.exports = {
   content: [
     './app/**/*.{js,ts,jsx,tsx}',
@@ -7,15 +6,43 @@ module.exports = {
   theme: {
     extend: {
       animation: {
-        fadeIn: 'fadeIn 1s ease-out',
+        gradient: 'gradient 3s ease infinite',
+        textGlow: 'textGlow 2s ease-in-out infinite', // Add textGlow animation
       },
       keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+        gradient: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
         },
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // Adding plugin to add custom scrollbar
+    function ({ addComponents }) {
+      addComponents({
+        '.scrollbar-thin': {
+          'scrollbar-width': 'thin',
+        },
+        '.scrollbar-thumb': {
+          'background-color': 'rgba(255, 255, 255, 0.4)', // light color for thumb
+          'border-radius': '10px',
+        },
+        '.scrollbar-track': {
+          'background': 'transparent',
+        },
+        /* Custom scrollbar styling for webkit browsers (Chrome, Safari) */
+        '::-webkit-scrollbar': {
+          width: '4px', // slim scrollbar width
+        },
+        '::-webkit-scrollbar-thumb': {
+          backgroundColor: 'rgba(255, 255, 255, 0.4)',
+          borderRadius: '10px',
+        },
+        '::-webkit-scrollbar-track': {
+          background: 'transparent',
+        },
+      });
+    },
+  ],
 };
