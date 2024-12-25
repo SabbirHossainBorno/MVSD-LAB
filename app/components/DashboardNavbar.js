@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Image from 'next/image';
 import { FaSun, FaMoon } from 'react-icons/fa'; // Import icons
+import { FiBell } from 'react-icons/fi';
 
 export default function DashboardNavbar({ toggleDashboardSidebar }) {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -189,85 +190,83 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
-            className={`${theme === 'dark' ? 'text-white' : 'text-black'} hover:bg-gray-800 p-2 rounded-full transition-colors flex items-center`}
+            className={`${theme === 'dark' ? 'text-white' : 'text-black'} hover:bg-gray-800 p-1 rounded-full transition-colors flex items-center`}
           >
             {theme === 'dark' ? <FaSun size={20} /> : <FaMoon size={20} />}
           </button>
 
+
+
+
           <div className="relative flex items-center space-x-4 md:space-x-6">
-            {/* Notification Button */}
-            <button
-              onClick={() => setShowNotifications((prev) => !prev)}
-              className={`relative ${theme === 'dark' ? 'text-white' : 'text-black'} hover:bg-gray-800 p-2 rounded-full transition-colors flex items-center`}
-            >
-              <Image
-                src="/images/notification.png"
-                alt="Notifications"
-                width={24}
-                height={24}
-                className="object-contain"
-              />
-              {notifications.some((notification) => notification.status === 'Unread') && (
-                <span className="absolute top-2 right-2 transform translate-x-1/2 -translate-y-1/2 flex h-3 w-3">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75 animate-ping"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
-                </span>
-              )}
-            </button>
+  {/* Notification Button */}
+  <button
+    onClick={() => setShowNotifications((prev) => !prev)}
+    className={`relative ${theme === 'dark' ? 'text-white' : 'text-black'} hover:bg-gray-800 p-1 rounded-full transition-colors flex items-center`}
+  >
+    <FiBell size={20} className="md:hidden" /> {/* Smaller icon for mobile */}
+    <FiBell size={20} className="hidden md:block" /> {/* Larger icon for desktop */}
+    {notifications.some((notification) => notification.status === 'Unread') && (
+      <span className="absolute top-2 right-2 transform translate-x-1/2 -translate-y-1/2 flex h-2 w-2">
+        <span className="absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75 animate-ping"></span>
+        <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
+      </span>
+    )}
+  </button>
 
-            {/* Notification Tray */}
-            {showNotifications && (
-              <div
-              ref={notificationRef}
-              className={`absolute top-full right-0 mt-2 w-11/12 max-w-sm ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'} shadow-lg rounded-lg border ${theme === 'dark' ? 'border-gray-700' : 'border-gray-300'} z-30 sm:w-80`}
+  {/* Notification Tray */}
+  {showNotifications && (
+    <div
+      ref={notificationRef}
+      className={`absolute top-full right-0 mt-2 w-full max-w-sm ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'} shadow-lg rounded-lg border ${theme === 'dark' ? 'border-gray-700' : 'border-gray-300'} z-30 sm:w-80`}
+    >
+      {/* Header */}
+      <div className={`p-4 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'} border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-300'} flex justify-between items-center`}>
+        <h4 className={`text-lg ${theme === 'dark' ? 'text-white' : 'text-black'} font-semibold`}>Notifications</h4>
+        <button
+          onClick={markAllAsRead}
+          className={`text-sm ${theme === 'dark' ? 'text-blue-500' : 'text-blue-700'} hover:text-blue-400 transition`}
+        >
+          Mark all as read
+        </button>
+      </div>
+
+      {/* Notification List */}
+      <ul className={`max-h-60 overflow-y-auto divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
+        {notifications.length > 0 ? (
+          notifications.map((notification) => (
+            <li
+              key={notification.id}
+              className={`p-4 cursor-pointer transition-all ${theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-300'} ${notification.status === 'Read' ? (theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200') : (theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100')}`}
+              onClick={() => handleNotificationClick(notification.id)}
             >
-              {/* Header */}
-              <div className={`p-4 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'} border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-300'} flex justify-between items-center`}>
-                <h4 className={`text-lg ${theme === 'dark' ? 'text-white' : 'text-black'} font-semibold`}>Notifications</h4>
-                <button
-                  onClick={markAllAsRead}
-                  className={`text-sm ${theme === 'dark' ? 'text-blue-500' : 'text-blue-700'} hover:text-blue-400 transition`}
+              <div className="flex justify-between items-center">
+                <span
+                  className={`text-sm font-medium ${notification.status === 'Unread' ? (theme === 'dark' ? 'text-white' : 'text-black') : (theme === 'dark' ? 'text-gray-400' : 'text-gray-600')}`}
                 >
-                  Mark all as read
-                </button>
-              </div>
-
-              {/* Notification List */}
-              <ul className={`max-h-60 overflow-y-auto divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
-                {notifications.length > 0 ? (
-                  notifications.map((notification) => (
-                    <li
-                      key={notification.id}
-                      className={`p-4 cursor-pointer transition-all ${theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-300'} ${notification.status === 'Read' ? (theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200') : (theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100')}`}
-                      onClick={() => handleNotificationClick(notification.id)}
-                    >
-                      <div className="flex justify-between items-center">
-                        <span
-                          className={`text-sm font-medium ${notification.status === 'Unread' ? (theme === 'dark' ? 'text-white' : 'text-black') : (theme === 'dark' ? 'text-gray-400' : 'text-gray-600')}`}
-                        >
-                          {notification.title}
-                        </span>
-                        {notification.status === 'Unread' && (
-                          <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                        )}
-                      </div>
-                      <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
-                        {formatRelativeTime(notification.created_at)}
-                      </p>
-                    </li>
-                  ))
-                ) : (
-                  <li className={`p-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-700'} text-sm text-center`}>You have no notifications</li>
+                  {notification.title}
+                </span>
+                {notification.status === 'Unread' && (
+                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
                 )}
-              </ul>
-
-              {/* Footer */}
-              <div className={`p-3 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'} text-center border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-300'}`}>
-                <button className={`text-sm ${theme === 'dark' ? 'text-blue-500' : 'text-blue-700'} hover:text-blue-400`}>View All</button>
               </div>
-            </div>
-          )}
-        </div>
+              <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} mt-1`}>
+                {formatRelativeTime(notification.created_at)}
+              </p>
+            </li>
+          ))
+        ) : (
+          <li className={`p-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-700'} text-sm text-center`}>You have no notifications</li>
+        )}
+      </ul>
+
+      {/* Footer */}
+      <div className={`p-3 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'} text-center border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-300'}`}>
+        <button className={`text-sm ${theme === 'dark' ? 'text-blue-500' : 'text-blue-700'} hover:text-blue-400`}>View All</button>
+      </div>
+    </div>
+  )}
+</div>
 
         <button
           onClick={handleLogout}
@@ -298,7 +297,7 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
           </button>
 
           {showProfileMenu && (
-            <div className={`absolute top-full right-0 mt-2 w-48 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'} shadow-lg rounded-lg border ${theme === 'dark' ? 'border-gray-700' : 'border-gray-300'} overflow-hidden z-20`}>
+            <div className={`absolute top-full right-0 mt-2 w-48 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'} shadow-lg rounded border ${theme === 'dark' ? 'border-gray-700' : 'border-gray-300'} overflow-hidden z-20`}>
               <ul>
                 <li className={`p-3 border-b ${theme === 'dark' ? 'border-gray-700' : 'border-gray-300'} hover:bg-gray-700`}>
                   <Link href="/profile" className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Profile</Link>
