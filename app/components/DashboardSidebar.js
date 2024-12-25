@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useCallback, useState } from 'react';
+import Image from 'next/image';
 
 export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -32,7 +33,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
 
       {/* Logo and Title */}
       <div className="flex flex-col items-center mb-2">
-        <img src="/images/logo.png" alt="Logo" className="w-20 h-20 object-contain mb-2"/>
+        <Image src="/images/logo.png" alt="Logo" width={80} height={80} className="object-contain mb-2"/>
         <h1 className="text-2xl font-semibold tracking-wider">MVSD LAB</h1>
         <hr className="w-full border-t-4 border-indigo-600 mt-2 rounded"/>
       </div>
@@ -41,37 +42,37 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
       <nav className="flex-1 mt-4 space-y-2">
         <Link href="/dashboard">
           <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
-            <img src="/icons/dashboard.png" alt="Dashboard" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
+            <Image src="/icons/dashboard.png" alt="Dashboard" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Dashboard</span>
           </div>
         </Link>
         <Link href="/home">
           <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
-            <img src="/icons/home.png" alt="Home" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
+            <Image src="/icons/home.png" alt="Home" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Home</span>
           </div>
         </Link>
         <Link href="/dashboard/professor_add">
           <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
-            <img src="/icons/add_professor.png" alt="Add Professor" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
+            <Image src="/icons/add_professor.png" alt="Add Professor" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Add Professor</span>
           </div>
         </Link>
         <Link href="/dashboard/users_list">
           <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
-            <img src="/icons/user_list.png" alt="Users List" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
+            <Image src="/icons/user_list.png" alt="Users List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Users List</span>
           </div>
         </Link>
         <Link href="/dashboard/subscribers_list">
           <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
-            <img src="/icons/subscriber_list.png" alt="Subscriber List" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
+            <Image src="/icons/subscriber_list.png" alt="Subscriber List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Subscriber List</span>
           </div>
         </Link>
         <Link href="/dashboard/professor_list">
           <div className="block p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
-            <img src="/icons/professor_list.png" alt="Professors List" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
+            <Image src="/icons/professor_list.png" alt="Professors List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Professor List</span>
           </div>
         </Link>
@@ -82,7 +83,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
             onClick={() => setShowDropdown(!showDropdown)}
             className="block w-full p-3 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer"
           >
-            <img src="/icons/add_member.png" alt="Add Member" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
+            <Image src="/icons/add_member.png" alt="Add Member" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Add Member</span>
             <svg className={`w-4 h-4 ml-auto transition-transform transform ${showDropdown ? 'rotate-180' : 'rotate-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
@@ -114,7 +115,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         {/* System Monitor Option */}
         <Link href="/dashboard/system_monitor">
           <div className="block p-3 mt-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
-            <img src="/icons/SystemMonitor.png" alt="System Monitor" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
+            <Image src="/icons/SystemMonitor.png" alt="System Monitor" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">System Monitor</span>
           </div>
         </Link>
@@ -122,11 +123,18 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         {/* Message */}
         <Link href="/dashboard/message">
           <div className="block p-3 mt-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
-            <img src="/icons/message.png" alt="Message" className="w-6 h-6 text-gray-300 group-hover:text-white"/>
+            <Image src="/icons/message.png" alt="Message" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
             <span className="text-lg font-medium">Message</span>
           </div>
         </Link>
-
+        
+        {/* Message */}
+        <Link href="/dashboard/message">
+          <div className="block p-3 mt-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-3 cursor-pointer">
+            <Image src="/icons/message.png" alt="Message" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
+            <span className="text-lg font-medium">Message</span>
+          </div>
+        </Link>
 
       </nav>
     </aside>

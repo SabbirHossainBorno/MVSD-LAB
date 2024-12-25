@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Image from 'next/image';
 
 
 export default function DashboardNavbar({ toggleDashboardSidebar }) {
@@ -161,16 +162,29 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
         </svg>
       </button>
 
-      <div className="flex items-center justify-center flex-1 text-[#4A90E2] text-xl lg:text-2xl font-bold tracking-tight md:text-2xl">
-        <span className="uppercase">Dashboard</span>
+      <div className="flex items-center justify-center flex-1 text-transparent text-3xl lg:text-4xl font-bold tracking-tight md:text-4xl">
+        <span className="uppercase bg-clip-text bg-gradient-to-r from-pink-500 via-purple-600 to-blue-500 animate-textGlow">
+          Dashboard
+        </span>
       </div>
 
       <div className="relative flex items-center space-x-4 md:space-x-6">
-        <div className="text-white text-lg hidden md:flex items-center">
-          <div className="flex items-center space-x-2 bg-gray-800 p-2 rounded shadow-md">
-            <span className="font-mono text-xl">{currentTime}</span>
+      <div className="relative flex items-center justify-center h-12">
+        {/* Animated Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-gradient rounded blur opacity-40"></div>
+
+        {/* Main Content */}
+        <div className="relative z-10 flex items-center space-x-2 bg-gray-900 p-2 rounded shadow border border-gray-700">
+          <div className="text-center">
+            <span className="font-mono text-lg text-white tracking-wide">
+              {currentTime}
+            </span>
           </div>
+          {/* Animated Pulse Dot */}
+          <div className="w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
         </div>
+      </div>
+
 
         <div className="relative flex items-center space-x-4 md:space-x-6">
           {/* Notification Button */}
@@ -178,7 +192,13 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
             onClick={() => setShowNotifications((prev) => !prev)}
             className="relative text-white hover:bg-gray-800 p-2 rounded-full transition-colors flex items-center"
           >
-            <img src="/images/notification.png" alt="Notifications" className="w-6 h-6" />
+            <Image
+              src="/images/notification.png"
+              alt="Notifications"
+              width={24}
+              height={24}
+              className="object-contain"
+            />
             {notifications.some((notification) => notification.status === 'Unread') && (
               <span className="absolute top-2 right-2 transform translate-x-1/2 -translate-y-1/2 flex h-3 w-3">
                 <span className="absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75 animate-ping"></span>
@@ -249,7 +269,13 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
           onClick={handleLogout}
           className="text-white hover:bg-gray-800 p-2 rounded-full transition-colors flex items-center"
         >
-          <img src="/images/logout.png" alt="Logout" className="w-6 h-6"/>
+          <Image
+            src="/images/logout.png" // Path to your image
+            alt="Logout"
+            width={24} // Set width
+            height={24} // Set height
+            className="object-contain"
+          />
         </button>
 
         <div className="relative flex items-center">
@@ -258,7 +284,13 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
             onClick={() => setShowProfileMenu(!showProfileMenu)}
             className="relative text-white hover:bg-gray-800 p-2 rounded-full transition-colors"
           >
-            <img src="/images/admin.png" alt="Profile" className="w-8 h-8 rounded-full"/>
+            <Image
+              src="/images/admin.png" // Path to your image
+              alt="Profile"
+              width={32} // Set width for the profile image
+              height={32} // Set height for the profile image
+              className="rounded-full"
+            />
           </button>
 
           {showProfileMenu && (
