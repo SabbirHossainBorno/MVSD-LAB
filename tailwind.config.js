@@ -7,7 +7,7 @@ module.exports = {
     extend: {
       animation: {
         gradient: 'gradient 3s ease infinite',
-        textGlow: 'textGlow 2s ease-in-out infinite', // Add textGlow animation
+        textGlow: 'textGlow 2s ease-in-out infinite',
       },
       keyframes: {
         gradient: {
