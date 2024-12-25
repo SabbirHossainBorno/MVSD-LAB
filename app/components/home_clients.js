@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Image from 'next/image';
 
 const clients = [
   "/images/clients/client-1.png",
@@ -63,10 +64,12 @@ export default function HomeClients() {
                   key={index}
                   className={`transition-all duration-700 ease-in-out transform ${opacity}`}
                 >
-                  <img
-                    src={client}
-                    alt={`Client ${index}`}
-                    className={`object-contain ${sizeClass}`}
+                  <Image 
+                    src={client} 
+                    alt={`Client ${index}`} 
+                    width={200} // Adjust the width based on your design
+                    height={100} // Adjust the height to maintain aspect ratio
+                    className={`object-contain ${sizeClass}`} 
                   />
                 </div>
               );

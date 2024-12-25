@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner'; // Import the LoadingSpinner component
+import Image from 'next/image';
 
 export default function HomeContactUs() {
   const [isLoading, setIsLoading] = useState(false); // Add loading state
@@ -71,11 +72,13 @@ export default function HomeContactUs() {
             {/* Card: Address */}
             <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded transition-transform transform hover:scale-105">
               <div>
-                <img
-                  src="/images/contactUS_icon/address.png"
-                  alt="Address Icon"
-                  className="w-12 h-12"
-                />
+              <Image 
+                src="/images/contactUS_icon/address.png" 
+                alt="Address Icon" 
+                width={48} // 12 * 4 = 48px for the width
+                height={48} // 12 * 4 = 48px for the height (to maintain square aspect ratio)
+                className="w-12 h-12" 
+              />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-800">Address</h3>
@@ -87,11 +90,13 @@ export default function HomeContactUs() {
             {/* Card: Call Us */}
             <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded transition-transform transform hover:scale-105">
               <div>
-                <img
-                  src="/images/contactUS_icon/callus.png"
-                  alt="Call Us Icon"
-                  className="w-12 h-12"
-                />
+              <Image 
+                src="/images/contactUS_icon/callus.png" 
+                alt="Call Us Icon" 
+                width={48} // 12 * 4 = 48px for the width
+                height={48} // 12 * 4 = 48px for the height (to maintain square aspect ratio)
+                className="w-12 h-12" 
+              />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-800">Call Us</h3>
@@ -103,11 +108,13 @@ export default function HomeContactUs() {
             {/* Card: Email */}
             <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded transition-transform transform hover:scale-105">
               <div>
-                <img
-                  src="/images/contactUS_icon/mail.png"
-                  alt="Email Icon"
-                  className="w-12 h-12"
-                />
+              <Image 
+                src="/images/contactUS_icon/mail.png" 
+                alt="Email Icon" 
+                width={48} // 12 * 4 = 48px for the width
+                height={48} // 12 * 4 = 48px for the height (to maintain square aspect ratio)
+                className="w-12 h-12" 
+              />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-800">Email Us</h3>
@@ -119,11 +126,13 @@ export default function HomeContactUs() {
             {/* Card: Open Hours */}
             <div className="flex items-start space-x-4 bg-white shadow-md p-6 rounded transition-transform transform hover:scale-105">
               <div>
-                <img
-                  src="/images/contactUS_icon/open.png"
-                  alt="Open Hours Icon"
-                  className="w-12 h-12"
-                />
+              <Image 
+                src="/images/contactUS_icon/open.png" 
+                alt="Open Hours Icon" 
+                width={48} // 12 * 4 = 48px for width
+                height={48} // 12 * 4 = 48px for height (maintaining square aspect ratio)
+                className="w-12 h-12" 
+              />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-800">Open Hours</h3>

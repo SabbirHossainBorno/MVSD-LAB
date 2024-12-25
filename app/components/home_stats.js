@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Image from 'next/image';
 
 export default function HomeStats() {
   const [professorCount, setProfessorCount] = useState(null);
@@ -44,7 +45,13 @@ export default function HomeStats() {
               className="flex flex-col items-center justify-center text-center bg-white p-6 rounded shadow-xl transition-transform transform hover:scale-105 hover:shadow-2xl duration-300 ease-in-out"
             >
               <div className="w-20 h-20 mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                <img src={stat.image} alt={stat.label} className="w-12 h-12 object-contain" />
+              <Image 
+                src={stat.image} // Dynamic image source
+                alt={stat.label} // Dynamic alt text
+                width={48} // Set width based on your design, e.g., 12 * 4 = 48px
+                height={48} // Set height to maintain aspect ratio, e.g., 12 * 4 = 48px
+                className="w-12 h-12 object-contain" 
+              />
               </div>
               <span className="text-3xl font-bold text-gray-800">{stat.value}</span>
               <p className="text-gray-600 mt-2 text-sm font-medium">{stat.label}</p>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Image from 'next/image';
 
 const testimonials = [
   {
@@ -77,11 +78,13 @@ export default function HomeTestimonial() {
                 }`}
               >
                 <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg max-w-md mx-auto text-center">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto mb-4 border-2 border-blue-500"
-                  />
+                <Image 
+                  src={testimonial.image} // Dynamic image source
+                  alt={testimonial.name} // Dynamic alt text
+                  width={80} // 16 * 4 = 64px for small, 20 * 4 = 80px for larger sizes
+                  height={80} // Ensure square aspect ratio (matching width)
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto mb-4 border-2 border-blue-500" 
+                />
                   <p className="text-sm sm:text-base italic text-gray-700 mb-4">
                   &quot;{testimonial.quote}&quot;
                   </p>
@@ -98,11 +101,13 @@ export default function HomeTestimonial() {
             {testimonials[currentIndex - 1] && (
               <div className="absolute left-0 transform -translate-x-1/4 scale-75 opacity-50 z-0 hidden sm:block">
                 <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg max-w-md mx-auto text-center">
-                  <img
-                    src={testimonials[currentIndex - 1].image}
-                    alt={testimonials[currentIndex - 1].name}
-                    className="w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-4 border-2 border-blue-500"
-                  />
+                <Image 
+                  src={testimonials[currentIndex - 1].image} // Dynamic image source
+                  alt={testimonials[currentIndex - 1].name} // Dynamic alt text
+                  width={64} // 16 * 4 = 64px for larger screens (sm:w-16 sm:h-16)
+                  height={64} // Ensure square aspect ratio (matching width)
+                  className="w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-4 border-2 border-blue-500" 
+                />
                   <p className="text-xs sm:text-sm italic text-gray-700 mb-4">
                   &quot;{testimonials[currentIndex - 1].quote}&quot;
                   </p>
@@ -119,11 +124,13 @@ export default function HomeTestimonial() {
             {testimonials[currentIndex + 1] && (
               <div className="absolute right-0 transform translate-x-1/4 scale-75 opacity-50 z-0 hidden sm:block">
                 <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg max-w-md mx-auto text-center">
-                  <img
-                    src={testimonials[currentIndex + 1].image}
-                    alt={testimonials[currentIndex + 1].name}
-                    className="w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-4 border-2 border-blue-500"
-                  />
+                <Image 
+                  src={testimonials[currentIndex + 1].image} // Dynamic image source
+                  alt={testimonials[currentIndex + 1].name} // Dynamic alt text
+                  width={64} // 16 * 4 = 64px for larger screens (sm:w-16 sm:h-16)
+                  height={64} // Ensure square aspect ratio (matching width)
+                  className="w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-4 border-2 border-blue-500" 
+                />
                   <p className="text-xs sm:text-sm italic text-gray-700 mb-4">
                   &quot;{testimonials[currentIndex + 1].quote}&quot;
                   </p>

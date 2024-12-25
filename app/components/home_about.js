@@ -2,6 +2,7 @@ import React from "react";
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import Image from 'next/image';
 
 const images = [
   "/images/about_banner/about_banner (1).jpg",
@@ -69,10 +70,12 @@ export default function HomeAbout() {
             <Slider {...settings}>
               {images.map((src, index) => (
                 <div key={index} className="flex justify-center">
-                  <img
-                    src={src}
-                    alt={`About MVSD Lab ${index + 1}`}
-                    className="rounded-lg w-full h-auto object-cover"
+                  <Image 
+                    src={src} 
+                    alt={`About MVSD Lab ${index + 1}`} 
+                    width={500}  // You can adjust this based on your desired width
+                    height={300} // Adjust this to maintain the correct aspect ratio
+                    className="rounded-lg w-full h-auto object-cover" 
                   />
                 </div>
               ))}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from 'next/image';
 
 export default function HomeHero() {
   // State to control the overlay visibility
@@ -47,11 +48,13 @@ export default function HomeHero() {
 
         {/* Right Side */}
         <div className="flex-1 w-full md:w-1/2 flex justify-center items-center">
-          <img
-            src="/images/hero-img.png"
-            alt="Hero Image"
-            className="w-full h-auto max-w-md sm:max-w-lg md:max-w-xl transform hover:scale-110 transition-transform duration-500"
-          />
+        <Image 
+          src="/images/hero-img.png" // Correct image path
+          alt="Hero Image" 
+          width={1200} // Example width, adjust based on your layout
+          height={800} // Example height, adjust based on aspect ratio
+          className="w-full h-auto max-w-md sm:max-w-lg md:max-w-xl transform hover:scale-110 transition-transform duration-500" 
+        />
         </div>
       </div>
 

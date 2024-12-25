@@ -7,6 +7,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner'; // Import the LoadingSpinner component
+import Image from 'next/image';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -47,7 +48,13 @@ export default function Footer() {
         {/* Logo and Info */}
         <div className="flex flex-col items-start mb-8 lg:mb-0">
           <Link href="/home" className="flex items-center space-x-4 rtl:space-x-reverse transition-all duration-300 hover:scale-105">
-            <img src="/images/logo.png" className="h-16 lg:h-20 xl:h-24 transition-all duration-300" alt="MVSD LAB Logo" />
+          <Image 
+            src="/images/logo.png" 
+            alt="MVSD LAB Logo" 
+            width={160} 
+            height={64} 
+            className="h-16 lg:h-20 xl:h-24 transition-all duration-300" 
+          />
             <span className="text-2xl lg:text-3xl xl:text-4xl font-extrabold text-white tracking-wide hover:text-blue-500 transition-colors duration-300">MVSD LAB</span>
           </Link>
           <p className="text-gray-300 mt-4 max-w-xs text-lg lg:text-xl leading-relaxed">

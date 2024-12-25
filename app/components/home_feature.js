@@ -1,4 +1,5 @@
 import React from "react";
+import Image from 'next/image';
 
 export default function HomeFeature() {
   return (
@@ -53,11 +54,13 @@ export default function HomeFeature() {
 
         {/* Right Side: Image */}
         <div className="w-full md:w-1/2 px-4 mt-8 md:mt-0 animate-fadeIn delay-500">
-          <img
-            src="/images/features.png" // Use the correct image path
-            alt="Features"
-            className="rounded-lg shadow-xl w-full h-auto object-cover transition-transform duration-500 ease-in-out transform hover:scale-105"
-          />
+        <Image 
+          src="/images/features.png" // Correct image path
+          alt="Features" 
+          width={1200} // Example width, adjust based on your layout
+          height={800} // Example height, adjust based on aspect ratio
+          className="rounded-lg shadow-xl w-full h-auto object-cover transition-transform duration-500 ease-in-out transform hover:scale-105" 
+        />
         </div>
       </div>
     </section>

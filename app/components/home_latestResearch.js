@@ -1,4 +1,5 @@
 import React from "react";
+import Image from 'next/image';
 
 // Card Component
 function Card({ imageSrc, label, title, description, link, isNew }) {
@@ -7,11 +8,13 @@ function Card({ imageSrc, label, title, description, link, isNew }) {
       <div className="flex flex-col h-full overflow-hidden bg-white rounded shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105">
         {/* Card Image */}
         <div className="relative">
-          <img
-            src={imageSrc}
-            alt={title}
-            className="object-cover object-center w-full h-48"
-          />
+        <Image 
+          src={imageSrc} // dynamic source for the image
+          alt={title} // dynamic alt text
+          width={800} // Adjust width as needed
+          height={300} // Adjust height to maintain aspect ratio
+          className="object-cover object-center w-full h-48" 
+        />
           {isNew && (
             <div className="absolute top-0 left-0 bg-blue-600 text-white text-xs font-bold uppercase px-2 py-1 rounded-br-lg">
               New

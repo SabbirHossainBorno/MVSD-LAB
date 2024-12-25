@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import withAuth from '../../components/withAuth'; 
 import LoadingSpinner from '../../components/LoadingSpinner'; 
+import Image from 'next/image';
 
 const ProfessorsList = () => {
   const [professors, setProfessors] = useState([]);

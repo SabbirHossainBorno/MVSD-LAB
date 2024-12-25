@@ -9,6 +9,7 @@ import withAuth from '../components/withAuth'; // Ensure correct path
 import LoadingSpinner from '../components/LoadingSpinner'; // Add a loading spinner component
 import DashboardMessageChart from '../components/DashboardMessage_chart'; // Add a loading spinner component
 import axios from 'axios';
+import Image from 'next/image';
 
 const Dashboard = () => {
   const [subscribers, setSubscribers] = useState(0);
@@ -80,7 +81,13 @@ const Dashboard = () => {
           <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out max-w-xs border-4 border-blue-500">
             {/* Icon Section */}
             <div className="w-20 h-20 mr-3 flex items-center justify-center">
-              <img src="/icons/user_count.png" alt="Total Users Icon" className="w-16 h-16" />
+            <Image 
+              src="/icons/user_count.png" // Image path
+              alt="Total Users Icon" // Alt text
+              width={64} // 16 * 4 = 64px width
+              height={64} // 16 * 4 = 64px height
+              className="w-16 h-16" // Tailwind classes for sizing
+            />
             </div>
 
             {/* Content Section */}
@@ -94,7 +101,13 @@ const Dashboard = () => {
           <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out max-w-xs border-4 border-green-500">
             {/* Icon Section */}
             <div className="w-20 h-20 mr-3 flex items-center justify-center">
-              <img src="/icons/subscribe_count.png" alt="Total Subscribers Icon" className="w-16 h-16" />
+            <Image 
+              src="/icons/subscribe_count.png" // Image path
+              alt="Total Subscribers Icon" // Alt text for accessibility
+              width={64} // 16 * 4 = 64px width
+              height={64} // 16 * 4 = 64px height
+              className="w-16 h-16" // Tailwind classes for sizing
+            />
             </div>
 
             {/* Content Section */}
@@ -108,7 +121,13 @@ const Dashboard = () => {
           <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out max-w-xs border-4 border-purple-500">
             {/* Icon Section */}
             <div className="w-20 h-20 mr-3 flex items-center justify-center">
-              <img src="/icons/professor_count.png" alt="Total Professors Icon" className="w-16 h-16" />
+            <Image 
+              src="/icons/professor_count.png" // Image path
+              alt="Total Professors Icon" // Alt text for accessibility
+              width={64} // 16 * 4 = 64px width
+              height={64} // 16 * 4 = 64px height
+              className="w-16 h-16" // Tailwind classes for sizing
+            />
             </div>
 
             {/* Content Section */}
@@ -122,7 +141,13 @@ const Dashboard = () => {
           <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out max-w-xs border-4 border-pink-500">
             {/* Icon Section */}
             <div className="w-20 h-20 mr-3 flex items-center justify-center">
-              <img src="/icons/message_count.png" alt="Total Messages Icon" className="w-16 h-16" />
+            <Image 
+              src="/icons/message_count.png" // Image path
+              alt="Total Messages Icon" // Alt text for accessibility
+              width={64} // 16 * 4 = 64px width
+              height={64} // 16 * 4 = 64px height
+              className="w-16 h-16" // Tailwind classes for sizing
+            />
             </div>
 
             {/* Content Section */}
@@ -136,7 +161,13 @@ const Dashboard = () => {
           <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out max-w-xs border-4 border-indigo-500">
             {/* Icon Section */}
             <div className="w-20 h-20 mr-3 flex items-center justify-center">
-              <img src="/icons/message_count.png" alt="Custom Icon" className="w-16 h-16" />
+            <Image 
+              src="/icons/message_count.png" // Image path
+              alt="Custom Icon" // Alt text for accessibility
+              width={64} // 16 * 4 = 64px width
+              height={64} // 16 * 4 = 64px height
+              className="w-16 h-16" // Tailwind classes for sizing
+            />
             </div>
 
             {/* Content Section */}

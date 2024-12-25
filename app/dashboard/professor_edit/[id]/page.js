@@ -7,6 +7,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import withAuth from '../../../components/withAuth';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import Image from 'next/image';
 
 const EditProfessor = () => {
   const [formData, setFormData] = useState({
@@ -242,7 +243,13 @@ const EditProfessor = () => {
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Edit Profile Photo</h3>
           <div className="mb-4">
-            <img src={photo} alt="Profile Photo" className="w-32 h-32 rounded-full mx-auto" />
+          <Image 
+            src={photo} // Dynamic image source
+            alt="Profile Photo" // Alt text for accessibility
+            width={128} // 32 * 4 = 128px width
+            height={128} // 32 * 4 = 128px height
+            className="w-32 h-32 rounded-full mx-auto" // Tailwind classes for styling
+          />
           </div>
           <div className="mb-4">
             <input
@@ -545,10 +552,12 @@ const EditProfessor = () => {
           {award.awardPhoto && (
             <div className="w-full md:col-span-3">
               <p className="text-gray-400 mb-2">Current Award Photo:</p>
-              <img
-                src={award.awardPhoto}
-                alt="Award Photo"
-                className="w-32 h-32 object-cover mb-4"
+              <Image 
+                src={award.awardPhoto} // Dynamic image source
+                alt="Award Photo" // Alt text for accessibility
+                width={128} // 32 * 4 = 128px width
+                height={128} // 32 * 4 = 128px height
+                className="w-32 h-32 object-cover mb-4" // Tailwind classes for styling
               />
             </div>
           )}
