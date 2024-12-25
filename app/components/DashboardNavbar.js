@@ -14,6 +14,11 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
   const [currentTime, setCurrentTime] = useState('');
   const notificationRef = useRef(null);
 
+  const [selectedTimeZone, setSelectedTimeZone] = useState('Asia/Dhaka'); // Default time zone
+  const [showTimeZoneDropdown, setShowTimeZoneDropdown] = useState(false);
+
+  const timeZones = ['UTC', 'Asia/Dhaka', 'America/Toronto', 'Europe/London', 'Asia/Kolkata', 'Australia/Sydney'];
+
 
     useEffect(() => {
       const fetchNotifications = async () => {
@@ -35,6 +40,18 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
   
       fetchNotifications();
     }, []);
+
+
+    // New useEffect for Time Zone Updates
+    useEffect(() => {
+      // Function to set the current time once based on the selected time zone
+      const updateTime = () => {
+        const currentTime = new Date().toLocaleTimeString('en-US', { timeZone: selectedTimeZone });
+        setCurrentTime(currentTime); // Set the time once for the selected time zone
+      };
+    
+      updateTime(); // Update the time immediately when the time zone changes
+    }, [selectedTimeZone]); // Only update when the selected time zone changes
 
 
   // Update current time
@@ -166,18 +183,60 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
       </div>
 
       <div className="relative flex items-center space-x-4 md:space-x-6">
-      <div className="hidden md:flex items-center justify-center">
-  <div className="flex items-center space-x-3 bg-gradient-to-br from-purple-600 via-indigo-500 to-blue-500 p-4 rounded-xl shadow-xl transform hover:scale-105 transition-transform duration-300">
-    <span className="font-mono text-2xl text-white tracking-wide">
-      {currentTime}
-    </span>
-    <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+      <div className="relative flex items-center h-12">
+  {/* Animated Gradient Background */}
+  <div className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-gradient rounded-md blur-lg opacity-40"></div>
+
+  {/* Main Content */}
+  <div className="relative z-10 flex items-center space-x-2 bg-gray-900 p-2 rounded-md shadow-lg border border-gray-700">
+    <div className="text-center">
+      <span className="font-mono text-lg text-white tracking-wide">
+        {currentTime}
+      </span>
+      <div className="text-xs text-gray-400">{selectedTimeZone}</div>
+    </div>
+    {/* Animated Pulse Dot */}
+    <div className="w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
   </div>
-</div>
-<div className="flex md:hidden items-center justify-center">
-  <div className="flex items-center space-x-2 bg-gray-900 p-3 rounded-lg shadow-md">
-    <span className="font-mono text-lg text-white">{currentTime}</span>
-    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+
+  {/* Timezone Dropdown */}
+  <div className="relative ml-3">
+    <button
+      onClick={() => setShowTimeZoneDropdown(!showTimeZoneDropdown)}
+      className="relative z-10 bg-gray-800 p-2 rounded-full text-white hover:bg-gray-700 transition-colors"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+        />
+      </svg>
+    </button>
+
+    {showTimeZoneDropdown && (
+      <div className="absolute top-12 left-0 bg-gray-900 w-48 rounded-lg shadow-lg border border-gray-700 z-20">
+        {timeZones.map((zone) => (
+          <div
+            key={zone}
+            className="px-4 py-2 text-white hover:bg-gray-700 cursor-pointer"
+            onClick={() => {
+              setSelectedTimeZone(zone);
+              setShowTimeZoneDropdown(false);
+            }}
+          >
+            {zone}
+          </div>
+        ))}
+      </div>
+    )}
   </div>
 </div>
 
