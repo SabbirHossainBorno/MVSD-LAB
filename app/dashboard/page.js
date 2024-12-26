@@ -87,6 +87,7 @@ const Dashboard = () => {
               width={64} // 16 * 4 = 64px width
               height={64} // 16 * 4 = 64px height
               className="w-16 h-16" // Tailwind classes for sizing
+              quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
             />
             </div>
 
@@ -107,6 +108,7 @@ const Dashboard = () => {
               width={64} // 16 * 4 = 64px width
               height={64} // 16 * 4 = 64px height
               className="w-16 h-16" // Tailwind classes for sizing
+              quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
             />
             </div>
 
@@ -127,6 +129,7 @@ const Dashboard = () => {
               width={64} // 16 * 4 = 64px width
               height={64} // 16 * 4 = 64px height
               className="w-16 h-16" // Tailwind classes for sizing
+              quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
             />
             </div>
 
@@ -147,6 +150,7 @@ const Dashboard = () => {
               width={64} // 16 * 4 = 64px width
               height={64} // 16 * 4 = 64px height
               className="w-16 h-16" // Tailwind classes for sizing
+              quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
             />
             </div>
 
@@ -167,6 +171,7 @@ const Dashboard = () => {
               width={64} // 16 * 4 = 64px width
               height={64} // 16 * 4 = 64px height
               className="w-16 h-16" // Tailwind classes for sizing
+              quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
             />
             </div>
 

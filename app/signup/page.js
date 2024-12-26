@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Image from 'next/image';
 
 export default function SignUpPage() {
   const [message, setMessage] = useState('');
@@ -72,14 +73,26 @@ export default function SignUpPage() {
       <div className="flex flex-col md:flex-row bg-white/10 backdrop-blur-lg rounded-lg shadow-lg max-w-4xl w-full p-6 md:p-0">
         {/* Left Side Image */}
         <div className="hidden md:block md:w-1/2">
-          <img src="/images/signup_img.jpg" alt="Sign Up Visual" className="h-full w-full object-cover rounded-l-lg" />
+        <Image 
+          src="/images/signup_img.jpg" // Static image source
+          alt="Sign Up Visual" // Alt text for accessibility
+          width={800} // Set an appropriate width (adjust based on layout)
+          height={600} // Set an appropriate height (adjust based on layout)
+          className="h-full w-full object-cover rounded-l-lg" // Tailwind classes for styling
+        />
         </div>
 
         {/* Right Side Form */}
         <div className="flex flex-col items-center justify-center md:w-1/2 p-6">
           {/* Logo Section */}
           <div className="mb-8 text-center">
-            <img src="/images/logo.png" alt="Logo" className="h-32 w-auto mx-auto" />
+          <Image
+            src="/images/logo.png" // Static image source
+            alt="Logo" // Alt text for accessibility
+            width={128} // Width set explicitly (32 * 4 = 128px)
+            height={128} // Height set explicitly (32 * 4 = 128px)
+            className="mx-auto object-contain" // Tailwind classes for styling
+          />
             <h2 className="text-xl font-bold leading-6 mt-2" style={{ color: '#012970' }}>AUTOMOTIVE MEETS AI</h2>
           </div>
 

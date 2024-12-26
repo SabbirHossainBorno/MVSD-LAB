@@ -116,11 +116,13 @@ const ProfessorsList = () => {
             >
               <div className="flex items-center mb-2">
                 <div className="w-24 h-24 relative overflow-hidden border-2 border-blue-500 rounded">
-                  <img
-                    src={`/Storage/Images/Professor/${professor.photo.split('/').pop()}`}
-                    alt={`${professor.first_name} ${professor.last_name}`}
-                    className="object-cover w-full h-full transition-transform duration-200 ease-in-out transform hover:scale-105"
-                  />
+                <Image 
+                  src={`/Storage/Images/Professor/${professor.photo.split('/').pop()}`} // Dynamic image source
+                  alt={`${professor.first_name} ${professor.last_name}`} // Dynamic alt text
+                  width={500} // You should specify the width (use an appropriate value based on your design)
+                  height={500} // Specify the height for the image (matching aspect ratio as needed)
+                  className="object-cover w-full h-full transition-transform duration-200 ease-in-out transform hover:scale-105" // Tailwind classes for styling
+                />
                 </div>
                 <div className="ml-4">
                   <div className="flex items-center text-sm">

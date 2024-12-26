@@ -9,6 +9,7 @@ import Slider from 'react-slick';
 import axios from 'axios';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Image from 'next/image';
 
 // Dummy Data for Other Members
 const membersData = {
@@ -146,10 +147,13 @@ export default function Member() {
         className="transition-opacity hover:opacity-80"
         aria-label={media.socialmedia_name}
       >
-        <img
-          src={iconMap[media.socialmedia_name]}
-          alt={media.socialmedia_name}
-          className="w-6 h-6"
+        <Image 
+          src={iconMap[media.socialmedia_name]} // Dynamic image source based on the social media name
+          alt={media.socialmedia_name} // Alt text for accessibility
+          width={24} // 6 * 4 = 24px width
+          height={24} // 6 * 4 = 24px height
+          className="w-6 h-6" // Tailwind classes for sizing
+          quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
         />
       </a>
     ));
@@ -232,11 +236,14 @@ export default function Member() {
                 {professors.map((prof) => (
                   <div key={prof.id} className="bg-transparent border-2 border-gray-300 rounded p-8 hover:bg-gray-100 transition-all duration-300">
                     <div className="flex justify-center mb-6">
-                      <img
-                        src={prof.photo}
-                        alt={`${prof.first_name} ${prof.last_name}`}
-                        className="w-44 h-44 rounded-full object-cover border-4 border-gray-200 shadow-md"
-                      />
+                    <Image 
+                      src={prof.photo} // Dynamic image source
+                      alt={`${prof.first_name} ${prof.last_name}`} // Dynamic alt text
+                      width={176} // 44 * 4 = 176px width
+                      height={176} // 44 * 4 = 176px height
+                      className="w-44 h-44 rounded-full object-cover border-4 border-gray-200 shadow-md" // Tailwind classes for styling
+                      quality={100} // Ensure the image is displayed in the highest quality
+                    />
                     </div>
                     <div className="text-center">
                       <h4 className="text-gray-900 text-2xl font-semibold mb-2">{`${prof.first_name} ${prof.last_name}`}</h4>
@@ -267,11 +274,13 @@ export default function Member() {
                   {filterMembers(category).map((member) => (
                     <div key={member.id} className="bg-gray-100 rounded p-6 shadow-md hover:scale-105 transition-all duration-500 mx-auto">
                       <div className="lg:min-h-[250px]">
-                        <img
-                          src={member.img}
-                          alt={member.name}
-                          className="w-full rounded inline-block"
-                        />
+                      <Image 
+                        src={member.img} // Dynamic image source
+                        alt={member.name} // Alt text for accessibility
+                        width={500} // Set an appropriate width (adjust based on layout)
+                        height={500} // Set an appropriate height (adjust based on layout)
+                        className="w-full rounded inline-block" // Tailwind classes for styling
+                      />
                       </div>
                       <div className="mt-6">
                         <h4 className="text-gray-800 text-lg font-bold" style={{ color: 'var(--heading-color)' }}>

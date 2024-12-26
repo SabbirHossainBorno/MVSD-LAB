@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Image from 'next/image';
 
 export default function UserEditPage({ params }) {
   const [user, setUser] = useState(null);
@@ -121,10 +122,12 @@ export default function UserEditPage({ params }) {
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-transparent">
-        <img
+        <Image 
           src="/images/loading.gif" // Path to your GIF
-          alt="Loading..."
-          className="w-24 h-24" // Adjust size as needed
+          alt="Loading..." // Alt text for accessibility
+          width={96} // 24 * 4 = 96px width
+          height={96} // 24 * 4 = 96px height
+          className="w-24 h-24" // Tailwind classes for sizing
         />
       </div>
     );

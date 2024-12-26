@@ -1,11 +1,10 @@
 // app/components/withAuth.js
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner';
-import axios from 'axios';
 import { handleSessionExpiration } from '../../lib/sessionUtils'; // Import the utility function
 
 const withAuth = (WrappedComponent) => {
@@ -14,19 +13,23 @@ const withAuth = (WrappedComponent) => {
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const router = useRouter();
+    const hasShownUnauthorizedToast = useRef(false); // Ref to track if the toast has been shown
 
-    // Function to handle unauthorized access
-    const handleUnauthorizedAccess = async () => {
-      toast.error('Authentication Required! Need To Login.');
-      router.push('/login?authRequired=true');
-    };
+    // Memoize handleUnauthorizedAccess
+    const handleUnauthorizedAccess = useCallback(async () => {
+      if (!hasShownUnauthorizedToast.current) {
+        hasShownUnauthorizedToast.current = true; // Prevent duplicate toasts
+        toast.error('Authentication Required! Need To Login.');
+        router.push('/login?authRequired=true');
+      }
+    }, [router]);
 
-    // Check authentication status from API
-    const checkAuth = async () => {
+    // Memoized checkAuth function
+    const checkAuth = useCallback(async () => {
       try {
         const response = await fetch('/api/check-auth');
         if (!response.ok) throw new Error('Failed to fetch auth status');
-        
+
         const result = await response.json();
         if (result.authenticated) {
           setIsAuthenticated(true);
@@ -40,7 +43,7 @@ const withAuth = (WrappedComponent) => {
       } finally {
         setLoading(false);
       }
-    };
+    }, [handleUnauthorizedAccess]);
 
     // Track user activity and manage session timeout
     useEffect(() => {
@@ -71,14 +74,14 @@ const withAuth = (WrappedComponent) => {
         window.removeEventListener('mousemove', handleActivity);
         window.removeEventListener('keydown', handleActivity);
       };
-    }, [isClient, router]);
+    }, [router]);
 
     // Check authentication status when component mounts
     useEffect(() => {
       if (isClient) {
         checkAuth();
       }
-    }, [isClient]);
+    }, [isClient, checkAuth]);
 
     // Display session expired message if URL query indicates so
     useEffect(() => {
