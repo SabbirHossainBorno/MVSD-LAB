@@ -1,8 +1,8 @@
 // app/api/check-auth/route.js
 import { NextResponse } from 'next/server';
-import logger from '../../../lib/logger'; // Import the logger
-import sendTelegramAlert from '../../../lib/telegramAlert'; // Import the Telegram alert function
-import { handleSessionExpiration } from '../../../lib/sessionUtils'; // Import the utility function
+import logger from '../../../lib/logger';
+import sendTelegramAlert from '../../../lib/telegramAlert';
+import { handleSessionExpiration } from '../../../lib/sessionUtils';
 
 const formatAlertMessage = (title, email, ipAddress, additionalInfo = '') => {
   return `MVSD LAB AUTH-CHECKER\n----------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}${additionalInfo}`;
@@ -10,7 +10,7 @@ const formatAlertMessage = (title, email, ipAddress, additionalInfo = '') => {
 
 const validateSession = (request) => {
   const sessionId = request.cookies.get('sessionId')?.value;
-  const eid = request.cookies.get('eid')?.value || ''; // Retrieve EID from cookies
+  const eid = request.cookies.get('eid')?.value || '';
   const ip = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr');
   const userAgent = request.headers.get('user-agent');
   const emailCookie = request.cookies.get('email');
@@ -45,7 +45,7 @@ export async function GET(request) {
     const diff = now - lastActivityDate;
 
     if (diff > 10 * 60 * 1000) { // 10 minutes
-      await handleSessionExpiration(router);
+      await handleSessionExpiration(); // Remove router argument
       return NextResponse.json({ authenticated: false, message: 'Session expired' });
     }
 

@@ -1,10 +1,9 @@
 // app/api/login/route.js
-
 import { NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import { query } from '../../../lib/db';
-import logger from '../../../lib/logger'; // Import the logger
-import sendTelegramAlert from '../../../lib/telegramAlert'; // Import the Telegram alert function
+import logger from '../../../lib/logger';
+import sendTelegramAlert from '../../../lib/telegramAlert';
 
 const formatAlertMessage = (title, email, ipAddress, userAgent, additionalInfo = '') => {
   return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}\nDevice INFO : ${userAgent}${additionalInfo}`;
@@ -14,7 +13,6 @@ export async function POST(request) {
   const { email, password } = await request.json();
   const sessionId = uuidv4();
 
-  // Extract IP address and User-Agent
   const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
 
@@ -45,7 +43,6 @@ export async function POST(request) {
       if (res.rows.length > 0) {
         const eid = `${Math.floor(Math.random() * 1000000)}-MVSDLAB`; // Generate an execution ID
 
-        // Log the generation of the execution ID
         logger.info('Generated execution ID', {
           meta: {
             eid,

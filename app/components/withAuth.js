@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { handleSessionExpiration } from '../../lib/sessionUtils'; // Import the utility function
+import { handleSessionExpiration } from '../../lib/sessionUtils';
 
 const withAuth = (WrappedComponent) => {
   const Wrapper = (props) => {
@@ -13,18 +13,16 @@ const withAuth = (WrappedComponent) => {
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const router = useRouter();
-    const hasShownUnauthorizedToast = useRef(false); // Ref to track if the toast has been shown
+    const hasShownUnauthorizedToast = useRef(false);
 
-    // Memoize handleUnauthorizedAccess
     const handleUnauthorizedAccess = useCallback(async () => {
       if (!hasShownUnauthorizedToast.current) {
-        hasShownUnauthorizedToast.current = true; // Prevent duplicate toasts
+        hasShownUnauthorizedToast.current = true;
         toast.error('Authentication Required! Need To Login.');
         router.push('/login?authRequired=true');
       }
     }, [router]);
 
-    // Memoized checkAuth function
     const checkAuth = useCallback(async () => {
       try {
         const response = await fetch('/api/check-auth');
@@ -45,7 +43,6 @@ const withAuth = (WrappedComponent) => {
       }
     }, [handleUnauthorizedAccess]);
 
-    // Track user activity and manage session timeout
     useEffect(() => {
       setIsClient(true);
 
@@ -64,10 +61,10 @@ const withAuth = (WrappedComponent) => {
           const diff = now - lastActivityDate;
 
           if (diff > 10 * 60 * 1000) { // 10 minutes
-            handleSessionExpiration(router);
+            handleSessionExpiration(router); // Pass router here
           }
         }
-      }, 60000); // Check every minute
+      }, 60000);
 
       return () => {
         clearInterval(interval);
@@ -76,21 +73,18 @@ const withAuth = (WrappedComponent) => {
       };
     }, [router]);
 
-    // Check authentication status when component mounts
     useEffect(() => {
       if (isClient) {
         checkAuth();
       }
     }, [isClient, checkAuth]);
 
-    // Display session expired message if URL query indicates so
     useEffect(() => {
       if (router.query?.sessionExpired) {
         toast.error('Session Expired! Please Login Again.');
       }
     }, [router.query]);
 
-    // Loading spinner until authentication check is complete
     if (loading) return <LoadingSpinner />;
 
     return <WrappedComponent {...props} isAuthenticated={isAuthenticated} />;
