@@ -38,20 +38,17 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
     }, []);
 
 
-    useEffect(() => {
-      const updateTime = () => {
-        const time = new Date().toLocaleTimeString('en-CA', {
-          timeZone: 'America/Toronto', // Set to the desired Canada time zone
-          hour12: true, // Use 12-hour clock; change to false for 24-hour
-        });
-        setCurrentTime(time);
-      };
-  
-      updateTime();
-      const interval = setInterval(updateTime, 1000);
-  
-      return () => clearInterval(interval);
-    }, []);
+  // Update current time
+  useEffect(() => {
+    const updateTime = () => {
+      setCurrentTime(new Date().toLocaleTimeString());
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
 
   // Handle click outside
@@ -215,7 +212,7 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
         {showNotifications && (
           <div
             ref={notificationRef}
-            className="absolute top-full right-0 mt-2 transform translate-x-24 w-[90vw] max-w-md bg-gray-900 shadow-lg rounded-lg border border-gray-700 z-30 overflow-hidden"
+            className="absolute top-full right-0 mt-2 transform translate-x-24 w-[90vw] max-w-md bg-gray-900 shadow-lg rounded border border-gray-700 z-30 overflow-hidden"
           >
             {/* Header */}
             <div className="p-4 bg-gray-800 border-b border-gray-700 flex items-center justify-between">
@@ -305,7 +302,7 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
           </button>
 
           {showProfileMenu && (
-            <div className="absolute top-full right-0 mt-2 w-48 bg-gray-800 shadow-lg rounded-lg border border-gray-700 overflow-hidden z-20">
+            <div className="absolute top-full right-0 mt-2 w-48 bg-gray-800 shadow-lg rounded border border-gray-700 overflow-hidden z-20">
               <ul>
                 <li className="p-3 border-b border-gray-700 hover:bg-gray-700">
                   <Link href="/profile" className="block text-gray-300">Profile</Link>

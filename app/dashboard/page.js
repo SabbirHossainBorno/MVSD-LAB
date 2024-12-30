@@ -76,112 +76,112 @@ const Dashboard = () => {
     <div className="flex flex-col min-h-screen bg-gray-900 text-gray-100">
       <main className="flex-1 p-3 md:p-4 lg:p-6">
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-10">
-          {/* Total Users Card */}
-          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out max-w-xs border-4 border-blue-500">
-            {/* Icon Section */}
-            <div className="w-20 h-20 mr-3 flex items-center justify-center">
-            <Image 
-              src="/icons/user_count.png" // Image path
-              alt="Total Users Icon" // Alt text
-              width={64} // 16 * 4 = 64px width
-              height={64} // 16 * 4 = 64px height
-              className="w-16 h-16" // Tailwind classes for sizing
-              quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
-            />
-            </div>
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-10">
+  {/* Total Users Card */}
+  <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
+    {/* Icon Section */}
+    <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
+      <Image 
+        src="/icons/user_count.png" // Image path
+        alt="Total Users Icon" // Alt text
+        width={64} // 16 * 4 = 64px width
+        height={64} // 16 * 4 = 64px height
+        className="w-16 h-16 md:w-20 md:h-20" // Tailwind classes for sizing
+        quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
+      />
+    </div>
 
-            {/* Content Section */}
-            <div className="flex flex-col items-start">
-              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Users</p>
-              <p className="text-3xl font-extrabold text-black mt-1">{users.length}</p>
-            </div>
-          </div>
+    {/* Content Section */}
+    <div className="flex flex-col items-start">
+      <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Users</p>
+      <p className="text-3xl font-extrabold text-black mt-1">{users.length}</p>
+    </div>
+  </div>
 
-          {/* Total Subscribers Card */}
-          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out max-w-xs border-4 border-green-500">
-            {/* Icon Section */}
-            <div className="w-20 h-20 mr-3 flex items-center justify-center">
-            <Image 
-              src="/icons/subscribe_count.png" // Image path
-              alt="Total Subscribers Icon" // Alt text for accessibility
-              width={64} // 16 * 4 = 64px width
-              height={64} // 16 * 4 = 64px height
-              className="w-16 h-16" // Tailwind classes for sizing
-              quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
-            />
-            </div>
+  {/* Total Subscribers Card */}
+  <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-green-500">
+    {/* Icon Section */}
+    <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
+      <Image 
+        src="/icons/subscribe_count.png" // Image path
+        alt="Total Subscribers Icon" // Alt text for accessibility
+        width={64} // 16 * 4 = 64px width
+        height={64} // 16 * 4 = 64px height
+        className="w-16 h-16 md:w-20 md:h-20" // Tailwind classes for sizing
+        quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
+      />
+    </div>
 
-            {/* Content Section */}
-            <div className="flex flex-col items-start">
-              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Subscribers</p>
-              <p className="text-3xl font-extrabold text-black mt-1">{subscribers}</p>
-            </div>
-          </div>
+    {/* Content Section */}
+    <div className="flex flex-col items-start">
+      <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Subscribers</p>
+      <p className="text-3xl font-extrabold text-black mt-1">{subscribers}</p>
+    </div>
+  </div>
 
-          {/* Total Professors Card */}
-          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out max-w-xs border-4 border-purple-500">
-            {/* Icon Section */}
-            <div className="w-20 h-20 mr-3 flex items-center justify-center">
-            <Image 
-              src="/icons/professor_count.png" // Image path
-              alt="Total Professors Icon" // Alt text for accessibility
-              width={64} // 16 * 4 = 64px width
-              height={64} // 16 * 4 = 64px height
-              className="w-16 h-16" // Tailwind classes for sizing
-              quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
-            />
-            </div>
+  {/* Total Professors Card */}
+  <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-purple-500">
+    {/* Icon Section */}
+    <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
+      <Image 
+        src="/icons/professor_count.png" // Image path
+        alt="Total Professors Icon" // Alt text for accessibility
+        width={64} // 16 * 4 = 64px width
+        height={64} // 16 * 4 = 64px height
+        className="w-16 h-16 md:w-20 md:h-20" // Tailwind classes for sizing
+        quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
+      />
+    </div>
 
-            {/* Content Section */}
-            <div className="flex flex-col items-start">
-              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Professors</p>
-              <p className="text-3xl font-extrabold text-black mt-1">{professorsCount}</p>
-            </div>
-          </div>
+    {/* Content Section */}
+    <div className="flex flex-col items-start">
+      <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Professors</p>
+      <p className="text-3xl font-extrabold text-black mt-1">{professorsCount}</p>
+    </div>
+  </div>
 
-          {/* Total Messages Card */}
-          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out max-w-xs border-4 border-pink-500">
-            {/* Icon Section */}
-            <div className="w-20 h-20 mr-3 flex items-center justify-center">
-            <Image 
-              src="/icons/message_count.png" // Image path
-              alt="Total Messages Icon" // Alt text for accessibility
-              width={64} // 16 * 4 = 64px width
-              height={64} // 16 * 4 = 64px height
-              className="w-16 h-16" // Tailwind classes for sizing
-              quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
-            />
-            </div>
+  {/* Total Messages Card */}
+  <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-pink-500">
+    {/* Icon Section */}
+    <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
+      <Image 
+        src="/icons/message_count.png" // Image path
+        alt="Total Messages Icon" // Alt text for accessibility
+        width={64} // 16 * 4 = 64px width
+        height={64} // 16 * 4 = 64px height
+        className="w-16 h-16 md:w-20 md:h-20" // Tailwind classes for sizing
+        quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
+      />
+    </div>
 
-            {/* Content Section */}
-            <div className="flex flex-col items-start">
-              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Messages</p>
-              <p className="text-3xl font-extrabold text-black mt-1">{messageCount}</p>
-            </div>
-          </div>
+    {/* Content Section */}
+    <div className="flex flex-col items-start">
+      <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Messages</p>
+      <p className="text-3xl font-extrabold text-black mt-1">{messageCount}</p>
+    </div>
+  </div>
 
-          {/* Custom Card */}
-          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out max-w-xs border-4 border-indigo-500">
-            {/* Icon Section */}
-            <div className="w-20 h-20 mr-3 flex items-center justify-center">
-            <Image 
-              src="/icons/message_count.png" // Image path
-              alt="Custom Icon" // Alt text for accessibility
-              width={64} // 16 * 4 = 64px width
-              height={64} // 16 * 4 = 64px height
-              className="w-16 h-16" // Tailwind classes for sizing
-              quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
-            />
-            </div>
+  {/* Custom Card */}
+  <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-indigo-500">
+    {/* Icon Section */}
+    <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
+      <Image 
+        src="/icons/message_count.png" // Image path
+        alt="Custom Icon" // Alt text for accessibility
+        width={64} // 16 * 4 = 64px width
+        height={64} // 16 * 4 = 64px height
+        className="w-16 h-16 md:w-20 md:h-20" // Tailwind classes for sizing
+        quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
+      />
+    </div>
 
-            {/* Content Section */}
-            <div className="flex flex-col items-start">
-              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Custom Label</p>
-              <p className="text-3xl font-extrabold text-black mt-1">00</p>
-            </div>
-          </div>
-        </div>
+    {/* Content Section */}
+    <div className="flex flex-col items-start">
+      <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Custom Label</p>
+      <p className="text-3xl font-extrabold text-black mt-1">00</p>
+    </div>
+  </div>
+</div>
 
         {/* Recent Users and Recent Subscribers Side by Side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
