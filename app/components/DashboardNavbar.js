@@ -38,17 +38,20 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
     }, []);
 
 
-  // Update current time
-  useEffect(() => {
-    const updateTime = () => {
-      setCurrentTime(new Date().toLocaleTimeString());
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
+    useEffect(() => {
+      const updateTime = () => {
+        const time = new Date().toLocaleTimeString('en-CA', {
+          timeZone: 'America/Toronto', // Set to the desired Canada time zone
+          hour12: true, // Use 12-hour clock; change to false for 24-hour
+        });
+        setCurrentTime(time);
+      };
+  
+      updateTime();
+      const interval = setInterval(updateTime, 1000);
+  
+      return () => clearInterval(interval);
+    }, []);
 
 
   // Handle click outside
@@ -187,88 +190,88 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
 
 
       <div className="relative flex items-center">
-  {/* Notification Button */}
-  <button
-    onClick={() => setShowNotifications((prev) => !prev)}
-    className="relative flex items-center justify-center w-11 h-11 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors shadow-md p-1"
-    aria-label="Toggle Notifications"
-  >
-    <Image
-      src="/images/notification.png"
-      alt="Notifications"
-      width={24}
-      height={24}
-      className="object-contain"
-    />
-    {notifications.some((n) => n.status === 'Unread') && (
-      <span className="absolute top-1 right-1 flex items-center justify-center h-3 w-3">
-        <span className="absolute inline-flex h-full w-full bg-red-500 rounded-full animate-ping opacity-75"></span>
-        <span className="relative inline-flex h-2 w-2 bg-red-600 rounded-full"></span>
-      </span>
-    )}
-  </button>
-
-  {/* Notification Tray */}
-  {showNotifications && (
-    <div
-      ref={notificationRef}
-      className="absolute top-full right-0 mt-2 transform translate-x-24 w-[90vw] max-w-md bg-gray-900 shadow-lg rounded-lg border border-gray-700 z-30 overflow-hidden"
-    >
-      {/* Header */}
-      <div className="p-4 bg-gray-800 border-b border-gray-700 flex items-center justify-between">
-        <h4 className="text-sm font-semibold text-white">Notifications</h4>
+        {/* Notification Button */}
         <button
-          onClick={markAllAsRead}
-          className="text-xs font-medium text-blue-400 hover:underline"
+          onClick={() => setShowNotifications((prev) => !prev)}
+          className="relative flex items-center justify-center w-11 h-11 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors shadow-md p-1"
+          aria-label="Toggle Notifications"
         >
-          Mark all as read
+          <Image
+            src="/images/notification.png"
+            alt="Notifications"
+            width={24}
+            height={24}
+            className="object-contain"
+          />
+          {notifications.some((n) => n.status === 'Unread') && (
+            <span className="absolute top-1 right-1 flex items-center justify-center h-3 w-3">
+              <span className="absolute inline-flex h-full w-full bg-red-500 rounded-full animate-ping opacity-75"></span>
+              <span className="relative inline-flex h-2 w-2 bg-red-600 rounded-full"></span>
+            </span>
+          )}
         </button>
-      </div>
 
-      {/* Notification List */}
-      <ul className="max-h-96 overflow-y-auto divide-y divide-gray-700">
-        {notifications.length > 0 ? (
-          notifications.map((notification) => (
-            <li
-              key={notification.id}
-              className={`p-4 hover:bg-gray-700 cursor-pointer flex justify-between items-center transition-all ${
-                notification.status === 'Unread' ? 'bg-gray-800' : 'bg-gray-900'
-              }`}
-              onClick={() => handleNotificationClick(notification.id)}
-            >
-              <div>
-                <p
-                  className={`text-sm font-medium ${
-                    notification.status === 'Unread' ? 'text-white' : 'text-gray-400'
-                  }`}
-                >
-                  {notification.title}
-                </p>
-                <span className="text-xs text-gray-500 mt-1">
-                  {formatRelativeTime(notification.created_at)}
-                </span>
-              </div>
-              {notification.status === 'Unread' && (
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+        {/* Notification Tray */}
+        {showNotifications && (
+          <div
+            ref={notificationRef}
+            className="absolute top-full right-0 mt-2 transform translate-x-24 w-[90vw] max-w-md bg-gray-900 shadow-lg rounded-lg border border-gray-700 z-30 overflow-hidden"
+          >
+            {/* Header */}
+            <div className="p-4 bg-gray-800 border-b border-gray-700 flex items-center justify-between">
+              <h4 className="text-sm font-semibold text-white">Notifications</h4>
+              <button
+                onClick={markAllAsRead}
+                className="text-xs font-medium text-blue-400 hover:underline"
+              >
+                Mark all as read
+              </button>
+            </div>
+
+            {/* Notification List */}
+            <ul className="max-h-96 overflow-y-auto divide-y divide-gray-700">
+              {notifications.length > 0 ? (
+                notifications.map((notification) => (
+                  <li
+                    key={notification.id}
+                    className={`p-4 hover:bg-gray-700 cursor-pointer flex justify-between items-center transition-all ${
+                      notification.status === 'Unread' ? 'bg-gray-800' : 'bg-gray-900'
+                    }`}
+                    onClick={() => handleNotificationClick(notification.id)}
+                  >
+                    <div>
+                      <p
+                        className={`text-sm font-medium ${
+                          notification.status === 'Unread' ? 'text-white' : 'text-gray-400'
+                        }`}
+                      >
+                        {notification.title}
+                      </p>
+                      <span className="text-xs text-gray-500 mt-1">
+                        {formatRelativeTime(notification.created_at)}
+                      </span>
+                    </div>
+                    {notification.status === 'Unread' && (
+                      <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                    )}
+                  </li>
+                ))
+              ) : (
+                <li className="p-4 text-center text-gray-500 text-sm">
+                  You have no notifications
+                </li>
               )}
-            </li>
-          ))
-        ) : (
-          <li className="p-4 text-center text-gray-500 text-sm">
-            You have no notifications
-          </li>
-        )}
-      </ul>
+            </ul>
 
-      {/* Footer */}
-      <div className="p-3 bg-gray-800 text-center">
-        <button className="text-sm font-medium text-blue-400 hover:underline">
-          View All
-        </button>
+            {/* Footer */}
+            <div className="p-3 bg-gray-800 text-center">
+              <button className="text-sm font-medium text-blue-400 hover:underline">
+                View All
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
-  )}
-</div>
 
 
         
