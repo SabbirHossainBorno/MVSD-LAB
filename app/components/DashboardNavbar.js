@@ -186,11 +186,12 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
       </div>
 
 
-      <div className="relative flex items-center space-x-4 md:space-x-6">
+      <div className="relative flex items-center">
   {/* Notification Button */}
   <button
     onClick={() => setShowNotifications((prev) => !prev)}
-    className="relative text-white hover:bg-gray-800 p-2 rounded-full transition-colors flex items-center"
+    className="relative flex items-center justify-center w-10 h-10 bg-gray-800 text-white rounded-full hover:bg-gray-700 transition-colors shadow-md"
+    aria-label="Toggle Notifications"
   >
     <Image
       src="/images/notification.png"
@@ -199,10 +200,10 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
       height={24}
       className="object-contain"
     />
-    {notifications.some((notification) => notification.status === 'Unread') && (
-      <span className="absolute top-2 right-2 transform translate-x-1/2 -translate-y-1/2 flex h-3 w-3">
-        <span className="absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75 animate-ping"></span>
-        <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+    {notifications.some((n) => n.status === 'Unread') && (
+      <span className="absolute top-1 right-1 flex items-center justify-center h-3 w-3">
+        <span className="absolute inline-flex h-full w-full bg-red-500 rounded-full animate-ping opacity-75"></span>
+        <span className="relative inline-flex h-2 w-2 bg-red-600 rounded-full"></span>
       </span>
     )}
   </button>
@@ -211,62 +212,66 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
   {showNotifications && (
     <div
       ref={notificationRef}
-      className="absolute top-full right-0 mt-2 w-full max-w-sm bg-gray-900 shadow-lg rounded-lg border border-gray-700 z-30 sm:w-80"
+      className="absolute top-full right-0 mt-2 w-[95vw] max-w-md bg-gray-900 shadow-lg rounded-lg border border-gray-700 z-30 overflow-hidden"
     >
       {/* Header */}
-      <div className="p-4 bg-gray-800 border-b border-gray-700 flex justify-between items-center">
-        <h4 className="text-lg text-white font-semibold">Notifications</h4>
+      <div className="p-4 bg-gray-800 border-b border-gray-700 flex items-center justify-between">
+        <h4 className="text-sm font-semibold text-white">Notifications</h4>
         <button
           onClick={markAllAsRead}
-          className="text-sm text-blue-500 hover:text-blue-400 transition"
+          className="text-xs font-medium text-blue-400 hover:underline"
         >
           Mark all as read
         </button>
       </div>
 
       {/* Notification List */}
-      <ul className="max-h-60 overflow-y-auto divide-y divide-gray-700">
+      <ul className="max-h-96 overflow-y-auto divide-y divide-gray-700">
         {notifications.length > 0 ? (
           notifications.map((notification) => (
             <li
               key={notification.id}
-              className={`p-4 cursor-pointer transition-all hover:bg-gray-700 ${
-                notification.status === 'Read' ? 'bg-gray-800' : 'bg-gray-700'
+              className={`p-4 hover:bg-gray-700 cursor-pointer flex justify-between items-center transition-all ${
+                notification.status === 'Unread' ? 'bg-gray-800' : 'bg-gray-900'
               }`}
               onClick={() => handleNotificationClick(notification.id)}
             >
-              <div className="flex justify-between items-center">
-                <span
+              <div>
+                <p
                   className={`text-sm font-medium ${
                     notification.status === 'Unread' ? 'text-white' : 'text-gray-400'
                   }`}
                 >
                   {notification.title}
+                </p>
+                <span className="text-xs text-gray-500 mt-1">
+                  {formatRelativeTime(notification.created_at)}
                 </span>
-                {notification.status === 'Unread' && (
-                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                )}
               </div>
-              <p className="text-xs text-gray-400 mt-1">
-                {formatRelativeTime(notification.created_at)}
-              </p>
+              {notification.status === 'Unread' && (
+                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+              )}
             </li>
           ))
         ) : (
-          <li className="p-4 text-gray-500 text-sm text-center">You have no notifications</li>
+          <li className="p-4 text-center text-gray-500 text-sm">
+            You have no notifications
+          </li>
         )}
       </ul>
 
       {/* Footer */}
-      <div className="p-3 bg-gray-800 text-center border-t border-gray-700">
-        <button className="text-sm text-blue-500 hover:text-blue-400">View All</button>
+      <div className="p-3 bg-gray-800 text-center">
+        <button className="text-sm font-medium text-blue-400 hover:underline">
+          View All
+        </button>
       </div>
     </div>
   )}
 </div>
 
 
-
+        
 
         <button
           onClick={handleLogout}
