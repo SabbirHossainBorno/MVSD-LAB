@@ -1,17 +1,25 @@
-// app/api/logout/route.js
-
 import { NextResponse } from 'next/server';
 import logger from '../../../lib/logger';
 import sendTelegramAlert from '../../../lib/telegramAlert';
+import { query } from '../../../lib/db'; // Ensure you import the query function
 
 const formatAlertMessage = (title, email, ipAddress, additionalInfo = '') => {
   return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}${additionalInfo}`;
 };
 
+const updateLogoutDetails = async (email) => {
+  const now = new Date();
+  await query(
+    `UPDATE admin SET status = 'Idle', last_logout_time = $1 WHERE email = $2`,
+    [now, email]
+  );
+};
+
 export async function POST(request) {
+  let email = '';
   try {
     // Retrieve cookies from the request
-    const email = request.cookies.get('email')?.value;
+    email = request.cookies.get('email')?.value;
     const sessionId = request.cookies.get('sessionId')?.value;
     const eid = request.cookies.get('eid')?.value || ''; // Retrieve EID from cookies
     const ipAddress = request.headers.get('x-forwarded-for') || request.connection.remoteAddress;
@@ -29,6 +37,9 @@ export async function POST(request) {
     // Send the Telegram alert
     const logoutMessage = formatAlertMessage('Logged Out Successfully!', email, ipAddress);
     await sendTelegramAlert(logoutMessage);
+
+    // Update logout details
+    await updateLogoutDetails(email);
 
     // Clear cookies
     const response = NextResponse.json({ message: 'Logout Successful' });

@@ -9,6 +9,14 @@ const formatAlertMessage = (title, email, ipAddress, userAgent, additionalInfo =
   return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}\nDevice INFO : ${userAgent}${additionalInfo}`;
 };
 
+const updateLoginDetails = async (email) => {
+  const now = new Date();
+  await query(
+    `UPDATE admin SET status = 'Active', last_login_time = $1, login_count = login_count + 1 WHERE email = $2`,
+    [now, email]
+  );
+};
+
 export async function POST(request) {
   const { email, password } = await request.json();
   const sessionId = uuidv4();
@@ -63,6 +71,9 @@ export async function POST(request) {
             details: `User ${email} logged in successfully from IP ${ipAddress} with User-Agent ${userAgent}`
           }
         });
+
+        await updateLoginDetails(email); // Update login details
+
         const response = NextResponse.json({ success: true, type: table === 'admin' ? 'admin' : 'user' });
         response.cookies.set('email', email, { httpOnly: true });
         response.cookies.set('sessionId', sessionId, { httpOnly: true });
