@@ -190,7 +190,7 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
   {/* Notification Button */}
   <button
     onClick={() => setShowNotifications((prev) => !prev)}
-    className="relative flex items-center justify-center w-10 h-10 bg-gray-800 text-white rounded-full hover:bg-gray-700 transition-colors shadow-md"
+    className="relative flex items-center justify-center w-11 h-11 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors shadow-md p-1"
     aria-label="Toggle Notifications"
   >
     <Image
@@ -212,7 +212,7 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
   {showNotifications && (
     <div
       ref={notificationRef}
-      className="absolute top-full right-0 mt-2 w-[95vw] max-w-md bg-gray-900 shadow-lg rounded-lg border border-gray-700 z-30 overflow-hidden"
+      className="absolute top-full right-0 mt-2 transform translate-x-24 w-[90vw] max-w-md bg-gray-900 shadow-lg rounded-lg border border-gray-700 z-30 overflow-hidden"
     >
       {/* Header */}
       <div className="p-4 bg-gray-800 border-b border-gray-700 flex items-center justify-between">
@@ -275,7 +275,7 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
 
         <button
           onClick={handleLogout}
-          className="text-white hover:bg-gray-800 p-2 rounded-full transition-colors flex items-center"
+          className="relative flex items-center justify-center w-11 h-11 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors shadow-md p-1"
         >
           <Image
             src="/images/logout.png" // Path to your image
@@ -290,7 +290,7 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
           <span className="text-white mr-2 hidden md:block">ADMIN</span>
           <button
             onClick={() => setShowProfileMenu(!showProfileMenu)}
-            className="relative text-white hover:bg-gray-800 p-2 rounded-full transition-colors"
+            className="relative flex items-center justify-center w-11 h-11 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors shadow-md p-1"
           >
             <Image
               src="/images/admin.png" // Path to your image
