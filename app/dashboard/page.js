@@ -21,6 +21,7 @@ const Dashboard = () => {
   const [recentSubscribers, setRecentSubscribers] = useState([]);
   const [admins, setAdmins] = useState([]); // State to manage admin data
   const [loading, setLoading] = useState(true); // State to manage loading
+  const [currentLoginCount, setCurrentLoginCount] = useState(0); // State to manage current login count
 
   useEffect(() => {
     let isMounted = true; // Track if the component is mounted
@@ -39,6 +40,7 @@ const Dashboard = () => {
           setAdmins(result.admins); // Set admin data
           setRecentUsers(result.recentUsers);
           setRecentProfessors(result.recentProfessors);
+          setCurrentLoginCount(result.currentLoginCount); // Set current login count
         }
       } catch (error) {
         toast.error('Failed to fetch data');
@@ -181,7 +183,7 @@ const Dashboard = () => {
             {/* Content Section */}
             <div className="flex flex-col items-start">
               <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Current Login</p>
-              <p className="text-3xl font-extrabold text-black mt-1">00</p>
+              <p className="text-3xl font-extrabold text-black mt-1">{currentLoginCount}</p>
             </div>
           </div>
         </div>
@@ -190,23 +192,25 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 gap-4 mb-5">
           {/* Admin Info */}
           <div className="bg-gray-800 p-4 rounded shadow-lg">
-            <div className="relative">
-              <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-                Login Information
-              </h2>
-              <hr className="border-0 h-1 bg-gradient-to-r from-blue-400 to-purple-500 rounded mb-6" />
-            </div>
+          <div className="relative flex flex-col items-center">
+            <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-orange-500 text-center">
+              Login Information
+            </h2>
+            <hr className="border-0 h-1 bg-gradient-to-r from-teal-400 to-orange-500 rounded w-full mb-6" />
+          </div>
+
             <div className="overflow-x-auto">
             <table className="min-w-full bg-gray-900 text-white rounded shadow-lg">
-              <thead className="text-sm font-semibold text-white">
-                <tr>
-                  <th className="py-3 px-6 text-left border-b border-gray-800">Email</th>
-                  <th className="py-3 px-6 text-left border-b border-gray-800">Status</th>
-                  <th className="py-3 px-6 text-left border-b border-gray-800">Last Login</th>
-                  <th className="py-3 px-6 text-left border-b border-gray-800">Last Logout</th>
-                  <th className="py-3 px-6 text-left border-b border-gray-800">Login Count</th>
-                </tr>
-              </thead>
+            <thead className="text-sm font-semibold text-gray-300 uppercase tracking-wider">
+  <tr className="border-b border-gray-700">
+    <th className="py-3 px-6 text-left">Email</th>
+    <th className="py-3 px-6 text-left">Status</th>
+    <th className="py-3 px-6 text-left">Last Login</th>
+    <th className="py-3 px-6 text-left">Last Logout</th>
+    <th className="py-3 px-6 text-left">Login Count</th>
+  </tr>
+</thead>
+
               <tbody className="text-gray-300">
                 {admins.map((admin) => (
                   <tr key={admin.email} className="hover:bg-gray-800 transition duration-300 ease-in-out">
@@ -277,8 +281,8 @@ const Dashboard = () => {
                   key={subscriber.email}
                   className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition"
                 >
-                  <span className="text-sm font-semibold text-gray-200">{subscriber.email}</span>
-                  <button className="bg-blue-600 text-white hover:bg-blue-700 rounded px-4 py-1 text-xs font-medium">
+                  <span className="text-xs sm:text-sm md:text-base font-semibold text-gray-200 break-words">{subscriber.email}</span>
+                  <button className="bg-blue-600 text-white hover:bg-blue-700 rounded px-2 py-1 text-xs font-medium">
                     Subscribed
                   </button>
                 </li>
@@ -318,7 +322,7 @@ const Dashboard = () => {
                   className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition"
                 >
                   <div className="flex items-center space-x-3">
-                    <span className="text-sm font-semibold text-gray-200">{professor.email}</span>
+                  <span className="text-xs sm:text-sm md:text-base font-semibold text-gray-200 break-words">{professor.email}</span>
                   </div>
                   <div className="flex space-x-2">
                     <div className="bg-yellow-600 text-white rounded px-2 py-1 text-xs font-medium">
