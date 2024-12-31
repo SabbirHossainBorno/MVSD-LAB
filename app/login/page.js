@@ -34,25 +34,31 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
-    const result = await res.json();
-    setLoading(false);
-    if (result.success) {
-      if (result.type === 'admin') {
-        toast.success('Welcome! BOSS');
-        router.push('/dashboard');
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      const result = await res.json();
+      setLoading(false);
+      if (result.success) {
+        if (result.type === 'admin') {
+          toast.success('Welcome! BOSS');
+          router.push('/dashboard');
+        } else {
+          toast.success('Welcome! MVSD LAB MEMBER');
+          router.push('/upload');
+        }
       } else {
-        toast.success('Welcome! MVSD LAB MEMBER');
-        router.push('/upload');
+        toast.error('Invalid Access! Email/Password Is Wrong');
       }
-    } else {
-      toast.error('Invalid Access! Email/Password Is Wrong');
+    } catch (error) {
+      setLoading(false);
+      toast.error('An error occurred during login. Please try again.');
+      console.error('Login error:', error);
     }
   };
 
