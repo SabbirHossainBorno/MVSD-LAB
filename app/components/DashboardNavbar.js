@@ -59,6 +59,7 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
   }, []);
 
 
+
   // Update current time
   useEffect(() => {
     const updateTime = () => {
@@ -186,35 +187,39 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
         </svg>
       </button>
 
+
+
       <div className="flex items-center justify-center flex-1 text-transparent text-3xl lg:text-4xl font-bold tracking-tight md:text-4xl">
         <span className="uppercase bg-clip-text bg-gradient-to-r from-pink-500 via-purple-600 to-blue-500 animate-textGlow">
           Dashboard
         </span>
       </div>
 
+      {/* Current Time Area */}
       <div className="relative flex items-center space-x-4 md:space-x-6">
-      <div className="relative hidden md:flex items-center justify-center h-12">
-        {/* Animated Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-gradient rounded blur opacity-40"></div>
+        <div className="relative hidden md:flex items-center justify-center h-12">
+          {/* Animated Gradient Background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-gradient rounded blur opacity-40"></div>
 
-        {/* Main Content */}
-        <div className="relative z-10 flex items-center space-x-2 bg-gray-900 p-2 rounded shadow border border-gray-700">
-          <div className="text-center">
-            <span className="font-mono text-lg text-white tracking-wide">
-              {currentTime}
-            </span>
+          {/* Main Content */}
+          <div className="relative z-10 flex items-center space-x-2 bg-gray-900 p-2 rounded shadow border border-gray-700">
+            <div className="text-center">
+              <span className="font-mono text-lg text-white tracking-wide">
+                {currentTime}
+              </span>
+            </div>
+            {/* Animated Pulse Dot */}
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
           </div>
-          {/* Animated Pulse Dot */}
-          <div className="w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
-        </div>
       </div>
 
 
+      {/* Notification Area */}
       <div className="relative flex items-center">
         {/* Notification Button */}
         <button
           onClick={() => setShowNotifications((prev) => !prev)}
-          className="relative flex items-center justify-center w-11 h-11 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors shadow-md p-1"
+          className="relative flex items-center justify-center w-11 h-11 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors shadow-md p-2"
           aria-label="Toggle Notifications"
         >
           <Image
@@ -234,87 +239,89 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
 
         {/* Notification Tray */}
         {showNotifications && (
-          <div
-            ref={notificationRef}
-            className="absolute top-full right-0 mt-2 transform translate-x-24 w-[90vw] max-w-md bg-gray-900 shadow-lg rounded border border-gray-700 z-30 overflow-hidden"
-          >
-            {/* Header */}
-            <div className="p-4 bg-gray-800 border-b border-gray-700 flex items-center justify-between">
-              <h4 className="text-sm font-semibold text-white">Notifications</h4>
-              <button
-                onClick={markAllAsRead}
-                className="text-xs font-medium text-blue-400 hover:underline"
-              >
-                Mark all as read
-              </button>
-            </div>
+            <div
+              ref={notificationRef}
+              className="absolute top-full right-0 mt-2 transform translate-x-24 w-[90vw] max-w-md bg-gray-900 shadow-lg rounded border border-gray-700 z-30 overflow-hidden"
+            >
+              {/* Header */}
+              <div className="p-4 bg-gray-800 border-b border-gray-700 flex items-center justify-between">
+                <h4 className="text-sm font-semibold text-white">Notifications</h4>
+                <button
+                  onClick={markAllAsRead}
+                  className="text-xs font-medium text-blue-400 hover:underline"
+                >
+                  Mark all as read
+                </button>
+              </div>
 
-            {/* Notification List */}
-            <ul className="max-h-96 overflow-y-auto divide-y divide-gray-700">
-              {notifications.length > 0 ? (
-                notifications.map((notification) => (
-                  <li
-                    key={notification.id}
-                    className={`p-4 hover:bg-gray-700 cursor-pointer flex justify-between items-center transition-all ${
-                      notification.status === 'Unread' ? 'bg-gray-800' : 'bg-gray-900'
-                    }`}
-                    onClick={() => handleNotificationClick(notification.id)}
-                  >
-                    <div>
-                      <p
-                        className={`text-sm font-medium ${
-                          notification.status === 'Unread' ? 'text-white' : 'text-gray-400'
-                        }`}
-                      >
-                        {notification.title}
-                      </p>
-                      <span className="text-xs text-gray-500 mt-1">
-                        {formatRelativeTime(notification.created_at)}
-                      </span>
-                    </div>
-                    {notification.status === 'Unread' && (
-                      <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                    )}
+              {/* Notification List */}
+              <ul className="max-h-96 overflow-y-auto divide-y divide-gray-700">
+                {notifications.length > 0 ? (
+                  notifications.map((notification) => (
+                    <li
+                      key={notification.id}
+                      className={`p-4 hover:bg-gray-700 cursor-pointer flex justify-between items-center transition-all ${
+                        notification.status === 'Unread' ? 'bg-gray-800' : 'bg-gray-900'
+                      }`}
+                      onClick={() => handleNotificationClick(notification.id)}
+                    >
+                      <div>
+                        <p
+                          className={`text-sm font-medium ${
+                            notification.status === 'Unread' ? 'text-white' : 'text-gray-400'
+                          }`}
+                        >
+                          {notification.title}
+                        </p>
+                        <span className="text-xs text-gray-500 mt-1">
+                          {formatRelativeTime(notification.created_at)}
+                        </span>
+                      </div>
+                      {notification.status === 'Unread' && (
+                        <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                      )}
+                    </li>
+                  ))
+                ) : (
+                  <li className="p-4 text-center text-gray-500 text-sm">
+                    You have no notifications
                   </li>
-                ))
-              ) : (
-                <li className="p-4 text-center text-gray-500 text-sm">
-                  You have no notifications
-                </li>
-              )}
-            </ul>
+                )}
+              </ul>
 
-            {/* Footer */}
-            <div className="p-3 bg-gray-800 text-center">
-              <button className="text-sm font-medium text-blue-400 hover:underline">
-                View All
-              </button>
+              {/* Footer */}
+              <div className="p-3 bg-gray-800 text-center">
+                <button className="text-sm font-medium text-blue-400 hover:underline">
+                  View All
+                </button>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
       </div>
 
+
+        {/* Logout Area */}
+        <div className="relative flex items-center">
+          <button
+            onClick={handleLogout}
+            className="relative flex items-center justify-center w-11 h-11 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors shadow-md p-2"
+          >
+            <Image
+              src="/images/logout.png" // Path to your image
+              alt="Logout"
+              width={24} // Set width
+              height={24} // Set height
+              className="object-contain"
+            />
+          </button>
+        </div>
 
         
-
-        <button
-          onClick={handleLogout}
-          className="relative flex items-center justify-center w-11 h-11 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors shadow-md p-1"
-        >
-          <Image
-            src="/images/logout.png" // Path to your image
-            alt="Logout"
-            width={24} // Set width
-            height={24} // Set height
-            className="object-contain"
-          />
-        </button>
-
         <div className="relative flex items-center">
           <button
             onClick={() => setShowProfileMenu(!showProfileMenu)}
-            className="relative flex items-center justify-center w-11 h-11 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors shadow-md p-1"
+            className="relative flex items-center justify-center w-11 h-11 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors shadow-md p-2"
           >
             {profile && (
               <Image

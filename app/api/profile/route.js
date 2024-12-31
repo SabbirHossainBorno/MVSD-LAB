@@ -1,6 +1,6 @@
 //app/api/profile/route.js
 import { NextResponse } from 'next/server';
-import { query } from '../../../lib/db'; // Ensure this path is correct
+import { query } from '../../../lib/db';
 
 export async function GET(request) {
   const email = request.cookies.get('email')?.value;
@@ -16,6 +16,9 @@ export async function GET(request) {
     if (!profile) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
+
+    // Ensure the profile picture path is relative to the public directory
+    profile.profile_picture = `/images/admin_dp/${profile.profile_picture.split('/').pop()}`;
 
     return NextResponse.json(profile);
   } catch (error) {
