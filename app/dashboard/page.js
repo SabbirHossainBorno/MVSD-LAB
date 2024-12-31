@@ -106,7 +106,7 @@ const Dashboard = () => {
             {/* Icon Section */}
             <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
               <Image 
-                src="/icons/subscribe_count.png" // Image path
+                src="/icons/subscriber.svg" // Image path
                 alt="Total Subscribers Icon" // Alt text for accessibility
                 width={64} // 16 * 4 = 64px width
                 height={64} // 16 * 4 = 64px height
@@ -127,7 +127,7 @@ const Dashboard = () => {
             {/* Icon Section */}
             <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
               <Image 
-                src="/icons/professor_count.png" // Image path
+                src="/icons/professor.svg" // Image path
                 alt="Total Professors Icon" // Alt text for accessibility
                 width={64} // 16 * 4 = 64px width
                 height={64} // 16 * 4 = 64px height
@@ -148,7 +148,7 @@ const Dashboard = () => {
             {/* Icon Section */}
             <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
               <Image 
-                src="/icons/message_count.png" // Image path
+                src="/icons/message.svg" // Image path
                 alt="Total Messages Icon" // Alt text for accessibility
                 width={64} // 16 * 4 = 64px width
                 height={64} // 16 * 4 = 64px height
@@ -169,7 +169,7 @@ const Dashboard = () => {
             {/* Icon Section */}
             <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
               <Image 
-                src="/icons/current_login." // Image path
+                src="/icons/current_login.svg" // Image path
                 alt="Current Login" // Alt text for accessibility
                 width={64} // 16 * 4 = 64px width
                 height={64} // 16 * 4 = 64px height
