@@ -63,6 +63,7 @@ export async function GET(request) {
 
     return NextResponse.json({ authenticated: true });
   } catch (error) {
+    console.error('Error during authentication check:', error); // Added console log
     const alertMessage = formatAlertMessage('Error during authentication check', email, ip, `\nError: ${error.message}`);
     await sendTelegramAlert(alertMessage);
 

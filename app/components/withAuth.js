@@ -1,4 +1,3 @@
-// app/components/withAuth.js
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
