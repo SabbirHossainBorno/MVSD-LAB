@@ -164,13 +164,13 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Custom Card */}
+          {/* Current Login Count */}
           <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-indigo-500">
             {/* Icon Section */}
             <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
               <Image 
-                src="/icons/message_count.png" // Image path
-                alt="Custom Icon" // Alt text for accessibility
+                src="/icons/current_login." // Image path
+                alt="Current Login" // Alt text for accessibility
                 width={64} // 16 * 4 = 64px width
                 height={64} // 16 * 4 = 64px height
                 className="w-16 h-16 md:w-20 md:h-20" // Tailwind classes for sizing
@@ -180,7 +180,7 @@ const Dashboard = () => {
 
             {/* Content Section */}
             <div className="flex flex-col items-start">
-              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Custom Label</p>
+              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Current Login</p>
               <p className="text-3xl font-extrabold text-black mt-1">00</p>
             </div>
           </div>
@@ -198,35 +198,35 @@ const Dashboard = () => {
             </div>
             <div className="overflow-x-auto">
             <table className="min-w-full bg-gray-900 text-white rounded shadow-lg">
-  <thead className="text-sm font-semibold text-white">
-    <tr>
-      <th className="py-3 px-6 text-left border-b border-gray-800">Email</th>
-      <th className="py-3 px-6 text-left border-b border-gray-800">Status</th>
-      <th className="py-3 px-6 text-left border-b border-gray-800">Last Login</th>
-      <th className="py-3 px-6 text-left border-b border-gray-800">Last Logout</th>
-      <th className="py-3 px-6 text-left border-b border-gray-800">Login Count</th>
-    </tr>
-  </thead>
-  <tbody className="text-gray-300">
-    {admins.map((admin) => (
-      <tr key={admin.email} className="hover:bg-gray-800 transition duration-300 ease-in-out">
-        <td className="py-3 px-6 border-b border-gray-800">{admin.email}</td>
-        <td className="py-3 px-6 border-b border-gray-800">
-          <span
-            className={`inline-block px-3 py-1 rounded text-xs font-semibold ${
-              admin.status === 'Active' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-            }`}
-          >
-            {admin.status === 'Active' ? 'Active' : 'Idle'}
-          </span>
-        </td>
-        <td className="py-3 px-6 border-b border-gray-800">{new Date(admin.last_login_time).toLocaleString()}</td>
-        <td className="py-3 px-6 border-b border-gray-800">{new Date(admin.last_logout_time).toLocaleString()}</td>
-        <td className="py-3 px-6 border-b border-gray-800">{admin.login_count}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+              <thead className="text-sm font-semibold text-white">
+                <tr>
+                  <th className="py-3 px-6 text-left border-b border-gray-800">Email</th>
+                  <th className="py-3 px-6 text-left border-b border-gray-800">Status</th>
+                  <th className="py-3 px-6 text-left border-b border-gray-800">Last Login</th>
+                  <th className="py-3 px-6 text-left border-b border-gray-800">Last Logout</th>
+                  <th className="py-3 px-6 text-left border-b border-gray-800">Login Count</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-300">
+                {admins.map((admin) => (
+                  <tr key={admin.email} className="hover:bg-gray-800 transition duration-300 ease-in-out">
+                    <td className="py-3 px-6 border-b border-gray-800">{admin.email}</td>
+                    <td className="py-3 px-6 border-b border-gray-800">
+                      <span
+                        className={`inline-block px-3 py-1 rounded text-xs font-semibold ${
+                          admin.status === 'Active' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                        }`}
+                      >
+                        {admin.status === 'Active' ? 'Active' : 'Idle'}
+                      </span>
+                    </td>
+                    <td className="py-3 px-6 border-b border-gray-800">{new Date(admin.last_login_time).toLocaleString()}</td>
+                    <td className="py-3 px-6 border-b border-gray-800">{new Date(admin.last_logout_time).toLocaleString()}</td>
+                    <td className="py-3 px-6 border-b border-gray-800">{admin.login_count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
             </div>
           </div>
