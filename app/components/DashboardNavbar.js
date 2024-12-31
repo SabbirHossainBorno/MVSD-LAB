@@ -318,46 +318,47 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
         </div>
 
         <div className="relative flex items-center">
-  <button
-    onClick={() => setShowProfileMenu(!showProfileMenu)}
-    className="relative flex items-center justify-center w-11 h-11 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors shadow-md p-2"
-  >
-    {profile && (
-      <div className="relative">
-        <Image
-          src={profile.profile_picture}
-          alt="Profile"
-          width={32}
-          height={32}
-          className="rounded-full"
-        />
-        {profile.status === 'Active' && (
-          <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-gray-800 rounded-full"></span>
-        )}
-      </div>
-    )}
-  </button>
-  {showProfileMenu && profile && (
-    <div className="absolute top-full right-0 mt-2 w-48 bg-gray-800 shadow-lg rounded border border-gray-700 overflow-hidden z-20">
-      <ul>
-        <li className="p-3 border-b border-gray-700 hover:bg-gray-700">
-          <span className="block text-gray-300">{profile.email}</span>
-        </li>
-        <li className="p-3 border-b border-gray-700 hover:bg-gray-700">
-          <Link href="/profile" className="block text-gray-300">Profile</Link>
-        </li>
-        <li className="p-3 border-b border-gray-700 hover:bg-gray-700">
           <button
-            onClick={handleLogout}
-            className="block w-full text-left text-gray-300"
+            onClick={() => setShowProfileMenu(!showProfileMenu)}
+            className="relative flex items-center justify-center w-11 h-11 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors shadow-md p-2"
           >
-            Logout
+            {profile && (
+              <div className="relative">
+                <Image
+                  src={profile.profile_picture}
+                  alt="Profile"
+                  width={32}
+                  height={32}
+                  className="rounded-full"
+                />
+                {profile.status === 'Active' && (
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-gray-800 rounded-full"></span>
+                )}
+              </div>
+            )}
           </button>
-        </li>
-      </ul>
-    </div>
-  )}
-</div>
+          {showProfileMenu && profile && (
+            <div className="absolute top-full right-0 mt-2 w-48 bg-gray-800 shadow-lg rounded border border-gray-700 overflow-hidden z-20">
+              <ul>
+                <li className="p-3 border-b border-gray-700 hover:bg-gray-700">
+                  <span className="block text-gray-300">{profile.email}</span>
+                </li>
+                <li className="p-3 border-b border-gray-700 hover:bg-gray-700">
+                  <Link href="/profile" className="block text-gray-300">Profile</Link>
+                </li>
+                <li className="p-3 border-b border-gray-700 hover:bg-gray-700">
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left text-gray-300"
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
       </nav>
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">

@@ -184,6 +184,22 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* Login Information */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+          {/* Recent Users */}
+          <div className="bg-gray-800 p-4 rounded shadow-lg">
+            <div className="relative">
+              <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-teal-500">
+                Login Information
+              </h2>
+              <hr className="border-0 h-1 bg-gradient-to-r from-green-400 to-teal-500 rounded-full mb-6" />
+            </div>
+
+
+            
+          </div>
+        </div>
+
         {/* Recent Users and Recent Subscribers Side by Side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
           {/* Recent Users */}
@@ -239,7 +255,12 @@ const Dashboard = () => {
             <Link href="/dashboard/subscribers_list" className="block mt-3 text-center text-blue-400 hover:text-blue-500 text-sm">View All</Link>
           </div>
 
-          {/* Message Statistics */}
+          
+        </div>
+
+        {/* Message Statistics and Recent Professors Side by Side */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+              {/* Message Statistics */}
           <div className="bg-gray-800 p-4 rounded shadow-lg">
             <div className="relative">
               <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-yellow-500">
