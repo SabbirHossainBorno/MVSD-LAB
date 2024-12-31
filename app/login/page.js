@@ -63,10 +63,12 @@ function LoginPage() {
   };
 
   useEffect(() => {
-    if (searchParams.get('sessionExpired')) {
-      toast.error('Session Expired! Please Login Again.');
-    } else if (searchParams.get('authRequired')) {
-      toast.error('Authentication Required! Need To Login.');
+    if (typeof window !== 'undefined') { // Only run this client-side
+      if (searchParams.get('sessionExpired')) {
+        toast.error('Session Expired! Please Login Again.');
+      } else if (searchParams.get('authRequired')) {
+        toast.error('Authentication Required! Need To Login.');
+      }
     }
   }, [searchParams]);
 

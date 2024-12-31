@@ -7,36 +7,56 @@ import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Image from 'next/image';
-
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function DashboardNavbar({ toggleDashboardSidebar }) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [currentTime, setCurrentTime] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [profile, setProfile] = useState(null); // Add profile state
   const notificationRef = useRef(null);
 
 
-    useEffect(() => {
-      const fetchNotifications = async () => {
-        try {
-          const response = await fetch('/api/notification');
-          const result = await response.json();
-          if (response.ok) {
-            const sortedNotifications = result.sort((a, b) =>
-              a.status === 'Unread' ? -1 : 1
-            );
-            setNotifications(sortedNotifications);
-          } else {
-            console.error(result.message);
-          }
-        } catch (error) {
-          console.error('Failed to fetch notifications:', error);
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetch('/api/notification');
+        const result = await response.json();
+        if (response.ok) {
+          const sortedNotifications = result.sort((a, b) =>
+            a.status === 'Unread' ? -1 : 1
+          );
+          setNotifications(sortedNotifications);
+        } else {
+          console.error(result.message);
         }
-      };
-  
-      fetchNotifications();
-    }, []);
+      } catch (error) {
+        console.error('Failed to fetch notifications:', error);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await fetch('/api/profile');
+        const result = await response.json();
+        if (response.ok) {
+          setProfile(result);
+        } else {
+          console.error(result.error);
+        }
+      } catch (error) {
+        console.error('Failed to fetch profile:', error);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
 
   // Update current time
@@ -121,6 +141,7 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
   };
 
   const handleLogout = async () => {
+    setLoading(true);
     try {
       const response = await fetch('/api/logout', { method: 'POST' });
       if (response.ok) {
@@ -132,11 +153,11 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
           document.cookie = cookie.trim().replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
         });
         toast.success('Logout Successful', {
-          position: 'top-right', // Show toast message on success
+          position: 'top-right',
         });
         setTimeout(() => {
           window.location.href = '/login';
-        }, 2000); // Redirect after a delay for the toast to appear
+        }, 2000);
       } else {
         toast.error('Logout Failed', {
           position: 'top-right',
@@ -148,6 +169,8 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
         position: 'top-right',
       });
       console.error('Logout Failed:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -270,6 +293,7 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
           </div>
         )}
       </div>
+      </div>
 
 
         
@@ -288,23 +312,27 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
         </button>
 
         <div className="relative flex items-center">
-          <span className="text-white mr-2 hidden md:block">ADMIN</span>
           <button
             onClick={() => setShowProfileMenu(!showProfileMenu)}
             className="relative flex items-center justify-center w-11 h-11 bg-gray-800 text-white rounded hover:bg-gray-700 transition-colors shadow-md p-1"
           >
-            <Image
-              src="/images/admin.png" // Path to your image
-              alt="Profile"
-              width={32} // Set width for the profile image
-              height={32} // Set height for the profile image
-              className="rounded-full"
-            />
+            {profile && (
+              <Image
+                src={profile.profile_picture}
+                alt="Profile"
+                width={32}
+                height={32}
+                className="rounded-full"
+              />
+            )}
           </button>
 
-          {showProfileMenu && (
+          {showProfileMenu && profile && (
             <div className="absolute top-full right-0 mt-2 w-48 bg-gray-800 shadow-lg rounded border border-gray-700 overflow-hidden z-20">
               <ul>
+                <li className="p-3 border-b border-gray-700 hover:bg-gray-700">
+                  <span className="block text-gray-300">{profile.email}</span>
+                </li>
                 <li className="p-3 border-b border-gray-700 hover:bg-gray-700">
                   <Link href="/profile" className="block text-gray-300">Profile</Link>
                 </li>
@@ -320,9 +348,13 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
             </div>
           )}
         </div>
-      </div>
-    </nav>
-    <ToastContainer />
+      </nav>
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
+          <LoadingSpinner />
+        </div>
+      )}
+      <ToastContainer />
     </>
   );
 }
