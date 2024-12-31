@@ -201,16 +201,15 @@ const Dashboard = () => {
 
             <div className="overflow-x-auto">
             <table className="min-w-full bg-gray-900 text-white rounded shadow-lg">
-            <thead className="text-sm font-semibold text-gray-300 uppercase tracking-wider">
-  <tr className="border-b border-gray-700">
-    <th className="py-3 px-6 text-left">Email</th>
-    <th className="py-3 px-6 text-left">Status</th>
-    <th className="py-3 px-6 text-left">Last Login</th>
-    <th className="py-3 px-6 text-left">Last Logout</th>
-    <th className="py-3 px-6 text-left">Login Count</th>
-  </tr>
-</thead>
-
+            <thead className="text-sm font-semibold text-gray-200 uppercase tracking-wider">
+              <tr className="bg-gradient-to-r from-blue-500 to-indigo-600">
+                <th className="py-3 px-6 text-left text-white">Email</th>
+                <th className="py-3 px-6 text-left text-white">Status</th>
+                <th className="py-3 px-6 text-left text-white">Last Login</th>
+                <th className="py-3 px-6 text-left text-white">Last Logout</th>
+                <th className="py-3 px-6 text-left text-white">Login Count</th>
+              </tr>
+            </thead>
               <tbody className="text-gray-300">
                 {admins.map((admin) => (
                   <tr key={admin.email} className="hover:bg-gray-800 transition duration-300 ease-in-out">
