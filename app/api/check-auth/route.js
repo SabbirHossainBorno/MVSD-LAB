@@ -22,6 +22,7 @@ const validateSession = (request) => {
 export async function GET(request) {
   const { sessionId, eid, ip, userAgent, email } = validateSession(request);
 
+  // Handle unauthorized access
   if (!email || !sessionId) {
     const alertMessage = formatAlertMessage('Unauthorized Access Attempt!', email, ip);
     await sendTelegramAlert(alertMessage);
@@ -31,24 +32,26 @@ export async function GET(request) {
         eid,
         sid: sessionId,
         taskName: 'Auth Check',
-        details: `Unauthorized access attempt from IP ${ip} with User-Agent ${userAgent}`
-      }
+        details: `Unauthorized access attempt from IP ${ip} with User-Agent ${userAgent}`,
+      },
     });
 
     return NextResponse.json({ authenticated: false });
   }
 
   try {
+    // Check session expiration
     const now = new Date();
     const lastActivity = request.cookies.get('lastActivity')?.value;
     const lastActivityDate = new Date(lastActivity);
     const diff = now - lastActivityDate;
 
     if (diff > 10 * 60 * 1000) { // 10 minutes
-      await handleSessionExpiration(); // Remove router argument
+      await handleSessionExpiration(null); // Handle session expiration
       return NextResponse.json({ authenticated: false, message: 'Session expired' });
     }
 
+    // Log successful authentication check
     const alertMessage = formatAlertMessage('Authentication Check Successful', email, ip);
     await sendTelegramAlert(alertMessage);
 
@@ -57,14 +60,20 @@ export async function GET(request) {
         eid,
         sid: sessionId,
         taskName: 'Auth Check',
-        details: `Authentication check successful for ${email} from IP ${ip} with User-Agent ${userAgent}`
-      }
+        details: `Authentication check successful for ${email} from IP ${ip} with User-Agent ${userAgent}`,
+      },
     });
 
     return NextResponse.json({ authenticated: true });
   } catch (error) {
-    console.error('Error during authentication check:', error); // Added console log
-    const alertMessage = formatAlertMessage('Error during authentication check', email, ip, `\nError: ${error.message}`);
+    console.error('Error during authentication check:', error);
+
+    const alertMessage = formatAlertMessage(
+      'Error during authentication check',
+      email,
+      ip,
+      `\nError: ${error.message}`
+    );
     await sendTelegramAlert(alertMessage);
 
     logger.error('Error during authentication check', {
@@ -72,8 +81,8 @@ export async function GET(request) {
         eid,
         sid: sessionId,
         taskName: 'Auth Check',
-        details: `Error during authentication check for ${email}: ${error.message} from IP ${ip} with User-Agent ${userAgent}`
-      }
+        details: `Error during authentication check for ${email}: ${error.message} from IP ${ip} with User-Agent ${userAgent}`,
+      },
     });
 
     return NextResponse.json({ authenticated: false, message: 'Internal server error' });
