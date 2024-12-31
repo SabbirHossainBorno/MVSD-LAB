@@ -59,8 +59,9 @@ export async function GET(request) {
     const recentProfessorsQuery = 'SELECT id, first_name, last_name, phone, dob, email, short_bio, joining_date, leaving_date, photo, status, type FROM professor_basic_info ORDER BY id DESC LIMIT 5';
     const recentSubscribersQuery = 'SELECT * FROM subscriber ORDER BY date DESC LIMIT 7';
     const recentUsersQuery = 'SELECT * FROM users WHERE status = \'approved\' ORDER BY id DESC LIMIT 5';
+    const adminDetailsQuery = 'SELECT * FROM admin'; // Add query for admin data
 
-    const [subscriberCount, userDetails, professorDetails, messageDetails, recentSubscribers, recentUsers, recentProfessors] = await Promise.all([
+    const [subscriberCount, userDetails, professorDetails, messageDetails, recentSubscribers, recentUsers, recentProfessors, adminDetails] = await Promise.all([
       query(subscriberCountQuery),
       query(userDetailsQuery),
       query(professorDetailsQuery),
@@ -68,6 +69,7 @@ export async function GET(request) {
       query(recentSubscribersQuery),
       query(recentUsersQuery),
       query(recentProfessorsQuery),
+      query(adminDetailsQuery), // Fetch admin data
     ]);
 
     // Log and alert successful data fetch
@@ -91,6 +93,7 @@ export async function GET(request) {
       recentSubscribers: recentSubscribers.rows,
       recentUsers: recentUsers.rows,
       recentProfessors: recentProfessors.rows,
+      admins: adminDetails.rows, // Include admin data in the response
     });
   } catch (error) {
     const errorMessage = formatAlertMessage('Error Fetching Dashboard Data', email, ip, `\nError: ${error.message}`);

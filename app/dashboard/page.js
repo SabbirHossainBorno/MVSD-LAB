@@ -19,6 +19,7 @@ const Dashboard = () => {
   const [recentUsers, setRecentUsers] = useState([]);
   const [recentProfessors, setRecentProfessors] = useState([]);
   const [recentSubscribers, setRecentSubscribers] = useState([]);
+  const [admins, setAdmins] = useState([]); // State to manage admin data
   const [loading, setLoading] = useState(true); // State to manage loading
 
   useEffect(() => {
@@ -35,6 +36,7 @@ const Dashboard = () => {
           setProfessorsCount(result.professorCount);
           setMessagesCount(result.messageCount);
           setRecentSubscribers(result.recentSubscribers);
+          setAdmins(result.admins); // Set admin data
           setRecentUsers(result.recentUsers);
           setRecentProfessors(result.recentProfessors);
         }
@@ -185,18 +187,38 @@ const Dashboard = () => {
         </div>
 
         {/* Login Information */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-          {/* Recent Users */}
+
+        <div className="grid grid-cols-1 gap-4 mb-5">
+          {/* Admin Info */}
           <div className="bg-gray-800 p-4 rounded shadow-lg">
             <div className="relative">
-              <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-teal-500">
+              <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
                 Login Information
               </h2>
-              <hr className="border-0 h-1 bg-gradient-to-r from-green-400 to-teal-500 rounded-full mb-6" />
+              <hr className="border-0 h-1 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mb-6" />
             </div>
-
-
-            
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-gray-800 text-white">
+                <thead>
+                  <tr>
+                    <th className="py-2 px-4 border-b border-gray-700">Email</th>
+                    <th className="py-2 px-4 border-b border-gray-700">Status</th>
+                    <th className="py-2 px-4 border-b border-gray-700">Last Login</th>
+                    <th className="py-2 px-4 border-b border-gray-700">Login Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {admins.map((admin) => (
+                    <tr key={admin.email}>
+                      <td className="py-2 px-4 border-b border-gray-700">{admin.email}</td>
+                      <td className="py-2 px-4 border-b border-gray-700">{admin.status}</td>
+                      <td className="py-2 px-4 border-b border-gray-700">{new Date(admin.last_login_time).toLocaleString()}</td>
+                      <td className="py-2 px-4 border-b border-gray-700">{admin.login_count}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
