@@ -187,7 +187,6 @@ const Dashboard = () => {
         </div>
 
         {/* Login Information */}
-
         <div className="grid grid-cols-1 gap-4 mb-5">
           {/* Admin Info */}
           <div className="bg-gray-800 p-4 rounded shadow-lg">
@@ -195,29 +194,40 @@ const Dashboard = () => {
               <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
                 Login Information
               </h2>
-              <hr className="border-0 h-1 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mb-6" />
+              <hr className="border-0 h-1 bg-gradient-to-r from-blue-400 to-purple-500 rounded mb-6" />
             </div>
             <div className="overflow-x-auto">
-              <table className="min-w-full bg-gray-800 text-white">
-                <thead>
-                  <tr>
-                    <th className="py-2 px-4 border-b border-gray-700">Email</th>
-                    <th className="py-2 px-4 border-b border-gray-700">Status</th>
-                    <th className="py-2 px-4 border-b border-gray-700">Last Login</th>
-                    <th className="py-2 px-4 border-b border-gray-700">Login Count</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {admins.map((admin) => (
-                    <tr key={admin.email}>
-                      <td className="py-2 px-4 border-b border-gray-700">{admin.email}</td>
-                      <td className="py-2 px-4 border-b border-gray-700">{admin.status}</td>
-                      <td className="py-2 px-4 border-b border-gray-700">{new Date(admin.last_login_time).toLocaleString()}</td>
-                      <td className="py-2 px-4 border-b border-gray-700">{admin.login_count}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <table className="min-w-full bg-gray-900 text-white rounded shadow-lg">
+  <thead className="text-sm font-semibold text-white">
+    <tr>
+      <th className="py-3 px-6 text-left border-b border-gray-800">Email</th>
+      <th className="py-3 px-6 text-left border-b border-gray-800">Status</th>
+      <th className="py-3 px-6 text-left border-b border-gray-800">Last Login</th>
+      <th className="py-3 px-6 text-left border-b border-gray-800">Last Logout</th>
+      <th className="py-3 px-6 text-left border-b border-gray-800">Login Count</th>
+    </tr>
+  </thead>
+  <tbody className="text-gray-300">
+    {admins.map((admin) => (
+      <tr key={admin.email} className="hover:bg-gray-800 transition duration-300 ease-in-out">
+        <td className="py-3 px-6 border-b border-gray-800">{admin.email}</td>
+        <td className="py-3 px-6 border-b border-gray-800">
+          <span
+            className={`inline-block px-3 py-1 rounded text-xs font-semibold ${
+              admin.status === 'Active' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`}
+          >
+            {admin.status === 'Active' ? 'Active' : 'Idle'}
+          </span>
+        </td>
+        <td className="py-3 px-6 border-b border-gray-800">{new Date(admin.last_login_time).toLocaleString()}</td>
+        <td className="py-3 px-6 border-b border-gray-800">{new Date(admin.last_logout_time).toLocaleString()}</td>
+        <td className="py-3 px-6 border-b border-gray-800">{admin.login_count}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
             </div>
           </div>
         </div>
