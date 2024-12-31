@@ -84,7 +84,7 @@ const Dashboard = () => {
             {/* Icon Section */}
             <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
             <Image 
-              src="/icons/user_count.png" // Image path
+              src="/icons/user.svg" // Image path
               alt="Total Users Icon" // Alt text
               width={64} // 16 * 4 = 64px width
               height={64} // 16 * 4 = 64px height
