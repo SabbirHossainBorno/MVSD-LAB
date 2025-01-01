@@ -24,6 +24,7 @@ const withAuth = (WrappedComponent) => {
     }, [router]);
 
     const checkAuth = useCallback(async () => {
+      console.log('Triggering authentication check');
       try {
         const response = await fetch('/api/check-auth');
         if (!response.ok) throw new Error('Failed to fetch auth status');
