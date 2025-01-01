@@ -24,7 +24,7 @@ const withAuth = (WrappedComponent) => {
     }, [router]);
 
     const checkAuth = useCallback(async () => {
-      console.log('Triggering authentication check');
+      //console.log('Triggering authentication check');
       try {
         const response = await fetch('/api/check-auth');
         if (!response.ok) throw new Error('Failed to fetch auth status');
@@ -62,7 +62,7 @@ const withAuth = (WrappedComponent) => {
           const diff = now - lastActivityDate;
 
           if (diff > 10 * 60 * 1000) { // 10 minutes
-            console.log('Session expired due to inactivity');
+            //console.log('Session expired due to inactivity');
             handleSessionExpiration(router); // Pass router here
           }
         }

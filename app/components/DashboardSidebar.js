@@ -22,9 +22,9 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
   return (
     <aside className={`fixed top-0 left-0 w-64 bg-gray-900 text-white h-full p-6 transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:w-64 md:flex md:flex-col z-50 shadow-lg overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent`}>
       {/* Logo and Title - Fixed */}
-      <div className="flex flex-col items-center mb-1 sticky top-0 bg-gray-900 p-2 z-40">
-        <Image src="/images/dashboardSidebar_logo.svg" alt="Logo" width={320} height={220} className="object-contain mb-2"/>
-        <hr className="w-full border-t-4 border-indigo-600 mt-2 rounded"/>
+      <div className="flex flex-col items-center mb-1 sticky top-0 bg-gray-900 p-1 z-40">
+        <Image src="/images/dashboardSidebar_logo.svg" alt="Logo" width={340} height={240} className="object-contain mb-1"/>
+        <hr className="w-full border-t-4 border-indigo-600 mt-1 rounded"/>
       </div>
 
       {/* Navigation Links */}

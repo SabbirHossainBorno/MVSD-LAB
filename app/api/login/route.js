@@ -24,7 +24,7 @@ export async function POST(request) {
   const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
 
-  console.log(`Login attempt: email=${email}, ipAddress=${ipAddress}, userAgent=${userAgent}`);
+  //console.log(`Login attempt: email=${email}, ipAddress=${ipAddress}, userAgent=${userAgent}`);
 
   const loginAttemptMessage = formatAlertMessage('Login Attempt!', email, ipAddress, userAgent);
   await sendTelegramAlert(loginAttemptMessage);
@@ -49,7 +49,7 @@ export async function POST(request) {
         }
       });
 
-      console.log(`Querying ${table} table for email=${email}`);
+      //console.log(`Querying ${table} table for email=${email}`);
 
       const res = await query(`SELECT * FROM ${table} WHERE email = $1 AND password = $2`, [email, password]);
       if (res.rows.length > 0) {
@@ -64,7 +64,7 @@ export async function POST(request) {
           }
         });
 
-        console.log(`Login successful: email=${email}, eid=${eid}`);
+        //console.log(`Login successful: email=${email}, eid=${eid}`);
 
         const successMessage = formatAlertMessage(`${table === 'admin' ? 'Admin' : 'User'} Login Successful.`, email, ipAddress, userAgent, `\nEID: ${eid}`);
         await sendTelegramAlert(successMessage);
@@ -107,7 +107,7 @@ export async function POST(request) {
       }
     });
 
-    console.log(`Login failed: email=${email}`);
+    //console.log(`Login failed: email=${email}`);
 
     return NextResponse.json({ success: false, message: 'Invalid email or password' });
   } catch (error) {
