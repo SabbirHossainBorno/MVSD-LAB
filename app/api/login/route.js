@@ -24,6 +24,8 @@ export async function POST(request) {
   const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
 
+  console.log(`Login attempt: email=${email}, ipAddress=${ipAddress}, userAgent=${userAgent}`);
+
   const loginAttemptMessage = formatAlertMessage('Login Attempt!', email, ipAddress, userAgent);
   await sendTelegramAlert(loginAttemptMessage);
 
@@ -47,6 +49,8 @@ export async function POST(request) {
         }
       });
 
+      console.log(`Querying ${table} table for email=${email}`);
+
       const res = await query(`SELECT * FROM ${table} WHERE email = $1 AND password = $2`, [email, password]);
       if (res.rows.length > 0) {
         const eid = `${Math.floor(Math.random() * 1000000)}-MVSDLAB`; // Generate an execution ID
@@ -59,6 +63,8 @@ export async function POST(request) {
             details: `Generated EID ${eid} for user ${email}`
           }
         });
+
+        console.log(`Login successful: email=${email}, eid=${eid}`);
 
         const successMessage = formatAlertMessage(`${table === 'admin' ? 'Admin' : 'User'} Login Successful.`, email, ipAddress, userAgent, `\nEID: ${eid}`);
         await sendTelegramAlert(successMessage);
@@ -100,6 +106,9 @@ export async function POST(request) {
         details: `Failed login attempt for ${email} from IP ${ipAddress} with User-Agent ${userAgent}`
       }
     });
+
+    console.log(`Login failed: email=${email}`);
+
     return NextResponse.json({ success: false, message: 'Invalid email or password' });
   } catch (error) {
     const errorMessage = formatAlertMessage('Error During Login!', email, ipAddress, userAgent, `\nError: ${error.message}`);
@@ -113,6 +122,9 @@ export async function POST(request) {
         details: `Error during login for ${email}: ${error.message} from IP ${ipAddress} with User-Agent ${userAgent}`
       }
     });
+
+    console.error(`Error during login: email=${email}, error=${error.message}`);
+
     return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
   }
 }

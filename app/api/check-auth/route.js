@@ -16,6 +16,8 @@ const validateSession = (request) => {
   const emailCookie = request.cookies.get('email');
   const email = emailCookie ? emailCookie.value : null;
 
+  console.log(`Session validation: email=${email}, sessionId=${sessionId}, ip=${ip}, userAgent=${userAgent}`);
+
   return { sessionId, eid, ip, userAgent, email };
 };
 
@@ -36,6 +38,8 @@ export async function GET(request) {
       },
     });
 
+    console.log(`Unauthorized access attempt: email=${email}, ip=${ip}, userAgent=${userAgent}`);
+
     return NextResponse.json({ authenticated: false });
   }
 
@@ -45,6 +49,8 @@ export async function GET(request) {
     const lastActivity = request.cookies.get('lastActivity')?.value;
     const lastActivityDate = new Date(lastActivity);
     const diff = now - lastActivityDate;
+
+    console.log(`Session check: email=${email}, lastActivity=${lastActivity}, diff=${diff}`);
 
     if (diff > 10 * 60 * 1000) { // 10 minutes
       await handleSessionExpiration(null); // Handle session expiration
@@ -63,6 +69,8 @@ export async function GET(request) {
         details: `Authentication check successful for ${email} from IP ${ip} with User-Agent ${userAgent}`,
       },
     });
+
+    console.log(`Authentication check successful: email=${email}, ip=${ip}, userAgent=${userAgent}`);
 
     return NextResponse.json({ authenticated: true });
   } catch (error) {
@@ -84,6 +92,8 @@ export async function GET(request) {
         details: `Error during authentication check for ${email}: ${error.message} from IP ${ip} with User-Agent ${userAgent}`,
       },
     });
+
+    console.log(`Error during authentication check: email=${email}, error=${error.message}`);
 
     return NextResponse.json({ authenticated: false, message: 'Internal server error' });
   }

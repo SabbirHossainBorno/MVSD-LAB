@@ -8,6 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner';
 import axios from 'axios';
+import Cookies from 'js-cookie'; // Import Cookies library
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -45,6 +46,7 @@ function LoginPage() {
       const result = await res.json();
       setLoading(false);
       if (result.success) {
+        Cookies.set('lastActivity', new Date().toISOString()); // Set lastActivity cookie
         if (result.type === 'admin') {
           toast.success('Welcome! BOSS');
           router.push('/dashboard');

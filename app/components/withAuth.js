@@ -1,3 +1,4 @@
+//app/components/withAuth.js
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
@@ -60,6 +61,7 @@ const withAuth = (WrappedComponent) => {
           const diff = now - lastActivityDate;
 
           if (diff > 10 * 60 * 1000) { // 10 minutes
+            console.log('Session expired due to inactivity');
             handleSessionExpiration(router); // Pass router here
           }
         }
