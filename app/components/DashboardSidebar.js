@@ -41,6 +41,12 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
             <span className="text-md font-medium">Home</span>
           </div>
         </Link>
+        <Link href="/dashboard/subscribers_list">
+          <div className="block p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer">
+            <Image src="/icons/subscriber_list.png" alt="Subscriber List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
+            <span className="text-md font-medium">Subscriber List</span>
+          </div>
+        </Link>
         <Link href="/dashboard/professor_add">
           <div className="block p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer">
             <Image src="/icons/add_professor.png" alt="Add Professor" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
@@ -51,18 +57,6 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
           <div className="block p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer">
             <Image src="/icons/professor_list.png" alt="Professors List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
             <span className="text-md font-medium">Professor List</span>
-          </div>
-        </Link>
-        <Link href="/dashboard/users_list">
-          <div className="block p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer">
-            <Image src="/icons/user_list.png" alt="Users List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">Users List</span>
-          </div>
-        </Link>
-        <Link href="/dashboard/subscribers_list">
-          <div className="block p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer">
-            <Image src="/icons/subscriber_list.png" alt="Subscriber List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">Subscriber List</span>
           </div>
         </Link>
 
@@ -81,23 +75,24 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
 
           {/* Dropdown Menu */}
           {showDropdown && (
-            <div className="relative w-full mt-2 bg-gray-900 rounded-lg shadow-xl z-20">
-              <Link href="/dashboard/add_member/staff">
-                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                  <span className="text-sm font-medium text-white">Staff</span>
-                </div>
-              </Link>
-              <Link href="/dashboard/add_member/post_doc_candidate">
-                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                  <span className="text-sm font-medium text-white">Post Doc Candidate</span>
-                </div>
-              </Link>
-              <Link href="/dashboard/add_member/masc_candidate">
-                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                  <span className="text-sm font-medium text-white">MASc Candidate</span>
-                </div>
-              </Link>
-            </div>
+            <div className="relative w-full mt-2 mb-2 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950 rounded shadow-lg z-20">
+            <Link href="/dashboard/add_member/staff">
+              <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                <span className="text-sm font-semibold text-white">Staff</span>
+              </div>
+            </Link>
+            <Link href="/dashboard/add_member/post_doc_candidate">
+              <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                <span className="text-sm font-semibold text-white">Post Doc Candidate</span>
+              </div>
+            </Link>
+            <Link href="/dashboard/add_member/masc_candidate">
+              <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                <span className="text-sm font-semibold text-white">MASc Candidate</span>
+              </div>
+            </Link>
+          </div>
+
           )}
         </div>
 
@@ -114,6 +109,19 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         <div className="block p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer">
             <Image src="/icons/message.png" alt="Message" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
             <span className="text-md font-medium">Message</span>
+          </div>
+        </Link>
+
+
+
+
+
+
+
+        <Link href="/dashboard/users_list">
+          <div className="block p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer">
+            <Image src="/icons/user_list.png" alt="Users List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
+            <span className="text-md font-medium">Users List</span>
           </div>
         </Link>
       </nav>
