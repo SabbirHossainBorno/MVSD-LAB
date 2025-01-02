@@ -4,13 +4,13 @@ import { query } from '../../../lib/db';
 import logger from '../../../lib/logger';
 import sendTelegramAlert from '../../../lib/telegramAlert';
 
-const formatAlertMessage = (title, details) => {
-  return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\n${details}`;
+const formatAlertMessage = (title, ipAddress, status) => {
+  return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\nIP : ${ipAddress}\nStatus : ${status}`;
 };
 
 export async function GET(request) {
-  const sessionId = request.cookies.get('sessionId') || 'Unknown Session';
-  const eid = request.cookies.get('eid') || 'Unknown EID';
+  const sessionId = request.cookies.get('sessionId')?.value || 'Unknown Session';
+  const eid = request.cookies.get('eid')?.value || 'Unknown EID';
   const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
 
@@ -18,7 +18,7 @@ export async function GET(request) {
     const queryText = 'SELECT id, email, date FROM subscriber';
     const result = await query(queryText);
 
-    const successMessage = formatAlertMessage('Subscribers List API Called Successfully', `IP: ${ipAddress}\nUser-Agent: ${userAgent}\nStatus: 200`);
+    const successMessage = formatAlertMessage('Subscribers List - API', ipAddress, 200);
     await sendTelegramAlert(successMessage);
 
     logger.info('Subscribers list fetched successfully', {
@@ -32,7 +32,7 @@ export async function GET(request) {
 
     return NextResponse.json({ subscribers: result.rows });
   } catch (error) {
-    const errorMessage = formatAlertMessage('Error Fetching Subscribers List', `IP: ${ipAddress}\nUser-Agent: ${userAgent}\nError: ${error.message}\nStatus: 500`);
+    const errorMessage = formatAlertMessage('Error Fetching Subscribers List', ipAddress, 500);
     await sendTelegramAlert(errorMessage);
 
     logger.error('Error fetching subscribers list', {

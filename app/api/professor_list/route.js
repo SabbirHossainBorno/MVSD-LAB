@@ -1,15 +1,21 @@
 // app/api/professor_list/route.js
 import { NextResponse } from 'next/server';
-import { Pool } from 'pg';
+import { query } from '../../../lib/db';
+import logger from '../../../lib/logger';
+import sendTelegramAlert from '../../../lib/telegramAlert';
 
 export const dynamic = 'force-dynamic';
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+const formatAlertMessage = (title, details) => {
+  return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\n${details}`;
+};
 
 export async function GET(req) {
-  const client = await pool.connect();
+  const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
+  const eid = req.cookies.get('eid')?.value || 'Unknown EID';
+  const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
+  const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
+
   try {
     const url = new URL(req.url);
     const search = url.searchParams.get('search') || '';
@@ -41,27 +47,42 @@ export async function GET(req) {
     searchQuery += ` ORDER BY substring(id from '[0-9]+')::int ${sortOrder}, id ${sortOrder} LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2}`;
     queryParams.push(resultsPerPage, offset); // Add pagination parameters
 
-    // Log the search query and parameters
-    console.log('Search Query:', searchQuery);
-    console.log('Query Params:', queryParams);
-
     // Execute queries
-    const professorsResult = await client.query(searchQuery, queryParams);
-    const countResult = await client.query(countQuery, queryParams.slice(0, filter !== 'all' ? 2 : 1));
+    const professorsResult = await query(searchQuery, queryParams);
+    const countResult = await query(countQuery, queryParams.slice(0, filter !== 'all' ? 2 : 1));
 
     const totalProfessors = parseInt(countResult.rows[0].count, 10);
     const totalPages = Math.ceil(totalProfessors / resultsPerPage);
 
-    console.log('Professors fetched:', professorsResult.rows);
+    const apiCallMessage = formatAlertMessage('Professor List - API', `IP : ${ipAddress}\nStatus : 200`);
+    await sendTelegramAlert(apiCallMessage);
+
+    logger.info('Fetched professors list successfully', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch Professors List',
+        details: `Fetched professors list successfully from IP ${ipAddress} with User-Agent ${userAgent}`
+      }
+    });
 
     return NextResponse.json({
       professors: professorsResult.rows,
       totalPages,
     });
   } catch (error) {
-    console.error('Error fetching professors:', error);
+    const errorMessage = formatAlertMessage('Error Fetching Professors List', `IP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
+    await sendTelegramAlert(errorMessage);
+
+    logger.error('Error fetching professors list', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch Professors List',
+        details: `Error fetching professors list from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+      }
+    });
+
     return NextResponse.json({ message: 'Error fetching professors' }, { status: 500 });
-  } finally {
-    client.release();
   }
 }
