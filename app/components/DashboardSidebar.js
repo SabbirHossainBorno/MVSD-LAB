@@ -47,6 +47,12 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
             <span className="text-md font-medium">Add Professor</span>
           </div>
         </Link>
+        <Link href="/dashboard/professor_list">
+          <div className="block p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer">
+            <Image src="/icons/professor_list.png" alt="Professors List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
+            <span className="text-md font-medium">Professor List</span>
+          </div>
+        </Link>
         <Link href="/dashboard/users_list">
           <div className="block p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer">
             <Image src="/icons/user_list.png" alt="Users List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
@@ -57,12 +63,6 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
           <div className="block p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer">
             <Image src="/icons/subscriber_list.png" alt="Subscriber List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
             <span className="text-md font-medium">Subscriber List</span>
-          </div>
-        </Link>
-        <Link href="/dashboard/professor_list">
-          <div className="block p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer">
-            <Image src="/icons/professor_list.png" alt="Professors List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">Professor List</span>
           </div>
         </Link>
 
