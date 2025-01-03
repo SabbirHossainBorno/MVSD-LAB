@@ -45,6 +45,7 @@ export async function GET(req, { params }) {
   const { id } = await params;  // Await params before using its properties
   const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
   const eid = req.cookies.get('eid')?.value || 'Unknown EID';
+  const email = req.cookies.get('email')?.value || 'Unknown Email';
   const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
   const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
 
@@ -142,11 +143,12 @@ export async function POST(req, { params }) {
   const { id } = await params;  // Await params before using its properties
   const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
   const eid = req.cookies.get('eid')?.value || 'Unknown EID';
+  const email = req.cookies.get('email')?.value || 'Unknown Email';
   const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
   const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
 
   try {
-    const apiCallMessage = formatAlertMessage('Professor Edit - API', `IP: ${ipAddress}\nStatus: 200`);
+    const apiCallMessage = formatAlertMessage('Professor Edit - API', `IP : ${ipAddress}\nStatus: 200`);
     await sendTelegramAlert(apiCallMessage);
 
     logger.info('Receiving form data', {
@@ -340,7 +342,7 @@ export async function POST(req, { params }) {
 
     await query('COMMIT');
 
-    const successMessage = formatAlertMessage('Professor Information Updated Successfully', `ID: ${id}\nIP: ${ipAddress}\nStatus: 200`);
+    const successMessage = formatAlertMessage('Professor Information Updated Successfully', `ID : ${id}\nUpdated By : ${email}`);
     await sendTelegramAlert(successMessage);
 
     logger.info('Professor information updated successfully', {
@@ -348,13 +350,13 @@ export async function POST(req, { params }) {
         eid,
         sid: sessionId,
         taskName: 'Edit Professor Data',
-        details: `Professor information updated successfully for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        details: `Professor information updated successfully for ID: ${id} by ${email} from IP ${ipAddress} with User-Agent ${userAgent}`
       }
     });
 
     // Insert notification
     const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
-    const notificationTitle = `A Professor Updated [${id}]`;
+    const notificationTitle = `Professor [${id}] Updated By ${email}`;
     const notificationStatus = 'Unread';
     await query(insertNotificationQuery, [id, notificationTitle, notificationStatus]);
 
@@ -363,7 +365,7 @@ export async function POST(req, { params }) {
   } catch (error) {
     await query('ROLLBACK');
 
-    const errorMessage = formatAlertMessage('Error Updating Professor Information', `ID: ${id}\nIP: ${ipAddress}\nError: ${error.message}\nStatus: 500`);
+    const errorMessage = formatAlertMessage('Error Updating Professor Information', `ID : ${id}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
     await sendTelegramAlert(errorMessage);
 
     logger.error('Error updating professor information', {

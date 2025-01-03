@@ -51,6 +51,7 @@ const saveAwardPhoto = async (file, professorId, index) => {
 export async function POST(req) {
   const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
   const eid = req.cookies.get('eid')?.value || 'Unknown EID';
+  const email = req.cookies.get('email')?.value || 'Unknown Email';
   const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
   const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
 
@@ -208,7 +209,7 @@ export async function POST(req) {
 
       const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
       const Id = `${professorId}`; 
-      const notificationTitle = `A New Professor Added [${professorId}]`;
+      const notificationTitle = `A New Professor Added [${professorId}] By ${email}`;
       const notificationStatus = 'Unread';
       await query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
 
@@ -217,7 +218,7 @@ export async function POST(req) {
       const apiCallMessage = formatAlertMessage('Professor Add - API', `IP : ${ipAddress}\nStatus : 200`);
       await sendTelegramAlert(apiCallMessage);
 
-      const successMessage = formatAlertMessage('A New Professor Added Successfully', `ID : ${professorId}\nDate : ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`);
+      const successMessage = formatAlertMessage('A New Professor Added Successfully', `ID : ${professorId}\nAdded By : ${email}\nDate : ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`);
       await sendTelegramAlert(successMessage);
 
       logger.info('A New Professor Added Successfully', {
@@ -225,7 +226,7 @@ export async function POST(req) {
           eid,
           sid: sessionId,
           taskName: 'Add Professor',
-          details: `A new professor added successfully with ID ${professorId} from IP ${ipAddress} with User-Agent ${userAgent}`
+          details: `A new professor added successfully with ID ${professorId} by ${email} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
 
@@ -250,7 +251,7 @@ export async function POST(req) {
     }
 
   } catch (error) {
-    const errorMessage = formatAlertMessage('Professor Add - API', `IP : ${ipAddress}\nError : ${error.message}\nStatus: 500`);
+    const errorMessage = formatAlertMessage('Professor Add - API', `IP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
     await sendTelegramAlert(errorMessage);
 
     logger.error('Error Processing Form Data', {
