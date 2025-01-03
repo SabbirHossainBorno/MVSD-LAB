@@ -234,7 +234,7 @@ export async function POST(req) {
     } catch (error) {
       await query('ROLLBACK');
 
-      const errorMessage = formatAlertMessage('Error Adding Professor', `ID: ${professorId}\nIP: ${ipAddress}\nError: ${error.message}\nStatus: 500`);
+      const errorMessage = formatAlertMessage('Professor Add - API', `ID : ${professorId}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
       await sendTelegramAlert(errorMessage);
 
       logger.error('Error Adding Professor', {
@@ -250,7 +250,7 @@ export async function POST(req) {
     }
 
   } catch (error) {
-    const errorMessage = formatAlertMessage('Error Processing Form Data', `IP: ${ipAddress}\nError: ${error.message}\nStatus: 500`);
+    const errorMessage = formatAlertMessage('Professor Add - API', `IP : ${ipAddress}\nError : ${error.message}\nStatus: 500`);
     await sendTelegramAlert(errorMessage);
 
     logger.error('Error Processing Form Data', {

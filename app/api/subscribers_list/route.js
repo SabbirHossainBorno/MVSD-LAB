@@ -32,7 +32,7 @@ export async function GET(request) {
 
     return NextResponse.json({ subscribers: result.rows });
   } catch (error) {
-    const errorMessage = formatAlertMessage('Error Fetching Subscribers List', ipAddress, 500);
+    const errorMessage = formatAlertMessage('Subscribers List - API', ipAddress, 500);
     await sendTelegramAlert(errorMessage);
 
     logger.error('Error fetching subscribers list', {

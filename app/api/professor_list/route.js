@@ -71,7 +71,7 @@ export async function GET(req) {
       totalPages,
     });
   } catch (error) {
-    const errorMessage = formatAlertMessage('Error Fetching Professors List', `IP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
+    const errorMessage = formatAlertMessage('Professor List - API', `IP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
     await sendTelegramAlert(errorMessage);
 
     logger.error('Error fetching professors list', {

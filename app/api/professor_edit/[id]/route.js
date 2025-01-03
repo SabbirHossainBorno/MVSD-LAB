@@ -1,45 +1,28 @@
 //app/api/professor_edit/[id]/route.js
 import { NextResponse } from 'next/server';
-import { Pool } from 'pg';
+import { query } from '../../../../lib/db';
+import logger from '../../../../lib/logger';
+import sendTelegramAlert from '../../../../lib/telegramAlert';
 import path from 'path';
 import fs from 'fs';
-import axios from 'axios';
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-
-// Helper function to call logAndAlert API
-const logAndAlert = async (message, sessionId, details = {}) => {
-  try {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    await axios.post(`${siteUrl}/api/log-and-alert`, { message, sessionId, details });
-  } catch (error) {
-    console.error('Failed to log and send alert:', error);
-  }
+const formatAlertMessage = (title, details) => {
+  return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\n${details}`;
 };
 
-// Helper function to save profile photo
 const saveProfilePhoto = async (file, professorId) => {
   const filename = `${professorId}_DP${path.extname(file.name)}`;
   const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
 
   try {
-    console.log(`Saving profile photo with filename: ${filename} at path: ${targetPath}`);
-    await logAndAlert(`Saving profile photo with filename: ${filename} at path: ${targetPath}`, 'SYSTEM');
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
-    console.log(`Profile photo saved successfully at path: ${targetPath}`);
-    await logAndAlert(`Profile photo saved successfully at path: ${targetPath}`, 'SYSTEM');
     return `/Storage/Images/Professor/${filename}`;
   } catch (error) {
-    console.error(`Error occurred while saving profile photo: ${error.message}`);
-    await logAndAlert(`Error occurred while saving profile photo: ${error.message}`, 'SYSTEM');
     throw new Error(`Failed to save profile photo: ${error.message}`);
   }
 };
 
-// Helper function to save award photo
 const saveAwardPhoto = async (file, professorId, index) => {
   if (!file) {
     throw new Error('No file provided for award photo');
@@ -49,65 +32,70 @@ const saveAwardPhoto = async (file, professorId, index) => {
   const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
 
   try {
-    console.log(`Saving award photo with filename: ${filename} at path: ${targetPath}`);
-    await logAndAlert(`Saving award photo with filename: ${filename} at path: ${targetPath}`, 'SYSTEM');
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
-    console.log(`Award photo saved successfully at path: ${targetPath}`);
-    await logAndAlert(`Award photo saved successfully at path: ${targetPath}`, 'SYSTEM');
     return `/Storage/Images/Professor/${filename}`;
   } catch (error) {
-    console.error(`Error occurred while saving award photo: ${error.message}`);
-    await logAndAlert(`Error occurred while saving award photo: ${error.message}`, 'SYSTEM');
     throw new Error(`Failed to save award photo: ${error.message}`);
   }
 };
 
 // Main function to handle the GET request
 export async function GET(req, { params }) {
-  const client = await pool.connect();
-  const { id } = params;
+  const { id } = await params;  // Await params before using its properties
+  const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
+  const eid = req.cookies.get('eid')?.value || 'Unknown EID';
+  const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
+  const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
 
   try {
-    console.log(`Fetching professor data for ID: ${id}`);
-    await logAndAlert(`Fetching professor data for ID: ${id}`, 'SYSTEM');
-    const professorQuery = `
-      SELECT * FROM professor_basic_info WHERE id = $1;
-    `;
-    const professorResult = await client.query(professorQuery, [id]);
+    const apiCallMessage = formatAlertMessage('Professor Edit - API', `IP: ${ipAddress}\nStatus: 200`);
+    await sendTelegramAlert(apiCallMessage);
+
+    logger.info('Fetching professor data', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch Professor Data',
+        details: `Fetching professor data for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+      }
+    });
+
+    const professorQuery = `SELECT * FROM professor_basic_info WHERE id = $1;`;
+    const professorResult = await query(professorQuery, [id]);
 
     if (professorResult.rows.length === 0) {
-      console.log(`No professor found with ID: ${id}`);
-      await logAndAlert(`No professor found with ID: ${id}`, 'SYSTEM');
+      const notFoundMessage = formatAlertMessage('Professor Not Found', `ID: ${id}\nIP: ${ipAddress}\nStatus: 404`);
+      await sendTelegramAlert(notFoundMessage);
+
+      logger.warn('Professor not found', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Fetch Professor Data',
+          details: `No professor found with ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        }
+      });
+
       return NextResponse.json({ message: 'Professor not found' }, { status: 404 });
     }
 
     const professor = professorResult.rows[0];
 
-    const socialMediaQuery = `
-      SELECT * FROM professor_socialmedia_info WHERE professor_id = $1;
-    `;
-    const socialMediaResult = await client.query(socialMediaQuery, [id]);
+    const socialMediaQuery = `SELECT * FROM professor_socialmedia_info WHERE professor_id = $1;`;
+    const socialMediaResult = await query(socialMediaQuery, [id]);
 
-    const educationQuery = `
-      SELECT * FROM professor_education_info WHERE professor_id = $1;
-    `;
-    const educationResult = await client.query(educationQuery, [id]);
+    const educationQuery = `SELECT * FROM professor_education_info WHERE professor_id = $1;`;
+    const educationResult = await query(educationQuery, [id]);
 
-    const careerQuery = `
-      SELECT * FROM professor_career_info WHERE professor_id = $1;
-    `;
-    const careerResult = await client.query(careerQuery, [id]);
+    const careerQuery = `SELECT * FROM professor_career_info WHERE professor_id = $1;`;
+    const careerResult = await query(careerQuery, [id]);
 
-    const citationsQuery = `
-      SELECT * FROM professor_citations_info WHERE professor_id = $1;
-    `;
-    const citationsResult = await client.query(citationsQuery, [id]);
+    const citationsQuery = `SELECT * FROM professor_citations_info WHERE professor_id = $1;`;
+    const citationsResult = await query(citationsQuery, [id]);
 
-    const awardsQuery = `
-      SELECT * FROM professor_award_info WHERE professor_id = $1;
-    `;
-    const awardsResult = await client.query(awardsQuery, [id]);
+    const awardsQuery = `SELECT * FROM professor_award_info WHERE professor_id = $1;`;
+    const awardsResult = await query(awardsQuery, [id]);
 
     const responseData = {
       ...professor,
@@ -118,27 +106,58 @@ export async function GET(req, { params }) {
       awards: awardsResult.rows.map(award => ({ ...award, existing: true })),
     };
 
-    console.log(`Professor data fetched successfully for ID: ${id}`);
-    await logAndAlert(`Professor data fetched successfully for ID: ${id}`, 'SYSTEM');
+    const successMessage = formatAlertMessage('Successfully Fetched Professor Data', `ID: ${id}\nIP: ${ipAddress}\nStatus: 200`);
+    await sendTelegramAlert(successMessage);
+
+    logger.info('Successfully fetched professor data', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch Professor Data',
+        details: `Successfully fetched professor data for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+      }
+    });
+
     return NextResponse.json(responseData, { status: 200 });
 
   } catch (error) {
-    console.error(`Error fetching professor data: ${error.message}`);
-    await logAndAlert(`Error fetching professor data: ${error.message}`, 'SYSTEM');
+    const errorMessage = formatAlertMessage('Error Fetching Professor Data', `ID: ${id}\nIP: ${ipAddress}\nError: ${error.message}\nStatus: 500`);
+    await sendTelegramAlert(errorMessage);
+
+    logger.error('Error fetching professor data', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch Professor Data',
+        details: `Error fetching professor data for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+      }
+    });
+
     return NextResponse.json({ message: `Failed to fetch professor data: ${error.message}` }, { status: 500 });
-  } finally {
-    client.release();
   }
 }
 
 // Main function to handle the POST request
 export async function POST(req, { params }) {
-  const client = await pool.connect();
-  const { id } = params;
+  const { id } = await params;  // Await params before using its properties
+  const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
+  const eid = req.cookies.get('eid')?.value || 'Unknown EID';
+  const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
+  const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
 
   try {
-    console.log('Receiving form data...');
-    await logAndAlert('Receiving form data...', 'SYSTEM');
+    const apiCallMessage = formatAlertMessage('Professor Edit - API', `IP: ${ipAddress}\nStatus: 200`);
+    await sendTelegramAlert(apiCallMessage);
+
+    logger.info('Receiving form data', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Edit Professor Data',
+        details: `Receiving form data for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+      }
+    });
+
     const formData = await req.formData();
 
     // Extract form data
@@ -165,243 +184,197 @@ export async function POST(req, { params }) {
     }
     const password = formData.get('password');
 
-    await client.query('BEGIN');
+    await query('BEGIN');
 
     // Update profile photo
     if (photo) {
-      console.log('Updating profile photo...');
-      await logAndAlert('Updating profile photo...', 'SYSTEM');
       const photoUrl = await saveProfilePhoto(photo, id);
       const updatePhotoQuery = `
         UPDATE professor_basic_info
         SET photo = $1
         WHERE id = $2
       `;
-      await client.query(updatePhotoQuery, [photoUrl, id]);
+      await query(updatePhotoQuery, [photoUrl, id]);
 
       const updateMemberPhotoQuery = `
         UPDATE member
         SET photo = $1, updated_at = NOW() AT TIME ZONE 'Asia/Dhaka'
         WHERE id = $2
       `;
-      await client.query(updateMemberPhotoQuery, [photoUrl, id]);
+      await query(updateMemberPhotoQuery, [photoUrl, id]);
     }
 
     // Update basic info
     if (first_name || last_name || phone || short_bio || status || leaving_date) {
-      console.log('Updating basic info...');
-      await logAndAlert('Updating basic info...', 'SYSTEM');
-
-      // Log incoming parameters for debugging
-      console.log('Parameters:', {
-        first_name,
-        last_name,
-        phone,
-        short_bio,
-        status,
-        leaving_date,
-        id
-      });
-
-      // Prepare leaving_date parameter
       const leavingDateParam = leaving_date === undefined || leaving_date === 'null' ? null : leaving_date;
-
-      console.log('leavingDateParam:', leavingDateParam); // Log the processed leaving_date parameter
 
       const updateBasicInfoQuery = `
         UPDATE professor_basic_info
         SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6
         WHERE id = $7
       `;
-
-      try {
-        await client.query(updateBasicInfoQuery, [first_name, last_name, phone, short_bio, status, leavingDateParam, id]);
-      } catch (error) {
-        console.error('Error executing updateBasicInfoQuery:', error);
-        throw error; // Re-throw error to be handled later if needed
-      }
+      await query(updateBasicInfoQuery, [first_name, last_name, phone, short_bio, status, leavingDateParam, id]);
 
       const updateMemberQuery = `
         UPDATE member
         SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6, updated_at = NOW() AT TIME ZONE 'Asia/Dhaka'
         WHERE id = $7
       `;
-
-      try {
-        await client.query(updateMemberQuery, [first_name, last_name, phone, short_bio, status, leavingDateParam, id]);
-      } catch (error) {
-        console.error('Error executing updateMemberQuery:', error);
-        throw error; // Re-throw error to be handled later if needed
-      }
+      await query(updateMemberQuery, [first_name, last_name, phone, short_bio, status, leavingDateParam, id]);
     }
 
     // Update social media
     if (socialMedia.length > 0) {
-      console.log('Updating social media...');
-      await logAndAlert('Updating social media...', 'SYSTEM');
       const deleteSocialMediaQuery = `
         DELETE FROM professor_socialmedia_info
         WHERE professor_id = $1
       `;
-      await client.query(deleteSocialMediaQuery, [id]);
+      await query(deleteSocialMediaQuery, [id]);
 
       const insertSocialMediaQuery = `
         INSERT INTO professor_socialmedia_info (professor_id, socialmedia_name, link)
         VALUES ($1, $2, $3)
       `;
       for (const sm of socialMedia) {
-        await client.query(insertSocialMediaQuery, [id, sm.socialmedia_name, sm.link]);
+        await query(insertSocialMediaQuery, [id, sm.socialmedia_name, sm.link]);
       }
     }
 
     // Update education
     if (education.length > 0) {
-      console.log('Updating education...');
-      await logAndAlert('Updating education...', 'SYSTEM');
       const deleteEducationQuery = `
         DELETE FROM professor_education_info
         WHERE professor_id = $1
       `;
-      await client.query(deleteEducationQuery, [id]);
+      await query(deleteEducationQuery, [id]);
 
       const insertEducationQuery = `
         INSERT INTO professor_education_info (professor_id, degree, institution, passing_year)
         VALUES ($1, $2, $3, $4)
       `;
       for (const edu of education) {
-        await client.query(insertEducationQuery, [id, edu.degree, edu.institution, edu.passing_year]);
+        await query(insertEducationQuery, [id, edu.degree, edu.institution, edu.passing_year]);
       }
     }
 
     // Update career
     if (career.length > 0) {
-      console.log('Updating career...');
-      await logAndAlert('Updating career...', 'SYSTEM');
       const deleteCareerQuery = `
         DELETE FROM professor_career_info
         WHERE professor_id = $1
       `;
-      await client.query(deleteCareerQuery, [id]);
+      await query(deleteCareerQuery, [id]);
 
       const insertCareerQuery = `
         INSERT INTO professor_career_info (professor_id, position, organization_name, joining_year, leaving_year)
         VALUES ($1, $2, $3, $4, $5)
       `;
       for (const job of career) {
-        await client.query(insertCareerQuery, [id, job.position, job.organization, job.joining_year, job.leaving_year]);
+        await query(insertCareerQuery, [id, job.position, job.organization, job.joining_year, job.leaving_year]);
       }
     }
 
     // Update citations
     if (citations.length > 0) {
-      console.log('Updating citations...');
-      await logAndAlert('Updating citations...', 'SYSTEM');
       const deleteCitationsQuery = `
         DELETE FROM professor_citations_info
         WHERE professor_id = $1
       `;
-      await client.query(deleteCitationsQuery, [id]);
+      await query(deleteCitationsQuery, [id]);
 
       const insertCitationsQuery = `
-      INSERT INTO professor_citations_info (professor_id, title, link, organization_name)
-      VALUES ($1, $2, $3, $4)
-    `;
-    for (const citation of citations) {
-      await client.query(insertCitationsQuery, [id, citation.title, citation.link, citation.organization_name]);
+        INSERT INTO professor_citations_info (professor_id, title, link, organization_name)
+        VALUES ($1, $2, $3, $4)
+      `;
+      for (const citation of citations) {
+        await query(insertCitationsQuery, [id, citation.title, citation.link, citation.organization_name]);
+      }
     }
-  }
 
-  // Update awards
-  if (awards.length > 0) {
-    console.log('Updating awards...');
-    await logAndAlert('Updating awards...', 'SYSTEM');
+    // Update awards
+    if (awards.length > 0) {
+      const newAwards = awards.filter(award => !award.existing);
 
-    // Filter new awards
-    const newAwards = awards.filter(award => !award.existing);
-    console.log('New awards to insert:', newAwards);  // Debug: Check if newAwards is empty
+      const insertAwardsQuery = `
+        INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
+        VALUES ($1, $2, $3, $4, $5)
+      `;
 
-    const insertAwardsQuery = `
-      INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
-      VALUES ($1, $2, $3, $4, $5)
-    `;
+      const currentAwardsCountQuery = `
+        SELECT COUNT(*) FROM professor_award_info WHERE professor_id = $1
+      `;
+      const currentAwardsCountResult = await query(currentAwardsCountQuery, [id]);
+      const currentAwardsCount = parseInt(currentAwardsCountResult.rows[0].count, 10);
 
-    // Get the current number of awards for the professor
-    const currentAwardsCountQuery = `
-      SELECT COUNT(*) FROM professor_award_info WHERE professor_id = $1
-    `;
-    const currentAwardsCountResult = await client.query(currentAwardsCountQuery, [id]);
-    const currentAwardsCount = parseInt(currentAwardsCountResult.rows[0].count, 10);
-
-    for (let i = 0; i < newAwards.length; i++) {
-      const award = newAwards[i];
-      console.log(`Processing award ${i + 1}:`, award);
-      
-      let awardUrl = null;
-      if (award.awardPhoto) {
-        try {
-          console.log(`Award photo for award ${i + 1}:`, award.awardPhoto);
+      for (let i = 0; i < newAwards.length; i++) {
+        const award = newAwards[i];
+        let awardUrl = null;
+        if (award.awardPhoto) {
           awardUrl = await saveAwardPhoto(award.awardPhoto, id, currentAwardsCount + i + 1);
-        } catch (error) {
-          console.error(`Error saving award photo for award ${i + 1}: ${error.message}`);
-          await logAndAlert(`Error saving award photo for award ${i + 1}: ${error.message}`, 'SYSTEM');
-          await client.query('ROLLBACK');  // Ensure rollback in case of error
-          throw error;
         }
-      }
-      
-      // Debug: Log the actual data being inserted
-      console.log('Inserting award:', { professor_id: id, title: award.title, year: award.year, details: award.details, awardPhoto: awardUrl });
-
-      // Insert the award
-      try {
-        await client.query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
-      } catch (insertError) {
-        console.error(`Error inserting award ${i + 1}: ${insertError.message}`);
-        await logAndAlert(`Error inserting award ${i + 1}: ${insertError.message}`, 'SYSTEM');
-        await client.query('ROLLBACK');  // Rollback the transaction on error
-        throw insertError;
+        await query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
       }
     }
-  }
 
-  // Update password
-  if (password) {
-    console.log('Updating password...');
-    await logAndAlert('Updating password...', 'SYSTEM');
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
-    if (!passwordRegex.test(password)) {
-      console.log('Password validation failed');
-      await logAndAlert('Password validation failed', 'SYSTEM');
-      await client.query('ROLLBACK');
-      return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
+    // Update password
+    if (password) {
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
+      if (!passwordRegex.test(password)) {
+        await query('ROLLBACK');
+        return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
+      }
+      const updatePasswordQuery = `
+        UPDATE professor_basic_info
+        SET password = $1
+        WHERE id = $2
+      `;
+      await query(updatePasswordQuery, [password, id]);
+
+      const updateMemberPasswordQuery = `
+        UPDATE member
+        SET password = $1
+        WHERE id = $2
+      `;
+      await query(updateMemberPasswordQuery, [password, id]);
     }
-    const updatePasswordQuery = `
-      UPDATE professor_basic_info
-      SET password = $1
-      WHERE id = $2
-    `;
-    await client.query(updatePasswordQuery, [password, id]);
 
-    const updateMemberPasswordQuery = `
-      UPDATE member
-      SET password = $1
-      WHERE id = $2
-    `;
-    await client.query(updateMemberPasswordQuery, [password, id]);
+    await query('COMMIT');
+
+    const successMessage = formatAlertMessage('Professor Information Updated Successfully', `ID: ${id}\nIP: ${ipAddress}\nStatus: 200`);
+    await sendTelegramAlert(successMessage);
+
+    logger.info('Professor information updated successfully', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Edit Professor Data',
+        details: `Professor information updated successfully for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+      }
+    });
+
+    // Insert notification
+    const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
+    const notificationTitle = `A Professor Updated [${id}]`;
+    const notificationStatus = 'Unread';
+    await query(insertNotificationQuery, [id, notificationTitle, notificationStatus]);
+
+    return NextResponse.json({ message: 'Professor information updated successfully!' }, { status: 200 });
+
+  } catch (error) {
+    await query('ROLLBACK');
+
+    const errorMessage = formatAlertMessage('Error Updating Professor Information', `ID: ${id}\nIP: ${ipAddress}\nError: ${error.message}\nStatus: 500`);
+    await sendTelegramAlert(errorMessage);
+
+    logger.error('Error updating professor information', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Edit Professor Data',
+        details: `Error updating professor information for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+      }
+    });
+
+    return NextResponse.json({ message: `Execution failed: ${error.message}` }, { status: 500 });
   }
-
-  await client.query('COMMIT');
-  console.log(`Professor information updated successfully for ID: ${id}`);
-  await logAndAlert(`Professor information updated successfully for ID: ${id}`, 'SYSTEM');
-  return NextResponse.json({ message: 'Professor information updated successfully!' }, { status: 200 });
-
-} catch (error) {
-  console.error(`Error during execution: ${error.message}`);
-  await logAndAlert(`Error during execution: ${error.message}`, 'SYSTEM');
-  await client.query('ROLLBACK');
-  return NextResponse.json({ message: `Execution failed: ${error.message}` }, { status: 500 });
-} finally {
-  client.release();
 }
-}
-
