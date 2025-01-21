@@ -125,14 +125,16 @@ const AddProfessor = () => {
       });
 
       if (response.ok) {
-        toast.success('Professor added successfully!');
-        router.push('/dashboard');
+        toast.success('Professor Added Successfully!');
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 2000); // 2-second delay
       } else {
         const result = await response.json();
         toast.error(result.message || 'An error occurred while adding the professor.');
       }
     } catch (error) {
-      toast.error('Failed to add professor');
+      toast.error('Failed To Add Professor');
     } finally {
       setLoading(false);
     }

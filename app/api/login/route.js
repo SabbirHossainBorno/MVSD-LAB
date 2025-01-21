@@ -66,7 +66,7 @@ export async function POST(request) {
 
         //console.log(`Login successful: email=${email}, eid=${eid}`);
 
-        const successMessage = formatAlertMessage(`${table === 'admin' ? 'Admin' : 'User'} Login Successful.`, email, ipAddress, userAgent, `\nEID: ${eid}`);
+        const successMessage = formatAlertMessage(`${table === 'admin' ? 'Admin' : 'User'} Login Successful.`, email, ipAddress, userAgent, `\nEID : ${eid}`);
         await sendTelegramAlert(successMessage);
 
         logger.info('Login successful', {
