@@ -81,6 +81,8 @@ const Dashboard = () => {
       <main className="flex-1 p-3 md:p-4 lg:p-6">
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-10">
+
+          
           {/* Total Users Card */}
           <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
             {/* Icon Section */}
@@ -104,7 +106,7 @@ const Dashboard = () => {
           </div>
 
           {/* Total Subscribers Card */}
-          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-green-500">
+          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
             {/* Icon Section */}
             <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
               <Image 
@@ -125,7 +127,7 @@ const Dashboard = () => {
           </div>
 
           {/* Total Professors Card */}
-          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-purple-500">
+          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
             {/* Icon Section */}
             <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
               <Image 
@@ -146,7 +148,7 @@ const Dashboard = () => {
           </div>
 
           {/* Total Messages Card */}
-          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-pink-500">
+          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
             {/* Icon Section */}
             <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
               <Image 
@@ -167,7 +169,7 @@ const Dashboard = () => {
           </div>
 
           {/* Current Login Count */}
-          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-indigo-500">
+          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
             {/* Icon Section */}
             <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
               <Image 
