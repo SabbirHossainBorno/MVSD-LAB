@@ -51,7 +51,7 @@ const saveAwardPhoto = async (file, professorId, index) => {
 export async function POST(req) {
   const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
   const eid = req.cookies.get('eid')?.value || 'Unknown EID';
-  const email = req.cookies.get('email')?.value || 'Unknown Email';
+  const adminEmail = req.cookies.get('email')?.value || 'Unknown Email'; // Renamed to adminEmail
   const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
   const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
 
@@ -62,7 +62,7 @@ export async function POST(req) {
     const last_name = formData.get('last_name');
     const phone = formData.get('phone');
     const dob = formData.get('dob');
-    const email = formData.get('email');
+    const email = formData.get('email'); // This is the professor's email
     const password = formData.get('password');
     const short_bio = formData.get('short_bio');
     const joining_date = formData.get('joining_date');
@@ -209,7 +209,7 @@ export async function POST(req) {
 
       const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
       const Id = `${professorId}`; 
-      const notificationTitle = `A New Professor Added [${professorId}] By ${email}`;
+      const notificationTitle = `A New Professor Added [${professorId}] By ${adminEmail}`;
       const notificationStatus = 'Unread';
       await query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
 
@@ -218,7 +218,7 @@ export async function POST(req) {
       const apiCallMessage = formatAlertMessage('Professor Add - API', `IP : ${ipAddress}\nStatus : 200`);
       await sendTelegramAlert(apiCallMessage);
 
-      const successMessage = formatAlertMessage('A New Professor Added Successfully', `ID : ${professorId}\nAdded By : ${email}\nDate : ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`);
+      const successMessage = formatAlertMessage('A New Professor Added Successfully', `ID : ${professorId}\nAdded By : ${adminEmail}\nDate : ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`);
       await sendTelegramAlert(successMessage);
 
       logger.info('A New Professor Added Successfully', {
@@ -226,7 +226,7 @@ export async function POST(req) {
           eid,
           sid: sessionId,
           taskName: 'Add Professor',
-          details: `A new professor added successfully with ID ${professorId} by ${email} from IP ${ipAddress} with User-Agent ${userAgent}`
+          details: `A new professor added successfully with ID ${professorId} by ${adminEmail} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
 
