@@ -1,71 +1,59 @@
 ///app/api/member/route.js
-import { Pool } from "pg";
-import axios from "axios";
+import { NextResponse } from 'next/server';
+import { query } from '../../../lib/db';
+import logger from '../../../lib/logger';
+import sendTelegramAlert from '../../../lib/telegramAlert';
 
-// Initialize the PostgreSQL database connection pool
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL, // Ensure this is set correctly in environment variables
-});
-
-// Helper function to call the logAndAlert API
-const logAndAlert = async (message, sessionId, details = {}) => {
-  try {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    await axios.post(`${siteUrl}/api/log-and-alert`, { message, sessionId, details });
-  } catch (error) {
-    console.error('Failed to log and send alert:', error);
-  }
+const formatAlertMessage = (title, details) => {
+  return `MVSD LAB HOME\n--------------------------\n${title}\n${details}`;
 };
 
-// Handler for the GET request to fetch professor details
 export async function GET(request) {
-  const sessionId = 'SYSTEM'; // A sessionId to track system actions
-  try {
-    // Log that the request has been initiated
-    await logAndAlert("Fetching professor details [member]", sessionId, { endpoint: "/api/member" });
+  const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr') || 'Unknown IP';
+  const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
 
-    // Connect to the database
-    const client = await pool.connect();
-    
-    // Query to fetch professor details ordered by ID
-    const professorResult = await client.query(
+  try {
+    logger.info('Fetching member details', {
+      meta: {
+        eid: '',
+        sid: '',
+        taskName: 'Home - Member',
+        details: `Fetching member details from IP ${ipAddress} with User-Agent ${userAgent}`
+      }
+    });
+
+    const memberResult = await query(
       `SELECT m.*, json_agg(json_build_object('socialmedia_name', s.socialmedia_name, 'link', s.link)) AS socialmedia
        FROM member m
        LEFT JOIN professor_socialmedia_info s ON m.id = s.professor_id
-       WHERE m.type = 'Professor' AND m.status = 'Active'
+       WHERE m.status = 'Active'
        GROUP BY m.id
        ORDER BY m.id`
     );
-    const professors = professorResult.rows;
+    const members = memberResult.rows;
 
-    // Log the successful query and the fetched data
-    await logAndAlert("Successfully fetched professor details [member]", sessionId, { professors });
-
-    // Return the fetched data as a JSON response
-    return new Response(
-      JSON.stringify(professors),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-        },
+    logger.info('Successfully fetched member details', {
+      meta: {
+        eid: '',
+        sid: '',
+        taskName: 'Home - Member',
+        details: `Successfully fetched member details from IP ${ipAddress} with User-Agent ${userAgent}`
       }
-    );
+    });
+
+    return NextResponse.json(members);
   } catch (error) {
-    console.error("Error fetching professor details:", error);
-
-    // Log the error
-    await logAndAlert(`Error fetching professor details: ${error.message}`, sessionId, { error: error.message });
-
-    // If any error occurs, send an error response
-    return new Response(
-      JSON.stringify({ error: "Failed to fetch professor details" }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const errorMessage = `Error fetching member details: ${error.message}`;
+    await sendTelegramAlert(formatAlertMessage('Error Fetching Member Details', `IP: ${ipAddress}\nError: ${errorMessage}`));
+    logger.error('Error fetching member details', {
+      meta: {
+        eid: '',
+        sid: '',
+        taskName: 'Home - Member',
+        details: `Error fetching member details from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
       }
-    );
+    });
+
+    return NextResponse.json({ error: 'Failed to fetch member details' }, { status: 500 });
   }
 }

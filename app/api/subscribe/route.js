@@ -70,7 +70,7 @@ export async function POST(request) {
     const notificationStatus = 'Unread';
     await query('INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3)', [subscriberId, notificationTitle, notificationStatus]);
 
-    await sendTelegramAlert(formatAlertMessage('New Subscriber', `ID: ${subscriberId}\nEmail: ${email}`));
+    await sendTelegramAlert(formatAlertMessage('New Subscriber', `ID : ${subscriberId}\nEmail : ${email}`));
     logger.info('New subscriber added', {
       meta: {
         eid: '',
