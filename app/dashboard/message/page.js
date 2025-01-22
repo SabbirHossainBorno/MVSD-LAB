@@ -13,6 +13,7 @@ function Message() {
   const [filteredMessage, setFilteredMessage] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [domainFilter, setDomainFilter] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,7 @@ function Message() {
   useEffect(() => {
     async function fetchMessage() {
       try {
-        const response = await fetch('/api/message');
+        const response = await fetch(`/api/message?sortOrder=${sortOrder}`);
         const result = await response.json();
         if (response.ok) {
           setMessage(result.message);
@@ -36,7 +37,7 @@ function Message() {
     }
 
     fetchMessage();
-  }, []);
+  }, [sortOrder]);
 
   useEffect(() => {
     let filtered = message.filter(message =>
@@ -101,6 +102,14 @@ function Message() {
             <option value="10">10 per page</option>
             <option value="20">20 per page</option>
             <option value="50">50 per page</option>
+          </select>
+          <select
+            className="w-full sm:w-1/3 p-3 rounded border border-gray-600 bg-gray-700 text-gray-100"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
           </select>
         </div>
         <div className="space-y-4">

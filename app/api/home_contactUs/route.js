@@ -5,7 +5,7 @@ import logger from '../../../lib/logger';
 import sendTelegramAlert from '../../../lib/telegramAlert';
 
 const formatAlertMessage = (title, details) => {
-  return `MVSD LAB HOME\n---------------------------\n${title}\n${details}`;
+  return `MVSD LAB HOME\n--------------------------\n${title}\n${details}`;
 };
 
 // Helper function to generate the next Contact Us ID

@@ -4,8 +4,8 @@ import { query } from '../../../lib/db';
 import logger from '../../../lib/logger';
 import sendTelegramAlert from '../../../lib/telegramAlert';
 
-const formatAlertMessage = (title, details) => {
-  return `MVSD LAB HOME\n---------------------------\n${title}\n${details}`;
+const formatAlertMessage = (title) => {
+  return `MVSD LAB HOME\n--------------------------\n${title}`;
 };
 
 // Handler for the GET request to fetch stats
@@ -44,6 +44,10 @@ export async function GET(request) {
       }
     });
 
+    // Send a Telegram alert for successful data fetch
+    const alertMessage = formatAlertMessage('Stats Data Fetched Successfully');
+    await sendTelegramAlert(alertMessage);
+
     // Return the fetched data as a JSON response
     return NextResponse.json({
       professorCount,
@@ -62,10 +66,10 @@ export async function GET(request) {
     });
 
     // Log the error and send a Telegram alert
-    const alertMessage = formatAlertMessage('Error Fetching Stats Data', `Error: ${error.message}`);
+    const alertMessage = formatAlertMessage('Error Fetching Stats Data');
     await sendTelegramAlert(alertMessage);
 
     // If any error occurs, send an error response
-    return NextResponse.json({ error: 'Failed to Home - Stats' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch stats data' }, { status: 500 });
   }
 }
