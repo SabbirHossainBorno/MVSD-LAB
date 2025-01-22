@@ -110,8 +110,9 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
 
   const markAllAsRead = async () => {
     try {
+      const unreadNotifications = notifications.filter(notification => notification.status === 'Unread');
       await Promise.all(
-        notifications.map((notification) =>
+        unreadNotifications.map((notification) =>
           fetch('/api/notification', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -119,7 +120,11 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
           })
         )
       );
-      setNotifications((prev) => prev.map((n) => ({ ...n, status: 'Read' })));
+      setNotifications((prev) =>
+        prev.map((notification) =>
+          notification.status === 'Unread' ? { ...notification, status: 'Read' } : notification
+        )
+      );
     } catch (error) {
       console.error('Failed to mark all notifications as read:', error);
     }

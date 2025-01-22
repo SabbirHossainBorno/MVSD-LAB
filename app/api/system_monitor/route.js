@@ -3,8 +3,14 @@ import { NextResponse } from 'next/server';
 import os from 'os';
 import fs from 'fs';
 import { exec } from 'child_process';
+import { query } from '../../../lib/db';
+import logger from '../../../lib/logger';
+import sendTelegramAlert from '../../../lib/telegramAlert';
 
-// Helper function to execute shell commands
+let cpuAlertSent = false;
+let ramAlertSent = false;
+let firstAccessAlertSent = false;
+
 const execCommand = (command) => {
   return new Promise((resolve, reject) => {
     exec(command, (error, stdout, stderr) => {
@@ -17,46 +23,84 @@ const execCommand = (command) => {
   });
 };
 
+const formatAlertMessage = (title, details) => {
+  return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\n${details}`;
+};
+
+const checkUsageAndSendAlert = async (usage, type, threshold, alertSentFlag, ipAddress) => {
+  if (usage > threshold) {
+    if (!alertSentFlag) {
+      setTimeout(async () => {
+        if (usage > threshold) {
+          const message = `${type} usage is over ${threshold}% for more than 5 minutes.`;
+          await sendTelegramAlert(formatAlertMessage('System Monitor Alert', `IP: ${ipAddress}\n${message}`));
+          logger.warn('System Monitor Alert', {
+            meta: {
+              eid: '',
+              sid: '',
+              taskName: 'System Monitor',
+              details: `${message} from IP ${ipAddress}`
+            }
+          });
+          if (type === 'CPU') cpuAlertSent = true;
+          if (type === 'RAM') ramAlertSent = true;
+        }
+      }, 300000); // 5 minutes in milliseconds
+    }
+  } else {
+    if (type === 'CPU') cpuAlertSent = false;
+    if (type === 'RAM') ramAlertSent = false;
+  }
+};
+
 export async function GET(request) {
+  const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr') || 'Unknown IP';
+  const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
+  const sessionId = request.cookies.get('sessionId')?.value || 'Unknown Session';
+  const eid = request.cookies.get('eid')?.value || 'Unknown EID';
+
   const data = {};
 
   try {
     // CPU Usage
     const cpuUsage = os.loadavg();
+    const cpuUsagePercentage = (cpuUsage[0] / os.cpus().length) * 100;
     data.cpu = {
-      usage: (cpuUsage[0] / os.cpus().length) * 100,
+      usage: cpuUsagePercentage,
       load: cpuUsage[0]
     };
 
     // RAM Usage
     const totalMemory = os.totalmem() / (1024 ** 3); // Convert to GB
     const freeMemory = os.freemem() / (1024 ** 3); // Convert to GB
+    const usedMemoryPercentage = ((totalMemory - freeMemory) / totalMemory) * 100;
     data.ram = {
       total: totalMemory.toFixed(2),
-      free: freeMemory.toFixed(2)
+      free: freeMemory.toFixed(2),
+      usedPercentage: usedMemoryPercentage.toFixed(2)
     };
 
     // Website Live Log
     const logFilePath = '/home/mvsd-lab/Log/mvsd_lab.log';
     const logData = fs.readFileSync(logFilePath, 'utf-8');
-    data.websiteLog = logData.split('\n').slice(-100); // Get last 10 log entries
+    data.websiteLog = logData.split('\n').slice(-100); // Get last 100 log entries
 
     // System Process
     const processList = await execCommand('top -b -n 1');
     data.process = processList;
 
-        // Network
-        const networkStats = await execCommand('vnstat -i eth0 --json'); // Specify the interface
-        const networkData = JSON.parse(networkStats);
-        const interfaceStats = networkData.interfaces[0].traffic.fiveminute;
-        const latestStats = interfaceStats[interfaceStats.length - 1];
-        const previousStats = interfaceStats[interfaceStats.length - 2];
-    
-        const downloadSpeedKBps = (latestStats.rx - previousStats.rx) / 300; // Convert to KB/s
-        const uploadSpeedKBps = (latestStats.tx - previousStats.tx) / 300; // Convert to KB/s
-    
-        const downloadSpeedMbps = (downloadSpeedKBps * 0.008).toFixed(2); // Convert to Mb/s
-        const uploadSpeedMbps = (uploadSpeedKBps * 0.008).toFixed(2); // Convert to Mb/s
+    // Network
+    const networkStats = await execCommand('vnstat -i eth0 --json'); // Specify the interface
+    const networkData = JSON.parse(networkStats);
+    const interfaceStats = networkData.interfaces[0].traffic.fiveminute;
+    const latestStats = interfaceStats[interfaceStats.length - 1];
+    const previousStats = interfaceStats[interfaceStats.length - 2];
+
+    const downloadSpeedKBps = (latestStats.rx - previousStats.rx) / 300; // Convert to KB/s
+    const uploadSpeedKBps = (latestStats.tx - previousStats.tx) / 300; // Convert to KB/s
+
+    const downloadSpeedMbps = (downloadSpeedKBps * 0.008).toFixed(2); // Convert to Mb/s
+    const uploadSpeedMbps = (uploadSpeedKBps * 0.008).toFixed(2); // Convert to Mb/s
 
     data.network = {
       download: downloadSpeedMbps,
@@ -79,9 +123,43 @@ export async function GET(request) {
     const seconds = Math.floor(uptime % 60);
     data.uptime = `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
 
+    logger.info('Fetched system data successfully', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch System Data',
+        details: `Fetched system data from IP ${ipAddress} with User-Agent ${userAgent}`
+      }
+    });
+
+    if (!firstAccessAlertSent) {
+      await sendTelegramAlert(formatAlertMessage('System Monitor - API', `IP : ${ipAddress}\nStatus : 200`));
+      firstAccessAlertSent = true;
+      logger.info('First access alert sent', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'System Monitor',
+          details: `First access alert sent from IP ${ipAddress} with User-Agent ${userAgent}`
+        }
+      });
+    }
+
+    await checkUsageAndSendAlert(cpuUsagePercentage, 'CPU', 80, cpuAlertSent, ipAddress);
+    await checkUsageAndSendAlert(usedMemoryPercentage, 'RAM', 80, ramAlertSent, ipAddress);
+
     return NextResponse.json(data);
   } catch (error) {
-    console.error('Error fetching system data:', error);
-    return NextResponse.error();
+    const errorMessage = `Error fetching system data: ${error.message}`;
+    await sendTelegramAlert(formatAlertMessage('System Monitor Error', `IP: ${ipAddress}\nError: ${errorMessage}`));
+    logger.error('Error fetching system data', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch System Data',
+        details: `Error fetching system data from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+      }
+    });
+    return NextResponse.json({ message: 'Failed to fetch system data' }, { status: 500 });
   }
 }
