@@ -10,6 +10,8 @@ import sendTelegramAlert from '../../../lib/telegramAlert';
 let cpuAlertSent = false;
 let ramAlertSent = false;
 let firstAccessAlertSent = false;
+let cpuHighUsageStartTime = null;
+let ramHighUsageStartTime = null;
 
 const execCommand = (command) => {
   return new Promise((resolve, reject) => {
@@ -27,30 +29,33 @@ const formatAlertMessage = (title, details) => {
   return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\n${details}`;
 };
 
-const checkUsageAndSendAlert = async (usage, type, threshold, alertSentFlag, ipAddress) => {
+const checkUsageAndSendAlert = async (usage, type, threshold, alertSentFlag, startTime, ipAddress) => {
+  const currentTime = new Date().getTime();
   if (usage > threshold) {
-    if (!alertSentFlag) {
-      setTimeout(async () => {
-        if (usage > threshold) {
-          const message = `${type} usage is over ${threshold}% for more than 5 minutes.`;
-          await sendTelegramAlert(formatAlertMessage('System Monitor Alert', `IP: ${ipAddress}\n${message}`));
-          logger.warn('System Monitor Alert', {
-            meta: {
-              eid: '',
-              sid: '',
-              taskName: 'System Monitor',
-              details: `${message} from IP ${ipAddress}`
-            }
-          });
-          if (type === 'CPU') cpuAlertSent = true;
-          if (type === 'RAM') ramAlertSent = true;
+    if (!startTime) {
+      startTime = currentTime;
+    }
+    const elapsedTime = currentTime - startTime;
+    if (elapsedTime >= 300000 && !alertSentFlag) { // 5 minutes in milliseconds
+      const message = `${type} usage is over ${threshold}% for more than 5 minutes.`;
+      await sendTelegramAlert(formatAlertMessage('System Monitor Alert', `IP: ${ipAddress}\n${message}`));
+      logger.warn('System Monitor Alert', {
+        meta: {
+          eid: '',
+          sid: '',
+          taskName: 'System Monitor',
+          details: `${message} from IP ${ipAddress}`
         }
-      }, 300000); // 5 minutes in milliseconds
+      });
+      if (type === 'CPU') cpuAlertSent = true;
+      if (type === 'RAM') ramAlertSent = true;
     }
   } else {
+    startTime = null;
     if (type === 'CPU') cpuAlertSent = false;
     if (type === 'RAM') ramAlertSent = false;
   }
+  return startTime;
 };
 
 export async function GET(request) {
@@ -81,7 +86,8 @@ export async function GET(request) {
     };
 
     // Website Live Log
-    const logFilePath = '/home/mvsd-lab/Log/mvsd_lab.log';
+    const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+    const logFilePath = `/home/mvsd-lab/logs/mvsd-lab-${currentDate}.log`;
     const logData = fs.readFileSync(logFilePath, 'utf-8');
     data.websiteLog = logData.split('\n').slice(-100); // Get last 100 log entries
 
@@ -145,8 +151,8 @@ export async function GET(request) {
       });
     }
 
-    await checkUsageAndSendAlert(cpuUsagePercentage, 'CPU', 80, cpuAlertSent, ipAddress);
-    await checkUsageAndSendAlert(usedMemoryPercentage, 'RAM', 80, ramAlertSent, ipAddress);
+    cpuHighUsageStartTime = await checkUsageAndSendAlert(cpuUsagePercentage, 'CPU', 80, cpuAlertSent, cpuHighUsageStartTime, ipAddress);
+    ramHighUsageStartTime = await checkUsageAndSendAlert(usedMemoryPercentage, 'RAM', 80, ramAlertSent, ramHighUsageStartTime, ipAddress);
 
     return NextResponse.json(data);
   } catch (error) {
