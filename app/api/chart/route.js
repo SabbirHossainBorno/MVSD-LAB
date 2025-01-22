@@ -1,19 +1,17 @@
+// app/api/messages_chart/route.js
 import { NextResponse } from 'next/server';
-import { Pool } from 'pg';
+import { query } from '../../../lib/db';
+import logger from '../../../lib/logger';
+import sendTelegramAlert from '../../../lib/telegramAlert';
 
-if (!process.env.DATABASE_URL) {
-  throw new Error('DATABASE_URL environment variable is not defined');
-}
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+const formatAlertMessage = (title, details) => {
+  return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\n${details}`;
+};
 
 // Helper function to fetch messages for chart
 const getMessagesChartData = async (days) => {
-  const client = await pool.connect();
   try {
-    const query = `
+    const queryText = `
       SELECT 
         DATE(date) AS date, 
         COUNT(id) AS count
@@ -26,21 +24,17 @@ const getMessagesChartData = async (days) => {
       ORDER BY 
         DATE(date) ASC
     `;
-    const result = await client.query(query);
+    const result = await query(queryText);
     return result.rows;
   } catch (error) {
-    //console.error('Error fetching chart data:', error);
     throw new Error('Failed to fetch chart data');
-  } finally {
-    client.release();
   }
 };
 
 // Helper function to fetch total messages for a given period
 const getTotalMessages = async (days) => {
-  const client = await pool.connect();
   try {
-    const query = `
+    const queryText = `
       SELECT 
         COUNT(id) AS count
       FROM 
@@ -48,13 +42,10 @@ const getTotalMessages = async (days) => {
       WHERE 
         date >= NOW() - INTERVAL '${days} days'
     `;
-    const result = await client.query(query);
+    const result = await query(queryText);
     return parseInt(result.rows[0].count, 10);
   } catch (error) {
-    //console.error('Error fetching total messages:', error);
     throw new Error('Failed to fetch total messages');
-  } finally {
-    client.release();
   }
 };
 
@@ -62,6 +53,11 @@ const getTotalMessages = async (days) => {
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const days = parseInt(searchParams.get('days')) || 7; // Default to 7 days if no parameter is provided
+
+  const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
+  const eid = req.cookies.get('eid')?.value || 'Unknown EID';
+  const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
+  const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
 
   try {
     const currentData = await getMessagesChartData(days);
@@ -72,14 +68,29 @@ export async function GET(req) {
 
     const percentageChange = previousTotal === 0 ? 0 : ((currentTotal - previousTotal) / previousTotal) * 100;
 
-    //console.log('Current Data:', currentData);
-    //console.log('Previous Data:', previousData);
-    //console.log('Current Total:', currentTotal);
-    //console.log('Previous Total:', previousTotal);
-    //console.log('Percentage Change:', percentageChange);
+    logger.info('Fetched messages chart data successfully', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch Messages Chart Data',
+        details: `Fetched messages chart data for the past ${days} days from IP ${ipAddress} with User-Agent ${userAgent}`
+      }
+    });
 
     return NextResponse.json({ data: currentData, totalMessages: currentTotal, percentageChange });
   } catch (error) {
+    const errorMessage = formatAlertMessage('Error Fetching Messages Chart Data', `Error: ${error.message}`);
+    await sendTelegramAlert(errorMessage);
+
+    logger.error('Error fetching messages chart data', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch Messages Chart Data',
+        details: `Error fetching messages chart data from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+      }
+    });
+
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

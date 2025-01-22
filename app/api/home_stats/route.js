@@ -1,70 +1,71 @@
-//app/api/home_stats/route.js
+// app/api/home_stats/route.js
+import { NextResponse } from 'next/server';
+import { query } from '../../../lib/db';
+import logger from '../../../lib/logger';
+import sendTelegramAlert from '../../../lib/telegramAlert';
 
-import { Pool } from "pg";
-import axios from "axios";
-
-// Initialize the PostgreSQL database connection pool
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL, // Ensure this is set correctly in environment variables
-});
-
-// Helper function to call the logAndAlert API
-const logAndAlert = async (message, sessionId, details = {}) => {
-  try {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    await axios.post(`${siteUrl}/api/log-and-alert`, { message, sessionId, details });
-  } catch (error) {
-    console.error('Failed to log and send alert:', error);
-  }
+const formatAlertMessage = (title, details) => {
+  return `MVSD LAB HOME\n---------------------------\n${title}\n${details}`;
 };
 
 // Handler for the GET request to fetch stats
 export async function GET(request) {
-  const sessionId = 'SYSTEM'; // A sessionId to track system actions
+  const sessionId = ''; // Public page, no session ID
+  const eid = ''; // Public page, no execution ID
+  const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr') || 'Unknown IP';
+  const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
+
   try {
     // Log that the stats request has been initiated
-    await logAndAlert("Fetching stats data [home_stats]", sessionId, { endpoint: "/api/home_stats" });
+    const logMessage = 'Fetching stats data [home_stats]';
+    logger.info(logMessage, {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Home - Stats',
+        details: `Request initiated from IP ${ipAddress} with User-Agent ${userAgent}`
+      }
+    });
 
-    // Connect to the database
-    const client = await pool.connect();
-    
     // Query to fetch the active professor count
-    const professorResult = await client.query(
+    const professorResult = await query(
       "SELECT count(*) FROM professor_basic_info WHERE status = 'Active'"
     );
     const professorCount = professorResult.rows[0]?.count || 0;
 
     // Log the successful query and the fetched data
-    await logAndAlert("Successfully fetched professor count [home_stats]", sessionId, { professorCount });
+    const successMessage = `Successfully fetched professor count [home_stats]: ${professorCount}`;
+    logger.info(successMessage, {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Home - Stats',
+        details: `Fetched professor count from IP ${ipAddress} with User-Agent ${userAgent}`
+      }
+    });
 
     // Return the fetched data as a JSON response
-    return new Response(
-      JSON.stringify({
-        professorCount,
-        // You can add more stats here in the future
-      }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  } catch (error) {
-    console.error("Error fetching stats data:", error);
+    return NextResponse.json({
+      professorCount,
+      // You can add more stats here in the future
+    }, { status: 200 });
 
-    // Log the error
-    await logAndAlert(`Error fetching stats data: ${error.message}`, sessionId, { error: error.message });
+  } catch (error) {
+    const errorMessage = `Error fetching stats data: ${error.message}`;
+    logger.error(errorMessage, {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Home - Stats',
+        details: `Error fetching stats data from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+      }
+    });
+
+    // Log the error and send a Telegram alert
+    const alertMessage = formatAlertMessage('Error Fetching Stats Data', `Error: ${error.message}`);
+    await sendTelegramAlert(alertMessage);
 
     // If any error occurs, send an error response
-    return new Response(
-      JSON.stringify({ error: "Failed to fetch stats data" }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    return NextResponse.json({ error: 'Failed to Home - Stats' }, { status: 500 });
   }
 }
