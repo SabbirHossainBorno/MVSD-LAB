@@ -79,10 +79,10 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-gray-100">
       <main className="flex-1 p-3 md:p-4 lg:p-6">
-        {/* Summary Cards */}
+
+        {/* ------------------------Summary Cards------------------------ */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-10">
 
-          
           {/* Total Users Card */}
           <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
             {/* Icon Section */}
@@ -167,7 +167,6 @@ const Dashboard = () => {
               <p className="text-3xl font-extrabold text-black mt-1">{messageCount}</p>
             </div>
           </div>
-
           {/* Current Login Count */}
           <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
             {/* Icon Section */}
@@ -190,7 +189,11 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Login Information */}
+
+
+
+
+        {/* ------------------------Login Information------------------------ */}
         <div className="grid grid-cols-1 gap-4 mb-5">
           {/* Admin Info */}
           <div className="bg-gray-800 p-4 rounded shadow-lg">
@@ -237,65 +240,10 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Recent Users and Recent Subscribers Side by Side */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-          {/* Recent Users */}
-          <div className="bg-gray-800 p-4 rounded shadow-lg">
-            <div className="relative">
-              <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-teal-500">
-                Recent Approved Users
-              </h2>
-              <hr className="border-0 h-1 bg-gradient-to-r from-green-400 to-teal-500 rounded-full mb-6" />
-            </div>
-            <ul className="space-y-3">
-              {recentUsers.map(user => (
-                <li
-                  key={user.email}
-                  className="flex items-center justify-between p-3 rounded bg-gray-700 border border-gray-600 shadow-sm hover:bg-gray-600 transition"
-                >
-                  <div className="flex items-center space-x-3">
-                    <div>
-                      <p className="text-sm font-semibold font-medium text-gray-200">{user.email}</p>
-                      <p className="text-xs text-gray-400">Joined recently</p>
-                    </div>
-                  </div>
-                  <button className="bg-green-600 text-white hover:bg-green-700 rounded px-4 py-1 text-xs font-medium">
-                    Active
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <Link href="/dashboard/users_list" className="block mt-3 text-center text-blue-400 hover:text-blue-500 text-sm">View All</Link>
-          </div>
 
-          {/* Recent Subscribers */}
-          <div className="bg-gray-800 p-4 rounded shadow-lg">
-            <div className="relative">
-            <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">
-                Recent Subscribers
-              </h2>
-              <hr className="border-0 h-1 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full mb-6" />
-            </div>
-            <ul className="space-y-2">
-              {recentSubscribers.map(subscriber => (
-                <li
-                  key={subscriber.email}
-                  className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition"
-                >
-                  <span className="text-xs sm:text-sm md:text-base font-semibold text-gray-200 break-words">{subscriber.email}</span>
-                  <button className="bg-blue-600 text-white hover:bg-blue-700 rounded px-2 py-1 text-xs font-medium">
-                    Subscribed
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <Link href="/dashboard/subscribers_list" className="block mt-3 text-center text-blue-400 hover:text-blue-500 text-sm">View All</Link>
-          </div>
 
-          
-        </div>
 
-        {/* Message Statistics and Recent Professors Side by Side */}
+        {/* ------------------------Message Statistics and Recent Professors Side by Side------------------------ */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
               {/* Message Statistics */}
           <div className="bg-gray-800 p-4 rounded shadow-lg">
@@ -340,62 +288,68 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Approved Users and Users Waiting for Approval Side by Side */}
+
+
+
+        {/* ------------------------Recent Subscribers and------ Side by Side------------------------ */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-          {/* Users Waiting for Approval */}
+          {/* Recent Subscribers */}
           <div className="bg-gray-800 p-4 rounded shadow-lg">
             <div className="relative">
+            <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">
+                Recent Subscribers
+              </h2>
+              <hr className="border-0 h-1 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full mb-6" />
+            </div>
+            <ul className="space-y-2">
+              {recentSubscribers.map(subscriber => (
+                <li
+                  key={subscriber.email}
+                  className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition"
+                >
+                  <span className="text-xs sm:text-sm md:text-base font-semibold text-gray-200 break-words">{subscriber.email}</span>
+                  <div className="bg-blue-600 text-white rounded px-2 py-1 text-xs font-medium">
+                    Subscribed
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <Link href="/dashboard/subscribers_list" className="block mt-3 text-center text-blue-400 hover:text-blue-500 text-sm">View All</Link>
+          </div>
+        </div>
+
+
+
+        {/* ------------------------Recent Subscribers and------ Side by Side------------------------ */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+          {/* Heading Example */}
+          <div className="bg-gray-800 p-4 rounded shadow-lg">
+
+            <div className="relative">
+              <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-teal-500">
+                Example Heading 1
+              </h2>
+              <hr className="border-0 h-1 bg-gradient-to-r from-green-400 to-teal-500 rounded-full mb-6" />
+            </div>
+
+            <div className="relative">
               <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500">
-                Waiting for Approval
+                Example Heading 2
               </h2>
               <hr className="border-0 h-1 bg-gradient-to-r from-teal-400 to-blue-500 rounded-full mb-6" />
             </div>
-            <ul className="space-y-2">
-              {users.filter(user => user.status === 'pending').map(user => (
-                <li key={user.id} className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition">
-                  <div className="flex items-center space-x-3">
-                    <div>
-                      <p className="text-sm font-semibold text-gray-200">{user.email}</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => updateUserStatus(user.id, 'approved')}
-                    className="bg-blue-600 text-white hover:bg-blue-700 rounded px-4 py-1 text-xs font-medium"
-                  >
-                    Approve
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
 
-          {/* Rejected Users */}
-          <div className="bg-gray-800 p-4 rounded shadow-lg">
             <div className="relative">
               <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-orange-500">
-                Rejected Users
+                Example Heading 3
               </h2>
               <hr className="border-0 h-1 bg-gradient-to-r from-pink-500 to-orange-500 rounded-full mb-6" />
             </div>
-            <ul className="space-y-2">
-              {users.filter(user => user.status === 'rejected').map(user => (
-                <li key={user.id} className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition">
-                  <div className="flex items-center space-x-3">
-                    <div>
-                      <p className="text-sm font-semibold text-red-500">{user.email}</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => updateUserStatus(user.id, 'approved')}
-                    className="bg-yellow-600 text-white hover:bg-yellow-700 rounded px-2 py-1 text-xs font-medium"
-                  >
-                    Force Approve
-                  </button>
-                </li>
-              ))}
-            </ul>
+            
           </div>
         </div>
+
+
       </main>
     </div>
   );
