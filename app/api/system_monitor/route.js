@@ -86,7 +86,7 @@ export async function GET(request) {
     };
 
     // Website Live Log
-    const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+    const currentDate = new Date().toLocaleDateString('en-CA'); // Get current date in YYYY-MM-DD format using local time zone
     const logFilePath = `/home/mvsd-lab/logs/mvsd-lab-${currentDate}.log`;
     const logData = fs.readFileSync(logFilePath, 'utf-8');
     data.websiteLog = logData.split('\n').slice(-100); // Get last 100 log entries
