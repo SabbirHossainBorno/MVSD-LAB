@@ -113,17 +113,6 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         </Link>
 
 
-
-
-
-
-
-        <Link href="/dashboard/users_list">
-          <div className="block p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer">
-            <Image src="/icons/user_list.png" alt="Users List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">Users List</span>
-          </div>
-        </Link>
       </nav>
     </aside>
   );

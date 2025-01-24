@@ -4,6 +4,9 @@
 import { useEffect, useState } from 'react';
 import withAuth from '../../components/withAuth';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import GaugeChart from 'react-gauge-chart';
 
 const SystemMonitoring = () => {
   const [data, setData] = useState(null);
@@ -31,9 +34,9 @@ const SystemMonitoring = () => {
 
   // Determine CPU usage color
   const getCpuUsageColor = (usage) => {
-    if (usage < 70) return 'bg-green-600';
-    if (usage < 80) return 'bg-yellow-600';
-    return 'bg-red-600';
+    if (usage < 70) return '#4caf50'; // Green
+    if (usage < 80) return '#ffeb3b'; // Yellow
+    return '#f44336'; // Red
   };
 
   // Determine RAM usage color
@@ -61,8 +64,19 @@ const SystemMonitoring = () => {
 
         <div className="bg-gray-800 p-4 md:p-6 rounded shadow-md">
           <h3 className="text-lg md:text-xl font-bold mb-4 text-blue-400">CPU Usage</h3>
-          <div className={`p-4 md:p-6 rounded shadow-md ${cpuUsageColor}`}>
-            <p>Current Usage : {data.cpu.usage.toFixed(0)}%</p>
+          <div className="flex justify-center items-center">
+            <div style={{ width: 200, height: 200 }}>
+              <GaugeChart 
+                id="cpu-usage-gauge"
+                nrOfLevels={30}
+                percent={data.cpu.usage / 100}
+                colors={['#4caf50', '#ffeb3b', '#f44336']}
+                arcWidth={0.3}
+                textColor="#fff"
+                needleColor="#000"
+                needleBaseColor="#000"
+              />
+            </div>
           </div>
         </div>
 
@@ -84,7 +98,6 @@ const SystemMonitoring = () => {
             <pre className="text-green-400 whitespace-pre-wrap">{data.websiteLog.join('\n')}</pre>
           </div>
         </div>
-
 
         {/* System Process */}
         <div className="col-span-1 md:col-span-2 bg-gray-800 p-4 md:p-6 rounded shadow-md">
@@ -125,7 +138,7 @@ const SystemMonitoring = () => {
 
         {/* Login Info */}
         <div className="bg-gray-800 p-4 md:p-6 rounded shadow-md overflow-x-auto">
-          <h3 className="text-lg md:text-xl font-bold mb-4 text-blue-400">Current Login Info</h3>
+          <h3 class="text-lg md:text-xl font-bold mb-4 text-blue-400">Current Login Info</h3>
           <div className="bg-gray-700 p-4 rounded overflow-x-auto">
             <pre className="text-gray-200">{data.loginInfo}</pre>
           </div>

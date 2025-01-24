@@ -13,10 +13,9 @@ import Image from 'next/image';
 
 const Dashboard = () => {
   const [subscribers, setSubscribers] = useState(0);
-  const [users, setUsers] = useState([]);
+  const [membersCount, setMembersCount] = useState(0);
   const [professorsCount, setProfessorsCount] = useState(0);
   const [messageCount, setMessagesCount] = useState(0);
-  const [recentUsers, setRecentUsers] = useState([]);
   const [recentProfessors, setRecentProfessors] = useState([]);
   const [recentSubscribers, setRecentSubscribers] = useState([]);
   const [admins, setAdmins] = useState([]); // State to manage admin data
@@ -33,12 +32,11 @@ const Dashboard = () => {
         const result = response.data;
         if (isMounted) {
           setSubscribers(result.subscribers);
-          setUsers(result.users);
+          setMembersCount(result.memberCount);
           setProfessorsCount(result.professorCount);
           setMessagesCount(result.messageCount);
           setRecentSubscribers(result.recentSubscribers);
           setAdmins(result.admins); // Set admin data
-          setRecentUsers(result.recentUsers);
           setRecentProfessors(result.recentProfessors);
           setCurrentLoginCount(result.currentLoginCount); // Set current login count
         }
@@ -57,23 +55,6 @@ const Dashboard = () => {
     };
   }, []);
 
-  const updateUserStatus = async (userId, newStatus) => {
-    try {
-      const response = await axios.post('/api/dashboard', { userId, newStatus });
-
-      if (response.status === 200) {
-        const updatedUser = response.data;
-        setUsers(users.map(user => (user.id === updatedUser.user.id ? updatedUser.user : user)));
-        toast.success('User status updated successfully!');
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error('Failed to update user status');
-      console.error('Error updating user status:', error);
-    }
-  };
-
   if (loading) return <LoadingSpinner />;
 
   return (
@@ -83,13 +64,13 @@ const Dashboard = () => {
         {/* ------------------------Summary Cards------------------------ */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-10">
 
-          {/* Total Users Card */}
+          {/* Total Members Card */}
           <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
             {/* Icon Section */}
             <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
             <Image 
-              src="/icons/user.svg" // Image path
-              alt="Total Users Icon" // Alt text
+              src="/icons/member.svg" // Image path
+              alt="Total Members Icon" // Alt text
               width={64} // 16 * 4 = 64px width
               height={64} // 16 * 4 = 64px height
               className="w-16 h-16 md:w-20 md:h-20" // Tailwind classes for sizing
@@ -100,8 +81,8 @@ const Dashboard = () => {
 
             {/* Content Section */}
             <div className="flex flex-col items-start">
-              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Users</p>
-              <p className="text-3xl font-extrabold text-black mt-1">{users.length}</p>
+              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Members</p>
+              <p className="text-3xl font-extrabold text-black mt-1">{membersCount}</p>
             </div>
           </div>
 
