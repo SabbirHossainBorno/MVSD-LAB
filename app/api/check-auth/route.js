@@ -80,7 +80,7 @@ export async function GET(request) {
       'Error during authentication check',
       email,
       ip,
-      `\nError: ${error.message}`
+      `\nError : ${error.message}`
     );
     await sendTelegramAlert(alertMessage);
 
