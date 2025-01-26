@@ -108,9 +108,9 @@ function DashboardMessageChart() {
   const totalMessages = chartData.reduce((sum, item) => sum + parseInt(item.count, 10), 0);
 
   return (
-    <div className="w-full max-w-3xl mx-auto p-6 bg-gradient-to-br from-gray-800 to-gray-900 text-gray-100 rounded-lg shadow-lg space-y-4">
-      <div className="flex justify-between items-center">
-        <div>
+    <div className="w-full max-w-3xl mx-auto p-6 bg-gray-900 text-gray-100 rounded shadow-lg space-y-4">
+      <div className="flex flex-col sm:flex-row justify-between items-center">
+        <div className="mb-4 sm:mb-0">
           <h3 className="text-4xl font-bold mb-1">{totalMessages}</h3>
           <p className="text-sm text-gray-400">Messages in the last {selectedDays} days</p>
         </div>
@@ -119,8 +119,8 @@ function DashboardMessageChart() {
             <button
               key={days}
               onClick={() => handleDaysChange(days)}
-              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors 
-                ${selectedDays === days ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors 
+                ${selectedDays === days ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-200 hover:bg-gray-600'}`}
             >
               {days} Days
             </button>
@@ -140,18 +140,18 @@ function DashboardMessageChart() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="bg-gray-800 p-3 rounded-md">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="bg-gray-800 p-3 rounded">
           <p className="text-sm text-gray-400">Average Messages</p>
           <p className="text-xl font-bold">{Math.round(totalMessages / selectedDays)}</p>
         </div>
-        <div className="bg-gray-800 p-3 rounded-md">
+        <div className="bg-gray-800 p-3 rounded">
           <p className="text-sm text-gray-400">Highest Daily Messages</p>
           <p className="text-xl font-bold">
             {Math.max(...chartData.map((item) => item.count)) || 0}
           </p>
         </div>
-        <div className="bg-gray-800 p-3 rounded-md">
+        <div className="bg-gray-800 p-3 rounded">
           <p className="text-sm text-gray-400">Percentage Change</p>
           <p className={`text-xl font-bold ${percentageChange >= 0 ? 'text-green-400' : 'text-red-400'}`}>
             {percentageChange.toFixed(2)}%
