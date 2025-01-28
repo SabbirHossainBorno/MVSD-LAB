@@ -5,8 +5,8 @@ import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import withAuth from '../../../../components/withAuth';
-import LoadingSpinner from '../../../../components/LoadingSpinner';
+import withAuth from '../../../components/withAuth';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 const AddPhdCadidate = () => {
   const [formData, setFormData] = useState({
@@ -18,7 +18,7 @@ const AddPhdCadidate = () => {
     password: '',
     confirm_password: '',
     short_bio: '',
-    addmission_date: '',
+    admission_date: '',
     completion_date: '',
     photo: '',
     type: 'PhD Candidate',
@@ -28,7 +28,7 @@ const AddPhdCadidate = () => {
   const [socialMedia, setSocialMedia] = useState([{ socialMedia_name: '', link: '' }]);
   const [education, setEducation] = useState([{ degree: '', institution: '', passing_year: '' }]);
   const [career, setCareer] = useState([{ position: '', organization: '', joining_year: '', leaving_year: '' }]);
-  const [documents, setDocuments] = useState([{ title: '', year: '', documentsPhoto: '' }]);
+  const [documents, setDocuments] = useState([{ title: '', documentType: '', documentsPhoto: '' }]);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -109,14 +109,14 @@ const AddPhdCadidate = () => {
 
     documents.forEach((document, index) => {
       data.append(`documents[${index}][title]`, document.title || '');
-      data.append(`documents[${index}][year]`, document.year || '');
+      data.append(`documents[${index}][documentType]`, document.documentType || '');
       if (document.documentsPhoto) {
         data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
       }
     });
 
     try {
-      const response = await fetch('/api/add_member/phd_candidate_add', {
+      const response = await fetch('/api/member_add/phd_candidate_add', {
         method: 'POST',
         body: data,
       });
@@ -216,13 +216,13 @@ const AddPhdCadidate = () => {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="addmission_date" className="block text-gray-300 mb-2">
-              Joining Date
+              <label htmlFor="admission_date" className="block text-gray-300 mb-2">
+              Admission Date
               </label>
               <input
                 type="date"
-                name="addmission_date"
-                value={formData.addmission_date}
+                name="admission_date"
+                value={formData.admission_date}
                 onChange={handleChange}
                 className="w-full p-3 rounded bg-gray-700 text-gray-300"
                 required
@@ -294,7 +294,7 @@ const AddPhdCadidate = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="completion_date" className="block text-gray-300 mb-2">
-                Leaving Date
+              Completion Date
               </label>
               <input
                 type="date"
@@ -503,17 +503,24 @@ const AddPhdCadidate = () => {
               className="w-full p-3 rounded bg-gray-700"
               required
             />
-            <input
-              type="number"
-              name="year"
-              placeholder="Year"
-              value={document.year}
-              onChange={(e) => handleArrayChange(setDocuments, index, 'year', parseInt(e.target.value, 10))}
-              className="w-full p-3 rounded bg-gray-700"
-              min="1900"
-              max={new Date().getFullYear()}
-              required
-            />
+
+            <select
+            name="documentType"
+            value={document.documentType}
+            onChange={(e) => handleArrayChange(setDocuments, index, 'documentType', e.target.value)}
+            className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+            required
+            >
+            <option value="" disabled className="text-gray-400">Select Document Type</option>
+            <option value="1" className="bg-gray-700 text-white">Education</option>
+            <option value="2" className="bg-gray-700 text-white">Medical</option>
+            <option value="3" className="bg-gray-700 text-white">Career</option>
+            <option value="4" className="bg-gray-700 text-white">Personal</option>
+            <option value="5" className="bg-gray-700 text-white">Other</option>
+            </select>
+
+
+
             <input
               type="file"
               name="documentsPhoto"
@@ -533,7 +540,7 @@ const AddPhdCadidate = () => {
         ))}
         <button
           type="button"
-          onClick={() => addNewField(setDocuments, { title: '', year: '', details: '', documentsPhoto: '' })}
+          onClick={() => addNewField(setDocuments, { title: '', documentType: '', documentsPhoto: '' })}
           className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
         >
           Add Another Document
