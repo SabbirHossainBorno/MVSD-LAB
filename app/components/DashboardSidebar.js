@@ -76,6 +76,12 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
           {/* Dropdown Menu */}
           {showDropdown && (
             <div className="relative w-full mt-2 mb-2 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950 rounded shadow-lg z-20">
+            
+            <Link href="/dashboard/member_add/phd_candidate_add">
+              <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                <span className="text-sm font-semibold text-white">PHd Candidate</span>
+              </div>
+            </Link>
             <Link href="/dashboard/add_member/staff">
               <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
                 <span className="text-sm font-semibold text-white">Staff</span>
