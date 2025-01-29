@@ -5,53 +5,39 @@ import logger from '../../../../lib/logger';
 import sendTelegramAlert from '../../../../lib/telegramAlert';
 import path from 'path';
 import fs from 'fs';
+import bcrypt from 'bcryptjs'; // Import bcrypt for password hashing
 
 const formatAlertMessage = (title, details) => {
   return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\n${details}`;
 };
 
 const generatePhdCandidateId = async () => {
-    try {
-      const result = await query('SELECT MAX(id) AS max_id FROM phd_candidate_basic_info');
-      const maxId = result.rows[0]?.max_id || 'PHDC00MVSD';
-      const numericPart = parseInt(maxId.substring(4, maxId.length - 4), 10) || 0;
-      const nextId = numericPart + 1;
-      return `PHDC${String(nextId).padStart(2, '0')}MVSD`;
-    } catch (error) {
-      throw new Error(`Error generating PhD Candidate ID: ${error.message}`);
-    }
-  };
+  try {
+    const result = await query('SELECT MAX(id) AS max_id FROM phd_candidate_basic_info');
+    const maxId = result.rows[0]?.max_id || 'PHDC00MVSD';
+    const numericPart = parseInt(maxId.substring(4, maxId.length - 4), 10) || 0;
+    const nextId = numericPart + 1;
+    return `PHDC${String(nextId).padStart(2, '0')}MVSD`;
+  } catch (error) {
+    throw new Error(`Error generating PhD Candidate ID: ${error.message}`);
+  }
+};
 
-const saveProfilePhoto = async (file, phdCandidateId) => {
-  const filename = `${phdCandidateId}_DP${path.extname(file.name)}`;
+const saveFile = async (file, filename) => {
   const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/PhD_Candidate', filename);
-
   try {
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
     return `/Storage/Images/PhD_Candidate/${filename}`;
   } catch (error) {
-    throw new Error(`Failed to save profile photo: ${error.message}`);
+    throw new Error(`Failed to save file: ${error.message}`);
   }
-};
-
-const saveDocumentPhoto = async (file, phdCandidateId, documentType, index) => {
-    const filename = `${phdCandidateId}_Document_${documentType}_${index}${path.extname(file.name)}`;
-    const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/PhD_Candidate', filename);
-
-    try {
-        const buffer = await file.arrayBuffer();
-        fs.writeFileSync(targetPath, Buffer.from(buffer));
-        return `/Storage/Images/PhD_Candidate/${filename}`;
-    } catch (error) {
-        throw new Error(`Failed to save document photo: ${error.message}`);
-    }
 };
 
 export async function POST(req) {
   const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
   const eid = req.cookies.get('eid')?.value || 'Unknown EID';
-  const adminEmail = req.cookies.get('email')?.value || 'Unknown Email'; // Renamed to adminEmail
+  const adminEmail = req.cookies.get('email')?.value || 'Unknown Email';
   const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
   const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
 
@@ -62,7 +48,7 @@ export async function POST(req) {
     const last_name = formData.get('last_name');
     const phone = formData.get('phone');
     const dob = formData.get('dob');
-    const email = formData.get('email'); // This is the phdCandidate's email
+    const email = formData.get('email');
     const password = formData.get('password');
     const short_bio = formData.get('short_bio');
     const admission_date = formData.get('admission_date');
@@ -85,6 +71,8 @@ export async function POST(req) {
       return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+
     const currentDate = new Date();
     const dobDate = new Date(dob);
     let age = currentDate.getFullYear() - dobDate.getFullYear();
@@ -96,8 +84,8 @@ export async function POST(req) {
       return NextResponse.json({ message: 'PhD Candidate must be at least 18 years old.' }, { status: 400 });
     }
 
-    const admission_date = new Date(admission_date).getFullYear();
-    if (admission_date > currentDate.getFullYear()) {
+    const admissionYear = new Date(admission_date).getFullYear();
+    if (admissionYear > currentDate.getFullYear()) {
       return NextResponse.json({ message: 'Admission date cannot be greater than the current year.' }, { status: 400 });
     }
 
@@ -126,7 +114,7 @@ export async function POST(req) {
     let photoUrl = null;
     const photoFile = formData.get('photo');
     if (photoFile) {
-      photoUrl = await saveProfilePhoto(photoFile, phdCandidateId);
+      photoUrl = await saveFile(photoFile, `${phdCandidateId}_DP${path.extname(photoFile.name)}`);
     }
 
     const documentUrls = [];
@@ -134,7 +122,7 @@ export async function POST(req) {
       for (let i = 0; i < documents.length; i++) {
         const documentFile = documents[i].documentPhoto;
         if (documentFile) {
-          const documentUrl = await saveDocumentPhoto(documentFile, phdCandidateId, i + 1);
+          const documentUrl = await saveFile(documentFile, `${phdCandidateId}_Document_${documents[i].documentType}_${i}${path.extname(documentFile.name)}`);
           documentUrls.push(documentUrl);
         } else {
           throw new Error('PhD Candidate document photo is missing');
@@ -152,10 +140,10 @@ export async function POST(req) {
         RETURNING *;
       `;
       await query(insertPhdCandidateQuery, [
-        phdCandidateId, first_name, last_name, phone, dob, email, password, short_bio, admission_date, completion_date, photoUrl, type,
+        phdCandidateId, first_name, last_name, phone, dob, email, hashedPassword, short_bio, admission_date, completion_date, photoUrl, type,
       ]);
 
-      const insertSocialMediaQuery = `INSERT INTO phd_candidate_socialMedia_info (phdCandidate_id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
+      const insertSocialMediaQuery = `INSERT INTO phd_candidate_socialmedia_info (phdCandidate_id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
       for (const sm of socialMedia) {
         await query(insertSocialMediaQuery, [phdCandidateId, sm.socialMedia_name, sm.link]);
       }
@@ -167,7 +155,7 @@ export async function POST(req) {
         RETURNING *;
       `;
       await query(insertMemberQuery, [
-        phdCandidateId, first_name, last_name, phone, dob, email, password, short_bio, admission_date, completion_date, photoUrl, type,
+        phdCandidateId, first_name, last_name, phone, dob, email, hashedPassword, short_bio, admission_date, completion_date, photoUrl, type,
       ]);
 
       const insertEducationQuery = `INSERT INTO phd_candidate_education_info (phdCandidate_id, degree, institution, passing_year) VALUES ($1, $2, $3, $4) RETURNING *;`;
@@ -182,7 +170,7 @@ export async function POST(req) {
         ]);
       }
 
-      const insertDocumentsQuery = `INSERT INTO phd_candidate_document_info (phdCandidate_id, title, documentType, document_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
+      const insertDocumentsQuery = `INSERT INTO phd_candidate_document_info (phdCandidate_id, title, documentType, document_photo) VALUES ($1, $2, $3, $4) RETURNING *;`;
       for (let i = 0; i < documents.length; i++) {
         const document = documents[i];
         const documentUrl = documentUrls[i]; // Get the URL of the saved document photo
