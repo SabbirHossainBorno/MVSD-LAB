@@ -7,12 +7,20 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import withAuth from '../../../components/withAuth';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import countryList from 'react-select-country-list';
 
 const AddPhdCadidate = () => {
+  const countries = countryList().getLabels(); // Get country names
+
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
     phone: '',
+    gender: '',
+    bloodGroup: '',
+    country: '',
+    idNumber: '',
+    passport_number: '',
     dob: '',
     email: '',
     password: '',
@@ -183,6 +191,75 @@ const AddPhdCadidate = () => {
                 type="number"
                 name="phone"
                 value={formData.phone}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-gray-700 text-gray-300"
+                required
+              />
+            </div>
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+              required
+            >
+              <option value="" disabled className="text-gray-400">Select Gender</option>
+              <option value="Male" className="bg-gray-700 text-white">Male</option>
+              <option value="Female" className="bg-gray-700 text-white">Female</option>
+              <option value="Other" className="bg-gray-700 text-white">Other</option>
+            </select>
+
+            <select
+              name="bloodGroup"
+              value={formData.bloodGroup}
+              onChange={handleChange}
+              className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+              required
+            >
+              <option value="" disabled className="text-gray-400">Select Blood Group</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+            <select
+              name="country"
+              value={selectedCountry}
+              onChange={(e) => setSelectedCountry(e.target.value)}
+              className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 
+                        focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+              required
+            >
+              <option value="" disabled className="text-gray-400">Select Country</option>
+              {countries.map((country, index) => (
+                <option key={index} value={country}>{country}</option>
+              ))}
+            </select>
+            <div className="mb-4">
+              <label htmlFor="idNumber" className="block text-gray-300 mb-2">
+              Identification Number
+              </label>
+              <input
+                type="number"
+                name="idNumber"
+                value={formData.idNumber}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-gray-700 text-gray-300"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="passport_number" className="block text-gray-300 mb-2">
+              Passport Number
+              </label>
+              <input
+                type="text"
+                name="passport_number"
+                value={formData.passport_number}
                 onChange={handleChange}
                 className="w-full p-3 rounded bg-gray-700 text-gray-300"
                 required
