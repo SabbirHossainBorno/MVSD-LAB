@@ -17,20 +17,41 @@ const generatePhdCandidateId = async () => {
     const maxId = result.rows[0]?.max_id || 'PHDC00MVSD';
     const numericPart = parseInt(maxId.substring(4, maxId.length - 4), 10) || 0;
     const nextId = numericPart + 1;
+    console.log('Generated PhD Candidate ID:', `PHDC${String(nextId).padStart(2, '0')}MVSD`);
     return `PHDC${String(nextId).padStart(2, '0')}MVSD`;
   } catch (error) {
+    console.error('Error generating PhD Candidate ID:', error.message);
     throw new Error(`Error generating PhD Candidate ID: ${error.message}`);
   }
 };
 
-const saveFile = async (file, filename) => {
+const saveProfilePhoto = async (file, phdCandidateId) => {
+  const filename = `${phdCandidateId}_DP${path.extname(file.name)}`;
   const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/PhD_Candidate', filename);
+
   try {
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
+    console.log('Profile photo saved successfully:', filename);
     return `/Storage/Images/PhD_Candidate/${filename}`;
   } catch (error) {
-    throw new Error(`Failed to save file: ${error.message}`);
+    console.error('Failed to save profile photo:', error.message);
+    throw new Error(`Failed to save profile photo: ${error.message}`);
+  }
+};
+
+const saveDocumentPhoto = async (file, phdCandidateId, index, documentType) => {
+  const filename = `${phdCandidateId}_Document_${documentType}_${index}${path.extname(file.name)}`;
+  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/PhD_Candidate', filename);
+
+  try {
+    const buffer = await file.arrayBuffer();
+    fs.writeFileSync(targetPath, Buffer.from(buffer));
+    console.log('Document photo saved successfully:', filename);
+    return `/Storage/Images/PhD_Candidate/${filename}`;
+  } catch (error) {
+    console.error('Failed to save document photo:', error.message);
+    throw new Error(`Failed to save document photo: ${error.message}`);
   }
 };
 
@@ -40,6 +61,8 @@ export async function POST(req) {
   const adminEmail = req.cookies.get('email')?.value || 'Unknown Email';
   const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
   const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
+
+  console.log('Received request to add PhD Candidate:', { sessionId, eid, adminEmail, ipAddress, userAgent });
 
   try {
     const formData = await req.formData();
@@ -70,18 +93,23 @@ export async function POST(req) {
       });
     }
 
+    console.log('Form data received:', { first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, password, short_bio, admission_date, completion_date, type, socialMedia, education, career, documents });
+
     // Validate required fields
     if (!first_name || !last_name || !phone || !gender || !bloodGroup || !country || !idNumber || !dob || !email || !password || !short_bio || !admission_date) {
+      console.warn('Validation Error: Missing required fields', { first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, password, short_bio, admission_date });
       return NextResponse.json({ message: 'All required fields must be filled.' }, { status: 400 });
     }
 
     // Validate password
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
     if (!passwordRegex.test(password)) {
+      console.warn('Validation Error: Invalid password format', { password });
       return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+    console.log('Password hashed successfully');
 
     // Validate age
     const currentDate = new Date();
@@ -92,12 +120,14 @@ export async function POST(req) {
       age--;
     }
     if (age < 18) {
+      console.warn('Validation Error: Age less than 18', { dob, age });
       return NextResponse.json({ message: 'PhD Candidate must be at least 18 years old.' }, { status: 400 });
     }
 
     // Validate admission date
     const admissionYear = new Date(admission_date).getFullYear();
     if (admissionYear > currentDate.getFullYear()) {
+      console.warn('Validation Error: Admission date greater than current year', { admission_date, admissionYear });
       return NextResponse.json({ message: 'Admission date cannot be greater than the current year.' }, { status: 400 });
     }
 
@@ -105,31 +135,43 @@ export async function POST(req) {
     const validateYear = (year) => year <= currentDate.getFullYear();
 
     if (!education.every(edu => validateYear(edu.passing_year))) {
+      console.warn('Validation Error: Education passing year greater than current year', { education });
       return NextResponse.json({ message: 'Passing year cannot be greater than the current year.' }, { status: 400 });
     }
 
     if (!career.every(car => validateYear(car.joining_year) && (!car.leaving_year || validateYear(car.leaving_year)))) {
+      console.warn('Validation Error: Career joining or leaving year greater than current year', { career });
       return NextResponse.json({ message: 'Joining year and leaving year cannot be greater than the current year.' }, { status: 400 });
     }
 
     // Check for existing email and phone
     const emailCheckResult = await query('SELECT id FROM member WHERE email = $1', [email]);
     if (emailCheckResult.rows.length > 0) {
+      console.warn('Validation Error: Email already exists', { email });
+      logger.warn('Validation Error: Email already exists', { email });
       return NextResponse.json({ message: 'Email already exists' }, { status: 400 });
     }
 
     const phoneCheckResult = await query('SELECT id FROM member WHERE phone = $1', [phone]);
     if (phoneCheckResult.rows.length > 0) {
+      console.warn('Validation Error: Phone number already exists', { phone });
+      logger.warn('Validation Error: Phone number already exists', { phone });
       return NextResponse.json({ message: 'Phone Number already exists' }, { status: 400 });
     }
 
     const phdCandidateId = await generatePhdCandidateId();
+    console.log('Generated PhD Candidate ID:', phdCandidateId);
 
     // Save profile photo
     let photoUrl = null;
     const photoFile = formData.get('photo');
     if (photoFile) {
-      photoUrl = await saveFile(photoFile, `${phdCandidateId}_DP${path.extname(photoFile.name)}`);
+      try {
+        photoUrl = await saveProfilePhoto(photoFile, phdCandidateId);
+      } catch (error) {
+        console.error('Error saving profile photo:', error.message);
+        return NextResponse.json({ message: `Failed to save profile photo: ${error.message}` }, { status: 500 });
+      }
     }
 
     // Save document photos
@@ -138,10 +180,16 @@ export async function POST(req) {
       for (let i = 0; i < documents.length; i++) {
         const documentFile = documents[i].documentPhoto;
         if (documentFile) {
-          const documentUrl = await saveFile(documentFile, `${phdCandidateId}_Document_${documents[i].documentType}_${i}${path.extname(documentFile.name)}`);
-          documentUrls.push(documentUrl);
+          try {
+            const documentUrl = await saveDocumentPhoto(documentFile, phdCandidateId, i, documents[i].documentType);
+            documentUrls.push(documentUrl);
+          } catch (error) {
+            console.error('Error saving document photo:', error.message);
+            return NextResponse.json({ message: `Failed to save document photo: ${error.message}` }, { status: 500 });
+          }
         } else {
-          throw new Error('PhD Candidate document photo is missing');
+          console.warn('Document photo is missing for document:', documents[i]);
+          return NextResponse.json({ message: 'PhD Candidate document photo is missing' }, { status: 400 });
         }
       }
     }
@@ -160,11 +208,15 @@ export async function POST(req) {
         phdCandidateId, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, hashedPassword, short_bio, admission_date, completion_date, photoUrl, type,
       ]);
 
+      console.log('Inserted into phd_candidate_basic_info');
+
       // Insert into phd_candidate_socialmedia_info
       const insertSocialMediaQuery = `INSERT INTO phd_candidate_socialmedia_info (phdCandidate_id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
       for (const sm of socialMedia) {
         await query(insertSocialMediaQuery, [phdCandidateId, sm.socialMedia_name, sm.link]);
       }
+
+      console.log('Inserted into phd_candidate_socialmedia_info');
 
       // Insert into member
       const insertMemberQuery = `
@@ -177,11 +229,15 @@ export async function POST(req) {
         phdCandidateId, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, hashedPassword, short_bio, admission_date, completion_date, photoUrl, type,
       ]);
 
+      console.log('Inserted into member');
+
       // Insert into phd_candidate_education_info
       const insertEducationQuery = `INSERT INTO phd_candidate_education_info (phdCandidate_id, degree, institution, passing_year) VALUES ($1, $2, $3, $4) RETURNING *;`;
       for (const edu of education) {
         await query(insertEducationQuery, [phdCandidateId, edu.degree, edu.institution, parseInt(edu.passing_year)]);
       }
+
+      console.log('Inserted into phd_candidate_education_info');
 
       // Insert into phd_candidate_career_info
       const insertCareerQuery = `INSERT INTO phd_candidate_career_info (phdCandidate_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
@@ -190,6 +246,8 @@ export async function POST(req) {
           phdCandidateId, car.position, car.organization, parseInt(car.joining_year), parseInt(car.leaving_year),
         ]);
       }
+
+      console.log('Inserted into phd_candidate_career_info');
 
       // Insert into phd_candidate_document_info
       const insertDocumentsQuery = `INSERT INTO phd_candidate_document_info (phdCandidate_id, title, documentType, document_photo) VALUES ($1, $2, $3, $4) RETURNING *;`;
@@ -206,12 +264,16 @@ export async function POST(req) {
         ]);
       }
 
+      console.log('Inserted into phd_candidate_document_info');
+
       // Insert into notification_details
       const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
       const Id = `${phdCandidateId}`; 
       const notificationTitle = `A New PhD Candidate Added [${phdCandidateId}] By ${adminEmail}`;
       const notificationStatus = 'Unread';
       await query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
+
+      console.log('Inserted into notification_details');
 
       await query('COMMIT');
 
@@ -230,6 +292,7 @@ export async function POST(req) {
         }
       });
 
+      console.log('PhD Candidate information added successfully');
       return NextResponse.json({ message: 'PhD Candidate information added successfully!' }, { status: 200 });
 
     } catch (error) {
@@ -247,6 +310,7 @@ export async function POST(req) {
         }
       });
 
+      console.error('Error adding PhD Candidate:', error.message);
       return NextResponse.json({ message: `Execution failed: ${error.message}` }, { status: 500 });
     }
 
@@ -263,6 +327,7 @@ export async function POST(req) {
       }
     });
 
+    console.error('Error processing form data:', error.message);
     return NextResponse.json({ message: `Failed to process form data: ${error.message}` }, { status: 500 });
   }
 }

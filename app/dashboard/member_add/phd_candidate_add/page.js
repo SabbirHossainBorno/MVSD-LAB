@@ -1,4 +1,4 @@
-//app/dashboard/member_add/phd_candidate_add/page.js
+// app/dashboard/member_add/phd_candidate_add/page.js
 'use client';
 
 import { useState, useCallback } from 'react';
@@ -165,7 +165,6 @@ const AddPhdCandidate = () => {
 
   if (loading) return <LoadingSpinner />;
 
-
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
       <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto">
@@ -177,7 +176,7 @@ const AddPhdCandidate = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="mb-4">
               <label htmlFor="first_name" className="block text-gray-300 mb-2">
-              First Name
+                First Name
               </label>
               <input
                 type="text"
@@ -190,7 +189,7 @@ const AddPhdCandidate = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="last_name" className="block text-gray-300 mb-2">
-              Last Name
+                Last Name
               </label>
               <input
                 type="text"
@@ -203,7 +202,7 @@ const AddPhdCandidate = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="phone" className="block text-gray-300 mb-2">
-              Phone No
+                Phone No
               </label>
               <input
                 type="number"
@@ -279,7 +278,7 @@ const AddPhdCandidate = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="idNumber" className="block text-gray-300 mb-2">
-              Identification Number
+                Identification Number
               </label>
               <input
                 type="number"
@@ -292,7 +291,7 @@ const AddPhdCandidate = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="passport_number" className="block text-gray-300 mb-2">
-              Passport Number
+                Passport Number
               </label>
               <input
                 type="text"
@@ -305,7 +304,7 @@ const AddPhdCandidate = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="email" className="block text-gray-300 mb-2">
-              Email
+                Email
               </label>
               <input
                 type="email"
@@ -332,7 +331,7 @@ const AddPhdCandidate = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="admission_date" className="block text-gray-300 mb-2">
-              Admission Date
+                Admission Date
               </label>
               <input
                 type="date"
@@ -345,7 +344,7 @@ const AddPhdCandidate = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="password" className="block text-gray-300 mb-2">
-              Password
+                Password
               </label>
               <input
                 type="password"
@@ -358,7 +357,7 @@ const AddPhdCandidate = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="confirm_password" className="block text-gray-300 mb-2">
-              Confirm Password
+                Confirm Password
               </label>
               <input
                 type="password"
@@ -409,7 +408,7 @@ const AddPhdCandidate = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="completion_date" className="block text-gray-300 mb-2">
-              Completion Date
+                Completion Date
               </label>
               <input
                 type="date"
@@ -422,7 +421,7 @@ const AddPhdCandidate = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="short_bio" className="block text-gray-300 mb-2">
-              Short Bio
+                Short Bio
               </label>
               <textarea
                 type="details"
@@ -484,7 +483,7 @@ const AddPhdCandidate = () => {
             Add Another Social Media
           </button>
         </div>
-  
+
         {/* Education Section */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Education</h3>
@@ -539,129 +538,127 @@ const AddPhdCandidate = () => {
             Add Another Education
           </button>
         </div>
-  
+
         {/* Career Section */}
-      <div className="mb-8">
-        <h3 className="text-xl font-bold mb-4">Career</h3>
-        {career.map((job, index) => (
-          <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 relative">
-            <input
-              type="text"
-              name="position"
-              placeholder="Position"
-              value={job.position}
-              onChange={(e) => handleArrayChange(setCareer, index, 'position', e.target.value)}
-              className="w-full p-3 rounded bg-gray-700"
-              required
-            />
-            <input
-              type="text"
-              name="organization"
-              placeholder="Organization"
-              value={job.organization}
-              onChange={(e) => handleArrayChange(setCareer, index, 'organization', e.target.value)}
-              className="w-full p-3 rounded bg-gray-700"
-              required
-            />
-            <input
-              type="number"
-              name="joining_year"
-              placeholder="Joining Year"
-              value={job.joining_year}
-              onChange={(e) => handleArrayChange(setCareer, index, 'joining_year', parseInt(e.target.value, 10))}
-              className="w-full p-3 rounded bg-gray-700"
-              min="1900"
-              max={new Date().getFullYear()}
-              required
-            />
-            <input
-              type="number"
-              name="leaving_year"
-              placeholder="Leaving Year"
-              value={job.leaving_year}
-              onChange={(e) => handleArrayChange(setCareer, index, 'leaving_year', parseInt(e.target.value, 10))}
-              className="w-full p-3 rounded bg-gray-700"
-              min="1900"
-              max={new Date().getFullYear()}
-            />
-            {career.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeField(setCareer, index)}
-                className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-              >
-                Remove
-              </button>
-            )}
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => addNewField(setCareer, { position: '', organization: '', joining_year: '', leaving_year: '' })}
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-        >
-          Add Another Job
-        </button>
-      </div>
-
-      {/* documents Section */}
-      <div className="mb-8">
-        <h3 className="text-xl font-bold mb-4">Documents</h3>
-        {documents.map((document, index) => (
-          <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
-            <input
-              type="text"
-              name="title"
-              placeholder="Document Title"
-              value={document.title}
-              onChange={(e) => handleArrayChange(setDocuments, index, 'title', e.target.value)}
-              className="w-full p-3 rounded bg-gray-700"
-              required
-            />
-            <div className="mb-4">
-            <select
-            name="documentType"
-            value={document.documentType}
-            onChange={(e) => handleArrayChange(setDocuments, index, 'documentType', e.target.value)}
-            className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
-            required
-            >
-            <option value="" disabled className="text-gray-400">Select Document Type</option>
-            <option value="1" className="bg-gray-700 text-white">Education</option>
-            <option value="2" className="bg-gray-700 text-white">Medical</option>
-            <option value="3" className="bg-gray-700 text-white">Career</option>
-            <option value="4" className="bg-gray-700 text-white">Personal</option>
-            <option value="5" className="bg-gray-700 text-white">Official</option>
-            <option value="6" className="bg-gray-700 text-white">Other</option>
-            </select>
+        <div className="mb-8">
+          <h3 className="text-xl font-bold mb-4">Career</h3>
+          {career.map((job, index) => (
+            <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 relative">
+              <input
+                type="text"
+                name="position"
+                placeholder="Position"
+                value={job.position}
+                onChange={(e) => handleArrayChange(setCareer, index, 'position', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700"
+                required
+              />
+              <input
+                type="text"
+                name="organization"
+                placeholder="Organization"
+                value={job.organization}
+                onChange={(e) => handleArrayChange(setCareer, index, 'organization', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700"
+                required
+              />
+              <input
+                type="number"
+                name="joining_year"
+                placeholder="Joining Year"
+                value={job.joining_year}
+                onChange={(e) => handleArrayChange(setCareer, index, 'joining_year', parseInt(e.target.value, 10))}
+                className="w-full p-3 rounded bg-gray-700"
+                min="1900"
+                max={new Date().getFullYear()}
+                required
+              />
+              <input
+                type="number"
+                name="leaving_year"
+                placeholder="Leaving Year"
+                value={job.leaving_year}
+                onChange={(e) => handleArrayChange(setCareer, index, 'leaving_year', parseInt(e.target.value, 10))}
+                className="w-full p-3 rounded bg-gray-700"
+                min="1900"
+                max={new Date().getFullYear()}
+              />
+              {career.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeField(setCareer, index)}
+                  className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+                >
+                  Remove
+                </button>
+              )}
             </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addNewField(setCareer, { position: '', organization: '', joining_year: '', leaving_year: '' })}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          >
+            Add Another Job
+          </button>
+        </div>
 
-
-            <input
-              type="file"
-              name="documentsPhoto"
-              onChange={(e) => handleArrayChange(setDocuments, index, 'documentsPhoto', e.target.files[0])}
-              className="w-full p-3 rounded bg-gray-700"
-            />
-            {documents.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeField(setDocuments, index)}
-                className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-              >
-                Remove
-              </button>
-            )}
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => addNewField(setDocuments, { title: '', documentType: '', documentsPhoto: '' })}
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-        >
-          Add Another Document
-        </button>
-      </div>
+        {/* Documents Section */}
+        <div className="mb-8">
+          <h3 className="text-xl font-bold mb-4">Documents</h3>
+          {documents.map((document, index) => (
+            <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
+              <input
+                type="text"
+                name="title"
+                placeholder="Document Title"
+                value={document.title}
+                onChange={(e) => handleArrayChange(setDocuments, index, 'title', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700"
+                required
+              />
+              <div className="mb-4">
+                <select
+                  name="documentType"
+                  value={document.documentType}
+                  onChange={(e) => handleArrayChange(setDocuments, index, 'documentType', e.target.value)}
+                  className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+                  required
+                >
+                <option value="" disabled className="text-gray-400">Select Document Type</option>
+                <option value="Education" className="bg-gray-700 text-white">Education</option>
+                <option value="Medical" className="bg-gray-700 text-white">Medical</option>
+                <option value="Career" className="bg-gray-700 text-white">Career</option>
+                <option value="Personal" className="bg-gray-700 text-white">Personal</option>
+                <option value="Official" className="bg-gray-700 text-white">Official</option>
+                <option value="Other" className="bg-gray-700 text-white">Other</option>
+                </select>
+              </div>
+              <input
+                type="file"
+                name="documentsPhoto"
+                onChange={(e) => handleArrayChange(setDocuments, index, 'documentsPhoto', e.target.files[0])}
+                className="w-full p-3 rounded bg-gray-700"
+              />
+              {documents.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeField(setDocuments, index)}
+                  className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addNewField(setDocuments, { title: '', documentType: '', documentsPhoto: '' })}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          >
+            Add Another Document
+          </button>
+        </div>
 
         {/* Submit Button */}
         <div className="flex justify-center">
@@ -677,4 +674,5 @@ const AddPhdCandidate = () => {
     </div>
   );
 }
+
 export default withAuth(AddPhdCandidate);
