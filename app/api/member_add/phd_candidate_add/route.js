@@ -70,6 +70,11 @@ export async function POST(req) {
       });
     }
 
+    // Validate required fields
+    if (!first_name || !last_name || !phone || !gender || !bloodGroup || !country || !idNumber || !dob || !email || !password || !short_bio || !admission_date) {
+      return NextResponse.json({ message: 'All required fields must be filled.' }, { status: 400 });
+    }
+
     // Validate password
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
     if (!passwordRegex.test(password)) {
@@ -163,7 +168,7 @@ export async function POST(req) {
 
       // Insert into member
       const insertMemberQuery = `
-        INSERT INTO member 
+        INSERT INTO member  
           (id, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, password, short_bio, admission_date, completion_date, photo, status, type) 
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
         RETURNING *;
