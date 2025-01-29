@@ -47,6 +47,8 @@ export async function POST(req) {
     const first_name = formData.get('first_name');
     const last_name = formData.get('last_name');
     const phone = formData.get('phone');
+    const gender = formData.get('gender');
+    const bloodGroup = formData.get('bloodGroup');
     const dob = formData.get('dob');
     const email = formData.get('email');
     const password = formData.get('password');

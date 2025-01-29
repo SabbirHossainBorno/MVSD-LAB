@@ -9,7 +9,7 @@ import withAuth from '../../../components/withAuth';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import countryList from 'react-select-country-list';
 
-const AddPhdCadidate = () => {
+const AddPhdCandidate = () => {
   const countries = countryList().getLabels(); // Get country names
 
   const [formData, setFormData] = useState({
@@ -49,11 +49,13 @@ const AddPhdCadidate = () => {
 
       if (file.size > 5 * 1024 * 1024) {
         toast.error('File size exceeds 5 MB.');
+        e.target.value = ''; // Reset file input
         return;
       }
 
       if (!['image/jpeg', 'image/png'].includes(file.type)) {
         toast.error('Invalid file type. Only JPG, JPEG, and PNG are allowed.');
+        e.target.value = ''; // Reset file input
         return;
       }
 
@@ -64,6 +66,22 @@ const AddPhdCadidate = () => {
   }, []);
 
   const handleArrayChange = useCallback((setter, index, field, value) => {
+    if (field === 'documentsPhoto' && value) {
+      const file = value;
+  
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('File size exceeds 5 MB.');
+        e.target.value = ''; // Reset file input
+        return;
+      }
+  
+      if (!['image/jpeg', 'image/png', 'application/pdf'].includes(file.type)) {
+        toast.error('Invalid file type. Only JPG, JPEG, PNG, and PDF are allowed.');
+        e.target.value = ''; // Reset file input
+        return;
+      }
+    }
+  
     setter((prevState) => {
       const newState = [...prevState];
       newState[index][field] = value;
@@ -196,49 +214,69 @@ const AddPhdCadidate = () => {
                 required
               />
             </div>
-            <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
-              required
-            >
-              <option value="" disabled className="text-gray-400">Select Gender</option>
-              <option value="Male" className="bg-gray-700 text-white">Male</option>
-              <option value="Female" className="bg-gray-700 text-white">Female</option>
-              <option value="Other" className="bg-gray-700 text-white">Other</option>
-            </select>
+            <div className="mb-4">
+              <label htmlFor="gender" className="block text-gray-300 mb-2">
+                Gender
+              </label>
+              <select
+                id="gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+                required
+              >
+                <option value="" disabled className="text-gray-400">
+                  Select Gender
+                </option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
 
-            <select
-              name="bloodGroup"
-              value={formData.bloodGroup}
-              onChange={handleChange}
-              className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
-              required
-            >
-              <option value="" disabled className="text-gray-400">Select Blood Group</option>
-              <option value="A+">A+</option>
-              <option value="A-">A-</option>
-              <option value="B+">B+</option>
-              <option value="B-">B-</option>
-              <option value="O+">O+</option>
-              <option value="O-">O-</option>
-              <option value="AB+">AB+</option>
-              <option value="AB-">AB-</option>
-            </select>
-            <select
-              name="country"
-              value={selectedCountry}
-              onChange={(e) => setSelectedCountry(e.target.value)}
-              className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 
-                        focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
-              required
-            >
-              <option value="" disabled className="text-gray-400">Select Country</option>
-              {countries.map((country, index) => (
-                <option key={index} value={country}>{country}</option>
-              ))}
-            </select>
+            <div className="mb-4">
+              <label htmlFor="bloodGroup" className="block text-gray-300 mb-2">
+                Blood Group
+              </label>
+              <select
+                id="bloodGroup"
+                name="bloodGroup"
+                value={formData.bloodGroup}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+                required
+              >
+                <option value="" disabled className="text-gray-400">
+                  Select Blood Group
+                </option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label htmlFor="country" className="block text-gray-300 mb-2">
+                Country
+              </label>
+              <select
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+                required
+              >
+                <option value="" disabled className="text-gray-400">Select Country</option>
+                {countries.map((country, index) => (
+                  <option key={index} value={country}>{country}</option>
+                ))}
+              </select>
+            </div>
             <div className="mb-4">
               <label htmlFor="idNumber" className="block text-gray-300 mb-2">
               Identification Number
@@ -580,7 +618,7 @@ const AddPhdCadidate = () => {
               className="w-full p-3 rounded bg-gray-700"
               required
             />
-
+            <div className="mb-4">
             <select
             name="documentType"
             value={document.documentType}
@@ -596,7 +634,7 @@ const AddPhdCadidate = () => {
             <option value="5" className="bg-gray-700 text-white">Official</option>
             <option value="6" className="bg-gray-700 text-white">Other</option>
             </select>
-
+            </div>
 
 
             <input
@@ -639,4 +677,4 @@ const AddPhdCadidate = () => {
     </div>
   );
 }
-export default withAuth(AddPhdCadidate);
+export default withAuth(AddPhdCandidate);
