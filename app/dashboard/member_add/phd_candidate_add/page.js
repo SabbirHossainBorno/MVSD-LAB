@@ -154,6 +154,7 @@ const AddPhdCandidate = () => {
         }, 3000); // 2-second delay
       } else {
         const result = await response.json();
+        console.log(result);  // Check the content of the response
         toast.error(result.message || 'An error occurred while adding the PhD Candidate.');
       }
     } catch (error) {
