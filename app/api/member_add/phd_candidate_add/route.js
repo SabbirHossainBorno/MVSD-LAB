@@ -96,9 +96,9 @@ export async function POST(req) {
       return NextResponse.json({ message: 'PhD Candidate must be at least 18 years old.' }, { status: 400 });
     }
 
-    const joiningYear = new Date(joining_date).getFullYear();
-    if (joiningYear > currentDate.getFullYear()) {
-      return NextResponse.json({ message: 'Joining date cannot be greater than the current year.' }, { status: 400 });
+    const admission_date = new Date(admission_date).getFullYear();
+    if (admission_date > currentDate.getFullYear()) {
+      return NextResponse.json({ message: 'Admission date cannot be greater than the current year.' }, { status: 400 });
     }
 
     const validateYear = (year) => year <= currentDate.getFullYear();
@@ -137,7 +137,7 @@ export async function POST(req) {
           const documentUrl = await saveDocumentPhoto(documentFile, phdCandidateId, i + 1);
           documentUrls.push(documentUrl);
         } else {
-          throw new Error('PhD Candidate photo is missing');
+          throw new Error('PhD Candidate document photo is missing');
         }
       }
     }
@@ -147,12 +147,12 @@ export async function POST(req) {
 
       const insertPhdCandidateQuery = `
         INSERT INTO phd_candidate_basic_info 
-          (id, first_name, last_name, phone, dob, email, password, short_bio, joining_date, leaving_date, photo, status, type) 
+          (id, first_name, last_name, phone, dob, email, password, short_bio, admission_date, completion_date, photo, status, type) 
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'Active', $12)
         RETURNING *;
       `;
       await query(insertPhdCandidateQuery, [
-        phdCandidateId, first_name, last_name, phone, dob, email, password, short_bio, joining_date, leaving_date, photoUrl, type,
+        phdCandidateId, first_name, last_name, phone, dob, email, password, short_bio, admission_date, completion_date, photoUrl, type,
       ]);
 
       const insertSocialMediaQuery = `INSERT INTO phd_candidate_socialMedia_info (phdCandidate_id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
@@ -162,12 +162,12 @@ export async function POST(req) {
 
       const insertMemberQuery = `
         INSERT INTO member 
-          (id, first_name, last_name, phone, dob, email, password, short_bio, joining_date, leaving_date, photo, status, type) 
+          (id, first_name, last_name, phone, dob, email, password, short_bio, admission_date, completion_date, photo, status, type) 
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'Active', $12)
         RETURNING *;
       `;
       await query(insertMemberQuery, [
-        phdCandidateId, first_name, last_name, phone, dob, email, password, short_bio, joining_date, leaving_date, photoUrl, type,
+        phdCandidateId, first_name, last_name, phone, dob, email, password, short_bio, admission_date, completion_date, photoUrl, type,
       ]);
 
       const insertEducationQuery = `INSERT INTO phd_candidate_education_info (phdCandidate_id, degree, institution, passing_year) VALUES ($1, $2, $3, $4) RETURNING *;`;
@@ -182,7 +182,7 @@ export async function POST(req) {
         ]);
       }
 
-      const insertDocumentsQuery = `INSERT INTO phd_candidate_document_info (phdCandidate_id, title, year, details, document_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
+      const insertDocumentsQuery = `INSERT INTO phd_candidate_document_info (phdCandidate_id, title, documentType, document_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
       for (let i = 0; i < documents.length; i++) {
         const document = documents[i];
         const documentUrl = documentUrls[i]; // Get the URL of the saved document photo
