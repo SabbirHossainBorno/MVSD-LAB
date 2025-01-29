@@ -49,6 +49,8 @@ export async function POST(req) {
     const phone = formData.get('phone');
     const gender = formData.get('gender');
     const bloodGroup = formData.get('bloodGroup');
+    const country = formData.get('country');
+    const idNumber = formData.get('idNumber');
     const dob = formData.get('dob');
     const email = formData.get('email');
     const password = formData.get('password');
@@ -68,6 +70,7 @@ export async function POST(req) {
       });
     }
 
+    // Validate password
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
     if (!passwordRegex.test(password)) {
       return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
@@ -75,6 +78,7 @@ export async function POST(req) {
 
     const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
 
+    // Validate age
     const currentDate = new Date();
     const dobDate = new Date(dob);
     let age = currentDate.getFullYear() - dobDate.getFullYear();
@@ -86,11 +90,13 @@ export async function POST(req) {
       return NextResponse.json({ message: 'PhD Candidate must be at least 18 years old.' }, { status: 400 });
     }
 
+    // Validate admission date
     const admissionYear = new Date(admission_date).getFullYear();
     if (admissionYear > currentDate.getFullYear()) {
       return NextResponse.json({ message: 'Admission date cannot be greater than the current year.' }, { status: 400 });
     }
 
+    // Validate education and career years
     const validateYear = (year) => year <= currentDate.getFullYear();
 
     if (!education.every(edu => validateYear(edu.passing_year))) {
@@ -101,6 +107,7 @@ export async function POST(req) {
       return NextResponse.json({ message: 'Joining year and leaving year cannot be greater than the current year.' }, { status: 400 });
     }
 
+    // Check for existing email and phone
     const emailCheckResult = await query('SELECT id FROM member WHERE email = $1', [email]);
     if (emailCheckResult.rows.length > 0) {
       return NextResponse.json({ message: 'Email already exists' }, { status: 400 });
@@ -113,12 +120,14 @@ export async function POST(req) {
 
     const phdCandidateId = await generatePhdCandidateId();
 
+    // Save profile photo
     let photoUrl = null;
     const photoFile = formData.get('photo');
     if (photoFile) {
       photoUrl = await saveFile(photoFile, `${phdCandidateId}_DP${path.extname(photoFile.name)}`);
     }
 
+    // Save document photos
     const documentUrls = [];
     if (documents.length > 0) {
       for (let i = 0; i < documents.length; i++) {
@@ -135,36 +144,41 @@ export async function POST(req) {
     try {
       await query('BEGIN');
 
+      // Insert into phd_candidate_basic_info
       const insertPhdCandidateQuery = `
         INSERT INTO phd_candidate_basic_info 
-          (id, first_name, last_name, phone, dob, email, password, short_bio, admission_date, completion_date, photo, status, type) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'Active', $12)
+          (id, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, password, short_bio, admission_date, completion_date, photo, status, type) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
         RETURNING *;
       `;
       await query(insertPhdCandidateQuery, [
-        phdCandidateId, first_name, last_name, phone, dob, email, hashedPassword, short_bio, admission_date, completion_date, photoUrl, type,
+        phdCandidateId, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, hashedPassword, short_bio, admission_date, completion_date, photoUrl, type,
       ]);
 
+      // Insert into phd_candidate_socialmedia_info
       const insertSocialMediaQuery = `INSERT INTO phd_candidate_socialmedia_info (phdCandidate_id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
       for (const sm of socialMedia) {
         await query(insertSocialMediaQuery, [phdCandidateId, sm.socialMedia_name, sm.link]);
       }
 
+      // Insert into member
       const insertMemberQuery = `
         INSERT INTO member 
-          (id, first_name, last_name, phone, dob, email, password, short_bio, admission_date, completion_date, photo, status, type) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'Active', $12)
+          (id, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, password, short_bio, admission_date, completion_date, photo, status, type) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
         RETURNING *;
       `;
       await query(insertMemberQuery, [
-        phdCandidateId, first_name, last_name, phone, dob, email, hashedPassword, short_bio, admission_date, completion_date, photoUrl, type,
+        phdCandidateId, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, hashedPassword, short_bio, admission_date, completion_date, photoUrl, type,
       ]);
 
+      // Insert into phd_candidate_education_info
       const insertEducationQuery = `INSERT INTO phd_candidate_education_info (phdCandidate_id, degree, institution, passing_year) VALUES ($1, $2, $3, $4) RETURNING *;`;
       for (const edu of education) {
         await query(insertEducationQuery, [phdCandidateId, edu.degree, edu.institution, parseInt(edu.passing_year)]);
       }
 
+      // Insert into phd_candidate_career_info
       const insertCareerQuery = `INSERT INTO phd_candidate_career_info (phdCandidate_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
       for (const car of career) {
         await query(insertCareerQuery, [
@@ -172,6 +186,7 @@ export async function POST(req) {
         ]);
       }
 
+      // Insert into phd_candidate_document_info
       const insertDocumentsQuery = `INSERT INTO phd_candidate_document_info (phdCandidate_id, title, documentType, document_photo) VALUES ($1, $2, $3, $4) RETURNING *;`;
       for (let i = 0; i < documents.length; i++) {
         const document = documents[i];
@@ -182,10 +197,11 @@ export async function POST(req) {
         }
 
         await query(insertDocumentsQuery, [
-          phdCandidateId, document.title, parseInt(document.documentType), documentUrl,
+          phdCandidateId, document.title, document.documentType, documentUrl,
         ]);
       }
 
+      // Insert into notification_details
       const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
       const Id = `${phdCandidateId}`; 
       const notificationTitle = `A New PhD Candidate Added [${phdCandidateId}] By ${adminEmail}`;
@@ -205,7 +221,7 @@ export async function POST(req) {
           eid,
           sid: sessionId,
           taskName: 'Add PhD Candidate',
-          details: `A new PHd Candidate added successfully with ID ${phdCandidateId} by ${adminEmail} from IP ${ipAddress} with User-Agent ${userAgent}`
+          details: `A new PhD Candidate added successfully with ID ${phdCandidateId} by ${adminEmail} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
 

@@ -437,53 +437,53 @@ const AddPhdCandidate = () => {
         </div>
 
         {/* Social Media Section */}
-      <div className="mb-8">
-        <h3 className="text-xl font-bold mb-4">Social Media</h3>
-        {socialMedia.map((sm, index) => (
-          <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 relative">
-            <select
-              name="socialMedia_name"
-              value={sm.socialMedia_name}
-              onChange={(e) => handleArrayChange(setSocialMedia, index, 'socialMedia_name', e.target.value)}
-              className="w-full p-3 rounded bg-gray-700 text-gray-300"
-              required
-            >
-              <option value="">Select Social Media</option>
-              <option value="Facebook">Facebook</option>
-              <option value="X">X</option>
-              <option value="Instagram">Instagram</option>
-              <option value="Linkedin">Linkedin</option>
-              <option value="GitHub">GitHub</option>
-              <option value="Website">Website</option>
-            </select>
-            <input
-              type="url"
-              name="link"
-              placeholder="Link"
-              value={sm.link}
-              onChange={(e) => handleArrayChange(setSocialMedia, index, 'link', e.target.value)}
-              className="w-full p-3 rounded bg-gray-700 text-gray-300"
-              required
-            />
-            {socialMedia.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeField(setSocialMedia, index)}
-                className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+        <div className="mb-8">
+          <h3 className="text-xl font-bold mb-4">Social Media</h3>
+          {socialMedia.map((sm, index) => (
+            <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 relative">
+              <select
+                name="socialMedia_name"
+                value={sm.socialMedia_name}
+                onChange={(e) => handleArrayChange(setSocialMedia, index, 'socialMedia_name', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700 text-gray-300"
+                required
               >
-                Remove
-              </button>
-            )}
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => addNewField(setSocialMedia, { socialMedia_name: '', link: '' })}
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-        >
-          Add Another Social Media
-        </button>
-      </div>
+                <option value="">Select Social Media</option>
+                <option value="Facebook">Facebook</option>
+                <option value="X">X</option>
+                <option value="Instagram">Instagram</option>
+                <option value="Linkedin">Linkedin</option>
+                <option value="GitHub">GitHub</option>
+                <option value="Website">Website</option>
+              </select>
+              <input
+                type="url"
+                name="link"
+                placeholder="Link"
+                value={sm.link}
+                onChange={(e) => handleArrayChange(setSocialMedia, index, 'link', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700 text-gray-300"
+                required
+              />
+              {socialMedia.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeField(setSocialMedia, index)}
+                  className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addNewField(setSocialMedia, { socialMedia_name: '', link: '' })}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          >
+            Add Another Social Media
+          </button>
+        </div>
   
         {/* Education Section */}
         <div className="mb-8">
