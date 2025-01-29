@@ -516,7 +516,8 @@ const AddPhdCadidate = () => {
             <option value="2" className="bg-gray-700 text-white">Medical</option>
             <option value="3" className="bg-gray-700 text-white">Career</option>
             <option value="4" className="bg-gray-700 text-white">Personal</option>
-            <option value="5" className="bg-gray-700 text-white">Other</option>
+            <option value="5" className="bg-gray-700 text-white">Official</option>
+            <option value="6" className="bg-gray-700 text-white">Other</option>
             </select>
 
 
