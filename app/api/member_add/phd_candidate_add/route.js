@@ -74,6 +74,7 @@ export async function POST(req) {
     const bloodGroup = formData.get('bloodGroup');
     const country = formData.get('country');
     const idNumber = formData.get('idNumber');
+    const passport_number = formData.get('passport_number');
     const dob = formData.get('dob');
     const email = formData.get('email');
     const password = formData.get('password');
@@ -89,15 +90,15 @@ export async function POST(req) {
       documents.push({
         title: formData.get(`documents[${i}][title]`),
         documentType: formData.get(`documents[${i}][documentType]`),
-        documentPhoto: formData.get(`documents[${i}][documentPhoto]`),
+        documentPhoto: formData.get(`documents[${i}][documentsPhoto]`),
       });
     }
 
-    console.log('Form data received:', { first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, password, short_bio, admission_date, completion_date, type, socialMedia, education, career, documents });
+    console.log('Form data received:', { first_name, last_name, phone, gender, bloodGroup, country, idNumber, passport_number, dob, email, password, short_bio, admission_date, completion_date, type, socialMedia, education, career, documents });
 
     // Validate required fields
-    if (!first_name || !last_name || !phone || !gender || !bloodGroup || !country || !idNumber || !dob || !email || !password || !short_bio || !admission_date) {
-      console.warn('Validation Error: Missing required fields', { first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, password, short_bio, admission_date });
+    if (!first_name || !last_name || !phone || !gender || !bloodGroup || !country || !idNumber || !passport_number || !dob || !email || !password || !short_bio || !admission_date) {
+      console.warn('Validation Error: Missing required fields', { first_name, last_name, phone, gender, bloodGroup, country, idNumber, passport_number, dob, email, password, short_bio, admission_date });
       return NextResponse.json({ message: 'All required fields must be filled.' }, { status: 400 });
     }
 
@@ -200,12 +201,12 @@ export async function POST(req) {
       // Insert into phd_candidate_basic_info
       const insertPhdCandidateQuery = `
         INSERT INTO phd_candidate_basic_info 
-          (id, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, password, short_bio, admission_date, completion_date, photo, status, type) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+          (id, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, password, short_bio, admission_date, completion_date, photo, status, type, passport_number) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16, $17)
         RETURNING *;
       `;
       await query(insertPhdCandidateQuery, [
-        phdCandidateId, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, hashedPassword, short_bio, admission_date, completion_date, photoUrl, type,
+        phdCandidateId, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, hashedPassword, short_bio, admission_date, completion_date, photoUrl, type, passport_number
       ]);
 
       console.log('Inserted into phd_candidate_basic_info');
@@ -221,8 +222,8 @@ export async function POST(req) {
       // Insert into member
       const insertMemberQuery = `
         INSERT INTO member  
-          (id, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, password, short_bio, admission_date, completion_date, photo, status, type) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+          (id, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, passport_number email, password, short_bio, admission_date, completion_date, photo, status, type) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16, $17)
         RETURNING *;
       `;
       await query(insertMemberQuery, [

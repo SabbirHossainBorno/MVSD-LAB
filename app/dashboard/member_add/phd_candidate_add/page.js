@@ -625,13 +625,13 @@ const AddPhdCandidate = () => {
                   className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
                   required
                 >
-                <option value="" disabled className="text-gray-400">Select Document Type</option>
-                <option value="Education" className="bg-gray-700 text-white">Education</option>
-                <option value="Medical" className="bg-gray-700 text-white">Medical</option>
-                <option value="Career" className="bg-gray-700 text-white">Career</option>
-                <option value="Personal" className="bg-gray-700 text-white">Personal</option>
-                <option value="Official" className="bg-gray-700 text-white">Official</option>
-                <option value="Other" className="bg-gray-700 text-white">Other</option>
+                  <option value="" disabled className="text-gray-400">Select Document Type</option>
+                    <option value="Education" className="bg-gray-700 text-white">Education</option>
+                    <option value="Medical" className="bg-gray-700 text-white">Medical</option>
+                    <option value="Career" className="bg-gray-700 text-white">Career</option>
+                    <option value="Personal" className="bg-gray-700 text-white">Personal</option>
+                    <option value="Official" className="bg-gray-700 text-white">Official</option>
+                    <option value="Other" className="bg-gray-700 text-white">Other</option>
                 </select>
               </div>
               <input
