@@ -200,14 +200,33 @@ export async function POST(req) {
 
       // Insert into phd_candidate_basic_info
       const insertPhdCandidateQuery = `
-        INSERT INTO phd_candidate_basic_info 
-          (id, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, password, short_bio, admission_date, completion_date, photo, status, type, passport_number) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16, $17)
-        RETURNING *;
-      `;
-      await query(insertPhdCandidateQuery, [
-        phdCandidateId, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, email, hashedPassword, short_bio, admission_date, completion_date, photoUrl, type, passport_number
-      ]);
+  INSERT INTO phd_candidate_basic_info 
+    (id, first_name, last_name, phone, gender, "bloodGroup", country, "idNumber", dob, email, password, short_bio, admission_date, completion_date, photo, status, type, passport_number)
+  VALUES 
+    ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16, $17)
+  RETURNING *;
+`;
+
+await query(insertPhdCandidateQuery, [
+  phdCandidateId, 
+  first_name, 
+  last_name, 
+  phone, 
+  gender, 
+  bloodGroup, 
+  country, 
+  idNumber, 
+  dob, 
+  email, 
+  hashedPassword, 
+  short_bio, 
+  admission_date, 
+  completion_date, 
+  photoUrl, 
+  type, 
+  passport_number
+]);
+
 
       console.log('Inserted into phd_candidate_basic_info');
 
@@ -222,21 +241,55 @@ export async function POST(req) {
       // Insert into member
       const insertMemberQuery = `
   INSERT INTO member  
-    (id, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, passport_number, email, password, short_bio, admission_date, completion_date, photo, status, type, joining_date, leaving_date)
+    (id, first_name, last_name, phone, gender, "bloodGroup", country, "idNumber", dob, passport_number, email, password, short_bio, admission_date, completion_date, photo, status, type, joining_date, leaving_date)
   VALUES 
-    ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16, NULL, NULL)
+    ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16, $17, NULL)
   RETURNING *;
 `;
 
-
-    console.log('Insert Query:', insertMemberQuery);
-console.log('Insert Values:', [
-  phdCandidateId, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, 
-  passport_number, email, hashedPassword, short_bio, admission_date, completion_date, photoUrl, type
+console.log('Inserting into member table with data:', [
+  phdCandidateId, 
+  first_name, 
+  last_name, 
+  phone, 
+  gender, 
+  bloodGroup, 
+  country, 
+  idNumber, 
+  dob, 
+  passport_number, 
+  email, 
+  hashedPassword, 
+  short_bio, 
+  admission_date, 
+  completion_date, 
+  photoUrl, 
+  type, 
+  joining_date || null,  // Use null if joining_date is undefined or empty
 ]);
-      await query(insertMemberQuery, [
-        phdCandidateId, first_name, last_name, phone, gender, bloodGroup, country, idNumber, dob, passport_number, email, hashedPassword, short_bio, admission_date, completion_date, photoUrl, type
-      ]);
+
+await query(insertMemberQuery, [
+  phdCandidateId, 
+  first_name, 
+  last_name, 
+  phone, 
+  gender, 
+  bloodGroup, 
+  country, 
+  idNumber, 
+  dob, 
+  passport_number, 
+  email, 
+  hashedPassword, 
+  short_bio, 
+  admission_date, 
+  completion_date, 
+  photoUrl, 
+  type, 
+  joining_date || null,  // Explicitly set null if not available
+]);
+
+    
 
       console.log('Inserted into member');
 
