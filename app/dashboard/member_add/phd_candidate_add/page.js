@@ -559,10 +559,10 @@ const AddPhdCandidate = () => {
               />
               <input
                 type="text"
-                name="organization"
+                name="organization_name"
                 placeholder="Organization"
-                value={job.organization}
-                onChange={(e) => handleArrayChange(setCareer, index, 'organization', e.target.value)}
+                value={job.organization_name}
+                onChange={(e) => handleArrayChange(setCareer, index, 'organization_name', e.target.value)}
                 className="w-full p-3 rounded bg-gray-700"
                 required
               />

@@ -243,31 +243,31 @@ export async function POST(req) {
       console.log('Inserted into phd_candidate_socialmedia_info');
 
       const insertMemberQuery = `
-        INSERT INTO member 
-        (id, first_name, last_name, phone, gender, "bloodGroup", country, dob, passport_number, email, password, short_bio, joining_date, completion_date, photo, status, type, leaving_date)
-        VALUES 
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16, $17)
-        RETURNING *;
-      `;
+              INSERT INTO member 
+              (id, first_name, last_name, phone, gender, "bloodGroup", country, dob, passport_number, email, password, short_bio, joining_date, leaving_date, photo, status, type)
+              VALUES 
+              ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16)
+              RETURNING *;
+            `;
       await query(insertMemberQuery, [
-        phdCandidateId,  
-        first_name,      
-        last_name,       
-        phone,           
-        gender,          
-        bloodGroup,      
-        country,         
-        dob,             
-        passport_number, 
-        email,           
-        password,        
-        short_bio,       
-        admission_date,  
-        completion_date, 
-        photoUrl,        
-        type,            
-        null             
+          phdCandidateId,  
+          first_name,      
+          last_name,       
+          phone,           
+          gender,          
+          bloodGroup,      
+          country,         
+          dob,             
+          passport_number, 
+          email,           
+          password,        
+          short_bio,       
+          admission_date,  
+          completion_date,  // Insert completion_date into leaving_date
+          photoUrl,         
+          type             
       ]);
+
       console.log('Inserted into member');
 
       // Insert into phd_candidate_education_info
@@ -285,20 +285,21 @@ export async function POST(req) {
       console.log('Inserted into phd_candidate_career_info');
 
       // Insert into phd_candidate_documents_info
-      const insertDocumentsQuery = `INSERT INTO phd_candidate_document_info (phd_candidate_id, title, documentType, document_photo) VALUES ($1, $2, $3, $4) RETURNING *;`;
-      for (let i = 0; i < documents.length; i++) {
-        const document = documents[i];
-        const documentUrl = documentUrls[i]; // Get the URL of the saved document photo
+      const insertDocumentsQuery = `INSERT INTO phd_candidate_document_info ("phd_candidate_id", "title", "documentType", "document_photo") VALUES ($1, $2, $3, $4) RETURNING *;`;
 
-        if (!documentUrl) {
-          throw new Error('Document URL is null');
+        for (let i = 0; i < documents.length; i++) {
+          const document = documents[i];
+          const documentUrl = documentUrls[i]; // Get the URL of the saved document photo
+
+          if (!documentUrl) {
+            throw new Error('Document URL is null');
+          }
+
+          await query(insertDocumentsQuery, [
+            phdCandidateId, document.title, documentUrl, document.documentType,
+          ]);
         }
-
-        await query(insertDocumentsQuery, [
-          phdCandidateId, document.title, document.documentType, documentUrl,
-        ]);
-      }
-      console.log('Inserted into phd_candidate_documents_info');
+        console.log('Inserted into phd_candidate_document_info');
 
       await query('COMMIT');
       console.log('Database transaction committed');
