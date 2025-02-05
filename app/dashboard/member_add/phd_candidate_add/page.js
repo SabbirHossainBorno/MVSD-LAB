@@ -94,55 +94,76 @@ const AddPhdCandidate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+  
     if (formData.password !== formData.confirm_password) {
       toast.error('Passwords do not match');
       setLoading(false);
       return;
     }
+  
     const data = new FormData();
     for (const key in formData) {
-      data.append(key, formData[key]);
+      if (formData[key]) {
+        data.append(key, formData[key]);
+      }
     }
-    const formattedEducation = education.map(edu => ({
+  
+    // Convert nested arrays/objects to JSON strings
+    const formattedEducation = education.map((edu) => ({
       ...edu,
-      passing_year: edu.passing_year ? parseInt(edu.passing_year, 10) : null
+      passing_year: edu.passing_year ? parseInt(edu.passing_year, 10) : null,
     }));
-    const formattedCareer = career.map(job => ({
+    
+    const formattedCareer = career.map((job) => ({
       ...job,
       joining_year: job.joining_year ? parseInt(job.joining_year, 10) : null,
-      leaving_year: job.leaving_year ? parseInt(job.leaving_year, 10) : null
+      leaving_year: job.leaving_year ? parseInt(job.leaving_year, 10) : null,
     }));
+  
     data.append('socialMedia', JSON.stringify(socialMedia));
     data.append('education', JSON.stringify(formattedEducation));
     data.append('career', JSON.stringify(formattedCareer));
+  
+    // Properly handle documents
     documents.forEach((document, index) => {
       data.append(`documents[${index}][title]`, document.title);
       data.append(`documents[${index}][documentType]`, document.documentType);
-      if (document.documentsPhoto) {
-        data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
+      if (document.documentPhoto) {
+        data.append(`documents[${index}][documentPhoto]`, document.documentPhoto);
       }
     });
+  
     try {
       const response = await fetch('/api/member_add/phd_candidate_add', {
         method: 'POST',
         body: data,
       });
-      const result = await response.json();
-      console.log('API response:', result); // Add this line to log the API response
+  
+      // Handle cases where API doesn't return JSON properly
+      let result;
+      try {
+        result = await response.json();
+      } catch (jsonError) {
+        throw new Error('Unexpected server response');
+      }
+  
+      console.log('API response:', result);
+  
       if (response.ok) {
         toast.success('PhD Candidate Added Successfully!');
         setTimeout(() => {
           router.push('/dashboard');
-        }, 3000); // 2-second delay
+        }, 2000); // 2-second delay
       } else {
         toast.error(result.message || 'An error occurred while adding the PhD Candidate.');
       }
     } catch (error) {
-      toast.error('Failed To Add PhD Candidate');
+      toast.error(error.message || 'Failed To Add PhD Candidate');
     } finally {
       setLoading(false);
     }
   };
+  
 
   if (loading) return <LoadingSpinner />;
 
