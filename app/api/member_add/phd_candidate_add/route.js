@@ -301,6 +301,12 @@ export async function POST(req) {
         }
         console.log('Inserted into phd_candidate_document_info');
 
+        const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
+        const Id = `${phdCandidateId}`; 
+        const notificationTitle = `A New PhD Candidate Added [${phdCandidateId}] By ${adminEmail}`;
+        const notificationStatus = 'Unread';
+        await query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
+
       await query('COMMIT');
       console.log('Database transaction committed');
 
