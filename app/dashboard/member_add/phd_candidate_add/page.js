@@ -1,6 +1,5 @@
 // app/dashboard/member_add/phd_candidate_add/page.js
 'use client';
-
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
@@ -11,7 +10,6 @@ import countryList from 'react-select-country-list';
 
 const AddPhdCandidate = () => {
   const countries = countryList().getLabels(); // Get country names
-
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -32,33 +30,27 @@ const AddPhdCandidate = () => {
     type: 'PhD Candidate',
     status: 'Active',
   });
-
   const [socialMedia, setSocialMedia] = useState([{ socialMedia_name: '', link: '' }]);
   const [education, setEducation] = useState([{ degree: '', institution: '', passing_year: '' }]);
   const [career, setCareer] = useState([{ position: '', organization: '', joining_year: '', leaving_year: '' }]);
   const [documents, setDocuments] = useState([{ title: '', documentType: '', documentsPhoto: '' }]);
   const [loading, setLoading] = useState(false);
-
   const router = useRouter();
 
   const handleChange = useCallback((e) => {
     const { name, value, files } = e.target;
-
     if (name === 'photo' && files.length > 0) {
       const file = files[0];
-
       if (file.size > 5 * 1024 * 1024) {
         toast.error('File size exceeds 5 MB.');
         e.target.value = ''; // Reset file input
         return;
       }
-
       if (!['image/jpeg', 'image/png'].includes(file.type)) {
         toast.error('Invalid file type. Only JPG, JPEG, and PNG are allowed.');
         e.target.value = ''; // Reset file input
         return;
       }
-
       setFormData((prevData) => ({ ...prevData, [name]: file }));
     } else {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -68,20 +60,17 @@ const AddPhdCandidate = () => {
   const handleArrayChange = useCallback((setter, index, field, value) => {
     if (field === 'documentsPhoto' && value) {
       const file = value;
-  
       if (file.size > 5 * 1024 * 1024) {
         toast.error('File size exceeds 5 MB.');
         e.target.value = ''; // Reset file input
         return;
       }
-  
       if (!['image/jpeg', 'image/png', 'application/pdf'].includes(file.type)) {
         toast.error('Invalid file type. Only JPG, JPEG, PNG, and PDF are allowed.');
         e.target.value = ''; // Reset file input
         return;
       }
     }
-  
     setter((prevState) => {
       const newState = [...prevState];
       newState[index][field] = value;
@@ -105,56 +94,47 @@ const AddPhdCandidate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     if (formData.password !== formData.confirm_password) {
       toast.error('Passwords do not match');
       setLoading(false);
       return;
     }
-
     const data = new FormData();
-
     for (const key in formData) {
       data.append(key, formData[key]);
     }
-
     const formattedEducation = education.map(edu => ({
       ...edu,
       passing_year: edu.passing_year ? parseInt(edu.passing_year, 10) : null
     }));
-
     const formattedCareer = career.map(job => ({
       ...job,
       joining_year: job.joining_year ? parseInt(job.joining_year, 10) : null,
       leaving_year: job.leaving_year ? parseInt(job.leaving_year, 10) : null
     }));
-
     data.append('socialMedia', JSON.stringify(socialMedia));
     data.append('education', JSON.stringify(formattedEducation));
     data.append('career', JSON.stringify(formattedCareer));
-
     documents.forEach((document, index) => {
-      data.append(`documents[${index}][title]`, document.title || '');
-      data.append(`documents[${index}][documentType]`, document.documentType || '');
+      data.append(`documents[${index}][title]`, document.title);
+      data.append(`documents[${index}][documentType]`, document.documentType);
       if (document.documentsPhoto) {
         data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
       }
     });
-
     try {
       const response = await fetch('/api/member_add/phd_candidate_add', {
         method: 'POST',
         body: data,
       });
-
+      const result = await response.json();
+      console.log('API response:', result); // Add this line to log the API response
       if (response.ok) {
         toast.success('PhD Candidate Added Successfully!');
         setTimeout(() => {
           router.push('/dashboard');
         }, 3000); // 2-second delay
       } else {
-        const result = await response.json();
-        console.log(result);  // Check the content of the response
         toast.error(result.message || 'An error occurred while adding the PhD Candidate.');
       }
     } catch (error) {
@@ -170,7 +150,6 @@ const AddPhdCandidate = () => {
     <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
       <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-6 text-center">Add PhD Candidate</h2>
-
         {/* Basic Info Section */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Basic Info</h3>
@@ -234,7 +213,6 @@ const AddPhdCandidate = () => {
                 <option value="Other">Other</option>
               </select>
             </div>
-
             <div className="mb-4">
               <label htmlFor="bloodGroup" className="block text-gray-300 mb-2">
                 Blood Group
@@ -393,7 +371,6 @@ const AddPhdCandidate = () => {
                 readOnly
               />
             </div>
-            
             <div className="mb-4">
               <label htmlFor="photo" className="block text-gray-300 mb-2">
                 Photo
@@ -435,7 +412,6 @@ const AddPhdCandidate = () => {
             </div>
           </div>
         </div>
-
         {/* Social Media Section */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Social Media</h3>
@@ -484,7 +460,6 @@ const AddPhdCandidate = () => {
             Add Another Social Media
           </button>
         </div>
-
         {/* Education Section */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Education</h3>
@@ -519,7 +494,6 @@ const AddPhdCandidate = () => {
                 max={new Date().getFullYear()}
                 required
               />
-              {/* Remove Button */}
               {education.length > 1 && (
                 <button
                   type="button"
@@ -539,7 +513,6 @@ const AddPhdCandidate = () => {
             Add Another Education
           </button>
         </div>
-
         {/* Career Section */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Career</h3>
@@ -603,7 +576,6 @@ const AddPhdCandidate = () => {
             Add Another Job
           </button>
         </div>
-
         {/* Documents Section */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Documents</h3>
@@ -627,12 +599,12 @@ const AddPhdCandidate = () => {
                   required
                 >
                   <option value="" disabled className="text-gray-400">Select Document Type</option>
-                    <option value="Education" className="bg-gray-700 text-white">Education</option>
-                    <option value="Medical" className="bg-gray-700 text-white">Medical</option>
-                    <option value="Career" className="bg-gray-700 text-white">Career</option>
-                    <option value="Personal" className="bg-gray-700 text-white">Personal</option>
-                    <option value="Official" className="bg-gray-700 text-white">Official</option>
-                    <option value="Other" className="bg-gray-700 text-white">Other</option>
+                  <option value="Education" className="bg-gray-700 text-white">Education</option>
+                  <option value="Medical" className="bg-gray-700 text-white">Medical</option>
+                  <option value="Career" className="bg-gray-700 text-white">Career</option>
+                  <option value="Personal" className="bg-gray-700 text-white">Personal</option>
+                  <option value="Official" className="bg-gray-700 text-white">Official</option>
+                  <option value="Other" className="bg-gray-700 text-white">Other</option>
                 </select>
               </div>
               <input
@@ -660,7 +632,6 @@ const AddPhdCandidate = () => {
             Add Another Document
           </button>
         </div>
-
         {/* Submit Button */}
         <div className="flex justify-center">
           <button

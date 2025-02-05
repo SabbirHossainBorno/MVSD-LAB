@@ -5,7 +5,6 @@ import logger from '../../../../lib/logger';
 import sendTelegramAlert from '../../../../lib/telegramAlert';
 import path from 'path';
 import fs from 'fs';
-import bcrypt from 'bcryptjs'; // Import bcrypt for password hashing
 
 const formatAlertMessage = (title, details) => {
   return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\n${details}`;
@@ -17,8 +16,9 @@ const generatePhdCandidateId = async () => {
     const maxId = result.rows[0]?.max_id || 'PHDC00MVSD';
     const numericPart = parseInt(maxId.substring(4, maxId.length - 4), 10) || 0;
     const nextId = numericPart + 1;
-    console.log('Generated PhD Candidate ID:', `PHDC${String(nextId).padStart(2, '0')}MVSD`);
-    return `PHDC${String(nextId).padStart(2, '0')}MVSD`;
+    const newId = `PHDC${String(nextId).padStart(2, '0')}MVSD`;
+    console.log('Generated PhD Candidate ID:', newId);
+    return newId;
   } catch (error) {
     console.error('Error generating PhD Candidate ID:', error.message);
     throw new Error(`Error generating PhD Candidate ID: ${error.message}`);
@@ -28,7 +28,6 @@ const generatePhdCandidateId = async () => {
 const saveProfilePhoto = async (file, phdCandidateId) => {
   const filename = `${phdCandidateId}_DP${path.extname(file.name)}`;
   const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/PhD_Candidate', filename);
-
   try {
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
@@ -43,7 +42,6 @@ const saveProfilePhoto = async (file, phdCandidateId) => {
 const saveDocumentPhoto = async (file, phdCandidateId, index, documentType) => {
   const filename = `${phdCandidateId}_Document_${documentType}_${index}${path.extname(file.name)}`;
   const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/PhD_Candidate', filename);
-
   try {
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
@@ -66,7 +64,6 @@ export async function POST(req) {
 
   try {
     const formData = await req.formData();
-
     const first_name = formData.get('first_name');
     const last_name = formData.get('last_name');
     const phone = formData.get('phone');
@@ -86,6 +83,7 @@ export async function POST(req) {
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
     const documents = [];
+
     for (let i = 0; formData.has(`documents[${i}][title]`); i++) {
       documents.push({
         title: formData.get(`documents[${i}][title]`),
@@ -109,9 +107,6 @@ export async function POST(req) {
       return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
-    console.log('Password hashed successfully');
-
     // Age validation
     const currentDate = new Date();
     const dobDate = new Date(dob);
@@ -134,30 +129,39 @@ export async function POST(req) {
 
     // Education and Career Year validation
     const validateYear = (year) => year <= currentDate.getFullYear();
-
     if (!education.every(edu => validateYear(edu.passing_year))) {
       console.warn('Validation Error: Education passing year greater than current year', { education });
       return NextResponse.json({ message: 'Passing year cannot be greater than the current year.' }, { status: 400 });
     }
-
     if (!career.every(car => validateYear(car.joining_year) && (!car.leaving_year || validateYear(car.leaving_year)))) {
       console.warn('Validation Error: Career joining or leaving year greater than current year', { career });
       return NextResponse.json({ message: 'Joining year and leaving year cannot be greater than the current year.' }, { status: 400 });
     }
 
-    // Check for existing email and phone
+    // Check for existing email, phone, ID number, and passport number
     const emailCheckResult = await query('SELECT id FROM member WHERE email = $1', [email]);
     if (emailCheckResult.rows.length > 0) {
       console.warn('Validation Error: Email already exists', { email });
       logger.warn('Validation Error: Email already exists', { email });
       return NextResponse.json({ message: 'Email already exists' }, { status: 400 });
     }
-
     const phoneCheckResult = await query('SELECT id FROM member WHERE phone = $1', [phone]);
     if (phoneCheckResult.rows.length > 0) {
       console.warn('Validation Error: Phone number already exists', { phone });
       logger.warn('Validation Error: Phone number already exists', { phone });
       return NextResponse.json({ message: 'Phone Number already exists' }, { status: 400 });
+    }
+    const idNumberCheckResult = await query('SELECT id FROM member WHERE idNumber = $1', [idNumber]);
+    if (idNumberCheckResult.rows.length > 0) {
+      console.warn('Validation Error: ID number already exists', { idNumber });
+      logger.warn('Validation Error: ID number already exists', { idNumber });
+      return NextResponse.json({ message: 'ID number already exists' }, { status: 400 });
+    }
+    const passportNumberCheckResult = await query('SELECT id FROM member WHERE passport_number = $1', [passport_number]);
+    if (passportNumberCheckResult.rows.length > 0) {
+      console.warn('Validation Error: Passport number already exists', { passport_number });
+      logger.warn('Validation Error: Passport number already exists', { passport_number });
+      return NextResponse.json({ message: 'Passport number already exists' }, { status: 400 });
     }
 
     const phdCandidateId = await generatePhdCandidateId();
@@ -169,6 +173,7 @@ export async function POST(req) {
     if (photoFile) {
       try {
         photoUrl = await saveProfilePhoto(photoFile, phdCandidateId);
+        console.log('Profile photo URL:', photoUrl);
       } catch (error) {
         console.error('Error saving profile photo:', error.message);
         return NextResponse.json({ message: `Failed to save profile photo: ${error.message}` }, { status: 500 });
@@ -184,6 +189,7 @@ export async function POST(req) {
           try {
             const documentUrl = await saveDocumentPhoto(documentFile, phdCandidateId, i, documents[i].documentType);
             documentUrls.push(documentUrl);
+            console.log(`Document photo URL for document ${i}:`, documentUrl);
           } catch (error) {
             console.error('Error saving document photo:', error.message);
             return NextResponse.json({ message: `Failed to save document photo: ${error.message}` }, { status: 500 });
@@ -197,37 +203,35 @@ export async function POST(req) {
 
     try {
       await query('BEGIN');
+      console.log('Database transaction started');
 
       // Insert into phd_candidate_basic_info
       const insertPhdCandidateQuery = `
-  INSERT INTO phd_candidate_basic_info 
-    (id, first_name, last_name, phone, gender, "bloodGroup", country, "idNumber", dob, email, password, short_bio, admission_date, completion_date, photo, status, type, passport_number)
-  VALUES 
-    ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16, $17)
-  RETURNING *;
-`;
-
-await query(insertPhdCandidateQuery, [
-  phdCandidateId, 
-  first_name, 
-  last_name, 
-  phone, 
-  gender, 
-  bloodGroup, 
-  country, 
-  idNumber, 
-  dob, 
-  email, 
-  hashedPassword, 
-  short_bio, 
-  admission_date, 
-  completion_date, 
-  photoUrl, 
-  type, 
-  passport_number
-]);
-
-
+        INSERT INTO phd_candidate_basic_info 
+        (id, first_name, last_name, phone, gender, "bloodGroup", country, "idNumber", dob, email, password, short_bio, admission_date, completion_date, photo, status, type, passport_number)
+        VALUES 
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16, $17)
+        RETURNING *;
+      `;
+      await query(insertPhdCandidateQuery, [
+        phdCandidateId,
+        first_name,
+        last_name,
+        phone,
+        gender,
+        bloodGroup,
+        country,
+        idNumber,
+        dob,
+        email,
+        password,
+        short_bio,
+        admission_date,
+        completion_date,
+        photoUrl,
+        type,
+        passport_number
+      ]);
       console.log('Inserted into phd_candidate_basic_info');
 
       // Insert into phd_candidate_socialmedia_info
@@ -235,62 +239,36 @@ await query(insertPhdCandidateQuery, [
       for (const sm of socialMedia) {
         await query(insertSocialMediaQuery, [phdCandidateId, sm.socialMedia_name, sm.link]);
       }
-
       console.log('Inserted into phd_candidate_socialmedia_info');
 
       // Insert into member
       const insertMemberQuery = `
-  INSERT INTO member  
-    (id, first_name, last_name, phone, gender, "bloodGroup", country, "idNumber", dob, passport_number, email, password, short_bio, admission_date, completion_date, photo, status, type, joining_date, leaving_date)
-  VALUES 
-    ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16, $17, NULL)
-  RETURNING *;
-`;
-
-console.log('Inserting into member table with data:', [
-  phdCandidateId, 
-  first_name, 
-  last_name, 
-  phone, 
-  gender, 
-  bloodGroup, 
-  country, 
-  idNumber, 
-  dob, 
-  passport_number, 
-  email, 
-  hashedPassword, 
-  short_bio, 
-  admission_date, 
-  completion_date, 
-  photoUrl, 
-  type, 
-  joining_date || null,  // Use null if joining_date is undefined or empty
-]);
-
-await query(insertMemberQuery, [
-  phdCandidateId, 
-  first_name, 
-  last_name, 
-  phone, 
-  gender, 
-  bloodGroup, 
-  country, 
-  idNumber, 
-  dob, 
-  passport_number, 
-  email, 
-  hashedPassword, 
-  short_bio, 
-  admission_date, 
-  completion_date, 
-  photoUrl, 
-  type, 
-  joining_date || null,  // Explicitly set null if not available
-]);
-
-    
-
+        INSERT INTO member 
+        (id, first_name, last_name, phone, gender, "bloodGroup", country, "idNumber", dob, passport_number, email, password, short_bio, admission_date, completion_date, photo, status, type, joining_date, leaving_date)
+        VALUES 
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16, $17, NULL)
+        RETURNING *;
+      `;
+      await query(insertMemberQuery, [
+        phdCandidateId,
+        first_name,
+        last_name,
+        phone,
+        gender,
+        bloodGroup,
+        country,
+        idNumber,
+        dob,
+        passport_number,
+        email,
+        password,
+        short_bio,
+        admission_date,
+        completion_date,
+        photoUrl,
+        type,
+        null
+      ]);
       console.log('Inserted into member');
 
       // Insert into phd_candidate_education_info
@@ -298,7 +276,6 @@ await query(insertMemberQuery, [
       for (const edu of education) {
         await query(insertEducationQuery, [phdCandidateId, edu.degree, edu.institution, edu.passing_year]);
       }
-
       console.log('Inserted into phd_candidate_education_info');
 
       // Insert into phd_candidate_career_info
@@ -306,22 +283,22 @@ await query(insertMemberQuery, [
       for (const car of career) {
         await query(insertCareerQuery, [phdCandidateId, car.position, car.company_name, car.joining_year, car.leaving_year]);
       }
-
       console.log('Inserted into phd_candidate_career_info');
 
-      // Commit the transaction
       await query('COMMIT');
-      
+      console.log('Database transaction committed');
+
       // Send Telegram alert for success
       const alertMessage = formatAlertMessage('PhD Candidate Added', `A new PhD Candidate with ID ${phdCandidateId} was successfully added.`);
       sendTelegramAlert(alertMessage);
-      
+      console.log('Success alert sent via Telegram');
+
       // Return success response
       logger.info(`PhD Candidate Added: ${phdCandidateId}`, { sessionId, adminEmail });
       return NextResponse.json({ message: 'PhD Candidate information added successfully' }, { status: 200 });
     } catch (error) {
-      console.error('Error in database transaction:', error.message);
       await query('ROLLBACK');
+      console.error('Error in database transaction:', error.message);
       sendTelegramAlert(formatAlertMessage('Error Adding PhD Candidate', `Error adding PhD Candidate: ${error.message}`));
       return NextResponse.json({ message: `Error adding PhD Candidate: ${error.message}` }, { status: 500 });
     }
