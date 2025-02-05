@@ -95,6 +95,15 @@ const AddPhdCandidate = () => {
     e.preventDefault();
     setLoading(true);
   
+    // Check if all documents have a photo
+    for (const document of documents) {
+      if (!document.documentsPhoto) {
+        toast.error(`Document photo is missing for ${document.title}`);
+        setLoading(false);
+        return;
+      }
+    }
+  
     if (formData.password !== formData.confirm_password) {
       toast.error('Passwords do not match');
       setLoading(false);
@@ -128,8 +137,8 @@ const AddPhdCandidate = () => {
     documents.forEach((document, index) => {
       data.append(`documents[${index}][title]`, document.title);
       data.append(`documents[${index}][documentType]`, document.documentType);
-      if (document.documentPhoto) {
-        data.append(`documents[${index}][documentPhoto]`, document.documentPhoto);
+      if (document.documentsPhoto) {
+        data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
       }
     });
   
@@ -597,62 +606,63 @@ const AddPhdCandidate = () => {
             Add Another Job
           </button>
         </div>
+
         {/* Documents Section */}
-        <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4">Documents</h3>
-          {documents.map((document, index) => (
-            <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
-              <input
-                type="text"
-                name="title"
-                placeholder="Document Title"
-                value={document.title}
-                onChange={(e) => handleArrayChange(setDocuments, index, 'title', e.target.value)}
-                className="w-full p-3 rounded bg-gray-700"
+      <div className="mb-8">
+        <h3 className="text-xl font-bold mb-4">Documents</h3>
+        {documents.map((document, index) => (
+          <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
+            <input
+              type="text"
+              name="title"
+              placeholder="Document Title"
+              value={document.title}
+              onChange={(e) => handleArrayChange(setDocuments, index, 'title', e.target.value)}
+              className="w-full p-3 rounded bg-gray-700"
+              required
+            />
+            <div className="mb-4">
+              <select
+                name="documentType"
+                value={document.documentType}
+                onChange={(e) => handleArrayChange(setDocuments, index, 'documentType', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
                 required
-              />
-              <div className="mb-4">
-                <select
-                  name="documentType"
-                  value={document.documentType}
-                  onChange={(e) => handleArrayChange(setDocuments, index, 'documentType', e.target.value)}
-                  className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
-                  required
-                >
-                  <option value="" disabled className="text-gray-400">Select Document Type</option>
-                  <option value="Education" className="bg-gray-700 text-white">Education</option>
-                  <option value="Medical" className="bg-gray-700 text-white">Medical</option>
-                  <option value="Career" className="bg-gray-700 text-white">Career</option>
-                  <option value="Personal" className="bg-gray-700 text-white">Personal</option>
-                  <option value="Official" className="bg-gray-700 text-white">Official</option>
-                  <option value="Other" className="bg-gray-700 text-white">Other</option>
-                </select>
-              </div>
-              <input
-                type="file"
-                name="documentsPhoto"
-                onChange={(e) => handleArrayChange(setDocuments, index, 'documentsPhoto', e.target.files[0])}
-                className="w-full p-3 rounded bg-gray-700"
-              />
-              {documents.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => removeField(setDocuments, index)}
-                  className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-                >
-                  Remove
-                </button>
-              )}
+              >
+                <option value="" disabled className="text-gray-400">Select Document Type</option>
+                <option value="Education" className="bg-gray-700 text-white">Education</option>
+                <option value="Medical" className="bg-gray-700 text-white">Medical</option>
+                <option value="Career" className="bg-gray-700 text-white">Career</option>
+                <option value="Personal" className="bg-gray-700 text-white">Personal</option>
+                <option value="Official" className="bg-gray-700 text-white">Official</option>
+                <option value="Other" className="bg-gray-700 text-white">Other</option>
+              </select>
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={() => addNewField(setDocuments, { title: '', documentType: '', documentsPhoto: '' })}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-          >
-            Add Another Document
-          </button>
-        </div>
+            <input
+              type="file"
+              name="documentsPhoto"
+              onChange={(e) => handleArrayChange(setDocuments, index, 'documentsPhoto', e.target.files[0])}
+              className="w-full p-3 rounded bg-gray-700"
+            />
+            {documents.length > 1 && (
+              <button
+                type="button"
+                onClick={() => removeField(setDocuments, index)}
+                className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+              >
+                Remove
+              </button>
+            )}
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={() => addNewField(setDocuments, { title: '', documentType: '', documentsPhoto: '' })}
+          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+        >
+          Add Another Document
+        </button>
+      </div>
         {/* Submit Button */}
         <div className="flex justify-center">
           <button
