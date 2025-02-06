@@ -5,6 +5,7 @@ import logger from '../../../../lib/logger';
 import sendTelegramAlert from '../../../../lib/telegramAlert';
 import path from 'path';
 import fs from 'fs';
+import bcrypt from 'bcryptjs';
 
 const formatAlertMessage = (title, details) => {
   return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\n${details}`;
@@ -95,6 +96,9 @@ export async function POST(req) {
       return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
     }
 
+    // Hash password before storing
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     // Age validation
     const currentDate = new Date();
     const dobDate = new Date(dob);
@@ -157,7 +161,7 @@ export async function POST(req) {
       }, { status: 400 });
     }
 
-    const idNumberCheckResult = await query('SELECT id FROM member WHERE id_number" = $1', [idNumber]);
+    const idNumberCheckResult = await query('SELECT id FROM member WHERE id_number = $1', [idNumber]);
     if (idNumberCheckResult.rows.length > 0) {
       logger.warn('Validation Error: ID number already exists', {
         meta: {
@@ -244,7 +248,7 @@ export async function POST(req) {
         country,
         dob,
         email,
-        password,
+        hashedPassword,
         short_bio,
         admission_date,
         completion_date,
@@ -276,7 +280,7 @@ export async function POST(req) {
         dob,             
         passport_number, 
         email,           
-        password,        
+        hashedPassword,        
         short_bio,       
         admission_date,  
         completion_date,  // Insert completion_date into leaving_date
@@ -321,7 +325,7 @@ export async function POST(req) {
       await query('COMMIT');
 
       // Send Telegram alert for success
-      const successMessage = formatAlertMessage('PhD Candidate Added', `A new PhD Candidate with ID ${phdCandidateId} was successfully added by ${adminEmail} on ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}.`);
+      const successMessage = formatAlertMessage('A New PhD Candidate Added Successfully', `ID : ${phdCandidateId}\nAdded By : ${adminEmail}\nDate : ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`);
       await sendTelegramAlert(successMessage);
 
       // Log success
