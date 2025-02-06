@@ -145,30 +145,40 @@ const AddPhdCandidate = () => {
         method: 'POST',
         body: data,
       });
-  
-      // Handle cases where API doesn't return JSON properly
+    
       let result;
       try {
         result = await response.json();
       } catch (jsonError) {
         throw new Error('Unexpected server response');
       }
-  
+    
       console.log('API response:', result);
-  
+    
       if (response.ok) {
         toast.success('PhD Candidate Added Successfully!');
         setTimeout(() => {
           router.push('/dashboard');
-        }, 2000); // 2-second delay
+        }, 2000);
       } else {
-        toast.error(result.message || 'An error occurred while adding the PhD Candidate.');
+        // ✅ Better error handling for duplicate email
+        if (result.message?.includes('Email already exists')) {
+          toast.error('This email is already registered. Please use a different one.');
+        } else if (result.message?.includes('Phone Number already exists')) {
+          toast.error('This phone number is already registered.');
+        } else if (result.message?.includes('ID number already exists')) {
+          toast.error('This ID number is already registered.');
+        } else if (result.message?.includes('Passport number already exists')) {
+          toast.error('This passport number is already registered.');
+        } else {
+          toast.error(result.message || 'An error occurred while adding the PhD Candidate.');
+        }
       }
     } catch (error) {
       toast.error(error.message || 'Failed To Add PhD Candidate');
     } finally {
       setLoading(false);
-    }
+    }    
   };
   
 

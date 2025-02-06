@@ -125,25 +125,73 @@ export async function POST(req) {
     // Check for existing email, phone, ID number, and passport number
     const emailCheckResult = await query('SELECT id FROM member WHERE email = $1', [email]);
     if (emailCheckResult.rows.length > 0) {
-      logger.warn('Validation Error: Email already exists', { email });
-      return NextResponse.json({ message: 'Email already exists' }, { status: 400 });
-    }
-    const phoneCheckResult = await query('SELECT id FROM member WHERE phone = $1', [phone]);
-    if (phoneCheckResult.rows.length > 0) {
-      logger.warn('Validation Error: Phone number already exists', { phone });
-      return NextResponse.json({ message: 'Phone Number already exists' }, { status: 400 });
-    }
-    const idNumberCheckResult = await query('SELECT id FROM member WHERE id = $1', [idNumber]);
-    if (idNumberCheckResult.rows.length > 0) {
-      logger.warn('Validation Error: ID number already exists', { idNumber });
-      return NextResponse.json({ message: 'ID number already exists' }, { status: 400 });
-    }
-    const passportNumberCheckResult = await query('SELECT id FROM member WHERE passport_number = $1', [passport_number]);
-    if (passportNumberCheckResult.rows.length > 0) {
-      logger.warn('Validation Error: Passport number already exists', { passport_number });
-      return NextResponse.json({ message: 'Passport number already exists' }, { status: 400 });
+      logger.warn('Validation Error: Email already exists', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Add PhD Candidate',
+          details: `Attempt to add PhD Candidate failed - Email ${email} already exists.`
+        }
+      });
+
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Email already exists. Please try with a different email.' 
+      }, { status: 400 });
     }
 
+    const phoneCheckResult = await query('SELECT id FROM member WHERE phone = $1', [phone]);
+    if (phoneCheckResult.rows.length > 0) {
+      logger.warn('Validation Error: Phone number already exists', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Add PhD Candidate',
+          details: `Attempt to add PhD Candidate failed - Phone No : ${phone} already exists.`
+        }
+      });
+
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Phone No already exists. Please try with a different phone no.' 
+      }, { status: 400 });
+    }
+
+    const idNumberCheckResult = await query('SELECT id FROM member WHERE idNumber = $1', [idNumber]);
+    if (idNumberCheckResult.rows.length > 0) {
+      logger.warn('Validation Error: ID number already exists', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Add PhD Candidate',
+          details: `Attempt to add PhD Candidate failed - ID number ${idNumber} already exists.`
+        }
+      });
+
+      return NextResponse.json({ 
+        success: false, 
+        message: 'ID number already exists. Please try with a different ID number.' 
+      }, { status: 400 });
+    }
+
+    const passportNumberCheckResult = await query('SELECT id FROM member WHERE passport_number = $1', [passport_number]);
+    if (passportNumberCheckResult.rows.length > 0) {
+      logger.warn('Validation Error: Passport number already exists', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Add PhD Candidate',
+          details: `Attempt to add PhD Candidate failed - Passport number ${passport_number} already exists.`
+        }
+      });
+
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Passport number already exists. Please try with a different passport number.' 
+      }, { status: 400 });
+    }
+
+      
     const phdCandidateId = await generatePhdCandidateId();
 
     // Save profile photo
