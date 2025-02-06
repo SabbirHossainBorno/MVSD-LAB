@@ -157,7 +157,7 @@ export async function POST(req) {
       }, { status: 400 });
     }
 
-    const idNumberCheckResult = await query('SELECT id FROM member WHERE idNumber = $1', [idNumber]);
+    const idNumberCheckResult = await query('SELECT id FROM member WHERE id_number" = $1', [idNumber]);
     if (idNumberCheckResult.rows.length > 0) {
       logger.warn('Validation Error: ID number already exists', {
         meta: {
@@ -228,7 +228,7 @@ export async function POST(req) {
 
       const insertPhdCandidateQuery = `
         INSERT INTO phd_candidate_basic_info 
-        (id, first_name, last_name, phone, gender, "bloodGroup", country, dob, email, password, short_bio, admission_date, completion_date, photo, status, type, passport_number, idNumber)
+        (id, first_name, last_name, phone, gender, "blood_group", country, dob, email, password, short_bio, admission_date, completion_date, photo, status, type, passport_number, "id_number")
         VALUES 
         ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'Active', $15, $16, $17)
         RETURNING *;
@@ -261,10 +261,8 @@ export async function POST(req) {
       }
 
       const insertMemberQuery = `
-        INSERT INTO member 
-        (id, first_name, last_name, phone, gender, "bloodGroup", country, dob, passport_number, email, password, short_bio, joining_date, leaving_date, photo, status, type, idNumber)
-        VALUES 
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16, $17)
+        INSERT INTO member (id, first_name, last_name, phone, gender, "blood_group", country, dob, passport_number, email, password, short_bio, joining_date, leaving_date, photo, status, type, "id_number")
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16, $17)
         RETURNING *;
       `;
       await query(insertMemberQuery, [
