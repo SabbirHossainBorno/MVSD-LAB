@@ -62,12 +62,10 @@ const AddPhdCandidate = () => {
       const file = value;
       if (file.size > 5 * 1024 * 1024) {
         toast.error('File size exceeds 5 MB.');
-        e.target.value = ''; // Reset file input
         return;
       }
       if (!['image/jpeg', 'image/png', 'application/pdf'].includes(file.type)) {
         toast.error('Invalid file type. Only JPG, JPEG, PNG, and PDF are allowed.');
-        e.target.value = ''; // Reset file input
         return;
       }
     }
@@ -263,7 +261,6 @@ const AddPhdCandidate = () => {
                 <option value="A-">A-</option>
                 <option value="B+">B+</option>
                 <option value="B-">B-</option>
-                <option value="O+">O+</option>
                 <option value="O-">O-</option>
                 <option value="AB+">AB+</option>
                 <option value="AB-">AB-</option>
@@ -339,19 +336,7 @@ const AddPhdCandidate = () => {
                 required
               />
             </div>
-            <div className="mb-4">
-              <label htmlFor="admission_date" className="block text-gray-300 mb-2">
-                Admission Date
-              </label>
-              <input
-                type="date"
-                name="admission_date"
-                value={formData.admission_date}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                required
-              />
-            </div>
+            
             <div className="mb-4">
               <label htmlFor="password" className="block text-gray-300 mb-2">
                 Password
@@ -373,6 +358,19 @@ const AddPhdCandidate = () => {
                 type="password"
                 name="confirm_password"
                 value={formData.confirm_password}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-gray-700 text-gray-300"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="admission_date" className="block text-gray-300 mb-2">
+                Admission Date
+              </label>
+              <input
+                type="date"
+                name="admission_date"
+                value={formData.admission_date}
                 onChange={handleChange}
                 className="w-full p-3 rounded bg-gray-700 text-gray-300"
                 required
@@ -500,7 +498,7 @@ const AddPhdCandidate = () => {
                 type="text"
                 name="degree"
                 placeholder="Degree"
-                value={edu.degree}
+                value={edu.degree || ''}
                 onChange={(e) => handleArrayChange(setEducation, index, 'degree', e.target.value)}
                 className="w-full p-3 rounded bg-gray-700"
                 required
@@ -509,7 +507,7 @@ const AddPhdCandidate = () => {
                 type="text"
                 name="institution"
                 placeholder="Institution"
-                value={edu.institution}
+                value={edu.institution || ''}
                 onChange={(e) => handleArrayChange(setEducation, index, 'institution', e.target.value)}
                 className="w-full p-3 rounded bg-gray-700"
                 required
@@ -518,7 +516,7 @@ const AddPhdCandidate = () => {
                 type="number"
                 name="passing_year"
                 placeholder="Passing Year"
-                value={edu.passing_year}
+                value={edu.passing_year || ''}
                 onChange={(e) => handleArrayChange(setEducation, index, 'passing_year', parseInt(e.target.value, 10))}
                 className="w-full p-3 rounded bg-gray-700"
                 min="1900"
@@ -544,6 +542,7 @@ const AddPhdCandidate = () => {
             Add Another Education
           </button>
         </div>
+
         {/* Career Section */}
         <div className="mb-8">
           <h3 className="text-xl font-bold mb-4">Career</h3>
@@ -553,7 +552,7 @@ const AddPhdCandidate = () => {
                 type="text"
                 name="position"
                 placeholder="Position"
-                value={job.position}
+                value={job.position || ''}
                 onChange={(e) => handleArrayChange(setCareer, index, 'position', e.target.value)}
                 className="w-full p-3 rounded bg-gray-700"
                 required
@@ -562,7 +561,7 @@ const AddPhdCandidate = () => {
                 type="text"
                 name="organization_name"
                 placeholder="Organization"
-                value={job.organization_name}
+                value={job.organization_name || ''}
                 onChange={(e) => handleArrayChange(setCareer, index, 'organization_name', e.target.value)}
                 className="w-full p-3 rounded bg-gray-700"
                 required
@@ -571,7 +570,7 @@ const AddPhdCandidate = () => {
                 type="number"
                 name="joining_year"
                 placeholder="Joining Year"
-                value={job.joining_year}
+                value={job.joining_year || ''}
                 onChange={(e) => handleArrayChange(setCareer, index, 'joining_year', parseInt(e.target.value, 10))}
                 className="w-full p-3 rounded bg-gray-700"
                 min="1900"
@@ -582,7 +581,7 @@ const AddPhdCandidate = () => {
                 type="number"
                 name="leaving_year"
                 placeholder="Leaving Year"
-                value={job.leaving_year}
+                value={job.leaving_year || ''}
                 onChange={(e) => handleArrayChange(setCareer, index, 'leaving_year', parseInt(e.target.value, 10))}
                 className="w-full p-3 rounded bg-gray-700"
                 min="1900"
@@ -601,7 +600,7 @@ const AddPhdCandidate = () => {
           ))}
           <button
             type="button"
-            onClick={() => addNewField(setCareer, { position: '', organization: '', joining_year: '', leaving_year: '' })}
+            onClick={() => addNewField(setCareer, { position: '', organization_name: '', joining_year: '', leaving_year: '' })}
             className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
           >
             Add Another Job
@@ -609,61 +608,62 @@ const AddPhdCandidate = () => {
         </div>
 
         {/* Documents Section */}
-      <div className="mb-8">
-        <h3 className="text-xl font-bold mb-4">Documents</h3>
-        {documents.map((document, index) => (
-          <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
-            <input
-              type="text"
-              name="title"
-              placeholder="Document Title"
-              value={document.title}
-              onChange={(e) => handleArrayChange(setDocuments, index, 'title', e.target.value)}
-              className="w-full p-3 rounded bg-gray-700"
-              required
-            />
-            <div className="mb-4">
-              <select
-                name="documentType"
-                value={document.documentType}
-                onChange={(e) => handleArrayChange(setDocuments, index, 'documentType', e.target.value)}
-                className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+        <div className="mb-8">
+          <h3 className="text-xl font-bold mb-4">Documents</h3>
+          {documents.map((document, index) => (
+            <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
+              <input
+                type="text"
+                name="title"
+                placeholder="Document Title"
+                value={document.title || ''}
+                onChange={(e) => handleArrayChange(setDocuments, index, 'title', e.target.value)}
+                className="w-full p-3 rounded bg-gray-700"
                 required
-              >
-                <option value="" disabled className="text-gray-400">Select Document Type</option>
-                <option value="Education" className="bg-gray-700 text-white">Education</option>
-                <option value="Medical" className="bg-gray-700 text-white">Medical</option>
-                <option value="Career" className="bg-gray-700 text-white">Career</option>
-                <option value="Personal" className="bg-gray-700 text-white">Personal</option>
-                <option value="Official" className="bg-gray-700 text-white">Official</option>
-                <option value="Other" className="bg-gray-700 text-white">Other</option>
-              </select>
+              />
+              <div className="mb-4">
+                <select
+                  name="documentType"
+                  value={document.documentType || ''}
+                  onChange={(e) => handleArrayChange(setDocuments, index, 'documentType', e.target.value)}
+                  className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+                  required
+                >
+                  <option value="" disabled className="text-gray-400">Select Document Type</option>
+                  <option value="Education" className="bg-gray-700 text-white">Education</option>
+                  <option value="Medical" className="bg-gray-700 text-white">Medical</option>
+                  <option value="Career" className="bg-gray-700 text-white">Career</option>
+                  <option value="Personal" className="bg-gray-700 text-white">Personal</option>
+                  <option value="Official" className="bg-gray-700 text-white">Official</option>
+                  <option value="Other" className="bg-gray-700 text-white">Other</option>
+                </select>
+              </div>
+              <input
+                type="file"
+                name="documentsPhoto"
+                onChange={(e) => handleArrayChange(setDocuments, index, 'documentsPhoto', e.target.files[0])}
+                className="w-full p-3 rounded bg-gray-700"
+              />
+              {documents.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeField(setDocuments, index)}
+                  className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+                >
+                  Remove
+                </button>
+              )}
             </div>
-            <input
-              type="file"
-              name="documentsPhoto"
-              onChange={(e) => handleArrayChange(setDocuments, index, 'documentsPhoto', e.target.files[0])}
-              className="w-full p-3 rounded bg-gray-700"
-            />
-            {documents.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeField(setDocuments, index)}
-                className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-              >
-                Remove
-              </button>
-            )}
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => addNewField(setDocuments, { title: '', documentType: '', documentsPhoto: '' })}
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-        >
-          Add Another Document
-        </button>
-      </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addNewField(setDocuments, { title: '', documentType: '', documentsPhoto: '' })}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          >
+            Add Another Document
+          </button>
+        </div>
+
         {/* Submit Button */}
         <div className="flex justify-center">
           <button

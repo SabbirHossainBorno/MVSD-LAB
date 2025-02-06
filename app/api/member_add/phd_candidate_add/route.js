@@ -80,7 +80,7 @@ export async function POST(req) {
       documents.push({
         title: formData.get(`documents[${i}][title]`),
         documentType: formData.get(`documents[${i}][documentType]`),
-        documentPhoto: formData.get(`documents[${i}][documentsPhoto]`),
+        documentsPhoto: formData.get(`documents[${i}][documentsPhoto]`),
       });
     }
 
@@ -158,167 +158,169 @@ export async function POST(req) {
     }
 
     // Save document photos
-const documentUrls = [];
-if (documents.length > 0) {
-  for (let i = 0; i < documents.length; i++) {
-    const documentFile = documents[i].documentPhoto;
-    if (documentFile) {
-      try {
-        const documentUrl = await saveDocumentPhoto(documentFile, phdCandidateId, i, documents[i].documentType);
-        documentUrls.push(documentUrl);
-      } catch (error) {
-        return NextResponse.json({ message: `Failed to save document photo: ${error.message}` }, { status: 500 });
+    const documentUrls = [];
+    if (documents.length > 0) {
+      for (let i = 0; i < documents.length; i++) {
+        const documentFile = documents[i].documentsPhoto;
+        if (documentFile) {
+          try {
+            const documentUrl = await saveDocumentPhoto(documentFile, phdCandidateId, i, documents[i].documentType);
+            documentUrls.push(documentUrl);
+          } catch (error) {
+            return NextResponse.json({ message: `Failed to save document photo: ${error.message}` }, { status: 500 });
+          }
+        } else {
+          return NextResponse.json({ message: 'PhD Candidate document photo is missing' }, { status: 400 });
+        }
       }
-    } else {
-      return NextResponse.json({ message: 'PhD Candidate document photo is missing' }, { status: 400 });
-    }
-  }
-}
-
-try {
-  await query('BEGIN');
-
-  const insertPhdCandidateQuery = `
-    INSERT INTO phd_candidate_basic_info 
-    (id, first_name, last_name, phone, gender, "bloodGroup", country, dob, email, password, short_bio, admission_date, completion_date, photo, status, type, passport_number)
-    VALUES 
-    ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'Active', $15, $16)
-    RETURNING *;
-  `;
-
-  await query(insertPhdCandidateQuery, [
-    phdCandidateId,
-    first_name,
-    last_name,
-    phone,
-    gender,
-    bloodGroup,
-    country,
-    dob,
-    email,
-    password,
-    short_bio,
-    admission_date,
-    completion_date,
-    photoUrl,
-    type,
-    passport_number
-  ]);
-
-  // Insert into phd_candidate_socialmedia_info
-  const insertSocialMediaQuery = `INSERT INTO phd_candidate_socialmedia_info (phd_candidate_id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
-  for (const sm of socialMedia) {
-    await query(insertSocialMediaQuery, [phdCandidateId, sm.socialMedia_name, sm.link]);
-  }
-
-  const insertMemberQuery = `
-    INSERT INTO member 
-    (id, first_name, last_name, phone, gender, "bloodGroup", country, dob, passport_number, email, password, short_bio, joining_date, leaving_date, photo, status, type)
-    VALUES 
-    ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16)
-    RETURNING *;
-  `;
-  await query(insertMemberQuery, [
-    phdCandidateId,  
-    first_name,      
-    last_name,       
-    phone,           
-    gender,          
-    bloodGroup,      
-    country,         
-    dob,             
-    passport_number, 
-    email,           
-    password,        
-    short_bio,       
-    admission_date,  
-    completion_date,  // Insert completion_date into leaving_date
-    photoUrl,         
-    type             
-  ]);
-
-  // Insert into phd_candidate_education_info
-  const insertEducationQuery = `INSERT INTO phd_candidate_education_info (phd_candidate_id, degree, institution, passing_year) VALUES ($1, $2, $3, $4) RETURNING *;`;
-  for (const edu of education) {
-    await query(insertEducationQuery, [phdCandidateId, edu.degree, edu.institution, edu.passing_year]);
-  }
-
-  // Insert into phd_candidate_career_info
-  const insertCareerQuery = `INSERT INTO phd_candidate_career_info (phd_candidate_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
-  for (const car of career) {
-    await query(insertCareerQuery, [phdCandidateId, car.position, car.organization_name, car.joining_year, car.leaving_year]);
-  }
-
-  // Insert into phd_candidate_documents_info
-  const insertDocumentsQuery = `INSERT INTO phd_candidate_document_info ("phd_candidate_id", "title", "documentType", "document_photo") VALUES ($1, $2, $3, $4) RETURNING *;`;
-  for (let i = 0; i < documents.length; i++) {
-    const document = documents[i];
-    const documentUrl = documentUrls[i]; // Get the URL of the saved document photo
-
-    if (!documentUrl) {
-      throw new Error('Document URL is null');
     }
 
-    await query(insertDocumentsQuery, [
-      phdCandidateId, document.title, document.documentType, documentUrl,
-    ]);
-  }
+    try {
+      await query('BEGIN');
 
-  const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
-  const Id = `${phdCandidateId}`; 
-  const notificationTitle = `A New PhD Candidate Added [${phdCandidateId}] By ${adminEmail}`;
-  const notificationStatus = 'Unread';
-  await query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
+      const insertPhdCandidateQuery = `
+        INSERT INTO phd_candidate_basic_info 
+        (id, first_name, last_name, phone, gender, "bloodGroup", country, dob, email, password, short_bio, admission_date, completion_date, photo, status, type, passport_number, idNumber)
+        VALUES 
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'Active', $15, $16, $17)
+        RETURNING *;
+      `;
 
-  await query('COMMIT');
+      await query(insertPhdCandidateQuery, [
+        phdCandidateId,
+        first_name,
+        last_name,
+        phone,
+        gender,
+        bloodGroup,
+        country,
+        dob,
+        email,
+        password,
+        short_bio,
+        admission_date,
+        completion_date,
+        photoUrl,
+        type,
+        passport_number,
+        idNumber
+      ]);
 
-  // Send Telegram alert for success
-  const successMessage = formatAlertMessage('PhD Candidate Added', `A new PhD Candidate with ID ${phdCandidateId} was successfully added by ${adminEmail} on ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}.`);
-  await sendTelegramAlert(successMessage);
+      // Insert into phd_candidate_socialmedia_info
+      const insertSocialMediaQuery = `INSERT INTO phd_candidate_socialmedia_info (phd_candidate_id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
+      for (const sm of socialMedia) {
+        await query(insertSocialMediaQuery, [phdCandidateId, sm.socialMedia_name, sm.link]);
+      }
 
-  // Log success
-  logger.info('PhD Candidate Added Successfully', {
-    meta: {
-      eid,
-      sid: sessionId,
-      taskName: 'Add PhD Candidate',
-      details: `A new PhD Candidate added successfully with ID ${phdCandidateId} by ${adminEmail} from IP ${ipAddress} with User-Agent ${userAgent}`
+      const insertMemberQuery = `
+        INSERT INTO member 
+        (id, first_name, last_name, phone, gender, "bloodGroup", country, dob, passport_number, email, password, short_bio, joining_date, leaving_date, photo, status, type, idNumber)
+        VALUES 
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, 'Active', $16, $17)
+        RETURNING *;
+      `;
+      await query(insertMemberQuery, [
+        phdCandidateId,  
+        first_name,      
+        last_name,       
+        phone,           
+        gender,          
+        bloodGroup,      
+        country,         
+        dob,             
+        passport_number, 
+        email,           
+        password,        
+        short_bio,       
+        admission_date,  
+        completion_date,  // Insert completion_date into leaving_date
+        photoUrl,         
+        type,
+        idNumber
+      ]);
+
+      // Insert into phd_candidate_education_info
+      const insertEducationQuery = `INSERT INTO phd_candidate_education_info (phd_candidate_id, degree, institution, passing_year) VALUES ($1, $2, $3, $4) RETURNING *;`;
+      for (const edu of education) {
+        await query(insertEducationQuery, [phdCandidateId, edu.degree, edu.institution, edu.passing_year]);
+      }
+
+      // Insert into phd_candidate_career_info
+      const insertCareerQuery = `INSERT INTO phd_candidate_career_info (phd_candidate_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
+      for (const car of career) {
+        await query(insertCareerQuery, [phdCandidateId, car.position, car.organization_name, car.joining_year, car.leaving_year]);
+      }
+
+      // Insert into phd_candidate_documents_info
+      const insertDocumentsQuery = `INSERT INTO phd_candidate_document_info ("phd_candidate_id", "title", "documentType", "document_photo") VALUES ($1, $2, $3, $4) RETURNING *;`;
+      for (let i = 0; i < documents.length; i++) {
+        const document = documents[i];
+        const documentUrl = documentUrls[i]; // Get the URL of the saved document photo
+
+        if (!documentUrl) {
+          throw new Error('Document URL is null');
+        }
+
+        await query(insertDocumentsQuery, [
+          phdCandidateId, document.title, document.documentType, documentUrl,
+        ]);
+      }
+
+      const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
+      const Id = `${phdCandidateId}`; 
+      const notificationTitle = `A New PhD Candidate Added [${phdCandidateId}] By ${adminEmail}`;
+      const notificationStatus = 'Unread';
+      await query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
+
+      await query('COMMIT');
+
+      // Send Telegram alert for success
+      const successMessage = formatAlertMessage('PhD Candidate Added', `A new PhD Candidate with ID ${phdCandidateId} was successfully added by ${adminEmail} on ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}.`);
+      await sendTelegramAlert(successMessage);
+
+      // Log success
+      logger.info('PhD Candidate Added Successfully', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Add PhD Candidate',
+          details: `A new PhD Candidate added successfully with ID ${phdCandidateId} by ${adminEmail} from IP ${ipAddress} with User-Agent ${userAgent}`
+        }
+      });
+
+      return NextResponse.json({ message: 'PhD Candidate information added successfully' }, { status: 200 });
+
+    } catch (error) {
+      await query('ROLLBACK');
+
+      const errorMessage = formatAlertMessage('Error Adding PhD Candidate', `ID : ${phdCandidateId}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
+      await sendTelegramAlert(errorMessage);
+
+      logger.error('Error Adding PhD Candidate', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Add PhD Candidate',
+          details: `Error adding PhD Candidate with ID ${phdCandidateId} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+        }
+      });
+
+      return NextResponse.json({ message: `Error adding PhD Candidate: ${error.message}` }, { status: 500 });
     }
-  });
-
-    return NextResponse.json({ message: 'PhD Candidate information added successfully' }, { status: 200 });
 
   } catch (error) {
-    await query('ROLLBACK');
-
-    const errorMessage = formatAlertMessage('Error Adding PhD Candidate', `ID : ${phdCandidateId}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
+    const errorMessage = formatAlertMessage('Error Handling PhD Candidate Request', `IP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
     await sendTelegramAlert(errorMessage);
 
-    logger.error('Error Adding PhD Candidate', {
+    logger.error('Error Processing Form Data', {
       meta: {
         eid,
         sid: sessionId,
         taskName: 'Add PhD Candidate',
-        details: `Error adding PhD Candidate with ID ${phdCandidateId} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+        details: `Error processing form data from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
       }
     });
 
-    return NextResponse.json({ message: `Error adding PhD Candidate: ${error.message}` }, { status: 500 });
+    return NextResponse.json({ message: `Error: ${error.message}` }, { status: 500 });
   }
-
-  } catch (error) {
-  const errorMessage = formatAlertMessage('Error Handling PhD Candidate Request', `IP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
-  await sendTelegramAlert(errorMessage);
-
-  logger.error('Error Processing Form Data', {
-    meta: {
-      eid,
-      sid: sessionId,
-      taskName: 'Add PhD Candidate',
-      details: `Error processing form data from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
-    }
-  });
-
-  return NextResponse.json({ message: `Error: ${error.message}` }, { status: 500 });
-  }
-  }
+}

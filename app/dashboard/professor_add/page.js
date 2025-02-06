@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import withAuth from '../../components/withAuth';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
+
 const AddProfessor = () => {
   const [formData, setFormData] = useState({
     first_name: '',
