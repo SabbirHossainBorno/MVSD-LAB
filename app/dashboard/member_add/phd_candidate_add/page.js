@@ -15,7 +15,7 @@ const AddPhdCandidate = () => {
     last_name: '',
     phone: '',
     gender: '',
-    bloodGroup: '',
+    bloodGroup: "",
     country: '',
     idNumber: '',
     passport_number: '',
@@ -178,6 +178,7 @@ const AddPhdCandidate = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
+      <ToastContainer />
       <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold mb-6 text-center">Add PhD Candidate</h2>
         {/* Basic Info Section */}
@@ -673,7 +674,6 @@ const AddPhdCandidate = () => {
           </button>
         </div>
       </form>
-      <ToastContainer />
     </div>
   );
 }
