@@ -148,6 +148,7 @@ const Dashboard = () => {
               <p className="text-3xl font-extrabold text-black mt-1">{messageCount}</p>
             </div>
           </div>
+          
           {/* Current Login Count */}
           <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
             {/* Icon Section */}
@@ -168,6 +169,122 @@ const Dashboard = () => {
               <p className="text-3xl font-extrabold text-black mt-1">{currentLoginCount}</p>
             </div>
           </div>
+        </div>
+
+
+        {/* ------------------------Member Summary Cards------------------------ */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-10">
+{/* Total PhD Candidate Card */}
+<div className="bg-white p-2 rounded shadow-md flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-2 border-blue-500">
+  {/* Icon Section */}
+  <div className="w-10 h-10 flex items-center justify-center md:w-12 md:h-12">
+    <Image 
+      src="/icons/phd_candidate.svg" 
+      alt="Total PhD Candidate Icon"
+      width={40} 
+      height={40} 
+      className="w-10 h-10 md:w-12 md:h-12"
+      quality={100} 
+      priority 
+    />
+  </div>
+
+  {/* Content Section */}
+  <div className="flex items-center gap-2">
+    <p className="text-xs font-medium text-gray-700 uppercase tracking-widest">Total PhD Candidate</p>
+    <p className="text-xl font-extrabold text-black">{membersCount}</p>
+  </div>
+</div>
+
+{/* Total PhD Candidate Card */}
+<div className="bg-white p-2 rounded shadow-md flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-2 border-blue-500">
+  {/* Icon Section */}
+  <div className="w-10 h-10 flex items-center justify-center md:w-12 md:h-12">
+    <Image 
+      src="/icons/phd_candidate.svg" 
+      alt="Total PhD Candidate Icon"
+      width={40} 
+      height={40} 
+      className="w-10 h-10 md:w-12 md:h-12"
+      quality={100} 
+      priority 
+    />
+  </div>
+
+  {/* Content Section */}
+  <div className="flex items-center gap-2">
+    <p className="text-xs font-medium text-gray-700 uppercase tracking-widest">Total PhD Candidate</p>
+    <p className="text-xl font-extrabold text-black">{membersCount}</p>
+  </div>
+</div>
+
+{/* Total PhD Candidate Card */}
+<div className="bg-white p-2 rounded shadow-md flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-2 border-blue-500">
+  {/* Icon Section */}
+  <div className="w-10 h-10 flex items-center justify-center md:w-12 md:h-12">
+    <Image 
+      src="/icons/phd_candidate.svg" 
+      alt="Total PhD Candidate Icon"
+      width={40} 
+      height={40} 
+      className="w-10 h-10 md:w-12 md:h-12"
+      quality={100} 
+      priority 
+    />
+  </div>
+
+  {/* Content Section */}
+  <div className="flex items-center gap-2">
+    <p className="text-xs font-medium text-gray-700 uppercase tracking-widest">Total PhD Candidate</p>
+    <p className="text-xl font-extrabold text-black">{membersCount}</p>
+  </div>
+</div>
+
+{/* Total PhD Candidate Card */}
+<div className="bg-white p-2 rounded shadow-md flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-2 border-blue-500">
+  {/* Icon Section */}
+  <div className="w-10 h-10 flex items-center justify-center md:w-12 md:h-12">
+    <Image 
+      src="/icons/phd_candidate.svg" 
+      alt="Total PhD Candidate Icon"
+      width={40} 
+      height={40} 
+      className="w-10 h-10 md:w-12 md:h-12"
+      quality={100} 
+      priority 
+    />
+  </div>
+
+  {/* Content Section */}
+  <div className="flex items-center gap-2">
+    <p className="text-xs font-medium text-gray-700 uppercase tracking-widest">Total PhD Candidate</p>
+    <p className="text-xl font-extrabold text-black">{membersCount}</p>
+  </div>
+</div>
+
+{/* Total PhD Candidate Card */}
+<div className="bg-white p-2 rounded shadow-md flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-2 border-blue-500">
+  {/* Icon Section */}
+  <div className="w-10 h-10 flex items-center justify-center md:w-12 md:h-12">
+    <Image 
+      src="/icons/phd_candidate.svg" 
+      alt="Total PhD Candidate Icon"
+      width={40} 
+      height={40} 
+      className="w-10 h-10 md:w-12 md:h-12"
+      quality={100} 
+      priority 
+    />
+  </div>
+
+  {/* Content Section */}
+  <div className="flex items-center gap-2">
+    <p className="text-xs font-medium text-gray-700 uppercase tracking-widest">Total PhD Candidate</p>
+    <p className="text-xl font-extrabold text-black">{membersCount}</p>
+  </div>
+</div>
+
+
         </div>
 
 
