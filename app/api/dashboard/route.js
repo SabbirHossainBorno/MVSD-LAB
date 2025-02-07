@@ -55,16 +55,18 @@ export async function GET(request) {
     const subscriberCountQuery = 'SELECT COUNT(*) FROM subscriber';
     const memberDetailsQuery = 'SELECT COUNT(*) AS count FROM member';
     const professorDetailsQuery = 'SELECT COUNT(*) AS count FROM professor_basic_info';
+    const phdCandidateDetailsQuery = 'SELECT COUNT(*) AS count FROM phd_candidate_basic_info';
     const messageDetailsQuery = 'SELECT COUNT(*) AS count FROM home_contact_us';
     const recentProfessorsQuery = 'SELECT id, first_name, last_name, phone, dob, email, short_bio, joining_date, leaving_date, photo, status, type FROM professor_basic_info ORDER BY id DESC LIMIT 5';
     const recentSubscribersQuery = 'SELECT * FROM subscriber ORDER BY date DESC LIMIT 7';
     const adminDetailsQuery = 'SELECT * FROM admin'; // Add query for admin data
     const currentLoginCountQuery = 'SELECT COUNT(*) AS count FROM admin WHERE status = \'Active\''; // Add query for current login count
 
-    const [subscriberCount, memberDetails, professorDetails, messageDetails, recentSubscribers, recentProfessors, adminDetails, currentLoginCount] = await Promise.all([
+    const [subscriberCount, memberDetails, professorDetails, phdCandidateDetails, messageDetails, recentSubscribers, recentProfessors, adminDetails, currentLoginCount] = await Promise.all([
       query(subscriberCountQuery),
       query(memberDetailsQuery),
       query(professorDetailsQuery),
+      query(phdCandidateDetailsQuery),
       query(messageDetailsQuery),
       query(recentSubscribersQuery),
       query(recentProfessorsQuery),
@@ -89,6 +91,7 @@ export async function GET(request) {
       subscribers: subscriberCount.rows[0].count,
       memberCount: memberDetails.rows[0].count,
       professorCount: professorDetails.rows[0].count,
+      phdCandidateCount: phdCandidateDetails.rows[0].count,
       messageCount: messageDetails.rows[0].count,
       recentSubscribers: recentSubscribers.rows,
       recentProfessors: recentProfessors.rows,

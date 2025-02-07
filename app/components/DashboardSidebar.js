@@ -1,4 +1,3 @@
-//app/components/DashboardSidebar.js
 'use client';
 
 import Link from 'next/link';
@@ -6,7 +5,7 @@ import { useEffect, useCallback, useState } from 'react';
 import Image from 'next/image';
 
 export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
 
   const handleClickOutside = useCallback((event) => {
     if (!event.target.closest('aside') && isOpen) {
@@ -18,6 +17,14 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, [handleClickOutside]);
+
+  const handleDropdownClick = (dropdown) => {
+    setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
+  };
+
+  const handleLinkClick = () => {
+    setActiveDropdown(null);
+  };
 
   return (
     <aside className={`fixed top-0 left-0 w-64 bg-gray-900 text-white h-full p-6 transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:w-64 md:flex md:flex-col z-50 shadow-lg overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent`}>
@@ -63,48 +70,71 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         {/* Add Member Dropdown */}
         <div className="relative">
           <button
-            onClick={() => setShowDropdown(!showDropdown)}
+            onClick={() => handleDropdownClick('addMember')}
             className="block w-full p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer"
           >
             <Image src="/icons/add_member.png" alt="Add Member" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
             <span className="text-md font-medium">Add Member</span>
-            <svg className={`w-4 h-4 ml-auto transition-transform transform ${showDropdown ? 'rotate-180' : 'rotate-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <svg className={`w-4 h-4 ml-auto transition-transform transform ${activeDropdown === 'addMember' ? 'rotate-180' : 'rotate-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </button>
 
           {/* Dropdown Menu */}
-          {showDropdown && (
+          {activeDropdown === 'addMember' && (
             <div className="relative w-full mt-2 mb-2 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950 rounded shadow-lg z-20">
-            
-            <Link href="/dashboard/member_add/phd_candidate_add">
-              <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                <span className="text-sm font-semibold text-white">PHd Candidate</span>
-              </div>
-            </Link>
-            <Link href="/dashboard/add_member/staff">
-              <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                <span className="text-sm font-semibold text-white">Staff</span>
-              </div>
-            </Link>
-            <Link href="/dashboard/add_member/post_doc_candidate">
-              <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                <span className="text-sm font-semibold text-white">Post Doc Candidate</span>
-              </div>
-            </Link>
-            <Link href="/dashboard/add_member/masc_candidate">
-              <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                <span className="text-sm font-semibold text-white">MASc Candidate</span>
-              </div>
-            </Link>
-          </div>
+             dashboard/member_add/phd_candidate_add" onClick={handleLinkClick}>
+                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                  <span className="text-sm font-semibold text-white">PHd Candidate</span>
+                </div>
+              </Link>
+              <Link href="/dashboard/add_member/staff" onClick={handleLinkClick}>
+               -indigo-600 flex items-center space-x-2 cursor-pointer">
+                  <span className="text-sm font-semibold text-white">Staff</span>
+                </div>
+              </Link>
+              <Link href="/dashboard/add_member/post_doc_candidate" onClick={handleLinkClick}>
+                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                  <span className="text-sm font-semibold text-white">Post Doc Candidate</span>
+                </div>
+              </Link>
+              <Link href="/dashboard/add_member/masc_candidate" onClick={handleLinkClick}>
+                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                  <span className="text-sm font-semibold text-white">MASc Candidate</span>
+                </div>
+              </Link>
+            </div>
+          )}
+        </div>
 
+        {/* Member List Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => handleDropdownClick('memberList')}
+            className="block w-full p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer"
+          >
+            <Image src="/icons/member_list.svg" alt="Member List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
+            <span className="text-md font-medium">Member List</span>
+            <svg className={`w-4 h-4 ml-auto transition-transform transform ${activeDropdown === 'memberList' ? 'rotate-180' : 'rotate-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+
+          {/* Dropdown Menu */}
+          {activeDropdown === 'memberList' && (
+            <div className="relative w-full mt-2 mb-2 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950 rounded shadow-lg z-20">
+              <Link href="/dashboard/member_list/phd_candidate_list" onClick={handleLinkClick}>
+                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                  <span className="text-sm font-semibold text-white">PHd Candidate</span>
+                </div>
+              </Link>
+            </div>
           )}
         </div>
 
         {/* System Monitor Option */}
         <Link href="/dashboard/system_monitor">
-        <div className="block p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer">
+          <div className="block p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer">
             <Image src="/icons/SystemMonitor.png" alt="System Monitor" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
             <span className="text-md font-medium">System Monitor</span>
           </div>

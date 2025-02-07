@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [subscribers, setSubscribers] = useState(0);
   const [membersCount, setMembersCount] = useState(0);
   const [professorsCount, setProfessorsCount] = useState(0);
+  const [phdCandidatesCount, setPhdCandidatesCount] = useState(0);
   const [messageCount, setMessagesCount] = useState(0);
   const [recentProfessors, setRecentProfessors] = useState([]);
   const [recentSubscribers, setRecentSubscribers] = useState([]);
@@ -34,6 +35,7 @@ const Dashboard = () => {
           setSubscribers(result.subscribers);
           setMembersCount(result.memberCount);
           setProfessorsCount(result.professorCount);
+          setPhdCandidatesCount(result.phdCandidateCount);
           setMessagesCount(result.messageCount);
           setRecentSubscribers(result.recentSubscribers);
           setAdmins(result.admins); // Set admin data
@@ -172,19 +174,20 @@ const Dashboard = () => {
         </div>
 
 
+
         {/* ------------------------Member Summary Cards------------------------ */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-10">
-        
+        <div className="bg-gray-800 p-4 rounded shadow-lg border border-gray-700 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-10">
+
           {/* Total PhD Candidate Card */}
-          <div className="bg-white p-2 rounded shadow-md flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
+          <div className="bg-white p-2 rounded shadow-md flex items-center justify-between transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-2 border-blue-500">
             {/* Icon Section */}
-            <div className="w-10 h-10 flex items-center justify-center md:w-12 md:h-12">
+            <div className="w-8 h-8 flex items-center justify-center md:w-10 md:h-10">
               <Image 
                 src="/icons/phd_candidate.svg" 
                 alt="Total PhD Candidate Icon"
-                width={40} 
-                height={40} 
-                className="w-10 h-10 md:w-12 md:h-12"
+                width={32} 
+                height={32} 
+                className="w-8 h-8 md:w-10 md:h-10"
                 quality={100} 
                 priority 
               />
@@ -192,21 +195,22 @@ const Dashboard = () => {
 
             {/* Content Section */}
             <div className="flex items-center gap-2">
-              <p className="text-xs font-medium text-gray-700 uppercase tracking-widest">PhD Candidate</p>
-              <p className="text-3xl font-extrabold text-black">{membersCount}</p>
+              <p className="text-xs font-bold text-gray-700 uppercase tracking-widest">PhD Candidate</p>
+              <p className="text-2xl font-extrabold text-black">{phdCandidatesCount}</p>
             </div>
           </div>
 
+          {/* Repeat the card structure for other cards */}
           {/* Total PhD Candidate Card */}
-          <div className="bg-white p-2 rounded shadow-md flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
+          <div className="bg-white p-2 rounded shadow-md flex items-center justify-between transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-2 border-blue-500">
             {/* Icon Section */}
-            <div className="w-10 h-10 flex items-center justify-center md:w-12 md:h-12">
+            <div className="w-8 h-8 flex items-center justify-center md:w-10 md:h-10">
               <Image 
                 src="/icons/phd_candidate.svg" 
                 alt="Total PhD Candidate Icon"
-                width={40} 
-                height={40} 
-                className="w-10 h-10 md:w-12 md:h-12"
+                width={32} 
+                height={32} 
+                className="w-8 h-8 md:w-10 md:h-10"
                 quality={100} 
                 priority 
               />
@@ -214,21 +218,20 @@ const Dashboard = () => {
 
             {/* Content Section */}
             <div className="flex items-center gap-2">
-              <p className="text-xs font-medium text-gray-700 uppercase tracking-widest">PhD Candidate</p>
-              <p className="text-3xl font-extrabold text-black">{membersCount}</p>
+              <p className="text-xs font-bold text-gray-700 uppercase tracking-widest">PhD Candidate</p>
+              <p className="text-2xl font-extrabold text-black">{phdCandidatesCount}</p>
             </div>
           </div>
-
           {/* Total PhD Candidate Card */}
-          <div className="bg-white p-2 rounded shadow-md flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
+          <div className="bg-white p-2 rounded shadow-md flex items-center justify-between transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-2 border-blue-500">
             {/* Icon Section */}
-            <div className="w-10 h-10 flex items-center justify-center md:w-12 md:h-12">
+            <div className="w-8 h-8 flex items-center justify-center md:w-10 md:h-10">
               <Image 
                 src="/icons/phd_candidate.svg" 
                 alt="Total PhD Candidate Icon"
-                width={40} 
-                height={40} 
-                className="w-10 h-10 md:w-12 md:h-12"
+                width={32} 
+                height={32} 
+                className="w-8 h-8 md:w-10 md:h-10"
                 quality={100} 
                 priority 
               />
@@ -236,21 +239,20 @@ const Dashboard = () => {
 
             {/* Content Section */}
             <div className="flex items-center gap-2">
-              <p className="text-xs font-medium text-gray-700 uppercase tracking-widest">PhD Candidate</p>
-              <p className="text-3xl font-extrabold text-black">{membersCount}</p>
+              <p className="text-xs font-bold text-gray-700 uppercase tracking-widest">PhD Candidate</p>
+              <p className="text-2xl font-extrabold text-black">{phdCandidatesCount}</p>
             </div>
           </div>
-
           {/* Total PhD Candidate Card */}
-          <div className="bg-white p-2 rounded shadow-md flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
+          <div className="bg-white p-2 rounded shadow-md flex items-center justify-between transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-2 border-blue-500">
             {/* Icon Section */}
-            <div className="w-10 h-10 flex items-center justify-center md:w-12 md:h-12">
+            <div className="w-8 h-8 flex items-center justify-center md:w-10 md:h-10">
               <Image 
                 src="/icons/phd_candidate.svg" 
                 alt="Total PhD Candidate Icon"
-                width={40} 
-                height={40} 
-                className="w-10 h-10 md:w-12 md:h-12"
+                width={32} 
+                height={32} 
+                className="w-8 h-8 md:w-10 md:h-10"
                 quality={100} 
                 priority 
               />
@@ -258,21 +260,20 @@ const Dashboard = () => {
 
             {/* Content Section */}
             <div className="flex items-center gap-2">
-              <p className="text-xs font-medium text-gray-700 uppercase tracking-widest">PhD Candidate</p>
-              <p className="text-3xl font-extrabold text-black">{membersCount}</p>
+              <p className="text-xs font-bold text-gray-700 uppercase tracking-widest">PhD Candidate</p>
+              <p className="text-2xl font-extrabold text-black">{phdCandidatesCount}</p>
             </div>
           </div>
-
           {/* Total PhD Candidate Card */}
-          <div className="bg-white p-2 rounded shadow-md flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
+          <div className="bg-white p-2 rounded shadow-md flex items-center justify-between transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-2 border-blue-500">
             {/* Icon Section */}
-            <div className="w-10 h-10 flex items-center justify-center md:w-12 md:h-12">
+            <div className="w-8 h-8 flex items-center justify-center md:w-10 md:h-10">
               <Image 
                 src="/icons/phd_candidate.svg" 
                 alt="Total PhD Candidate Icon"
-                width={40} 
-                height={40} 
-                className="w-10 h-10 md:w-12 md:h-12"
+                width={32} 
+                height={32} 
+                className="w-8 h-8 md:w-10 md:h-10"
                 quality={100} 
                 priority 
               />
@@ -280,8 +281,8 @@ const Dashboard = () => {
 
             {/* Content Section */}
             <div className="flex items-center gap-2">
-              <p className="text-xs font-medium text-gray-700 uppercase tracking-widest">PhD Candidate</p>
-              <p className="text-3xl font-extrabold text-black">{membersCount}</p>
+              <p className="text-xs font-bold text-gray-700 uppercase tracking-widest">PhD Candidate</p>
+              <p className="text-2xl font-extrabold text-black">{phdCandidatesCount}</p>
             </div>
           </div>
         </div>
