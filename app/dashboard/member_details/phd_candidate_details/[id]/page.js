@@ -11,6 +11,8 @@ import Image from 'next/image';
 const PhdCandidateDetails = () => {
   const [phdCandidateDetails, setPhdCandidateDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const { id } = useParams();
   const router = useRouter(); // Initialize router
 
@@ -32,6 +34,16 @@ const PhdCandidateDetails = () => {
 
     fetchPhdCandidateDetails();
   }, [id]);
+
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
+  };
 
   if (loading) return <LoadingSpinner />;
 
@@ -139,14 +151,15 @@ const PhdCandidateDetails = () => {
               {phdCandidateDetails.documents.map((document, index) => (
                 <div key={index} className="bg-gray-700 p-4 rounded-lg shadow-lg">
                   <h4 className="text-lg font-semibold text-blue-500">{document.title}</h4>
-                  <p className="text-gray-400">{document.type}</p>
+                  <p className="text-gray-400">{document.document_type}</p>
                   {document.document_photo ? (
                     <Image 
                       src={formatImageUrl(document.document_photo)} // Ensure valid URL
                       alt={document.title} // Dynamic alt text
                       width={80} // 20 * 4 = 80px width
                       height={80} // 20 * 4 = 80px height
-                      className="w-20 h-20 mt-4 rounded-lg object-cover" // Tailwind classes for styling
+                      className="w-20 h-20 mt-4 rounded-lg object-cover cursor-pointer" // Tailwind classes for styling
+                      onClick={() => handleImageClick(formatImageUrl(document.document_photo))} // Open modal on click
                       onError={(e) => { e.target.onerror = null; e.target.src = '/fallback-image.png'; }} // Fallback image handler
                     />
                   ) : (
@@ -160,6 +173,29 @@ const PhdCandidateDetails = () => {
           </div>
         )}
 
+        {/* Modal */}
+        {isModalOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+            onClick={handleCloseModal}
+          >
+            <div className="relative bg-white p-4 rounded-lg shadow-lg">
+            <button
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                onClick={handleCloseModal}
+              >
+                &times;
+              </button>
+              <Image
+                src={selectedImage}
+                alt="Document Image"
+                width={800}
+                height={800}
+                className="object-contain"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -302,7 +302,7 @@ export async function POST(req) {
       }
 
       // Insert into phd_candidate_documents_info
-      const insertDocumentsQuery = `INSERT INTO phd_candidate_document_info ("phd_candidate_id", "title", "documentType", "document_photo") VALUES ($1, $2, $3, $4) RETURNING *;`;
+      const insertDocumentsQuery = `INSERT INTO phd_candidate_document_info ("phd_candidate_id", "title", "document_type", "document_photo") VALUES ($1, $2, $3, $4) RETURNING *;`;
       for (let i = 0; i < documents.length; i++) {
         const document = documents[i];
         const documentUrl = documentUrls[i]; // Get the URL of the saved document photo

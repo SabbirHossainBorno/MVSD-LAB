@@ -11,6 +11,8 @@ import Image from 'next/image';
 const ProfessorDetails = () => {
   const [professorDetails, setProfessorDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const { id } = useParams();
   const router = useRouter(); // Initialize router
 
@@ -30,13 +32,30 @@ const ProfessorDetails = () => {
     fetchProfessorDetails();
   }, [id]);
 
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
+  };
+
   if (loading) return <LoadingSpinner />;
 
   if (!professorDetails || !professorDetails.basicInfo) return <div>Professor Details Not Found</div>;
 
+  const formatImageUrl = (url) => {
+    if (url.startsWith('//')) {
+      return `https:${url}`;
+    }
+    return url.startsWith('/') ? url : `/${url}`;
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
-            <Head>
+      <Head>
         <title>MVSD LAB - Professor Details - {professorDetails.basicInfo.id}</title>
       </Head>
       <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto">
@@ -53,13 +72,14 @@ const ProfessorDetails = () => {
 
         {/* Professor Photo and Basic Info */}
         <div className="text-center mb-10">
-        <Image 
-          src={professorDetails.basicInfo.photo} // Dynamic image source
-          alt={`${professorDetails.basicInfo.first_name} ${professorDetails.basicInfo.last_name}`} // Dynamic alt text
-          width={160} // 40 * 4 = 160px width
-          height={160} // 40 * 4 = 160px height
-          className="w-40 h-40 rounded-full mx-auto shadow-lg mb-4" // Tailwind classes for styling
-        />
+          <Image 
+            src={formatImageUrl(professorDetails.basicInfo.photo)} // Ensure valid URL
+            alt={`${professorDetails.basicInfo.first_name} ${professorDetails.basicInfo.last_name}`} // Dynamic alt text
+            width={160} // 40 * 4 = 160px width
+            height={160} // 40 * 4 = 160px height
+            className="w-40 h-40 rounded-full mx-auto shadow-lg mb-4" // Tailwind classes for styling
+            onClick={() => handleImageClick(formatImageUrl(professorDetails.basicInfo.photo))} // Open modal on click
+          />
           <h2 className="text-4xl font-extrabold text-blue-500">{`${professorDetails.basicInfo.first_name} ${professorDetails.basicInfo.last_name}`}</h2>
           <p className="text-gray-400 text-lg mt-4">{professorDetails.basicInfo.short_bio || 'No bio available'}</p>
         </div>
@@ -151,13 +171,14 @@ const ProfessorDetails = () => {
                   <p className="text-gray-400">{award.year}</p>
                   {award.award_photo ? (
                     <Image 
-                    src={award.award_photo} // Dynamic image source
-                    alt={award.title} // Dynamic alt text
-                    width={80} // 20 * 4 = 80px width
-                    height={80} // 20 * 4 = 80px height
-                    className="w-20 h-20 mt-4 rounded-lg object-cover" // Tailwind classes for styling
-                    onError={(e) => { e.target.onerror = null; e.target.src = '/fallback-image.png'; }} // Fallback image handler
-                  />
+                      src={formatImageUrl(award.award_photo)} // Ensure valid URL
+                      alt={award.title} // Dynamic alt text
+                      width={80} // 20 * 4 = 80px width
+                      height={80} // 20 * 4 = 80px height
+                      className="w-20 h-20 mt-4 rounded-lg object-cover cursor-pointer" // Tailwind classes for styling
+                      onClick={() => handleImageClick(formatImageUrl(award.award_photo))} // Open modal on click
+                      onError={(e) => { e.target.onerror = null; e.target.src = '/fallback-image.png'; }} // Fallback image handler
+                    />
                   ) : (
                     <div className="w-20 h-20 mt-4 rounded-lg bg-gray-500 flex items-center justify-center">
                       <span className="text-gray-300">No Image</span>
@@ -169,6 +190,29 @@ const ProfessorDetails = () => {
           </div>
         )}
 
+        {/* Modal */}
+        {isModalOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+            onClick={handleCloseModal}
+          >
+            <div className="relative bg-white p-4 rounded-lg shadow-lg">
+              <button
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                onClick={handleCloseModal}
+              >
+                &times;
+              </button>
+              <Image
+                src={selectedImage}
+                alt="Document Image"
+                width={800}
+                height={800}
+                className="object-contain"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
