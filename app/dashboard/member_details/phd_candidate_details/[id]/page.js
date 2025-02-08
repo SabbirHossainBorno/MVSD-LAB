@@ -1,43 +1,46 @@
-//app/dashboard/professor_details/[id]/page.js
+// app/dashboard/member_details/phd_candidate_details/[id]/page.js
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation'; // Import useRouter
-import LoadingSpinner from '../../../components/LoadingSpinner';
-import withAuth from '../../../components/withAuth';
+import LoadingSpinner from '../../../../components/LoadingSpinner';
+import withAuth from '../../../../components/withAuth';
 import Head from 'next/head'; // Import Head for setting the document title
 import Image from 'next/image';
 
-const ProfessorDetails = () => {
-  const [professorDetails, setProfessorDetails] = useState(null);
+const PhdCandidateDetails = () => {
+  const [phdCandidateDetails, setPhdCandidateDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const router = useRouter(); // Initialize router
 
   useEffect(() => {
-    const fetchProfessorDetails = async () => {
+    const fetchPhdCandidateDetails = async () => {
       try {
-        const response = await fetch(`/api/professor_details/${id}`);
+        const response = await fetch(`/api/member_details/phd_candidate_details/${id}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
         const data = await response.json();
-        setProfessorDetails(data);
+        setPhdCandidateDetails(data);
       } catch (error) {
-        console.error('Failed to fetch professor details:', error);
+        console.error('Failed to fetch PhD candidate details:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProfessorDetails();
+    fetchPhdCandidateDetails();
   }, [id]);
 
   if (loading) return <LoadingSpinner />;
 
-  if (!professorDetails || !professorDetails.basicInfo) return <div>Professor Details Not Found</div>;
+  if (!phdCandidateDetails || !phdCandidateDetails.basicInfo) return <div>PhD Candidate Details Not Found</div>;
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
-            <Head>
-        <title>MVSD LAB - Professor Details - {professorDetails.basicInfo.id}</title>
+      <Head>
+        <title>MVSD LAB - PhD Candidate Details - {phdCandidateDetails.basicInfo.id}</title>
       </Head>
       <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto">
 
@@ -51,22 +54,22 @@ const ProfessorDetails = () => {
           </button>
         </div>
 
-        {/* Professor Photo and Basic Info */}
+        {/* PhD Candidate Photo and Basic Info */}
         <div className="text-center mb-10">
-        <Image 
-          src={professorDetails.basicInfo.photo} // Dynamic image source
-          alt={`${professorDetails.basicInfo.first_name} ${professorDetails.basicInfo.last_name}`} // Dynamic alt text
-          width={160} // 40 * 4 = 160px width
-          height={160} // 40 * 4 = 160px height
-          className="w-40 h-40 rounded-full mx-auto shadow-lg mb-4" // Tailwind classes for styling
-        />
-          <h2 className="text-4xl font-extrabold text-blue-500">{`${professorDetails.basicInfo.first_name} ${professorDetails.basicInfo.last_name}`}</h2>
-          <p className="text-gray-400 text-lg mt-4">{professorDetails.basicInfo.short_bio || 'No bio available'}</p>
+          <Image 
+            src={phdCandidateDetails.basicInfo.photo} // Dynamic image source
+            alt={`${phdCandidateDetails.basicInfo.first_name} ${phdCandidateDetails.basicInfo.last_name}`} // Dynamic alt text
+            width={160} // 40 * 4 = 160px width
+            height={160} // 40 * 4 = 160px height
+            className="w-40 h-40 rounded-full mx-auto shadow-lg mb-4" // Tailwind classes for styling
+          />
+          <h2 className="text-4xl font-extrabold text-blue-500">{`${phdCandidateDetails.basicInfo.first_name} ${phdCandidateDetails.basicInfo.last_name}`}</h2>
+          <p className="text-gray-400 text-lg mt-4">{phdCandidateDetails.basicInfo.short_bio || 'No bio available'}</p>
         </div>
 
         {/* Social Media Section */}
         <div className="flex justify-center space-x-6 mb-10">
-          {professorDetails.socialMedia.map((social, index) => (
+          {phdCandidateDetails.socialMedia.map((social, index) => (
             <a key={index} href={social.link} target="_blank" rel="noopener noreferrer">
               <Image 
                 src={`/icons/${social.socialmedia_name.toLowerCase()}.png`} // Dynamic image source based on social media name
@@ -84,17 +87,17 @@ const ProfessorDetails = () => {
           {['phone', 'email', 'dob', 'joining_date', 'leaving_date'].map((field) => (
             <div key={field} className="bg-gray-700 p-4 rounded-lg shadow-lg">
               <h4 className="text-lg font-semibold text-indigo-400 capitalize">{field.replace('_', ' ')}</h4>
-              <p className="text-gray-300 mt-2">{professorDetails.basicInfo[field] || 'N/A'}</p>
+              <p className="text-gray-300 mt-2">{phdCandidateDetails.basicInfo[field] || 'N/A'}</p>
             </div>
           ))}
         </div>
 
         {/* Education Section */}
-        {professorDetails.education && professorDetails.education.length > 0 && (
+        {phdCandidateDetails.education && phdCandidateDetails.education.length > 0 && (
           <div className="mb-10">
             <h3 className="text-2xl font-semibold text-indigo-400 mb-5">Education</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {professorDetails.education.map((edu, index) => (
+              {phdCandidateDetails.education.map((edu, index) => (
                 <div key={index} className="bg-gray-700 p-4 rounded-lg shadow-lg">
                   <h4 className="text-lg font-semibold text-blue-500">{edu.degree}</h4>
                   <p className="text-gray-300 mt-2">{edu.institution}</p>
@@ -106,11 +109,11 @@ const ProfessorDetails = () => {
         )}
 
         {/* Career Section */}
-        {professorDetails.career && professorDetails.career.length > 0 && (
+        {phdCandidateDetails.career && phdCandidateDetails.career.length > 0 && (
           <div className="mb-10">
             <h3 className="text-2xl font-semibold text-indigo-400 mb-5">Career</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {professorDetails.career.map((job, index) => (
+              {phdCandidateDetails.career.map((job, index) => (
                 <div key={index} className="bg-gray-700 p-4 rounded-lg shadow-lg">
                   <h4 className="text-lg font-semibold text-blue-500">{job.position}</h4>
                   <p className="text-gray-300 mt-2">{job.organization_name}</p>
@@ -121,43 +124,24 @@ const ProfessorDetails = () => {
           </div>
         )}
 
-        {/* Citations Section */}
-        {professorDetails.citations && professorDetails.citations.length > 0 && (
+        {/* Document Section */}
+        {phdCandidateDetails.documents && phdCandidateDetails.documents.length > 0 && (
           <div className="mb-10">
-            <h3 className="text-2xl font-semibold text-indigo-400 mb-5">Citations</h3>
+            <h3 className="text-2xl font-semibold text-indigo-400 mb-5">Documents</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {professorDetails.citations.map((citation, index) => (
+              {phdCandidateDetails.documents.map((document, index) => (
                 <div key={index} className="bg-gray-700 p-4 rounded-lg shadow-lg">
-                  <h4 className="text-lg font-semibold text-blue-500">{citation.title}</h4>
-                  <p className="text-gray-300 mt-2">{citation.organization_name}</p>
-                  <a href={citation.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
-                    View Citation
-                  </a>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Awards Section */}
-        {professorDetails.awards && professorDetails.awards.length > 0 && (
-          <div className="mb-10">
-            <h3 className="text-2xl font-semibold text-indigo-400 mb-5">Awards</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {professorDetails.awards.map((award, index) => (
-                <div key={index} className="bg-gray-700 p-4 rounded-lg shadow-lg">
-                  <h4 className="text-lg font-semibold text-blue-500">{award.title}</h4>
-                  <p className="text-gray-300 mt-2">{award.details}</p>
-                  <p className="text-gray-400">{award.year}</p>
-                  {award.award_photo ? (
+                  <h4 className="text-lg font-semibold text-blue-500">{document.title}</h4>
+                  <p className="text-gray-400">{document.type}</p>
+                  {document.document_photo ? (
                     <Image 
-                    src={award.award_photo} // Dynamic image source
-                    alt={award.title} // Dynamic alt text
-                    width={80} // 20 * 4 = 80px width
-                    height={80} // 20 * 4 = 80px height
-                    className="w-20 h-20 mt-4 rounded-lg object-cover" // Tailwind classes for styling
-                    onError={(e) => { e.target.onerror = null; e.target.src = '/fallback-image.png'; }} // Fallback image handler
-                  />
+                      src={document.document_photo} // Dynamic image source
+                      alt={document.title} // Dynamic alt text
+                      width={80} // 20 * 4 = 80px width
+                      height={80} // 20 * 4 = 80px height
+                      className="w-20 h-20 mt-4 rounded-lg object-cover" // Tailwind classes for styling
+                      onError={(e) => { e.target.onerror = null; e.target.src = '/fallback-image.png'; }} // Fallback image handler
+                    />
                   ) : (
                     <div className="w-20 h-20 mt-4 rounded-lg bg-gray-500 flex items-center justify-center">
                       <span className="text-gray-300">No Image</span>
@@ -174,4 +158,4 @@ const ProfessorDetails = () => {
   );
 };
 
-export default withAuth(ProfessorDetails);
+export default withAuth(PhdCandidateDetails);
