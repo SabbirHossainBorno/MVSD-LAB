@@ -34,13 +34,13 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
   return (
     <aside className={`fixed top-0 left-0 w-64 bg-gray-900 text-white h-full p-6 transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:w-64 md:flex md:flex-col z-50 shadow-lg overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent`}>
       {/* Logo and Title - Fixed */}
-      <div className="flex flex-col items-center justify-center mb-1 sticky top-0 bg-gray-900 p-1 z-40">
+      <div className="flex flex-col items-center justify-center sticky top-0 bg-gray-900 p-2 z-40">
         <Image src="/images/dashboardSidebar_logo.svg" alt="Logo" width={340} height={240} className="object-contain mb-1"/>
         <hr className="w-full border-t-4 border-indigo-600 mt-1 rounded"/>
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-1 mt-1 space-y-2 overflow-y-auto pr-2">
+      <nav className="flex-1 space-y-2 overflow-y-auto p-2">
         <Link href="/dashboard">
           <div className={`block w-full p-2 mb-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isActive('/dashboard') ? 'bg-indigo-700' : ''}`}>
             <Image src="/icons/dashboard.png" alt="Dashboard" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
@@ -153,6 +153,21 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
           </div>
         </Link>
       </nav>
+
+      {/* Footer */}
+      <div className="sticky bottom-0 w-full bg-transparent mt-2 z-40 flex justify-center items-center shadow-lg">
+        <p className="text-xs text-gray-400 font-medium text-center">
+          ©  
+          <a href="https://www.mvsdlab.com" target="_blank" className="font-semibold text-white hover:text-indigo-400 transition duration-300">
+            MVSD LAB
+          </a>  
+          , 2025, All Rights Reserved.
+        </p>
+      </div>
+
+
+
+
     </aside>
   );
 }
