@@ -37,6 +37,13 @@ const PhdCandidateDetails = () => {
 
   if (!phdCandidateDetails || !phdCandidateDetails.basicInfo) return <div>PhD Candidate Details Not Found</div>;
 
+  const formatImageUrl = (url) => {
+    if (url.startsWith('//')) {
+      return `https:${url}`;
+    }
+    return url.startsWith('/') ? url : `/${url}`;
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
       <Head>
@@ -57,7 +64,7 @@ const PhdCandidateDetails = () => {
         {/* PhD Candidate Photo and Basic Info */}
         <div className="text-center mb-10">
           <Image 
-            src={phdCandidateDetails.basicInfo.photo} // Dynamic image source
+            src={formatImageUrl(phdCandidateDetails.basicInfo.photo)} // Ensure valid URL
             alt={`${phdCandidateDetails.basicInfo.first_name} ${phdCandidateDetails.basicInfo.last_name}`} // Dynamic alt text
             width={160} // 40 * 4 = 160px width
             height={160} // 40 * 4 = 160px height
@@ -84,7 +91,7 @@ const PhdCandidateDetails = () => {
 
         {/* Basic Info Section */}
         <div className="mb-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {['phone', 'email', 'dob', 'joining_date', 'leaving_date'].map((field) => (
+          {['phone', 'email', 'dob', 'admission_date', 'completion_date'].map((field) => (
             <div key={field} className="bg-gray-700 p-4 rounded-lg shadow-lg">
               <h4 className="text-lg font-semibold text-indigo-400 capitalize">{field.replace('_', ' ')}</h4>
               <p className="text-gray-300 mt-2">{phdCandidateDetails.basicInfo[field] || 'N/A'}</p>
@@ -135,7 +142,7 @@ const PhdCandidateDetails = () => {
                   <p className="text-gray-400">{document.type}</p>
                   {document.document_photo ? (
                     <Image 
-                      src={document.document_photo} // Dynamic image source
+                      src={formatImageUrl(document.document_photo)} // Ensure valid URL
                       alt={document.title} // Dynamic alt text
                       width={80} // 20 * 4 = 80px width
                       height={80} // 20 * 4 = 80px height
