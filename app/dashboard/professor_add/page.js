@@ -7,13 +7,20 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import withAuth from '../../components/withAuth';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import countryList from 'react-select-country-list';
 
 
 const AddProfessor = () => {
+  const countries = countryList().getLabels(); // Get country names
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
     phone: '',
+    gender: '',
+    bloodGroup: "",
+    country: '',
+    idNumber: '',
+    passport_number: '',
     dob: '',
     email: '',
     password: '',
@@ -193,6 +200,93 @@ const AddProfessor = () => {
               />
             </div>
             <div className="mb-4">
+              <label htmlFor="gender" className="block text-gray-300 mb-2">
+                Gender
+              </label>
+              <select
+                id="gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+                required
+              >
+                <option value="" disabled className="text-gray-400">
+                  Select Gender
+                </option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label htmlFor="bloodGroup" className="block text-gray-300 mb-2">
+                Blood Group
+              </label>
+              <select
+                id="bloodGroup"
+                name="bloodGroup"
+                value={formData.bloodGroup}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+                required
+              >
+                <option value="" disabled className="text-gray-400">
+                  Select Blood Group
+                </option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label htmlFor="country" className="block text-gray-300 mb-2">
+                Country
+              </label>
+              <select
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+                required
+              >
+                <option value="" disabled className="text-gray-400">Select Country</option>
+                {countries.map((country, index) => (
+                  <option key={index} value={country}>{country}</option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-4">
+              <label htmlFor="idNumber" className="block text-gray-300 mb-2">
+                Identification Number
+              </label>
+              <input
+                type="number"
+                name="idNumber"
+                value={formData.idNumber}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-gray-700 text-gray-300"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="passport_number" className="block text-gray-300 mb-2">
+                Passport Number
+              </label>
+              <input
+                type="text"
+                name="passport_number"
+                value={formData.passport_number}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-gray-700 text-gray-300"
+                required
+              />
+            </div>
+            <div className="mb-4">
               <label htmlFor="email" className="block text-gray-300 mb-2">
               Email
               </label>
@@ -230,6 +324,18 @@ const AddProfessor = () => {
                 onChange={handleChange}
                 className="w-full p-3 rounded bg-gray-700 text-gray-300"
                 required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="type" className="block text-gray-300 mb-2">
+                Type
+              </label>
+              <input
+                type="text"
+                name="type"
+                value={formData.type}
+                className="w-full p-3 rounded bg-gray-700 mb-4"
+                readOnly
               />
             </div>
             <div className="mb-4">

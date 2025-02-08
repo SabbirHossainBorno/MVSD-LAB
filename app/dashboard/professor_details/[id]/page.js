@@ -1,12 +1,14 @@
-//app/dashboard/professor_details/[id]/page.js
+// app/dashboard/professor_details/[id]/page.js
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation'; // Import useRouter
+import { useParams, useRouter } from 'next/navigation';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import withAuth from '../../../components/withAuth';
-import Head from 'next/head'; // Import Head for setting the document title
 import Image from 'next/image';
+import { FiMail, FiPhone, FiCalendar, FiBook, FiBriefcase, FiFile, FiX } from 'react-icons/fi';
+import { FaRegIdBadge } from "react-icons/fa";
+import { GiPassport } from "react-icons/gi";
 
 const ProfessorDetails = () => {
   const [professorDetails, setProfessorDetails] = useState(null);
@@ -14,22 +16,25 @@ const ProfessorDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const { id } = useParams();
-  const router = useRouter(); // Initialize router
+  const router = useRouter();
 
   useEffect(() => {
+    const controller = new AbortController();
     const fetchProfessorDetails = async () => {
       try {
-        const response = await fetch(`/api/professor_details/${id}`);
+        const response = await fetch(`/api/professor_details/${id}`, { signal: controller.signal });
+        if (!response.ok) throw new Error('Network error');
         const data = await response.json();
         setProfessorDetails(data);
       } catch (error) {
-        console.error('Failed to fetch professor details:', error);
+        if (error.name !== 'AbortError') console.error('Failed to fetch professor details:', error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProfessorDetails();
+    return () => controller.abort();
   }, [id]);
 
   const handleImageClick = (imageUrl) => {
@@ -42,174 +47,205 @@ const ProfessorDetails = () => {
     setSelectedImage(null);
   };
 
-  if (loading) return <LoadingSpinner />;
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  };
 
+  if (loading) return <LoadingSpinner />;
   if (!professorDetails || !professorDetails.basicInfo) return <div>Professor Details Not Found</div>;
 
   const formatImageUrl = (url) => {
-    if (url.startsWith('//')) {
-      return `https:${url}`;
-    }
+    if (!url) return '/images/default-avatar.png';
+    if (url.startsWith('//')) return `https:${url}`;
     return url.startsWith('/') ? url : `/${url}`;
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
-      <Head>
-        <title>MVSD LAB - Professor Details - {professorDetails.basicInfo.id}</title>
-      </Head>
-      <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto">
-
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-blue-900 text-slate-100 p-4 sm:p-8">
+      <div className="max-w-7xl mx-auto space-y-12">
         {/* Back Button */}
-        <div className="mb-4">
-          <button 
-            onClick={() => router.back()} 
-            className="text-blue-500 hover:text-blue-300 font-semibold"
-          >
-            &lt; Back
-          </button>
-        </div>
+        <button
+          onClick={() => router.back()}
+          className="flex items-center text-blue-300 hover:text-blue-100 transition-colors group"
+        >
+          <span className="mr-2 group-hover:-translate-x-1 transition-transform">←</span>
+          Back to Member List
+        </button>
 
-        {/* Professor Photo and Basic Info */}
-        <div className="text-center mb-10">
-          <Image 
-            src={formatImageUrl(professorDetails.basicInfo.photo)} // Ensure valid URL
-            alt={`${professorDetails.basicInfo.first_name} ${professorDetails.basicInfo.last_name}`} // Dynamic alt text
-            width={160} // 40 * 4 = 160px width
-            height={160} // 40 * 4 = 160px height
-            className="w-40 h-40 rounded-full mx-auto shadow-lg mb-4" // Tailwind classes for styling
-            onClick={() => handleImageClick(formatImageUrl(professorDetails.basicInfo.photo))} // Open modal on click
-          />
-          <h2 className="text-4xl font-extrabold text-blue-500">{`${professorDetails.basicInfo.first_name} ${professorDetails.basicInfo.last_name}`}</h2>
-          <p className="text-gray-400 text-lg mt-4">{professorDetails.basicInfo.short_bio || 'No bio available'}</p>
-        </div>
-
-        {/* Social Media Section */}
-        <div className="flex justify-center space-x-6 mb-10">
-          {professorDetails.socialMedia.map((social, index) => (
-            <a key={index} href={social.link} target="_blank" rel="noopener noreferrer">
-              <Image 
-                src={`/icons/${social.socialmedia_name.toLowerCase()}.png`} // Dynamic image source based on social media name
-                alt={social.socialmedia_name} // Alt text for accessibility
-                width={32} // 8 * 4 = 32px width
-                height={32} // 8 * 4 = 32px height
-                className="w-8 h-8" // Tailwind classes for sizing
+        {/* Profile Header */}
+        <div className="bg-gray-800/50 backdrop-blur-lg rounded p-8 shadow-2xl">
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <div className="relative group w-48 h-48 shrink-0">
+              <Image
+                src={formatImageUrl(professorDetails.basicInfo.photo)}
+                alt={`${professorDetails.basicInfo.first_name} ${professorDetails.basicInfo.last_name}`}
+                width={192}
+                height={192}
+                className="w-full h-full rounded object-cover transform group-hover:scale-105 transition-transform duration-300"
+                onClick={() => handleImageClick(formatImageUrl(professorDetails.basicInfo.photo))}
               />
-            </a>
-          ))}
-        </div>
-
-        {/* Basic Info Section */}
-        <div className="mb-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {['phone', 'email', 'dob', 'joining_date', 'leaving_date'].map((field) => (
-            <div key={field} className="bg-gray-700 p-4 rounded-lg shadow-lg">
-              <h4 className="text-lg font-semibold text-indigo-400 capitalize">{field.replace('_', ' ')}</h4>
-              <p className="text-gray-300 mt-2">{professorDetails.basicInfo[field] || 'N/A'}</p>
+              <div className="absolute inset-0 border-2 border-blue-400/30 rounded pointer-events-none" />
             </div>
-          ))}
-        </div>
 
-        {/* Education Section */}
-        {professorDetails.education && professorDetails.education.length > 0 && (
-          <div className="mb-10">
-            <h3 className="text-2xl font-semibold text-indigo-400 mb-5">Education</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {professorDetails.education.map((edu, index) => (
-                <div key={index} className="bg-gray-700 p-4 rounded-lg shadow-lg">
-                  <h4 className="text-lg font-semibold text-blue-500">{edu.degree}</h4>
-                  <p className="text-gray-300 mt-2">{edu.institution}</p>
-                  <p className="text-gray-400">{edu.passing_year}</p>
-                </div>
-              ))}
+            <div className="text-center md:text-left space-y-4">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                {`${professorDetails.basicInfo.first_name} ${professorDetails.basicInfo.last_name}`}
+              </h1>
+              <p className="text-xl text-gray-300 font-light max-w-2xl text-justify">
+                {professorDetails.basicInfo.short_bio || 'Distinguished Professor at MVSD Lab'}
+              </p>
+
+              <div className="flex justify-center md:justify-start space-x-4">
+                {professorDetails.socialMedia.map((social, index) => (
+                  <a
+                    key={index}
+                    href={social.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded bg-gray-700 hover:bg-white hover:text-gray-900 transition-colors duration-300"
+                  >
+                    <Image
+                      src={`/icons/${social.socialmedia_name.toLowerCase()}.png`}
+                      alt={social.socialmedia_name}
+                      width={24}
+                      height={24}
+                      className="w-6 h-6"
+                    />
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
-        )}
+        </div>
 
-        {/* Career Section */}
-        {professorDetails.career && professorDetails.career.length > 0 && (
-          <div className="mb-10">
-            <h3 className="text-2xl font-semibold text-indigo-400 mb-5">Career</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Details Sections */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Basic Information */}
+          <section className="bg-gray-800/50 backdrop-blur-lg p-8 rounded shadow-xl">
+            <h2 className="text-2xl font-semibold mb-6 text-blue-300 flex items-center gap-2">
+              <FiBook className="inline-block" /> Basic Information
+            </h2>
+            <div className="space-y-4">
+              <InfoItem icon={<FiMail />} label="Email" value={professorDetails.basicInfo.email} />
+              <InfoItem icon={<FiPhone />} label="Phone" value={professorDetails.basicInfo.phone} />
+              <InfoItem icon={<FiCalendar />} label="Date of Birth" value={formatDate(professorDetails.basicInfo.dob)} />
+              <InfoItem icon={<FiCalendar />} label="Joining Date" value={formatDate(professorDetails.basicInfo.joining_date)} />
+              <InfoItem icon={<FiCalendar />} label="Leaving Date" value={formatDate(professorDetails.basicInfo.leaving_date)} />
+              <InfoItem icon={<FaRegIdBadge />} label="ID Number" value={professorDetails.basicInfo.id_number} />
+              <InfoItem icon={<GiPassport />} label="Passport Number" value={professorDetails.basicInfo.passport_number} />
+            </div>
+          </section>
+
+          {/* Education Timeline */}
+          {professorDetails.education?.length > 0 && (
+            <section className="bg-gray-800/50 backdrop-blur-lg p-8 rounded shadow-xl">
+              <h2 className="text-2xl font-semibold mb-6 text-purple-300 flex items-center gap-2">
+                <FiBriefcase className="inline-block" /> Education
+              </h2>
+              <div className="space-y-6 relative before:absolute before:left-8 before:h-full before:w-0.5 before:bg-gray-600">
+                {professorDetails.education.map((edu, index) => (
+                  <TimelineItem
+                    key={index}
+                    title={edu.degree}
+                    subtitle={edu.institution}
+                    year={edu.passing_year}
+                    isLast={index === professorDetails.education.length - 1}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+
+        {/* Career Timeline */}
+        {professorDetails.career?.length > 0 && (
+          <section className="bg-gray-800/50 backdrop-blur-lg p-8 rounded shadow-xl">
+            <h2 className="text-2xl font-semibold mb-6 text-green-300 flex items-center gap-2">
+              <FiBriefcase className="inline-block" /> Professional Experience
+            </h2>
+            <div className="space-y-6 relative before:absolute before:left-8 before:h-full before:w-0.5 before:bg-gray-600">
               {professorDetails.career.map((job, index) => (
-                <div key={index} className="bg-gray-700 p-4 rounded-lg shadow-lg">
-                  <h4 className="text-lg font-semibold text-blue-500">{job.position}</h4>
-                  <p className="text-gray-300 mt-2">{job.organization_name}</p>
-                  <p className="text-gray-400">{job.joining_year} - {job.leaving_year || 'Present'}</p>
-                </div>
+                <TimelineItem
+                  key={index}
+                  title={job.position}
+                  subtitle={job.organization_name}
+                  year={`${job.joining_year} - ${job.leaving_year || 'Present'}`}
+                  isLast={index === professorDetails.career.length - 1}
+                />
               ))}
             </div>
-          </div>
+          </section>
         )}
 
         {/* Citations Section */}
-        {professorDetails.citations && professorDetails.citations.length > 0 && (
-          <div className="mb-10">
-            <h3 className="text-2xl font-semibold text-indigo-400 mb-5">Citations</h3>
+        {professorDetails.citations?.length > 0 && (
+          <section className="bg-gray-800/50 backdrop-blur-lg p-8 rounded shadow-xl">
+            <h2 className="text-2xl font-semibold mb-6 text-yellow-300 flex items-center gap-2">
+              <FiFile className="inline-block" /> Citations
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {professorDetails.citations.map((citation, index) => (
-                <div key={index} className="bg-gray-700 p-4 rounded-lg shadow-lg">
-                  <h4 className="text-lg font-semibold text-blue-500">{citation.title}</h4>
+                <div key={index} className="bg-gray-700 p-6 rounded-lg hover:bg-gray-600/50 transition-colors">
+                  <h3 className="text-lg font-semibold text-blue-400">{citation.title}</h3>
                   <p className="text-gray-300 mt-2">{citation.organization_name}</p>
-                  <a href={citation.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
-                    View Citation
+                  <a
+                    href={citation.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block mt-4 text-blue-400 hover:text-blue-300 transition-colors"
+                  >
+                    View Citation →
                   </a>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         )}
 
-        {/* Awards Section */}
-        {professorDetails.awards && professorDetails.awards.length > 0 && (
-          <div className="mb-10">
-            <h3 className="text-2xl font-semibold text-indigo-400 mb-5">Awards</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Awards Gallery */}
+        {professorDetails.awards?.length > 0 && (
+          <section className="bg-gray-800/50 backdrop-blur-lg p-8 rounded shadow-xl">
+            <h2 className="text-2xl font-semibold mb-6 text-yellow-300 flex items-center gap-2">
+              <FiFile className="inline-block" /> Awards
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {professorDetails.awards.map((award, index) => (
-                <div key={index} className="bg-gray-700 p-4 rounded-lg shadow-lg">
-                  <h4 className="text-lg font-semibold text-blue-500">{award.title}</h4>
-                  <p className="text-gray-300 mt-2">{award.details}</p>
-                  <p className="text-gray-400">{award.year}</p>
-                  {award.award_photo ? (
-                    <Image 
-                      src={formatImageUrl(award.award_photo)} // Ensure valid URL
-                      alt={award.title} // Dynamic alt text
-                      width={80} // 20 * 4 = 80px width
-                      height={80} // 20 * 4 = 80px height
-                      className="w-20 h-20 mt-4 rounded-lg object-cover cursor-pointer" // Tailwind classes for styling
-                      onClick={() => handleImageClick(formatImageUrl(award.award_photo))} // Open modal on click
-                      onError={(e) => { e.target.onerror = null; e.target.src = '/fallback-image.png'; }} // Fallback image handler
-                    />
-                  ) : (
-                    <div className="w-20 h-20 mt-4 rounded-lg bg-gray-500 flex items-center justify-center">
-                      <span className="text-gray-300">No Image</span>
-                    </div>
-                  )}
-                </div>
+                <DocumentCard
+                  key={index}
+                  title={award.title}
+                  type={award.year}
+                  imageUrl={formatImageUrl(award.award_photo)}
+                  onClick={() => handleImageClick(formatImageUrl(award.award_photo))}
+                />
               ))}
             </div>
-          </div>
+          </section>
         )}
 
-        {/* Modal */}
+        {/* Image Modal */}
         {isModalOpen && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
-            onClick={handleCloseModal}
-          >
-            <div className="relative bg-white p-4 rounded-lg shadow-lg">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-xl flex items-center justify-center z-50 p-4">
+            <div className="relative max-w-4xl w-full">
               <button
-                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
                 onClick={handleCloseModal}
+                className="absolute -top-2 -right-2 text-white hover:text-blue-300 z-50 transition-colors"
               >
-                &times;
+                <FiX className="w-8 h-8" />
               </button>
-              <Image
-                src={selectedImage}
-                alt="Document Image"
-                width={800}
-                height={800}
-                className="object-contain"
-              />
+              <div className="bg-gray-900 rounded overflow-hidden shadow-2xl p-2">
+                <Image
+                  src={selectedImage}
+                  alt="Document preview"
+                  width={1200}
+                  height={800}
+                  className="object-contain w-full h-full max-h-[80vh]"
+                />
+              </div>
             </div>
           </div>
         )}
@@ -217,5 +253,54 @@ const ProfessorDetails = () => {
     </div>
   );
 };
+
+// Reusable Components (Same as PhD Candidate Details)
+const InfoItem = ({ icon, label, value }) => (
+  <div className="flex items-start space-x-4">
+    <div className="text-blue-400 mt-1">{icon}</div>
+    <div>
+      <p className="text-sm font-medium text-gray-400">{label}</p>
+      <p className="text-gray-200">{value || 'N/A'}</p>
+    </div>
+  </div>
+);
+
+const TimelineItem = ({ title, subtitle, year, isLast }) => (
+  <div className="relative pl-14">
+    <div className="absolute left-8 top-4 w-4 h-4 bg-blue-500 rounded-full transform -translate-x-1/2 z-10" />
+    {!isLast && <div className="absolute left-8 top-8 bottom-0 w-0.5 bg-gray-600" />}
+    <div className="space-y-1">
+      <h3 className="text-lg font-semibold text-gray-100">{title}</h3>
+      <p className="text-gray-400">{subtitle}</p>
+      <p className="text-sm text-blue-400">{year}</p>
+    </div>
+  </div>
+);
+
+const DocumentCard = ({ title, type, imageUrl, onClick }) => (
+  <div 
+    className="group relative bg-gray-700 rounded overflow-hidden cursor-pointer transform transition-all hover:-translate-y-2 shadow-lg"
+    onClick={onClick}
+  >
+    <div className="aspect-square bg-gray-600 relative">
+      {imageUrl ? (
+        <Image
+          src={imageUrl}
+          alt={title}
+          fill
+          className="object-cover group-hover:opacity-80 transition-opacity"
+        />
+      ) : (
+        <div className="w-full h-full flex items-center justify-center text-gray-400">
+          <FiFile className="w-12 h-12" />
+        </div>
+      )}
+    </div>
+    <div className="p-4 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent">
+      <h4 className="font-medium text-white truncate">{title}</h4>
+      <p className="text-sm text-gray-400 truncate">{type}</p>
+    </div>
+  </div>
+);
 
 export default withAuth(ProfessorDetails);
