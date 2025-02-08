@@ -155,7 +155,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
       </nav>
 
       {/* Footer */}
-      <div className="sticky bottom-0 w-full bg-transparent mt-2 z-40 flex justify-center items-center shadow-lg">
+      <div className="sticky bottom-0 w-full bg-transparent mt-2 z-40 flex justify-center items-center">
         <p className="text-xs text-gray-400 font-medium text-center">
           ©  
           <a href="https://www.mvsdlab.com" target="_blank" className="font-semibold text-white hover:text-indigo-400 transition duration-300">
@@ -164,7 +164,6 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
           , 2025, All Rights Reserved.
         </p>
       </div>
-
 
 
 
