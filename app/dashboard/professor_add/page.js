@@ -1,4 +1,4 @@
-//app/dashboard/professor_add/page.js
+// app/dashboard/professor_add/page.js
 'use client';
 
 import { useState, useCallback } from 'react';
@@ -8,6 +8,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import withAuth from '../../components/withAuth';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import countryList from 'react-select-country-list';
+import { 
+  FiUser, FiMail, FiPhone, FiCalendar, FiBook, FiBriefcase, FiFileText, 
+  FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
+  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo,
+} from 'react-icons/fi';
 
 
 const AddProfessor = () => {
@@ -152,577 +157,736 @@ const AddProfessor = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
-      <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold mb-6 text-center">Add Professor</h2>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-blue-900 text-slate-100 p-4 sm:p-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <button
+            onClick={() => router.back()}
+            className="flex items-center text-blue-300 hover:text-blue-100 transition-colors group"
+          >
+            <span className="mr-2 group-hover:-translate-x-1 transition-transform">←</span>
+            Back to Dashboard
+          </button>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            Add New Professor
+          </h1>
+        </div>
 
-        {/* Basic Info Section */}
-        <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4">Basic Info</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="mb-4">
-              <label htmlFor="first_name" className="block text-gray-300 mb-2">
-              First Name
-              </label>
-              <input
-                type="text"
-                name="first_name"
-                value={formData.first_name}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="last_name" className="block text-gray-300 mb-2">
-              Last Name
-              </label>
-              <input
-                type="text"
-                name="last_name"
-                value={formData.last_name}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="phone" className="block text-gray-300 mb-2">
-              Phone No
-              </label>
-              <input
-                type="number"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="gender" className="block text-gray-300 mb-2">
-                Gender
-              </label>
-              <select
-                id="gender"
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
-                required
-              >
-                <option value="" disabled className="text-gray-400">
-                  Select Gender
-                </option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <div className="mb-4">
-              <label htmlFor="bloodGroup" className="block text-gray-300 mb-2">
-                Blood Group
-              </label>
-              <select
-                id="bloodGroup"
-                name="bloodGroup"
-                value={formData.bloodGroup}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
-                required
-              >
-                <option value="" disabled className="text-gray-400">
-                  Select Blood Group
-                </option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="O-">O-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
-              </select>
-            </div>
-            <div className="mb-4">
-              <label htmlFor="country" className="block text-gray-300 mb-2">
-                Country
-              </label>
-              <select
-                name="country"
-                value={formData.country}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
-                required
-              >
-                <option value="" disabled className="text-gray-400">Select Country</option>
-                {countries.map((country, index) => (
-                  <option key={index} value={country}>{country}</option>
-                ))}
-              </select>
-            </div>
-            <div className="mb-4">
-              <label htmlFor="idNumber" className="block text-gray-300 mb-2">
-                Identification Number
-              </label>
-              <input
-                type="number"
-                name="idNumber"
-                value={formData.idNumber}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="passport_number" className="block text-gray-300 mb-2">
-                Passport Number
-              </label>
-              <input
-                type="text"
-                name="passport_number"
-                value={formData.passport_number}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-300 mb-2">
-              Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="dob" className="block text-gray-300 mb-2">
-                Date of Birth
-              </label>
-              <input
-                type="date"
-                id="dob"
-                name="dob"
-                value={formData.dob}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="joining_date" className="block text-gray-300 mb-2">
-              Joining Date
-              </label>
-              <input
-                type="date"
-                name="joining_date"
-                value={formData.joining_date}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="type" className="block text-gray-300 mb-2">
-                Type
-              </label>
-              <input
-                type="text"
-                name="type"
-                value={formData.type}
-                className="w-full p-3 rounded bg-gray-700 mb-4"
-                readOnly
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-300 mb-2">
-              Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="confirm_password" className="block text-gray-300 mb-2">
-              Confirm Password
-              </label>
-              <input
-                type="password"
-                name="confirm_password"
-                value={formData.confirm_password}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="type" className="block text-gray-300 mb-2">
-                Type
-              </label>
-              <input
-                type="text"
-                name="type"
-                value={formData.type}
-                className="w-full p-3 rounded bg-gray-700 mb-4"
-                readOnly
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="status" className="block text-gray-300 mb-2">
-                Status
-              </label>
-              <input
-                type="text"
-                name="status"
-                value={formData.status}
-                className="w-full p-3 rounded bg-gray-700 mb-4"
-                readOnly
-              />
-            </div>
+        {/* Main Form */}
+        <form onSubmit={handleSubmit} className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-2xl p-6 space-y-8">
+          {/* Personal Information Section */}
+          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-blue-300">
+              <FiUser className="w-6 h-6" /> Personal Information
+            </h2>
             
-            <div className="mb-4">
-              <label htmlFor="photo" className="block text-gray-300 mb-2">
-                Photo
-              </label>
-              <input
-                type="file"
-                id="photo"
-                name="photo"
-                accept=".jpg, .jpeg, .png"
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="leaving_date" className="block text-gray-300 mb-2">
-                Leaving Date
-              </label>
-              <input
-                type="date"
-                name="leaving_date"
-                value={formData.leaving_date}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300 cursor-not-allowed"
-                readOnly
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="short_bio" className="block text-gray-300 mb-2">
-              Short Bio
-              </label>
-              <textarea
-                type="details"
-                name="short_bio"
-                value={formData.short_bio}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-700 text-gray-300"
-                required
-              />
-            </div>
-          </div>
-        </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* First Name */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">First Name</label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="first_name"
+                    value={formData.first_name}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+                    required
+                  />
+                  <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+              </div>
 
-        {/* Social Media Section */}
-      <div className="mb-8">
-        <h3 className="text-xl font-bold mb-4">Social Media</h3>
-        {socialMedia.map((sm, index) => (
-          <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 relative">
-            <select
-              name="socialMedia_name"
-              value={sm.socialMedia_name}
-              onChange={(e) => handleArrayChange(setSocialMedia, index, 'socialMedia_name', e.target.value)}
-              className="w-full p-3 rounded bg-gray-700 text-gray-300"
-              required
+              {/* Last Name */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Last Name</label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="last_name"
+                    value={formData.last_name}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+                    required
+                  />
+                  <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+              </div>
+
+              {/* Email */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Email</label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+                    required
+                  />
+                  <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+              </div>
+
+              {/* Phone */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Phone</label>
+                <div className="relative">
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+                    required
+                  />
+                  <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+              </div>
+
+              {/* Country */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Country</label>
+                <div className="relative">
+                  <select
+                    name="country"
+                    value={formData.country}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                    required
+                  >
+                    <option value="">Select Country</option>
+                    {countries.map((country) => (
+                      <option key={country} value={country}>{country}</option>
+                    ))}
+                  </select>
+                  <FiGlobe className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* Date of Birth */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Date of Birth</label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    name="dob"
+                    value={formData.dob}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none appearance-none"
+                    required
+                  />
+                  <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+              </div>
+              {/* Gender */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Gender</label>
+                <div className="relative">
+                  <select
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                    required
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* Blood Group */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Blood Group</label>
+                <div className="relative">
+                  <select
+                    name="bloodGroup"
+                    value={formData.bloodGroup}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                    required
+                  >
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                  </select>
+                  <FiActivity className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* ID Number */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">ID Number</label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="idNumber"
+                    value={formData.idNumber}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                    required
+                  />
+                  <FiFileText className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+              </div>
+
+              {/* Passport Number */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Passport Number</label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="passport_number"
+                    value={formData.passport_number}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                    required
+                  />
+                  <FiGlobe className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+              </div>
+
+              {/* Joining Date */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Joining Date</label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    name="joining_date"
+                    value={formData.joining_date}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                    required
+                  />
+                  <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+              </div>
+
+              {/* Leaving Date */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Leaving Date</label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    name="leaving_date"
+                    value={formData.leaving_date}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-700 rounded-lg border border-gray-600 cursor-not-allowed"
+                    readOnly
+                  />
+                  <FiAlertCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                </div>
+              </div>
+
+              {/* Password */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Password</label>
+                <div className="relative">
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                    required
+                  />
+                  <FiAlertCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+              </div>
+
+              {/* Confirm Password */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Confirm Password</label>
+                <div className="relative">
+                  <input
+                    type="password"
+                    name="confirm_password"
+                    value={formData.confirm_password}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                    required
+                  />
+                  <FiAlertCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+              </div>
+
+              {/* Type */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Type</label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="type"
+                    value={formData.type}
+                    readOnly
+                    className="w-full pl-10 pr-4 py-3 bg-gray-700 rounded-lg border border-gray-600 cursor-not-allowed"
+                  />
+                  <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                </div>
+              </div>
+
+              {/* Status */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Status</label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="status"
+                    value={formData.status}
+                    readOnly
+                    className="w-full pl-10 pr-4 py-3 bg-gray-700 rounded-lg border border-gray-600 cursor-not-allowed"
+                  />
+                  <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                </div>
+              </div>
+
+              {/* Photo Upload */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Profile Photo</label>
+                <div className="relative">
+                  <input
+                    type="file"
+                    name="photo"
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                    accept="image/*"
+                  />
+                  <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+              </div>
+
+              {/* Short Bio */}
+              <div className="space-y-2 col-span-full">
+                <label className="block text-sm font-medium text-gray-300">Short Bio</label>
+                <div className="relative">
+                  <textarea
+                    name="short_bio"
+                    value={formData.short_bio}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none min-h-[120px]"
+                    required
+                  />
+                  <FiFileText className="absolute left-3 top-4 text-gray-400" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Social Media Section */}
+          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-purple-300">
+              <FiLinkedin className="w-6 h-6" /> Social Profiles
+            </h2>
+            
+            {socialMedia.map((sm, index) => (
+              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="relative">
+                  <select
+                    name="socialMedia_name"
+                    value={sm.socialMedia_name}
+                    onChange={(e) => handleArrayChange(setSocialMedia, index, 'socialMedia_name', e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                    required
+                  >
+                    <option value="">Select Platform</option>
+                    <option value="Linkedin">LinkedIn</option>
+                    <option value="GitHub">GitHub</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="X">X (Twitter)</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="Website">Personal Website</option>
+                  </select>
+                  <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+                
+                <div className="relative">
+                  <input
+                    type="url"
+                    placeholder="Profile URL"
+                    value={sm.link}
+                    onChange={(e) => handleArrayChange(setSocialMedia, index, 'link', e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                    required
+                  />
+                  {sm.socialMedia_name === 'GitHub' ? (
+                    <FiGithub className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : (
+                    <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  )}
+                </div>
+
+                {socialMedia.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeField(setSocialMedia, index)}
+                    className="absolute -right-4 -top-4 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <FiX className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={() => addNewField(setSocialMedia, { socialMedia_name: '', link: '' })}
+              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
             >
-              <option value="">Select Social Media</option>
-              <option value="Facebook">Facebook</option>
-              <option value="X">X</option>
-              <option value="Instagram">Instagram</option>
-              <option value="Linkedin">Linkedin</option>
-              <option value="GitHub">GitHub</option>
-              <option value="Website">Website</option>
-            </select>
-            <input
-              type="url"
-              name="link"
-              placeholder="Link"
-              value={sm.link}
-              onChange={(e) => handleArrayChange(setSocialMedia, index, 'link', e.target.value)}
-              className="w-full p-3 rounded bg-gray-700 text-gray-300"
-              required
-            />
-            {socialMedia.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeField(setSocialMedia, index)}
-                className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-              >
-                Remove
-              </button>
-            )}
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => addNewField(setSocialMedia, { socialMedia_name: '', link: '' })}
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-        >
-          Add Another Social Media
-        </button>
-      </div>
-  
-        {/* Education Section */}
-        <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4">Education</h3>
-          {education.map((edu, index) => (
-            <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
-              <input
-                type="text"
-                name="degree"
-                placeholder="Degree"
-                value={edu.degree}
-                onChange={(e) => handleArrayChange(setEducation, index, 'degree', e.target.value)}
-                className="w-full p-3 rounded bg-gray-700"
-                required
-              />
-              <input
-                type="text"
-                name="institution"
-                placeholder="Institution"
-                value={edu.institution}
-                onChange={(e) => handleArrayChange(setEducation, index, 'institution', e.target.value)}
-                className="w-full p-3 rounded bg-gray-700"
-                required
-              />
-              <input
-                type="number"
-                name="passing_year"
-                placeholder="Passing Year"
-                value={edu.passing_year}
-                onChange={(e) => handleArrayChange(setEducation, index, 'passing_year', parseInt(e.target.value, 10))}
-                className="w-full p-3 rounded bg-gray-700"
-                min="1900"
-                max={new Date().getFullYear()}
-                required
-              />
-              {/* Remove Button */}
-              {education.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => removeField(setEducation, index)}
-                  className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-                >
-                  Remove
-                </button>
-              )}
+              <FiPlus className="w-5 h-5" />
+              <span>Add Social Profile</span>
+            </button>
+          </section>
+
+          {/* Education Section */}
+          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-green-300">
+              <FiBook className="w-6 h-6" /> Education History
+            </h2>
+            
+            <div className="space-y-6 relative before:absolute before:left-8 before:h-full before:w-0.5 before:bg-gray-600">
+              {education.map((edu, index) => (
+                <div key={index} className="relative pl-14">
+                  <div className="absolute left-8 top-4 w-4 h-4 bg-blue-500 rounded-full transform -translate-x-1/2 z-10" />
+                  {index !== education.length - 1 && (
+                    <div className="absolute left-8 top-8 bottom-0 w-0.5 bg-gray-600" />
+                  )}
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800/70 transition-colors">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="Degree"
+                        value={edu.degree}
+                        onChange={(e) => handleArrayChange(setEducation, index, 'degree', e.target.value)}
+                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                        required
+                      />
+                      <FiBook className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+                    </div>
+                    
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="Institution"
+                        value={edu.institution}
+                        onChange={(e) => handleArrayChange(setEducation, index, 'institution', e.target.value)}
+                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                        required
+                      />
+                      <FiBriefcase className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+                    </div>
+
+                    <div className="relative">
+                      <input
+                        type="number"
+                        placeholder="Passing Year"
+                        value={edu.passing_year}
+                        onChange={(e) => handleArrayChange(setEducation, index, 'passing_year', parseInt(e.target.value, 10))}
+                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                        min="1900"
+                        max={new Date().getFullYear()}
+                        required
+                      />
+                      <FiCalendar className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+                    </div>
+                  </div>
+                  
+                  {education.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeField(setEducation, index)}
+                      className="absolute right-0 top-0 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg"
+                    >
+                      <FiTrash2 className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              ))}
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={() => addNewField(setEducation, { degree: '', institution: '', passing_year: '' })}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-          >
-            Add Another Education
-          </button>
-        </div>
-  
-        {/* Career Section */}
-      <div className="mb-8">
-        <h3 className="text-xl font-bold mb-4">Career</h3>
-        {career.map((job, index) => (
-          <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 relative">
-            <input
-              type="text"
-              name="position"
-              placeholder="Position"
-              value={job.position}
-              onChange={(e) => handleArrayChange(setCareer, index, 'position', e.target.value)}
-              className="w-full p-3 rounded bg-gray-700"
-              required
-            />
-            <input
-              type="text"
-              name="organization"
-              placeholder="Organization"
-              value={job.organization}
-              onChange={(e) => handleArrayChange(setCareer, index, 'organization', e.target.value)}
-              className="w-full p-3 rounded bg-gray-700"
-              required
-            />
-            <input
-              type="number"
-              name="joining_year"
-              placeholder="Joining Year"
-              value={job.joining_year}
-              onChange={(e) => handleArrayChange(setCareer, index, 'joining_year', parseInt(e.target.value, 10))}
-              className="w-full p-3 rounded bg-gray-700"
-              min="1900"
-              max={new Date().getFullYear()}
-              required
-            />
-            <input
-              type="number"
-              name="leaving_year"
-              placeholder="Leaving Year"
-              value={job.leaving_year}
-              onChange={(e) => handleArrayChange(setCareer, index, 'leaving_year', parseInt(e.target.value, 10))}
-              className="w-full p-3 rounded bg-gray-700"
-              min="1900"
-              max={new Date().getFullYear()}
-            />
-            {career.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeField(setCareer, index)}
-                className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-              >
-                Remove
-              </button>
-            )}
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => addNewField(setCareer, { position: '', organization: '', joining_year: '', leaving_year: '' })}
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-        >
-          Add Another Job
-        </button>
-      </div>
 
-      {/* Citations Section */}
-      <div className="mb-8">
-        <h3 className="text-xl font-bold mb-4">Citations</h3>
-        {citations.map((citation, index) => (
-          <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
-            <input
-              type="text"
-              name="title"
-              placeholder="Title"
-              value={citation.title}
-              onChange={(e) => handleArrayChange(setCitations, index, 'title', e.target.value)}
-              className="w-full p-3 rounded bg-gray-700"
-              required
-            />
-            <input
-              type="text"
-              name="link"
-              placeholder="Link"
-              value={citation.link}
-              onChange={(e) => handleArrayChange(setCitations, index, 'link', e.target.value)}
-              className="w-full p-3 rounded bg-gray-700"
-              required
-            />
-            <input
-              type="text"
-              name="organization"
-              placeholder="Organization"
-              value={citation.organization}
-              onChange={(e) => handleArrayChange(setCitations, index, 'organization', e.target.value)}
-              className="w-full p-3 rounded bg-gray-700"
-              required
-            />
-            {citations.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeField(setCitations, index)}
-                className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-              >
-                Remove
-              </button>
-            )}
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => addNewField(setCitations, { title: '', link: '', organization: '' })}
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-        >
-          Add Another Citation
-        </button>
-      </div>
+            <button
+              type="button"
+              onClick={() => addNewField(setEducation, { degree: '', institution: '', passing_year: '' })}
+              className="mt-4 flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
+            >
+              <FiPlus className="w-5 h-5" />
+              <span>Add Education</span>
+            </button>
+          </section>
 
-      {/* Awards Section */}
-      <div className="mb-8">
-        <h3 className="text-xl font-bold mb-4">Awards</h3>
-        {awards.map((award, index) => (
-          <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 relative">
-            <input
-              type="text"
-              name="title"
-              placeholder="Award Title"
-              value={award.title}
-              onChange={(e) => handleArrayChange(setAwards, index, 'title', e.target.value)}
-              className="w-full p-3 rounded bg-gray-700"
-              required
-            />
-            <input
-              type="number"
-              name="year"
-              placeholder="Year"
-              value={award.year}
-              onChange={(e) => handleArrayChange(setAwards, index, 'year', parseInt(e.target.value, 10))}
-              className="w-full p-3 rounded bg-gray-700"
-              min="1900"
-              max={new Date().getFullYear()}
-              required
-            />
-            <input
-              type="text"
-              name="details"
-              placeholder="Details"
-              value={award.details}
-              onChange={(e) => handleArrayChange(setAwards, index, 'details', e.target.value)}
-              className="w-full p-3 rounded bg-gray-700"
-              required
-            />
-            <input
-              type="file"
-              name="awardPhoto"
-              onChange={(e) => handleArrayChange(setAwards, index, 'awardPhoto', e.target.files[0])}
-              className="w-full p-3 rounded bg-gray-700"
-            />
-            {awards.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeField(setAwards, index)}
-                className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-              >
-                Remove
-              </button>
-            )}
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: '' })}
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-        >
-          Add Another Award
-        </button>
-      </div>
+          {/* Career Section */}
+          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-yellow-300">
+              <FiBriefcase className="w-6 h-6" /> Professional Experience
+            </h2>
+            
+            {career.map((job, index) => (
+              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800/70 transition-colors">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Position"
+                    value={job.position}
+                    onChange={(e) => handleArrayChange(setCareer, index, 'position', e.target.value)}
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    required
+                  />
+                  <FiUser className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
 
-        {/* Submit Button */}
-        <div className="flex justify-center">
-          <button
-            type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
-          >
-            Add Professor
-          </button>
-        </div>
-      </form>
-      <ToastContainer />
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Organization"
+                    value={job.organization}
+                    onChange={(e) => handleArrayChange(setCareer, index, 'organization', e.target.value)}
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    required
+                  />
+                  <FiBriefcase className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+
+                <div className="relative">
+                  <input
+                    type="number"
+                    placeholder="Start Year"
+                    value={job.joining_year}
+                    onChange={(e) => handleArrayChange(setCareer, index, 'joining_year', parseInt(e.target.value, 10))}
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    min="1900"
+                    max={new Date().getFullYear()}
+                    required
+                  />
+                  <FiCalendar className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+
+                <div className="relative">
+                  <input
+                    type="number"
+                    placeholder="End Year"
+                    value={job.leaving_year}
+                    onChange={(e) => handleArrayChange(setCareer, index, 'leaving_year', parseInt(e.target.value, 10))}
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    min="1900"
+                    max={new Date().getFullYear()}
+                  />
+                  <FiCalendar className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+
+                {career.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeField(setCareer, index)}
+                    className="absolute -right-4 -top-4 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <FiX className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={() => addNewField(setCareer, { position: '', organization: '', joining_year: '', leaving_year: '' })}
+              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
+            >
+              <FiPlus className="w-5 h-5" />
+              <span>Add Experience</span>
+            </button>
+          </section>
+
+          {/* Citations Section */}
+          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-purple-300">
+              <FiFileText className="w-6 h-6" /> Academic Citations
+            </h2>
+
+            {citations.map((citation, index) => (
+              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800/70 transition-colors">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Citation Title"
+                    value={citation.title}
+                    onChange={(e) => handleArrayChange(setCitations, index, 'title', e.target.value)}
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    required
+                  />
+                  <FiBook className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+
+                <div className="relative">
+                  <input
+                    type="url"
+                    placeholder="Citation URL"
+                    value={citation.link}
+                    onChange={(e) => handleArrayChange(setCitations, index, 'link', e.target.value)}
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    required
+                  />
+                  <FiLink className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Issuing Organization"
+                    value={citation.organization}
+                    onChange={(e) => handleArrayChange(setCitations, index, 'organization', e.target.value)}
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    required
+                  />
+                  <FiBriefcase className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+
+                {citations.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeField(setCitations, index)}
+                    className="absolute -right-4 -top-4 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <FiX className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={() => addNewField(setCitations, { title: '', link: '', organization: '' })}
+              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
+            >
+              <FiPlus className="w-5 h-5" />
+              <span>Add Citation</span>
+            </button>
+          </section>
+
+          {/* Awards Section */}
+          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-yellow-300">
+              <FiAward className="w-6 h-6" /> Honors & Awards
+            </h2>
+
+            {awards.map((award, index) => (
+              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800/70 transition-colors">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Award Title"
+                    value={award.title}
+                    onChange={(e) => handleArrayChange(setAwards, index, 'title', e.target.value)}
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    required
+                  />
+                  <FiAward className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+
+                <div className="relative">
+                  <input
+                    type="number"
+                    placeholder="Year Received"
+                    value={award.year}
+                    onChange={(e) => handleArrayChange(setAwards, index, 'year', parseInt(e.target.value, 10))}
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    min="1900"
+                    max={new Date().getFullYear()}
+                    required
+                  />
+                  <FiCalendar className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Award Details"
+                    value={award.details}
+                    onChange={(e) => handleArrayChange(setAwards, index, 'details', e.target.value)}
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    required
+                  />
+                  <FiInfo className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-300">Award Photo</label>
+                  <div className="relative">
+                    <input
+                      type="file"
+                      onChange={(e) => handleArrayChange(setAwards, index, 'awardPhoto', e.target.files[0])}
+                      className="w-full pl-10 pr-4 py-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                      accept="image/*,application/pdf"
+                    />
+                    <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    {award.awardPhoto && (
+                      <button
+                        type="button"
+                        onClick={() => handleArrayChange(setAwards, index, 'awardPhoto', null)}
+                        className="absolute right-0 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-300"
+                      >
+                        <FiX className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+                {awards.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeField(setAwards, index)}
+                    className="absolute -right-4 -top-4 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <FiX className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: null })}
+              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
+            >
+              <FiPlus className="w-5 h-5" />
+              <span>Add Award</span>
+            </button>
+          </section>
+
+          {/* Submit Button */}
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={loading}
+              className="relative bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg transform transition-all duration-200 hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {loading ? (
+                <span className="flex items-center">
+                  <FiLoader className="animate-spin mr-2" />
+                  Processing...
+                </span>
+              ) : (
+                'Add Professor'
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+      <ToastContainer position="bottom-right" theme="dark" />
     </div>
   );
-}
+};
+
 export default withAuth(AddProfessor);
