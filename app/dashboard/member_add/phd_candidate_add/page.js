@@ -397,14 +397,14 @@ const AddPhdCandidate = () => {
                 </div>
               </div>
 
-              {/* Joining Date */}
+              {/* Admission Date */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">Joining Date</label>
+                <label className="block text-sm font-medium text-gray-300">Admission Date</label>
                 <div className="relative">
                   <input
                     type="date"
-                    name="joining_date"
-                    value={formData.joining_date}
+                    name="admission_date"
+                    value={formData.admission_date}
                     onChange={handleChange}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
                     required
@@ -413,14 +413,14 @@ const AddPhdCandidate = () => {
                 </div>
               </div>
 
-              {/* Leaving Date */}
+              {/* Completion Date */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">Leaving Date</label>
+                <label className="block text-sm font-medium text-gray-300">Completion Date</label>
                 <div className="relative">
                   <input
                     type="date"
-                    name="leaving_date"
-                    value={formData.leaving_date}
+                    name="completion_date"
+                    value={formData.completion_date}
                     onChange={handleChange}
                     className="w-full pl-10 pr-4 py-3 bg-gray-700 rounded-lg border border-gray-600 cursor-not-allowed"
                     readOnly
