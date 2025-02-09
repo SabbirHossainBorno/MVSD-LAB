@@ -777,93 +777,100 @@ const AddProfessor = () => {
           </section>
 
           {/* Awards Section */}
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
-            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-yellow-300">
-              <FiAward className="w-6 h-6" /> Honors & Awards
-            </h2>
+<section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+  <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-yellow-300">
+    <FiAward className="w-6 h-6" /> Honors & Awards
+  </h2>
 
-            {awards.map((award, index) => (
-              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800/70 transition-colors">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Award Title"
-                    value={award.title}
-                    onChange={(e) => handleArrayChange(setAwards, index, 'title', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
-                    required
-                  />
-                  <FiAward className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
-                </div>
+  {awards.map((award, index) => (
+    <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800/70 transition-colors">
+      {/* Award Title */}
+      <div className="relative">
+        <input
+          type="text"
+          placeholder="Award Title"
+          value={award.title}
+          onChange={(e) => handleArrayChange(setAwards, index, 'title', e.target.value)}
+          className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+          required
+        />
+        <FiAward className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
+      </div>
 
-                <div className="relative">
-                  <input
-                    type="number"
-                    placeholder="Year Received"
-                    value={award.year}
-                    onChange={(e) => handleArrayChange(setAwards, index, 'year', parseInt(e.target.value, 10))}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
-                    min="1900"
-                    max={new Date().getFullYear()}
-                    required
-                  />
-                  <FiCalendar className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
-                </div>
+      {/* Year Received */}
+      <div className="relative">
+        <input
+          type="number"
+          placeholder="Year Received"
+          value={award.year}
+          onChange={(e) => handleArrayChange(setAwards, index, 'year', parseInt(e.target.value, 10))}
+          className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+          min="1900"
+          max={new Date().getFullYear()}
+          required
+        />
+        <FiCalendar className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
+      </div>
 
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Award Details"
-                    value={award.details}
-                    onChange={(e) => handleArrayChange(setAwards, index, 'details', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
-                    required
-                  />
-                  <FiInfo className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
-                </div>
+      {/* Award Details */}
+      <div className="relative">
+        <input
+          type="text"
+          placeholder="Award Details"
+          value={award.details}
+          onChange={(e) => handleArrayChange(setAwards, index, 'details', e.target.value)}
+          className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+          required
+        />
+        <FiInfo className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
+      </div>
 
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-300">Award Photo</label>
-                  <div className="relative">
-                    <input
-                      type="file"
-                      onChange={(e) => handleArrayChange(setAwards, index, 'awardPhoto', e.target.files[0])}
-                      className="w-full pl-10 pr-4 py-3 bg-gray-800 text-white rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-                      accept="image/*,application/pdf"
-                    />
-                    <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    {award.awardPhoto && (
-                      <button
-                        type="button"
-                        onClick={() => handleArrayChange(setAwards, index, 'awardPhoto', null)}
-                        className="absolute right-0 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-300"
-                      >
-                        <FiX className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-                {awards.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeField(setAwards, index)}
-                    className="absolute -right-4 -top-4 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <FiX className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-            ))}
+      {/* Award Photo Upload */}
+<div className="relative">
+  <label className="block text-sm font-medium text-gray-300 mb-1">Award Photo</label>
+  <div className="relative">
+    <input
+      type="file"
+      onChange={(e) => handleArrayChange(setAwards, index, 'awardPhoto', e.target.files[0])}
+      className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+      accept="image/*,application/pdf"
+    />
+    <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+    {award.awardPhoto && (
+      <button
+        type="button"
+        onClick={() => handleArrayChange(setAwards, index, 'awardPhoto', null)}
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-300 p-1.5"
+      >
+        <FiX className="w-4 h-4" />
+      </button>
+    )}
+  </div>
+</div>
 
-            <button
-              type="button"
-              onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: null })}
-              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
-            >
-              <FiPlus className="w-5 h-5" />
-              <span>Add Award</span>
-            </button>
-          </section>
+{/* Remove Button */}
+{awards.length > 1 && (
+  <button
+    type="button"
+    onClick={() => removeField(setAwards, index)}
+    className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
+  >
+    <FiX className="w-3.5 h-3.5" />
+  </button>
+)}
+    </div>
+  ))}
+
+  {/* Add Award Button */}
+  <button
+    type="button"
+    onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: null })}
+    className="w-full md:w-auto flex items-center justify-center space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
+  >
+    <FiPlus className="w-5 h-5" />
+    <span>Add Award</span>
+  </button>
+</section>
 
           {/* Submit Button */}
           <div className="flex justify-end">
