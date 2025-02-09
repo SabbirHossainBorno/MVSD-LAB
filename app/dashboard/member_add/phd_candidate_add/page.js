@@ -1,5 +1,6 @@
 // app/dashboard/member_add/phd_candidate_add/page.js
 'use client';
+
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
@@ -7,6 +8,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import withAuth from '../../../components/withAuth';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import countryList from 'react-select-country-list';
+import { 
+  FiUser, FiMail, FiPhone, FiCalendar, FiBook, FiBriefcase, FiFileText, 
+  FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
+  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo,
+} from 'react-icons/fi';
+
 
 const AddPhdCandidate = () => {
   const countries = countryList().getLabels(); // Get country names
@@ -35,6 +42,7 @@ const AddPhdCandidate = () => {
   const [career, setCareer] = useState([{ position: '', organization: '', joining_year: '', leaving_year: '' }]);
   const [documents, setDocuments] = useState([{ title: '', documentType: '', documentsPhoto: '' }]);
   const [loading, setLoading] = useState(false);
+  
   const router = useRouter();
 
   const handleChange = useCallback((e) => {

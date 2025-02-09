@@ -55,11 +55,13 @@ const AddProfessor = () => {
 
       if (file.size > 5 * 1024 * 1024) {
         toast.error('File size exceeds 5 MB.');
+        e.target.value = ''; // Reset file input
         return;
       }
 
       if (!['image/jpeg', 'image/png'].includes(file.type)) {
         toast.error('Invalid file type. Only JPG, JPEG, and PNG are allowed.');
+        e.target.value = ''; // Reset file input
         return;
       }
 
