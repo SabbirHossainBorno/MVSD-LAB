@@ -333,10 +333,10 @@ const AddProfessor = () => {
 
               {/* ID Number */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">ID Number</label>
+                <label className="block text-sm font-medium text-gray-300">Identification Number</label>
                 <div className="relative">
                   <input
-                    type="text"
+                    type="number"
                     name="idNumber"
                     value={formData.idNumber}
                     onChange={handleChange}
