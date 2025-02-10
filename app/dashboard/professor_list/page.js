@@ -1,4 +1,3 @@
-//app/dashboard/professor_list/page.js
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -10,13 +9,13 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import Image from 'next/image';
 import { 
   FiSearch, FiFilter, FiArrowUp, FiArrowDown, FiEdit, FiEye, 
-  FiUser, FiPlus, FiChevronRight, FiSliders, FiBookOpen 
+  FiUser, FiChevronRight, FiBookOpen 
 } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 
 const ProfessorsList = () => {
   const [professors, setProfessors] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
   const [sortOrder, setSortOrder] = useState('asc');
@@ -24,13 +23,13 @@ const ProfessorsList = () => {
   const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
 
-  const resultsPerPage = 10;
-
   useEffect(() => {
     const fetchProfessors = async () => {
-      setLoading(true); 
+      setLoading(true);
       try {
-        const res = await fetch(`/api/professor_list?page=${currentPage}&search=${searchTerm}&filter=${filter}&sortOrder=${sortOrder}`);
+        const res = await fetch(
+          `/api/professor_list?page=${currentPage}&search=${searchTerm}&filter=${filter}&sortOrder=${sortOrder}`
+        );
         const data = await res.json();
         if (res.ok) {
           setProfessors(data.professors);
@@ -45,8 +44,7 @@ const ProfessorsList = () => {
       }
     };
 
-    const debounceFetch = setTimeout(fetchProfessors, 300); // Debounce for 300ms
-
+    const debounceFetch = setTimeout(fetchProfessors, 300);
     return () => clearTimeout(debounceFetch);
   }, [currentPage, searchTerm, filter, sortOrder]);
 
@@ -60,7 +58,7 @@ const ProfessorsList = () => {
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   const handleFilterChange = (e) => {
@@ -68,8 +66,8 @@ const ProfessorsList = () => {
     setCurrentPage(1);
   };
 
-  const handleSortOrderChange = (e) => {
-    setSortOrder(e.target.value);
+  const toggleSortOrder = () => {
+    setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
     setCurrentPage(1);
   };
 
@@ -89,7 +87,7 @@ const ProfessorsList = () => {
             <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-300 text-center mb-4">
               Academic Professor Directory
             </h1>
-            <div className="flex justify-center space-x-4">
+            <div className="flex flex-wrap justify-center gap-4">
               <div className="bg-blue-600/20 px-4 py-2 rounded-full flex items-center">
                 <FiBookOpen className="mr-2 text-blue-400" />
                 <span className="font-medium">{professors.length} Professors</span>
@@ -99,58 +97,67 @@ const ProfessorsList = () => {
                 <span className="font-medium">{professors.filter(p => p.status === 'Active').length} Active</span>
               </div>
               <div className="bg-red-600/20 px-4 py-2 rounded-full flex items-center">
-                <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+                <span className="w-2 h-2 bg-red-400 rounded-full mr-2"></span>
                 <span className="font-medium">{professors.filter(p => p.status === 'Inactive').length} Inactive</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Advanced Controls */}
+        {/* Controls Section */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-2xl p-6 space-y-6"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-            <div className="relative col-span-2">
+          <div className="flex flex-col md:flex-row gap-4 w-full">
+            {/* Search Input - Wider */}
+            <div className="relative flex-[3] min-w-[240px]">
               <input
                 type="text"
-                placeholder="Search Professor members..."
+                placeholder="Search professors..."
                 value={searchTerm}
                 onChange={handleSearch}
-                className="w-full pl-14 pr-4 py-4 bg-gray-800 rounded-xl border-2 border-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all"
+                className="w-full pl-14 pr-4 py-3 bg-gray-800 rounded-xl border-2 border-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all text-sm"
               />
               <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
             </div>
 
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/30 to-purple-600/30 rounded-xl blur-md opacity-30"></div>
+            {/* Filter Dropdown - Medium */}
+            <div className="relative flex-[1.5] min-w-[180px]">
               <select
                 value={filter}
                 onChange={handleFilterChange}
-                className="w-full pl-14 pr-4 py-4 bg-gray-800 rounded-xl border-2 border-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 relative z-10"
+                className="w-full pl-14 pr-4 py-3 bg-gray-800 rounded-xl border-2 border-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 text-sm"
               >
-                <option value="all">All Professor</option>
+                <option value="all">All Professors</option>
                 <option value="active">Active Scholars</option>
-                <option value="inactive">Inactive Professor</option>
+                <option value="inactive">Inactive Professors</option>
               </select>
-              <FiFilter className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xl z-20" />
+              <FiFilter className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
             </div>
 
-            <div className="relative">
-              <button className="w-full pl-14 pr-4 py-4 bg-gray-800 rounded-xl border-2 border-gray-700 hover:border-blue-500 transition-all flex items-center justify-between">
-                <div className="flex items-center">
-                  <FiSliders className="text-gray-400 mr-4 text-xl" />
-                  <span className="text-gray-300">Advanced Filters</span>
-                </div>
-                <FiChevronRight className="text-gray-400" />
-              </button>
-            </div>
+            {/* Sort Order Toggle - Compact */}
+            <button
+              onClick={toggleSortOrder}
+              className="flex items-center justify-center gap-2 px-4 py-3 bg-gray-800 rounded-xl border-2 border-gray-700 hover:border-blue-500 transition-colors flex-[0.5] min-w-[140px] text-sm"
+            >
+              {sortOrder === 'asc' ? (
+                <>
+                  <FiArrowUp className="text-blue-400 shrink-0" />
+                  <span className="hidden sm:inline">Ascending</span>
+                </>
+              ) : (
+                <>
+                  <FiArrowDown className="text-blue-400 shrink-0" />
+                  <span className="hidden sm:inline">Descending</span>
+                </>
+              )}
+            </button>
           </div>
         </motion.div>
 
-        {/* Professor Grid */}
+        {/* Professors Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {professors.length > 0 ? (
             professors.map((professor) => (
@@ -163,14 +170,15 @@ const ProfessorsList = () => {
                 <div className="absolute inset-0 border-2 border-gray-700 rounded-2xl group-hover:border-blue-500 transition-colors pointer-events-none"></div>
                 
                 <div className="flex items-start space-x-4">
-                  <div className="relative w-16 h-16 flex-shrink-0">
+                  {/* Fixed Size Avatar */}
+                  <div className="relative w-20 h-20 flex-shrink-0">
                     {professor.photo ? (
                       <Image
                         src={`/Storage/Images/Professor/${professor.photo.split('/').pop()}`}
                         alt={professor.first_name}
-                        width={64}
-                        height={64}
-                        className="rounded-xl border-2 border-blue-500/50 object-cover"
+                        width={80}
+                        height={80}
+                        className="rounded-xl border-2 border-blue-500/50 object-cover w-full h-full"
                       />
                     ) : (
                       <div className="w-full h-full rounded-xl bg-gray-700 flex items-center justify-center">
@@ -185,8 +193,8 @@ const ProfessorsList = () => {
                       {professor.first_name} {professor.last_name}
                     </h2>
                     <p className="text-gray-400 text-sm truncate mb-2">{professor.email}</p>
-                    <div className="flex items-center space-x-2">
-                      <span className="px-2 py-1 bg-blue-600/20 text-blue-400 text-xs rounded-lg">ID : {professor.id}</span>
+                    <div className="flex flex-wrap gap-2">
+                      <span className="px-2 py-1 bg-blue-600/20 text-blue-400 text-xs rounded-lg">ID: {professor.id}</span>
                       <span className="px-2 py-1 bg-purple-600/20 text-purple-400 text-xs rounded-lg">{professor.department}</span>
                     </div>
                   </div>
@@ -212,12 +220,12 @@ const ProfessorsList = () => {
             ))
           ) : (
             <div className="col-span-full text-center py-16 bg-gray-800/50 rounded-2xl">
-              <p className="text-2xl text-gray-400 mb-4">No Professor members found</p>
+              <p className="text-2xl text-gray-400 mb-4">No professors found</p>
             </div>
           )}
         </div>
 
-        {/* Enhanced Pagination */}
+        {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex justify-center mt-8">
             <div className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-2xl p-4">
