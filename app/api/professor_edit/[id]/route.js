@@ -45,7 +45,7 @@ export async function GET(req, { params }) {
   const { id } = await params;  // Await params before using its properties
   const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
   const eid = req.cookies.get('eid')?.value || 'Unknown EID';
-  const email = req.cookies.get('email')?.value || 'Unknown Email';
+  const adminEmail = req.cookies.get('email')?.value || 'Unknown Email';
   const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
   const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
 
@@ -143,7 +143,7 @@ export async function POST(req, { params }) {
   const { id } = await params;  // Await params before using its properties
   const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
   const eid = req.cookies.get('eid')?.value || 'Unknown EID';
-  const email = req.cookies.get('email')?.value || 'Unknown Email';
+  const adminEmail = req.cookies.get('email')?.value || 'Unknown Email';
   const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
   const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
 
@@ -356,7 +356,7 @@ export async function POST(req, { params }) {
 
     // Insert notification
     const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
-    const notificationTitle = `Professor [${id}] Updated By ${email}`;
+    const notificationTitle = `Professor [${id}] Updated By ${adminEmail}`;
     const notificationStatus = 'Unread';
     await query(insertNotificationQuery, [id, notificationTitle, notificationStatus]);
 
