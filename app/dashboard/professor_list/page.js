@@ -135,34 +135,45 @@ const ProfessorsList = () => {
               <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
             </div>
 
-            {/* Filter Dropdown - Medium */}
-            <div className="relative flex-[1.5] min-w-[180px]">
+            {/* Filter Dropdown - Responsive */}
+            <div className="relative flex-[1.5] min-w-[150px] sm:min-w-[180px]">
               <select
                 value={filter}
                 onChange={handleFilterChange}
-                className="w-full pl-14 pr-4 py-3 bg-gray-800 rounded-xl border-2 border-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 text-sm"
+                className="w-full pl-10 sm:pl-14 pr-4 py-2.5 sm:py-3 bg-gray-800 rounded-xl border-2 border-gray-700 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all text-xs sm:text-sm"
               >
-                <option value="all">All Professors</option>
-                <option value="active">Active Scholars</option>
-                <option value="inactive">Inactive Professors</option>
+                <option value="all" className="text-gray-300 bg-gray-800 hover:bg-blue-600">
+                  <span className="truncate">All Professors</span>
+                </option>
+                <option value="active" className="text-gray-300 bg-gray-800 hover:bg-blue-600">
+                  <span className="truncate">
+                    <span className="hidden xs:inline">Active </span>
+                    Professors
+                  </span>
+                </option>
+                <option value="inactive" className="text-gray-300 bg-gray-800 hover:bg-blue-600">
+                  <span className="truncate">
+                    <span className="hidden xs:inline">Inactive </span>
+                    Professors
+                  </span>
+                </option>
               </select>
-              <FiFilter className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
+              <FiFilter className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 text-gray-400 text-lg sm:text-xl" />
             </div>
-
-            {/* Sort Order Toggle - Compact */}
+            {/* Sort Order Toggle - Enhanced Mobile */}
             <button
               onClick={toggleSortOrder}
-              className="flex items-center justify-center gap-2 px-4 py-3 bg-gray-800 rounded-xl border-2 border-gray-700 hover:border-blue-500 transition-colors flex-[0.5] min-w-[140px] text-sm"
+              className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-800 rounded-xl border-2 border-gray-700 hover:border-blue-500 transition-colors flex-[0.5] min-w-[120px] sm:min-w-[140px] text-xs sm:text-sm"
             >
               {sortOrder === 'asc' ? (
                 <>
-                  <FiArrowUp className="text-blue-400 shrink-0" />
-                  <span className="hidden sm:inline">Ascending</span>
+                  <FiArrowUp className="text-blue-400 shrink-0 text-sm sm:text-base" />
+                  <span className="inline whitespace-nowrap">Ascending</span>
                 </>
               ) : (
                 <>
-                  <FiArrowDown className="text-blue-400 shrink-0" />
-                  <span className="hidden sm:inline">Descending</span>
+                  <FiArrowDown className="text-blue-400 shrink-0 text-sm sm:text-base" />
+                  <span className="inline whitespace-nowrap">Descending</span>
                 </>
               )}
             </button>
