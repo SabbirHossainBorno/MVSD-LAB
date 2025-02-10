@@ -8,6 +8,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import withAuth from '../../../components/withAuth';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import Image from 'next/image';
+import { FiSearch, FiFilter, FiArrowUp, FiArrowDown, FiEdit, FiEye, 
+  FiUser, FiChevronRight, FiBookOpen, FiTrash2, FiUpload, FiGlobe,
+  FiBriefcase, FiAward, FiLink, FiX } from 'react-icons/fi';
+import { motion } from 'framer-motion';
 
 const EditProfessor = () => {
   const [formData, setFormData] = useState({
