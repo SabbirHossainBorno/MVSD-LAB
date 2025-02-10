@@ -1,3 +1,4 @@
+//app/dashboard/professor_list/page.js
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -7,6 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import withAuth from '../../components/withAuth';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Image from 'next/image';
+import { format } from 'date-fns';
+
 import { 
   FiSearch, FiFilter, FiArrowUp, FiArrowDown, FiEdit, FiEye, 
   FiUser, FiChevronRight, FiBookOpen 
@@ -22,6 +25,11 @@ const ProfessorsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
+  const [totalProfessors, setTotalProfessors] = useState(0);
+  const [activeProfessors, setActiveProfessors] = useState(0);
+  const [inactiveProfessors, setInactiveProfessors] = useState(0);
+
+
 
   useEffect(() => {
     const fetchProfessors = async () => {
@@ -32,8 +40,11 @@ const ProfessorsList = () => {
         );
         const data = await res.json();
         if (res.ok) {
-          setProfessors(data.professors);
-          setTotalPages(data.totalPages);
+          setProfessors(data.professors || []);
+          setTotalPages(data.totalPages || 1);
+          setTotalProfessors(data.totalProfessors ?? 0); // Ensure default value
+          setActiveProfessors(data.activeProfessors ?? 0);
+          setInactiveProfessors(data.inactiveProfessors ?? 0);
         } else {
           toast.error(data.message);
         }
@@ -81,28 +92,29 @@ const ProfessorsList = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-blue-900 text-slate-100 p-4 sm:p-8">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header Section */}
-        <div className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
-          <div className="relative bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-2xl p-8">
-            <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-300 text-center mb-4">
-              Academic Professor Directory
-            </h1>
-            <div className="flex flex-wrap justify-center gap-4">
-              <div className="bg-blue-600/20 px-4 py-2 rounded-full flex items-center">
-                <FiBookOpen className="mr-2 text-blue-400" />
-                <span className="font-medium">{professors.length} Professors</span>
-              </div>
-              <div className="bg-green-600/20 px-4 py-2 rounded-full flex items-center">
-                <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-                <span className="font-medium">{professors.filter(p => p.status === 'Active').length} Active</span>
-              </div>
-              <div className="bg-red-600/20 px-4 py-2 rounded-full flex items-center">
-                <span className="w-2 h-2 bg-red-400 rounded-full mr-2"></span>
-                <span className="font-medium">{professors.filter(p => p.status === 'Inactive').length} Inactive</span>
-              </div>
-            </div>
-          </div>
-        </div>
+<div className="relative group">
+  <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+  <div className="relative bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-2xl p-8">
+    <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-300 text-center mb-4">
+      Academic Professor Directory
+    </h1>
+    <div className="flex flex-wrap justify-center gap-4">
+      <div className="bg-blue-600/20 px-4 py-2 rounded-full flex items-center">
+        <FiBookOpen className="mr-2 text-blue-400" />
+        <span className="font-medium">{totalProfessors} Professors</span>
+      </div>
+      <div className="bg-green-600/20 px-4 py-2 rounded-full flex items-center">
+        <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+        <span className="font-medium">{activeProfessors} Active</span>
+      </div>
+      <div className="bg-red-600/20 px-4 py-2 rounded-full flex items-center">
+        <span className="w-2 h-2 bg-red-400 rounded-full mr-2"></span>
+        <span className="font-medium">{inactiveProfessors} Inactive</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 
         {/* Controls Section */}
         <motion.div 
@@ -194,8 +206,10 @@ const ProfessorsList = () => {
                     </h2>
                     <p className="text-gray-400 text-sm truncate mb-2">{professor.email}</p>
                     <div className="flex flex-wrap gap-2">
-                      <span className="px-2 py-1 bg-blue-600/20 text-blue-400 text-xs rounded-lg">ID: {professor.id}</span>
-                      <span className="px-2 py-1 bg-purple-600/20 text-purple-400 text-xs rounded-lg">{professor.department}</span>
+                      <span className="px-2 py-1 bg-blue-600/20 text-blue-400 text-xs rounded-lg">{professor.id}</span>
+                      <span className="px-2 py-1 bg-purple-600/20 text-purple-400 text-xs rounded-lg">
+                        {format(new Date(professor.joining_date), "d MMMM, yyyy")}
+                      </span>
                     </div>
                   </div>
                 </div>

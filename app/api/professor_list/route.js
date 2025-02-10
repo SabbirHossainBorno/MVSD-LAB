@@ -22,7 +22,7 @@ export async function GET(req) {
     const filter = url.searchParams.get('filter') || 'all';
     const page = parseInt(url.searchParams.get('page'), 10) || 1;
     const sortOrder = url.searchParams.get('sortOrder') || 'asc'; 
-    const resultsPerPage = 12; // Set to 12 results per page
+    const resultsPerPage = 12;
     const offset = (page - 1) * resultsPerPage;
 
     let searchQuery = `
@@ -30,28 +30,30 @@ export async function GET(req) {
       WHERE (first_name ILIKE $1 OR last_name ILIKE $1 OR email ILIKE $1)
     `;
     let countQuery = `
-      SELECT COUNT(*) FROM professor_basic_info
+      SELECT COUNT(*) AS total, 
+             COUNT(*) FILTER (WHERE status ILIKE 'Active') AS active_count,
+             COUNT(*) FILTER (WHERE status ILIKE 'Inactive') AS inactive_count
+      FROM professor_basic_info
       WHERE (first_name ILIKE $1 OR last_name ILIKE $1 OR email ILIKE $1)
     `;
 
-    const searchValue = `%${search}%`;
-    let queryParams = [searchValue];
+    const queryParams = [`%${search}%`];
 
     if (filter !== 'all') {
       searchQuery += ` AND status ILIKE $2`;
       countQuery += ` AND status ILIKE $2`;
-      queryParams.push(filter); // Add filter to params
+      queryParams.push(filter);
     }
 
-    // Add ordering and pagination
-    searchQuery += ` ORDER BY substring(id from '[0-9]+')::int ${sortOrder}, id ${sortOrder} LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2}`;
-    queryParams.push(resultsPerPage, offset); // Add pagination parameters
+    searchQuery += ` ORDER BY id ${sortOrder} LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2}`;
+    queryParams.push(resultsPerPage, offset);
 
-    // Execute queries
     const professorsResult = await query(searchQuery, queryParams);
     const countResult = await query(countQuery, queryParams.slice(0, filter !== 'all' ? 2 : 1));
 
-    const totalProfessors = parseInt(countResult.rows[0].count, 10);
+    const totalProfessors = parseInt(countResult.rows[0].total, 10);
+    const activeProfessors = parseInt(countResult.rows[0].active_count, 10);
+    const inactiveProfessors = parseInt(countResult.rows[0].inactive_count, 10);
     const totalPages = Math.ceil(totalProfessors / resultsPerPage);
 
     const apiCallMessage = formatAlertMessage('Professor List - API', `IP : ${ipAddress}\nStatus : 200`);
@@ -68,6 +70,9 @@ export async function GET(req) {
 
     return NextResponse.json({
       professors: professorsResult.rows,
+      totalProfessors,
+      activeProfessors,
+      inactiveProfessors,
       totalPages,
     });
   } catch (error) {
@@ -79,7 +84,8 @@ export async function GET(req) {
         eid,
         sid: sessionId,
         taskName: 'Fetch Professors List',
-        details: `Error fetching professors list from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+        details: `Error fetching professors list from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`,
+        stack: error.stack
       }
     });
 
