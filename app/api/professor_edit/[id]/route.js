@@ -272,7 +272,7 @@ export async function POST(req, { params }) {
         VALUES ($1, $2, $3, $4, $5)
       `;
       for (const job of career) {
-        await query(insertCareerQuery, [id, job.position, job.organization, job.joining_year, job.leaving_year]);
+        await query(insertCareerQuery, [id, job.position, job.organization_name, job.joining_year, job.leaving_year]);
       }
     }
 
