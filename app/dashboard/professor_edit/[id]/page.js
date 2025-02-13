@@ -10,7 +10,7 @@ import Image from 'next/image';
 import {
   FiUser, FiMail, FiPhone, FiCalendar, FiBook, FiBriefcase, FiFileText,
   FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
-  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo,
+  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo, FiRefreshCcw,
 } from 'react-icons/fi';
 
 const EditProfessor = () => {
@@ -170,9 +170,9 @@ const EditProfessor = () => {
           </h1>
         </div>
         {/* Main Form */}
-        <form className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-2xl p-6 space-y-8">
+        <form className="bg-gray-800/50 backdrop-blur-lg rounded shadow-2xl p-6 space-y-8">
           {/* Personal Information Section */}
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-blue-300">
               <FiUser className="w-6 h-6" /> Personal Information
             </h2>
@@ -186,7 +186,7 @@ const EditProfessor = () => {
                     name="first_name"
                     value={formData.first_name}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
                     required
                   />
                   <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -201,7 +201,7 @@ const EditProfessor = () => {
                     name="last_name"
                     value={formData.last_name}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
                     required
                   />
                   <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -216,7 +216,7 @@ const EditProfessor = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
                     required
                   />
                   <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -230,7 +230,7 @@ const EditProfessor = () => {
                     name="short_bio"
                     value={formData.short_bio}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none min-h-[120px]"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none min-h-[120px]"
                     required
                   />
                   <FiFileText className="absolute left-3 top-4 text-gray-400" />
@@ -244,7 +244,7 @@ const EditProfessor = () => {
                     name="status"
                     value={formData.status}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
                     required
                   >
                     <option value="Active">Active</option>
@@ -263,22 +263,25 @@ const EditProfessor = () => {
                     name="leaving_date"
                     value={formData.leaving_date}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none appearance-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none appearance-none"
                   />
                   <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
               </div>
             </div>
+            <div className="mt-4 flex items-center space-x-4">
             <button
               type="button"
               onClick={() => handleSubmit('basicInfo')}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
-              Update Basic Info
+              <FiRefreshCcw className="w-4 h-4" />
+              <span>Update Basic Info</span>
             </button>
+            </div>
           </section>
           {/* Profile Photo Section */}
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-blue-300">
               <FiUpload className="w-6 h-6" /> Edit Profile Photo
             </h2>
@@ -299,21 +302,24 @@ const EditProfessor = () => {
                 name="photo"
                 accept=".jpg, .jpeg, .png"
                 onChange={handleChange}
-                className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
               />
               <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             </div>
+            <div className="mt-4 flex items-center space-x-4">
             <button
               type="button"
               onClick={() => handleSubmit('photo')}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
-              Change Profile Photo
+              <FiRefreshCcw className="w-4 h-4" />
+              <span>Change Profile Photo</span>            
             </button>
+            </div>
           </section>
 
           {/* Social Media Section */}
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-purple-300">
               <FiLinkedin className="w-6 h-6" /> Social Profiles
             </h2>
@@ -324,7 +330,7 @@ const EditProfessor = () => {
                     name="socialmedia_name"
                     value={sm.socialmedia_name}
                     onChange={(e) => handleArrayChange(setSocialMedia, index, 'socialmedia_name', e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
                     required
                   >
                     <option value="">Select Platform</option>
@@ -343,7 +349,7 @@ const EditProfessor = () => {
                     placeholder="Profile URL"
                     value={sm.link}
                     onChange={(e) => handleArrayChange(setSocialMedia, index, 'link', e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
                     required
                   />
                   {sm.socialmedia_name === 'GitHub' ? (
@@ -363,10 +369,11 @@ const EditProfessor = () => {
                 )}
               </div>
             ))}
+            <div className="mt-4 flex items-center space-x-4">
             <button
               type="button"
               onClick={() => addNewField(setSocialMedia, { socialmedia_name: '', link: '' })}
-              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
+              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
               <FiPlus className="w-5 h-5" />
               <span>Add Social Profile</span>
@@ -374,14 +381,16 @@ const EditProfessor = () => {
             <button
               type="button"
               onClick={() => handleSubmit('socialMedia')}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
-              Update Social Media
+              <FiRefreshCcw className="w-4 h-4" />
+              <span>Update Social Media</span>
             </button>
+            </div>
           </section>
           
           {/* Education Section */}
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-green-300">
               <FiBook className="w-6 h-6" /> Education History
             </h2>
@@ -392,7 +401,7 @@ const EditProfessor = () => {
                   {index !== education.length - 1 && (
                     <div className="absolute left-8 top-8 bottom-0 w-0.5 bg-gray-600" />
                   )}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800/70 transition-colors">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
                     <div className="relative">
                       <input
                         type="text"
@@ -441,30 +450,35 @@ const EditProfessor = () => {
                 </div>
               ))}
             </div>
-            <button
-              type="button"
-              onClick={() => addNewField(setEducation, { degree: '', institution: '', passing_year: '' })}
-              className="mt-4 flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
-            >
-              <FiPlus className="w-5 h-5" />
-              <span>Add Education</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSubmit('education')}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
-            >
-              Update Education
-            </button>
+            <div className="mt-4 flex items-center space-x-4">
+              <button
+                type="button"
+                onClick={() => addNewField(setEducation, { degree: '', institution: '', passing_year: '' })}
+                className="flex items-center justify-center space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+              >
+                <FiPlus className="w-5 h-5" />
+                <span>Add Education</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleSubmit('education')}
+                className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+              >
+                <FiRefreshCcw className="w-4 h-4" />
+                <span>Update Education</span>
+              </button>
+            </div>
+
           </section>
 
           {/* Career Section */}
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-yellow-300">
               <FiBriefcase className="w-6 h-6" /> Professional Experience
             </h2>
             {career.map((job, index) => (
-              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800/70 transition-colors">
+              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
                 <div className="relative">
                   <input
                     type="text"
@@ -523,10 +537,11 @@ const EditProfessor = () => {
                 )}
               </div>
             ))}
+            <div className="mt-4 flex items-center space-x-4">
             <button
               type="button"
               onClick={() => addNewField(setCareer, { position: '', organization_name: '', joining_year: '', leaving_year: '' })}
-              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
+              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
               <FiPlus className="w-5 h-5" />
               <span>Add Experience</span>
@@ -534,18 +549,21 @@ const EditProfessor = () => {
             <button
               type="button"
               onClick={() => handleSubmit('career')}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
-              Update Career
+              <FiRefreshCcw className="w-4 h-4" />
+              <span>Update Career</span>
             </button>
+            </div>
           </section>
+
           {/* Citations Section */}
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-purple-300">
               <FiFileText className="w-6 h-6" /> Academic Citations
             </h2>
             {citations.map((citation, index) => (
-              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800/70 transition-colors">
+              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
                 <div className="relative">
                   <input
                     type="text"
@@ -590,10 +608,11 @@ const EditProfessor = () => {
                 )}
               </div>
             ))}
+            <div className="mt-4 flex items-center space-x-4">
             <button
               type="button"
               onClick={() => addNewField(setCitations, { title: '', link: '', organization_name: '' })}
-              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
+              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
               <FiPlus className="w-5 h-5" />
               <span>Add Citation</span>
@@ -601,18 +620,21 @@ const EditProfessor = () => {
             <button
               type="button"
               onClick={() => handleSubmit('citations')}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
-              Update Citations
+              <FiRefreshCcw className="w-4 h-4" />
+              <span>Update Citations</span>
             </button>
+            </div>
           </section>
+
           {/* Awards Section */}
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-yellow-300">
               <FiAward className="w-6 h-6" /> Honors & Awards
             </h2>
             {awards.map((award, index) => (
-              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800/70 transition-colors">
+              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
                 {/* Existing Awards */}
                 {award.existing ? (
                   <>
@@ -691,33 +713,38 @@ const EditProfessor = () => {
                       className="w-full p-3 rounded bg-gray-700"
                     />
                     <button
-                      type="button"
-                      onClick={() => removeField(setAwards, index)}
-                      className="absolute top-0 right-0 mt-2 mr-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
-                    >
-                      Remove
-                    </button>
+                        type="button"
+                        onClick={() => removeField(setAwards, index)}
+                        className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
+                      >
+                        <FiX className="w-3.5 h-3.5" />
+                      </button>
                   </>
                 )}
               </div>
             ))}
+            <div className="mt-4 flex items-center space-x-4">
             <button
               type="button"
               onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: null, existing: false })}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mr-2"
+              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
-              Add Another Award
+              <FiPlus className="w-5 h-5" />
+              <span>Add Award</span>
             </button>
             <button
               type="button"
               onClick={() => handleSubmit('awards')}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
-              Update Awards
+              <FiRefreshCcw className="w-4 h-4" />
+              <span>Update Awards</span>
             </button>
+            </div>
           </section>
+
           {/* Password Section */}
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-red-300">
               <FiAlertCircle className="w-6 h-6" /> Password
             </h2>
@@ -730,7 +757,7 @@ const EditProfessor = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
                     required
                   />
                   <FiAlertCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -744,20 +771,23 @@ const EditProfessor = () => {
                     name="confirm_password"
                     value={formData.confirm_password}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
                     required
                   />
                   <FiAlertCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
               </div>
             </div>
+            <div className="mt-4 flex items-center space-x-4">
             <button
               type="button"
               onClick={() => handleSubmit('password')}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mt-4"
+              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
-              Update Password
+              <FiRefreshCcw className="w-4 h-4" />
+              <span>Update Password</span>
             </button>
+            </div>
           </section>
         </form>
       </div>

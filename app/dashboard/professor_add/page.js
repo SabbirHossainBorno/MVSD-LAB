@@ -176,9 +176,9 @@ const AddProfessor = () => {
         </div>
 
         {/* Main Form */}
-        <form onSubmit={handleSubmit} className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-2xl p-6 space-y-8">
+        <form onSubmit={handleSubmit} className="bg-gray-800/50 backdrop-blur-lg rounded shadow-2xl p-6 space-y-8">
           {/* Personal Information Section */}
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-blue-300">
               <FiUser className="w-6 h-6" /> Personal Information
             </h2>
@@ -193,7 +193,7 @@ const AddProfessor = () => {
                     name="first_name"
                     value={formData.first_name}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
                     required
                   />
                   <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -209,7 +209,7 @@ const AddProfessor = () => {
                     name="last_name"
                     value={formData.last_name}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
                     required
                   />
                   <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -225,7 +225,7 @@ const AddProfessor = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
                     required
                   />
                   <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -241,7 +241,7 @@ const AddProfessor = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
                     required
                   />
                   <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -256,7 +256,7 @@ const AddProfessor = () => {
                     name="country"
                     value={formData.country}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
                     required
                   >
                     <option value="">Select Country</option>
@@ -278,7 +278,7 @@ const AddProfessor = () => {
                     name="dob"
                     value={formData.dob}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none appearance-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none appearance-none"
                     required
                   />
                   <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -292,7 +292,7 @@ const AddProfessor = () => {
                     name="gender"
                     value={formData.gender}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
                     required
                   >
                     <option value="">Select Gender</option>
@@ -313,7 +313,7 @@ const AddProfessor = () => {
                     name="bloodGroup"
                     value={formData.bloodGroup}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
                     required
                   >
                     <option value="">Select Blood Group</option>
@@ -340,7 +340,7 @@ const AddProfessor = () => {
                     name="idNumber"
                     value={formData.idNumber}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
                     required
                   />
                   <FiFileText className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -356,7 +356,7 @@ const AddProfessor = () => {
                     name="passport_number"
                     value={formData.passport_number}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
                     required
                   />
                   <FiGlobe className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -372,7 +372,7 @@ const AddProfessor = () => {
                     name="joining_date"
                     value={formData.joining_date}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
                     required
                   />
                   <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -388,7 +388,7 @@ const AddProfessor = () => {
                     name="leaving_date"
                     value={formData.leaving_date}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-700 rounded-lg border border-gray-600 cursor-not-allowed"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-700 rounded border border-gray-600 cursor-not-allowed"
                     readOnly
                   />
                   <FiAlertCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
@@ -404,7 +404,7 @@ const AddProfessor = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
                     required
                   />
                   <FiAlertCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -420,7 +420,7 @@ const AddProfessor = () => {
                     name="confirm_password"
                     value={formData.confirm_password}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
                     required
                   />
                   <FiAlertCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -436,7 +436,7 @@ const AddProfessor = () => {
                     name="type"
                     value={formData.type}
                     readOnly
-                    className="w-full pl-10 pr-4 py-3 bg-gray-700 rounded-lg border border-gray-600 cursor-not-allowed"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-700 rounded border border-gray-600 cursor-not-allowed"
                   />
                   <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                 </div>
@@ -451,7 +451,7 @@ const AddProfessor = () => {
                     name="status"
                     value={formData.status}
                     readOnly
-                    className="w-full pl-10 pr-4 py-3 bg-gray-700 rounded-lg border border-gray-600 cursor-not-allowed"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-700 rounded border border-gray-600 cursor-not-allowed"
                   />
                   <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                 </div>
@@ -465,7 +465,7 @@ const AddProfessor = () => {
                     type="file"
                     name="photo"
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
                     accept="image/*"
                   />
                   <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -480,7 +480,7 @@ const AddProfessor = () => {
                     name="short_bio"
                     value={formData.short_bio}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none min-h-[120px]"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none min-h-[120px]"
                     required
                   />
                   <FiFileText className="absolute left-3 top-4 text-gray-400" />
@@ -490,7 +490,7 @@ const AddProfessor = () => {
           </section>
 
           {/* Social Media Section */}
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-purple-300">
               <FiLinkedin className="w-6 h-6" /> Social Profiles
             </h2>
@@ -502,7 +502,7 @@ const AddProfessor = () => {
                     name="socialMedia_name"
                     value={sm.socialMedia_name}
                     onChange={(e) => handleArrayChange(setSocialMedia, index, 'socialMedia_name', e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
                     required
                   >
                     <option value="">Select Platform</option>
@@ -522,7 +522,7 @@ const AddProfessor = () => {
                     placeholder="Profile URL"
                     value={sm.link}
                     onChange={(e) => handleArrayChange(setSocialMedia, index, 'link', e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
                     required
                   />
                   {sm.socialMedia_name === 'GitHub' ? (
@@ -547,7 +547,7 @@ const AddProfessor = () => {
             <button
               type="button"
               onClick={() => addNewField(setSocialMedia, { socialMedia_name: '', link: '' })}
-              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
+              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
               <FiPlus className="w-5 h-5" />
               <span>Add Social Profile</span>
@@ -555,7 +555,7 @@ const AddProfessor = () => {
           </section>
 
           {/* Education Section */}
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-green-300">
               <FiBook className="w-6 h-6" /> Education History
             </h2>
@@ -568,7 +568,7 @@ const AddProfessor = () => {
                     <div className="absolute left-8 top-8 bottom-0 w-0.5 bg-gray-600" />
                   )}
                   
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800/70 transition-colors">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
                     <div className="relative">
                       <input
                         type="text"
@@ -624,7 +624,7 @@ const AddProfessor = () => {
             <button
               type="button"
               onClick={() => addNewField(setEducation, { degree: '', institution: '', passing_year: '' })}
-              className="mt-4 flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
+              className="mt-4 flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
               <FiPlus className="w-5 h-5" />
               <span>Add Education</span>
@@ -632,13 +632,13 @@ const AddProfessor = () => {
           </section>
 
           {/* Career Section */}
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-yellow-300">
               <FiBriefcase className="w-6 h-6" /> Professional Experience
             </h2>
             
             {career.map((job, index) => (
-              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800/70 transition-colors">
+              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
                 <div className="relative">
                   <input
                     type="text"
@@ -705,7 +705,7 @@ const AddProfessor = () => {
             <button
               type="button"
               onClick={() => addNewField(setCareer, { position: '', organization: '', joining_year: '', leaving_year: '' })}
-              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
+              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
               <FiPlus className="w-5 h-5" />
               <span>Add Experience</span>
@@ -713,13 +713,13 @@ const AddProfessor = () => {
           </section>
 
           {/* Citations Section */}
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-purple-300">
               <FiFileText className="w-6 h-6" /> Academic Citations
             </h2>
 
             {citations.map((citation, index) => (
-              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800/70 transition-colors">
+              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
                 <div className="relative">
                   <input
                     type="text"
@@ -771,7 +771,7 @@ const AddProfessor = () => {
             <button
               type="button"
               onClick={() => addNewField(setCitations, { title: '', link: '', organization: '' })}
-              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
+              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
               <FiPlus className="w-5 h-5" />
               <span>Add Citation</span>
@@ -779,13 +779,13 @@ const AddProfessor = () => {
           </section>
 
           {/* Awards Section */}
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
           <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-yellow-300">
             <FiAward className="w-6 h-6" /> Honors & Awards
           </h2>
 
           {awards.map((award, index) => (
-            <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded-lg hover:bg-gray-800/70 transition-colors">
+            <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
               {/* Award Title */}
               <div className="relative">
                 <input
@@ -834,7 +834,7 @@ const AddProfessor = () => {
                   <input
                     type="file"
                     onChange={(e) => handleArrayChange(setAwards, index, 'awardPhoto', e.target.files[0])}
-                    className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                    className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
                     accept="image/*,application/pdf"
                   />
                   <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -867,7 +867,7 @@ const AddProfessor = () => {
               <button
                 type="button"
                 onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: null })}
-                className="w-full md:w-auto flex items-center justify-center space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all"
+                className="w-full md:w-auto flex items-center justify-center space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
               >
                 <FiPlus className="w-5 h-5" />
                 <span>Add Award</span>
@@ -879,7 +879,7 @@ const AddProfessor = () => {
             <button
               type="submit"
               disabled={loading}
-              className="relative bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg transform transition-all duration-200 hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="relative bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded font-semibold shadow-lg transform transition-all duration-200 hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center">
