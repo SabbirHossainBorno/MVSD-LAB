@@ -5,6 +5,7 @@ import logger from '../../../../lib/logger';
 import sendTelegramAlert from '../../../../lib/telegramAlert';
 import path from 'path';
 import fs from 'fs';
+import bcrypt from 'bcryptjs';
 
 const formatAlertMessage = (title, details) => {
   return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\n${details}`;
@@ -206,7 +207,7 @@ export async function POST(req, { params }) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Profile Photo Updated',
+          taskName: 'Edit Professor Data',
           details: `Profile photo updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
@@ -231,7 +232,7 @@ export async function POST(req, { params }) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Basic INFO Updated',
+          taskName: 'Edit Professor Data',
           details: `Basic info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
@@ -256,7 +257,7 @@ export async function POST(req, { params }) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Social Media Updated',
+          taskName: 'Edit Professor Data',
           details: `Social Media info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
@@ -281,7 +282,7 @@ export async function POST(req, { params }) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Education INFO Updated',
+          taskName: 'Edit Professor Data',
           details: `Education info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
@@ -306,7 +307,7 @@ export async function POST(req, { params }) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Career INFO Updated',
+          taskName: 'Edit Professor Data',
           details: `Career info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
@@ -331,7 +332,7 @@ export async function POST(req, { params }) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Citation INFO Updated',
+          taskName: 'Edit Professor Data',
           details: `Citation info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
@@ -364,7 +365,7 @@ export async function POST(req, { params }) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Award INFO Updated',
+          taskName: 'Edit Professor Data',
           details: `Award info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
@@ -375,24 +376,35 @@ export async function POST(req, { params }) {
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
       if (!passwordRegex.test(password)) {
         await query('ROLLBACK');
-        console.warn(`Password validation failed for professor ID: ${id}`);
+
         return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
       }
+      // Hash the password
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+
       const updatePasswordQuery = `
         UPDATE professor_basic_info
         SET password = $1
         WHERE id = $2
       `;
-      await query(updatePasswordQuery, [password, id]);
+      await query(updatePasswordQuery, [hashedPassword, id]);
 
       const updateMemberPasswordQuery = `
         UPDATE member
         SET password = $1
         WHERE id = $2
       `;
-      await query(updateMemberPasswordQuery, [password, id]);
+      await query(updateMemberPasswordQuery, [hashedPassword, id]);
 
-      console.log(`Password updated for professor ID: ${id}`);
+      logger.info('Password Updated', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Edit Professor Data',
+          details: `Password updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        }
+      });
     }
 
     await query('COMMIT');
@@ -408,8 +420,6 @@ export async function POST(req, { params }) {
         details: `Professor information updated successfully for ID: ${id} by ${adminEmail} from IP ${ipAddress} with User-Agent ${userAgent}`
       }
     });
-
-    console.log(`Professor information updated successfully for ID: ${id}`);
 
     // Insert notification
     const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
@@ -433,8 +443,6 @@ export async function POST(req, { params }) {
         details: `Error updating professor information for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
       }
     });
-
-    console.error(`Error updating professor information for ID: ${id}: ${error.message}`);
     return NextResponse.json({ message: `Execution failed: ${error.message}` }, { status: 500 });
   }
 }
