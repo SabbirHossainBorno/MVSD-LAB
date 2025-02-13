@@ -38,19 +38,19 @@ const EditProfessor = () => {
         const response = await fetch(`/api/professor_edit/${id}`);
         const data = await response.json();
         setFormData({
-          first_name: data.first_name,
-          last_name: data.last_name,
-          phone: data.phone,
-          short_bio: data.short_bio,
-          status: data.status,
-          leaving_date: data.leaving_date,
+          first_name: data.first_name || '',
+          last_name: data.last_name || '',
+          phone: data.phone || '',
+          short_bio: data.short_bio || '',
+          status: data.status, // Directly use the status from the database
+          leaving_date: data.leaving_date || '', // Only leaving_date can be null
         });
-        setPhoto(data.photo);
-        setSocialMedia(data.socialMedia);
-        setEducation(data.education);
-        setCareer(data.career);
-        setCitations(data.citations);
-        setAwards(data.awards);
+        setPhoto(data.photo || null);
+        setSocialMedia(data.socialMedia || []);
+        setEducation(data.education || []);
+        setCareer(data.career || []);
+        setCitations(data.citations || []);
+        setAwards(data.awards || []);
       } catch (error) {
         toast.error('Failed to fetch professor data');
       } finally {

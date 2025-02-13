@@ -77,8 +77,7 @@ export async function GET(req, { params }) {
           details: `No professor found with ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
-
-      return NextResponse.json({ message: 'Professor not found' }, { status: 404 });
+      return NextResponse.json({ message: 'Professor Not Found' }, { status: 404 });
     }
 
     const professor = professorResult.rows[0];
@@ -118,7 +117,6 @@ export async function GET(req, { params }) {
         details: `Successfully fetched professor data for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
       }
     });
-
     return NextResponse.json(responseData, { status: 200 });
 
   } catch (error) {
@@ -133,7 +131,6 @@ export async function GET(req, { params }) {
         details: `Error fetching professor data for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
       }
     });
-
     return NextResponse.json({ message: `Failed to fetch professor data: ${error.message}` }, { status: 500 });
   }
 }
@@ -168,7 +165,7 @@ export async function POST(req, { params }) {
     const phone = formData.get('phone');
     const short_bio = formData.get('short_bio');
     const status = formData.get('status');
-    const leaving_date = formData.get('leaving_date');
+    const leaving_date = formData.get('leaving_date') || null; // Set to null if empty
     const photo = formData.get('photo');
     const socialMedia = JSON.parse(formData.get('socialMedia') || '[]');
     const education = JSON.parse(formData.get('education') || '[]');
@@ -204,25 +201,40 @@ export async function POST(req, { params }) {
         WHERE id = $2
       `;
       await query(updateMemberPhotoQuery, [photoUrl, id]);
+
+      logger.info('Profile Photo Updated', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Profile Photo Updated',
+          details: `Profile photo updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        }
+      });
     }
 
     // Update basic info
     if (first_name || last_name || phone || short_bio || status || leaving_date) {
-      const leavingDateParam = leaving_date === undefined || leaving_date === 'null' ? null : leaving_date;
-
       const updateBasicInfoQuery = `
         UPDATE professor_basic_info
         SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6
         WHERE id = $7
       `;
-      await query(updateBasicInfoQuery, [first_name, last_name, phone, short_bio, status, leavingDateParam, id]);
+      await query(updateBasicInfoQuery, [first_name, last_name, phone, short_bio, status, leaving_date, id]);
 
       const updateMemberQuery = `
         UPDATE member
         SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6, updated_at = NOW() AT TIME ZONE 'Asia/Dhaka'
         WHERE id = $7
       `;
-      await query(updateMemberQuery, [first_name, last_name, phone, short_bio, status, leavingDateParam, id]);
+      await query(updateMemberQuery, [first_name, last_name, phone, short_bio, status, leaving_date, id]);
+      logger.info('Basic INFO Updated', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Basic INFO Updated',
+          details: `Basic info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        }
+      });
     }
 
     // Update social media
@@ -240,6 +252,14 @@ export async function POST(req, { params }) {
       for (const sm of socialMedia) {
         await query(insertSocialMediaQuery, [id, sm.socialmedia_name, sm.link]);
       }
+      logger.info('Social Media Updated', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Social Media Updated',
+          details: `Social Media info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        }
+      });
     }
 
     // Update education
@@ -257,6 +277,14 @@ export async function POST(req, { params }) {
       for (const edu of education) {
         await query(insertEducationQuery, [id, edu.degree, edu.institution, edu.passing_year]);
       }
+      logger.info('Education INFO Updated', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Education INFO Updated',
+          details: `Education info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        }
+      });
     }
 
     // Update career
@@ -274,6 +302,14 @@ export async function POST(req, { params }) {
       for (const job of career) {
         await query(insertCareerQuery, [id, job.position, job.organization_name, job.joining_year, job.leaving_year]);
       }
+      logger.info('Career INFO Updated', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Career INFO Updated',
+          details: `Career info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        }
+      });
     }
 
     // Update citations
@@ -291,6 +327,14 @@ export async function POST(req, { params }) {
       for (const citation of citations) {
         await query(insertCitationsQuery, [id, citation.title, citation.link, citation.organization_name]);
       }
+      logger.info('Citation INFO Updated', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Citation INFO Updated',
+          details: `Citation info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        }
+      });
     }
 
     // Update awards
@@ -316,6 +360,14 @@ export async function POST(req, { params }) {
         }
         await query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
       }
+      logger.info('Award INFO Updated', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Award INFO Updated',
+          details: `Award info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        }
+      });
     }
 
     // Update password
@@ -323,6 +375,7 @@ export async function POST(req, { params }) {
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
       if (!passwordRegex.test(password)) {
         await query('ROLLBACK');
+        console.warn(`Password validation failed for professor ID: ${id}`);
         return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
       }
       const updatePasswordQuery = `
@@ -338,11 +391,13 @@ export async function POST(req, { params }) {
         WHERE id = $2
       `;
       await query(updateMemberPasswordQuery, [password, id]);
+
+      console.log(`Password updated for professor ID: ${id}`);
     }
 
     await query('COMMIT');
 
-    const successMessage = formatAlertMessage('Professor Information Updated Successfully', `ID : ${id}\nUpdated By : ${email}`);
+    const successMessage = formatAlertMessage('Professor Information Updated Successfully', `ID : ${id}\nUpdated By : ${adminEmail}`);
     await sendTelegramAlert(successMessage);
 
     logger.info('Professor information updated successfully', {
@@ -350,9 +405,11 @@ export async function POST(req, { params }) {
         eid,
         sid: sessionId,
         taskName: 'Edit Professor Data',
-        details: `Professor information updated successfully for ID: ${id} by ${email} from IP ${ipAddress} with User-Agent ${userAgent}`
+        details: `Professor information updated successfully for ID: ${id} by ${adminEmail} from IP ${ipAddress} with User-Agent ${userAgent}`
       }
     });
+
+    console.log(`Professor information updated successfully for ID: ${id}`);
 
     // Insert notification
     const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
@@ -377,6 +434,7 @@ export async function POST(req, { params }) {
       }
     });
 
+    console.error(`Error updating professor information for ID: ${id}: ${error.message}`);
     return NextResponse.json({ message: `Execution failed: ${error.message}` }, { status: 500 });
   }
 }
