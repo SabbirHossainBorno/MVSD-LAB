@@ -545,6 +545,7 @@ const AddProfessor = () => {
                     <option value="Website">Personal Website</option>
                   </select>
                   <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 </div>
                 
                 <div className="relative">
@@ -606,7 +607,7 @@ const AddProfessor = () => {
                         placeholder="Degree"
                         value={edu.degree}
                         onChange={(e) => handleArrayChange(setEducation, index, 'degree', e.target.value)}
-                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                         required
                       />
                       <FiBook className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -618,7 +619,7 @@ const AddProfessor = () => {
                         placeholder="Institution"
                         value={edu.institution}
                         onChange={(e) => handleArrayChange(setEducation, index, 'institution', e.target.value)}
-                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                         required
                       />
                       <FiBriefcase className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -630,7 +631,7 @@ const AddProfessor = () => {
                         placeholder="Passing Year"
                         value={edu.passing_year}
                         onChange={(e) => handleArrayChange(setEducation, index, 'passing_year', parseInt(e.target.value, 10))}
-                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                         min="1900"
                         max={new Date().getFullYear()}
                         required
@@ -676,7 +677,7 @@ const AddProfessor = () => {
                     placeholder="Position"
                     value={job.position}
                     onChange={(e) => handleArrayChange(setCareer, index, 'position', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
                   <FiUser className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -688,7 +689,7 @@ const AddProfessor = () => {
                     placeholder="Organization"
                     value={job.organization}
                     onChange={(e) => handleArrayChange(setCareer, index, 'organization', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
                   <FiBriefcase className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -700,7 +701,7 @@ const AddProfessor = () => {
                     placeholder="Start Year"
                     value={job.joining_year}
                     onChange={(e) => handleArrayChange(setCareer, index, 'joining_year', parseInt(e.target.value, 10))}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     min="1900"
                     max={new Date().getFullYear()}
                     required
@@ -714,7 +715,7 @@ const AddProfessor = () => {
                     placeholder="End Year"
                     value={job.leaving_year}
                     onChange={(e) => handleArrayChange(setCareer, index, 'leaving_year', parseInt(e.target.value, 10))}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     min="1900"
                     max={new Date().getFullYear()}
                   />
@@ -757,7 +758,7 @@ const AddProfessor = () => {
                     placeholder="Citation Title"
                     value={citation.title}
                     onChange={(e) => handleArrayChange(setCitations, index, 'title', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
                   <FiBook className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -769,7 +770,7 @@ const AddProfessor = () => {
                     placeholder="Citation URL"
                     value={citation.link}
                     onChange={(e) => handleArrayChange(setCitations, index, 'link', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
                   <FiLink className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -781,7 +782,7 @@ const AddProfessor = () => {
                     placeholder="Issuing Organization"
                     value={citation.organization}
                     onChange={(e) => handleArrayChange(setCitations, index, 'organization', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
                   <FiBriefcase className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -919,7 +920,7 @@ const AddProfessor = () => {
                   placeholder="Award Title"
                   value={award.title}
                   onChange={(e) => handleArrayChange(setAwards, index, 'title', e.target.value)}
-                  className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                  className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                   required
                 />
                 <FiAward className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -932,7 +933,7 @@ const AddProfessor = () => {
                   placeholder="Year Received"
                   value={award.year}
                   onChange={(e) => handleArrayChange(setAwards, index, 'year', parseInt(e.target.value, 10))}
-                  className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                  className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                   min="1900"
                   max={new Date().getFullYear()}
                   required
@@ -947,11 +948,10 @@ const AddProfessor = () => {
                   placeholder="Award Details"
                   value={award.details}
                   onChange={(e) => handleArrayChange(setAwards, index, 'details', e.target.value)}
-                  className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                  className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                   required
                 />
-                <FiInfo className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
-                
+                <FiInfo className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />                
               </div>
 
               {/* Award Photo Upload */}

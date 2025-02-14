@@ -259,12 +259,12 @@ const EditProfessor = () => {
                 <label className="block text-sm font-medium text-gray-300">Leaving Date</label>
                 <div className="relative">
                 <input
-                    type="date"
-                    name="leaving_date" // ✅ Must match `handleChange`
-                    value={formData.leaving_date}
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none appearance-none"
-                  />
+                  type="date"
+                  name="leaving_date" // ✅ Must match `handleChange`
+                  value={formData.leaving_date}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none appearance-none"
+                />
 
                   <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
@@ -343,6 +343,7 @@ const EditProfessor = () => {
                     <option value="Website">Personal Website</option>
                   </select>
                   <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 </div>
                 <div className="relative">
                   <input
@@ -363,9 +364,9 @@ const EditProfessor = () => {
                   <button
                     type="button"
                     onClick={() => removeField(setSocialMedia, index)}
-                    className="absolute -right-4 -top-4 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
                   >
-                    <FiX className="w-4 h-4" />
+                    <FiX className="w-3.5 h-3.5" />
                   </button>
                 )}
               </div>
@@ -409,7 +410,7 @@ const EditProfessor = () => {
                         placeholder="Degree"
                         value={edu.degree}
                         onChange={(e) => handleArrayChange(setEducation, index, 'degree', e.target.value)}
-                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                         required
                       />
                       <FiBook className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -420,7 +421,7 @@ const EditProfessor = () => {
                         placeholder="Institution"
                         value={edu.institution}
                         onChange={(e) => handleArrayChange(setEducation, index, 'institution', e.target.value)}
-                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                         required
                       />
                       <FiBriefcase className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -431,7 +432,7 @@ const EditProfessor = () => {
                         placeholder="Passing Year"
                         value={edu.passing_year}
                         onChange={(e) => handleArrayChange(setEducation, index, 'passing_year', parseInt(e.target.value, 10))}
-                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                         min="1900"
                         max={new Date().getFullYear()}
                         required
@@ -486,7 +487,7 @@ const EditProfessor = () => {
                     placeholder="Position"
                     value={job.position}
                     onChange={(e) => handleArrayChange(setCareer, index, 'position', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
                   <FiUser className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -497,7 +498,7 @@ const EditProfessor = () => {
                     placeholder="Organization"
                     value={job.organization_name}
                     onChange={(e) => handleArrayChange(setCareer, index, 'organization_name', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
                   <FiBriefcase className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -508,7 +509,7 @@ const EditProfessor = () => {
                     placeholder="Start Year"
                     value={job.joining_year}
                     onChange={(e) => handleArrayChange(setCareer, index, 'joining_year', parseInt(e.target.value, 10))}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     min="1900"
                     max={new Date().getFullYear()}
                     required
@@ -521,7 +522,7 @@ const EditProfessor = () => {
                     placeholder="End Year"
                     value={job.leaving_year}
                     onChange={(e) => handleArrayChange(setCareer, index, 'leaving_year', parseInt(e.target.value, 10))}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     min="1900"
                     max={new Date().getFullYear()}
                   />
@@ -531,9 +532,9 @@ const EditProfessor = () => {
                   <button
                     type="button"
                     onClick={() => removeField(setCareer, index)}
-                    className="absolute -right-4 -top-4 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
                   >
-                    <FiX className="w-4 h-4" />
+                    <FiX className="w-3.5 h-3.5" />
                   </button>
                 )}
               </div>
@@ -571,7 +572,7 @@ const EditProfessor = () => {
                     placeholder="Citation Title"
                     value={citation.title}
                     onChange={(e) => handleArrayChange(setCitations, index, 'title', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
                   <FiBook className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -582,7 +583,7 @@ const EditProfessor = () => {
                     placeholder="Citation URL"
                     value={citation.link}
                     onChange={(e) => handleArrayChange(setCitations, index, 'link', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
                   <FiLink className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -593,7 +594,7 @@ const EditProfessor = () => {
                     placeholder="Issuing Organization"
                     value={citation.organization_name}
                     onChange={(e) => handleArrayChange(setCitations, index, 'organization_name', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
                   <FiBriefcase className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -602,9 +603,9 @@ const EditProfessor = () => {
                   <button
                     type="button"
                     onClick={() => removeField(setCitations, index)}
-                    className="absolute -right-4 -top-4 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
                   >
-                    <FiX className="w-4 h-4" />
+                    <FiX className="w-3.5 h-3.5" />
                   </button>
                 )}
               </div>
@@ -630,119 +631,148 @@ const EditProfessor = () => {
           </section>
 
           {/* Awards Section */}
-          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
-            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-yellow-300">
-              <FiAward className="w-6 h-6" /> Honors & Awards
-            </h2>
-            {awards.map((award, index) => (
-              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
-                {/* Existing Awards */}
-                {award.existing ? (
-                  <>
-                    <input
-                      type="text"
-                      name="title"
-                      placeholder="Award Title"
-                      value={award.title}
-                      className="w-full p-3 rounded bg-gray-700"
-                      readOnly
-                    />
-                    <input
-                      type="number"
-                      name="year"
-                      placeholder="Year"
-                      value={award.year}
-                      className="w-full p-3 rounded bg-gray-700"
-                      readOnly
-                    />
-                    <input
-                      type="text"
-                      name="details"
-                      placeholder="Details"
-                      value={award.details}
-                      className="w-full p-3 rounded bg-gray-700"
-                      readOnly
-                    />
-                    {award.awardPhoto && (
-                      <div className="w-full md:col-span-3">
-                        <p className="text-gray-400 mb-2">Current Award Photo:</p>
-                        <Image
-                          src={award.awardPhoto}
-                          alt="Award Photo"
-                          width={128}
-                          height={128}
-                          className="w-32 h-32 object-cover mb-4"
-                        />
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <input
-                      type="text"
-                      name="title"
-                      placeholder="Award Title"
-                      value={award.title}
-                      onChange={(e) => handleArrayChange(setAwards, index, 'title', e.target.value)}
-                      className="w-full p-3 rounded bg-gray-700"
-                      required
-                    />
-                    <input
-                      type="number"
-                      name="year"
-                      placeholder="Year"
-                      value={award.year}
-                      onChange={(e) => handleArrayChange(setAwards, index, 'year', parseInt(e.target.value, 10))}
-                      className="w-full p-3 rounded bg-gray-700"
-                      min="1900"
-                      max={new Date().getFullYear()}
-                      required
-                    />
-                    <input
-                      type="text"
-                      name="details"
-                      placeholder="Details"
-                      value={award.details}
-                      onChange={(e) => handleArrayChange(setAwards, index, 'details', e.target.value)}
-                      className="w-full p-3 rounded bg-gray-700"
-                      required
-                    />
-                    <input
-                      type="file"
-                      name="awardPhoto"
-                      onChange={(e) => handleArrayChange(setAwards, index, 'awardPhoto', e.target.files[0])}
-                      className="w-full p-3 rounded bg-gray-700"
-                    />
-                    <button
-                        type="button"
-                        onClick={() => removeField(setAwards, index)}
-                        className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
-                      >
-                        <FiX className="w-3.5 h-3.5" />
-                      </button>
-                  </>
-                )}
-              </div>
-            ))}
-            <div className="mt-4 flex items-center space-x-4">
-            <button
-              type="button"
-              onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: null, existing: false })}
-              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-            >
-              <FiPlus className="w-5 h-5" />
-              <span>Add Award</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSubmit('awards')}
-              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-            >
-              <FiRefreshCcw className="w-4 h-4" />
-              <span>Update Awards</span>
-            </button>
+<section className="bg-gray-700/30 rounded p-6 shadow-inner">
+  <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-yellow-300">
+    <FiAward className="w-6 h-6" /> Honors & Awards
+  </h2>
+  
+  {awards.map((award, index) => (
+    <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
+      
+      {/* Existing Awards */}
+      {award.existing ? (
+        <>
+          <input
+            type="text"
+            name="title"
+            placeholder="Award Title"
+            value={award.title}
+            className="w-full p-3 rounded bg-gray-700 mb-3"
+            readOnly
+          />
+          <input
+            type="number"
+            name="year"
+            placeholder="Year"
+            value={award.year}
+            className="w-full p-3 rounded bg-gray-700 mb-3"
+            readOnly
+          />
+          <input
+            type="text"
+            name="details"
+            placeholder="Details"
+            value={award.details}
+            className="w-full p-3 rounded bg-gray-700 mb-3"
+            readOnly
+          />
+          {award.awardPhoto && (
+            <div className="w-full md:col-span-3 mb-4">
+              <p className="text-gray-400 mb-2">Current Award Photo:</p>
+              <Image
+                src={award.awardPhoto}
+                alt="Award Photo"
+                width={128}
+                height={128}
+                className="w-32 h-32 object-cover mb-4"
+              />
             </div>
-          </section>
+          )}
+        </>
+      ) : (
+        <>
+          {/* Award Title */}
+          <div className="relative mb-3">
+            <input
+              type="text"
+              name="title"
+              placeholder="Award Title"
+              value={award.title}
+              onChange={(e) => handleArrayChange(setAwards, index, 'title', e.target.value)}
+              className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
+              required
+            />
+            <FiAward className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
+          </div>
+
+          {/* Award Year */}
+          <div className="relative mb-3">
+            <input
+              type="number"
+              name="year"
+              placeholder="Year"
+              value={award.year}
+              onChange={(e) => handleArrayChange(setAwards, index, 'year', parseInt(e.target.value, 10))}
+              className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
+              min="1900"
+              max={new Date().getFullYear()}
+              required
+            />
+            <FiCalendar className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
+          </div>
+
+          {/* Award Details */}
+          <div className="relative mb-3">
+            <input
+              type="text"
+              name="details"
+              placeholder="Details"
+              value={award.details}
+              onChange={(e) => handleArrayChange(setAwards, index, 'details', e.target.value)}
+              className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
+              required
+            />
+            <FiInfo className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
+          </div>
+
+          {/* Award Photo */}
+          <div className="relative mb-3">
+            <label className="block text-sm font-medium text-gray-300 mb-1">Award Photo</label>
+            <div className="relative">
+              <input
+                type="file"
+                name="awardPhoto"
+                onChange={(e) => handleArrayChange(setAwards, index, 'awardPhoto', e.target.files[0])}
+                className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+              />
+              <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            </div>
+          </div>
+
+          {/* Remove Button */}
+          <button
+            type="button"
+            onClick={() => removeField(setAwards, index)}
+            className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
+          >
+            <FiX className="w-3.5 h-3.5" />
+          </button>
+        </>
+      )}
+    </div>
+  ))}
+
+  <div className="mt-4 flex items-center space-x-4">
+    <button
+      type="button"
+      onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: null, existing: false })}
+      className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+    >
+      <FiPlus className="w-5 h-5" />
+      <span>Add Award</span>
+    </button>
+
+    <button
+      type="button"
+      onClick={() => handleSubmit('awards')}
+      className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+    >
+      <FiRefreshCcw className="w-4 h-4" />
+      <span>Update Awards</span>
+    </button>
+  </div>
+</section>
+
 
           {/* Password Section */}
           <section className="bg-gray-700/30 rounded p-6 shadow-inner">
