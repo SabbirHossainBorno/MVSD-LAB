@@ -254,7 +254,7 @@ const ProfessorDetails = () => {
   );
 };
 
-// Reusable Components (Same as PhD Candidate Details)
+// Reusable Components (Same as Professor Candidate Details)
 const InfoItem = ({ icon, label, value }) => (
   <div className="flex items-start space-x-4">
     <div className="text-blue-400 mt-1">{icon}</div>

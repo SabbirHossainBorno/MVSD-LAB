@@ -46,6 +46,10 @@ export async function GET(req, { params }) {
     const professorCitationsQuery = `SELECT * FROM professor_citations_info WHERE professor_id = $1;`;
     const professorCitationsResult = await query(professorCitationsQuery, [id]);
 
+    // Fetch professor documents
+    const professorDocumentsQuery = `SELECT * FROM phd_candidate_document_info WHERE phd_candidate_id = $1;`;
+    const pDocumentsResult = await query(phdCandidateDocumentsQuery, [id]);
+
     // Fetch professor awards
     const professorAwardsQuery = `SELECT * FROM professor_award_info WHERE professor_id = $1;`;
     const professorAwardsResult = await query(professorAwardsQuery, [id]);
