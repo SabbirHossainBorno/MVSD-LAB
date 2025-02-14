@@ -258,13 +258,14 @@ const EditProfessor = () => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300">Leaving Date</label>
                 <div className="relative">
-                  <input
+                <input
                     type="date"
-                    name="leaving_date"
+                    name="leaving_date" // ✅ Must match `handleChange`
                     value={formData.leaving_date}
                     onChange={handleChange}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none appearance-none"
                   />
+
                   <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
               </div>
