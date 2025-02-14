@@ -76,7 +76,7 @@ const ProfessorDetails = () => {
           className="flex items-center text-blue-300 hover:text-blue-100 transition-colors group"
         >
           <span className="mr-2 group-hover:-translate-x-1 transition-transform">←</span>
-          Back to Member List
+          Back to Prodes List
         </button>
 
         {/* Profile Header */}
@@ -327,7 +327,7 @@ const DocumentCard = ({ title, type, details, imageUrl, onClick }) => (
     </div>
     <div className="p-4 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent">
       <h4 className="font-medium text-white truncate">{title}</h4>
-      <p className="text-sm text-gray-400 truncate">{type}</p>
+      <p className="text-sm text-white truncate">{type}</p>
       {details && <p className="text-sm text-gray-300 mt-1">{details}</p>} {/* Display details */}
     </div>
   </div>

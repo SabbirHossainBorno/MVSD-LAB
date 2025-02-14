@@ -40,6 +40,34 @@ const saveProfilePhoto = async (file, professorId, eid, sessionId) => {
   }
 };
 
+const saveDocumentPhoto = async (file, professorId, documentType) => {
+  const filename = `${professorId}_Document_${documentType}_${Date.now()}${path.extname(file.name)}`;
+  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
+  try {
+    const buffer = await file.arrayBuffer();
+    fs.writeFileSync(targetPath, Buffer.from(buffer));
+    logger.info('Document photo saved successfully', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Save Document Photo',
+        details: `Document photo saved at ${targetPath} for professor ID: ${professorId}`
+      }
+    });
+    return `/Storage/Images/Professor/${filename}`;
+  } catch (error) {
+    logger.error('Failed to save document photo', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Save Document Photo',
+        details: `Failed to save document photo at ${targetPath} for professor ID: ${professorId}. Error: ${error.message}`
+      }
+    });
+    throw new Error(`Failed to save document photo: ${error.message}`);
+  }
+};
+
 const saveAwardPhoto = async (file, professorId, index, eid, sessionId) => {
   if (!file) {
     logger.warn('No file provided for award photo', {
@@ -135,6 +163,9 @@ export async function GET(req, { params }) {
     const citationsQuery = `SELECT * FROM professor_citations_info WHERE professor_id = $1;`;
     const citationsResult = await query(citationsQuery, [id]);
 
+    const documentsQuery = `SELECT * FROM professor_document_info WHERE professor_id = $1;`;
+    const documentsResult = await query(documentsQuery, [id]);
+
     const awardsQuery = `SELECT * FROM professor_award_info WHERE professor_id = $1;`;
     const awardsResult = await query(awardsQuery, [id]);
 
@@ -144,6 +175,7 @@ export async function GET(req, { params }) {
       education: educationResult.rows,
       career: careerResult.rows,
       citations: citationsResult.rows,
+      documents: documentsResult.rows.map(document => ({ ...document, existing: true })),
       awards: awardsResult.rows.map(award => ({ ...award, existing: true })),
     };
 
@@ -212,6 +244,15 @@ export async function POST(req, { params }) {
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
     const citations = JSON.parse(formData.get('citations') || '[]');
+    // Extract documents data
+    const documents = [];
+    for (let i = 0; formData.has(`documents[${i}][title]`); i++) {
+      documents.push({
+        title: formData.get(`documents[${i}][title]`),
+        documentType: formData.get(`documents[${i}][documentType]`),
+        documentsPhoto: formData.get(`documents[${i}][documentsPhoto]`),
+      });
+    }
     const awards = [];
     for (let i = 0; formData.has(`awards[${i}][title]`); i++) {
       awards.push({
@@ -375,6 +416,29 @@ export async function POST(req, { params }) {
           sid: sessionId,
           taskName: 'Edit Professor Data',
           details: `Citation info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        }
+      });
+    }
+
+    // Save documents to the database
+    if (documents.length > 0) {
+      const insertDocumentsQuery = `
+        INSERT INTO professor_document_info (professor_id, title, document_type, document_photo)
+        VALUES ($1, $2, $3, $4)
+      `;
+      for (const document of documents) {
+        let documentUrl = null;
+        if (document.documentsPhoto) {
+          documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, document.documentType);
+        }
+        await query(insertDocumentsQuery, [id, document.title, document.documentType, documentUrl]);
+      }
+      logger.info('Documents Updated', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Edit Professor Data',
+          details: `Documents updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
     }

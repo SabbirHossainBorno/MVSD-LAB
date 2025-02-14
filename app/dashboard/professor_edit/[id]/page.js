@@ -8,7 +8,7 @@ import withAuth from '../../../components/withAuth';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import Image from 'next/image';
 import {
-  FiUser, FiMail, FiPhone, FiCalendar, FiBook, FiBriefcase, FiFileText,
+  FiUser, FiPhone, FiCalendar, FiBook, FiBriefcase, FiFileText,
   FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
   FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo, FiRefreshCcw,
 } from 'react-icons/fi';
@@ -27,6 +27,7 @@ const EditProfessor = () => {
   const [education, setEducation] = useState([]);
   const [career, setCareer] = useState([]);
   const [citations, setCitations] = useState([]);
+  const [documents, setDocuments] = useState([]);
   const [awards, setAwards] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -50,6 +51,7 @@ const EditProfessor = () => {
         setEducation(data.education || []);
         setCareer(data.career || []);
         setCitations(data.citations || []);
+        setDocuments(data.documents || []); // Add this line
         setAwards(data.awards || []);
       } catch (error) {
         toast.error('Failed to fetch professor data');
@@ -103,6 +105,16 @@ const EditProfessor = () => {
     setLoading(true);
     const data = new FormData();
 
+    if (section === 'documents') {
+      documents.forEach((document, index) => {
+        data.append(`documents[${index}][title]`, document.title);
+        data.append(`documents[${index}][documentType]`, document.documentType);
+        if (document.documentsPhoto) {
+          data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
+        }
+      });
+    }
+
     if (section === 'basicInfo') {
       for (const key in formData) {
         data.append(key, formData[key]);
@@ -138,7 +150,7 @@ const EditProfessor = () => {
       });
 
       if (response.ok) {
-        toast.success('Professor updated successfully!');
+        toast.success('Professor Updated successfully!');
         router.push('/dashboard');
       } else {
         const result = await response.json();
@@ -630,148 +642,236 @@ const EditProfessor = () => {
             </div>
           </section>
 
-          {/* Awards Section */}
-<section className="bg-gray-700/30 rounded p-6 shadow-inner">
-  <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-yellow-300">
-    <FiAward className="w-6 h-6" /> Honors & Awards
+          {/* Documents Section */}
+<section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+  <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-cyan-300">
+    <FiFileText className="w-6 h-6" /> Documents
   </h2>
-  
-  {awards.map((award, index) => (
+
+  {documents.map((document, index) => (
     <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
-      
-      {/* Existing Awards */}
-      {award.existing ? (
-        <>
+      {/* Document Title Input */}
+      <div className="relative flex items-center">
+        <input
+          type="text"
+          placeholder="Document Title"
+          value={document.title}
+          onChange={(e) => handleArrayChange(setDocuments, index, 'title', e.target.value)}
+          className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
+          required
+        />
+        <FiFileText className="absolute right-3 text-gray-400 pointer-events-none" />
+      </div>
+
+      {/* Document Type */}
+      <div className="relative flex items-center">
+        <FiInfo className="absolute left-3 text-gray-400 pointer-events-none" />
+        <select
+          name="documentType"
+          value={document.documentType}
+          onChange={(e) => handleArrayChange(setDocuments, index, 'documentType', e.target.value)}
+          className="w-full pl-10 pr-10 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+          required
+        >
+          <option value="" disabled className="text-gray-400">Select Type</option>
+          <option value="Education">Education</option>
+          <option value="Medical">Medical</option>
+          <option value="Career">Career</option>
+          <option value="Personal">Personal</option>
+          <option value="Official">Official</option>
+          <option value="Other">Other</option>
+        </select>
+        <FiChevronDown className="absolute right-3 text-gray-400 pointer-events-none" />
+      </div>
+
+      {/* Document Upload */}
+      <div className="relative space-y-2">
+        <div className="relative">
           <input
-            type="text"
-            name="title"
-            placeholder="Award Title"
-            value={award.title}
-            className="w-full p-3 rounded bg-gray-700 mb-3"
-            readOnly
+            type="file"
+            onChange={(e) => handleArrayChange(setDocuments, index, 'documentsPhoto', e.target.files[0])}
+            className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+            accept="image/*,application/pdf"
           />
-          <input
-            type="number"
-            name="year"
-            placeholder="Year"
-            value={award.year}
-            className="w-full p-3 rounded bg-gray-700 mb-3"
-            readOnly
-          />
-          <input
-            type="text"
-            name="details"
-            placeholder="Details"
-            value={award.details}
-            className="w-full p-3 rounded bg-gray-700 mb-3"
-            readOnly
-          />
-          {award.awardPhoto && (
-            <div className="w-full md:col-span-3 mb-4">
-              <p className="text-gray-400 mb-2">Current Award Photo:</p>
-              <Image
-                src={award.awardPhoto}
-                alt="Award Photo"
-                width={128}
-                height={128}
-                className="w-32 h-32 object-cover mb-4"
-              />
-            </div>
+          <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          {document.documentsPhoto && (
+            <button
+              type="button"
+              onClick={() => handleArrayChange(setDocuments, index, 'documentsPhoto', null)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-300"
+            >
+              <FiX className="w-4 h-4" />
+            </button>
           )}
-        </>
-      ) : (
-        <>
-          {/* Award Title */}
-          <div className="relative mb-3">
-            <input
-              type="text"
-              name="title"
-              placeholder="Award Title"
-              value={award.title}
-              onChange={(e) => handleArrayChange(setAwards, index, 'title', e.target.value)}
-              className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
-              required
-            />
-            <FiAward className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
-          </div>
+        </div>
+      </div>
 
-          {/* Award Year */}
-          <div className="relative mb-3">
-            <input
-              type="number"
-              name="year"
-              placeholder="Year"
-              value={award.year}
-              onChange={(e) => handleArrayChange(setAwards, index, 'year', parseInt(e.target.value, 10))}
-              className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
-              min="1900"
-              max={new Date().getFullYear()}
-              required
-            />
-            <FiCalendar className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
-          </div>
-
-          {/* Award Details */}
-          <div className="relative mb-3">
-            <input
-              type="text"
-              name="details"
-              placeholder="Details"
-              value={award.details}
-              onChange={(e) => handleArrayChange(setAwards, index, 'details', e.target.value)}
-              className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
-              required
-            />
-            <FiInfo className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
-          </div>
-
-          {/* Award Photo */}
-          <div className="relative mb-3">
-            <label className="block text-sm font-medium text-gray-300 mb-1">Award Photo</label>
-            <div className="relative">
-              <input
-                type="file"
-                name="awardPhoto"
-                onChange={(e) => handleArrayChange(setAwards, index, 'awardPhoto', e.target.files[0])}
-                className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-              />
-              <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            </div>
-          </div>
-
-          {/* Remove Button */}
-          <button
-            type="button"
-            onClick={() => removeField(setAwards, index)}
-            className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
-          >
-            <FiX className="w-3.5 h-3.5" />
-          </button>
-        </>
+      {/* Remove Button */}
+      {documents.length > 1 && (
+        <button
+          type="button"
+          onClick={() => removeField(setDocuments, index)}
+          className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
+        >
+          <FiX className="w-3.5 h-3.5" />
+        </button>
       )}
     </div>
   ))}
 
-  <div className="mt-4 flex items-center space-x-4">
-    <button
-      type="button"
-      onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: null, existing: false })}
-      className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-    >
-      <FiPlus className="w-5 h-5" />
-      <span>Add Award</span>
-    </button>
-
-    <button
-      type="button"
-      onClick={() => handleSubmit('awards')}
-      className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-    >
-      <FiRefreshCcw className="w-4 h-4" />
-      <span>Update Awards</span>
-    </button>
-  </div>
+  {/* Add Document Button */}
+  <button
+    type="button"
+    onClick={() => addNewField(setDocuments, { title: '', documentType: '', documentsPhoto: null })}
+    className="w-full md:w-auto flex items-center justify-center space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+  >
+    <FiPlus className="w-5 h-5" />
+    <span>Add Document</span>
+  </button>
 </section>
+
+          {/* Awards Section */}
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
+            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-yellow-300">
+              <FiAward className="w-6 h-6" /> Honors & Awards
+            </h2>
+            
+            {awards.map((award, index) => (
+              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
+                
+                {/* Existing Awards */}
+                {award.existing ? (
+                  <>
+                    <input
+                      type="text"
+                      name="title"
+                      placeholder="Award Title"
+                      value={award.title}
+                      className="w-full p-3 rounded bg-gray-700 mb-3"
+                      readOnly
+                    />
+                    <input
+                      type="number"
+                      name="year"
+                      placeholder="Year"
+                      value={award.year}
+                      className="w-full p-3 rounded bg-gray-700 mb-3"
+                      readOnly
+                    />
+                    <input
+                      type="text"
+                      name="details"
+                      placeholder="Details"
+                      value={award.details}
+                      className="w-full p-3 rounded bg-gray-700 mb-3"
+                      readOnly
+                    />
+                    {award.awardPhoto && (
+                      <div className="w-full md:col-span-3 mb-4">
+                        <p className="text-gray-400 mb-2">Current Award Photo:</p>
+                        <Image
+                          src={award.awardPhoto}
+                          alt="Award Photo"
+                          width={128}
+                          height={128}
+                          className="w-32 h-32 object-cover mb-4"
+                        />
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {/* Award Title */}
+                    <div className="relative mb-3">
+                      <input
+                        type="text"
+                        name="title"
+                        placeholder="Award Title"
+                        value={award.title}
+                        onChange={(e) => handleArrayChange(setAwards, index, 'title', e.target.value)}
+                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
+                        required
+                      />
+                      <FiAward className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
+                    </div>
+
+                    {/* Award Year */}
+                    <div className="relative mb-3">
+                      <input
+                        type="number"
+                        name="year"
+                        placeholder="Year"
+                        value={award.year}
+                        onChange={(e) => handleArrayChange(setAwards, index, 'year', parseInt(e.target.value, 10))}
+                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
+                        min="1900"
+                        max={new Date().getFullYear()}
+                        required
+                      />
+                      <FiCalendar className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
+                    </div>
+
+                    {/* Award Details */}
+                    <div className="relative mb-3">
+                      <input
+                        type="text"
+                        name="details"
+                        placeholder="Details"
+                        value={award.details}
+                        onChange={(e) => handleArrayChange(setAwards, index, 'details', e.target.value)}
+                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
+                        required
+                      />
+                      <FiInfo className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400" />
+                    </div>
+
+                    {/* Award Photo */}
+                    <div className="relative mb-3">
+                      <label className="block text-sm font-medium text-gray-300 mb-1">Award Photo</label>
+                      <div className="relative">
+                        <input
+                          type="file"
+                          name="awardPhoto"
+                          onChange={(e) => handleArrayChange(setAwards, index, 'awardPhoto', e.target.files[0])}
+                          className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                        />
+                        <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                      </div>
+                    </div>
+
+                    {/* Remove Button */}
+                    <button
+                      type="button"
+                      onClick={() => removeField(setAwards, index)}
+                      className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
+                    >
+                      <FiX className="w-3.5 h-3.5" />
+                    </button>
+                  </>
+                )}
+              </div>
+            ))}
+
+            <div className="mt-4 flex items-center space-x-4">
+              <button
+                type="button"
+                onClick={() => addNewField(setAwards, { title: '', year: '', details: '', awardPhoto: null, existing: false })}
+                className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+              >
+                <FiPlus className="w-5 h-5" />
+                <span>Add Award</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleSubmit('awards')}
+                className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+              >
+                <FiRefreshCcw className="w-4 h-4" />
+                <span>Update Awards</span>
+              </button>
+            </div>
+          </section>
 
 
           {/* Password Section */}
