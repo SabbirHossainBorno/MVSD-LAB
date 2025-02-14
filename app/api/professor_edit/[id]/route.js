@@ -81,6 +81,101 @@ const saveAwardPhoto = async (file, professorId, index, eid, sessionId) => {
   }
 };
 
+// Main function to handle the GET request
+export async function GET(req, { params }) {
+  const { id } = await params;  // Await params before using its properties
+  const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
+  const eid = req.cookies.get('eid')?.value || 'Unknown EID';
+  const adminEmail = req.cookies.get('email')?.value || 'Unknown Email';
+  const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
+  const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
+
+  try {
+    const apiCallMessage = formatAlertMessage('Professor Edit - API', `IP: ${ipAddress}\nStatus: 200`);
+    await sendTelegramAlert(apiCallMessage);
+
+    logger.info('Fetching professor data', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch Professor Data',
+        details: `Fetching professor data for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+      }
+    });
+
+    const professorQuery = `SELECT * FROM professor_basic_info WHERE id = $1;`;
+    const professorResult = await query(professorQuery, [id]);
+
+    if (professorResult.rows.length === 0) {
+      const notFoundMessage = formatAlertMessage('Professor Not Found', `ID: ${id}\nIP: ${ipAddress}\nStatus: 404`);
+      await sendTelegramAlert(notFoundMessage);
+
+      logger.warn('Professor not found', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Fetch Professor Data',
+          details: `No professor found with ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        }
+      });
+      return NextResponse.json({ message: 'Professor Not Found' }, { status: 404 });
+    }
+
+    const professor = professorResult.rows[0];
+
+    const socialMediaQuery = `SELECT * FROM professor_socialmedia_info WHERE professor_id = $1;`;
+    const socialMediaResult = await query(socialMediaQuery, [id]);
+
+    const educationQuery = `SELECT * FROM professor_education_info WHERE professor_id = $1;`;
+    const educationResult = await query(educationQuery, [id]);
+
+    const careerQuery = `SELECT * FROM professor_career_info WHERE professor_id = $1;`;
+    const careerResult = await query(careerQuery, [id]);
+
+    const citationsQuery = `SELECT * FROM professor_citations_info WHERE professor_id = $1;`;
+    const citationsResult = await query(citationsQuery, [id]);
+
+    const awardsQuery = `SELECT * FROM professor_award_info WHERE professor_id = $1;`;
+    const awardsResult = await query(awardsQuery, [id]);
+
+    const responseData = {
+      ...professor,
+      socialMedia: socialMediaResult.rows,
+      education: educationResult.rows,
+      career: careerResult.rows,
+      citations: citationsResult.rows,
+      awards: awardsResult.rows.map(award => ({ ...award, existing: true })),
+    };
+
+    const successMessage = formatAlertMessage('Successfully Fetched Professor Data', `ID: ${id}\nIP: ${ipAddress}\nStatus: 200`);
+    await sendTelegramAlert(successMessage);
+
+    logger.info('Successfully fetched professor data', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch Professor Data',
+        details: `Successfully fetched professor data for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+      }
+    });
+    return NextResponse.json(responseData, { status: 200 });
+
+  } catch (error) {
+    const errorMessage = formatAlertMessage('Error Fetching Professor Data', `ID: ${id}\nIP: ${ipAddress}\nError: ${error.message}\nStatus: 500`);
+    await sendTelegramAlert(errorMessage);
+
+    logger.error('Error fetching professor data', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Fetch Professor Data',
+        details: `Error fetching professor data for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+      }
+    });
+    return NextResponse.json({ message: `Failed to fetch professor data: ${error.message}` }, { status: 500 });
+  }
+}
+
 // Main function to handle the POST request
 export async function POST(req, { params }) {
   const { id } = await params;  // Await params before using its properties
@@ -133,7 +228,7 @@ export async function POST(req, { params }) {
 
     // Update profile photo
     if (photo) {
-      const photoUrl = await saveProfilePhoto(photo, id, eid, sessionId);
+      const photoUrl = await saveProfilePhoto(photo, id);
       const updatePhotoQuery = `
         UPDATE professor_basic_info
         SET photo = $1
@@ -143,7 +238,7 @@ export async function POST(req, { params }) {
 
       const updateMemberPhotoQuery = `
         UPDATE member
-        SET photo = $1, updated_at = NOW() AT TIME ZONE 'Asia/Dhaka'
+        SET photo = $1, updated_at = NOW()
         WHERE id = $2
       `;
       await query(updateMemberPhotoQuery, [photoUrl, id]);
@@ -160,19 +255,20 @@ export async function POST(req, { params }) {
 
     // Update basic info
     if (first_name || last_name || phone || short_bio || status || leaving_date) {
+      const newStatus = leaving_date ? 'Inactive' : status;
       const updateBasicInfoQuery = `
         UPDATE professor_basic_info
         SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6
         WHERE id = $7
       `;
-      await query(updateBasicInfoQuery, [first_name, last_name, phone, short_bio, status, leaving_date, id]);
+      await query(updateBasicInfoQuery, [first_name, last_name, phone, short_bio, newStatus, leaving_date, id]);
 
       const updateMemberQuery = `
         UPDATE member
-        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6, updated_at = NOW() AT TIME ZONE 'Asia/Dhaka'
+        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6, updated_at = NOW()
         WHERE id = $7
       `;
-      await query(updateMemberQuery, [first_name, last_name, phone, short_bio, status, leaving_date, id]);
+      await query(updateMemberQuery, [first_name, last_name, phone, short_bio, newStatus, leaving_date, id]);
       logger.info('Basic INFO Updated', {
         meta: {
           eid,
@@ -302,7 +398,7 @@ export async function POST(req, { params }) {
         const award = newAwards[i];
         let awardUrl = null;
         if (award.awardPhoto) {
-          awardUrl = await saveAwardPhoto(award.awardPhoto, id, i, eid, sessionId);
+          awardUrl = await saveAwardPhoto(award.awardPhoto, id, currentAwardsCount + i + 1);
         }
         await query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
       }
@@ -321,14 +417,7 @@ export async function POST(req, { params }) {
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
       if (!passwordRegex.test(password)) {
         await query('ROLLBACK');
-        logger.warn('Password validation failed', {
-          meta: {
-            eid,
-            sid: sessionId,
-            taskName: 'Edit Professor Data',
-            details: `Password validation failed for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
-          }
-        });
+
         return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
       }
       // Hash the password

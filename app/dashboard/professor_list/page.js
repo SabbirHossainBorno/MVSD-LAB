@@ -238,10 +238,20 @@ const ProfessorsList = () => {
                     </h2>
                     <p className="text-gray-400 text-sm truncate mb-2">{professor.email}</p>
                     <div className="flex flex-wrap gap-2">
-                      <span className="px-2 py-1 bg-blue-600/20 text-blue-400 text-xs rounded">{professor.id}</span>
-                      <span className="px-2 py-1 bg-purple-600/20 text-purple-400 text-xs rounded">
-                        {format(new Date(professor.joining_date), "d MMMM, yyyy")}
+                      <span className="px-3 py-1.5 bg-blue-600/20 text-blue-300 text-xs rounded inline-flex items-center gap-1.5 border border-blue-500/10">
+                        <FiUser className="text-xs shrink-0" />
+                        <span>{professor.id}</span>
                       </span>
+                      <span className="px-3 py-1.5 bg-green-600/20 text-green-300 text-xs rounded inline-flex items-center gap-1.5 border border-green-500/10">
+                        <FiArrowUp className="text-xs shrink-0" />
+                        <span>{format(new Date(professor.joining_date), "d MMM yyyy")}</span>
+                      </span>
+                      {professor.leaving_date && (
+                        <span className="px-3 py-1.5 bg-red-600/20 text-red-300 text-xs rounded inline-flex items-center gap-1.5 border border-red-500/10">
+                          <FiArrowDown className="text-xs shrink-0" />
+                          <span>{format(new Date(professor.leaving_date), "d MMM yyyy")}</span>
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
