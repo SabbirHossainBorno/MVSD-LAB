@@ -421,27 +421,29 @@ export async function POST(req, { params }) {
     }
 
     // Save documents to the database
-    if (documents.length > 0) {
-      const insertDocumentsQuery = `
-        INSERT INTO professor_document_info (professor_id, title, document_type, document_photo)
-        VALUES ($1, $2, $3, $4)
-      `;
-      for (const document of documents) {
-        let documentUrl = null;
-        if (document.documentsPhoto) {
-          documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, document.documentType);
-        }
-        await query(insertDocumentsQuery, [id, document.title, document.documentType, documentUrl]);
-      }
-      logger.info('Documents Updated', {
-        meta: {
-          eid,
-          sid: sessionId,
-          taskName: 'Edit Professor Data',
-          details: `Documents updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
-        }
-      });
+if (documents.length > 0) {
+  const insertDocumentsQuery = `
+    INSERT INTO professor_document_info (professor_id, title, document_type, document_photo)
+    VALUES ($1, $2, $3, $4)
+  `;
+  for (const document of documents) {
+    let documentUrl = null;
+    if (document.documentsPhoto && typeof document.documentsPhoto !== 'string') {
+      documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, document.documentType);
+    } else {
+      documentUrl = document.documentsPhoto; // Use existing URL if no new file is uploaded
     }
+    await query(insertDocumentsQuery, [id, document.title, document.documentType, documentUrl]);
+  }
+  logger.info('Documents Updated', {
+    meta: {
+      eid,
+      sid: sessionId,
+      taskName: 'Edit Professor Data',
+      details: `Documents updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+    }
+  });
+}
 
     // Update awards
     if (awards.length > 0) {

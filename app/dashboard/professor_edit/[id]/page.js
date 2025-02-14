@@ -109,7 +109,7 @@ const EditProfessor = () => {
       documents.forEach((document, index) => {
         data.append(`documents[${index}][title]`, document.title);
         data.append(`documents[${index}][documentType]`, document.documentType);
-        if (document.documentsPhoto) {
+        if (document.documentsPhoto && typeof document.documentsPhoto !== 'string') {
           data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
         }
       });
@@ -686,24 +686,43 @@ const EditProfessor = () => {
 
       {/* Document Upload */}
       <div className="relative space-y-2">
-        <div className="relative">
-          <input
-            type="file"
-            onChange={(e) => handleArrayChange(setDocuments, index, 'documentsPhoto', e.target.files[0])}
-            className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-            accept="image/*,application/pdf"
-          />
-          <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          {document.documentsPhoto && (
+        {document.document_photo && typeof document.document_photo === 'string' ? (
+          <div>
+            <Image
+              src={document.document_photo}
+              alt="Document Photo"
+              width={128}
+              height={128}
+              className="w-32 h-32 object-cover mb-4"
+            />
             <button
               type="button"
-              onClick={() => handleArrayChange(setDocuments, index, 'documentsPhoto', null)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-300"
+              onClick={() => handleArrayChange(setDocuments, index, 'document_photo', null)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
-              <FiX className="w-4 h-4" />
+              Change Document Photo
             </button>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="relative">
+            <input
+              type="file"
+              onChange={(e) => handleArrayChange(setDocuments, index, 'document_photo', e.target.files[0])}
+              className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+              accept="image/*,application/pdf"
+            />
+            <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            {document.document_photo && (
+              <button
+                type="button"
+                onClick={() => handleArrayChange(setDocuments, index, 'document_photo', null)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-300"
+              >
+                <FiX className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Remove Button */}
@@ -720,14 +739,26 @@ const EditProfessor = () => {
   ))}
 
   {/* Add Document Button */}
+  <div className="mt-4 flex items-center space-x-4">
   <button
     type="button"
     onClick={() => addNewField(setDocuments, { title: '', documentType: '', documentsPhoto: null })}
-    className="w-full md:w-auto flex items-center justify-center space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+    className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
   >
     <FiPlus className="w-5 h-5" />
     <span>Add Document</span>
   </button>
+
+  {/* Update Documents Button */}
+  <button
+    type="button"
+    onClick={() => handleSubmit('documents')}
+    className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+  >
+    <FiRefreshCcw className="w-4 h-4" />
+    <span>Update Document</span>
+  </button>
+  </div>
 </section>
 
           {/* Awards Section */}
