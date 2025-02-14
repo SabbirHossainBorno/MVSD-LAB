@@ -190,8 +190,8 @@ const PhdCandidateDetails = () => {
         {/* Documents Gallery */}
         {phdCandidateDetails.documents?.length > 0 && (
           <section className="bg-gray-800/50 backdrop-blur-lg p-8 rounded shadow-xl">
-            <h2 className="text-2xl font-semibold mb-6 text-yellow-300 flex items-center gap-2">
-              <FiFile className="inline-block" /> Research Documents
+            <h2 className="text-2xl font-semibold mb-6 text-cyan-300 flex items-center gap-2">
+              <FiFile className="inline-block" /> Documents
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {phdCandidateDetails.documents.map((doc, index) => (

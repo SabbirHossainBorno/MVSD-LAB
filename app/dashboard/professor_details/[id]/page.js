@@ -17,6 +17,7 @@ const ProfessorDetails = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const { id } = useParams();
   const router = useRouter();
+  const [selectedAwardDetails, setSelectedAwardDetails] = useState(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -37,8 +38,9 @@ const ProfessorDetails = () => {
     return () => controller.abort();
   }, [id]);
 
-  const handleImageClick = (imageUrl) => {
+  const handleImageClick = (imageUrl, details) => {
     setSelectedImage(imageUrl);
+    setSelectedAwardDetails(details);
     setIsModalOpen(true);
   };
 
@@ -207,6 +209,26 @@ const ProfessorDetails = () => {
           </section>
         )}
 
+        {/* Documents Gallery */}
+        {professorDetails.documents?.length > 0 && (
+          <section className="bg-gray-800/50 backdrop-blur-lg p-8 rounded shadow-xl">
+            <h2 className="text-2xl font-semibold mb-6 text-cyan-300 flex items-center gap-2">
+              <FiFile className="inline-block" /> Documents
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {professorDetails.documents.map((doc, index) => (
+                <DocumentCard
+                  key={index}
+                  title={doc.title}
+                  type={doc.document_type}
+                  imageUrl={formatImageUrl(doc.document_photo)}
+                  onClick={() => handleImageClick(formatImageUrl(doc.document_photo))}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Awards Gallery */}
         {professorDetails.awards?.length > 0 && (
           <section className="bg-gray-800/50 backdrop-blur-lg p-8 rounded shadow-xl">
@@ -219,8 +241,9 @@ const ProfessorDetails = () => {
                   key={index}
                   title={award.title}
                   type={award.year}
+                  details={award.details} // Add details here
                   imageUrl={formatImageUrl(award.award_photo)}
-                  onClick={() => handleImageClick(formatImageUrl(award.award_photo))}
+                  onClick={() => handleImageClick(formatImageUrl(award.award_photo), award.details)}
                 />
               ))}
             </div>
@@ -245,6 +268,12 @@ const ProfessorDetails = () => {
                   height={800}
                   className="object-contain w-full h-full max-h-[80vh]"
                 />
+                {selectedAwardDetails && (
+                  <div className="p-4 text-white">
+                    <h4 className="text-lg font-semibold">Details</h4>
+                    <p>{selectedAwardDetails}</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -277,7 +306,7 @@ const TimelineItem = ({ title, subtitle, year, isLast }) => (
   </div>
 );
 
-const DocumentCard = ({ title, type, imageUrl, onClick }) => (
+const DocumentCard = ({ title, type, details, imageUrl, onClick }) => (
   <div 
     className="group relative bg-gray-700 rounded overflow-hidden cursor-pointer transform transition-all hover:-translate-y-2 shadow-lg"
     onClick={onClick}
@@ -299,6 +328,7 @@ const DocumentCard = ({ title, type, imageUrl, onClick }) => (
     <div className="p-4 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent">
       <h4 className="font-medium text-white truncate">{title}</h4>
       <p className="text-sm text-gray-400 truncate">{type}</p>
+      {details && <p className="text-sm text-gray-300 mt-1">{details}</p>} {/* Display details */}
     </div>
   </div>
 );

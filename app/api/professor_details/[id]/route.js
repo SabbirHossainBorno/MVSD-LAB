@@ -9,8 +9,7 @@ const formatAlertMessage = (title, details) => {
 };
 
 export async function GET(req, { params }) {
-  // Await the params before using
-  const { id } = await params; // Add this line to properly await params
+  const { id } = await params;
 
   const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
   const eid = req.cookies.get('eid')?.value || 'Unknown EID';
@@ -47,15 +46,15 @@ export async function GET(req, { params }) {
     const professorCitationsResult = await query(professorCitationsQuery, [id]);
 
     // Fetch professor documents
-    const professorDocumentsQuery = `SELECT * FROM phd_candidate_document_info WHERE phd_candidate_id = $1;`;
-    const pDocumentsResult = await query(phdCandidateDocumentsQuery, [id]);
+    const professorDocumentsQuery = `SELECT * FROM professor_document_info WHERE professor_id = $1;`;
+    const professorDocumentsResult = await query(professorDocumentsQuery, [id]);
 
     // Fetch professor awards
     const professorAwardsQuery = `SELECT * FROM professor_award_info WHERE professor_id = $1;`;
     const professorAwardsResult = await query(professorAwardsQuery, [id]);
 
     // Fetch professor social media info
-    const professorSocialMediaQuery = `SELECT * FROM professor_socialMedia_info WHERE professor_id = $1;`;
+    const professorSocialMediaQuery = `SELECT * FROM professor_socialmedia_info WHERE professor_id = $1;`;
     const professorSocialMediaResult = await query(professorSocialMediaQuery, [id]);
 
     const professorDetails = {
@@ -63,6 +62,7 @@ export async function GET(req, { params }) {
       education: professorEducationResult.rows,
       career: professorCareerResult.rows,
       citations: professorCitationsResult.rows,
+      documents: professorDocumentsResult.rows,
       awards: professorAwardsResult.rows,
       socialMedia: professorSocialMediaResult.rows,
     };
@@ -81,7 +81,7 @@ export async function GET(req, { params }) {
 
     return NextResponse.json(professorDetails, { status: 200 });
   } catch (error) {
-    const errorMessage = formatAlertMessage('Error Fetching Professor Details', `ID : ${id}`);
+    const errorMessage = formatAlertMessage('Error Fetching Professor Details', `ID : ${id}\nError: ${error.message}`);
     await sendTelegramAlert(errorMessage);
 
     logger.error('Error fetching professor details', {
@@ -93,6 +93,6 @@ export async function GET(req, { params }) {
       }
     });
 
-    return NextResponse.json({ message: 'Failed to fetch professor details' }, { status: 500 });
+    return NextResponse.json({ message: `Failed to fetch professor details: ${error.message}` }, { status: 500 });
   }
 }
