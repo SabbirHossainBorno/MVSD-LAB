@@ -36,6 +36,18 @@ const saveProfilePhoto = async (file, professorId) => {
   }
 };
 
+const saveDocumentPhoto = async (file, professorId, index, documentType) => {
+  const filename = `${professorId}_Document_${documentType}_${index}${path.extname(file.name)}`;
+  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
+  try {
+    const buffer = await file.arrayBuffer();
+    fs.writeFileSync(targetPath, Buffer.from(buffer));
+    return `/Storage/Images/Professor/${filename}`;
+  } catch (error) {
+    throw new Error(`Failed to save document photo: ${error.message}`);
+  }
+};
+
 const saveAwardPhoto = async (file, professorId, index) => {
   const filename = `${professorId}_Award_${index}${path.extname(file.name)}`;
   const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
@@ -78,6 +90,15 @@ export async function POST(req) {
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
     const citations = JSON.parse(formData.get('citations') || '[]');
+    const documents = [];
+
+    for (let i = 0; formData.has(`documents[${i}][title]`); i++) {
+      documents.push({
+        title: formData.get(`documents[${i}][title]`),
+        documentType: formData.get(`documents[${i}][documentType]`),
+        documentsPhoto: formData.get(`documents[${i}][documentsPhoto]`),
+      });
+    }
     const awards = [];
     for (let i = 0; formData.has(`awards[${i}][title]`); i++) {
       awards.push({
@@ -139,8 +160,8 @@ export async function POST(req) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Add PhD Candidate',
-          details: `Attempt to add PhD Candidate failed - Email ${email} already exists.`
+          taskName: 'Add Professor',
+          details: `Attempt to add Professor failed - Email ${email} already exists.`
         }
       });
 
@@ -156,8 +177,8 @@ export async function POST(req) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Add PhD Candidate',
-          details: `Attempt to add PhD Candidate failed - Phone No : ${phone} already exists.`
+          taskName: 'Add Professor',
+          details: `Attempt to add Professor failed - Phone No : ${phone} already exists.`
         }
       });
 
@@ -173,8 +194,8 @@ export async function POST(req) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Add PhD Candidate',
-          details: `Attempt to add PhD Candidate failed - ID number ${idNumber} already exists.`
+          taskName: 'Add Professor',
+          details: `Attempt to add Professor failed - ID number ${idNumber} already exists.`
         }
       });
 
@@ -190,8 +211,8 @@ export async function POST(req) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Add PhD Candidate',
-          details: `Attempt to add PhD Candidate failed - Passport number ${passport_number} already exists.`
+          taskName: 'Add Professor',
+          details: `Attempt to add Professor failed - Passport number ${passport_number} already exists.`
         }
       });
 
@@ -207,6 +228,24 @@ export async function POST(req) {
     const photoFile = formData.get('photo');
     if (photoFile) {
       photoUrl = await saveProfilePhoto(photoFile, professorId);
+    }
+
+    // Save document photos
+    const documentUrls = [];
+    if (documents.length > 0) {
+      for (let i = 0; i < documents.length; i++) {
+        const documentFile = documents[i].documentsPhoto;
+        if (documentFile) {
+          try {
+            const documentUrl = await saveDocumentPhoto(documentFile, professorId, i, documents[i].documentType);
+            documentUrls.push(documentUrl);
+          } catch (error) {
+            return NextResponse.json({ message: `Failed to save document photo: ${error.message}` }, { status: 500 });
+          }
+        } else {
+          return NextResponse.json({ message: 'Professor document photo is missing' }, { status: 400 });
+        }
+      }
     }
 
     const awardUrls = [];
@@ -265,6 +304,21 @@ export async function POST(req) {
       const insertCitationQuery = `INSERT INTO professor_citations_info (professor_id, title, link, organization_name) VALUES ($1, $2, $3, $4) RETURNING *;`;
       for (const citation of citations) {
         await query(insertCitationQuery, [professorId, citation.title, citation.link, citation.organization]);
+      }
+
+      // Insert into professor_documents_info
+      const insertDocumentsQuery = `INSERT INTO professor_document_info ("professor_id", "title", "document_type", "document_photo") VALUES ($1, $2, $3, $4) RETURNING *;`;
+      for (let i = 0; i < documents.length; i++) {
+        const document = documents[i];
+        const documentUrl = documentUrls[i]; // Get the URL of the saved document photo
+
+        if (!documentUrl) {
+          throw new Error('Document URL is null');
+        }
+
+        await query(insertDocumentsQuery, [
+          professorId, document.title, document.documentType, documentUrl,
+        ]);
       }
 
       const insertAwardsQuery = `INSERT INTO professor_award_info (professor_id, title, year, details, award_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;

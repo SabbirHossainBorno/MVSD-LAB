@@ -610,7 +610,7 @@ const AddPhdCandidate = () => {
                         placeholder="Degree"
                         value={edu.degree}
                         onChange={(e) => handleArrayChange(setEducation, index, 'degree', e.target.value)}
-                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                         required
                       />
                       <FiBook className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -622,7 +622,7 @@ const AddPhdCandidate = () => {
                         placeholder="Institution"
                         value={edu.institution}
                         onChange={(e) => handleArrayChange(setEducation, index, 'institution', e.target.value)}
-                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                         required
                       />
                       <FiBriefcase className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -634,7 +634,7 @@ const AddPhdCandidate = () => {
                         placeholder="Passing Year"
                         value={edu.passing_year}
                         onChange={(e) => handleArrayChange(setEducation, index, 'passing_year', parseInt(e.target.value, 10))}
-                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                        className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                         min="1900"
                         max={new Date().getFullYear()}
                         required
@@ -680,7 +680,7 @@ const AddPhdCandidate = () => {
                     placeholder="Position"
                     value={job.position}
                     onChange={(e) => handleArrayChange(setCareer, index, 'position', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
                   <FiUser className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -692,7 +692,7 @@ const AddPhdCandidate = () => {
                     placeholder="Organization"
                     value={job.organization_name}
                     onChange={(e) => handleArrayChange(setCareer, index, 'organization_name', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
                   <FiBriefcase className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -704,7 +704,7 @@ const AddPhdCandidate = () => {
                     placeholder="Start Year"
                     value={job.joining_year}
                     onChange={(e) => handleArrayChange(setCareer, index, 'joining_year', parseInt(e.target.value, 10))}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     min="1900"
                     max={new Date().getFullYear()}
                     required
@@ -718,7 +718,7 @@ const AddPhdCandidate = () => {
                     placeholder="End Year"
                     value={job.leaving_year}
                     onChange={(e) => handleArrayChange(setCareer, index, 'leaving_year', parseInt(e.target.value, 10))}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pr-4"
+                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     min="1900"
                     max={new Date().getFullYear()}
                   />
