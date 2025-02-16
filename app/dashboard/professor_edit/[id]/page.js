@@ -109,8 +109,8 @@ const EditProfessor = () => {
       documents.forEach((document, index) => {
         data.append(`documents[${index}][title]`, document.title);
         data.append(`documents[${index}][documentType]`, document.documentType);
-        if (document.documentsPhoto && typeof document.documentsPhoto !== 'string') {
-          data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
+        if (document.document_photo && typeof document.document_photo !== 'string') {
+          data.append(`documents[${index}][document_photo]`, document.document_photo);
         }
       });
     }
@@ -740,24 +740,24 @@ const EditProfessor = () => {
 
   {/* Add Document Button */}
   <div className="mt-4 flex items-center space-x-4">
-  <button
-    type="button"
-    onClick={() => addNewField(setDocuments, { title: '', documentType: '', documentsPhoto: null })}
-    className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-  >
-    <FiPlus className="w-5 h-5" />
-    <span>Add Document</span>
-  </button>
+    <button
+      type="button"
+      onClick={() => addNewField(setDocuments, { title: '', documentType: '', document_photo: null })}
+      className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+    >
+      <FiPlus className="w-5 h-5" />
+      <span>Add Document</span>
+    </button>
 
-  {/* Update Documents Button */}
-  <button
-    type="button"
-    onClick={() => handleSubmit('documents')}
-    className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-  >
-    <FiRefreshCcw className="w-4 h-4" />
-    <span>Update Document</span>
-  </button>
+    {/* Update Documents Button */}
+    <button
+      type="button"
+      onClick={() => handleSubmit('documents')}
+      className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+    >
+      <FiRefreshCcw className="w-4 h-4" />
+      <span>Update Documents</span>
+    </button>
   </div>
 </section>
 
