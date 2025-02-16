@@ -40,17 +40,12 @@ const saveProfilePhoto = async (file, professorId, eid, sessionId) => {
   }
 };
 
-const saveDocumentPhoto = async (file, professorId, documentType, eid, sessionId) => {
-  console.log('[DEBUG] Starting document photo save for:', professorId);
+const saveDocumentPhoto = async (file, professorId, documentType) => {
+  const filename = `${professorId}_Document_${documentType}_${Date.now()}${path.extname(file.name)}`;
+  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
   try {
-    const filename = `${professorId}_Document_${documentType}_${Date.now()}${path.extname(file.name)}`;
-    const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
-    console.log('[DEBUG] Generated filename:', filename);
-
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
-    console.log('[SUCCESS] Document saved at:', targetPath);
-
     logger.info('Document photo saved successfully', {
       meta: {
         eid,
@@ -59,19 +54,17 @@ const saveDocumentPhoto = async (file, professorId, documentType, eid, sessionId
         details: `Document photo saved at ${targetPath} for professor ID: ${professorId}`
       }
     });
-    
     return `/Storage/Images/Professor/${filename}`;
   } catch (error) {
-    console.error('[ERROR] Document save failed:', error);
     logger.error('Failed to save document photo', {
       meta: {
         eid,
         sid: sessionId,
         taskName: 'Save Document Photo',
-        details: `Failed to save document photo for professor ID: ${professorId}. Error: ${error.message}`
+        details: `Failed to save document photo at ${targetPath} for professor ID: ${professorId}. Error: ${error.message}`
       }
     });
-    throw error;
+    throw new Error(`Failed to save document photo: ${error.message}`);
   }
 };
 
@@ -170,14 +163,7 @@ export async function GET(req, { params }) {
     const citationsQuery = `SELECT * FROM professor_citations_info WHERE professor_id = $1;`;
     const citationsResult = await query(citationsQuery, [id]);
 
-    const documentsQuery = `
-      SELECT 
-        title,
-        document_type as "documentType",
-        document_photo as "documentsPhoto"
-      FROM professor_document_info 
-      WHERE professor_id = $1;
-    `;
+    const documentsQuery = `SELECT * FROM professor_document_info WHERE professor_id = $1;`;
     const documentsResult = await query(documentsQuery, [id]);
 
     const awardsQuery = `SELECT * FROM professor_award_info WHERE professor_id = $1;`;
@@ -433,54 +419,30 @@ export async function POST(req, { params }) {
         }
       });
     }
-    console.log('[DEBUG] Processing documents for professor:', id);
-    // Update documents
+
+    // Save documents to the database
 if (documents.length > 0) {
-  console.log('[DEBUG] Document count:', documents.length);
-    console.log('[DEBUG] First document:', documents[0]);
-  // Get existing documents first
-  const existingDocsQuery = `
-    SELECT document_photo 
-    FROM professor_document_info 
-    WHERE professor_id = $1
+  const insertDocumentsQuery = `
+    INSERT INTO professor_document_info (professor_id, title, document_type, document_photo)
+    VALUES ($1, $2, $3, $4)
   `;
-  const existingDocsResult = await query(existingDocsQuery, [id]);
-  const existingPhotos = existingDocsResult.rows.map(r => r.document_photo);
-
-  // Delete existing documents
-  const deleteQuery = `DELETE FROM professor_document_info WHERE professor_id = $1`;
-  await query(deleteQuery, [id]);
-  console.log('[SUCCESS] Deleted existing documents');
-
-  // Insert new documents
-  const insertQuery = `INSERT INTO professor_document_info 
-    (professor_id, title, document_type, document_photo)
-    VALUES ($1, $2, $3, $4)`;
-  
   for (const document of documents) {
-    console.log('[DEBUG] Processing document:', document.title);
-    let documentUrl = document.documentsPhoto;
-    
-    if (document.documentsPhoto instanceof File) {
-      console.log('[DEBUG] New file detected, saving document photo');
-      documentUrl = await saveDocumentPhoto(
-        document.documentsPhoto, 
-        id, 
-        document.documentType,
-        eid, // Fix: Add eid parameter
-        sessionId // Fix: Add sessionId parameter
-      );
-      console.log('[SUCCESS] New document URL:', documentUrl);
+    let documentUrl = null;
+    if (document.documentsPhoto && typeof document.documentsPhoto !== 'string') {
+      documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, document.documentType);
+    } else {
+      documentUrl = document.documentsPhoto; // Use existing URL if no new file is uploaded
     }
-
-    await query(insertQuery, [
-      id,
-      document.title,
-      document.documentType,
-      documentUrl
-    ]);
-    console.log('[SUCCESS] Inserted document:', document.title);
+    await query(insertDocumentsQuery, [id, document.title, document.documentType, documentUrl]);
   }
+  logger.info('Documents Updated', {
+    meta: {
+      eid,
+      sid: sessionId,
+      taskName: 'Edit Professor Data',
+      details: `Documents updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+    }
+  });
 }
 
     // Update awards

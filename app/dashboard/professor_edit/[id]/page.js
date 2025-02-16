@@ -104,23 +104,15 @@ const EditProfessor = () => {
   const handleSubmit = async (section) => {
     setLoading(true);
     const data = new FormData();
-    console.log('[FRONTEND DEBUG] Section:', section);
 
     if (section === 'documents') {
-      console.log('[FRONTEND DEBUG] Documents before submit:', documents);
       documents.forEach((document, index) => {
-        console.log(`[FRONTEND DEBUG] Document ${index}:`, {
-          title: document.title,
-          type: document.documentType,
-          photo: document.documentsPhoto instanceof File ? 'NEW_FILE' : document.documentsPhoto
-        });
-
-        data.append(`documents[${index}][title]`, document.title);
-        data.append(`documents[${index}][documentType]`, document.documentType);
-        
-        if (document.documentsPhoto instanceof File) {
-          console.log(`[FRONTEND DEBUG] Appending file for document ${index}`);
-          data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
+        if (!document.existing) {
+          data.append(`documents[${index}][title]`, document.title);
+          data.append(`documents[${index}][documentType]`, document.documentType);
+          if (document.document_photo && typeof document.document_photo !== 'string') {
+            data.append(`documents[${index}][document_photo]`, document.document_photo);
+          }
         }
       });
     }
@@ -158,22 +150,17 @@ const EditProfessor = () => {
         method: 'POST',
         body: data,
       });
-      console.log('[FRONTEND DEBUG] Response status:', response.status);
 
       if (response.ok) {
-        console.log('[FRONTEND SUCCESS] Update successful');
         toast.success('Professor Updated successfully!');
         router.push('/dashboard');
       } else {
         const result = await response.json();
-        console.error('[FRONTEND ERROR] Server response:', result);
-        toast.error(result.message || 'Update failed');
+        toast.error(result.message || 'An error occurred while updating the professor.');
       }
     } catch (error) {
-      console.error('[FRITICAL] Frontend error:', error);
       toast.error('Failed to update professor');
     } finally {
-      console.log('[FRONTEND DEBUG] Submission complete');
       setLoading(false);
     }
   };
@@ -658,35 +645,37 @@ const EditProfessor = () => {
           </section>
 
           {/* Documents Section */}
-<section className="bg-gray-700/30 rounded p-6 shadow-inner">
+<section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
   <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-cyan-300">
     <FiFileText className="w-6 h-6" /> Documents
   </h2>
-
   {documents.map((document, index) => (
     <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
-      {/* Document Title */}
-      <div className="relative">
+      {/* Document Title Input */}
+      <div className="relative flex items-center">
         <input
           type="text"
           placeholder="Document Title"
-          value={document.title || ''}
+          value={document.title}
+          readOnly={document.existing}
           onChange={(e) => handleArrayChange(setDocuments, index, 'title', e.target.value)}
-          className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
+          className={`w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10 ${document.existing ? 'cursor-not-allowed' : ''}`}
           required
         />
-        <FiFileText className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <FiFileText className="absolute right-3 text-gray-400 pointer-events-none" />
       </div>
-
       {/* Document Type */}
-      <div className="relative">
+      <div className="relative flex items-center">
+        <FiInfo className="absolute left-3 text-gray-400 pointer-events-none" />
         <select
-          value={document.documentType || ''}
+          name="documentType"
+          value={document.documentType}
+          disabled={document.existing}
           onChange={(e) => handleArrayChange(setDocuments, index, 'documentType', e.target.value)}
-          className="w-full pl-10 pr-10 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+          className={`w-full pl-10 pr-10 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none ${document.existing ? 'cursor-not-allowed' : ''}`}
           required
         >
-          <option value="">Select Type</option>
+          <option value="" disabled className="text-gray-400">Select Type</option>
           <option value="Education">Education</option>
           <option value="Medical">Medical</option>
           <option value="Career">Career</option>
@@ -694,51 +683,41 @@ const EditProfessor = () => {
           <option value="Official">Official</option>
           <option value="Other">Other</option>
         </select>
-        <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <FiChevronDown className="absolute right-3 text-gray-400 pointer-events-none" />
       </div>
-
-      {/* Document Photo Section */}
-      <div className="space-y-4">
-        {/* Existing Document Preview */}
-        {document.documentsPhoto && (
-          <div className="relative">
+      {/* Document Photo */}
+      <div className="relative space-y-2">
+        {document.document_photo && typeof document.document_photo === 'string' ? (
+          <div>
             <Image
-              src={document.documentsPhoto}
-              alt="Document Preview"
-              width={128}
-              height={128}
-              className="w-32 h-32 object-cover rounded mx-auto"
+              src={document.document_photo}
+              alt="Document Photo"
+              width={64}
+              height={64}
+              className="w-16 h-16 object-cover mb-4"
             />
-            <div className="text-center text-sm text-gray-400 mt-2">
-              Current Document
-            </div>
           </div>
-        )}
-
-        {/* File Upload Input */}
-        <div className="relative">
-          <label className="block text-sm text-center text-gray-300 mb-2">
-            {document.documentsPhoto ? 'Change Document' : 'Upload Document'}
-          </label>
+        ) : (
           <div className="relative">
             <input
               type="file"
-              onChange={(e) => 
-                handleArrayChange(
-                  setDocuments, 
-                  index, 
-                  'documentsPhoto', 
-                  e.target.files[0]
-                )
-              }
+              onChange={(e) => handleArrayChange(setDocuments, index, 'document_photo', e.target.files[0])}
               className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
               accept="image/*,application/pdf"
             />
             <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            {document.document_photo && (
+              <button
+                type="button"
+                onClick={() => handleArrayChange(setDocuments, index, 'document_photo', null)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-300"
+              >
+                <FiX className="w-4 h-4" />
+              </button>
+            )}
           </div>
-        </div>
+        )}
       </div>
-
       {/* Remove Button */}
       <button
         type="button"
@@ -749,29 +728,24 @@ const EditProfessor = () => {
       </button>
     </div>
   ))}
-
   {/* Add Document Button */}
   <div className="mt-4 flex items-center space-x-4">
     <button
       type="button"
-      onClick={() => addNewField(setDocuments, { 
-        title: '', 
-        documentType: '', 
-        documentsPhoto: null 
-      })}
+      onClick={() => addNewField(setDocuments, { title: '', documentType: '', document_photo: null, existing: false })}
       className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
     >
       <FiPlus className="w-5 h-5" />
       <span>Add Document</span>
     </button>
-
+    {/* Update Documents Button */}
     <button
       type="button"
       onClick={() => handleSubmit('documents')}
       className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
     >
       <FiRefreshCcw className="w-4 h-4" />
-      <span>Update Documents</span>
+      <span>Update Document</span>
     </button>
   </div>
 </section>
