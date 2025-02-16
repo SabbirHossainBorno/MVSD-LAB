@@ -76,7 +76,7 @@ const ProfessorDetails = () => {
           className="flex items-center text-blue-300 hover:text-blue-100 transition-colors group"
         >
           <span className="mr-2 group-hover:-translate-x-1 transition-transform">←</span>
-          Back to Prodes List
+          Back to Professor List
         </button>
 
         {/* Profile Header */}

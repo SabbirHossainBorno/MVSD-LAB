@@ -40,34 +40,6 @@ const saveProfilePhoto = async (file, professorId, eid, sessionId) => {
   }
 };
 
-const saveDocumentPhoto = async (file, professorId, documentType) => {
-  const filename = `${professorId}_Document_${documentType}_${Date.now()}${path.extname(file.name)}`;
-  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
-  try {
-    const buffer = await file.arrayBuffer();
-    fs.writeFileSync(targetPath, Buffer.from(buffer));
-    logger.info('Document photo saved successfully', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Save Document Photo',
-        details: `Document photo saved at ${targetPath} for professor ID: ${professorId}`
-      }
-    });
-    return `/Storage/Images/Professor/${filename}`;
-  } catch (error) {
-    logger.error('Failed to save document photo', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Save Document Photo',
-        details: `Failed to save document photo at ${targetPath} for professor ID: ${professorId}. Error: ${error.message}`
-      }
-    });
-    throw new Error(`Failed to save document photo: ${error.message}`);
-  }
-};
-
 const saveAwardPhoto = async (file, professorId, index, eid, sessionId) => {
   if (!file) {
     logger.warn('No file provided for award photo', {
@@ -175,7 +147,7 @@ export async function GET(req, { params }) {
       education: educationResult.rows,
       career: careerResult.rows,
       citations: citationsResult.rows,
-      documents: documentsResult.rows.map(document => ({ ...document, existing: true })),
+      documents: documentsResult.rows, // Add this line
       awards: awardsResult.rows.map(award => ({ ...award, existing: true })),
     };
 
@@ -244,15 +216,16 @@ export async function POST(req, { params }) {
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
     const citations = JSON.parse(formData.get('citations') || '[]');
-    // Extract documents data
     const documents = [];
     for (let i = 0; formData.has(`documents[${i}][title]`); i++) {
       documents.push({
         title: formData.get(`documents[${i}][title]`),
-        documentType: formData.get(`documents[${i}][documentType]`),
-        documentsPhoto: formData.get(`documents[${i}][documentsPhoto]`),
+        document_type: formData.get(`documents[${i}][document_type]`),
+        document_photo: formData.get(`documents[${i}][document_photo]`),
+        existing: formData.get(`documents[${i}][existing]`) === 'true',
       });
     }
+    
     const awards = [];
     for (let i = 0; formData.has(`awards[${i}][title]`); i++) {
       awards.push({
@@ -420,30 +393,41 @@ export async function POST(req, { params }) {
       });
     }
 
-    // Save documents to the database
-if (documents.length > 0) {
-  const insertDocumentsQuery = `
-    INSERT INTO professor_document_info (professor_id, title, document_type, document_photo)
+    // Handle documents
+if (section === 'documents') {
+  // Delete all existing documents
+  const deleteQuery = `DELETE FROM professor_document_info WHERE professor_id = $1`;
+  await query(deleteQuery, [id]);
+
+  // Insert remaining documents
+  const insertQuery = `
+    INSERT INTO professor_document_info 
+      (professor_id, title, document_type, document_photo)
     VALUES ($1, $2, $3, $4)
   `;
-  for (const document of documents) {
-    let documentUrl = null;
-    if (document.documentsPhoto && typeof document.documentsPhoto !== 'string') {
-      documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, document.documentType);
-    } else {
-      documentUrl = document.documentsPhoto; // Use existing URL if no new file is uploaded
+
+  for (const doc of documents) {
+    // For existing documents, keep the original photo
+    let docPhoto = doc.document_photo;
+    
+    // For new documents, save the uploaded file
+    if (!doc.existing && doc.document_photo) {
+      const filename = `${id}_Document_${Date.now()}${path.extname(doc.document_photo.name)}`;
+      const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
+      const buffer = await doc.document_photo.arrayBuffer();
+      fs.writeFileSync(targetPath, Buffer.from(buffer));
+      docPhoto = `/Storage/Images/Professor/${filename}`;
     }
-    await query(insertDocumentsQuery, [id, document.title, document.documentType, documentUrl]);
+
+    await query(insertQuery, [
+      id,
+      doc.title,
+      doc.document_type,
+      docPhoto
+    ]);
   }
-  logger.info('Documents Updated', {
-    meta: {
-      eid,
-      sid: sessionId,
-      taskName: 'Edit Professor Data',
-      details: `Documents updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
-    }
-  });
 }
+
 
     // Update awards
     if (awards.length > 0) {

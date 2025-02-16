@@ -10,7 +10,7 @@ import Image from 'next/image';
 import {
   FiUser, FiPhone, FiCalendar, FiBook, FiBriefcase, FiFileText,
   FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
-  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo, FiRefreshCcw,
+  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo, FiRefreshCcw, FiFile, FiImage,
 } from 'react-icons/fi';
 
 const EditProfessor = () => {
@@ -27,8 +27,8 @@ const EditProfessor = () => {
   const [education, setEducation] = useState([]);
   const [career, setCareer] = useState([]);
   const [citations, setCitations] = useState([]);
-  const [documents, setDocuments] = useState([]);
   const [awards, setAwards] = useState([]);
+  const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { id } = useParams();
@@ -51,7 +51,7 @@ const EditProfessor = () => {
         setEducation(data.education || []);
         setCareer(data.career || []);
         setCitations(data.citations || []);
-        setDocuments(data.documents || []); // Add this line
+        setDocuments(data.documents?.map(doc => ({ ...doc, existing: true })) || []);
         setAwards(data.awards || []);
       } catch (error) {
         toast.error('Failed to fetch professor data');
@@ -104,18 +104,6 @@ const EditProfessor = () => {
   const handleSubmit = async (section) => {
     setLoading(true);
     const data = new FormData();
-
-    if (section === 'documents') {
-      documents.forEach((document, index) => {
-        if (!document.existing) {
-          data.append(`documents[${index}][title]`, document.title);
-          data.append(`documents[${index}][documentType]`, document.documentType);
-          if (document.document_photo && typeof document.document_photo !== 'string') {
-            data.append(`documents[${index}][document_photo]`, document.document_photo);
-          }
-        }
-      });
-    }
 
     if (section === 'basicInfo') {
       for (const key in formData) {
@@ -645,37 +633,38 @@ const EditProfessor = () => {
           </section>
 
           {/* Documents Section */}
-<section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+<section className="bg-gray-700/30 rounded p-6 shadow-inner">
   <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-cyan-300">
     <FiFileText className="w-6 h-6" /> Documents
   </h2>
+
   {documents.map((document, index) => (
     <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
-      {/* Document Title Input */}
+      {/* Document Title */}
       <div className="relative flex items-center">
         <input
           type="text"
           placeholder="Document Title"
           value={document.title}
-          readOnly={document.existing}
           onChange={(e) => handleArrayChange(setDocuments, index, 'title', e.target.value)}
-          className={`w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10 ${document.existing ? 'cursor-not-allowed' : ''}`}
+          className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
+          readOnly={document.existing}
           required
         />
-        <FiFileText className="absolute right-3 text-gray-400 pointer-events-none" />
+        <FiFileText className="absolute right-3 text-gray-400" />
       </div>
+
       {/* Document Type */}
       <div className="relative flex items-center">
-        <FiInfo className="absolute left-3 text-gray-400 pointer-events-none" />
         <select
           name="documentType"
-          value={document.documentType}
+          value={document.document_type}
+          onChange={(e) => handleArrayChange(setDocuments, index, 'document_type', e.target.value)}
+          className="w-full pl-10 pr-10 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
           disabled={document.existing}
-          onChange={(e) => handleArrayChange(setDocuments, index, 'documentType', e.target.value)}
-          className={`w-full pl-10 pr-10 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none ${document.existing ? 'cursor-not-allowed' : ''}`}
           required
         >
-          <option value="" disabled className="text-gray-400">Select Type</option>
+          <option value="">Select Type</option>
           <option value="Education">Education</option>
           <option value="Medical">Medical</option>
           <option value="Career">Career</option>
@@ -685,20 +674,25 @@ const EditProfessor = () => {
         </select>
         <FiChevronDown className="absolute right-3 text-gray-400 pointer-events-none" />
       </div>
-      {/* Document Photo */}
-      <div className="relative space-y-2">
-        {document.document_photo && typeof document.document_photo === 'string' ? (
-          <div>
-            <Image
-              src={document.document_photo}
-              alt="Document Photo"
-              width={64}
-              height={64}
-              className="w-16 h-16 object-cover mb-4"
-            />
-          </div>
+
+      {/* Document File Input/Preview */}
+      <div className="relative flex items-center gap-3">
+        {document.existing ? (
+          <>
+            <div className="relative w-16 h-16">
+              <Image
+                src={document.document_photo}
+                alt="Document preview"
+                fill
+                className="object-cover rounded"
+              />
+            </div>
+            <span className="text-sm text-gray-400">
+              {document.document_photo.split('.').pop().toUpperCase()} Document
+            </span>
+          </>
         ) : (
-          <div className="relative">
+          <div className="relative w-full">
             <input
               type="file"
               onChange={(e) => handleArrayChange(setDocuments, index, 'document_photo', e.target.files[0])}
@@ -707,45 +701,47 @@ const EditProfessor = () => {
             />
             <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             {document.document_photo && (
-              <button
-                type="button"
-                onClick={() => handleArrayChange(setDocuments, index, 'document_photo', null)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-300"
-              >
-                <FiX className="w-4 h-4" />
-              </button>
+              <span className="absolute right-12 top-1/2 -translate-y-1/2 text-sm text-gray-300">
+                {document.document_photo.name}
+              </span>
             )}
           </div>
         )}
+
+        {/* Remove Button */}
+        <button
+          type="button"
+          onClick={() => removeField(setDocuments, index)}
+          className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
+        >
+          <FiX className="w-3.5 h-3.5" />
+        </button>
       </div>
-      {/* Remove Button */}
-      <button
-        type="button"
-        onClick={() => removeField(setDocuments, index)}
-        className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
-      >
-        <FiX className="w-3.5 h-3.5" />
-      </button>
     </div>
   ))}
-  {/* Add Document Button */}
+
   <div className="mt-4 flex items-center space-x-4">
     <button
       type="button"
-      onClick={() => addNewField(setDocuments, { title: '', documentType: '', document_photo: null, existing: false })}
-      className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+      onClick={() => addNewField(setDocuments, { 
+        title: '', 
+        document_type: '', 
+        document_photo: null,
+        existing: false 
+      })}
+      className="flex items-center justify-center space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
     >
       <FiPlus className="w-5 h-5" />
       <span>Add Document</span>
     </button>
-    {/* Update Documents Button */}
+
     <button
       type="button"
       onClick={() => handleSubmit('documents')}
       className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
     >
       <FiRefreshCcw className="w-4 h-4" />
-      <span>Update Document</span>
+      <span>Update Documents</span>
     </button>
   </div>
 </section>
