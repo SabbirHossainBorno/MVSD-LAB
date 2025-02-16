@@ -420,29 +420,49 @@ export async function POST(req, { params }) {
       });
     }
 
-    // Save documents to the database
+    // Update documents
 if (documents.length > 0) {
-  const insertDocumentsQuery = `
-    INSERT INTO professor_document_info (professor_id, title, document_type, document_photo)
-    VALUES ($1, $2, $3, $4)
+  // Get existing documents first
+  const existingDocsQuery = `
+    SELECT document_photo 
+    FROM professor_document_info 
+    WHERE professor_id = $1
   `;
-  for (const document of documents) {
-    let documentUrl = null;
-    if (document.documentsPhoto && typeof document.documentsPhoto !== 'string') {
-      documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, document.documentType);
-    } else {
-      documentUrl = document.documentsPhoto; // Use existing URL if no new file is uploaded
+  const existingDocsResult = await query(existingDocsQuery, [id]);
+  const existingPhotos = existingDocsResult.rows.map(r => r.document_photo);
+
+  // Delete all existing documents
+  await query(`
+    DELETE FROM professor_document_info 
+    WHERE professor_id = $1
+  `, [id]);
+
+  // Insert updated documents
+  for (const [idx, document] of documents.entries()) {
+    let documentUrl = document.documentsPhoto;
+    
+    // If new file uploaded
+    if (document.documentsPhoto instanceof File) {
+      documentUrl = await saveDocumentPhoto(
+        document.documentsPhoto,
+        id,
+        document.documentType,
+        eid,
+        sessionId
+      );
     }
-    await query(insertDocumentsQuery, [id, document.title, document.documentType, documentUrl]);
+    // If using existing photo (check by URL pattern)
+    else if (existingPhotos.includes(documentUrl)) {
+      // Preserve existing URL
+      documentUrl = existingPhotos.find(url => url === documentUrl);
+    }
+
+    await query(`
+      INSERT INTO professor_document_info 
+        (professor_id, title, document_type, document_photo)
+      VALUES ($1, $2, $3, $4)
+    `, [id, document.title, document.documentType, documentUrl]);
   }
-  logger.info('Documents Updated', {
-    meta: {
-      eid,
-      sid: sessionId,
-      taskName: 'Edit Professor Data',
-      details: `Documents updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
-    }
-  });
 }
 
     // Update awards

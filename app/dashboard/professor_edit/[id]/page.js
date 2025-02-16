@@ -109,8 +109,8 @@ const EditProfessor = () => {
       documents.forEach((document, index) => {
         data.append(`documents[${index}][title]`, document.title);
         data.append(`documents[${index}][documentType]`, document.documentType);
-        if (document.document_photo && typeof document.document_photo !== 'string') {
-          data.append(`documents[${index}][document_photo]`, document.document_photo);
+        if (document.documentsPhoto && typeof document.documentsPhoto !== 'string') {
+          data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
         }
       });
     }
@@ -643,15 +643,15 @@ const EditProfessor = () => {
           </section>
 
           {/* Documents Section */}
-<section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
+<section className="bg-gray-700/30 rounded p-6 shadow-inner">
   <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-cyan-300">
     <FiFileText className="w-6 h-6" /> Documents
   </h2>
 
   {documents.map((document, index) => (
     <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
-      {/* Document Title Input */}
-      <div className="relative flex items-center">
+      {/* Document Title */}
+      <div className="relative">
         <input
           type="text"
           placeholder="Document Title"
@@ -660,20 +660,18 @@ const EditProfessor = () => {
           className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
           required
         />
-        <FiFileText className="absolute right-3 text-gray-400 pointer-events-none" />
+        <FiFileText className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
       </div>
 
       {/* Document Type */}
-      <div className="relative flex items-center">
-        <FiInfo className="absolute left-3 text-gray-400 pointer-events-none" />
+      <div className="relative">
         <select
-          name="documentType"
           value={document.documentType}
           onChange={(e) => handleArrayChange(setDocuments, index, 'documentType', e.target.value)}
           className="w-full pl-10 pr-10 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
           required
         >
-          <option value="" disabled className="text-gray-400">Select Type</option>
+          <option value="">Select Type</option>
           <option value="Education">Education</option>
           <option value="Medical">Medical</option>
           <option value="Career">Career</option>
@@ -681,75 +679,87 @@ const EditProfessor = () => {
           <option value="Official">Official</option>
           <option value="Other">Other</option>
         </select>
-        <FiChevronDown className="absolute right-3 text-gray-400 pointer-events-none" />
+        <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
       </div>
 
-      {/* Document Upload */}
-      <div className="relative space-y-2">
-        {document.document_photo && typeof document.document_photo === 'string' ? (
-          <div>
+      {/* Document Photo */}
+      <div className="relative">
+        {document.documentsPhoto ? (
+          <div className="relative">
             <Image
-              src={document.document_photo}
-              alt="Document Photo"
+              src={
+                typeof document.documentsPhoto === 'string' 
+                  ? document.documentsPhoto 
+                  : URL.createObjectURL(document.documentsPhoto)
+              }
+              alt="Document Preview"
               width={128}
               height={128}
-              className="w-32 h-32 object-cover mb-4"
+              className="w-32 h-32 object-cover mb-2 rounded"
             />
-            <button
-              type="button"
-              onClick={() => handleArrayChange(setDocuments, index, 'document_photo', null)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-            >
-              Change Document Photo
-            </button>
-          </div>
-        ) : (
-          <div className="relative">
             <input
               type="file"
-              onChange={(e) => handleArrayChange(setDocuments, index, 'document_photo', e.target.files[0])}
-              className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  handleArrayChange(setDocuments, index, 'documentsPhoto', file);
+                }
+              }}
+              className="absolute inset-0 opacity-0 cursor-pointer"
               accept="image/*,application/pdf"
             />
-            <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            {document.document_photo && (
-              <button
-                type="button"
-                onClick={() => handleArrayChange(setDocuments, index, 'document_photo', null)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-300"
-              >
-                <FiX className="w-4 h-4" />
-              </button>
-            )}
+            <div className="text-sm text-center text-gray-400 mt-1">
+              Click photo to change
+            </div>
+          </div>
+        ) : (
+          <div className="border-2 border-dashed border-gray-600 p-4 rounded text-center">
+            <label className="cursor-pointer">
+              <FiUpload className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+              <span className="text-gray-400">Upload Document</span>
+              <input
+                type="file"
+                onChange={(e) => 
+                  handleArrayChange(
+                    setDocuments, 
+                    index, 
+                    'documentsPhoto', 
+                    e.target.files[0]
+                  )
+                }
+                className="hidden"
+                accept="image/*,application/pdf"
+              />
+            </label>
           </div>
         )}
       </div>
 
       {/* Remove Button */}
-      {documents.length > 1 && (
-        <button
-          type="button"
-          onClick={() => removeField(setDocuments, index)}
-          className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
-        >
-          <FiX className="w-3.5 h-3.5" />
-        </button>
-      )}
+      <button
+        type="button"
+        onClick={() => removeField(setDocuments, index)}
+        className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
+      >
+        <FiX className="w-3.5 h-3.5" />
+      </button>
     </div>
   ))}
 
-  {/* Add Document Button */}
   <div className="mt-4 flex items-center space-x-4">
     <button
       type="button"
-      onClick={() => addNewField(setDocuments, { title: '', documentType: '', document_photo: null })}
+      onClick={() => addNewField(setDocuments, { 
+        title: '', 
+        documentType: '', 
+        documentsPhoto: null 
+      })}
       className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
     >
       <FiPlus className="w-5 h-5" />
       <span>Add Document</span>
     </button>
 
-    {/* Update Documents Button */}
     <button
       type="button"
       onClick={() => handleSubmit('documents')}
