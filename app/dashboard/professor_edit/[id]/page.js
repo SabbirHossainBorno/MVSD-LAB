@@ -104,12 +104,22 @@ const EditProfessor = () => {
   const handleSubmit = async (section) => {
     setLoading(true);
     const data = new FormData();
+    console.log('[FRONTEND DEBUG] Section:', section);
 
     if (section === 'documents') {
+      console.log('[FRONTEND DEBUG] Documents before submit:', documents);
       documents.forEach((document, index) => {
+        console.log(`[FRONTEND DEBUG] Document ${index}:`, {
+          title: document.title,
+          type: document.documentType,
+          photo: document.documentsPhoto instanceof File ? 'NEW_FILE' : document.documentsPhoto
+        });
+
         data.append(`documents[${index}][title]`, document.title);
         data.append(`documents[${index}][documentType]`, document.documentType);
-        if (document.documentsPhoto && typeof document.documentsPhoto !== 'string') {
+        
+        if (document.documentsPhoto instanceof File) {
+          console.log(`[FRONTEND DEBUG] Appending file for document ${index}`);
           data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
         }
       });
@@ -148,17 +158,22 @@ const EditProfessor = () => {
         method: 'POST',
         body: data,
       });
+      console.log('[FRONTEND DEBUG] Response status:', response.status);
 
       if (response.ok) {
+        console.log('[FRONTEND SUCCESS] Update successful');
         toast.success('Professor Updated successfully!');
         router.push('/dashboard');
       } else {
         const result = await response.json();
-        toast.error(result.message || 'An error occurred while updating the professor.');
+        console.error('[FRONTEND ERROR] Server response:', result);
+        toast.error(result.message || 'Update failed');
       }
     } catch (error) {
+      console.error('[FRITICAL] Frontend error:', error);
       toast.error('Failed to update professor');
     } finally {
+      console.log('[FRONTEND DEBUG] Submission complete');
       setLoading(false);
     }
   };
@@ -655,7 +670,7 @@ const EditProfessor = () => {
         <input
           type="text"
           placeholder="Document Title"
-          value={document.title}
+          value={document.title || ''}
           onChange={(e) => handleArrayChange(setDocuments, index, 'title', e.target.value)}
           className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
           required
@@ -666,7 +681,7 @@ const EditProfessor = () => {
       {/* Document Type */}
       <div className="relative">
         <select
-          value={document.documentType}
+          value={document.documentType || ''}
           onChange={(e) => handleArrayChange(setDocuments, index, 'documentType', e.target.value)}
           className="w-full pl-10 pr-10 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
           required
@@ -682,57 +697,46 @@ const EditProfessor = () => {
         <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
       </div>
 
-      {/* Document Photo */}
-      <div className="relative">
-        {document.documentsPhoto ? (
+      {/* Document Photo Section */}
+      <div className="space-y-4">
+        {/* Existing Document Preview */}
+        {document.documentsPhoto && (
           <div className="relative">
             <Image
-              src={
-                typeof document.documentsPhoto === 'string' 
-                  ? document.documentsPhoto 
-                  : URL.createObjectURL(document.documentsPhoto)
-              }
+              src={document.documentsPhoto}
               alt="Document Preview"
               width={128}
               height={128}
-              className="w-32 h-32 object-cover mb-2 rounded"
+              className="w-32 h-32 object-cover rounded mx-auto"
             />
-            <input
-              type="file"
-              onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) {
-                  handleArrayChange(setDocuments, index, 'documentsPhoto', file);
-                }
-              }}
-              className="absolute inset-0 opacity-0 cursor-pointer"
-              accept="image/*,application/pdf"
-            />
-            <div className="text-sm text-center text-gray-400 mt-1">
-              Click photo to change
+            <div className="text-center text-sm text-gray-400 mt-2">
+              Current Document
             </div>
           </div>
-        ) : (
-          <div className="border-2 border-dashed border-gray-600 p-4 rounded text-center">
-            <label className="cursor-pointer">
-              <FiUpload className="w-8 h-8 mx-auto text-gray-400 mb-2" />
-              <span className="text-gray-400">Upload Document</span>
-              <input
-                type="file"
-                onChange={(e) => 
-                  handleArrayChange(
-                    setDocuments, 
-                    index, 
-                    'documentsPhoto', 
-                    e.target.files[0]
-                  )
-                }
-                className="hidden"
-                accept="image/*,application/pdf"
-              />
-            </label>
-          </div>
         )}
+
+        {/* File Upload Input */}
+        <div className="relative">
+          <label className="block text-sm text-center text-gray-300 mb-2">
+            {document.documentsPhoto ? 'Change Document' : 'Upload Document'}
+          </label>
+          <div className="relative">
+            <input
+              type="file"
+              onChange={(e) => 
+                handleArrayChange(
+                  setDocuments, 
+                  index, 
+                  'documentsPhoto', 
+                  e.target.files[0]
+                )
+              }
+              className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+              accept="image/*,application/pdf"
+            />
+            <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          </div>
+        </div>
       </div>
 
       {/* Remove Button */}
@@ -746,6 +750,7 @@ const EditProfessor = () => {
     </div>
   ))}
 
+  {/* Add Document Button */}
   <div className="mt-4 flex items-center space-x-4">
     <button
       type="button"
