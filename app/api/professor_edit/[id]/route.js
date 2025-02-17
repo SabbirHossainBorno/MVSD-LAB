@@ -175,7 +175,12 @@ export async function GET(req, { params }) {
       education: educationResult.rows,
       career: careerResult.rows,
       citations: citationsResult.rows,
-      documents: documentsResult.rows, // Include documents
+      documents: documentsResult.rows.map(doc => ({
+        title: doc.title,
+        document_type: doc.document_type,
+        documentsPhoto: doc.document_photo, // Fix property name mismatch
+        existing: true
+      })),
       awards: awardsResult.rows.map(award => ({ ...award, existing: true })),
     };
 
@@ -439,6 +444,8 @@ if (documents.length > 0) {
       documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, i + 1, document.document_type, eid, sessionId);
     }
     await query(insertDocumentsQuery, [id, document.title, document.document_type, documentUrl]);
+    // Add console log here
+    console.log(`Document ${i + 1}: Title - ${document.title}, Type - ${document.document_type}, URL - ${documentUrl}`);
   }
   logger.info('Document INFO Updated', {
     meta: {
