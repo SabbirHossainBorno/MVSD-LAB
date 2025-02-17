@@ -149,15 +149,7 @@ const EditProfessor = () => {
           data.append(`awards[${index}][existing]`, award.existing ? 'true' : 'false');
         });
         break;
-      case 'documents':
-        documents.forEach((document, index) => {
-          data.append(`documents[${index}][title]`, document.title);
-          data.append(`documents[${index}][document_type]`, document.document_type);
-          if (document.documentsPhoto) {
-            data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
-          }
-        });
-        break;
+        // Modify the documents case in handleSubmit
       case 'password':
         data.append('password', formData.password);
         break;

@@ -426,35 +426,56 @@ export async function POST(req, { params }) {
       });
     }
 
-    // Update documents
+    // Update the documents processing section in POST handler
 if (documents.length > 0) {
-  const deleteDocumentsQuery = `
-    DELETE FROM professor_document_info
-    WHERE professor_id = $1
-  `;
+  const deleteDocumentsQuery = `DELETE FROM professor_document_info WHERE professor_id = $1`;
   await query(deleteDocumentsQuery, [id]);
+
   const insertDocumentsQuery = `
-    INSERT INTO professor_document_info (professor_id, title, document_type, document_photo)
+    INSERT INTO professor_document_info 
+    (professor_id, title, document_type, document_photo)
     VALUES ($1, $2, $3, $4)
   `;
-  for (let i = 0; i < documents.length; i++) {
-    const document = documents[i];
+
+  // Track document counts per type
+  const docTypeCounters = {};
+
+  for (const document of documents) {
+    const docType = document.document_type;
+    
+    // Initialize or increment counter for document type
+    if (!docTypeCounters[docType]) {
+      docTypeCounters[docType] = 0;
+    }
+    docTypeCounters[docType]++;
+    const typeIndex = docTypeCounters[docType];
+
     let documentUrl = null;
-    if (document.documentsPhoto) {
-      documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, i + 1, document.document_type, eid, sessionId);
+    
+    // Handle existing URLs
+    if (typeof document.documentsPhoto === 'string') {
+      documentUrl = document.documentsPhoto;
+    } 
+    // Handle new file uploads
+    else if (document.documentsPhoto instanceof File) {
+      const filename = `${id}_Document_${docType}_${typeIndex}${path.extname(document.documentsPhoto.name)}`;
+      documentUrl = await saveDocumentPhoto(
+        document.documentsPhoto,
+        id,
+        typeIndex,  // Now using type-specific index
+        docType,
+        eid,
+        sessionId
+      );
     }
-    await query(insertDocumentsQuery, [id, document.title, document.document_type, documentUrl]);
-    // Add console log here
-    console.log(`Document ${i + 1}: Title - ${document.title}, Type - ${document.document_type}, URL - ${documentUrl}`);
+
+    await query(insertDocumentsQuery, [
+      id,
+      document.title,
+      docType,
+      documentUrl
+    ]);
   }
-  logger.info('Document INFO Updated', {
-    meta: {
-      eid,
-      sid: sessionId,
-      taskName: 'Edit Professor Data',
-      details: `Document info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
-    }
-  });
 }
 
 
