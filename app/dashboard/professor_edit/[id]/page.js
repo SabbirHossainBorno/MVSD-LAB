@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import withAuth from '../../../components/withAuth';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import Image from 'next/image';
+import CustomPopup from '../../../components/CustomPopup'; // Import the custom popup component
 import {
   FiUser, FiPhone, FiCalendar, FiBook, FiBriefcase, FiFileText,
   FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
@@ -32,6 +33,8 @@ const EditProfessor = () => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { id } = useParams();
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [documentToDelete, setDocumentToDelete] = useState(null);
 
   useEffect(() => {
     const fetchProfessorData = async () => {
@@ -61,6 +64,38 @@ const EditProfessor = () => {
     };
     fetchProfessorData();
   }, [id]);
+
+  const handleDeleteClick = (document) => {
+    setDocumentToDelete(document);
+    setShowDeletePopup(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/professor_edit/${id}/delete_document`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ documentId: documentToDelete.serial }),
+      });
+  
+      if (response.ok) {
+        toast.success('Document deleted successfully!');
+        // Refresh the page or update the state to remove the deleted document
+        setDocuments((prevDocuments) => prevDocuments.filter(doc => doc.serial !== documentToDelete.serial));
+      } else {
+        toast.error('Failed to delete document');
+      }
+    } catch (error) {
+      toast.error('Failed to delete document');
+    } finally {
+      setLoading(false);
+      setShowDeletePopup(false);
+      setDocumentToDelete(null);
+    }
+  };
 
   const handleChange = useCallback((e) => {
     const { name, value, files } = e.target;
@@ -138,6 +173,21 @@ const EditProfessor = () => {
       case 'citations':
         data.append('citations', JSON.stringify(citations));
         break;
+        case 'documents':
+      documents.forEach((document, index) => {
+        if (!document.existing && !document.documentsPhoto) {
+          toast.error(`Document photo is required for new document: ${document.title}`);
+          setLoading(false);
+          return;
+        }
+        data.append(`documents[${index}][title]`, document.title);
+        data.append(`documents[${index}][document_type]`, document.document_type); // Ensure document_type is appended
+        if (document.documentsPhoto) {
+          data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
+        }
+        data.append(`documents[${index}][existing]`, document.existing ? 'true' : 'false');
+      });
+      break;
       case 'awards':
         awards.forEach((award, index) => {
           data.append(`awards[${index}][title]`, award.title);
@@ -149,44 +199,6 @@ const EditProfessor = () => {
           data.append(`awards[${index}][existing]`, award.existing ? 'true' : 'false');
         });
         break;
-        // Modify the documents case in handleSubmit
-case 'documents':
-  console.group('%cDocument Validation', 'color: orange; font-weight: bold');
-  let docValid = true;
-  
-  try {
-    documents.forEach((document, index) => {
-      console.log(`Checking document #${index}:`, {
-        title: document.title,
-        hasFile: !!document.documentsPhoto,
-        isExisting: document.existing
-      });
-
-      if (!document.existing && !document.documentsPhoto) {
-        console.error('Missing file for new document:', document.title);
-        toast.error(`Document "${document.title}" requires file upload`);
-        docValid = false;
-      }
-    });
-
-    if (!docValid) {
-      console.warn('Blocked submission due to missing document files');
-      throw new Error('Validation failed - missing document files');
-    }
-
-    // Proceed with valid documents
-    documents.forEach((document, index) => {
-      data.append(`documents[${index}][title]`, document.title);
-      data.append(`documents[${index}][document_type]`, document.document_type);
-      if (document.documentsPhoto) {
-        data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
-      }
-      data.append(`documents[${index}][existing]`, document.existing ? 'true' : 'false');
-    });
-  } finally {
-    console.groupEnd();
-  }
-  break;
       case 'password':
         data.append('password', formData.password);
         break;
@@ -693,121 +705,122 @@ case 'documents':
             </div>
           </section>
 
-
-          {/* Documents Section */}
-<section className="bg-gray-700/30 rounded p-6 shadow-inner">
-  <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-cyan-300">
-    <FiFileText className="w-6 h-6" /> Documents
-  </h2>
-  {documents.map((document, index) => (
-    <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
-      {/* Document Title Input */}
-      <div className="relative flex items-center">
-        <input
-          type="text"
-          placeholder="Document Title"
-          value={document.title}
-          onChange={(e) => handleArrayChange(setDocuments, index, 'title', e.target.value)}
-          className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
-          required
-          readOnly={document.existing} // Make read-only if existing
-        />
-        <FiFileText className="absolute right-3 text-gray-400 pointer-events-none" />
-      </div>
-      {/* Document Type */}
-      <div className="relative flex items-center">
-        <FiInfo className="absolute left-3 text-gray-400 pointer-events-none" />
-        <select
-          name="document_type"
-          value={document.document_type}
-          onChange={(e) => handleArrayChange(setDocuments, index, 'document_type', e.target.value)}
-          className="w-full pl-10 pr-10 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-          required
-          disabled={document.existing} // Disable if existing
-        >
-          <option value="" disabled className="text-gray-400">Select Type</option>
-          <option value="Education">Education</option>
-          <option value="Medical">Medical</option>
-          <option value="Career">Career</option>
-          <option value="Personal">Personal</option>
-          <option value="Official">Official</option>
-          <option value="Other">Other</option>
-        </select>
-        <FiChevronDown className="absolute right-3 text-gray-400 pointer-events-none" />
-      </div>
-      {/* Document Upload */}
-      <div className="relative space-y-2">
-        {document.existing ? (
-          <div className="relative">
-            <p className="text-gray-400 mb-2">Current Document Photo:</p>
-            <Image
-              src={document.documentsPhoto}
-              alt="Document Photo"
-              width={64}
-              height={64}
-              className="w-16 h-16 object-cover mb-4"
-            />
-          </div>
-        ) : (
-          <div className="relative">
+          {/* Document Section */}
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
+      <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-cyan-300">
+        <FiFileText className="w-6 h-6" /> Documents
+      </h2>
+      {documents.map((document, index) => (
+        <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
+          {/* Document Title Input */}
+          <div className="relative flex items-center">
             <input
-              type="file"
-              onChange={(e) => handleArrayChange(setDocuments, index, 'documentsPhoto', e.target.files[0])}
-              className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-              accept="image/*,application/pdf"
+              type="text"
+              placeholder="Document Title"
+              value={document.title}
+              onChange={(e) => handleArrayChange(setDocuments, index, 'title', e.target.value)}
+              className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
+              required
+              readOnly={document.existing} // Make read-only if existing
             />
-            <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            {/* Add the warning message here */}
-      {!document.existing && (
-        <p className="text-sm text-red-400 mt-1">
-          <FiAlertCircle className="inline mr-1" />
-          File upload is required for new documents
-        </p>
-      )}
-            {document.documentsPhoto && (
-              <button
-                type="button"
-                onClick={() => handleArrayChange(setDocuments, index, 'documentsPhoto', null)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-300"
-              >
-                <FiX className="w-4 h-4" />
-              </button>
+            <FiFileText className="absolute right-3 text-gray-400 pointer-events-none" />
+          </div>
+          {/* Document Type */}
+          <div className="relative flex items-center">
+            <FiInfo className="absolute left-3 text-gray-400 pointer-events-none" />
+            <select
+              name="document_type"
+              value={document.document_type}
+              onChange={(e) => handleArrayChange(setDocuments, index, 'document_type', e.target.value)}
+              className="w-full pl-10 pr-10 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+              required
+              disabled={document.existing} // Disable if existing
+            >
+              <option value="" disabled className="text-gray-400">Select Type</option>
+              <option value="Education">Education</option>
+              <option value="Medical">Medical</option>
+              <option value="Career">Career</option>
+              <option value="Personal">Personal</option>
+              <option value="Official">Official</option>
+              <option value="Other">Other</option>
+            </select>
+            <FiChevronDown className="absolute right-3 text-gray-400 pointer-events-none" />
+          </div>
+          {/* Document Upload */}
+          <div className="relative space-y-2">
+            {document.existing ? (
+              <div className="relative">
+                <p className="text-gray-400 mb-2">Current Document Photo:</p>
+                <Image
+                  src={document.documentsPhoto}
+                  alt="Document Photo"
+                  width={64}
+                  height={64}
+                  className="w-16 h-16 object-cover mb-4"
+                />
+              </div>
+            ) : (
+              <div className="relative">
+                <input
+                  type="file"
+                  onChange={(e) => handleArrayChange(setDocuments, index, 'documentsPhoto', e.target.files[0])}
+                  className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                  accept="image/*,application/pdf"
+                />
+                <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                {document.documentsPhoto && (
+                  <button
+                    type="button"
+                    onClick={() => handleArrayChange(setDocuments, index, 'documentsPhoto', null)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-300"
+                  >
+                    <FiX className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
             )}
           </div>
-        )}
-      </div>
-      {/* Remove Button */}
-      {!document.existing && documents.length > 1 && (
+          {/* Remove Button */}
+          {document.existing && (
+            <button
+              type="button"
+              onClick={() => handleDeleteClick(document)}
+              className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
+            >
+              <FiTrash2 className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+      ))}
+      <div className="mt-4 flex items-center space-x-4">
+        {/* Add Document Button */}
         <button
           type="button"
-          onClick={() => removeField(setDocuments, index)}
-          className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
+          onClick={() => addNewField(setDocuments, { title: '', document_type: '', documentsPhoto: null, existing: false })}
+          className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
         >
-          <FiX className="w-3.5 h-3.5" />
+          <FiPlus className="w-5 h-5" />
+          <span>Add Document</span>
         </button>
-      )}
-    </div>
-  ))}
-  <div className="mt-4 flex items-center space-x-4">
-  {/* Add Document Button */}
-  <button
-    type="button"
-    onClick={() => addNewField(setDocuments, { title: '', document_type: '', documentsPhoto: null, existing: false })}
-    className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-  >
-    <FiPlus className="w-5 h-5" />
-    <span>Add Document</span>
-  </button>
-    <button
-      type="button"
-      onClick={() => handleSubmit('documents')}
-      className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-    >
-      <FiRefreshCcw className="w-4 h-4" />
-      <span>Update Documents</span>
-    </button>
-    </div>
-</section>
+        <button
+          type="button"
+          onClick={() => handleSubmit('documents')}
+          className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+        >
+          <FiRefreshCcw className="w-4 h-4" />
+          <span>Update Documents</span>
+        </button>
+      </div>
+    </section>
+
+    {/* Custom Popup */}
+    <CustomPopup
+      isOpen={showDeletePopup}
+      onClose={() => setShowDeletePopup(false)}
+      onConfirm={handleDeleteConfirm}
+      title="Are you sure?"
+      message={`You won't be able to revert this!`}
+    />
 
           {/* Awards Section */}
           <section className="bg-gray-700/30 rounded p-6 shadow-inner">
