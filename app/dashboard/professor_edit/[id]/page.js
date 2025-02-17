@@ -150,6 +150,43 @@ const EditProfessor = () => {
         });
         break;
         // Modify the documents case in handleSubmit
+case 'documents':
+  console.group('%cDocument Validation', 'color: orange; font-weight: bold');
+  let docValid = true;
+  
+  try {
+    documents.forEach((document, index) => {
+      console.log(`Checking document #${index}:`, {
+        title: document.title,
+        hasFile: !!document.documentsPhoto,
+        isExisting: document.existing
+      });
+
+      if (!document.existing && !document.documentsPhoto) {
+        console.error('Missing file for new document:', document.title);
+        toast.error(`Document "${document.title}" requires file upload`);
+        docValid = false;
+      }
+    });
+
+    if (!docValid) {
+      console.warn('Blocked submission due to missing document files');
+      throw new Error('Validation failed - missing document files');
+    }
+
+    // Proceed with valid documents
+    documents.forEach((document, index) => {
+      data.append(`documents[${index}][title]`, document.title);
+      data.append(`documents[${index}][document_type]`, document.document_type);
+      if (document.documentsPhoto) {
+        data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
+      }
+      data.append(`documents[${index}][existing]`, document.existing ? 'true' : 'false');
+    });
+  } finally {
+    console.groupEnd();
+  }
+  break;
       case 'password':
         data.append('password', formData.password);
         break;
@@ -720,6 +757,13 @@ const EditProfessor = () => {
               accept="image/*,application/pdf"
             />
             <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            {/* Add the warning message here */}
+      {!document.existing && (
+        <p className="text-sm text-red-400 mt-1">
+          <FiAlertCircle className="inline mr-1" />
+          File upload is required for new documents
+        </p>
+      )}
             {document.documentsPhoto && (
               <button
                 type="button"

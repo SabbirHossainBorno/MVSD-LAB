@@ -41,27 +41,74 @@ const saveProfilePhoto = async (file, professorId, eid, sessionId) => {
 };
 
 const saveDocumentPhoto = async (file, professorId, index, document_type, eid, sessionId) => {
+  const logBase = {
+    eid,
+    sid: sessionId,
+    taskName: 'Save Document Photo',
+    details: {
+      professorId,
+      documentIndex: index,
+      documentType: document_type
+    }
+  };
+
+  logger.debug('SAVING DOCUMENT PHOTO INITIATED', {
+    meta: {
+      ...logBase,
+      details: {
+        ...logBase.details,
+        fileName: file?.name,
+        fileType: file?.type,
+        fileSize: file?.size
+      }
+    }
+  });
+
+  if (!file) {
+    logger.error('DOCUMENT PHOTO MISSING', {
+      meta: {
+        ...logBase,
+        details: {
+          ...logBase.details,
+          error: 'No file provided',
+          stack: new Error().stack
+        }
+      }
+    });
+    throw new Error('No file provided for document photo');
+  }
+
   const filename = `${professorId}_Document_${document_type}_${index}${path.extname(file.name)}`;
   const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
+
   try {
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
-    logger.info('Document photo saved successfully', {
+    
+    logger.info('DOCUMENT PHOTO SAVED', {
       meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Save Document Photo',
-        details: `Document photo saved at ${targetPath} for professor ID: ${professorId}`
+        ...logBase,
+        details: {
+          ...logBase.details,
+          filePath: targetPath,
+          fileSize: file.size,
+          mimeType: file.type,
+          md5: crypto.createHash('md5').update(Buffer.from(buffer)).digest('hex')
+        }
       }
     });
+    
     return `/Storage/Images/Professor/${filename}`;
   } catch (error) {
-    logger.error('Failed to save document photo', {
+    logger.error('DOCUMENT PHOTO SAVE FAILED', {
       meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Save Document Photo',
-        details: `Failed to save document photo at ${targetPath} for professor ID: ${professorId}. Error: ${error.message}`
+        ...logBase,
+        details: {
+          ...logBase.details,
+          error: error.message,
+          stack: error.stack,
+          systemError: error
+        }
       }
     });
     throw new Error(`Failed to save document photo: ${error.message}`);
@@ -250,14 +297,35 @@ export async function POST(req, { params }) {
     const career = JSON.parse(formData.get('career') || '[]');
     const citations = JSON.parse(formData.get('citations') || '[]');
 
-    const documents = [];
-    for (let i = 0; formData.has(`documents[${i}][title]`); i++) {
-      documents.push({
-        title: formData.get(`documents[${i}][title]`),
-        document_type: formData.get(`documents[${i}][document_type]`),
-        documentsPhoto: formData.get(`documents[${i}][documentsPhoto]`),
-      });
+    // In the documents processing loop
+const documents = [];
+for (let i = 0; formData.has(`documents[${i}][title]`); i++) {
+  documents.push({
+    title: formData.get(`documents[${i}][title]`),
+    document_type: formData.get(`documents[${i}][document_type]`),
+    // Correct field name from documentsPhoto to documentPhoto
+    documentPhoto: formData.get(`documents[${i}][documentsPhoto]`), // 🚨 Fix here
+    existing: formData.get(`documents[${i}][existing]`) === 'true',
+  });
+}
+
+// In the validation check
+if (!document.documentPhoto) { // ✅ Now matches corrected field name
+  logger.error('DOCUMENT VALIDATION FAILED', {
+    meta: {
+      eid,
+      sid: sessionId,
+      taskName: 'Add Document',
+      details: JSON.stringify({ // 🚨 Add JSON.stringify
+        documentIndex: index,
+        documentTitle: document.title,
+        documentType: document.document_type,
+        receivedFiles: !!document.documentPhoto
+      })
     }
+  });
+  throw new Error(`Document "${document.title}" requires file upload`);
+}
     
     const awards = [];
     for (let i = 0; formData.has(`awards[${i}][title]`); i++) {
@@ -426,58 +494,154 @@ export async function POST(req, { params }) {
       });
     }
 
-    // Update the documents processing section in POST handler
+
+
+// Document Processing Section in POST route
 if (documents.length > 0) {
-  const deleteDocumentsQuery = `DELETE FROM professor_document_info WHERE professor_id = $1`;
-  await query(deleteDocumentsQuery, [id]);
-
-  const insertDocumentsQuery = `
-    INSERT INTO professor_document_info 
-    (professor_id, title, document_type, document_photo)
-    VALUES ($1, $2, $3, $4)
-  `;
-
-  // Track document counts per type
-  const docTypeCounters = {};
-
-  for (const document of documents) {
-    const docType = document.document_type;
-    
-    // Initialize or increment counter for document type
-    if (!docTypeCounters[docType]) {
-      docTypeCounters[docType] = 0;
+  const newDocuments = documents.filter(document => !document.existing);
+  
+  logger.info('DOCUMENT PROCESSING STARTED', {
+    meta: {
+      eid,
+      sid: sessionId,
+      taskName: 'Add Document',
+      details: {
+        totalDocuments: documents.length,
+        newDocumentsCount: newDocuments.length,
+        existingDocumentsCount: documents.length - newDocuments.length
+      }
     }
-    docTypeCounters[docType]++;
-    const typeIndex = docTypeCounters[docType];
+  });
 
-    let documentUrl = null;
-    
-    // Handle existing URLs
-    if (typeof document.documentsPhoto === 'string') {
-      documentUrl = document.documentsPhoto;
-    } 
-    // Handle new file uploads
-    else if (document.documentsPhoto instanceof File) {
-      const filename = `${id}_Document_${docType}_${typeIndex}${path.extname(document.documentsPhoto.name)}`;
-      documentUrl = await saveDocumentPhoto(
-        document.documentsPhoto,
+  // Validate new documents
+  for (const [index, document] of newDocuments.entries()) {
+    logger.debug('VALIDATING DOCUMENT', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Add Document',
+        details: {
+          documentIndex: index,
+          title: document.title,
+          type: document.document_type,
+          hasFile: !!document.documentPhoto
+        }
+      }
+    });
+
+    if (!document.documentPhoto) {
+      logger.error('DOCUMENT VALIDATION FAILED', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Add Document',
+          details: {
+            documentIndex: index,
+            title: document.title,
+            error: 'Missing document photo',
+            receivedData: {
+              title: document.title,
+              type: document.document_type,
+              existing: document.existing
+            }
+          }
+        }
+      });
+      throw new Error(`Document "${document.title}" requires file upload`);
+    }
+  }
+
+  // Process valid documents
+  const currentCountResult = await query(
+    'SELECT COUNT(*) FROM professor_document_info WHERE professor_id = $1', 
+    [id]
+  );
+  let documentIndex = parseInt(currentCountResult.rows[0].count, 10) + 1;
+
+  for (const [index, document] of newDocuments.entries()) {
+    try {
+      logger.info('SAVING DOCUMENT FILE', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Add Document',
+          details: {
+            documentIndex: index,
+            title: document.title,
+            type: document.document_type,
+            fileInfo: {
+              name: document.documentPhoto.name,
+              type: document.documentPhoto.type,
+              size: document.documentPhoto.size
+            }
+          }
+        }
+      });
+
+      const documentUrl = await saveDocumentPhoto(
+        document.documentPhoto,
         id,
-        typeIndex,  // Now using type-specific index
-        docType,
+        documentIndex++,
+        document.document_type,
         eid,
         sessionId
       );
+
+      await query(
+        `INSERT INTO professor_document_info 
+        (professor_id, title, document_type, document_photo) 
+        VALUES ($1, $2, $3, $4)`,
+        [id, document.title, document.document_type, documentUrl]
+      );
+
+      logger.info('DOCUMENT SAVED TO DB', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Add Document',
+          details: {
+            documentIndex: index,
+            title: document.title,
+            type: document.document_type,
+            dbEntry: {
+              id,
+              title: document.title,
+              type: document.document_type,
+              photoUrl: documentUrl
+            }
+          }
+        }
+      });
+    } catch (error) {
+      logger.error('DOCUMENT PROCESSING FAILED', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Add Document',
+          details: {
+            documentIndex: index,
+            title: document.title,
+            error: error.message,
+            stack: error.stack
+          }
+        }
+      });
+      throw error;
     }
-
-    await query(insertDocumentsQuery, [
-      id,
-      document.title,
-      docType,
-      documentUrl
-    ]);
   }
-}
 
+  logger.info('DOCUMENTS PROCESSED SUCCESSFULLY', {
+    meta: {
+      eid,
+      sid: sessionId,
+      taskName: 'Add Document',
+      details: {
+        insertedCount: newDocuments.length,
+        lastDocumentIndex: documentIndex - 1
+      }
+    }
+  });
+}
 
     // Update awards
     if (awards.length > 0) {
