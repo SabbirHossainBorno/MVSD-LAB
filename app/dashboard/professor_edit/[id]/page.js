@@ -10,7 +10,7 @@ import Image from 'next/image';
 import {
   FiUser, FiPhone, FiCalendar, FiBook, FiBriefcase, FiFileText,
   FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
-  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo, FiRefreshCcw, FiFile, FiImage,
+  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo, FiRefreshCcw,
 } from 'react-icons/fi';
 
 const EditProfessor = () => {
@@ -27,8 +27,8 @@ const EditProfessor = () => {
   const [education, setEducation] = useState([]);
   const [career, setCareer] = useState([]);
   const [citations, setCitations] = useState([]);
-  const [awards, setAwards] = useState([]);
   const [documents, setDocuments] = useState([]);
+  const [awards, setAwards] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { id } = useParams();
@@ -51,7 +51,7 @@ const EditProfessor = () => {
         setEducation(data.education || []);
         setCareer(data.career || []);
         setCitations(data.citations || []);
-        setDocuments(data.documents?.map(doc => ({ ...doc, existing: true })) || []);
+        setDocuments(data.documents || []);
         setAwards(data.awards || []);
       } catch (error) {
         toast.error('Failed to fetch professor data');
@@ -81,12 +81,24 @@ const EditProfessor = () => {
   }, []);
 
   const handleArrayChange = useCallback((setter, index, field, value) => {
+    if (field === 'documentsPhoto' && value) {
+      const file = value;
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('File size exceeds 5 MB.');
+        return;
+      }
+      if (!['image/jpeg', 'image/png', 'application/pdf'].includes(file.type)) {
+        toast.error('Invalid file type. Only JPG, JPEG, PNG, and PDF are allowed.');
+        return;
+      }
+    }
     setter((prevState) => {
       const newState = [...prevState];
       newState[index][field] = value;
       return newState;
     });
   }, []);
+  
 
   const addNewField = useCallback((setter, newItem) => {
     setter((prevState) => [...prevState, newItem]);
@@ -104,41 +116,61 @@ const EditProfessor = () => {
   const handleSubmit = async (section) => {
     setLoading(true);
     const data = new FormData();
-
-    if (section === 'basicInfo') {
-      for (const key in formData) {
-        data.append(key, formData[key]);
-      }
-    } else if (section === 'photo') {
-      data.append('photo', photo);
-    } else if (section === 'socialMedia') {
-      data.append('socialMedia', JSON.stringify(socialMedia));
-    } else if (section === 'education') {
-      data.append('education', JSON.stringify(education));
-    } else if (section === 'career') {
-      data.append('career', JSON.stringify(career));
-    } else if (section === 'citations') {
-      data.append('citations', JSON.stringify(citations));
-    } else if (section === 'awards') {
-      awards.forEach((award, index) => {
-        data.append(`awards[${index}][title]`, award.title);
-        data.append(`awards[${index}][year]`, award.year);
-        data.append(`awards[${index}][details]`, award.details);
-        if (award.awardPhoto) {
-          data.append(`awards[${index}][awardPhoto]`, award.awardPhoto);
+  
+    switch (section) {
+      case 'basicInfo':
+        for (const key in formData) {
+          data.append(key, formData[key]);
         }
-        data.append(`awards[${index}][existing]`, award.existing ? 'true' : 'false');
-      });
-    } else if (section === 'password') {
-      data.append('password', formData.password);
+        break;
+      case 'photo':
+        data.append('photo', photo);
+        break;
+      case 'socialMedia':
+        data.append('socialMedia', JSON.stringify(socialMedia));
+        break;
+      case 'education':
+        data.append('education', JSON.stringify(education));
+        break;
+      case 'career':
+        data.append('career', JSON.stringify(career));
+        break;
+      case 'citations':
+        data.append('citations', JSON.stringify(citations));
+        break;
+      case 'awards':
+        awards.forEach((award, index) => {
+          data.append(`awards[${index}][title]`, award.title);
+          data.append(`awards[${index}][year]`, award.year);
+          data.append(`awards[${index}][details]`, award.details);
+          if (award.awardPhoto) {
+            data.append(`awards[${index}][awardPhoto]`, award.awardPhoto);
+          }
+          data.append(`awards[${index}][existing]`, award.existing ? 'true' : 'false');
+        });
+        break;
+      case 'documents':
+        documents.forEach((document, index) => {
+          data.append(`documents[${index}][title]`, document.title);
+          data.append(`documents[${index}][document_type]`, document.document_type);
+          if (document.documentsPhoto) {
+            data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
+          }
+        });
+        break;
+      case 'password':
+        data.append('password', formData.password);
+        break;
+      default:
+        break;
     }
-
+  
     try {
       const response = await fetch(`/api/professor_edit/${id}`, {
         method: 'POST',
         body: data,
       });
-
+  
       if (response.ok) {
         toast.success('Professor Updated successfully!');
         router.push('/dashboard');
@@ -632,15 +664,15 @@ const EditProfessor = () => {
             </div>
           </section>
 
+
           {/* Documents Section */}
 <section className="bg-gray-700/30 rounded p-6 shadow-inner">
   <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-cyan-300">
     <FiFileText className="w-6 h-6" /> Documents
   </h2>
-
   {documents.map((document, index) => (
     <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
-      {/* Document Title */}
+      {/* Document Title Input */}
       <div className="relative flex items-center">
         <input
           type="text"
@@ -648,23 +680,23 @@ const EditProfessor = () => {
           value={document.title}
           onChange={(e) => handleArrayChange(setDocuments, index, 'title', e.target.value)}
           className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
-          readOnly={document.existing}
           required
+          readOnly={document.existing} // Make read-only if existing
         />
-        <FiFileText className="absolute right-3 text-gray-400" />
+        <FiFileText className="absolute right-3 text-gray-400 pointer-events-none" />
       </div>
-
       {/* Document Type */}
       <div className="relative flex items-center">
+        <FiInfo className="absolute left-3 text-gray-400 pointer-events-none" />
         <select
-          name="documentType"
+          name="document_type"
           value={document.document_type}
           onChange={(e) => handleArrayChange(setDocuments, index, 'document_type', e.target.value)}
           className="w-full pl-10 pr-10 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-          disabled={document.existing}
           required
+          disabled={document.existing} // Disable if existing
         >
-          <option value="">Select Type</option>
+          <option value="" disabled className="text-gray-400">Select Type</option>
           <option value="Education">Education</option>
           <option value="Medical">Medical</option>
           <option value="Career">Career</option>
@@ -674,41 +706,42 @@ const EditProfessor = () => {
         </select>
         <FiChevronDown className="absolute right-3 text-gray-400 pointer-events-none" />
       </div>
-
-      {/* Document File Input/Preview */}
-      <div className="relative flex items-center gap-3">
+      {/* Document Upload */}
+      <div className="relative space-y-2">
         {document.existing ? (
-          <>
-            <div className="relative w-16 h-16">
-              <Image
-                src={document.document_photo}
-                alt="Document preview"
-                fill
-                className="object-cover rounded"
-              />
-            </div>
-            <span className="text-sm text-gray-400">
-              {document.document_photo.split('.').pop().toUpperCase()} Document
-            </span>
-          </>
+          <div className="relative">
+            <p className="text-gray-400 mb-2">Current Document Photo:</p>
+            <Image
+              src={document.documentsPhoto}
+              alt="Document Photo"
+              width={64}
+              height={64}
+              className="w-16 h-16 object-cover mb-4"
+            />
+          </div>
         ) : (
-          <div className="relative w-full">
+          <div className="relative">
             <input
               type="file"
-              onChange={(e) => handleArrayChange(setDocuments, index, 'document_photo', e.target.files[0])}
+              onChange={(e) => handleArrayChange(setDocuments, index, 'documentsPhoto', e.target.files[0])}
               className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
               accept="image/*,application/pdf"
             />
             <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            {document.document_photo && (
-              <span className="absolute right-12 top-1/2 -translate-y-1/2 text-sm text-gray-300">
-                {document.document_photo.name}
-              </span>
+            {document.documentsPhoto && (
+              <button
+                type="button"
+                onClick={() => handleArrayChange(setDocuments, index, 'documentsPhoto', null)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-300"
+              >
+                <FiX className="w-4 h-4" />
+              </button>
             )}
           </div>
         )}
-
-        {/* Remove Button */}
+      </div>
+      {/* Remove Button */}
+      {!document.existing && documents.length > 1 && (
         <button
           type="button"
           onClick={() => removeField(setDocuments, index)}
@@ -716,25 +749,19 @@ const EditProfessor = () => {
         >
           <FiX className="w-3.5 h-3.5" />
         </button>
-      </div>
+      )}
     </div>
   ))}
-
   <div className="mt-4 flex items-center space-x-4">
-    <button
-      type="button"
-      onClick={() => addNewField(setDocuments, { 
-        title: '', 
-        document_type: '', 
-        document_photo: null,
-        existing: false 
-      })}
-      className="flex items-center justify-center space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-    >
-      <FiPlus className="w-5 h-5" />
-      <span>Add Document</span>
-    </button>
-
+  {/* Add Document Button */}
+  <button
+    type="button"
+    onClick={() => addNewField(setDocuments, { title: '', document_type: '', documentsPhoto: null, existing: false })}
+    className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+  >
+    <FiPlus className="w-5 h-5" />
+    <span>Add Document</span>
+  </button>
     <button
       type="button"
       onClick={() => handleSubmit('documents')}
@@ -743,7 +770,7 @@ const EditProfessor = () => {
       <FiRefreshCcw className="w-4 h-4" />
       <span>Update Documents</span>
     </button>
-  </div>
+    </div>
 </section>
 
           {/* Awards Section */}
