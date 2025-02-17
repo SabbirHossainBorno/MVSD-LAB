@@ -46,8 +46,6 @@
     "slick-carousel": "^1.8.1",
     "socket.io": "^4.8.0",
     "socket.io-client": "^4.8.0",
-    "sweetalert2": "^11.6.13",
-    "sweetalert2-react-content": "^5.1.0",
     "tail": "^2.2.6",
     "uuid": "^10.0.0",
     "winston": "^3.17.0",
