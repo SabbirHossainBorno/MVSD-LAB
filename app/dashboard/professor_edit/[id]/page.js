@@ -73,7 +73,7 @@ const EditProfessor = () => {
   const handleDeleteConfirm = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/professor_edit/${id}/delete_document`, {
+      const response = await fetch(`/api/professor_edit/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ const EditProfessor = () => {
       });
 
       if (response.ok) {
-        toast.success('Document deleted successfully!');
+        toast.success('Document Deleted Successfully!');
         // Refresh the page or update the state to remove the deleted document
         setDocuments((prevDocuments) => prevDocuments.filter(doc => doc.serial !== documentToDelete.serial));
       } else {
@@ -811,16 +811,17 @@ const EditProfessor = () => {
             <span>Update Documents</span>
           </button>
         </div>
-      </section>
-
-      {/* Custom Popup */}
+        {/* Custom Popup */}
       <CustomPopup
         isOpen={showDeletePopup}
         onClose={() => setShowDeletePopup(false)}
         onConfirm={handleDeleteConfirm}
-        title="Are you sure?"
-        message={`You won't be able to revert this!`}
+        title="Are You Sure?"
+        message={`You Won't Be Able To Revert This!`}
       />
+      </section>
+
+      
 
           {/* Awards Section */}
           <section className="bg-gray-700/30 rounded p-6 shadow-inner">

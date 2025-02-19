@@ -1,3 +1,4 @@
+//app/components/CustomPopup
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiCheck, FiAlertTriangle } from 'react-icons/fi';
