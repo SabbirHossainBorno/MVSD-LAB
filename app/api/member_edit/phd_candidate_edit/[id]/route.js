@@ -1,8 +1,8 @@
 //app/api/professor_edit/[id]/route.js
 import { NextResponse } from 'next/server';
-import { query } from '../../../../lib/db';
-import logger from '../../../../lib/logger';
-import sendTelegramAlert from '../../../../lib/telegramAlert';
+import { query } from '../../../../../lib/db';
+import logger from '../../../../../lib/logger';
+import sendTelegramAlert from '../../../../../lib/telegramAlert';
 import path from 'path';
 import fs from 'fs';
 import bcrypt from 'bcryptjs';
@@ -11,9 +11,9 @@ const formatAlertMessage = (title, details) => {
   return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\n${details}`;
 };
 
-const saveProfilePhoto = async (file, professorId, eid, sessionId) => {
-  const filename = `${professorId}_DP${path.extname(file.name)}`;
-  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
+const saveProfilePhoto = async (file, phdCandidateId, eid, sessionId) => {
+  const filename = `${phdCandidateId}_DP${path.extname(file.name)}`;
+  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/PhD_Candidate', filename);
 
   try {
     const buffer = await file.arrayBuffer();
@@ -22,38 +22,38 @@ const saveProfilePhoto = async (file, professorId, eid, sessionId) => {
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Edit Professor Data',
-        details: `Profile photo saved at ${targetPath} for professor ID: ${professorId}`
+        taskName: 'Edit PhD Candidate Data',
+        details: `Profile photo saved at ${targetPath} for phd candidate ID: ${phdCandidateId}`
       }
     });
-    return `/Storage/Images/Professor/${filename}`;
+    return `/Storage/Images/PhD_Candidate/${filename}`;
   } catch (error) {
     logger.error('Failed to save profile photo', {
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Edit Professor Data',
-        details: `Failed to save profile photo at ${targetPath} for professor ID: ${professorId}. Error: ${error.message}`
+        taskName: 'Edit PhD Candidate Data',
+        details: `Failed to save profile photo at ${targetPath} for phd candidate ID: ${phdCandidateId}. Error: ${error.message}`
       }
     });
     throw new Error(`Failed to save profile photo: ${error.message}`);
   }
 };
 
-const saveDocumentPhoto = async (file, professorId, index, document_type, eid, sessionId) => {
+const saveDocumentPhoto = async (file, phdCandidateId, index, document_type, eid, sessionId) => {
   if (!file) {
     logger.warn('No file provided for document photo', {
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Edit Professor Data',
-        details: `No file provided for document photo for professor ID: ${professorId}`
+        taskName: 'Edit PhD Candidate Data',
+        details: `No file provided for document photo for phd candidate ID: ${phdCandidateId}`
       }
     });
     throw new Error('No file provided for document photo');
   }
-  const filename = `${professorId}_Document_${document_type}_${index}${path.extname(file.name)}`;
-  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
+  const filename = `${phdCandidateId}_Document_${document_type}_${index}${path.extname(file.name)}`;
+  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/PhD_Candidate', filename);
 
   try {
     const buffer = await file.arrayBuffer();
@@ -62,64 +62,24 @@ const saveDocumentPhoto = async (file, professorId, index, document_type, eid, s
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Edit Professor Data',
-        details: `Document photo saved at ${targetPath} for professor ID: ${professorId}`
+        taskName: 'Edit PhD Candidate Data',
+        details: `Document photo saved at ${targetPath} for phd candidate ID: ${phdCandidateId}`
       }
     });
-    return `/Storage/Images/Professor/${filename}`;
+    return `/Storage/Images/PhD_Candidate/${filename}`;
   } catch (error) {
     logger.error('Failed to save document photo', {
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Edit Professor Data',
-        details: `Failed to save document photo at ${targetPath} for professor ID: ${professorId}. Error: ${error.message}`
+        taskName: 'Edit PhD Candidate Data',
+        details: `Failed to save document photo at ${targetPath} for phd candidate ID: ${phdCandidateId}. Error: ${error.message}`
       }
     });
     throw new Error(`Failed to save document photo: ${error.message}`);
   }
 };
 
-const saveAwardPhoto = async (file, professorId, index, eid, sessionId) => {
-  if (!file) {
-    logger.warn('No file provided for award photo', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Edit Professor Data',
-        details: `No file provided for award photo for professor ID: ${professorId}`
-      }
-    });
-    throw new Error('No file provided for award photo');
-  }
-
-  const filename = `${professorId}_Award_${index}${path.extname(file.name)}`;
-  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
-
-  try {
-    const buffer = await file.arrayBuffer();
-    fs.writeFileSync(targetPath, Buffer.from(buffer));
-    logger.info('Award photo saved successfully', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Edit Professor Data',
-        details: `Award photo saved at ${targetPath} for professor ID: ${professorId}`
-      }
-    });
-    return `/Storage/Images/Professor/${filename}`;
-  } catch (error) {
-    logger.error('Failed to save award photo', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Edit Professor Data',
-        details: `Failed to save award photo at ${targetPath} for professor ID: ${professorId}. Error: ${error.message}`
-      }
-    });
-    throw new Error(`Failed to save award photo: ${error.message}`);
-  }
-};
 
 // Main function to handle the GET request
 export async function GET(req, { params }) {
@@ -131,15 +91,15 @@ export async function GET(req, { params }) {
   const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
 
   try {
-    const apiCallMessage = formatAlertMessage('Professor Edit - API', `IP: ${ipAddress}\nStatus: 200`);
+    const apiCallMessage = formatAlertMessage('PhD Candidate Edit - API', `IP: ${ipAddress}\nStatus: 200`);
     await sendTelegramAlert(apiCallMessage);
 
-    logger.info('Fetching professor data', {
+    logger.info('Fetching phd candidate data', {
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Fetch Professor Data',
-        details: `Fetching professor data for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        taskName: 'Fetch PhD Candidate Data',
+        details: `Fetching phd candidate data for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
       }
     });
 
@@ -147,21 +107,21 @@ export async function GET(req, { params }) {
     const professorResult = await query(professorQuery, [id]);
 
     if (professorResult.rows.length === 0) {
-      const notFoundMessage = formatAlertMessage('Professor Not Found', `ID: ${id}\nIP: ${ipAddress}\nStatus: 404`);
+      const notFoundMessage = formatAlertMessage('PhD Candidate Not Found', `ID: ${id}\nIP: ${ipAddress}\nStatus: 404`);
       await sendTelegramAlert(notFoundMessage);
 
-      logger.warn('Professor not found', {
+      logger.warn('PhD Candidate not found', {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Fetch Professor Data',
-          details: `No professor found with ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+          taskName: 'Fetch PhD Candidate Data',
+          details: `No phd candidate found with ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
-      return NextResponse.json({ message: 'Professor Not Found' }, { status: 404 });
+      return NextResponse.json({ message: 'PhD Candidate Not Found' }, { status: 404 });
     }
 
-    const professor = professorResult.rows[0];
+    const phdCandidate = professorResult.rows[0];
 
     const socialMediaQuery = `SELECT * FROM professor_socialmedia_info WHERE professor_id = $1;`;
     const socialMediaResult = await query(socialMediaQuery, [id]);
@@ -178,11 +138,8 @@ export async function GET(req, { params }) {
     const documentsQuery = `SELECT * FROM professor_document_info WHERE professor_id = $1;`;
     const documentsResult = await query(documentsQuery, [id]);
 
-    const awardsQuery = `SELECT * FROM professor_award_info WHERE professor_id = $1;`;
-    const awardsResult = await query(awardsQuery, [id]);
-
     const responseData = {
-      ...professor,
+      ...phdCandidate,
       socialMedia: socialMediaResult.rows,
       education: educationResult.rows,
       career: careerResult.rows,
@@ -193,35 +150,34 @@ export async function GET(req, { params }) {
         documentsPhoto: doc.document_photo, // Fix property name mismatch
         existing: true
       })),
-      awards: awardsResult.rows.map(award => ({ ...award, existing: true })),
     };
 
-    const successMessage = formatAlertMessage('Successfully Fetched Professor Data', `ID: ${id}\nIP: ${ipAddress}\nStatus: 200`);
+    const successMessage = formatAlertMessage('Successfully Fetched PhD Candidate Data', `ID: ${id}\nIP: ${ipAddress}\nStatus: 200`);
     await sendTelegramAlert(successMessage);
 
-    logger.info('Successfully fetched professor data', {
+    logger.info('Successfully fetched phd candidate data', {
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Fetch Professor Data',
-        details: `Successfully fetched professor data for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        taskName: 'Fetch PhD Candidate Data',
+        details: `Successfully fetched phd candidate data for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
       }
     });
     return NextResponse.json(responseData, { status: 200 });
 
   } catch (error) {
-    const errorMessage = formatAlertMessage('Error Fetching Professor Data', `ID: ${id}\nIP: ${ipAddress}\nError: ${error.message}\nStatus: 500`);
+    const errorMessage = formatAlertMessage('Error Fetching PhD Candidate Data', `ID: ${id}\nIP: ${ipAddress}\nError: ${error.message}\nStatus: 500`);
     await sendTelegramAlert(errorMessage);
 
-    logger.error('Error fetching professor data', {
+    logger.error('Error fetching phd candidate data', {
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Fetch Professor Data',
-        details: `Error fetching professor data for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+        taskName: 'Fetch PhD Candidate Data',
+        details: `Error fetching phd candidate data for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
       }
     });
-    return NextResponse.json({ message: `Failed to fetch professor data: ${error.message}` }, { status: 500 });
+    return NextResponse.json({ message: `Failed to fetch phd candidate data: ${error.message}` }, { status: 500 });
   }
 }
 
@@ -255,7 +211,7 @@ export async function DELETE(req, { params }) {
           meta: {
             eid,
             sid: sessionId,
-            taskName: 'Edit Professor Data',
+            taskName: 'Edit PhD Candidate Data',
             details: `File does not exist at path: ${filePath} for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
           }
         });
@@ -267,7 +223,7 @@ export async function DELETE(req, { params }) {
               meta: {
                 eid,
                 sid: sessionId,
-                taskName: 'Edit Professor Data',
+                taskName: 'Edit PhD Candidate Data',
                 details: `Failed to delete file at path: ${filePath} for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}. Error: ${err.message}`
               }
             });
@@ -276,7 +232,7 @@ export async function DELETE(req, { params }) {
               meta: {
                 eid,
                 sid: sessionId,
-                taskName: 'Edit Professor Data',
+                taskName: 'Edit PhD Candidate Data',
                 details: `File deleted successfully at path: ${filePath} for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
               }
             });
@@ -291,7 +247,7 @@ export async function DELETE(req, { params }) {
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Edit Professor Data',
+        taskName: 'Edit PhD Candidate Data',
         details: `Document deleted for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
       }
     });
@@ -304,7 +260,7 @@ export async function DELETE(req, { params }) {
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Edit Professor Data',
+        taskName: 'Edit PhD Candidate Data',
         details: `Error deleting document for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
       }
     });
@@ -322,14 +278,14 @@ export async function POST(req, { params }) {
   const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
 
   try {
-    const apiCallMessage = formatAlertMessage('Professor Edit - API', `IP : ${ipAddress}\nStatus: 200`);
+    const apiCallMessage = formatAlertMessage('PhD Candidate Edit - API', `IP : ${ipAddress}\nStatus: 200`);
     await sendTelegramAlert(apiCallMessage);
 
     logger.info('Receiving form data', {
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Edit Professor Data',
+        taskName: 'Edit PhD Candidate Data',
         details: `Receiving form data for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
       }
     });
@@ -364,16 +320,6 @@ export async function POST(req, { params }) {
       });
     }
     
-    const awards = [];
-    for (let i = 0; formData.has(`awards[${i}][title]`); i++) {
-      awards.push({
-        title: formData.get(`awards[${i}][title]`),
-        year: formData.get(`awards[${i}][year]`),
-        details: formData.get(`awards[${i}][details]`),
-        awardPhoto: formData.get(`awards[${i}][awardPhoto]`),
-        existing: formData.get(`awards[${i}][existing]`) === 'true',
-      });
-    }
     const password = formData.get('password');
 
     await query('BEGIN');
@@ -399,7 +345,7 @@ export async function POST(req, { params }) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Edit Professor Data',
+          taskName: 'Edit PhD Candidate Data',
           details: `Profile photo updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
@@ -425,7 +371,7 @@ export async function POST(req, { params }) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Edit Professor Data',
+          taskName: 'Edit PhD Candidate Data',
           details: `Basic info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
@@ -450,7 +396,7 @@ export async function POST(req, { params }) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Edit Professor Data',
+          taskName: 'Edit PhD Candidate Data',
           details: `Social Media info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
@@ -475,7 +421,7 @@ export async function POST(req, { params }) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Edit Professor Data',
+          taskName: 'Edit PhD Candidate Data',
           details: `Education info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
@@ -500,98 +446,38 @@ export async function POST(req, { params }) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Edit Professor Data',
+          taskName: 'Edit PhD Candidate Data',
           details: `Career info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
     }
 
-    // Update citations
-    if (citations.length > 0) {
-      const deleteCitationsQuery = `
-        DELETE FROM professor_citations_info
-        WHERE professor_id = $1
-      `;
-      await query(deleteCitationsQuery, [id]);
+    // Update documents
+    if (documents.length > 0) {
+      const newDocuments = documents.filter(document => !document.existing);
 
-      const insertCitationsQuery = `
-        INSERT INTO professor_citations_info (professor_id, title, link, organization_name)
-        VALUES ($1, $2, $3, $4)
+      const insertDocumentsQuery = `
+        INSERT INTO professor_document_info (professor_id, title, document_type, document_photo) VALUES ($1, $2, $3, $4)
       `;
-      for (const citation of citations) {
-        await query(insertCitationsQuery, [id, citation.title, citation.link, citation.organization_name]);
+      const currentDocumentsCountQuery = `
+        SELECT COUNT(*) FROM professor_document_info WHERE professor_id = $1
+      `;
+      const currentDocumentsCountResult = await query(currentDocumentsCountQuery, [id]);
+      const currentDocumentsCount = parseInt(currentDocumentsCountResult.rows[0].count, 10);
+      for (let i = 0; i < newDocuments.length; i++) {
+        const document = newDocuments[i];
+        let documentUrl = null;
+        if (document.documentsPhoto) {
+          documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, currentDocumentsCount + i + 1, document.document_type); // Pass document_type
+        }
+        await query(insertDocumentsQuery, [id, document.title, document.document_type, documentUrl]);
       }
-      logger.info('Citation INFO Updated', {
+      logger.info('Document INFO Updated', {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Edit Professor Data',
-          details: `Citation info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
-        }
-      });
-    }
-
-
-
-// Update documents
-if (documents.length > 0) {
-  const newDocuments = documents.filter(document => !document.existing);
-
-  const insertDocumentsQuery = `
-    INSERT INTO professor_document_info (professor_id, title, document_type, document_photo) VALUES ($1, $2, $3, $4)
-  `;
-  const currentDocumentsCountQuery = `
-    SELECT COUNT(*) FROM professor_document_info WHERE professor_id = $1
-  `;
-  const currentDocumentsCountResult = await query(currentDocumentsCountQuery, [id]);
-  const currentDocumentsCount = parseInt(currentDocumentsCountResult.rows[0].count, 10);
-  for (let i = 0; i < newDocuments.length; i++) {
-    const document = newDocuments[i];
-    let documentUrl = null;
-    if (document.documentsPhoto) {
-      documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, currentDocumentsCount + i + 1, document.document_type); // Pass document_type
-    }
-    await query(insertDocumentsQuery, [id, document.title, document.document_type, documentUrl]);
-  }
-  logger.info('Document INFO Updated', {
-    meta: {
-      eid,
-      sid: sessionId,
-      taskName: 'Edit Professor Data',
-      details: `Document info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
-    }
-  });
-}
-
-    // Update awards
-    if (awards.length > 0) {
-      const newAwards = awards.filter(award => !award.existing);
-
-      const insertAwardsQuery = `
-        INSERT INTO professor_award_info (professor_id, title, year, details, award_photo)
-        VALUES ($1, $2, $3, $4, $5)
-      `;
-
-      const currentAwardsCountQuery = `
-        SELECT COUNT(*) FROM professor_award_info WHERE professor_id = $1
-      `;
-      const currentAwardsCountResult = await query(currentAwardsCountQuery, [id]);
-      const currentAwardsCount = parseInt(currentAwardsCountResult.rows[0].count, 10);
-
-      for (let i = 0; i < newAwards.length; i++) {
-        const award = newAwards[i];
-        let awardUrl = null;
-        if (award.awardPhoto) {
-          awardUrl = await saveAwardPhoto(award.awardPhoto, id, currentAwardsCount + i + 1);
-        }
-        await query(insertAwardsQuery, [id, award.title, award.year, award.details, awardUrl]);
-      }
-      logger.info('Award INFO Updated', {
-        meta: {
-          eid,
-          sid: sessionId,
-          taskName: 'Edit Professor Data',
-          details: `Award info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+          taskName: 'Edit PhD Candidate Data',
+          details: `Document info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
     }
@@ -626,7 +512,7 @@ if (documents.length > 0) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Edit Professor Data',
+          taskName: 'Edit PhD Candidate Data',
           details: `Password updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
@@ -634,37 +520,37 @@ if (documents.length > 0) {
 
     await query('COMMIT');
 
-    const successMessage = formatAlertMessage('Professor Information Updated Successfully', `ID : ${id}\nUpdated By : ${adminEmail}`);
+    const successMessage = formatAlertMessage('PhD Candidate Information Updated Successfully', `ID : ${id}\nUpdated By : ${adminEmail}`);
     await sendTelegramAlert(successMessage);
 
-    logger.info('Professor information updated successfully', {
+    logger.info('PhD Candidate information updated successfully', {
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Edit Professor Data',
-        details: `Professor information updated successfully for ID: ${id} by ${adminEmail} from IP ${ipAddress} with User-Agent ${userAgent}`
+        taskName: 'Edit PhD Candidate Data',
+        details: `PhD Candidate information updated successfully for ID: ${id} by ${adminEmail} from IP ${ipAddress} with User-Agent ${userAgent}`
       }
     });
 
     // Insert notification
     const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
-    const notificationTitle = `Professor [${id}] Updated By ${adminEmail}`;
+    const notificationTitle = `PhD Candidate [${id}] Updated By ${adminEmail}`;
     const notificationStatus = 'Unread';
     await query(insertNotificationQuery, [id, notificationTitle, notificationStatus]);
 
-    return NextResponse.json({ message: 'Professor information updated successfully!' }, { status: 200 });
+    return NextResponse.json({ message: 'PhD Candidate information updated successfully!' }, { status: 200 });
 
   } catch (error) {
     await query('ROLLBACK');
 
-    const errorMessage = formatAlertMessage('Error Updating Professor Information', `ID : ${id}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
+    const errorMessage = formatAlertMessage('Error Updating PhD Candidate Information', `ID : ${id}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
     await sendTelegramAlert(errorMessage);
 
     logger.error('Error updating professor information', {
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Edit Professor Data',
+        taskName: 'Edit PhD Candidate Data',
         details: `Error updating professor information for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
       }
     });
