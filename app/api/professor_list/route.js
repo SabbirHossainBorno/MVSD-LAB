@@ -25,23 +25,27 @@ export async function GET(req) {
     const resultsPerPage = 12;
     const offset = (page - 1) * resultsPerPage;
 
-    let searchQuery = `
-      SELECT * FROM professor_basic_info
-      WHERE (first_name ILIKE $1 OR last_name ILIKE $1 OR email ILIKE $1)
-    `;
-    let countQuery = `
+    // Fetch total counts for all professors
+    const totalCountsQuery = `
       SELECT COUNT(*) AS total, 
              COUNT(*) FILTER (WHERE status ILIKE 'Active') AS active_count,
              COUNT(*) FILTER (WHERE status ILIKE 'Inactive') AS inactive_count
       FROM professor_basic_info
+    `;
+    const totalCountsResult = await query(totalCountsQuery);
+    const totalProfessors = parseInt(totalCountsResult.rows[0].total, 10);
+    const activeProfessors = parseInt(totalCountsResult.rows[0].active_count, 10);
+    const inactiveProfessors = parseInt(totalCountsResult.rows[0].inactive_count, 10);
+
+    // Fetch filtered list of professors
+    let searchQuery = `
+      SELECT * FROM professor_basic_info
       WHERE (first_name ILIKE $1 OR last_name ILIKE $1 OR email ILIKE $1)
     `;
-
     const queryParams = [`%${search}%`];
 
     if (filter !== 'all') {
       searchQuery += ` AND status ILIKE $2`;
-      countQuery += ` AND status ILIKE $2`;
       queryParams.push(filter);
     }
 
@@ -49,11 +53,6 @@ export async function GET(req) {
     queryParams.push(resultsPerPage, offset);
 
     const professorsResult = await query(searchQuery, queryParams);
-    const countResult = await query(countQuery, queryParams.slice(0, filter !== 'all' ? 2 : 1));
-
-    const totalProfessors = parseInt(countResult.rows[0].total, 10);
-    const activeProfessors = parseInt(countResult.rows[0].active_count, 10);
-    const inactiveProfessors = parseInt(countResult.rows[0].inactive_count, 10);
     const totalPages = Math.ceil(totalProfessors / resultsPerPage);
 
     const apiCallMessage = formatAlertMessage('Professor List - API', `IP : ${ipAddress}\nStatus : 200`);

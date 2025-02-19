@@ -25,34 +25,36 @@ export async function GET(req) {
     const resultsPerPage = 12; // Set to 12 results per page
     const offset = (page - 1) * resultsPerPage;
 
+    // Fetch total counts for all PhD candidates
+    const totalCountsQuery = `
+      SELECT COUNT(*) AS total, 
+             COUNT(*) FILTER (WHERE status ILIKE 'Active') AS active_count,
+             COUNT(*) FILTER (WHERE status ILIKE 'Inactive') AS inactive_count
+      FROM phd_candidate_basic_info
+    `;
+    const totalCountsResult = await query(totalCountsQuery);
+    const totalPhdCandidates = parseInt(totalCountsResult.rows[0].total, 10);
+    const activePhdCandidates = parseInt(totalCountsResult.rows[0].active_count, 10);
+    const inactivePhdCandidates = parseInt(totalCountsResult.rows[0].inactive_count, 10);
+
+    // Fetch filtered list of PhD candidates
     let searchQuery = `
       SELECT * FROM phd_candidate_basic_info
       WHERE (first_name ILIKE $1 OR last_name ILIKE $1 OR email ILIKE $1)
     `;
-    let countQuery = `
-      SELECT COUNT(*) FROM phd_candidate_basic_info
-      WHERE (first_name ILIKE $1 OR last_name ILIKE $1 OR email ILIKE $1)
-    `;
-
-    const searchValue = `%${search}%`;
-    let queryParams = [searchValue];
+    const queryParams = [`%${search}%`];
 
     if (filter !== 'all') {
       searchQuery += ` AND status ILIKE $2`;
-      countQuery += ` AND status ILIKE $2`;
-      queryParams.push(filter); // Add filter to params
+      queryParams.push(filter);
     }
 
-    // Add ordering and pagination
     searchQuery += ` ORDER BY substring(id from '[0-9]+')::int ${sortOrder}, id ${sortOrder} LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2}`;
     queryParams.push(resultsPerPage, offset); // Add pagination parameters
 
     // Execute queries
-    const phd_candidatesResult = await query(searchQuery, queryParams);
-    const countResult = await query(countQuery, queryParams.slice(0, filter !== 'all' ? 2 : 1));
-
-    const totalPhd_candidates = parseInt(countResult.rows[0].count, 10);
-    const totalPages = Math.ceil(totalPhd_candidates / resultsPerPage);
+    const phdCandidatesResult = await query(searchQuery, queryParams);
+    const totalPages = Math.ceil(totalPhdCandidates / resultsPerPage);
 
     const apiCallMessage = formatAlertMessage('PhD Candidate List - API', `IP : ${ipAddress}\nStatus : 200`);
     await sendTelegramAlert(apiCallMessage);
@@ -67,7 +69,10 @@ export async function GET(req) {
     });
 
     return NextResponse.json({
-      phd_candidates: phd_candidatesResult.rows,
+      phd_candidates: phdCandidatesResult.rows,
+      totalPhdCandidates,
+      activePhdCandidates,
+      inactivePhdCandidates,
       totalPages,
     });
   } catch (error) {
@@ -79,7 +84,8 @@ export async function GET(req) {
         eid,
         sid: sessionId,
         taskName: 'Fetch PhD Candidates List',
-        details: `Error fetching PhD candidates list from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+        details: `Error fetching PhD candidates list from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`,
+        stack: error.stack
       }
     });
 

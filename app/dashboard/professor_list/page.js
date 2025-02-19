@@ -43,7 +43,7 @@ const ProfessorsList = () => {
         if (res.ok) {
           setProfessors(data.professors || []);
           setTotalPages(data.totalPages || 1);
-          setTotalProfessors(data.totalProfessors ?? 0); // Ensure default value
+          setTotalProfessors(data.totalProfessors ?? 0);
           setActiveProfessors(data.activeProfessors ?? 0);
           setInactiveProfessors(data.inactiveProfessors ?? 0);
         } else {
@@ -55,7 +55,7 @@ const ProfessorsList = () => {
         setLoading(false);
       }
     };
-
+  
     const debounceFetch = setTimeout(fetchProfessors, 300);
     return () => clearTimeout(debounceFetch);
   }, [currentPage, searchTerm, filter, sortOrder]);

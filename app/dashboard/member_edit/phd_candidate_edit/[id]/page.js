@@ -230,7 +230,7 @@ const EditPhdCandidate = () => {
             className="flex items-center text-blue-300 hover:text-blue-100 transition-colors group"
           >
             <span className="mr-2 group-hover:-translate-x-1 transition-transform">←</span>
-            Back to Dashboard
+            Back to Member List
           </button>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             Edit PhD Candidate
