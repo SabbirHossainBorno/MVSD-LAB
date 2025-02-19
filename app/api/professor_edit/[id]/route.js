@@ -380,7 +380,7 @@ export async function POST(req, { params }) {
 
     // Update profile photo
     if (photo) {
-      const photoUrl = await saveProfilePhoto(photo, id);
+      const photoUrl = await saveProfilePhoto(photo, id, eid, sessionId);
       const updatePhotoQuery = `
         UPDATE professor_basic_info
         SET photo = $1
@@ -549,7 +549,7 @@ if (documents.length > 0) {
     const document = newDocuments[i];
     let documentUrl = null;
     if (document.documentsPhoto) {
-      documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, currentDocumentsCount + i + 1, document.document_type); // Pass document_type
+      documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, currentDocumentsCount + i + 1, document.document_type, eid, sessionId); // Pass document_type
     }
     await query(insertDocumentsQuery, [id, document.title, document.document_type, documentUrl]);
   }

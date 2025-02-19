@@ -1,4 +1,4 @@
-//app/api/professor_edit/[id]/route.js
+//app/api/member_edit/phd_candidate_edit/[id]/route.js
 import { NextResponse } from 'next/server';
 import { query } from '../../../../../lib/db';
 import logger from '../../../../../lib/logger';
@@ -103,10 +103,10 @@ export async function GET(req, { params }) {
       }
     });
 
-    const professorQuery = `SELECT * FROM professor_basic_info WHERE id = $1;`;
-    const professorResult = await query(professorQuery, [id]);
+    const phdCandidateQuery = `SELECT * FROM phd_candidate_basic_info WHERE id = $1;`;
+    const phdCandidateResult = await query(phdCandidateQuery, [id]);
 
-    if (professorResult.rows.length === 0) {
+    if (phdCandidateResult.rows.length === 0) {
       const notFoundMessage = formatAlertMessage('PhD Candidate Not Found', `ID: ${id}\nIP: ${ipAddress}\nStatus: 404`);
       await sendTelegramAlert(notFoundMessage);
 
@@ -121,21 +121,18 @@ export async function GET(req, { params }) {
       return NextResponse.json({ message: 'PhD Candidate Not Found' }, { status: 404 });
     }
 
-    const phdCandidate = professorResult.rows[0];
+    const phdCandidate = phdCandidateResult.rows[0];
 
-    const socialMediaQuery = `SELECT * FROM professor_socialmedia_info WHERE professor_id = $1;`;
+    const socialMediaQuery = `SELECT * FROM phd_candidate_socialmedia_info WHERE phd_candidate_id = $1;`;
     const socialMediaResult = await query(socialMediaQuery, [id]);
 
-    const educationQuery = `SELECT * FROM professor_education_info WHERE professor_id = $1;`;
+    const educationQuery = `SELECT * FROM phd_candidate_education_info WHERE phd_candidate_id = $1;`;
     const educationResult = await query(educationQuery, [id]);
 
-    const careerQuery = `SELECT * FROM professor_career_info WHERE professor_id = $1;`;
+    const careerQuery = `SELECT * FROM phd_candidate_career_info WHERE phd_candidate_id = $1;`;
     const careerResult = await query(careerQuery, [id]);
 
-    const citationsQuery = `SELECT * FROM professor_citations_info WHERE professor_id = $1;`;
-    const citationsResult = await query(citationsQuery, [id]);
-
-    const documentsQuery = `SELECT * FROM professor_document_info WHERE professor_id = $1;`;
+    const documentsQuery = `SELECT * FROM phd_candidate_document_info WHERE phd_candidate_id = $1;`;
     const documentsResult = await query(documentsQuery, [id]);
 
     const responseData = {
@@ -143,7 +140,6 @@ export async function GET(req, { params }) {
       socialMedia: socialMediaResult.rows,
       education: educationResult.rows,
       career: careerResult.rows,
-      citations: citationsResult.rows,
       documents: documentsResult.rows.map(doc => ({
         title: doc.title,
         document_type: doc.document_type,
@@ -195,8 +191,8 @@ export async function DELETE(req, { params }) {
 
     // Delete the document from the database
     const deleteDocumentQuery = `
-      DELETE FROM professor_document_info
-      WHERE professor_id = $1 AND document_type = $2 AND title = $3 AND document_photo = $4
+      DELETE FROM phd_candidate_document_info
+      WHERE phd_candidate_id = $1 AND document_type = $2 AND title = $3 AND document_photo = $4
     `;
     await query(deleteDocumentQuery, [id, documentType, documentTitle, documentPhoto]);
 
@@ -212,7 +208,7 @@ export async function DELETE(req, { params }) {
             eid,
             sid: sessionId,
             taskName: 'Edit PhD Candidate Data',
-            details: `File does not exist at path: ${filePath} for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+            details: `File does not exist at path: ${filePath} for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
           }
         });
       } else {
@@ -224,7 +220,7 @@ export async function DELETE(req, { params }) {
                 eid,
                 sid: sessionId,
                 taskName: 'Edit PhD Candidate Data',
-                details: `Failed to delete file at path: ${filePath} for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}. Error: ${err.message}`
+                details: `Failed to delete file at path: ${filePath} for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}. Error: ${err.message}`
               }
             });
           } else {
@@ -233,7 +229,7 @@ export async function DELETE(req, { params }) {
                 eid,
                 sid: sessionId,
                 taskName: 'Edit PhD Candidate Data',
-                details: `File deleted successfully at path: ${filePath} for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+                details: `File deleted successfully at path: ${filePath} for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
               }
             });
           }
@@ -248,7 +244,7 @@ export async function DELETE(req, { params }) {
         eid,
         sid: sessionId,
         taskName: 'Edit PhD Candidate Data',
-        details: `Document deleted for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        details: `Document deleted for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
       }
     });
 
@@ -286,7 +282,7 @@ export async function POST(req, { params }) {
         eid,
         sid: sessionId,
         taskName: 'Edit PhD Candidate Data',
-        details: `Receiving form data for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+        details: `Receiving form data for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
       }
     });
 
@@ -303,7 +299,6 @@ export async function POST(req, { params }) {
     const socialMedia = JSON.parse(formData.get('socialMedia') || '[]');
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
-    const citations = JSON.parse(formData.get('citations') || '[]');
 
     const documents = [];
     for (let i = 0; formData.has(`documents[${i}][title]`); i++) {
@@ -326,9 +321,9 @@ export async function POST(req, { params }) {
 
     // Update profile photo
     if (photo) {
-      const photoUrl = await saveProfilePhoto(photo, id);
+      const photoUrl = await saveProfilePhoto(photo, id, eid, sessionId);
       const updatePhotoQuery = `
-        UPDATE professor_basic_info
+        UPDATE phd_candidate_basic_info
         SET photo = $1
         WHERE id = $2
       `;
@@ -346,7 +341,7 @@ export async function POST(req, { params }) {
           eid,
           sid: sessionId,
           taskName: 'Edit PhD Candidate Data',
-          details: `Profile photo updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+          details: `Profile photo updated for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
     }
@@ -355,8 +350,8 @@ export async function POST(req, { params }) {
     if (first_name || last_name || phone || short_bio || status || leaving_date) {
       const newStatus = leaving_date ? 'Inactive' : status;
       const updateBasicInfoQuery = `
-        UPDATE professor_basic_info
-        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6
+        UPDATE phd_candidate_basic_info
+        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, completion_date = $6
         WHERE id = $7
       `;
       await query(updateBasicInfoQuery, [first_name, last_name, phone, short_bio, newStatus, leaving_date, id]);
@@ -372,7 +367,7 @@ export async function POST(req, { params }) {
           eid,
           sid: sessionId,
           taskName: 'Edit PhD Candidate Data',
-          details: `Basic info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+          details: `Basic info updated for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
     }
@@ -380,13 +375,13 @@ export async function POST(req, { params }) {
     // Update social media
     if (socialMedia.length > 0) {
       const deleteSocialMediaQuery = `
-        DELETE FROM professor_socialmedia_info
-        WHERE professor_id = $1
+        DELETE FROM phd_candidate_socialmedia_info
+        WHERE phd_candidate_id = $1
       `;
       await query(deleteSocialMediaQuery, [id]);
 
       const insertSocialMediaQuery = `
-        INSERT INTO professor_socialmedia_info (professor_id, socialmedia_name, link)
+        INSERT INTO phd_candidate_socialmedia_info (phd_candidate_id, socialmedia_name, link)
         VALUES ($1, $2, $3)
       `;
       for (const sm of socialMedia) {
@@ -397,7 +392,7 @@ export async function POST(req, { params }) {
           eid,
           sid: sessionId,
           taskName: 'Edit PhD Candidate Data',
-          details: `Social Media info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+          details: `Social Media info updated for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
     }
@@ -405,13 +400,13 @@ export async function POST(req, { params }) {
     // Update education
     if (education.length > 0) {
       const deleteEducationQuery = `
-        DELETE FROM professor_education_info
-        WHERE professor_id = $1
+        DELETE FROM phd_candidate_education_info
+        WHERE phd_candidate_id = $1
       `;
       await query(deleteEducationQuery, [id]);
 
       const insertEducationQuery = `
-        INSERT INTO professor_education_info (professor_id, degree, institution, passing_year)
+        INSERT INTO phd_candidate_education_info (phd_candidate_id, degree, institution, passing_year)
         VALUES ($1, $2, $3, $4)
       `;
       for (const edu of education) {
@@ -422,7 +417,7 @@ export async function POST(req, { params }) {
           eid,
           sid: sessionId,
           taskName: 'Edit PhD Candidate Data',
-          details: `Education info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+          details: `Education info updated for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
     }
@@ -430,13 +425,13 @@ export async function POST(req, { params }) {
     // Update career
     if (career.length > 0) {
       const deleteCareerQuery = `
-        DELETE FROM professor_career_info
-        WHERE professor_id = $1
+        DELETE FROM phd_candidate_career_info
+        WHERE phd_candidate_id = $1
       `;
       await query(deleteCareerQuery, [id]);
 
       const insertCareerQuery = `
-        INSERT INTO professor_career_info (professor_id, position, organization_name, joining_year, leaving_year)
+        INSERT INTO phd_candidate_career_info (phd_candidate_id, position, organization_name, joining_year, leaving_year)
         VALUES ($1, $2, $3, $4, $5)
       `;
       for (const job of career) {
@@ -447,7 +442,7 @@ export async function POST(req, { params }) {
           eid,
           sid: sessionId,
           taskName: 'Edit PhD Candidate Data',
-          details: `Career info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+          details: `Career info updated for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
     }
@@ -457,10 +452,10 @@ export async function POST(req, { params }) {
       const newDocuments = documents.filter(document => !document.existing);
 
       const insertDocumentsQuery = `
-        INSERT INTO professor_document_info (professor_id, title, document_type, document_photo) VALUES ($1, $2, $3, $4)
+        INSERT INTO phd_candidate_document_info (phd_candidate_id, title, document_type, document_photo) VALUES ($1, $2, $3, $4)
       `;
       const currentDocumentsCountQuery = `
-        SELECT COUNT(*) FROM professor_document_info WHERE professor_id = $1
+        SELECT COUNT(*) FROM phd_candidate_document_info WHERE phd_candidate_id = $1
       `;
       const currentDocumentsCountResult = await query(currentDocumentsCountQuery, [id]);
       const currentDocumentsCount = parseInt(currentDocumentsCountResult.rows[0].count, 10);
@@ -468,7 +463,7 @@ export async function POST(req, { params }) {
         const document = newDocuments[i];
         let documentUrl = null;
         if (document.documentsPhoto) {
-          documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, currentDocumentsCount + i + 1, document.document_type); // Pass document_type
+          documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, currentDocumentsCount + i + 1, document.document_type, eid, sessionId); // Pass document_type
         }
         await query(insertDocumentsQuery, [id, document.title, document.document_type, documentUrl]);
       }
@@ -477,7 +472,7 @@ export async function POST(req, { params }) {
           eid,
           sid: sessionId,
           taskName: 'Edit PhD Candidate Data',
-          details: `Document info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+          details: `Document info updated for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
     }
@@ -495,7 +490,7 @@ export async function POST(req, { params }) {
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
       const updatePasswordQuery = `
-        UPDATE professor_basic_info
+        UPDATE phd_candidate_basic_info
         SET password = $1
         WHERE id = $2
       `;
@@ -513,7 +508,7 @@ export async function POST(req, { params }) {
           eid,
           sid: sessionId,
           taskName: 'Edit PhD Candidate Data',
-          details: `Password updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+          details: `Password updated for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
     }
@@ -546,12 +541,12 @@ export async function POST(req, { params }) {
     const errorMessage = formatAlertMessage('Error Updating PhD Candidate Information', `ID : ${id}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
     await sendTelegramAlert(errorMessage);
 
-    logger.error('Error updating professor information', {
+    logger.error('Error updating phd candidate information', {
       meta: {
         eid,
         sid: sessionId,
         taskName: 'Edit PhD Candidate Data',
-        details: `Error updating professor information for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+        details: `Error updating phd candidate information for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
       }
     });
     return NextResponse.json({ message: `Execution failed: ${error.message}` }, { status: 500 });

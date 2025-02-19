@@ -205,6 +205,11 @@ const EditProfessor = () => {
         });
         break;
       case 'password':
+        if (formData.password !== formData.confirm_password) {
+          toast.error("Passwords do not match");
+          setLoading(false);
+          return;
+        }
         data.append('password', formData.password);
         break;
       default:
