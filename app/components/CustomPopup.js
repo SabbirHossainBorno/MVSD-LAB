@@ -26,34 +26,34 @@ const CustomPopup = ({ isOpen, onClose, onConfirm, title, message }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="absolute inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-[999] p-4"
+          className="absolute inset-0 flex items-center justify-center z-[999] p-4"
         >
           <motion.div
             initial={{ y: '-100%', opacity: 0 }}
             animate={{ y: '0%', opacity: 1 }}
             exit={{ y: '-100%', opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="relative bg-white/90 backdrop-blur-2xl rounded-2xl shadow-2xl overflow-hidden w-full max-w-md border border-white/20"
+            className="relative bg-gray-900 rounded-2xl shadow-2xl overflow-hidden w-full max-w-md border border-gray-700"
           >
             {/* Content */}
             <div className="p-8 relative">
               <button
                 onClick={onClose}
-                className="absolute top-5 right-5 p-2 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50 transition-all"
+                className="absolute top-5 right-5 p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-all"
               >
-                <FiX className="w-6 h-6 text-gray-700" />
+                <FiX className="w-6 h-6 text-gray-300" />
               </button>
 
               <div className="flex flex-col items-center text-center space-y-6">
-                <div className="p-4 bg-white/50 backdrop-blur-sm rounded-full shadow-lg">
-                  <FiAlertTriangle className="w-8 h-8 text-blue-600" />
+                <div className="p-4 bg-gray-800 rounded-full shadow-lg">
+                  <FiAlertTriangle className="w-8 h-8 text-yellow-400" />
                 </div>
 
                 <div className="space-y-2">
-                  <h2 className="text-3xl font-bold text-gray-800">
+                  <h2 className="text-3xl font-bold text-gray-100">
                     {title}
                   </h2>
-                  <p className="text-gray-600 text-lg leading-relaxed">
+                  <p className="text-gray-400 text-lg leading-relaxed">
                     {message}
                   </p>
                 </div>
@@ -63,7 +63,7 @@ const CustomPopup = ({ isOpen, onClose, onConfirm, title, message }) => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={onClose}
-                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gray-100/80 hover:bg-gray-200/80 backdrop-blur-sm text-gray-700 font-semibold transition-all border border-white/20"
+                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold transition-all border border-gray-700"
                   >
                     <FiX className="w-5 h-5" />
                     Cancel
@@ -73,7 +73,7 @@ const CustomPopup = ({ isOpen, onClose, onConfirm, title, message }) => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={onConfirm}
-                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600/90 hover:bg-blue-700/90 backdrop-blur-sm text-white font-semibold shadow-lg transition-all border border-blue-700/20"
+                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg transition-all border border-blue-700/20"
                   >
                     <FiCheck className="w-5 h-5" />
                     Confirm
