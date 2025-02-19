@@ -1,4 +1,4 @@
-//app/components/CustomPopup
+// app/components/CustomPopup.js
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiCheck, FiAlertTriangle } from 'react-icons/fi';
@@ -26,7 +26,7 @@ const CustomPopup = ({ isOpen, onClose, onConfirm, title, message }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-[999] p-4"
+          className="absolute inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-[999] p-4"
         >
           <motion.div
             initial={{ y: '-100%', opacity: 0 }}
