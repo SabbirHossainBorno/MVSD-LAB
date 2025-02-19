@@ -74,13 +74,18 @@ const EditProfessor = () => {
     setLoading(true);
     try {
       const response = await fetch(`/api/professor_edit/${id}`, {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ documentId: documentToDelete.serial }),
+        body: JSON.stringify({
+          documentId: documentToDelete.serial,
+          documentType: documentToDelete.document_type,
+          documentTitle: documentToDelete.title,
+          documentPhoto: documentToDelete.documentsPhoto,
+        }),
       });
-
+  
       if (response.ok) {
         toast.success('Document Deleted Successfully!');
         // Refresh the page or update the state to remove the deleted document
@@ -812,17 +817,18 @@ const EditProfessor = () => {
     </button>
   </div>
   {/* Custom Popup */}
-  {showDeletePopup && (
-    <div className="absolute inset-0 flex items-center justify-center">
-      <CustomPopup
-        isOpen={showDeletePopup}
-        onClose={() => setShowDeletePopup(false)}
-        onConfirm={handleDeleteConfirm}
-        title="Are You Sure?"
-        message={`You Won't Be Able To Revert This!`}
-      />
-    </div>
-  )}
+{showDeletePopup && documentToDelete && (
+  <div className="absolute inset-0 flex items-center justify-center">
+    <CustomPopup
+      isOpen={showDeletePopup}
+      onClose={() => setShowDeletePopup(false)}
+      onConfirm={handleDeleteConfirm}
+      title="Are You Sure?"
+      warning={`You Won't Be Able To Revert This!`}
+      message={`Document INFO : ${documentToDelete.title} - [${documentToDelete.document_type}]`}
+    />
+  </div>
+)}
 </section>
 
       

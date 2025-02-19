@@ -225,6 +225,72 @@ export async function GET(req, { params }) {
   }
 }
 
+// Main function to handle the DELETE request
+export async function DELETE(req, { params }) {
+  const { id } = await params; // Await params before using its properties
+  const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
+  const eid = req.cookies.get('eid')?.value || 'Unknown EID';
+  const adminEmail = req.cookies.get('email')?.value || 'Unknown Email';
+  const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
+  const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
+
+  try {
+    const { documentId, documentType, documentTitle, documentPhoto } = await req.json();
+
+    // Delete the document from the database
+    const deleteDocumentQuery = `
+      DELETE FROM professor_document_info
+      WHERE professor_id = $1 AND document_type = $2 AND title = $3 AND document_photo = $4
+    `;
+    await query(deleteDocumentQuery, [id, documentType, documentTitle, documentPhoto]);
+
+    // Construct the full file path
+    const basePath = '/home/mvsd-lab/public';
+    const filePath = path.join(basePath, documentPhoto);
+
+    // Check if the file exists before attempting to delete it
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+      if (err) {
+        console.error('File does not exist:', filePath);
+      } else {
+        // Remove the file from the server
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.error('Failed to delete file:', err);
+          } else {
+            console.log('File deleted successfully:', filePath);
+          }
+        });
+      }
+    });
+
+    const successMessage = formatAlertMessage('Document Deleted Successfully', `ID: ${id}\nDocument: ${documentTitle}\nStatus: 200`);
+    await sendTelegramAlert(successMessage);
+    logger.info('Document deleted successfully', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Delete Document',
+        details: `Document deleted for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+      }
+    });
+
+    return NextResponse.json({ message: 'Document deleted successfully' }, { status: 200 });
+  } catch (error) {
+    const errorMessage = formatAlertMessage('Error Deleting Document', `ID: ${id}\nError: ${error.message}\nStatus: 500`);
+    await sendTelegramAlert(errorMessage);
+    logger.error('Error deleting document', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Delete Document',
+        details: `Error deleting document for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+      }
+    });
+    return NextResponse.json({ message: `Failed to delete document: ${error.message}` }, { status: 500 });
+  }
+}
+
 // Main function to handle the POST request
 export async function POST(req, { params }) {
   const { id } = await params;  // Await params before using its properties
@@ -449,12 +515,6 @@ export async function POST(req, { params }) {
 // Update documents
 if (documents.length > 0) {
   const newDocuments = documents.filter(document => !document.existing);
-
-  const deleteDocumentQuery = `
-      DELETE FROM professor_document_info
-      WHERE serial = $1 AND professor_id = $2
-    `;
-    await query(deleteDocumentQuery, [documentId, id]);
 
   const insertDocumentsQuery = `
     INSERT INTO professor_document_info (professor_id, title, document_type, document_photo) VALUES ($1, $2, $3, $4)

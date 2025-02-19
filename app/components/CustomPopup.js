@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiCheck, FiAlertTriangle } from 'react-icons/fi';
 
-const CustomPopup = ({ isOpen, onClose, onConfirm, title, message }) => {
+const CustomPopup = ({ isOpen, onClose, onConfirm, title, warning, message }) => {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
@@ -33,7 +33,7 @@ const CustomPopup = ({ isOpen, onClose, onConfirm, title, message }) => {
             animate={{ y: '0%', opacity: 1 }}
             exit={{ y: '-100%', opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="relative bg-gray-900 rounded-2xl shadow-2xl overflow-hidden w-full max-w-md border border-gray-700"
+            className="relative bg-gray-900 rounded shadow-2xl overflow-hidden w-full max-w-md border border-gray-700"
           >
             {/* Content */}
             <div className="p-8 relative">
@@ -53,7 +53,10 @@ const CustomPopup = ({ isOpen, onClose, onConfirm, title, message }) => {
                   <h2 className="text-3xl font-bold text-gray-100">
                     {title}
                   </h2>
-                  <p className="text-gray-400 text-lg leading-relaxed">
+                  <p className="text-yellow-400 text-lg leading-relaxed">
+                    {warning}
+                  </p>
+                  <p className="text-red-400 text-md leading-relaxed">
                     {message}
                   </p>
                 </div>
@@ -63,7 +66,7 @@ const CustomPopup = ({ isOpen, onClose, onConfirm, title, message }) => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={onClose}
-                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold transition-all border border-gray-700"
+                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold transition-all border border-gray-700"
                   >
                     <FiX className="w-5 h-5" />
                     Cancel
@@ -73,7 +76,7 @@ const CustomPopup = ({ isOpen, onClose, onConfirm, title, message }) => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={onConfirm}
-                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg transition-all border border-blue-700/20"
+                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg transition-all border border-blue-700/20"
                   >
                     <FiCheck className="w-5 h-5" />
                     Confirm
