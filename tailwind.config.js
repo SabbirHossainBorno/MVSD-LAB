@@ -6,19 +6,31 @@ module.exports = {
   theme: {
     extend: {
       animation: {
-        gradient: 'gradient 3s ease infinite',
-        textGlow: 'textGlow 2s ease-in-out infinite',
+        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'bounce': 'bounce 2s infinite',
+        'gradient': 'gradient 3s ease infinite',
+        'textGlow': 'textGlow 2s ease-in-out infinite',
       },
       keyframes: {
+        pulse: {
+          '0%, 100%': { opacity: '0.3' },
+          '50%': { opacity: '0.15' },
+        },
         gradient: {
           '0%, 100%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
         },
       },
+      grayscale: {
+        35: '35%',
+      },
+      colors: {
+        'amber-500/20': 'rgba(245, 158, 11, 0.2)',
+        'green-500/20': 'rgba(16, 185, 129, 0.2)',
+      },
     },
   },
   plugins: [
-    // Adding plugin to add custom scrollbar
     function ({ addComponents }) {
       addComponents({
         '.scrollbar-thin': {

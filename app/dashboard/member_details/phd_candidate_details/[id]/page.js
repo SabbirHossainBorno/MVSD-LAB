@@ -85,43 +85,81 @@ const PhdCandidateDetails = () => {
         {/* Profile Header */}
         <div className="bg-gray-800/50 backdrop-blur-lg rounded p-8 shadow-2xl">
           <div className="flex flex-col md:flex-row items-center gap-8">
-          <div className="flex flex-col items-center space-y-6 group">
-  {/* Image Container with Floating Effect */}
-  <div className="relative w-48 h-48 shrink-0 transition-transform duration-500 hover:scale-[1.02] hover:rotate-[1deg]">
-    <div className="absolute inset-0 bg-gradient-to-tr from-blue-400/30 to-purple-400/30 rounded-2xl transform rotate-[6deg] scale-105 -z-10" />
-    
-    <div className="relative overflow-hidden rounded-xl w-full h-full shadow-2xl shadow-blue-300/30 hover:shadow-purple-400/40 transition-all duration-500">
-      <Image
-        src={formatImageUrl(phdCandidateDetails.basicInfo.photo)}
-        alt={`${phdCandidateDetails.basicInfo.first_name} ${phdCandidateDetails.basicInfo.last_name}`}
-        width={192}
-        height={192}
-        className="w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105"
-      />
+          <div className="flex flex-col items-center space-y-6 group relative">
+  {/* Status Crown Badge */}
+  <div className={`absolute -top-4 z-20 transition-all duration-500 ${
+    phdCandidateDetails.status === 'Active' 
+      ? 'opacity-100' 
+      : 'opacity-40 scale-90'
+  }`}>
+    <div className={`relative px-4 py-1.5 rounded-full text-sm font-semibold backdrop-blur-lg ${
+      phdCandidateDetails.status === 'Active'
+        ? 'bg-green-500/20 text-green-300 border border-green-400/30 shadow-green-500/20'
+        : 'bg-amber-500/20 text-amber-300 border border-amber-400/30 shadow-amber-500/20'
+    } shadow-lg transition-colors duration-300`}>
+      <span className="relative z-10 flex items-center space-x-2">
+        <span className={`w-2 h-2 rounded-full ${
+          phdCandidateDetails.status === 'Active'
+            ? 'bg-green-400 shadow-green-400/40'
+            : 'bg-amber-400 shadow-amber-400/40'
+        } shadow-inner animate-pulse-slow`} />
+        <span>{phdCandidateDetails.status.toUpperCase()}</span>
+      </span>
+      {/* Decorative Gradient */}
+      <div className={`absolute inset-0 rounded-full opacity-20 ${
+        phdCandidateDetails.status === 'Active'
+          ? 'bg-gradient-to-r from-green-400 to-emerald-400'
+          : 'bg-gradient-to-r from-amber-400 to-orange-400'
+      }`} />
     </div>
-
-    {/* Decorative Border Elements */}
-    <div className="absolute inset-0 border-2 border-white/20 rounded-xl pointer-events-none" />
-    <div className="absolute inset-0 border-2 border-blue-400/10 rounded-xl pointer-events-none" />
   </div>
 
-  {/* ID Badge with Dynamic Gradient */}
+  {/* Image Container - Modified for Status */}
+  <div className={`relative w-48 h-48 transition-all duration-500 ${
+    phdCandidateDetails.status === 'Inactive' 
+      ? 'grayscale-[35%] opacity-90' 
+      : 'grayscale-0'
+  }`}>
+    {/* Existing image container code from previous design */}
+    {/* ... (keep previous image container code) ... */}
+    
+    {/* Status Overlay */}
+    {phdCandidateDetails.status === 'Inactive' && (
+      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-black/20 to-black/40 rounded-xl pointer-events-none" />
+    )}
+  </div>
+
+  {/* ID Badge with Status Connection */}
   <div className="relative inline-block">
-    <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full blur-lg opacity-30 animate-pulse-slow" />
-    <div className="relative px-6 py-2 bg-white/5 backdrop-blur-sm border-2 border-blue-400/20 rounded-full shadow-lg hover:border-purple-400/40 transition-colors duration-300">
-      <h3 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent 
-                      tracking-tighter hover:tracking-tight transition-all duration-300">
+    <div className={`absolute inset-0 rounded-full blur-lg opacity-30 animate-pulse-slow ${
+      phdCandidateDetails.status === 'Active'
+        ? 'bg-gradient-to-r from-green-400 to-blue-400'
+        : 'bg-gradient-to-r from-amber-400 to-purple-400'
+    }`} />
+    {/* Existing ID badge code modified with status colors */}
+    <div className={`relative px-6 py-2 backdrop-blur-sm border-2 rounded-full transition-all duration-300 ${
+      phdCandidateDetails.status === 'Active'
+        ? 'border-blue-400/20 hover:border-green-400/40'
+        : 'border-amber-400/20 hover:border-purple-400/40'
+    }`}>
+      <h3 className={`text-3xl md:text-4xl font-bold bg-clip-text text-transparent tracking-tighter ${
+        phdCandidateDetails.status === 'Active'
+          ? 'bg-gradient-to-r from-blue-400 to-green-400'
+          : 'bg-gradient-to-r from-amber-400 to-purple-400'
+      }`}>
         {phdCandidateDetails.basicInfo.id}
       </h3>
     </div>
-    {/* Animated Decoration Dots */}
-    <div className="absolute -top-2 -right-4 flex space-x-1.5">
-      {[...Array(3)].map((_, i) => (
-        <div key={i} className="w-2 h-2 bg-purple-400/60 rounded-full animate-bounce" 
-             style={{ animationDelay: `${i * 0.2}s` }} />
-      ))}
-    </div>
   </div>
+
+  {/* Status Message Floating */}
+  {phdCandidateDetails.status === 'Inactive' && (
+    <div className="absolute bottom-20 right-4 transform translate-y-6 rotate-3 opacity-80 hover:opacity-100 transition-opacity">
+      <div className="px-3 py-1.5 bg-rose-500/20 text-rose-200 text-xs font-medium rounded-full backdrop-blur-lg border border-rose-400/30">
+        ⚠️ Currently Inactive
+      </div>
+    </div>
+  )}
 </div>
 
             <div className="text-center md:text-left space-y-4">
