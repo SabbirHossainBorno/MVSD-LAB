@@ -88,9 +88,9 @@ const PhdCandidateDetails = () => {
           <div className="flex flex-col items-center space-y-6 group">
   {/* Image Container with Floating Effect */}
   <div className="relative w-48 h-48 shrink-0 transition-transform duration-500 hover:scale-[1.02] hover:rotate-[1deg]">
-    <div className="absolute inset-0 bg-gradient-to-tr from-blue-400/30 to-purple-400/30 rounded-2xl transform rotate-[6deg] scale-105 -z-10" />
+    <div className="absolute inset-0 bg-gradient-to-tr from-blue-400/30 to-purple-400/30 rounded transform rotate-[6deg] scale-105 -z-10" />
     
-    <div className="relative overflow-hidden rounded-xl w-full h-full shadow-2xl shadow-blue-300/30 hover:shadow-purple-400/40 transition-all duration-500">
+    <div className="relative overflow-hidden rounded w-full h-full shadow-2xl shadow-blue-300/30 hover:shadow-purple-400/40 transition-all duration-500">
       <Image
         src={formatImageUrl(phdCandidateDetails.basicInfo.photo)}
         alt={`${phdCandidateDetails.basicInfo.first_name} ${phdCandidateDetails.basicInfo.last_name}`}
@@ -101,26 +101,23 @@ const PhdCandidateDetails = () => {
     </div>
 
     {/* Decorative Border Elements */}
-    <div className="absolute inset-0 border-2 border-white/20 rounded-xl pointer-events-none" />
-    <div className="absolute inset-0 border-2 border-blue-400/10 rounded-xl pointer-events-none" />
+    <div className="absolute inset-0 border-2 border-white/20 rounded pointer-events-none" />
+    <div className="absolute inset-0 border-2 border-blue-400/10 rounded pointer-events-none" />
   </div>
 
   {/* ID Badge with Dynamic Gradient */}
   <div className="relative inline-block">
-    <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full blur-lg opacity-30 animate-pulse-slow" />
     <div className="relative px-6 py-2 bg-white/5 backdrop-blur-sm border-2 border-blue-400/20 rounded-full shadow-lg hover:border-purple-400/40 transition-colors duration-300">
-      <h3 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent 
-                      tracking-tighter hover:tracking-tight transition-all duration-300">
+      <h3 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent 
+                      tracking-tighter hover:tracking-tight duration-300">
         {phdCandidateDetails.basicInfo.id}
       </h3>
     </div>
-    {/* Animated Decoration Dots */}
-    <div className="absolute -top-2 -right-4 flex space-x-1.5">
-      {[...Array(3)].map((_, i) => (
-        <div key={i} className="w-2 h-2 bg-purple-400/60 rounded-full animate-bounce" 
-             style={{ animationDelay: `${i * 0.2}s` }} />
-      ))}
-    </div>
+  </div>
+
+  {/* Status Indicator */}
+  <div className={`px-4 py-2 rounded text-white ${phdCandidateDetails.basicInfo.status === 'Active' ? 'bg-green-500' : 'bg-red-500'}`}>
+    {phdCandidateDetails.basicInfo.status}
   </div>
 </div>
             <div className="text-center md:text-left space-y-4">
