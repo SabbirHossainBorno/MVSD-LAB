@@ -222,9 +222,9 @@ const EditPhdCandidate = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-blue-900 text-slate-100 p-4 sm:p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-4">
           <button
             onClick={() => router.back()}
             className="flex items-center text-blue-300 hover:text-blue-100 transition-colors group"

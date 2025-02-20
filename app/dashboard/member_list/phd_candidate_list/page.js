@@ -1,3 +1,4 @@
+// app/dashboard/member_list/phd_candidate_list/page.js
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -148,13 +149,13 @@ const PhdCandidatesList = () => {
                 </option>
               </select>
               <FiFilter className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 text-gray-400 text-lg sm:text-xl pointer-events-none" />
+              {/* Dropdown Arrow Icon */}
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </span>
             </div>
-            {/* Sort Order Toggle - Enhanced Mobile */}
             <button
               onClick={toggleSortOrder}
               className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-800 rounded border-2 border-gray-700 hover:border-blue-500 transition-colors flex-[0.5] min-w-[120px] sm:min-w-[140px] text-xs sm:text-sm"
@@ -205,21 +206,21 @@ const PhdCandidatesList = () => {
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <h2 className="text-xl font-semibold truncate">
+                  <h2 className="text-xl font-semibold truncate">
                       {phdCandidate.first_name} {phdCandidate.last_name}
                     </h2>
                     <p className="text-gray-400 text-sm truncate mb-2">{phdCandidate.email}</p>
                     <div className="flex flex-wrap gap-2">
-                      <span className="px-3 py-1.5 bg-blue-600/20 text-blue-300 text-xs rounded inline-flex items-center gap-1.5 border border-blue-500/10">
+                    <span className="px-2 py-1.5 bg-blue-600/20 text-blue-300 text-xs rounded inline-flex items-center gap-1 border border-blue-500/10">
                         <FiUser className="text-xs shrink-0" />
                         <span>{phdCandidate.id}</span>
                       </span>
-                      <span className="px-3 py-1.5 bg-green-600/20 text-green-300 text-xs rounded inline-flex items-center gap-1.5 border border-green-500/10">
+                      <span className="px-2 py-1.5 bg-green-600/20 text-green-300 text-xs rounded inline-flex items-center gap-1 border border-green-500/10">
                         <FiArrowUp className="text-xs shrink-0" />
                         <span>{format(new Date(phdCandidate.admission_date), "d MMM yyyy")}</span>
                       </span>
                       {phdCandidate.completion_date && (
-                        <span className="px-3 py-1.5 bg-red-600/20 text-red-300 text-xs rounded inline-flex items-center gap-1.5 border border-red-500/10">
+                        <span className="px-2 py-1.5 bg-red-600/20 text-red-300 text-xs rounded inline-flex items-center gap-1 border border-red-500/10">
                           <FiArrowDown className="text-xs shrink-0" />
                           <span>{format(new Date(phdCandidate.completion_date), "d MMM yyyy")}</span>
                         </span>
