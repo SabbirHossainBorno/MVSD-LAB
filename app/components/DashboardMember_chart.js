@@ -103,24 +103,27 @@ function DashboardMemberChart() {
   };
 
   return (
-    <div className="w-full mx-auto p-4 bg-gray-900 rounded border border-gray-800 shadow-2xl space-y-6">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-gray-800 rounded-lg">
+    <div className="w-full mx-auto p-6 bg-gray-900 rounded border border-gray-800 shadow-2xl space-y-6">
+      <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+        <div className="flex items-center gap-2 mb-4 md:mb-0">
+          <div className="p-2 bg-gray-800 rounded">
             <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-gray-100">Member Distribution</h2>
         </div>
-        <div className="text-gray-400">
-          Total: {totalMembers}
-        </div>
       </div>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full">
+            <div className="bg-gray-800 px-4 py-2 rounded flex-1">
+                <p className="text-sm text-gray-400">Total Members</p>
+                <p className="text-2xl font-bold">{totalMembers}</p>
+            </div>
+        </div>
 
-      <div className="relative h-80">
+      <div className="relative h-80 w-full">
         {loading ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50 rounded-xl">
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50 rounded">
             <div className="w-12 h-12 border-4 border-t-4 border-gray-600 rounded-full animate-spin border-t-blue-500"></div>
           </div>
         ) : (
