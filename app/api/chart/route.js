@@ -49,6 +49,22 @@ const getTotalMessages = async (days) => {
   }
 };
 
+// Helper function to fetch all-time total messages
+const getAllTimeTotalMessages = async () => {
+  try {
+    const queryText = `
+      SELECT 
+        COUNT(id) AS count
+      FROM 
+        home_contact_us
+    `;
+    const result = await query(queryText);
+    return parseInt(result.rows[0].count, 10);
+  } catch (error) {
+    throw new Error('Failed to fetch all-time total messages');
+  }
+};
+
 // API handler
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
@@ -62,6 +78,7 @@ export async function GET(req) {
   try {
     const currentData = await getMessagesChartData(days);
     const previousData = await getMessagesChartData(days * 2); // Fetch data for the previous period
+    const allTimeTotal = await getAllTimeTotalMessages(); // Fetch all-time total messages
 
     const currentTotal = currentData.reduce((sum, item) => sum + parseInt(item.count, 10), 0);
     const previousTotal = previousData.reduce((sum, item) => sum + parseInt(item.count, 10), 0);
@@ -77,7 +94,7 @@ export async function GET(req) {
       }
     });
 
-    return NextResponse.json({ data: currentData, totalMessages: currentTotal, percentageChange });
+    return NextResponse.json({ data: currentData, totalMessages: currentTotal, percentageChange, allTimeTotal });
   } catch (error) {
     const errorMessage = formatAlertMessage('Error Fetching Messages Chart Data', `Error: ${error.message}`);
     await sendTelegramAlert(errorMessage);

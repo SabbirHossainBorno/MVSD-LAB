@@ -1,4 +1,4 @@
-//app/components/DashboardMessage_chart.js
+// app/components/DashboardMessage_chart.js
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
@@ -10,7 +10,11 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from 'chart.js';
+import 'chartjs-plugin-crosshair';
+import annotationPlugin from 'chartjs-plugin-annotation';
+import zoomPlugin from 'chartjs-plugin-zoom';
 
 ChartJS.register(
   CategoryScale,
@@ -19,7 +23,10 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler,
+  annotationPlugin,
+  zoomPlugin
 );
 
 function DashboardMessageChart() {
@@ -27,6 +34,7 @@ function DashboardMessageChart() {
   const [selectedDays, setSelectedDays] = useState(7);
   const [loading, setLoading] = useState(true);
   const [percentageChange, setPercentageChange] = useState(0);
+  const [allTimeTotal, setAllTimeTotal] = useState(0);
 
   useEffect(() => {
     async function fetchChartData() {
@@ -37,6 +45,7 @@ function DashboardMessageChart() {
         if (response.ok) {
           setChartData(data.data);
           setPercentageChange(data.percentageChange);
+          setAllTimeTotal(data.allTimeTotal);
         } else {
           console.error('Failed to fetch chart data:', data.message);
         }
@@ -58,40 +67,91 @@ function DashboardMessageChart() {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        display: false,
-      },
+      legend: { display: false },
       tooltip: {
+        mode: 'index',
+        intersect: false,
+        backgroundColor: 'rgba(17, 24, 39, 0.9)',
+        titleColor: '#E5E7EB',
+        bodyColor: '#F9FAFB',
+        borderColor: 'rgba(255, 255, 255, 0.1)',
+        borderWidth: 1,
+        padding: 12,
         callbacks: {
-          label: function (context) {
-            return `${context.dataset.label}: ${context.raw} Messages`;
-          },
-        },
+          label: (context) => `${context.dataset.label}: ${context.raw} Messages`,
+          title: (items) => new Date(items[0].label).toLocaleDateString('en-US', { 
+            weekday: 'short', 
+            month: 'short', 
+            day: 'numeric' 
+          })
+        }
       },
+      zoom: {
+        zoom: {
+          wheel: { enabled: true },
+          pinch: { enabled: true },
+          mode: 'x',
+        },
+        pan: { enabled: true, mode: 'x' },
+        limits: { x: { min: 'original', max: 'original' } }
+      },
+      annotation: {
+        annotations: {
+          line1: {
+            type: 'line',
+            yMin: 0,
+            yMax: 0,
+            borderColor: 'rgba(255, 255, 255, 0.1)',
+            borderWidth: 2,
+            borderDash: [4, 4],
+          }
+        }
+      }
+    },
+    interaction: {
+      mode: 'nearest',
+      axis: 'x',
+      intersect: false
     },
     scales: {
       x: {
-        grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
-        },
-        ticks: {
-          color: '#A3A3A3',
+        grid: { display: false },
+        ticks: { 
+          color: '#9CA3AF',
+          maxRotation: 0,
+          autoSkipPadding: 20
         },
       },
       y: {
-        grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
+        grid: { 
+          color: 'rgba(255, 255, 255, 0.05)',
+          drawBorder: false
         },
-        ticks: {
-          color: '#A3A3A3',
+        ticks: { 
+          color: '#9CA3AF',
+          padding: 10,
+          callback: (value) => value === 0 ? value : `${value}`
         },
-        beginAtZero: true,
-      },
+        beginAtZero: true
+      }
     },
+    elements: {
+      point: {
+        radius: 0,
+        hoverRadius: 6,
+        backgroundColor: '#38BDF8',
+        borderWidth: 2,
+        hoverBorderWidth: 3
+      },
+      line: {
+        borderWidth: 2,
+        tension: 0.4
+      }
+    }
   };
 
   const chartDataFormatted = {
-    labels: chartData.map((item) =>
+    labels: chartData.map((item) => 
       new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
     ),
     datasets: [
@@ -99,9 +159,16 @@ function DashboardMessageChart() {
         label: 'Messages',
         data: chartData.map((item) => item.count),
         borderColor: '#38BDF8',
-        backgroundColor: 'rgba(56, 189, 248, 0.2)',
+        backgroundColor: (context) => {
+          const ctx = context.chart.ctx;
+          const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+          gradient.addColorStop(0, 'rgba(56, 189, 248, 0.2)');
+          gradient.addColorStop(1, 'rgba(56, 189, 248, 0)');
+          return gradient;
+        },
         fill: true,
-        tension: 0.4,
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: '#38BDF8',
       },
     ],
   };
@@ -109,54 +176,105 @@ function DashboardMessageChart() {
   const totalMessages = chartData.reduce((sum, item) => sum + parseInt(item.count, 10), 0);
 
   return (
-    <div className="w-full max-w-3xl mx-auto p-6 bg-gray-900 text-gray-100 rounded shadow-lg space-y-4">
-      <div className="flex flex-col sm:flex-row justify-between items-center">
-        <div className="mb-4 sm:mb-0">
-          <h3 className="text-4xl font-bold mb-1">{totalMessages}</h3>
-          <p className="text-sm text-gray-400">Messages in the last {selectedDays} days</p>
+    <div className="w-full mx-auto p-4 bg-gray-900 rounded-xl border border-gray-800 shadow-2xl space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="space-y-2">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-gray-800 rounded-lg">
+              <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold">Message Analytics</h2>
+          </div>
+          <p className="text-sm text-gray-400">Total messages tracked in selected period</p>
         </div>
-        <div className="flex space-x-2">
-          {[7, 30, 90].map((days) => (
-            <button
-              key={days}
-              onClick={() => handleDaysChange(days)}
-              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors 
-                ${selectedDays === days ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-200 hover:bg-gray-600'}`}
-            >
-              {days} Days
-            </button>
-          ))}
+        
+ sm:items-center gap-3">
+          <div className="bg-gray-800 px-4 py-2 rounded-lg">
+            <p className="text-sm text-gray-400">Total Messages</p>
+            <p className="text-2xl font-bold">{totalMessages}</p>
+          </div>
+          <div className="bg-gray-800 px-4 py-2 rounded-lg">
+            <p className="text-sm text-gray-400">All Time Total Messages</p>
+            <p className="text-2xl font-bold">{allTimeTotal}</p>
+                     {[7, 30, 90].map((days) => (
+              <button
+                key={days}
+                onClick={() => handleDaysChange(days)}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200
+                  ${selectedDays === days 
+                    ? 'bg-blue-600 text-white shadow-blue-sm' 
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'}`}
+              >
+                {days}D
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="relative">
+      <div className="relative h-64 lg:h-80">
         {loading ? (
-          <div className="flex justify-center items-center h-56">
-            <div className="w-8 h-8 border-4 border-t-4 border-gray-200 rounded-full animate-spin"></div>
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50 rounded-xl">
+            <div className="w-12 h-12 border-4 border-t-4 border-gray-600 rounded-full animate-spin border-t-blue-500"></div>
           </div>
         ) : (
-          <div className="h-56">
-            <Line data={chartDataFormatted} options={chartOptions} />
-          </div>
+          <Line 
+            data={chartDataFormatted} 
+            options={chartOptions} 
+            className="!w-full !h-full"
+          />
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div className="bg-gray-800 p-3 rounded">
-          <p className="text-sm text-gray-400">Average Messages</p>
-          <p className="text-xl font-bold">{Math.round(totalMessages / selectedDays)}</p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-gradient-to-br from-gray-800 to-gray-850 p-4 rounded-xl border border-gray-800">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-blue-500/10 rounded-lg">
+              <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm text-gray-400">Daily Average</p>
+              <p className="text-xl font-bold">{Math.round(totalMessages / selectedDays)}</p>
+            </div>
+          </div>
         </div>
-        <div className="bg-gray-800 p-3 rounded">
-          <p className="text-sm text-gray-400">Highest Daily Messages</p>
-          <p className="text-xl font-bold">
-            {Math.max(...chartData.map((item) => item.count)) || 0}
-          </p>
+
+        <div className="bg-gradient-to-br from-gray-800 to-gray-850 p-4 rounded-xl border border-gray-800">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-green-500/10 rounded-lg">
+              <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm text-gray-400">Peak Daily</p>
+              <p className="text-xl font-bold">
+                {Math.max(...chartData.map((item) => item.count)) || 0}
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="bg-gray-800 p-3 rounded">
-          <p className="text-sm text-gray-400">Percentage Change</p>
-          <p className={`text-xl font-bold ${percentageChange >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-            {percentageChange.toFixed(2)}%
-          </p>
+
+        <div className="bg-gradient-to-br from-gray-800 to-gray-850 p-4 rounded-xl border border-gray-800">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-purple-500/10 rounded-lg">
+              <svg className={`w-5 h-5 ${percentageChange >= 0 ? 'text-green-400' : 'text-red-400'}`} 
+                   fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                      d={percentageChange >= 0 ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm text-gray-400">Trend Change</p>
+              <p className={`text-xl font-bold ${percentageChange >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {percentageChange >= 0 ? '+' : ''}{percentageChange.toFixed(2)}%
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
