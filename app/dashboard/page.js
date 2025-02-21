@@ -8,6 +8,7 @@ import Link from 'next/link';
 import withAuth from '../components/withAuth'; // Ensure correct path
 import LoadingSpinner from '../components/LoadingSpinner'; // Add a loading spinner component
 import DashboardMessageChart from '../components/DashboardMessage_chart'; // Add a loading spinner component
+import DashboardMemberChart from '../components/DashboardMember_chart'; // Add a loading spinner component
 import axios from 'axios';
 import Image from 'next/image';
 
@@ -341,7 +342,7 @@ const Dashboard = () => {
 
 
 
-        {/* ------------------------Message Statistics and Recent Professors Side by Side------------------------ */}
+        {/* ------------------------Message Statistics and Member Statistics Side by Side------------------------ */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
               {/* Message Statistics */}
           <div className="bg-gray-800 p-4 rounded shadow-lg">
@@ -352,6 +353,49 @@ const Dashboard = () => {
               <hr className="border-0 h-1 bg-gradient-to-r from-red-400 to-yellow-500 rounded-full mb-6" />
             </div>
             <DashboardMessageChart />
+          </div>
+
+          {/* Member Statistics */}
+          <div className="bg-gray-800 p-4 rounded shadow-lg">
+            <div className="relative">
+              <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-yellow-500">
+                Member Statistics
+              </h2>
+              <hr className="border-0 h-1 bg-gradient-to-r from-red-400 to-yellow-500 rounded-full mb-6" />
+            </div>
+            <DashboardMemberChart />
+          </div>
+
+          
+        </div>
+
+
+
+
+        {/* ------------------------Recent Subscribers and Recent Professors------ Side by Side------------------------ */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+          {/* Recent Subscribers */}
+          <div className="bg-gray-800 p-4 rounded shadow-lg">
+            <div className="relative">
+            <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">
+                Recent Subscribers
+              </h2>
+              <hr className="border-0 h-1 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full mb-6" />
+            </div>
+            <ul className="space-y-2">
+              {recentSubscribers.map(subscriber => (
+                <li
+                  key={subscriber.email}
+                  className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition"
+                >
+                  <span className="text-xs sm:text-sm md:text-base font-semibold text-gray-200 break-words">{subscriber.email}</span>
+                  <div className="bg-blue-600 text-white rounded px-2 py-1 text-xs font-medium">
+                    Subscribed
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <Link href="/dashboard/subscribers_list" className="block mt-3 text-center text-blue-400 hover:text-blue-500 text-sm">View All</Link>
           </div>
 
           {/* Recent Professors */}
@@ -384,36 +428,7 @@ const Dashboard = () => {
             </ul>
             <Link href="/dashboard/professor_list" className="block mt-3 text-center text-blue-400 hover:text-blue-500 text-sm">View All</Link>
           </div>
-        </div>
 
-
-
-
-        {/* ------------------------Recent Subscribers and------ Side by Side------------------------ */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-          {/* Recent Subscribers */}
-          <div className="bg-gray-800 p-4 rounded shadow-lg">
-            <div className="relative">
-            <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">
-                Recent Subscribers
-              </h2>
-              <hr className="border-0 h-1 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full mb-6" />
-            </div>
-            <ul className="space-y-2">
-              {recentSubscribers.map(subscriber => (
-                <li
-                  key={subscriber.email}
-                  className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition"
-                >
-                  <span className="text-xs sm:text-sm md:text-base font-semibold text-gray-200 break-words">{subscriber.email}</span>
-                  <div className="bg-blue-600 text-white rounded px-2 py-1 text-xs font-medium">
-                    Subscribed
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <Link href="/dashboard/subscribers_list" className="block mt-3 text-center text-blue-400 hover:text-blue-500 text-sm">View All</Link>
-          </div>
         </div>
 
 
