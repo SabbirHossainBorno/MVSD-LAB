@@ -177,47 +177,64 @@ function DashboardMessageChart() {
 
   return (
     <div className="w-full mx-auto p-4 bg-gray-900 rounded border border-gray-800 shadow-2xl space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div className="space-y-2 w-full">
-          <div className="flex items-center justify-between w-full">
-            {/* Left - Icon and Title */}
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gray-800 rounded">
-                <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-bold">Message Analytics</h2>
+      {/* Header Section */}
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-semibold text-gray-100 flex items-center gap-3">
+            <div className="p-2 bg-gray-800 rounded">
+              <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
             </div>
+            Message Analytics
+          </h2>
+          <p className="text-sm text-gray-400">Messages over selected period</p>
+        </div>
 
-            {/* Right - Buttons */}
-            <div className="flex gap-2 ml-auto">
-              {[7, 30, 90].map((days) => (
-                <button
-                  key={days}
-                  onClick={() => handleDaysChange(days)}
-                  className={`px-4 py-2 rounded text-sm font-medium transition-all duration-200
-                    ${selectedDays === days 
-                      ? 'bg-blue-600 text-white shadow-md' 
-                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'}`}
-                >
-                  {days}D
-                </button>
-              ))}
+        <div className="flex gap-2 bg-gray-800 p-1 rounded">
+          {[7, 30, 90].map((days) => (
+            <button
+              key={days}
+              onClick={() => handleDaysChange(days)}
+              className={`px-3 py-1 text-sm rounded transition-colors ${
+                selectedDays === days 
+                  ? 'bg-blue-600 text-white' 
+                  : 'text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              {days}D
+            </button>
+          ))}
+        </div>
+      </div>
+          {/* Stats Summary */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="p-4 bg-gray-800 rounded">
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm text-gray-400">Selected Period</p>
+              <p className="text-2xl font-bold text-gray-100">{totalMessages}</p>
+            </div>
+            <div className="text-blue-400 bg-blue-900/30 p-2 rounded">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
             </div>
           </div>
-
-          <p className="text-sm text-gray-400 text-center">Total Messages Tracked In Selected Period</p>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full">
-            <div className="bg-gray-800 px-4 py-2 rounded flex-1">
-              <p className="text-sm text-gray-400">Total Messages</p>
-              <p className="text-2xl font-bold">{totalMessages}</p>
+        </div>
+        
+        <div className="p-4 bg-gray-800 rounded">
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm text-gray-400">All Time Total</p>
+              <p className="text-2xl font-bold text-gray-100">{allTimeTotal}</p>
             </div>
-            <div className="bg-gray-800 px-4 py-2 rounded flex-1">
-              <p className="text-sm text-gray-400">All Time Total Messages</p>
-              <p className="text-2xl font-bold">{allTimeTotal}</p>
+            <div className="text-purple-400 bg-purple-900/30 p-2 rounded-">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
+              </svg>
             </div>
-          </div>
+      </div>
         </div>
       </div>
 
