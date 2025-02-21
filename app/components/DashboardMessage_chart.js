@@ -178,51 +178,48 @@ function DashboardMessageChart() {
   return (
     <div className="w-full mx-auto p-4 bg-gray-900 rounded border border-gray-800 shadow-2xl space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-gray-800 rounded">
-              <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-              </svg>
-            </div>
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-              {/* Left - Heading */}
-              <h2 className="text-2xl font-bold">Message Analytics</h2>
-
-              {/* Right - Buttons */}
-              <div className="flex gap-2 ml-auto">
-                {[7, 30, 90].map((days) => (
-                  <button
-                    key={days}
-                    onClick={() => handleDaysChange(days)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
-                      ${selectedDays === days 
-                        ? 'bg-blue-600 text-white shadow-md' 
-                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'}`}
-                  >
-                    {days}D
-                  </button>
-                ))}
+        <div className="space-y-2 w-full">
+          <div className="flex items-center justify-between w-full">
+            {/* Left - Icon and Title */}
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-gray-800 rounded">
+                <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
               </div>
+              <h2 className="text-2xl font-bold">Message Analytics</h2>
+            </div>
 
+            {/* Right - Buttons */}
+            <div className="flex gap-2 ml-auto">
+              {[7, 30, 90].map((days) => (
+                <button
+                  key={days}
+                  onClick={() => handleDaysChange(days)}
+                  className={`px-4 py-2 rounded text-sm font-medium transition-all duration-200
+                    ${selectedDays === days 
+                      ? 'bg-blue-600 text-white shadow-md' 
+                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'}`}
+                >
+                  {days}D
+                </button>
+              ))}
             </div>
           </div>
-          
-          <p className="text-sm text-gray-400">Total Messages Tracked In Selected Period</p>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-          <div className="bg-gray-800 px-4 py-2 rounded">
-            <p className="text-sm text-gray-400">Total Messages</p>
-            <p className="text-2xl font-bold">{totalMessages}</p>
-          </div>
-          <div className="bg-gray-800 px-4 py-2 rounded">
-            <p className="text-sm text-gray-400">All Time Total Messages</p>
-            <p className="text-2xl font-bold">{allTimeTotal}</p>
+
+          <p className="text-sm text-gray-400 text-center">Total Messages Tracked In Selected Period</p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full">
+            <div className="bg-gray-800 px-4 py-2 rounded flex-1">
+              <p className="text-sm text-gray-400">Total Messages</p>
+              <p className="text-2xl font-bold">{totalMessages}</p>
+            </div>
+            <div className="bg-gray-800 px-4 py-2 rounded flex-1">
+              <p className="text-sm text-gray-400">All Time Total Messages</p>
+              <p className="text-2xl font-bold">{allTimeTotal}</p>
+            </div>
           </div>
         </div>
-
       </div>
-    </div>
 
       <div className="relative h-64 lg:h-80">
         {loading ? (
@@ -238,45 +235,44 @@ function DashboardMessageChart() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-gradient-to-br from-gray-800 to-gray-850 p-2 rounded border border-gray-800">
-          <div className="flex items-center gap-2">
-            <div className="p-1 bg-blue-500/10 rounded">
-              <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
-              </svg>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-gradient-to-br from-gray-800 to-gray-850 p-2 rounded border border-gray-800">
+            <div className="flex items-center gap-2">
+              <div className="p-1 bg-blue-500/10 rounded">
+                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+                </svg>
+              </div>
+              <p className="text-sm text-gray-400">Daily Average</p>
             </div>
-            <p className="text-sm text-gray-400">Daily Average</p>
+            <p className="text-xl font-bold mt-2">{Math.round(totalMessages / selectedDays)}</p>
           </div>
-          <p className="text-xl font-bold mt-2">{Math.round(totalMessages / selectedDays)}</p>
-        </div>
 
-        <div className="bg-gradient-to-br from-gray-800 to-gray-850 p-2 rounded border border-gray-800">
-          <div className="flex items-center gap-2">
-            <div className="p-1 bg-green-500/10 rounded">
-              <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-              </svg>
+          <div className="bg-gradient-to-br from-gray-800 to-gray-850 p-2 rounded border border-gray-800">
+            <div className="flex items-center gap-2">
+              <div className="p-1 bg-green-500/10 rounded">
+                <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                </svg>
+              </div>
+              <p className="text-sm text-gray-400">Highest Peak</p>
             </div>
-            <p className="text-sm text-gray-400">Highest Peak</p>
+            <p className="text-xl font-bold mt-2">{Math.max(...chartData.map((item) => item.count)) || 0}</p>
           </div>
-          <p className="text-xl font-bold mt-2">{Math.max(...chartData.map((item) => item.count)) || 0}</p>
-        </div>
 
-        <div className="bg-gradient-to-br from-gray-800 to-gray-850 p-2 rounded border border-gray-800">
-    <div className="flex items-center gap-2">
-      <div className="p-1 bg-purple-500/10 rounded">
-        <svg className={`w-5 h-5 ${percentageChange >= 0 ? 'text-green-400' : 'text-red-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={percentageChange >= 0 ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} />
-        </svg>
-      </div>
-      <p className="text-sm text-gray-400">Trend Change</p>
-    </div>
-    <p className={`text-xl font-bold mt-2 ${percentageChange >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-      {percentageChange >= 0 ? '+' : ''}{percentageChange.toFixed(2)}%
-    </p>
-  </div>
-
+          <div className="bg-gradient-to-br from-gray-800 to-gray-850 p-2 rounded border border-gray-800">
+            <div className="flex items-center gap-2">
+              <div className="p-1 bg-purple-500/10 rounded">
+                <svg className={`w-5 h-5 ${percentageChange >= 0 ? 'text-green-400' : 'text-red-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={percentageChange >= 0 ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} />
+                </svg>
+              </div>
+              <p className="text-sm text-gray-400">Trend Change</p>
+            </div>
+            <p className={`text-xl font-bold mt-2 ${percentageChange >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+              {percentageChange >= 0 ? '+' : ''}{percentageChange.toFixed(2)}%
+            </p>
+          </div>
       </div>
     </div>
   );
