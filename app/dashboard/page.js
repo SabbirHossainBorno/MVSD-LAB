@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
-import withAuth from '../components/withAuth'; // Ensure correct path
-import LoadingSpinner from '../components/LoadingSpinner'; // Add a loading spinner component
-import DashboardMessageChart from '../components/DashboardMessage_chart'; // Add a loading spinner component
+import withAuth from '../components/withAuth';
+import LoadingSpinner from '../components/LoadingSpinner';
+import DashboardMessageChart from '../components/DashboardMessage_chart';
 import axios from 'axios';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 const Dashboard = () => {
   const [subscribers, setSubscribers] = useState(0);
@@ -19,15 +20,54 @@ const Dashboard = () => {
   const [messageCount, setMessagesCount] = useState(0);
   const [recentProfessors, setRecentProfessors] = useState([]);
   const [recentSubscribers, setRecentSubscribers] = useState([]);
-  const [admins, setAdmins] = useState([]); // State to manage admin data
-  const [loading, setLoading] = useState(true); // State to manage loading
-  const [currentLoginCount, setCurrentLoginCount] = useState(0); // State to manage current login count
+  const [admins, setAdmins] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentLoginCount, setCurrentLoginCount] = useState(0);
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { type: 'spring', stiffness: 120 },
+    },
+    hover: { scale: 1.05 },
+  };
+
+  // Card colors configuration
+  const cardColors = [
+    'from-blue-500 via-purple-500 to-pink-500',
+    'from-green-500 via-teal-500 to-cyan-500',
+    'from-yellow-500 via-orange-500 to-red-500',
+    'from-purple-500 via-pink-500 to-red-500',
+    'from-cyan-500 via-blue-500 to-indigo-500',
+  ];
+
+  const cards = [
+    { title: 'Total Members', value: membersCount, icon: '/icons/member.svg' },
+    { title: 'Total Subscribers', value: subscribers, icon: '/icons/subscriber.svg' },
+    { title: 'Total Professors', value: professorsCount, icon: '/icons/professor.svg' },
+    { title: 'Total Messages', value: messageCount, icon: '/icons/message.svg' },
+    { title: 'Current Login', value: currentLoginCount, icon: '/icons/current_login.svg' },
+  ];
 
   useEffect(() => {
-    let isMounted = true; // Track if the component is mounted
+    let isMounted = true;
 
     async function fetchData() {
-      setLoading(true); // Start loading
+      setLoading(true);
       try {
         const response = await axios.get('/api/dashboard');
         const result = response.data;
@@ -38,22 +78,22 @@ const Dashboard = () => {
           setPhdCandidatesCount(result.phdCandidateCount);
           setMessagesCount(result.messageCount);
           setRecentSubscribers(result.recentSubscribers);
-          setAdmins(result.admins); // Set admin data
+          setAdmins(result.admins);
           setRecentProfessors(result.recentProfessors);
-          setCurrentLoginCount(result.currentLoginCount); // Set current login count
+          setCurrentLoginCount(result.currentLoginCount);
         }
       } catch (error) {
         toast.error('Failed to fetch data');
         console.error('Error fetching dashboard data:', error);
       } finally {
-        if (isMounted) setLoading(false); // End loading
+        if (isMounted) setLoading(false);
       }
     }
 
     fetchData();
 
     return () => {
-      isMounted = false; // Cleanup function to set isMounted to false
+      isMounted = false;
     };
   }, []);
 
@@ -62,116 +102,67 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-gray-100">
       <main className="flex-1 p-3 md:p-4 lg:p-6">
+    {/* ------------------------Summary Cards------------------------ */}
+    <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-10"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {cards.map((card, index) => (
+            <motion.div
+              key={card.title}
+              variants={cardVariants}
+              whileHover="hover"
+              className={`relative bg-gradient-to-br ${cardColors[index]} p-1 rounded-2xl shadow-2xl hover:shadow-xl transition-shadow duration-300 group`}
+            >
+              <div className="relative bg-gray-800/90 backdrop-blur-sm rounded-xl p-6 h-full">
+                {/* Animated border effect */}
+                <div className="absolute inset-0 rounded-xl overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-20 transition-opacity duration-300 animate-pulse" />
+                </div>
 
-        {/* ------------------------Summary Cards------------------------ */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-10">
+                <div className="flex items-center space-x-4">
+                  {/* Icon with gradient background */}
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: -5 }}
+                    className={`p-3 rounded-xl bg-gradient-to-br ${cardColors[index]} shadow-lg`}
+                  >
+                    <Image
+                      src={card.icon}
+                      alt={card.title}
+                      width={48}
+                      height={48}
+                      className="w-12 h-12 filter brightness-0 invert"
+                    />
+                  </motion.div>
 
-          {/* Total Members Card */}
-          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
-            {/* Icon Section */}
-            <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
-            <Image 
-              src="/icons/member.svg" // Image path
-              alt="Total Members Icon" // Alt text
-              width={64} // 16 * 4 = 64px width
-              height={64} // 16 * 4 = 64px height
-              className="w-16 h-16 md:w-20 md:h-20" // Tailwind classes for sizing
-              quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
-              priority // Ensures the image is loaded with high priority
-            />
-            </div>
+                  {/* Content */}
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-gray-400 mb-1">
+                      {card.title}
+                    </span>
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="text-3xl font-bold bg-gradient-to-br bg-clip-text text-transparent"
+                      style={{ backgroundImage: `linear-gradient(to right, ${cardColors[index].split(' ')[0].split('-')[0]}-600, ${cardColors[index].split(' ')[2].split('-')[0]}-600)` }}
+                    >
+                      {card.value}
+                    </motion.span>
+                  </div>
+                </div>
 
-            {/* Content Section */}
-            <div className="flex flex-col items-start">
-              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Members</p>
-              <p className="text-3xl font-extrabold text-black mt-1">{membersCount}</p>
-            </div>
-          </div>
-
-          {/* Total Subscribers Card */}
-          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
-            {/* Icon Section */}
-            <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
-              <Image 
-                src="/icons/subscriber.svg" // Image path
-                alt="Total Subscribers Icon" // Alt text for accessibility
-                width={64} // 16 * 4 = 64px width
-                height={64} // 16 * 4 = 64px height
-                className="w-16 h-16 md:w-20 md:h-20" // Tailwind classes for sizing
-                quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
-              />
-            </div>
-
-            {/* Content Section */}
-            <div className="flex flex-col items-start">
-              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Subscribers</p>
-              <p className="text-3xl font-extrabold text-black mt-1">{subscribers}</p>
-            </div>
-          </div>
-
-          {/* Total Professors Card */}
-          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
-            {/* Icon Section */}
-            <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
-              <Image 
-                src="/icons/professor.svg" // Image path
-                alt="Total Professors Icon" // Alt text for accessibility
-                width={64} // 16 * 4 = 64px width
-                height={64} // 16 * 4 = 64px height
-                className="w-16 h-16 md:w-20 md:h-20" // Tailwind classes for sizing
-                quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
-              />
-            </div>
-
-            {/* Content Section */}
-            <div className="flex flex-col items-start">
-              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Professors</p>
-              <p className="text-3xl font-extrabold text-black mt-1">{professorsCount}</p>
-            </div>
-          </div>
-
-          {/* Total Messages Card */}
-          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
-            {/* Icon Section */}
-            <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
-              <Image 
-                src="/icons/message.svg" // Image path
-                alt="Total Messages Icon" // Alt text for accessibility
-                width={64} // 16 * 4 = 64px width
-                height={64} // 16 * 4 = 64px height
-                className="w-16 h-16 md:w-20 md:h-20" // Tailwind classes for sizing
-                quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
-              />
-            </div>
-
-            {/* Content Section */}
-            <div className="flex flex-col items-start">
-              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Messages</p>
-              <p className="text-3xl font-extrabold text-black mt-1">{messageCount}</p>
-            </div>
-          </div>
-          
-          {/* Current Login Count */}
-          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
-            {/* Icon Section */}
-            <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
-              <Image 
-                src="/icons/current_login.svg" // Image path
-                alt="Current Login" // Alt text for accessibility
-                width={64} // 16 * 4 = 64px width
-                height={64} // 16 * 4 = 64px height
-                className="w-16 h-16 md:w-20 md:h-20" // Tailwind classes for sizing
-                quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
-              />
-            </div>
-
-            {/* Content Section */}
-            <div className="flex flex-col items-start">
-              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Current Login</p>
-              <p className="text-3xl font-extrabold text-black mt-1">{currentLoginCount}</p>
-            </div>
-          </div>
-        </div>
+                {/* Decorative elements */}
+                <div className="absolute bottom-2 right-2 opacity-10 group-hover:opacity-30 transition-opacity">
+                  <svg className="w-16 h-16" fill="currentColor">
+                    <circle cx="8" cy="8" r="8" />
+                  </svg>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
 
 
 
