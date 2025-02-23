@@ -79,6 +79,7 @@ function DashboardMemberChart() {
             </svg>
               </div>
               <h2 className="text-2xl font-bold">Member Analytics</h2>
+              <p className="text-sm text-gray-400">Messages over selected period</p>
             </div>
             </div>
             <p></p>
@@ -113,19 +114,19 @@ function DashboardMemberChart() {
         {chartData.labels?.map((label, index) => (
           <div 
             key={index}
-            className="p-4 bg-gray-50 rounded hover:bg-gray-100 transition-colors"
+            className="p-4 bg-gray-800 rounded hover:bg-gray-500 transition-colors"
           >
             <div className="flex items-center gap-3">
               <div 
                 className="w-3 h-3 rounded-full"
                 style={{ backgroundColor: chartData.datasets[0].backgroundColor[index] }}
               />
-              <span className="text-sm font-medium text-gray-900">{label}</span>
+              <span className="text-sm font-medium text-white-900">{label}</span>
             </div>
             <div className="mt-2 ml-6">
-              <p className="text-lg font-semibold text-gray-900">
+              <p className="text-lg font-semibold text-white-900">
                 {chartData.datasets[0].data[index]}
-                <span className="ml-2 text-sm text-gray-500">
+                <span className="ml-2 text-sm text-white-500">
                   ({Math.round(chartData.datasets[0].data[index] / totalMembers * 100)}%)
                 </span>
               </p>
