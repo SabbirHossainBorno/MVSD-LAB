@@ -83,7 +83,7 @@ const DashboardMemberChart = () => {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={controls}
-      className="w-full mx-auto p-6 bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl border border-gray-700 shadow-2xl space-y-8 overflow-hidden relative"
+      className="w-full mx-auto p-4 bg-gradient-to-br from-gray-900 to-gray-800 rounded border border-gray-700 shadow-2xl space-y-4 overflow-hidden relative"
     >
       {/* Glowing Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
@@ -108,7 +108,7 @@ const DashboardMemberChart = () => {
         </div>
         <motion.div 
           whileHover={{ scale: 1.05 }}
-          className="bg-gray-800/50 px-6 py-3 rounded-xl border border-gray-700 backdrop-blur-sm shadow-lg"
+          className="bg-gray-800/50 px-6 py-3 rounded border border-gray-700 backdrop-blur-sm shadow-lg"
         >
           <p className="text-sm text-gray-300 font-medium">Total Members</p>
           <p className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
@@ -125,7 +125,7 @@ const DashboardMemberChart = () => {
         className="relative h-80 w-full group z-10"
       >
         {loading ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 rounded-2xl">
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 rounded">
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ repeat: Infinity, duration: 1.2 }}
@@ -179,7 +179,7 @@ const DashboardMemberChart = () => {
                 y: -5,
                 transition: { type: 'spring', stiffness: 300 }
               }}
-              className="p-5 bg-gray-800/50 rounded-xl border border-gray-700 backdrop-blur-sm hover:border-blue-400/30 transition-all relative overflow-hidden group"
+              className="p-5 bg-gray-800/50 rounded border border-gray-700 backdrop-blur-sm hover:border-blue-400/30 transition-all relative overflow-hidden group"
               style={{
                 borderLeft: `4px solid ${color}`,
                 boxShadow: `0 4px 30px -15px ${color}33`

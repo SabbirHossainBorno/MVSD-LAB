@@ -358,10 +358,10 @@ const Dashboard = () => {
           {/* Member Statistics */}
           <div className="bg-gray-800 p-4 rounded shadow-lg">
             <div className="relative">
-              <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-yellow-500">
+            <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-teal-400">
                 Member Statistics
               </h2>
-              <hr className="border-0 h-1 bg-gradient-to-r from-red-400 to-yellow-500 rounded-full mb-6" />
+              <hr className="border-0 h-1 bg-gradient-to-r from-red-400 to-yellow-500 rounded-full mb-1" />
             </div>
             <DashboardMemberChart />
           </div>
