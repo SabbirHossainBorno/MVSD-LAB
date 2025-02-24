@@ -113,6 +113,19 @@ const PhdCandidateDetails = () => {
                     {phdCandidateDetails.basicInfo.id}
                   </h3>
                 </div>
+                {/* Status Indicator */}
+                <div className={`absolute -top-2.5 -right-2.5 flex items-center gap-1.5 px-3 py-0.5 rounded text-xs font-semibold backdrop-blur-lg border ${
+                  phdCandidateDetails.basicInfo.status === 'Active' 
+                    ? 'bg-green-500/20 border-green-400/30 text-green-400'
+                    : 'bg-red-500/20 border-red-400/30 text-red-400'
+                }`}>
+                  <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                    phdCandidateDetails.basicInfo.status === 'Active' 
+                      ? 'bg-green-400' 
+                      : 'bg-red-400'
+                  }`} />
+                  {phdCandidateDetails.basicInfo.status}
+                  </div>
               </div>
             </div>
             <div className="text-center md:text-left space-y-4">
