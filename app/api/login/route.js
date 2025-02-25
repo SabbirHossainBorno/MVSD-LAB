@@ -10,7 +10,7 @@ const formatAlertMessage = (userType, email, ipAddress, userAgent, additionalInf
   const isAdmin = userType === 'admin';
   let message = isAdmin 
     ? "MVSD LAB DASHBOARD\n------------------------------------\nAdmin Login Successful.\n"
-    : "MVSD LAB MEMBER DASHBOARD\n-----------------------------------------------\nMember Login Successful.\n";
+    : "MVSD LAB MEMBER DASHBOARD\n--------------------------------------------------\nMember Login Successful.\n";
 
   message += `Email : ${email}\n`;
   

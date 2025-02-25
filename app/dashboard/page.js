@@ -23,6 +23,7 @@ const Dashboard = () => {
   const [admins, setAdmins] = useState([]); // State to manage admin data
   const [loading, setLoading] = useState(true); // State to manage loading
   const [currentLoginCount, setCurrentLoginCount] = useState(0); // State to manage current login count
+  const [memberLoginInfoTrackers, setMemberLoginInfoTrackers] = useState([]); // State to manage admin data
 
   useEffect(() => {
     let isMounted = true; // Track if the component is mounted
@@ -42,6 +43,7 @@ const Dashboard = () => {
           setAdmins(result.admins); // Set admin data
           setRecentProfessors(result.recentProfessors);
           setCurrentLoginCount(result.currentLoginCount); // Set current login count
+          setMemberLoginInfoTrackers(result.memberLoginInfoTrackers);
         }
       } catch (error) {
         toast.error('Failed to fetch data');
@@ -330,6 +332,60 @@ const Dashboard = () => {
                     <td className="py-3 px-6 border-b border-gray-800">{new Date(admin.last_login_time).toLocaleString()}</td>
                     <td className="py-3 px-6 border-b border-gray-800">{new Date(admin.last_logout_time).toLocaleString()}</td>
                     <td className="py-3 px-6 border-b border-gray-800">{admin.login_count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            </div>
+          </div>
+        </div>
+
+
+
+
+        {/* ------------------------Member Login Information------------------------ */}
+        <div className="grid grid-cols-1 gap-4 mb-5">
+          {/* Member Login Info */}
+          <div className="bg-gray-800 p-4 rounded shadow-lg">
+          <div className="relative flex flex-col items-center">
+            <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-orange-500 text-center">
+              Member Login Information Tracker
+            </h2>
+            <hr className="border-0 h-1 bg-gradient-to-r from-teal-400 to-orange-500 rounded w-full mb-6" />
+          </div>
+
+            <div className="overflow-x-auto">
+            <table className="min-w-full bg-gray-900 text-white rounded shadow-lg">
+            <thead className="text-sm font-semibold text-gray-200 uppercase tracking-wider">
+              <tr className="bg-gradient-to-r from-blue-500 to-indigo-600">
+                <th className="py-3 px-6 text-left text-white">ID</th>
+                <th className="py-3 px-6 text-left text-white">Email</th>
+                <th className="py-3 px-6 text-left text-white">Last Login</th>
+                <th className="py-3 px-6 text-left text-white">Last Logout</th>
+                <th className="py-3 px-6 text-left text-white">Last Login Date</th>
+                <th className="py-3 px-6 text-left text-white">Login Count</th>
+                <th className="py-3 px-6 text-left text-white">State</th>
+              </tr>
+            </thead>
+              <tbody className="text-gray-300">
+                {memberLoginInfoTrackers.map((member_login_info_tracker) => (
+                  <tr key={member_login_info_tracker.email} className="hover:bg-gray-800 transition duration-300 ease-in-out">
+                    <td className="py-3 px-6 border-b border-gray-800">{member_login_info_tracker.id}</td>
+                    <td className="py-3 px-6 border-b border-gray-800">{member_login_info_tracker.email}</td>
+                    <td className="py-3 px-6 border-b border-gray-800">{new Date(member_login_info_tracker.last_login_time).toLocaleString()}</td>
+                    <td className="py-3 px-6 border-b border-gray-800">{new Date(member_login_info_tracker.last_logout_time).toLocaleString()}</td>
+                    <td className="py-3 px-6 border-b border-gray-800">{new Date(member_login_info_tracker.last_login_date).toLocaleString()}</td>
+                    <td className="py-3 px-6 border-b border-gray-800">{member_login_info_tracker.total_login_count}</td>
+                    <td className="py-3 px-6 border-b border-gray-800">
+                      <span
+                        className={`inline-block px-3 py-1 rounded text-xs font-semibold ${
+                          member_login_info_tracker.login_state === 'Active' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                        }`}
+                      >
+                        {member_login_info_tracker.login_state === 'Active' ? 'Active' : 'Idle'}
+                      </span>
+                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -61,8 +61,9 @@ export async function GET(request) {
     const recentSubscribersQuery = 'SELECT * FROM subscriber ORDER BY date DESC LIMIT 7';
     const adminDetailsQuery = 'SELECT * FROM admin'; // Add query for admin data
     const currentLoginCountQuery = 'SELECT COUNT(*) AS count FROM admin WHERE status = \'Active\''; // Add query for current login count
+    const memberLoginInfoTrackerQuery = 'SELECT * FROM member_login_info_tracker'; // Add query for admin data
 
-    const [subscriberCount, memberDetails, professorDetails, phdCandidateDetails, messageDetails, recentSubscribers, recentProfessors, adminDetails, currentLoginCount] = await Promise.all([
+    const [subscriberCount, memberDetails, professorDetails, phdCandidateDetails, messageDetails, recentSubscribers, recentProfessors, adminDetails, currentLoginCount, memberLoginInfoTracker] = await Promise.all([
       query(subscriberCountQuery),
       query(memberDetailsQuery),
       query(professorDetailsQuery),
@@ -72,6 +73,7 @@ export async function GET(request) {
       query(recentProfessorsQuery),
       query(adminDetailsQuery), // Fetch admin data
       query(currentLoginCountQuery), // Fetch current login count
+      query(memberLoginInfoTrackerQuery),
     ]);
 
     // Log and alert successful data fetch
@@ -97,6 +99,7 @@ export async function GET(request) {
       recentProfessors: recentProfessors.rows,
       admins: adminDetails.rows, // Include admin data in the response
       currentLoginCount: currentLoginCount.rows[0].count, // Include current login count in the response
+      memberLoginInfoTrackers: memberLoginInfoTracker.rows,
     });
   } catch (error) {
     const errorMessage = formatAlertMessage('Error Fetching Dashboard Data', email, ip, `\nError: ${error.message}`);

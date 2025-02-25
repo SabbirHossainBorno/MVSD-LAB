@@ -7,7 +7,7 @@ import { query } from '../../../lib/db';
 const formatAlertMessage = (userType, title, email, ipAddress, additionalInfo = '') => {
   const header = userType === 'admin' 
     ? "MVSD LAB DASHBOARD\n------------------------------------\n"
-    : "MVSD LAB MEMBER DASHBOARD\n----------------------------------------------\n";
+    : "MVSD LAB MEMBER DASHBOARD\n--------------------------------------------------\n";
   return `${header}${title}\nEmail : ${email}\nIP : ${ipAddress}${additionalInfo}`;
 };
 

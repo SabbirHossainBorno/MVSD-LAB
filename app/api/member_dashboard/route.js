@@ -5,7 +5,7 @@ import logger from '../../../lib/logger';
 import sendTelegramAlert from '../../../lib/telegramAlert';
 
 const formatAlertMessage = (title, email, ipAddress, userAgent, additionalInfo = '') => {
-  return `MVSD LAB MEMBER DASHBOARD\n------------------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}\nDevice INFO : ${userAgent}${additionalInfo}`;
+  return `MVSD LAB MEMBER DASHBOARD\n--------------------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}\nDevice INFO : ${userAgent}${additionalInfo}`;
 };
 
 export async function GET(request) {
