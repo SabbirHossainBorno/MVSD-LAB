@@ -10,7 +10,7 @@ const formatAlertMessage = (userType, email, ipAddress, userAgent, additionalInf
   const isAdmin = userType === 'admin';
   let message = isAdmin 
     ? "MVSD LAB DASHBOARD\n------------------------------------\nAdmin Login Successful.\n"
-    : "MVSD LAB MEMBER DASHBOARD\n-------------------------------------------\nMember Login Successful.\n";
+    : "MVSD LAB MEMBER DASHBOARD\n-----------------------------------------------\nMember Login Successful.\n";
 
   message += `Email : ${email}\n`;
   
@@ -132,6 +132,14 @@ export async function POST(request) {
         }
 
         const eid = `${Math.floor(100000 + Math.random() * 900000)}-MVSDLAB`;
+        logger.info('Generated execution ID', {
+          meta: {
+            eid,
+            sid: sessionId,
+            taskName: 'Generate EID',
+            details: `Generated EID ${eid} for user ${email}`
+          }
+        });
 
         // Update member tracker
         if (table === 'member') {
