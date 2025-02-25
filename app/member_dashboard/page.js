@@ -1,4 +1,4 @@
-//UPLOAD PAGE
+//app/member_dashboard/page.js
 
 'use client';
 
@@ -31,8 +31,8 @@ export default function UploadPage() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-semibold">Upload Page</h1>
-      <p>Welcome to the upload page. You can upload files here.</p>
+      <h1 className="text-2xl font-semibold">Member Dashboard</h1>
+      <p>Welcome to the Member Dashboard.</p>
       {/* Upload functionality goes here */}
     </div>
   );

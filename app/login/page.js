@@ -52,7 +52,7 @@ function LoginPage() {
           router.push('/dashboard');
         } else {
           toast.success('Welcome! MVSD LAB MEMBER');
-          router.push('/upload');
+          router.push('/member_dashboard');
         }
       } else {
         toast.error('Invalid Access! Email/Password Is Wrong');

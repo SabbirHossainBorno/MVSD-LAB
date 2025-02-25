@@ -6,8 +6,21 @@ import { query } from '../../../lib/db';
 import logger from '../../../lib/logger';
 import sendTelegramAlert from '../../../lib/telegramAlert';
 
-const formatAlertMessage = (title, email, ipAddress, userAgent, additionalInfo = '') => {
-  return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}\nDevice INFO : ${userAgent}${additionalInfo}`;
+const formatAlertMessage = (userType, email, ipAddress, userAgent, additionalInfo = {}) => {
+  const isAdmin = userType === 'admin';
+  let message = isAdmin 
+    ? "MVSD LAB DASHBOARD\n------------------------------------\nAdmin Login Successful.\n"
+    : "MVSD LAB MEMBER DASHBOARD\n-------------------------------------------\nMember Login Successful.\n";
+
+  message += `Email : ${email}\n`;
+  
+  if (!isAdmin && additionalInfo.memberId) {
+    message += `ID : ${additionalInfo.memberId}\n`;
+  }
+
+  message += `IP : ${ipAddress}\nDevice INFO : ${userAgent}\nEID : ${additionalInfo.eid || 'N/A'}`;
+  
+  return message;
 };
 
 const updateLoginDetails = async (email) => {
@@ -18,131 +31,220 @@ const updateLoginDetails = async (email) => {
   );
 };
 
+const updateMemberLoginTracker = async (userId, email) => {
+  try {
+    await query(
+      `INSERT INTO member_login_info_tracker 
+       (id, email, last_login_time, last_login_date, total_login_count, login_state)
+       VALUES ($1, $2, CURRENT_TIME, CURRENT_DATE, 1, 'Active')
+       ON CONFLICT (id) DO UPDATE SET
+         last_login_time = CURRENT_TIME,
+         last_login_date = CURRENT_DATE,
+         total_login_count = member_login_info_tracker.total_login_count + 1,
+         login_state = 'Active',
+         last_logout_time = NULL`,
+      [userId, email]
+    );
+  } catch (error) {
+    logger.error('Member login tracker update failed', {
+      meta: {
+        taskName: 'LoginTracking',
+        details: `Error updating tracker for ${email}: ${error.message}`
+      }
+    });
+  }
+};
+
 export async function POST(request) {
   const { email, password } = await request.json();
   const sessionId = uuidv4();
+  const isAdminEmail = email.endsWith('@mvsdlab.com');
 
-  const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr') || 'Unknown IP';
+  const ipAddress = request.headers.get('x-forwarded-for') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
 
-  const loginAttemptMessage = formatAlertMessage('Login Attempt!', email, ipAddress, userAgent);
-  await sendTelegramAlert(loginAttemptMessage);
+  // Login attempt alert
+  const attemptMessage = formatAlertMessage(
+    isAdminEmail ? 'admin' : 'member',
+    email,
+    ipAddress,
+    userAgent,
+    { eid: 'Login Attempt' }
+  ).replace('Successful', 'Attempt');
+  await sendTelegramAlert(attemptMessage);
 
   logger.info('Received login request', {
     meta: {
       eid: '',
       sid: sessionId,
       taskName: 'Login',
-      details: `Login attempt for ${email} from IP ${ipAddress} with User-Agent ${userAgent}`
+      details: `Login attempt for ${email} from IP ${ipAddress}`,
+      userType: isAdminEmail ? 'admin' : 'member'
     }
   });
 
   try {
-    const isAdminEmail = email.endsWith('@mvsdlab.com');
-
     const checkUser = async (table, comparePassword) => {
-      logger.info(`Checking ${table} table for user`, {
+      logger.info(`Checking ${table} table`, {
         meta: {
-          eid: '',
           sid: sessionId,
-          taskName: 'Login',
-          details: `Querying ${table} table for ${email}`
+          taskName: 'DBCheck',
+          details: `Looking for ${email} in ${table}`,
+          userType: table
         }
       });
 
       const res = await query(`SELECT * FROM ${table} WHERE email = $1`, [email]);
       if (res.rows.length > 0) {
         const user = res.rows[0];
-        logger.info(`User found in ${table} table`, { user });
-
-        const passwordMatch = comparePassword ? await bcrypt.compare(password, user.password) : password === user.password;
-        if (!passwordMatch) {
-          logger.warn('Password mismatch', { email });
+        
+        // Password validation
+        const passwordValid = comparePassword 
+          ? await bcrypt.compare(password, user.password)
+          : password === user.password;
+        
+        if (!passwordValid) {
+          logger.warn('Password mismatch', {
+            meta: {
+              sid: sessionId,
+              taskName: 'AuthCheck',
+              details: `Invalid password for ${email}`,
+              userType: table
+            }
+          });
           return null;
         }
 
-        if (user.status !== 'Active') {
-          logger.warn('User is inactive', { email });
-          return NextResponse.json({ success: false, message: 'You Are INACTIVE! Please Contact With Administration' });
+        // Member status check
+        if (table === 'member' && user.status !== 'Active') {
+          logger.warn('Inactive member attempt', {
+            meta: {
+              sid: sessionId,
+              taskName: 'AuthCheck',
+              details: `Inactive member ${email} blocked`,
+              userType: 'member'
+            }
+          });
+          return NextResponse.json({ 
+            success: false, 
+            message: 'Sorry You Are Not Active Member! Please Contact Administration' 
+          });
         }
 
-        const eid = `${Math.floor(Math.random() * 1000000)}-MVSDLAB`;
+        const eid = `${Math.floor(100000 + Math.random() * 900000)}-MVSDLAB`;
 
-        logger.info('Generated execution ID', {
-          meta: {
+        // Update member tracker
+        if (table === 'member') {
+          await updateMemberLoginTracker(user.id, email);
+        }
+
+        // Success alert
+        const successMessage = formatAlertMessage(
+          table,
+          email,
+          ipAddress,
+          userAgent,
+          {
             eid,
-            sid: sessionId,
-            taskName: 'Generate EID',
-            details: `Generated EID ${eid} for user ${email}`
+            memberId: table === 'member' ? user.id : undefined
           }
-        });
-
-        const successMessage = formatAlertMessage(`${table === 'admin' ? 'Admin' : 'User'} Login Successful.`, email, ipAddress, userAgent, `\nEID : ${eid}`);
+        );
         await sendTelegramAlert(successMessage);
 
-        logger.info('Login successful', {
+        logger.info('Login success', {
           meta: {
             eid,
             sid: sessionId,
-            taskName: 'Login',
-            details: `User ${email} logged in successfully from IP ${ipAddress} with User-Agent ${userAgent}`
+            taskName: 'AuthSuccess',
+            details: `Successful ${table} login for ${email}`,
+            userType: table,
+            userId: table === 'member' ? user.id : 'admin'
           }
         });
 
-        await updateLoginDetails(email);
-
-        const response = NextResponse.json({ success: true, type: table === 'admin' ? 'admin' : 'user' });
-        response.cookies.set('email', email, { httpOnly: true });
-        response.cookies.set('sessionId', sessionId, { httpOnly: true });
-        response.cookies.set('eid', eid, { httpOnly: true });
-
+        // Update admin details
         if (table === 'admin') {
-          response.cookies.set('redirect', '/dashboard', { httpOnly: true });
-        } else if (user.type === 'Professor' || user.type === 'PhD Candidate') {
-          response.cookies.set('redirect', '/upload', { httpOnly: true });
-        } else {
-          response.cookies.set('redirect', '/home', { httpOnly: true });
+          await updateLoginDetails(email);
         }
+
+        // Set response cookies
+        const response = NextResponse.json({ 
+          success: true, 
+          type: table === 'admin' ? 'admin' : 'user' 
+        });
+        
+        const cookieConfig = { httpOnly: true, secure: process.env.NODE_ENV === 'production' };
+        response.cookies.set('email', email, cookieConfig);
+        response.cookies.set('sessionId', sessionId, cookieConfig);
+        response.cookies.set('eid', eid, cookieConfig);
+        response.cookies.set('redirect', 
+          table === 'admin' ? '/dashboard' :
+          ['Professor', 'PhD Candidate'].includes(user.type) ? '/upload' : '/home',
+          cookieConfig
+        );
 
         return response;
       }
       return null;
     };
 
+    // Check admin first if email matches
     if (isAdminEmail) {
       const adminResponse = await checkUser('admin', false);
       if (adminResponse) return adminResponse;
-    } else {
-      const memberResponse = await checkUser('member', true);
-      if (memberResponse) return memberResponse;
     }
 
-    const failedMessage = formatAlertMessage('Login Failed!', email, ipAddress, userAgent);
+    // Check member if not admin
+    const memberResponse = await checkUser('member', true);
+    if (memberResponse) return memberResponse;
+
+    // Failed login handling
+    const failedMessage = formatAlertMessage(
+      isAdminEmail ? 'admin' : 'member',
+      email,
+      ipAddress,
+      userAgent,
+      { eid: 'Failed Attempt' }
+    ).replace('Successful', 'Failed');
     await sendTelegramAlert(failedMessage);
 
     logger.warn('Login failed', {
       meta: {
-        eid: '',
         sid: sessionId,
-        taskName: 'Login',
-        details: `Failed login attempt for ${email} from IP ${ipAddress} with User-Agent ${userAgent}`
+        taskName: 'AuthFailure',
+        details: `Failed login for ${email}`,
+        userType: isAdminEmail ? 'admin' : 'member'
       }
     });
 
-    return NextResponse.json({ success: false, message: 'Invalid email or password' });
+    return NextResponse.json({ 
+      success: false, 
+      message: 'Invalid email or password' 
+    });
+
   } catch (error) {
-    const errorMessage = formatAlertMessage('Error During Login!', email, ipAddress, userAgent, `\nError: ${error.message}`);
+    // Error handling
+    const errorMessage = formatAlertMessage(
+      isAdminEmail ? 'admin' : 'member',
+      email,
+      ipAddress,
+      userAgent,
+      { eid: 'Error', error: error.message }
+    ).replace('Successful', 'Error');
     await sendTelegramAlert(errorMessage);
 
-    logger.error('Error during login', {
+    logger.error('Login process error', {
       meta: {
-        eid: '',
         sid: sessionId,
-        taskName: 'Login',
-        details: `Error during login for ${email}: ${error.message} from IP ${ipAddress} with User-Agent ${userAgent}`
+        taskName: 'SystemError',
+        details: `Error: ${error.message}`,
+        userType: isAdminEmail ? 'admin' : 'member'
       }
     });
 
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
