@@ -1,3 +1,4 @@
+//app/api/logout/route.js
 import { NextResponse } from 'next/server';
 import logger from '../../../lib/logger';
 import sendTelegramAlert from '../../../lib/telegramAlert';
