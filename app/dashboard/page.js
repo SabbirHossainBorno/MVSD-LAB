@@ -373,9 +373,16 @@ const Dashboard = () => {
                   <tr key={member_login_info_tracker.email} className="hover:bg-gray-800 transition duration-300 ease-in-out">
                     <td className="py-3 px-6 border-b border-gray-800">{member_login_info_tracker.id}</td>
                     <td className="py-3 px-6 border-b border-gray-800">{member_login_info_tracker.email}</td>
-                    <td className="py-3 px-6 border-b border-gray-800">{new Date(member_login_info_tracker.last_login_time).toLocaleString()}</td>
-                    <td className="py-3 px-6 border-b border-gray-800">{new Date(member_login_info_tracker.last_logout_time).toLocaleString()}</td>
-                    <td className="py-3 px-6 border-b border-gray-800">{new Date(member_login_info_tracker.last_login_date).toLocaleString()}</td>
+                    <td className="py-3 px-6 border-b border-gray-800">
+                      {member_login_info_tracker.last_login_time.split('.')[0]}
+                    </td>
+                    <td className="py-3 px-6 border-b border-gray-800">
+                      {member_login_info_tracker.last_logout_time.split('.')[0]}
+                    </td>
+                    {/* For date-only display */}
+                    <td className="py-3 px-6 border-b border-gray-800">
+                      {new Date(member_login_info_tracker.last_login_date).toLocaleDateString('en-US')}
+                    </td>
                     <td className="py-3 px-6 border-b border-gray-800">{member_login_info_tracker.total_login_count}</td>
                     <td className="py-3 px-6 border-b border-gray-800">
                       <span
