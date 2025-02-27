@@ -6,11 +6,6 @@
     "auditLog": "logs/.ff912f246f4dd8fa4dd8ce4c75b212c7acd57bc8-audit.json",
     "files": [
         {
-            "date": 1738040558181,
-            "name": "logs/mvsd-lab-2025-01-28.log",
-            "hash": "ec69abd3a19cf3973a63e87e50e00dd82f0958c3bdcf35a4491ec5519fbdc3b2"
-        },
-        {
             "date": 1738127015125,
             "name": "logs/mvsd-lab-2025-01-29.log",
             "hash": "5fcb181194433131641491d1cf8b7ea6668f192656c4c25715743424e7ef878f"
@@ -129,6 +124,11 @@
             "date": 1740554305543,
             "name": "logs/mvsd-lab-2025-02-26.log",
             "hash": "03f580ffccd0d8c61b0dd6c31be856dedf59502eb33fb39bca926a439e0ef2a7"
+        },
+        {
+            "date": 1740643094072,
+            "name": "logs/mvsd-lab-2025-02-27.log",
+            "hash": "1e9d4095d5e45a31b5a9f39a5fa68a40e71df9b43c8bb691576ff434c6147db8"
         }
     ],
     "hashType": "sha256"
