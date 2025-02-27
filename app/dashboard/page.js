@@ -371,9 +371,8 @@ const Dashboard = () => {
               >
                 <div className="flex flex-col items-center mb-6">
                 <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-400 text-center">
-  Member Login Activity
-</h2>
-
+                  Member Login Activity
+                </h2>
                   <div className="h-1 w-full bg-gradient-to-r from-teal-400 to-orange-400 rounded mt-2" />
                 </div>
               </motion.div>
@@ -497,63 +496,145 @@ const Dashboard = () => {
 
 
         {/* ------------------------Recent Subscribers and Recent Professors------ Side by Side------------------------ */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-          {/* Recent Subscribers */}
-          <div className="bg-gray-800 p-4 rounded shadow-lg">
-            <div className="relative">
-            <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">
-                Recent Subscribers
-              </h2>
-              <hr className="border-0 h-1 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full mb-6" />
-            </div>
-            <ul className="space-y-2">
-              {recentSubscribers.map(subscriber => (
-                <li
-                  key={subscriber.email}
-                  className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition"
-                >
-                  <span className="text-xs sm:text-sm md:text-base font-semibold text-gray-200 break-words">{subscriber.email}</span>
-                  <div className="bg-blue-600 text-white rounded px-2 py-1 text-xs font-medium">
-                    Subscribed
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <Link href="/dashboard/subscribers_list" className="block mt-3 text-center text-blue-400 hover:text-blue-500 text-sm">View All</Link>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+  {/* Recent Subscribers */}
+  <motion.div 
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    className="bg-gray-800/50 backdrop-blur-lg p-5 rounded border border-gray-700/30 relative overflow-hidden shadow-2xl hover:shadow-blue-500/10 transition-shadow"
+  >
+    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 pointer-events-none" />
+    <div className="relative z-10">
+      <motion.div 
+        initial={{ x: -20 }}
+        animate={{ x: 0 }}
+        className="mb-5"
+      >
+        <h2 className="text-2xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400 flex items-center">
+          <motion.span
+            animate={{ rotate: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="mr-2"
+          >
+            👥
+          </motion.span>
+          Recent Subscribers
+        </h2>
+        <div className="h-0.5 bg-gradient-to-r from-blue-400/50 to-indigo-400/50 rounded" />
+      </motion.div>
 
-          {/* Recent Professors */}
-          <div className="bg-gray-800 p-4 rounded shadow-lg">
-            <div className="relative">
-              <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-500">
-                Recent Professors
-              </h2>
-              <hr className="border-0 h-1 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-full mb-6" />
-            </div>
-            <ul className="space-y-2">
-              {recentProfessors.map(professor => (
-                <li
-                  key={professor.id}
-                  className="flex items-center justify-between p-3 bg-gray-700 rounded border border-gray-600 shadow-sm hover:bg-gray-600 transition"
-                >
-                  <div className="flex items-center space-x-3">
-                  <span className="text-xs sm:text-sm md:text-base font-semibold text-gray-200 break-words">{professor.email}</span>
-                  </div>
-                  <div className="flex space-x-2">
-                    <div className="bg-yellow-600 text-white rounded px-2 py-1 text-xs font-medium">
-                      {professor.id}
-                    </div>
-                    <div className="bg-green-600 text-white rounded px-2 py-1 text-xs font-medium">
-                      {professor.status}
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <Link href="/dashboard/professor_list" className="block mt-3 text-center text-blue-400 hover:text-blue-500 text-sm">View All</Link>
-          </div>
+      <ul className="space-y-3">
+        {recentSubscribers.map((subscriber, index) => (
+          <motion.li
+            key={subscriber.email}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: index * 0.05 }}
+            className="flex items-center justify-between p-3 bg-gray-700/30 rounded border border-gray-600/50 backdrop-blur-sm hover:border-blue-400/30 transition-all group"
+          >
+            <span className="text-sm font-medium text-gray-200 truncate pr-2">
+              {subscriber.email}
+            </span>
+            <motion.div 
+              whileHover={{ scale: 1.05 }}
+              className="flex items-center space-x-2"
+            >
+              <div className="bg-blue-500/20 text-blue-400 rounded px-2 py-1 text-xs font-bold flex items-center">
+                <span className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse" />
+                Subscribed
+              </div>
+            </motion.div>
+          </motion.li>
+        ))}
+      </ul>
+      
+      <motion.div whileHover={{ scale: 1.02 }} className="mt-4">
+        <Link 
+          href="/dashboard/subscribers_list"
+          className="w-full text-center block bg-gray-700/50 hover:bg-gray-700/70 rounded p-2 text-sm font-medium text-blue-400 transition-all"
+        >
+          View All Subscribers →
+        </Link>
+      </motion.div>
+    </div>
+  </motion.div>
 
-        </div>
+  {/* Recent Professors */}
+  <motion.div 
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    className="bg-gray-800/50 backdrop-blur-lg p-5 rounded border border-gray-700/30 relative overflow-hidden shadow-2xl hover:shadow-purple-500/10 transition-shadow"
+  >
+    <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/5 pointer-events-none" />
+    <div className="relative z-10">
+      <motion.div 
+        initial={{ x: -20 }}
+        animate={{ x: 0 }}
+        className="mb-5"
+      >
+        <h2 className="text-2xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400 flex items-center">
+          <motion.span
+            animate={{ rotate: [0, -10, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="mr-2"
+          >
+            🎓
+          </motion.span>
+          Recent Professors
+        </h2>
+        <div className="h-0.5 bg-gradient-to-r from-purple-400/50 to-indigo-400/50 rounded" />
+      </motion.div>
+
+      <ul className="space-y-3">
+        {recentProfessors.map((professor, index) => (
+          <motion.li
+            key={professor.id}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: index * 0.05 }}
+            className="flex items-center justify-between p-3 bg-gray-700/30 rounded border border-gray-600/50 backdrop-blur-sm hover:border-purple-400/30 transition-all group"
+          >
+            <div className="flex items-center space-x-3">
+              <span className="text-sm font-medium text-gray-200 truncate">
+                {professor.email}
+              </span>
+            </div>
+            <div className="flex space-x-2">
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                className="bg-yellow-500/20 text-yellow-400 rounded px-2 py-1 text-xs font-bold"
+              >
+                ID: {professor.id}
+              </motion.div>
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                className={`${
+                  professor.status === 'Active' 
+                    ? 'bg-green-500/20 text-green-400' 
+                    : 'bg-red-500/20 text-red-400'
+                } rounded px-2 py-1 text-xs font-bold flex items-center`}
+              >
+                {professor.status === 'Active' && (
+                  <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse" />
+                )}
+                {professor.status}
+              </motion.div>
+            </div>
+          </motion.li>
+        ))}
+      </ul>
+
+      <motion.div whileHover={{ scale: 1.02 }} className="mt-4">
+        <Link 
+          href="/dashboard/professor_list"
+          className="w-full text-center block bg-gray-700/50 hover:bg-gray-700/70 rounded p-2 text-sm font-medium text-purple-400 transition-all"
+        >
+          View All Professors →
+        </Link>
+      </motion.div>
+    </div>
+  </motion.div>
+</div>
 
 
 
