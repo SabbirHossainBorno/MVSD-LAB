@@ -11,6 +11,7 @@ import DashboardMessageChart from '../components/DashboardMessage_chart'; // Add
 import DashboardMemberChart from '../components/DashboardMember_chart'; // Add a loading spinner component
 import axios from 'axios';
 import Image from 'next/image';
+import { motion } from 'framer-motion'
 
 const Dashboard = () => {
   const [subscribers, setSubscribers] = useState(0);
@@ -310,16 +311,19 @@ const Dashboard = () => {
             <thead className="text-sm font-semibold text-gray-200 uppercase tracking-wider">
               <tr className="bg-gradient-to-r from-blue-500 to-indigo-600">
                 <th className="py-3 px-6 text-left text-white">Email</th>
-                <th className="py-3 px-6 text-left text-white">Status</th>
                 <th className="py-3 px-6 text-left text-white">Last Login</th>
                 <th className="py-3 px-6 text-left text-white">Last Logout</th>
                 <th className="py-3 px-6 text-left text-white">Login Count</th>
+                <th className="py-3 px-6 text-left text-white">Status</th>
               </tr>
             </thead>
               <tbody className="text-gray-300">
                 {admins.map((admin) => (
                   <tr key={admin.email} className="hover:bg-gray-800 transition duration-300 ease-in-out">
-                    <td className="py-3 px-6 border-b border-gray-800">{admin.email}</td>
+                    <td className="py-3 px-6 border-b border-gray-800">{admin.email}</td>                   
+                    <td className="py-3 px-6 border-b border-gray-800">{new Date(admin.last_login_time).toLocaleString()}</td>
+                    <td className="py-3 px-6 border-b border-gray-800">{new Date(admin.last_logout_time).toLocaleString()}</td>
+                    <td className="py-3 px-6 border-b border-gray-800">{admin.login_count}</td>
                     <td className="py-3 px-6 border-b border-gray-800">
                       <span
                         className={`inline-block px-3 py-1 rounded text-xs font-semibold ${
@@ -329,9 +333,6 @@ const Dashboard = () => {
                         {admin.status === 'Active' ? 'Active' : 'Idle'}
                       </span>
                     </td>
-                    <td className="py-3 px-6 border-b border-gray-800">{new Date(admin.last_login_time).toLocaleString()}</td>
-                    <td className="py-3 px-6 border-b border-gray-800">{new Date(admin.last_logout_time).toLocaleString()}</td>
-                    <td className="py-3 px-6 border-b border-gray-800">{admin.login_count}</td>
                   </tr>
                 ))}
               </tbody>
@@ -345,62 +346,122 @@ const Dashboard = () => {
 
 
         {/* ------------------------Member Login Information------------------------ */}
-        <div className="grid grid-cols-1 gap-4 mb-5">
-          {/* Member Login Info */}
-          <div className="bg-gray-800 p-4 rounded shadow-lg">
-          <div className="relative flex flex-col items-center">
-            <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-orange-500 text-center">
-              Member Login Information Tracker
-            </h2>
-            <hr className="border-0 h-1 bg-gradient-to-r from-teal-400 to-orange-500 rounded w-full mb-6" />
-          </div>
-
-            <div className="overflow-x-auto">
-            <table className="min-w-full bg-gray-900 text-white rounded shadow-lg">
-            <thead className="text-sm font-semibold text-gray-200 uppercase tracking-wider">
-              <tr className="bg-gradient-to-r from-blue-500 to-indigo-600">
-                <th className="py-3 px-6 text-left text-white">ID</th>
-                <th className="py-3 px-6 text-left text-white">Email</th>
-                <th className="py-3 px-6 text-left text-white">Last Login</th>
-                <th className="py-3 px-6 text-left text-white">Last Logout</th>
-                <th className="py-3 px-6 text-left text-white">Last Login Date</th>
-                <th className="py-3 px-6 text-left text-white">Login Count</th>
-                <th className="py-3 px-6 text-left text-white">State</th>
-              </tr>
-            </thead>
-              <tbody className="text-gray-300">
-                {memberLoginInfoTrackers.map((member_login_info_tracker) => (
-                  <tr key={member_login_info_tracker.email} className="hover:bg-gray-800 transition duration-300 ease-in-out">
-                    <td className="py-3 px-6 border-b border-gray-800">{member_login_info_tracker.id}</td>
-                    <td className="py-3 px-6 border-b border-gray-800">{member_login_info_tracker.email}</td>
-                    <td className="py-3 px-6 border-b border-gray-800">
-                      {member_login_info_tracker.last_login_time.split('.')[0]}
-                    </td>
-                    <td className="py-3 px-6 border-b border-gray-800">
-                      {member_login_info_tracker.last_logout_time.split('.')[0]}
-                    </td>
-                    {/* For date-only display */}
-                    <td className="py-3 px-6 border-b border-gray-800">
-                      {new Date(member_login_info_tracker.last_login_date).toLocaleDateString('en-US')}
-                    </td>
-                    <td className="py-3 px-6 border-b border-gray-800">{member_login_info_tracker.total_login_count}</td>
-                    <td className="py-3 px-6 border-b border-gray-800">
-                      <span
-                        className={`inline-block px-3 py-1 rounded text-xs font-semibold ${
-                          member_login_info_tracker.login_state === 'Active' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-                        }`}
-                      >
-                        {member_login_info_tracker.login_state === 'Active' ? 'Active' : 'Idle'}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            </div>
-          </div>
+<div className="grid grid-cols-1 gap-4 mb-5">
+  <div className="bg-gray-800/50 backdrop-blur-lg p-6 rounded shadow-2xl border border-gray-700/30 relative overflow-hidden">
+    <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-orange-500/10 pointer-events-none" />
+    <div className="relative z-10">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="flex flex-col items-center mb-4">
+          <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-orange-500 text-center">
+            Member Login Activity
+          </h2>
+          <div className="h-1 w-24 bg-gradient-to-r from-teal-400 to-orange-400 rounded mt-2" />
         </div>
+      </motion.div>
+
+      <div className="overflow-x-auto rounded border border-gray-700/50 shadow-2xl">
+        <table className="min-w-full bg-gray-900/50 backdrop-blur-sm">
+        <thead className="text-sm font-semibold text-gray-200 uppercase tracking-wider sticky top-0 z-20">
+          <motion.tr 
+            className="bg-gradient-to-r from-blue-600/80 to-indigo-600/80 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            {["ID", "Email", "Last Login", "Last Logout", "Login Date", "Count", "Status"].map((header) => (
+              <th 
+                key={header}
+                className="py-4 px-6 text-left"
+              >
+                <div className="flex items-center space-x-2">
+                  <span>{header}</span>
+                  {["Last Login", "Last Logout", "Login Date", "Count", "Status"].includes(header) && (
+                    <span className="text-gray-400 text-xs">▼</span>
+                  )}
+                </div>
+              </th>
+            ))}
+          </motion.tr>
+        </thead>
+
+          <tbody className="text-gray-300 divide-y divide-gray-700/50">
+            {memberLoginInfoTrackers.map((tracker, index) => (
+              <motion.tr
+                key={tracker.email}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05 }}
+                className="hover:bg-gray-800/30 transition-all duration-300 group"
+              >
+                <td className="py-4 px-6 font-mono text-teal-400">{tracker.id}</td>
+                <td className="py-4 px-6 max-w-xs truncate hover:text-clip">{tracker.email}</td>
+                
+                <td className="py-4 px-6">
+                  <div className="flex items-center space-x-2">
+                    {new Date(tracker.last_login_time).toLocaleTimeString('en-US', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true
+                    })}
+                  </div>
+                </td>
+
+                <td className="py-4 px-6">
+                  {new Date(tracker.last_logout_time).toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                  })}
+                </td>
+
+                <td className="py-4 px-6">
+                  {new Date(tracker.last_login_date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  })}
+                </td>
+
+                <td className="py-4 px-6 font-bold text-center">
+                  <span className="bg-gray-700/50 px-3 py-1 rounded text-sm">
+                    {tracker.total_login_count}
+                  </span>
+                </td>
+
+                <td className="py-4 px-6">
+                  <motion.span
+                    className={`inline-flex items-center px-3 py-1 rounded text-xs font-bold uppercase ${
+                      tracker.login_state === 'Active' 
+                        ? 'bg-green-500/20 text-green-400' 
+                        : 'bg-red-500/20 text-red-400'
+                    }`}
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    {tracker.login_state === 'Active' ? (
+                      <>
+                        <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-ping" />
+                        Active
+                      </>
+                    ) : (
+                      'Idle'
+                    )}
+                  </motion.span>
+                </td>
+              </motion.tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Floating Elements for Decoration */}
+      <div className="absolute top-0 left-0 w-32 h-32 bg-teal-500/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute bottom-0 right-0 w-48 h-48 bg-orange-500/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+    </div>
+  </div>
+</div>
 
 
 
@@ -409,27 +470,14 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
               {/* Message Statistics */}
           <div className="bg-gray-800 p-4 rounded shadow-lg">
-            <div className="relative">
-              <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-yellow-500">
-                Message Statistics
-              </h2>
-              <hr className="border-0 h-1 bg-gradient-to-r from-red-400 to-yellow-500 rounded-full mb-6" />
-            </div>
             <DashboardMessageChart />
           </div>
 
           {/* Member Statistics */}
-          <div className="bg-gray-800 p-4 rounded shadow-lg">
-            <div className="relative">
-            <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-teal-400">
-                Member Statistics
-              </h2>
-              <hr className="border-0 h-1 bg-gradient-to-r from-red-400 to-yellow-500 rounded-full mb-1" />
-            </div>
+          <div className="bg-gray-800 px-4 pb-4 rounded shadow-lg">
             <DashboardMemberChart />
           </div>
 
-          
         </div>
 
 

@@ -83,7 +83,7 @@ const DashboardMemberChart = () => {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={controls}
-      className="w-full mx-auto p-4 bg-gradient-to-br from-gray-900 to-gray-800 rounded border border-gray-700 shadow-2xl space-y-4 overflow-hidden relative"
+      className="w-full mx-auto p-4 bg-gradient-to-br from-gray-900 to-gray-800 rounded shadow-2xl space-y-4 overflow-hidden relative"
     >
       {/* Glowing Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
