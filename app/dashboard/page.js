@@ -514,7 +514,7 @@ const Dashboard = () => {
           <motion.span
             animate={{ rotate: [0, 10, 0] }}
             transition={{ repeat: Infinity, duration: 2 }}
-            className="mr-2"
+            className="mr-2 text-white text-opacity-100"
           >
             👥
           </motion.span>
@@ -532,14 +532,23 @@ const Dashboard = () => {
             transition={{ delay: index * 0.05 }}
             className="flex items-center justify-between p-3 bg-gray-700/30 rounded border border-gray-600/50 backdrop-blur-sm hover:border-blue-400/30 transition-all group"
           >
-            <span className="text-sm font-medium text-gray-200 truncate pr-2">
-              {subscriber.email}
-            </span>
+            <div className="flex-1 min-w-0 pr-2">
+              <span className="text-sm font-medium text-gray-200 truncate block">
+                {subscriber.email}
+              </span>
+              <span className="text-xs text-gray-400 truncate block mt-1">
+                {new Date(subscriber.date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })}
+              </span>
+            </div>
             <motion.div 
               whileHover={{ scale: 1.05 }}
-              className="flex items-center space-x-2"
+              className="flex-shrink-0"
             >
-              <div className="bg-blue-500/20 text-blue-400 rounded px-2 py-1 text-xs font-bold flex items-center">
+              <div className="bg-blue-500/20 text-blue-400 rounded px-2 md:px-3 py-1 text-xs font-bold flex items-center">
                 <span className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse" />
                 Subscribed
               </div>
@@ -576,7 +585,7 @@ const Dashboard = () => {
           <motion.span
             animate={{ rotate: [0, -10, 0] }}
             transition={{ repeat: Infinity, duration: 2 }}
-            className="mr-2"
+            className="mr-2 text-white text-opacity-100"
           >
             🎓
           </motion.span>
@@ -592,27 +601,33 @@ const Dashboard = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.05 }}
-            className="flex items-center justify-between p-3 bg-gray-700/30 rounded border border-gray-600/50 backdrop-blur-sm hover:border-purple-400/30 transition-all group"
+            className="flex items-center justify-between p-3 bg-gray-700/30 rounded border border-gray-600/50 backdrop-blur-sm hover:border-purple-400/30 transition-all group overflow-hidden"
           >
-            <div className="flex items-center space-x-3">
-              <span className="text-sm font-medium text-gray-200 truncate">
+            <div className="flex-1 min-w-0 pr-2">
+              <span className="text-sm font-medium text-gray-200 truncate block">
                 {professor.email}
               </span>
+              <span className="text-xs text-gray-400 truncate block mt-1">
+                Joined : {new Date(professor.joining_date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })}
+              </span>
             </div>
-            <div className="flex space-x-2">
+
+            <div className="flex-shrink-0 flex items-center space-x-2 min-w-max">
               <motion.div 
-                whileHover={{ scale: 1.05 }}
-                className="bg-yellow-500/20 text-yellow-400 rounded px-2 py-1 text-xs font-bold"
+                className="bg-yellow-500/20 text-yellow-400 rounded px-2 md:px-3 py-1 text-xs font-bold truncate"
               >
-                ID: {professor.id}
+                {professor.id}
               </motion.div>
               <motion.div 
-                whileHover={{ scale: 1.05 }}
                 className={`${
                   professor.status === 'Active' 
                     ? 'bg-green-500/20 text-green-400' 
                     : 'bg-red-500/20 text-red-400'
-                } rounded px-2 py-1 text-xs font-bold flex items-center`}
+                } rounded px-2 md:px-3 py-1 text-xs font-bold flex items-center truncate`}
               >
                 {professor.status === 'Active' && (
                   <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse" />
