@@ -38,13 +38,12 @@ function LoginPage() {
     try {
       const res = await fetch('/api/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
       const result = await res.json();
       setLoading(false);
+  
       if (result.success) {
         Cookies.set('lastActivity', new Date().toISOString()); // Set lastActivity cookie
         if (result.type === 'admin') {
@@ -55,7 +54,12 @@ function LoginPage() {
           router.push('/member_dashboard');
         }
       } else {
-        toast.error('Invalid Access! Email/Password Is Wrong');
+        // Check for inactive user message
+        if (result.message === 'Sorry You Are Not Active Member! Please Contact Administration') {
+          toast.error(result.message); // Show the correct error toast
+        } else {
+          toast.error('Invalid Access! Email/Password Is Wrong');
+        }
       }
     } catch (error) {
       setLoading(false);

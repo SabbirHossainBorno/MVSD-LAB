@@ -36,13 +36,12 @@ const updateMemberLoginTracker = async (userId, email) => {
     await query(
       `INSERT INTO member_login_info_tracker 
        (id, email, last_login_time, last_login_date, total_login_count, login_state)
-       VALUES ($1, $2, CURRENT_TIME, CURRENT_DATE, 1, 'Active')
+       VALUES ($1, $2, NOW(), NOW()::date, 1, 'Active')
        ON CONFLICT (id) DO UPDATE SET
-         last_login_time = CURRENT_TIME,
-         last_login_date = CURRENT_DATE,
+         last_login_time = NOW(),
+         last_login_date = NOW()::date,
          total_login_count = member_login_info_tracker.total_login_count + 1,
-         login_state = 'Active',
-         last_logout_time = NULL`,
+         login_state = 'Active'`,
       [userId, email]
     );
   } catch (error) {
@@ -52,8 +51,11 @@ const updateMemberLoginTracker = async (userId, email) => {
         details: `Error updating tracker for ${email}: ${error.message}`
       }
     });
+    // Propagate the error to prevent login success
+    throw error;
   }
 };
+
 
 export async function POST(request) {
   const { email, password } = await request.json();
@@ -117,7 +119,7 @@ export async function POST(request) {
 
         // Member status check
         if (table === 'member' && user.status !== 'Active') {
-          logger.warn('Inactive member attempt', {
+          logger.warn('Inactive member login attempt', {
             meta: {
               sid: sessionId,
               taskName: 'AuthCheck',
@@ -125,6 +127,18 @@ export async function POST(request) {
               userType: 'member'
             }
           });
+          
+          // Send Telegram alert
+          const inactiveMessage = formatAlertMessage(
+            'member',
+            email,
+            ipAddress,
+            userAgent,
+            { eid: 'Inactive Login Attempt' }
+          ).replace('Successful', 'Failed (Inactive Member)');
+          
+          await sendTelegramAlert(inactiveMessage);
+        
           return NextResponse.json({ 
             success: false, 
             message: 'Sorry You Are Not Active Member! Please Contact Administration' 
