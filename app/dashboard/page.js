@@ -320,19 +320,33 @@ const Dashboard = () => {
               <tbody className="text-gray-300">
                 {admins.map((admin) => (
                   <tr key={admin.email} className="hover:bg-gray-800 transition duration-300 ease-in-out">
-                    <td className="py-3 px-6 border-b border-gray-800">{admin.email}</td>                   
+                    <td className="py-3 px-6 border-b border-gray-800 font-mono text-teal-400">{admin.email}</td>                   
                     <td className="py-3 px-6 border-b border-gray-800">{new Date(admin.last_login_time).toLocaleString()}</td>
-                    <td className="py-3 px-6 border-b border-gray-800">{new Date(admin.last_logout_time).toLocaleString()}</td>
-                    <td className="py-3 px-6 border-b border-gray-800">{admin.login_count}</td>
-                    <td className="py-3 px-6 border-b border-gray-800">
-                      <span
-                        className={`inline-block px-3 py-1 rounded text-xs font-semibold ${
-                          admin.status === 'Active' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-                        }`}
-                      >
-                        {admin.status === 'Active' ? 'Active' : 'Idle'}
+                    <td className="py-3 px-6 border-b border-gray-800">{new Date(admin.last_logout_time).toLocaleString()}</td>                   
+                    <td className="py-3 px-6 border-b border-gray-800 font-bold">
+                      <span className="bg-gray-700/50 px-3 py-1 rounded text-sm">
+                        {admin.login_count}
                       </span>
                     </td>
+                    <td className="py-3 px-6 border-b border-gray-800">
+                          <motion.span
+                            className={`inline-flex items-center px-3 py-1 rounded text-xs font-bold uppercase ${
+                              admin.status === 'Active' 
+                                ? 'bg-green-500/20 text-green-400' 
+                                : 'bg-red-500/20 text-red-400'
+                            }`}
+                            whileHover={{ scale: 1.05 }}
+                          >
+                            {admin.status === 'Active' ? (
+                              <>
+                                <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-ping" />
+                                Active
+                              </>
+                            ) : (
+                              'Idle'
+                            )}
+                          </motion.span>
+                        </td>
                   </tr>
                 ))}
               </tbody>
@@ -355,10 +369,11 @@ const Dashboard = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <div className="flex flex-col items-center mb-4">
-                  <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-orange-500 text-center">
-                    Member Login Activity
-                  </h2>
+                <div className="flex flex-col items-center mb-6">
+                <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-400 text-center">
+  Member Login Activity
+</h2>
+
                   <div className="h-1 w-full bg-gradient-to-r from-teal-400 to-orange-400 rounded mt-2" />
                 </div>
               </motion.div>
@@ -378,9 +393,7 @@ const Dashboard = () => {
                       >
                         <div className="flex items-center space-x-2">
                           <span>{header}</span>
-                          {["Last Login", "Last Logout", "Login Date", "Count", "Status"].includes(header) && (
-                            <span className="text-gray-400 text-xs">▼</span>
-                          )}
+                          {["Last Login", "Last Logout", "Login Date", "Count", "Status"].includes(header)}
                         </div>
                       </th>
                     ))}
@@ -425,7 +438,7 @@ const Dashboard = () => {
                           })}
                         </td>
 
-                        <td className="py-4 px-6 font-bold text-center">
+                        <td className="py-4 px-6 font-bold">
                           <span className="bg-gray-700/50 px-3 py-1 rounded text-sm">
                             {tracker.total_login_count}
                           </span>
