@@ -297,4 +297,4 @@ const PhdCandidatesList = () => {
   );
 };
 
-export default withAuth(PhdCandidatesList);
+export default withAuth(PhdCandidatesList, 'admin'); // Pass 'admin' as the required role

@@ -159,4 +159,4 @@ const SystemMonitoring = () => {
   );
 };
 
-export default withAuth(SystemMonitoring);
+export default withAuth(SystemMonitoring, 'admin'); // Pass 'admin' as the required role

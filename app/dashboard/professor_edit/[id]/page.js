@@ -1035,4 +1035,4 @@ const EditProfessor = () => {
   );
 };
 
-export default withAuth(EditProfessor);
+export default withAuth(EditProfessor, 'admin'); // Pass 'admin' as the required role

@@ -802,4 +802,4 @@ const EditPhdCandidate = () => {
   );
 };
 
-export default withAuth(EditPhdCandidate);
+export default withAuth(EditPhdCandidate, 'admin'); // Pass 'admin' as the required role

@@ -324,4 +324,4 @@ const ProfessorsList = () => {
   );
 };
 
-export default withAuth(ProfessorsList);
+export default withAuth(ProfessorsList, 'admin'); // Pass 'admin' as the required role

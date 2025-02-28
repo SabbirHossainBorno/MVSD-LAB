@@ -315,4 +315,4 @@ const DocumentCard = ({ title, type, imageUrl, onClick }) => (
   </div>
 );
 
-export default withAuth(PhdCandidateDetails);
+export default withAuth(PhdCandidateDetails, 'admin'); // Pass 'admin' as the required role

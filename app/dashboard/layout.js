@@ -37,4 +37,4 @@ DashboardLayout.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
 };
 
-export default withAuth(DashboardLayout);
+export default withAuth(DashboardLayout, 'admin'); // Pass 'admin' as the required role
