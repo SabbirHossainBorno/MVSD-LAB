@@ -700,4 +700,4 @@ const Dashboard = () => {
   );
 }
 
-export default withAuth(Dashboard);
+export default withAuth(Dashboard, 'admin'); // Pass 'admin' as the required role

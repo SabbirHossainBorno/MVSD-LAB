@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import logger from '../../../lib/logger';
 import sendTelegramAlert from '../../../lib/telegramAlert';
 import { handleSessionExpiration } from '../../../lib/sessionUtils';
+import { query } from '../../../lib/db'; // Import your database query function
 
 const formatAlertMessage = (title, email, ipAddress, additionalInfo = '') => {
   return `MVSD LAB AUTH-CHECKER\n----------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}${additionalInfo}`;
@@ -44,35 +45,36 @@ export async function GET(request) {
   }
 
   try {
-    // Check session expiration
     const now = new Date();
     const lastActivity = request.cookies.get('lastActivity')?.value;
     const lastActivityDate = new Date(lastActivity);
     const diff = now - lastActivityDate;
 
-    //console.log(`Session check: email=${email}, lastActivity=${lastActivity}, diff=${diff}`);
-
     if (diff > 10 * 60 * 1000) { // 10 minutes
-      await handleSessionExpiration(null); // Handle session expiration
+      await handleSessionExpiration(null);
       return NextResponse.json({ authenticated: false, message: 'Session expired' });
     }
 
-    // Log successful authentication check
-    const alertMessage = formatAlertMessage('Authentication Check Successful', email, ip);
-    await sendTelegramAlert(alertMessage);
+    // Fetch user role from the database
+    const res = await query('SELECT type FROM admin WHERE email = $1 UNION SELECT type FROM member WHERE email = $1', [email]);
+    if (res.rows.length > 0) {
+      const user = res.rows[0];
+      const alertMessage = formatAlertMessage('Authentication Check Successful', email, ip);
+      await sendTelegramAlert(alertMessage);
 
-    logger.info('Authentication check successful', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Auth Check',
-        details: `Authentication check successful for ${email} from IP ${ip} with User-Agent ${userAgent}`,
-      },
-    });
+      logger.info('Authentication check successful', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Auth Check',
+          details: `Authentication check successful for ${email} from IP ${ip} with User-Agent ${userAgent}`,
+        },
+      });
 
-    //console.log(`Authentication check successful: email=${email}, ip=${ip}, userAgent=${userAgent}`);
+      return NextResponse.json({ authenticated: true, role: user.type });
+    }
 
-    return NextResponse.json({ authenticated: true });
+    return NextResponse.json({ authenticated: false });
   } catch (error) {
     console.error('Error during authentication check:', error);
 
@@ -92,8 +94,6 @@ export async function GET(request) {
         details: `Error during authentication check for ${email}: ${error.message} from IP ${ip} with User-Agent ${userAgent}`,
       },
     });
-
-    //console.log(`Error during authentication check: email=${email}, error=${error.message}`);
 
     return NextResponse.json({ authenticated: false, message: 'Internal server error' });
   }

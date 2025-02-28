@@ -263,4 +263,4 @@ function Message() {
   );
 }
 
-export default withAuth(Message);
+export default withAuth(Message, 'admin'); // Pass 'admin' as the required role

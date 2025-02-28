@@ -7,11 +7,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { handleSessionExpiration } from '../../lib/sessionUtils';
 
-const withAuth = (WrappedComponent) => {
+const withAuth = (WrappedComponent, requiredRole) => {
   const Wrapper = (props) => {
     const [isClient, setIsClient] = useState(false);
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [userRole, setUserRole] = useState(null);
     const router = useRouter();
     const hasShownUnauthorizedToast = useRef(false);
 
@@ -27,10 +28,10 @@ const withAuth = (WrappedComponent) => {
       try {
         const response = await fetch('/api/check-auth');
         if (!response.ok) throw new Error('Failed to fetch auth status');
-
         const result = await response.json();
         if (result.authenticated) {
           setIsAuthenticated(true);
+          setUserRole(result.role); // Set the user's role
           hasShownUnauthorizedToast.current = false; // Reset the flag on successful authentication
         } else {
           await handleUnauthorizedAccess();
@@ -46,27 +47,22 @@ const withAuth = (WrappedComponent) => {
 
     useEffect(() => {
       setIsClient(true);
-
       const handleActivity = () => {
         Cookies.set('lastActivity', new Date().toISOString());
       };
-
       window.addEventListener('mousemove', handleActivity);
       window.addEventListener('keydown', handleActivity);
-
       const interval = setInterval(() => {
         const lastActivity = Cookies.get('lastActivity');
         if (lastActivity) {
           const now = new Date();
           const lastActivityDate = new Date(lastActivity);
           const diff = now - lastActivityDate;
-
           if (diff > 10 * 60 * 1000) { // 10 minutes
             handleSessionExpiration(router);
           }
         }
       }, 60000);
-
       return () => {
         clearInterval(interval);
         window.removeEventListener('mousemove', handleActivity);
@@ -87,6 +83,13 @@ const withAuth = (WrappedComponent) => {
     }, [router.query]);
 
     if (loading) return <LoadingSpinner />;
+
+    // Check if the user has the required role
+    if (isAuthenticated && requiredRole && userRole !== requiredRole) {
+      toast.error('Access Denied! You do not have permission to view this page.');
+      router.push('/member_dashboard'); // Redirect to member dashboard
+      return null;
+    }
 
     return <WrappedComponent {...props} isAuthenticated={isAuthenticated} />;
   };
