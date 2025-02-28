@@ -9,14 +9,56 @@ const formatAlertMessage = (title, ipAddress, status) => {
 };
 
 export async function GET(request) {
+  const { searchParams } = new URL(request.url);
   const sessionId = request.cookies.get('sessionId')?.value || 'Unknown Session';
   const eid = request.cookies.get('eid')?.value || 'Unknown EID';
-  const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr') || 'Unknown IP';
+  const ipAddress = request.headers.get('x-forwarded-for') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
 
   try {
-    const queryText = 'SELECT id, email, date FROM subscriber';
-    const result = await query(queryText);
+    // Get query parameters
+    const search = searchParams.get('search') || '';
+    const sortField = searchParams.get('sortField') || 'date';
+    const sortOrder = searchParams.get('sortOrder') || 'DESC';
+    const dateRange = searchParams.get('dateRange') || '';
+
+    let queryText = `
+      SELECT id, email, date 
+      FROM subscriber
+      WHERE 1=1
+    `;
+    const params = [];
+
+    // Add search filter
+    if (search) {
+      queryText += `
+        AND (
+          email ILIKE $${params.length + 1}
+          OR id::TEXT ILIKE $${params.length + 1}
+        )
+      `;
+      params.push(`%${search}%`);
+    }
+
+    // Add date filter
+    if (dateRange) {
+      const [startDate, endDate] = dateRange.split('_');
+      queryText += `
+        AND date BETWEEN $${params.length + 1} AND $${params.length + 2}
+      `;
+      params.push(startDate, endDate);
+    }
+
+    // Add sorting
+    const validSortFields = ['id', 'email', 'date'];
+    const safeSortField = validSortFields.includes(sortField) ? sortField : 'date';
+    const safeSortOrder = sortOrder.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+    
+    queryText += `
+      ORDER BY ${safeSortField} ${safeSortOrder}
+    `;
+
+    const result = await query(queryText, params);
 
     const successMessage = formatAlertMessage('Subscribers List - API', ipAddress, 200);
     await sendTelegramAlert(successMessage);
@@ -26,7 +68,12 @@ export async function GET(request) {
         eid,
         sid: sessionId,
         taskName: 'Fetch Subscribers List',
-        details: `Fetched subscribers list successfully from IP ${ipAddress} with User-Agent ${userAgent}`
+        details: `Fetched ${result.rowCount} subscribers with filters: ${JSON.stringify({
+          search,
+          sortField,
+          sortOrder,
+          dateRange
+        })}`
       }
     });
 
@@ -40,10 +87,13 @@ export async function GET(request) {
         eid,
         sid: sessionId,
         taskName: 'Fetch Subscribers List',
-        details: `Error fetching subscribers list from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+        details: `Error: ${error.message}`
       }
     });
 
-    return NextResponse.json({ message: 'Failed to fetch subscribers' }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Failed to fetch subscribers' }, 
+      { status: 500 }
+    );
   }
 }
