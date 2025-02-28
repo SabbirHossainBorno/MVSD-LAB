@@ -134,17 +134,22 @@ function MemberDashboard() {
             : 'bg-white/95 backdrop-blur-md text-gray-800'
         }`}
       >
-        <div className="p-6 border-b border-gray-200/20">
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            MVSD Lab
-          </h2>
-        </div>
+      <div className="p-4 flex justify-center items-center">
+        <img 
+          src={darkMode ? "/images/memberDashboardSidebar_logo_dark.svg" : "/images/memberDashboardSidebar_logo_light.svg"} 
+          alt="MVSD Lab Logo" 
+          className="h-14 w-auto"
+        />
+      </div>
+
+
+
         <nav className="p-4 space-y-2">
           {menuItems.map((item) => (
             <div key={item.name}>
               <motion.div
                 whileHover={{ scale: 1.02 }}
-                className={`flex items-center p-3 rounded-xl cursor-pointer transition-all ${
+                className={`flex items-center p-3 rounded cursor-pointer transition-all ${
                   activeMenu === item.link 
                     ? 'bg-blue-500/10 text-blue-600' 
                     : 'hover:bg-gray-100/20'
@@ -166,7 +171,7 @@ function MemberDashboard() {
                   {item.subItems.map((subItem) => (
                     <div
                       key={subItem.name}
-                      className="p-2 text-sm rounded-lg hover:bg-gray-100/20 cursor-pointer"
+                      className="p-2 text-sm rounded hover:bg-gray-100/20 cursor-pointer"
                     >
                       {subItem.name}
                     </div>
@@ -180,10 +185,10 @@ function MemberDashboard() {
 
       {/* Main Content */}
       <main className={`transition-all duration-300 ${isDesktop ? 'ml-64' : ''}`}>
-        <nav className={`p-4 border-b ${
+        <nav className={`p-4 ${
           darkMode 
-            ? 'bg-gray-800/80 backdrop-blur-sm border-gray-700' 
-            : 'bg-white/80 backdrop-blur-sm border-gray-200'
+            ? 'bg-gray-800/80 backdrop-blur-sm' 
+            : 'bg-white/80 backdrop-blur-sm'
         }`}>
           <div className="flex items-center justify-between">
             <motion.button
@@ -210,14 +215,14 @@ function MemberDashboard() {
               </h1>
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className={`px-3 py-1 rounded-full ${
+                className={`px-3 py-1 rounded ${
                   darkMode 
                     ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' 
                     : 'bg-gradient-to-r from-blue-400 to-purple-400 text-white'
                 }`}
               >
                 <span className="font-mono text-sm tracking-wide">
-                  ID: {memberData?.id}
+                  {memberData?.id}
                 </span>
               </motion.div>
             </motion.div>
@@ -250,7 +255,7 @@ function MemberDashboard() {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className={`absolute right-0 mt-2 w-48 rounded-xl shadow-xl ${
+                    className={`absolute right-0 mt-2 w-48 rounded shadow-xl ${
                       darkMode 
                         ? 'bg-gray-800 border border-gray-700' 
                         : 'bg-white border border-gray-200'
@@ -284,7 +289,7 @@ function MemberDashboard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className={`p-6 rounded-2xl shadow-lg transition-all ${
+                className={`p-6 rounded shadow-lg transition-all ${
                   darkMode 
                     ? 'bg-gray-800 hover:bg-gray-700/80' 
                     : 'bg-white hover:bg-gray-50'
@@ -313,7 +318,7 @@ function MemberDashboard() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className={`mt-8 p-6 rounded-2xl shadow-lg ${
+            className={`mt-8 p-6 rounded shadow-lg ${
               darkMode ? 'bg-gray-800' : 'bg-white'
             }`}
           >
@@ -328,7 +333,7 @@ function MemberDashboard() {
                   key={item}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className={`p-4 rounded-xl ${
+                  className={`p-4 rounded ${
                     darkMode ? 'bg-gray-700/50' : 'bg-gray-50'
                   }`}
                 >
@@ -336,7 +341,7 @@ function MemberDashboard() {
                     <div className={`h-2 w-2 rounded-full ${
                       darkMode ? 'bg-green-400' : 'bg-green-500'
                     }`} />
-                    <div className={`h-4 w-1/3 rounded-md ${
+                    <div className={`h-4 w-1/3 rounded ${
                       darkMode ? 'bg-gray-600' : 'bg-gray-200'
                     }`} />
                   </div>
