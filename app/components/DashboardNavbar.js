@@ -261,38 +261,38 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
 
               {/* Notification List */}
               <ul className="max-h-96 overflow-y-auto divide-y divide-gray-700">
-  {notifications.length > 0 ? (
-    notifications.map((notification) => (
-      <li
-        key={`${notification.id}-${notification.created_at}`}
-        className={`p-4 hover:bg-gray-700 cursor-pointer flex justify-between items-center transition-all ${
-          notification.status === 'Unread' ? 'bg-gray-800' : 'bg-gray-900'
-        }`}
-        onClick={() => handleNotificationClick(notification.id)}
-      >
-        <div>
-          <p
-            className={`text-sm font-medium ${
-              notification.status === 'Unread' ? 'text-white' : 'text-gray-400'
-            }`}
-          >
-            {notification.title}
-          </p>
-          <span className="text-xs text-gray-500 mt-1">
-            {formatRelativeTime(notification.created_at)}
-          </span>
-        </div>
-        {notification.status === 'Unread' && (
-          <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-        )}
-      </li>
-    ))
-  ) : (
-    <li className="p-4 text-center text-gray-500 text-sm">
-      You have no notifications
-    </li>
-  )}
-</ul>
+                {notifications.length > 0 ? (
+                  notifications.map((notification) => (
+                    <li
+                      key={`${notification.id}-${notification.created_at}`}
+                      className={`p-4 hover:bg-gray-700 cursor-pointer flex justify-between items-center transition-all ${
+                        notification.status === 'Unread' ? 'bg-gray-800' : 'bg-gray-900'
+                      }`}
+                      onClick={() => handleNotificationClick(notification.id)}
+                    >
+                      <div>
+                        <p
+                          className={`text-sm font-medium ${
+                            notification.status === 'Unread' ? 'text-white' : 'text-gray-400'
+                          }`}
+                        >
+                          {notification.title}
+                        </p>
+                        <span className="text-xs text-gray-500 mt-1">
+                          {formatRelativeTime(notification.created_at)}
+                        </span>
+                      </div>
+                      {notification.status === 'Unread' && (
+                        <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                      )}
+                    </li>
+                  ))
+                ) : (
+                  <li className="p-4 text-center text-gray-500 text-sm">
+                    You have no notifications
+                  </li>
+                )}
+              </ul>
 
               {/* Footer */}
               <div className="p-3 bg-gray-800 text-center">

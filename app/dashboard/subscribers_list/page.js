@@ -258,4 +258,4 @@ function SubscribersList() {
   );
 }
 
-export default withAuth(SubscribersList);
+export default withAuth(SubscribersList, 'admin'); // Pass 'admin' as the required role

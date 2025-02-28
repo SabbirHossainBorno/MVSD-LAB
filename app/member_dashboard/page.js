@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { ToastContainer, toast } from 'react-toastify';
@@ -46,7 +46,7 @@ const menuItems = [
   }
 ];
 
-function MemberDashboard() {
+const MemberDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -56,6 +56,7 @@ function MemberDashboard() {
   const [isDesktop, setIsDesktop] = useState(true); // Default to desktop to match server render
   const [mounted, setMounted] = useState(false); // Track client-side mount
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     setMounted(true); // Mark client-side mount
@@ -64,7 +65,7 @@ function MemberDashboard() {
       setIsDesktop(desktop);
       setSidebarOpen(desktop);
     };
-    
+
     checkDesktop();
     window.addEventListener('resize', checkDesktop);
     return () => window.removeEventListener('resize', checkDesktop);
@@ -83,9 +84,14 @@ function MemberDashboard() {
         router.push('/login');
       }
     };
-
     fetchData();
   }, [router]);
+
+  useEffect(() => {
+    if (searchParams.get('accessDenied')) {
+      toast.error('Access Denied! You do not have permission to view this page.');
+    }
+  }, [searchParams]);
 
   const handleLogout = async () => {
     try {

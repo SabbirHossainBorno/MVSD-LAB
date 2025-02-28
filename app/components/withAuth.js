@@ -13,6 +13,7 @@ const withAuth = (WrappedComponent, requiredRole) => {
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userRole, setUserRole] = useState(null);
+    const [unauthorized, setUnauthorized] = useState(false); // State to handle unauthorized access
     const router = useRouter();
     const hasShownUnauthorizedToast = useRef(false);
 
@@ -82,14 +83,20 @@ const withAuth = (WrappedComponent, requiredRole) => {
       }
     }, [router.query]);
 
-    if (loading) return <LoadingSpinner />;
+    useEffect(() => {
+      if (isAuthenticated && requiredRole && userRole !== requiredRole) {
+        setUnauthorized(true); // Set unauthorized state
+      }
+    }, [isAuthenticated, requiredRole, userRole]);
 
-    // Check if the user has the required role
-    if (isAuthenticated && requiredRole && userRole !== requiredRole) {
-      toast.error('Access Denied! You do not have permission to view this page.');
-      router.push('/member_dashboard'); // Redirect to member dashboard
-      return null;
-    }
+    useEffect(() => {
+      if (unauthorized) {
+        toast.error('Access Denied! You do not have permission to view this page.');
+        router.push('/member_dashboard?accessDenied=true'); // Redirect to member dashboard with query parameter
+      }
+    }, [unauthorized, router]);
+
+    if (loading) return <LoadingSpinner />;
 
     return <WrappedComponent {...props} isAuthenticated={isAuthenticated} />;
   };
