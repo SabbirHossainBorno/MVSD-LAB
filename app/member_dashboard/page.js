@@ -9,7 +9,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import withAuth from '../components/withAuth';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { FaSun, FaMoon } from 'react-icons/fa';
+import { FiChevronDown, FiChevronUp, FiSettings, FiLogOut } from 'react-icons/fi';
 
 const sidebarVariants = {
   open: { x: 0 },
@@ -213,86 +214,245 @@ const MemberDashboard = () => {
             : 'bg-white/80 backdrop-blur-sm'
         }`}>
           <div className="flex items-center justify-between">
-            <motion.button
-              onClick={() => setDarkMode(!darkMode)}
-              whileHover={{ scale: 1.1 }}
-              className={`p-2 rounded-full shadow-lg ${
-                darkMode 
-                  ? 'bg-gray-700 text-yellow-400' 
-                  : 'bg-gray-100 text-gray-600'
-              }`}
-            >
-              {darkMode ? '🌞' : '🌙'}
-            </motion.button>
-
+         {/* Toggle switch component */}
             <motion.div 
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col items-center space-y-1"
+              className={`relative w-14 h-8 rounded-full p-1 cursor-pointer ${
+                darkMode 
+                  ? 'bg-gradient-to-r from-gray-800 to-gray-700' 
+                  : 'bg-gradient-to-r from-blue-200 to-blue-100'
+              }`}
+              onClick={() => setDarkMode(!darkMode)}
+              whileHover={{ scale: 1.05 }}
             >
-              <h1 className={`text-xl font-bold ${
-                darkMode ? 'text-white' : 'text-gray-800'
-              }`}>
-                MEMBER DASHBOARD PANEL
-              </h1>
-
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                className={`px-3 py-1 rounded ${
+                className={`absolute top-1 w-6 h-6 rounded-full flex items-center justify-center shadow-lg ${
                   darkMode 
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' 
-                    : 'bg-gradient-to-r from-blue-400 to-purple-400 text-white'
+                    ? 'bg-gray-600 text-yellow-400' 
+                    : 'bg-white text-blue-600'
                 }`}
+                animate={{
+                  x: darkMode ? 26 : 0,
+                  transition: { type: 'spring', stiffness: 300, damping: 20 }
+                }}
+                whileTap={{ scale: 0.9 }}
               >
-                <span className="font-mono text-sm tracking-wide">
-                  {memberData?.id}
-                </span>
+                {darkMode ? (
+                  <FaSun className="w-4 h-4 transition-opacity duration-200" />
+                ) : (
+                  <FaMoon className="w-4 h-4 transition-opacity duration-200" />
+                )}
               </motion.div>
+              
+              {/* Optional background icons */}
+              <div className="flex justify-between w-full h-full">
+                <FaMoon className={`w-4 h-4 ${darkMode ? 'text-gray-500' : 'text-transparent'}`} />
+                <FaSun className={`w-4 h-4 ${!darkMode ? 'text-gray-500' : 'text-transparent'}`} />
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: -20, rotateX: -30 }}
+              animate={{ opacity: 1, y: 0, rotateX: 0 }}
+              transition={{ duration: 0.6, type: 'spring' }}
+              className="flex flex-col items-center gap-3 relative group"
+            >
+              {/* Animated Background Effect */}
+              <div className={`absolute -inset-2 rounded-xl blur opacity-20 group-hover:opacity-30 transition-opacity ${
+                darkMode 
+                  ? 'bg-gradient-to-r from-blue-500/40 to-purple-500/40' 
+                  : 'bg-gradient-to-r from-blue-300/40 to-purple-300/40'
+              }`}></div>
+
+              {/* Modern Title with Gradient Text */}
+              <h1 className={`text-center font-extrabold bg-clip-text ${
+                darkMode 
+                  ? 'text-transparent bg-gradient-to-r from-blue-400 to-purple-300' 
+                  : 'text-transparent bg-gradient-to-r from-blue-600 to-purple-600'
+              }`}
+              style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)' }}>
+                MEMBER<span className="sr-only"> </span>
+                <span className="font-light mx-2">|</span>DASHBOARD
+              </h1>
             </motion.div>
 
             <div className="relative">
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="flex items-center space-x-2 cursor-pointer"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="flex items-center space-x-3 cursor-pointer group"
                 onClick={() => setProfileOpen(!profileOpen)}
-                onBlur={() => setProfileOpen(false)}
                 tabIndex={0}
               >
-                <Image
-                  src={memberData?.photo || '/default-avatar.jpg'}
-                  alt="Profile"
-                  width={48}
-                  height={48}
-                  className="rounded-full border-2 border-blue-500"
-                />
-                <span className={`font-medium ${
-                  darkMode ? 'text-gray-100' : 'text-gray-800'
-                }`}>
-                  {memberData?.first_name}
-                </span>
+                <div className="relative">
+                  <Image
+                    src={memberData?.photo || '/default-avatar.jpg'}
+                    alt="Profile"
+                    width={52}
+                    height={52}
+                    className={`rounded border-3 transition-all duration-300 ${
+                      darkMode 
+                        ? 'border-purple-400/30 hover:border-purple-400/60' 
+                        : 'border-blue-100 hover:border-blue-200'
+                    }`}
+                  />
+                  <div className={`absolute inset-0 rounded shadow-lg ${
+                    darkMode ? 'shadow-purple-500/10' : 'shadow-blue-500/10'
+                  }`}/>
+                </div>
+                
+                <div className="flex flex-col items-start">
+                  <span className={`font-semibold text-lg transition-colors ${
+                    darkMode ? 'text-gray-100' : 'text-gray-800'
+                  }`}>
+                    {memberData?.first_name}
+                  </span>
+                  <span className={`text-sm ${
+                    darkMode ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
+                    {memberData?.type}
+                  </span>
+                </div>
+                
+                <motion.div
+                  animate={{ rotate: profileOpen ? 180 : 0 }}
+                  className={`text-xl ${
+                    darkMode ? 'text-purple-300' : 'text-blue-500'
+                  }`}
+                >
+                  <FiChevronDown />
+                </motion.div>
               </motion.div>
 
               <AnimatePresence>
                 {profileOpen && (
                   <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className={`absolute right-0 mt-2 w-48 rounded shadow-xl ${
+                    initial={{ opacity: 0, y: -15, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -15, scale: 0.95 }}
+                    className={`absolute right-0 mt-3 max-w-[90vw] min-w-[16rem] rounded shadow-2xl backdrop-blur-lg ${
                       darkMode 
-                        ? 'bg-gray-800 border border-gray-700' 
-                        : 'bg-white border border-gray-200'
+                        ? 'bg-gray-800/95 border border-gray-700/60' 
+                        : 'bg-white/95 border border-gray-200/60'
                     }`}
+                    style={{
+                      boxShadow: darkMode 
+                        ? '0 8px 32px rgba(0,0,0,0.28)' 
+                        : '0 8px 32px rgba(0,0,0,0.08)'
+                    }}
                   >
-                    <button className="w-full px-4 py-3 text-left hover:bg-gray-100/20 text-gray-700">
-                      Settings
-                    </button>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full px-4 py-3 text-left hover:bg-red-500/10 text-red-500"
+                    {/* Profile Header */}
+                    <div className={`p-4 border-b ${
+                      darkMode ? 'border-gray-700/60' : 'border-gray-200/60'
+                    }`}>
+                      <div className="flex items-center space-x-3">
+                        <Image
+                          src={memberData?.photo || '/default-avatar.jpg'}
+                          alt="Profile"
+                          width={44}
+                          height={44}
+                          className="rounded border-2 border-white/20 flex-shrink-0"
+                        />
+                        <div className="min-w-0"> {/* Added min-w-0 for text truncation */}
+                          <p className={`font-medium truncate ${
+                            darkMode ? 'text-gray-100' : 'text-gray-800'
+                          }`}>
+                            {memberData?.first_name} {memberData?.last_name}
+                          </p>
+                          <p className={`text-sm break-words overflow-wrap-anywhere ${
+                            darkMode ? 'text-gray-400' : 'text-gray-500'
+                          }`}>
+                            {memberData?.email}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Menu Items */}
+                    <div className="p-2 space-y-1">
+                      <motion.button
+                        whileHover={{ x: 5 }}
+                        className={`w-full flex items-center space-x-3 px-4 py-3 rounded transition-colors ${
+                          darkMode 
+                            ? 'hover:bg-gray-700/50' 
+                            : 'hover:bg-gray-100/50'
+                        }`}
+                      >
+                        <FiSettings className={`text-lg ${
+                          darkMode ? 'text-purple-400' : 'text-blue-500'
+                        }`}/>
+                        <span className={darkMode ? 'text-gray-200' : 'text-gray-700'}>
+                          Account Settings
+                        </span>
+                      </motion.button>
+
+                      <motion.button
+                        whileHover={{ x: 5 }}
+                        onClick={handleLogout}
+                        className={`w-full flex items-center space-x-3 px-4 py-3 rounded transition-colors ${
+                          darkMode 
+                            ? 'hover:bg-red-500/20' 
+                            : 'hover:bg-red-100/50'
+                        }`}
+                      >
+                        <FiLogOut className={`text-lg ${
+                          darkMode ? 'text-red-400' : 'text-red-500'
+                        }`}/>
+                        <span className={darkMode ? 'text-red-400' : 'text-red-500'}>
+                          Sign Out
+                        </span>
+                      </motion.button>
+                    </div>
+
+                    {/* Interactive ID Badge */}
+                    <motion.div
+                      whileHover={{ scale: 1.05, boxShadow: darkMode 
+                        ? '0 4px 24px -2px rgba(99, 102, 241, 0.3)' 
+                        : '0 4px 24px -2px rgba(79, 70, 229, 0.2)' }}
+                      whileTap={{ scale: 0.98 }}
+                      className={`relative px-4 py-2 rounded border ${
+                        darkMode 
+                          ? 'border-gray-700/60 bg-gray-800/80 backdrop-blur-lg' 
+                          : 'border-gray-200/60 bg-white/90 backdrop-blur-lg'
+                      }`}
                     >
-                      Logout
-                    </button>
+                      <div className="flex items-center gap-2">
+                        {/* Animated Icon */}
+                        <motion.div 
+                          animate={{ rotate: [0, 15, -15, 0] }} 
+                          transition={{ repeat: Infinity, duration: 4 }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className={`h-5 w-5 ${
+                              darkMode ? 'text-purple-400' : 'text-purple-600'
+                            }`}
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                          >
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                          </svg>
+                        </motion.div>
+
+                        {/* ID Text with Gradient Underline */}
+                        <div className="relative">
+                          <span className={`font-mono text-sm tracking-wider ${
+                            darkMode ? 'text-gray-200' : 'text-gray-800'
+                          }`}>
+                            {memberData?.id}
+                          </span>
+                          <div className={`absolute -bottom-1 left-0 w-full h-[2px] bg-gradient-to-r ${
+                            darkMode 
+                              ? 'from-blue-400/60 to-purple-400/60' 
+                              : 'from-blue-500/60 to-purple-500/60'
+                          }`}></div>
+                        </div>
+                      </div>
+
+                      {/* Animated Background Pattern */}
+                      <div className={`absolute inset-0 rounded opacity-10 ${
+                        darkMode ? 'bg-[url("/pattern-dark.svg")]' : 'bg-[url("/pattern-light.svg")]'
+                      }`}></div>
+                    </motion.div>
                   </motion.div>
                 )}
               </AnimatePresence>
