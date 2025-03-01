@@ -300,37 +300,34 @@ const MemberDashboard = () => {
 
     {/* Animated Status Dot */}
     {memberData?.status === 'Active' && (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: [0.4, 1, 0.4], scale: [0.8, 1.2, 0.8] }}
-        transition={{ duration: 1.5, repeat: Infinity }}
-        className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 bg-green-400"
-      />
-    )}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ 
+            opacity: [0.4, 1, 0.4],
+            scale: [0.8, 1.2, 0.8]
+          }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+          className={`absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 ${
+            darkMode ? 'border-gray-800' : 'border-white'
+          } ${memberData?.status === 'Active' ? 'bg-green-400' : 'bg-Green-400'}`}
+        />
+      )}
   </div>
 
   {/* Modern Desktop Profile Info */}
   {isDesktop && (
     <div className="transition-all flex flex-col leading-tight">
       {/* ID */}
-      <span className="font-mono font-bold text-lg bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent">
+      <span className="font-mono font-bold text-md bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent">
         {memberData?.id}
       </span>
       
       {/* Type (Below ID) */}
-      <span className="text-xs font-semibold px-2 py-1 rounded-full bg-purple-100 text-purple-700">
+      <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-purple-100 text-purple-700">
         {memberData?.type}
       </span>
     </div>
   )}
-
-  {/* Dropdown Icon */}
-  <motion.div
-    animate={{ rotate: profileOpen ? 180 : 0 }}
-    className="text-xl text-blue-500"
-  >
-    <FiChevronDown />
-  </motion.div>
 </motion.div>
 
 
