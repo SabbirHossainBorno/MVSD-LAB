@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import withAuth from '../components/withAuth';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 
 const sidebarVariants = {
   open: { x: 0 },
@@ -52,6 +53,7 @@ const MemberDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState('dashboard');
+  const [openSubMenu, setOpenSubMenu] = useState(null);
   const [memberData, setMemberData] = useState(null);
   const [isDesktop, setIsDesktop] = useState(true); // Default to desktop to match server render
   const [mounted, setMounted] = useState(false); // Track client-side mount
@@ -104,6 +106,10 @@ const MemberDashboard = () => {
     }
   };
 
+  const toggleSubMenu = (menuName) => {
+    setOpenSubMenu(openSubMenu === menuName ? null : menuName);
+  };
+
   if (!mounted || loading) return <LoadingSpinner />;
 
   return (
@@ -114,7 +120,7 @@ const MemberDashboard = () => {
       {!isDesktop && (
         <motion.button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className={`fixed z-50 top-6 right-6 p-2 lg:hidden ${
+          className={`fixed z-50 top-6 ${sidebarOpen ? 'right-6' : 'left-6'} p-2 lg:hidden ${
             darkMode ? 'text-white' : 'text-gray-800'
           }`}
           animate={sidebarOpen ? 'open' : 'closed'}
@@ -140,53 +146,63 @@ const MemberDashboard = () => {
             : 'bg-white/95 backdrop-blur-md text-gray-800'
         }`}
       >
-      <div className="p-4 flex justify-center items-center">
-        <img 
-          src={darkMode ? "/images/memberDashboardSidebar_logo_dark.svg" : "/images/memberDashboardSidebar_logo_light.svg"} 
-          alt="MVSD Lab Logo" 
-          className="h-14 w-auto"
-        />
-      </div>
-
-
+        <div className="p-4 flex justify-center items-center">
+          <img 
+            src={darkMode ? "/images/memberDashboardSidebar_logo_dark.svg" : "/images/memberDashboardSidebar_logo_light.svg"} 
+            alt="MVSD Lab Logo" 
+            className="h-14 w-auto"
+          />
+        </div>
 
         <nav className="p-4 space-y-2">
-          {menuItems.map((item) => (
-            <div key={item.name}>
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                className={`flex items-center p-3 rounded cursor-pointer transition-all ${
-                  activeMenu === item.link 
-                    ? 'bg-blue-500/10 text-blue-600' 
-                    : 'hover:bg-gray-100/20'
-                }`}
-                onClick={() => {
-                  item.link && setActiveMenu(item.link);
-                  item.subItems.length === 0 && setSidebarOpen(false);
-                }}
-              >
-                <span className="mr-3 text-xl">{item.icon}</span>
-                <span className="font-medium">{item.name}</span>
-              </motion.div>
+        {menuItems.map((item) => (
+          <div key={item.name}>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              className={`flex items-center p-3 rounded cursor-pointer transition-all ${
+                activeMenu === item.link 
+                  ? 'bg-blue-500/10 text-blue-600' 
+                  : 'hover:bg-gray-100/20'
+              }`}
+              onClick={() => {
+                item.link && setActiveMenu(item.link);
+                item.subItems.length === 0 && setSidebarOpen(false);
+                toggleSubMenu(item.name);
+              }}
+            >
+              <span className="mr-3 text-xl">{item.icon}</span>
+              <span className="font-medium flex-1">{item.name}</span>
               {item.subItems.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="ml-8 mt-1 space-y-1"
+                <motion.span
+                  initial={{ rotate: 0 }}
+                  animate={{ rotate: openSubMenu === item.name ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="text-lg"
                 >
-                  {item.subItems.map((subItem) => (
-                    <div
-                      key={subItem.name}
-                      className="p-2 text-sm rounded hover:bg-gray-100/20 cursor-pointer"
-                    >
-                      {subItem.name}
-                    </div>
-                  ))}
-                </motion.div>
+                  {openSubMenu === item.name ? <FiChevronUp /> : <FiChevronDown />}
+                </motion.span>
               )}
-            </div>
-          ))}
-        </nav>
+            </motion.div>
+            {item.subItems.length > 0 && openSubMenu === item.name && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="ml-8 mt-1 space-y-1"
+              >
+                {item.subItems.map((subItem) => (
+                  <div
+                    key={subItem.name}
+                    className="p-2 text-sm rounded hover:bg-gray-100/20 cursor-pointer"
+                    onClick={() => setActiveMenu(subItem.link)}
+                  >
+                    {subItem.name}
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </div>
+        ))}
+      </nav>
       </motion.aside>
 
       {/* Main Content */}
@@ -219,6 +235,7 @@ const MemberDashboard = () => {
               }`}>
                 MEMBER DASHBOARD PANEL
               </h1>
+
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className={`px-3 py-1 rounded ${
@@ -267,7 +284,7 @@ const MemberDashboard = () => {
                         : 'bg-white border border-gray-200'
                     }`}
                   >
-                    <button className="w-full px-4 py-3 text-left hover:bg-gray-100/20">
+                    <button className="w-full px-4 py-3 text-left hover:bg-gray-100/20 text-gray-700">
                       Settings
                     </button>
                     <button

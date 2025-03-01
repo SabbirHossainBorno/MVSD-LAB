@@ -8,8 +8,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Image from 'next/image';
 import LoadingSpinner from '../components/LoadingSpinner';
+import withAuth from './withAuth';
 
-export default function DashboardNavbar({ toggleDashboardSidebar }) {
+function DashboardNavbar({ toggleDashboardSidebar }) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -374,3 +375,4 @@ export default function DashboardNavbar({ toggleDashboardSidebar }) {
     </>
   );
 }
+export default withAuth(DashboardNavbar, 'admin'); // Specify required role here
