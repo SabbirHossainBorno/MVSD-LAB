@@ -140,6 +140,25 @@ const MemberDashboard = () => {
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <ToastContainer position="top-right" autoClose={3000} />
 
+      {/* Mobile Menu Toggle */}
+      {!isDesktop && (
+        <AnimatePresence>
+          {!sidebarOpen && (
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSidebarOpen(true)}
+              className={`fixed z-40 top-6 left-6 p-2 lg:hidden ${
+                darkMode ? 'text-gray-200' : 'text-gray-800'
+              }`}
+            >
+              <FiMenu className="w-6 h-6" />
+            </motion.button>
+          )}
+        </AnimatePresence>
+      )}
+
       {/* Sidebar */}
       <motion.aside
         initial={isDesktop ? "open" : "closed"}
@@ -168,7 +187,7 @@ const MemberDashboard = () => {
         </div>
 
         {/* Navigation Menu */}
-        <nav className="p-4 space-y-1">
+        <nav className="p-4 space-y-2">
           {menuItems.map((item) => (
             <div key={item.name}>
               <motion.div
@@ -198,29 +217,36 @@ const MemberDashboard = () => {
               {/* Submenu Items */}
               {item.subItems.length > 0 && openSubMenu === item.name && (
                 <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  className={`ml-8 space-y-1 ${darkMode ? 'bg-gray-700/50 text-gray-300' : 'bg-gray-100/50 text-gray-700'}`}
-                >
-                  {item.subItems.map((subItem) => (
-                    <div
-                      key={subItem.name}
-                      className={`p-2 text-sm rounded-lg ${darkMode ? 'hover:bg-gray-700/50' : 'hover:bg-gray-100/50'}`}
-                      onClick={() => setActiveMenu(subItem.link)}
-                    >
-                      {subItem.name}
-                    </div>
-                  ))}
-                </motion.div>
-              )}
-            </div>
-          ))}
-        </nav>
-      </motion.aside>
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className={`ml-6 mt-2 pl-4 border-l-2 ${
+                  darkMode 
+                    ? 'border-gray-600/50' 
+                    : 'border-gray-300/50'
+                }`}
+              >
+                {item.subItems.map((subItem) => (
+                  <div
+                    key={subItem.name}
+                    className={`p-2.5 text-sm rounded-lg mb-1 ${
+                      darkMode 
+                        ? 'hover:bg-gray-700/30 text-gray-300' 
+                        : 'hover:bg-gray-100/70 text-gray-700'
+                    }`}
+                    onClick={() => setActiveMenu(subItem.link)}
+                  >
+                    {subItem.name}
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </div>
+        ))}
+      </nav>
+    </motion.aside>
 
-      {/* Main Content Area */}
+      {/* Main Content */}
       <main className={`transition-all duration-300 ${isDesktop ? 'ml-64' : ''}`}>
-        {/* Top Navigation Bar */}
         <nav className={`p-4 border-b ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
           <div className="flex items-center justify-between">
             {/* Dark Mode Toggle (Desktop only) */}
@@ -254,55 +280,59 @@ const MemberDashboard = () => {
               </h1>
             </div>
 
-            {/* Profile Section */}
+            {/* Modern Profile Section */}
             <div className="relative">
-              <motion.div
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="flex items-center space-x-3 cursor-pointer group"
-                onClick={() => setProfileOpen(!profileOpen)}
-                tabIndex={0}
-              >
-                {/* Profile Image */}
-                <div className="relative">
-                  <Image
-                    src={memberData?.photo || '/default-avatar.jpg'}
-                    alt="Profile"
-                    width={52}
-                    height={52}
-                    className={`rounded border-3 transition-all duration-300 ${
-                      darkMode 
-                        ? 'border-purple-400/30 hover:border-purple-400/60' 
-                        : 'border-blue-100 hover:border-blue-200'
-                    }`}
-                  />
-                  <div className={`absolute inset-0 rounded shadow-lg ${
-                    darkMode ? 'shadow-purple-500/10' : 'shadow-blue-500/10'
-                  }`}/>
-                </div>
+            <motion.div
+  whileHover={{ scale: 1.03 }}
+  whileTap={{ scale: 0.97 }}
+  className="flex items-center space-x-4 cursor-pointer group"
+  onClick={() => setProfileOpen(!profileOpen)}
+>
+  {/* Profile Image with Status Indicator */}
+  <div className="relative w-12 h-12"> {/* Ensures fixed size */}
+    <Image
+      src={memberData?.photo || '/default-avatar.jpg'}
+      alt="Profile"
+      width={48}
+      height={48}
+      className="w-full h-full rounded-full border-2 object-cover"
+    />
 
-                {/* Desktop Name and Type */}
-                {isDesktop && (
-                  <div className="text-left">
-                    <p className={`font-medium ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>
-                      {memberData?.first_name} {memberData?.last_name}
-                    </p>
-                    <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                      {memberData?.type}
-                    </p>
-                  </div>
-                )}
+    {/* Animated Status Dot */}
+    {memberData?.status === 'Active' && (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0.4, 1, 0.4], scale: [0.8, 1.2, 0.8] }}
+        transition={{ duration: 1.5, repeat: Infinity }}
+        className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 bg-green-400"
+      />
+    )}
+  </div>
 
-                {/* Dropdown Icon */}
-                <motion.div
-                  animate={{ rotate: profileOpen ? 180 : 0 }}
-                  className={`text-xl ${
-                    darkMode ? 'text-purple-300' : 'text-blue-500'
-                  }`}
-                >
-                  <FiChevronDown />
-                </motion.div>
-              </motion.div>
+  {/* Modern Desktop Profile Info */}
+  {isDesktop && (
+    <div className="transition-all flex flex-col leading-tight">
+      {/* ID */}
+      <span className="font-mono font-bold text-lg bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent">
+        {memberData?.id}
+      </span>
+      
+      {/* Type (Below ID) */}
+      <span className="text-xs font-semibold px-2 py-1 rounded-full bg-purple-100 text-purple-700">
+        {memberData?.type}
+      </span>
+    </div>
+  )}
+
+  {/* Dropdown Icon */}
+  <motion.div
+    animate={{ rotate: profileOpen ? 180 : 0 }}
+    className="text-xl text-blue-500"
+  >
+    <FiChevronDown />
+  </motion.div>
+</motion.div>
+
 
               {/* Profile Dropdown Menu */}
               <AnimatePresence>
@@ -452,11 +482,6 @@ const MemberDashboard = () => {
                             }`}>
                               {memberData?.id}
                             </span>
-                            <div className={`absolute -bottom-1 left-0 w-full h-[2px] bg-gradient-to-r ${
-                              darkMode 
-                                ? 'from-blue-400/60 to-purple-400/60' 
-                                : 'from-blue-500/60 to-purple-500/60'
-                            }`}></div>
                           </div>
                         </div>
                       </motion.div>
