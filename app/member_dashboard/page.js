@@ -175,7 +175,7 @@ const MemberDashboard = () => {
           <img 
             src={darkMode ? "/images/memberDashboardSidebar_logo_dark.svg" : "/images/memberDashboardSidebar_logo_light.svg"} 
             alt="Dashboard Logo"
-            className="h-12 w-auto"
+            className="h-14 w-auto"
           />
           {/* Mobile close button - Only inside sidebar */}
           {!isDesktop && (
@@ -243,6 +243,26 @@ const MemberDashboard = () => {
           </div>
         ))}
       </nav>
+      {/* Fixed Footer */}
+  <div className={`p-4 text-center border-t ${
+    darkMode 
+      ? 'border-gray-700 text-gray-400' 
+      : 'border-gray-200 text-gray-500'
+  }`}>
+    <p className="text-xs">
+      ©{" "}
+      <a 
+        href="https://www.mvsdlab.com" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className={`hover:underline ${
+          darkMode ? 'text-gray-300' : 'text-gray-600'
+        }`}
+      >
+        MVSD LAB
+      </a>, {new Date().getFullYear()}, All Rights Reserved.
+    </p>
+  </div>
     </motion.aside>
 
       {/* Main Content */}
@@ -283,52 +303,52 @@ const MemberDashboard = () => {
             {/* Modern Profile Section */}
             <div className="relative">
             <motion.div
-  whileHover={{ scale: 1.03 }}
-  whileTap={{ scale: 0.97 }}
-  className="flex items-center space-x-4 cursor-pointer group"
-  onClick={() => setProfileOpen(!profileOpen)}
->
-  {/* Profile Image with Status Indicator */}
-  <div className="relative w-12 h-12"> {/* Ensures fixed size */}
-    <Image
-      src={memberData?.photo || '/default-avatar.jpg'}
-      alt="Profile"
-      width={48}
-      height={48}
-      className="w-full h-full rounded-full border-2 object-cover"
-    />
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="flex items-center space-x-4 cursor-pointer group"
+                onClick={() => setProfileOpen(!profileOpen)}
+              >
+                {/* Profile Image with Status Indicator */}
+                <div className="relative w-12 h-12"> {/* Ensures fixed size */}
+                  <Image
+                    src={memberData?.photo || '/default-avatar.jpg'}
+                    alt="Profile"
+                    width={48}
+                    height={48}
+                    className="w-full h-full rounded-full border-2 object-cover"
+                  />
 
-    {/* Animated Status Dot */}
-    {memberData?.status === 'Active' && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ 
-            opacity: [0.4, 1, 0.4],
-            scale: [0.8, 1.2, 0.8]
-          }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className={`absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 ${
-            darkMode ? 'border-gray-800' : 'border-white'
-          } ${memberData?.status === 'Active' ? 'bg-green-400' : 'bg-Green-400'}`}
-        />
-      )}
-  </div>
+                  {/* Animated Status Dot */}
+                  {memberData?.status === 'Active' && (
+                      <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ 
+                              opacity: [0.4, 1, 0.4],
+                              scale: [0.8, 1.2, 0.8]
+                          }}
+                          transition={{ duration: 1.5, repeat: Infinity }}
+                          className={`absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 ${
+                              darkMode ? 'border-gray-800' : 'border-white'
+                          } bg-green-400`}
+                      />
+                  )}
+                </div>
 
-  {/* Modern Desktop Profile Info */}
-  {isDesktop && (
-    <div className="transition-all flex flex-col leading-tight">
-      {/* ID */}
-      <span className="font-mono font-bold text-md bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent">
-        {memberData?.id}
-      </span>
-      
-      {/* Type (Below ID) */}
-      <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-purple-100 text-purple-700">
-        {memberData?.type}
-      </span>
-    </div>
-  )}
-</motion.div>
+                {/* Modern Desktop Profile Info */}
+                {isDesktop && (
+                  <div className="transition-all flex flex-col leading-tight">
+                    {/* ID */}
+                    <span className="font-mono font-bold text-md bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent">
+                      {memberData?.id}
+                    </span>
+                    
+                    {/* Type (Below ID) */}
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-purple-100 text-purple-700">
+                      {memberData?.type}
+                    </span>
+                  </div>
+                )}
+              </motion.div>
 
 
               {/* Profile Dropdown Menu */}
