@@ -10,6 +10,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import withAuth from '../components/withAuth';
 import LoadingSpinner from '../components/LoadingSpinner';
+import AddPublication from './add_publication/page';
 import { 
   FiHome, FiFileText, FiUsers, FiSettings, FiLogOut, FiChevronDown, 
   FiChevronUp, FiBox, FiDatabase, FiStar, FiClock, FiMenu, FiX 
@@ -41,7 +42,7 @@ const menuItems = [
     name: 'Publications', 
     icon: <LiaProjectDiagramSolid className="w-5 h-5" />,
     subItems: [
-      { name: 'Add Publication', link: 'add_publications' },
+      { name: 'Add Publication', link: 'add_publication' }, // Updated link
       { name: 'Publication List', link: 'list_publication' }
     ]
   }
@@ -233,19 +234,23 @@ const MemberDashboard = () => {
                       : 'border-gray-300/50'
                   }`}
                 >
-                  {item.subItems.map((subItem) => (
-                    <div
-                      key={subItem.name}
-                      className={`p-2.5 text-sm rounded mb-1 ${
-                        darkMode 
-                          ? 'hover:bg-gray-700/30 text-gray-300' 
-                          : 'hover:bg-gray-100/70 text-gray-700'
-                      }`}
-                      onClick={() => setActiveMenu(subItem.link)}
-                    >
-                      {subItem.name}
-                    </div>
-                  ))}
+                  // In the navigation menu where subItems are mapped:
+{item.subItems.map((subItem) => (
+  <div
+    key={subItem.name}
+    className={`p-2.5 text-sm rounded mb-1 ${
+      darkMode 
+        ? 'hover:bg-gray-700/30 text-gray-300' 
+        : 'hover:bg-gray-100/70 text-gray-700'
+    }`}
+    onClick={() => {
+      setActiveMenu(subItem.link);
+      setSidebarOpen(false); // Close sidebar on mobile
+    }}
+  >
+    {subItem.name}
+  </div>
+))}
                 </motion.div>
               )}
             </div>
@@ -521,7 +526,9 @@ const MemberDashboard = () => {
         </nav>
 
         {/* Dashboard Content */}
-        <div className="p-6">
+        <div className="p-6 h-full">
+        {activeMenu === 'dashboard' && (
+    <>
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
@@ -608,7 +615,20 @@ const MemberDashboard = () => {
               ))}
             </div>
           </motion.div>
+          </>
+          )}
+
+          {/* Add Publication Page */}
+          {activeMenu === 'add_publication' && (
+            <AddPublication darkMode={darkMode} />
+          )}
+        
+          {/* Publication List Page (You can create similarly) */}
+          {activeMenu === 'list_publication' && (
+            <div>{/* Your publication list component */}</div>
+          )}
         </div>
+
       </main>
     </div>
   );
