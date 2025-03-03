@@ -174,7 +174,7 @@ const MemberDashboard = () => {
             {!isDesktop && (
               <FiX 
                 onClick={() => setSidebarOpen(false)}
-                className={`absolute top-6 right-6 cursor-pointer ${
+                className={`absolute top-3 right-3 cursor-pointer ${
                   darkMode ? 'text-gray-300 hover:text-gray-100' : 'text-gray-600 hover:text-gray-800'
                 } transition-colors`}
               />
