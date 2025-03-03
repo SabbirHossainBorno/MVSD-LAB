@@ -33,23 +33,17 @@ const menuItems = [
     name: 'Research', 
     icon: <FiFileText className="w-5 h-5" />,
     subItems: [
-      { name: 'Publications', link: 'publications' },
-      { name: 'Projects', link: 'projects' }
+      { name: 'Add Research', link: 'add_research' },
+      { name: 'Research List', link: 'list_research' }
     ]
   },
   { 
-    name: 'Collaborations', 
-    icon: <FiUsers className="w-5 h-5" />,
+    name: 'Publications', 
+    icon: <LiaProjectDiagramSolid className="w-5 h-5" />,
     subItems: [
-      { name: 'Partners', link: 'partners' },
-      { name: 'Conferences', link: 'conferences' }
+      { name: 'Add Publication', link: 'add_publications' },
+      { name: 'Publication List', link: 'list_publication' }
     ]
-  },
-  { 
-    name: 'Settings', 
-    icon: <FiSettings className="w-5 h-5" />,
-    link: 'settings',
-    subItems: []
   }
 ];
 
@@ -206,7 +200,7 @@ const MemberDashboard = () => {
               <div key={item.name}>
                 <motion.div
                   whileHover={{ scale: 1.02 }}
-                  className={`flex items-center p-3 rounded-lg cursor-pointer ${
+                  className={`flex items-center p-3 rounded cursor-pointer ${
                     activeMenu === item.link 
                       ? `${darkMode ? 'bg-purple-500/20 text-purple-300' : 'bg-purple-100 text-purple-700'}` 
                       : `${darkMode ? 'hover:bg-gray-700/50 text-gray-300' : 'hover:bg-gray-100/50 text-gray-700'}`
@@ -242,7 +236,7 @@ const MemberDashboard = () => {
                   {item.subItems.map((subItem) => (
                     <div
                       key={subItem.name}
-                      className={`p-2.5 text-sm rounded-lg mb-1 ${
+                      className={`p-2.5 text-sm rounded mb-1 ${
                         darkMode 
                           ? 'hover:bg-gray-700/30 text-gray-300' 
                           : 'hover:bg-gray-100/70 text-gray-700'
@@ -540,14 +534,14 @@ const MemberDashboard = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className={`p-6 rounded-xl shadow-sm ${
+                className={`p-6 rounded shadow-sm ${
                   darkMode 
                     ? 'bg-gray-800 hover:bg-gray-700/80' 
                     : 'bg-white hover:bg-gray-50'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <div className={`p-3 rounded-lg ${
+                  <div className={`p-3 rounded ${
                     darkMode ? 'bg-gray-700' : 'bg-gray-100'
                   }`}>
                     {React.cloneElement(card.icon, {
@@ -573,7 +567,7 @@ const MemberDashboard = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className={`mt-8 p-6 rounded-xl ${
+            className={`mt-8 p-6 rounded ${
               darkMode ? 'bg-gray-800' : 'bg-white'
             }`}
           >
@@ -592,7 +586,7 @@ const MemberDashboard = () => {
                   key={item}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className={`p-4 rounded-lg flex items-center space-x-4 ${
+                  className={`p-4 rounded flex items-center space-x-4 ${
                     darkMode ? 'bg-gray-700/50' : 'bg-gray-50'
                   }`}
                 >
