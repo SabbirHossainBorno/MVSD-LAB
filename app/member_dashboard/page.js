@@ -234,7 +234,7 @@ const MemberDashboard = () => {
                       : 'border-gray-300/50'
                   }`}
                 >
-                  // In the navigation menu where subItems are mapped:
+                  {/* In the navigation menu where subItems are mapped */}
 {item.subItems.map((subItem) => (
   <div
     key={subItem.name}
