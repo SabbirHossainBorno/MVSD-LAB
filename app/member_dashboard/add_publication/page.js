@@ -103,7 +103,7 @@ const AddPublication = ({ darkMode }) => {
       animate={{ opacity: 1, y: 0 }}
       className="h-full space-y-6"
     >
-      <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-sm`}>
+      <div className={`p-6 rounded ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-sm`}>
         <h1 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>
           Add New Publication
         </h1>
@@ -118,7 +118,7 @@ const AddPublication = ({ darkMode }) => {
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className={`w-full px-4 py-2.5 rounded-lg border ${
+              className={`w-full px-4 py-2.5 rounded border ${
                 darkMode 
                   ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
                   : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
@@ -160,7 +160,7 @@ const AddPublication = ({ darkMode }) => {
                 type="text"
                 value={newAuthor}
                 onChange={(e) => setNewAuthor(e.target.value)}
-                className={`flex-1 px-4 py-2.5 rounded-lg border ${
+                className={`flex-1 px-4 py-2.5 rounded border ${
                   darkMode 
                     ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
                     : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
@@ -171,7 +171,7 @@ const AddPublication = ({ darkMode }) => {
               <button
                 type="button"
                 onClick={addAuthor}
-                className={`px-4 py-2.5 rounded-lg ${
+                className={`px-4 py-2.5 rounded ${
                   darkMode 
                     ? 'bg-purple-600 hover:bg-purple-500 text-white' 
                     : 'bg-purple-600 hover:bg-purple-700 text-white'
@@ -192,7 +192,7 @@ const AddPublication = ({ darkMode }) => {
               type="date"
               value={formData.date}
               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-              className={`w-full px-4 py-2.5 rounded-lg border ${
+              className={`w-full px-4 py-2.5 rounded border ${
                 darkMode 
                   ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
                   : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
@@ -212,7 +212,7 @@ const AddPublication = ({ darkMode }) => {
               rows="5"
               value={formData.abstract}
               onChange={(e) => setFormData({ ...formData, abstract: e.target.value })}
-              className={`w-full px-4 py-2.5 rounded-lg border ${
+              className={`w-full px-4 py-2.5 rounded border ${
                 darkMode 
                   ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
                   : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
@@ -233,7 +233,7 @@ const AddPublication = ({ darkMode }) => {
               type="file"
               accept="application/pdf"
               onChange={handleFileChange}
-              className={`w-full p-2 rounded-lg border ${
+              className={`w-full p-2 rounded border ${
                 darkMode 
                   ? 'bg-gray-700 border-gray-600 text-gray-100' 
                   : 'bg-white border-gray-300 text-gray-800'

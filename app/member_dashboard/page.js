@@ -141,16 +141,16 @@ const MemberDashboard = () => {
         <AnimatePresence>
           {!sidebarOpen && (
             <motion.button
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSidebarOpen(true)}
-              className={`fixed z-40 top-6 left-6 p-2 lg:hidden ${
-                darkMode ? 'text-gray-200' : 'text-gray-800'
-              }`}
-            >
-              <FiMenu className="w-6 h-6" />
-            </motion.button>
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  exit={{ opacity: 0 }}
+  onClick={() => setSidebarOpen(true)}
+  className={`fixed z-[60] top-4 left-4 p-2 lg:hidden ${
+    darkMode ? 'text-gray-200' : 'text-gray-800'
+  }`}
+>
+  <FiMenu className="w-6 h-6" />
+</motion.button>
           )}
         </AnimatePresence>
       )}
@@ -527,7 +527,7 @@ const MemberDashboard = () => {
         </nav>
 
         {/* Dashboard Content */}
-        <div className="p-8 h-full pt-16"> {/* Added pt-20 for spacing */}
+        <div className="p-8 h-full pt-28"> {/* Added pt-20 for spacing */}
         {activeMenu === 'dashboard' && (
     <>
           {/* Stats Grid */}
