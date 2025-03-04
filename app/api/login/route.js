@@ -60,7 +60,11 @@ const updateMemberLoginTracker = async (userId, email) => {
 export async function POST(request) {
   const { email, password } = await request.json();
   const sessionId = uuidv4();
-  const isAdminEmail = email.endsWith('@mvsdlab.com');
+  // New improved admin check
+  const emailParts = email.split('@');
+  const isAdminEmail = emailParts.length === 2 && 
+                      emailParts[1] === 'mvsdlab.com' && 
+                      emailParts[0].toLowerCase().includes('admin');
 
   const ipAddress = request.headers.get('x-forwarded-for') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
