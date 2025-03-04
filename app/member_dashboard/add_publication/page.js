@@ -1,7 +1,9 @@
+// app/member_dashboard/add_publication/page.js
 'use client';
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import withAuth from '../../components/withAuth';
 
 const AddPublication = ({ darkMode }) => {
   return (
@@ -108,4 +110,4 @@ const AddPublication = ({ darkMode }) => {
   );
 };
 
-export default AddPublication;
+export default withAuth(AddPublication);
