@@ -45,3 +45,7 @@
 2025-03-04 04:31:47-EID[928454-MVSDLAB]-SID[ce166c4a-cc3d-415f-b20b-3d893cf89bfa]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
 2025-03-04 04:31:47-EID[928454-MVSDLAB]-SID[ce166c4a-cc3d-415f-b20b-3d893cf89bfa]-[INFO] TASK[Auth Check]-Authentication check successful for bbirhosdasainborno@gmail.com from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
 2025-03-04 04:31:48-EID[928454-MVSDLAB]-SID[ce166c4a-cc3d-415f-b20b-3d893cf89bfa]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-04 13:49:20-EID[]-SID[77bb2852-742a-4620-818b-0143a73be87f]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 103.180.244.251
+2025-03-04 13:49:20-EID[]-SID[77bb2852-742a-4620-818b-0143a73be87f]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-04 13:49:20-EID[295591-MVSDLAB]-SID[77bb2852-742a-4620-818b-0143a73be87f]-[INFO] TASK[Generate EID]-Generated EID 295591-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-04 13:49:21-EID[295591-MVSDLAB]-SID[77bb2852-742a-4620-818b-0143a73be87f]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
