@@ -200,10 +200,9 @@ const MemberDashboard = () => {
             {menuItems.map((item) => (
               <div key={item.name}>
                 <motion.div
-                  whileHover={{ scale: 1.02 }}
                   className={`flex items-center p-3 rounded cursor-pointer ${
-                    activeMenu === item.link 
-                      ? `${darkMode ? 'bg-purple-500/20 text-purple-300' : 'bg-purple-100 text-purple-700'}` 
+                    activeMenu === item.link || item.subItems.some(sub => sub.link === activeMenu)
+                      ? `${darkMode ? 'bg-purple-500/20 text-purple-300' : 'bg-purple-100 text-purple-700'}`
                       : `${darkMode ? 'hover:bg-gray-700/50 text-gray-300' : 'hover:bg-gray-100/50 text-gray-700'}`
                   }`}
                   onClick={() => {
@@ -283,7 +282,9 @@ const MemberDashboard = () => {
 
       {/* Main Content */}
       <main className={`transition-all duration-300 ${isDesktop ? 'ml-64' : ''}`}>
-        <nav className={`p-4 border-b ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
+      <nav className={`fixed top-0 ${isDesktop ? 'left-64' : 'left-0'} right-0 z-50 p-4 border-b ${
+    darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
+  }`}>
           <div className="flex items-center justify-between">
             {/* Dark Mode Toggle (Desktop only) */}
             <div className="hidden md:flex items-center space-x-4">
@@ -526,7 +527,7 @@ const MemberDashboard = () => {
         </nav>
 
         {/* Dashboard Content */}
-        <div className="p-6 h-full">
+        <div className="p-8 h-full pt-16"> {/* Added pt-20 for spacing */}
         {activeMenu === 'dashboard' && (
     <>
           {/* Stats Grid */}

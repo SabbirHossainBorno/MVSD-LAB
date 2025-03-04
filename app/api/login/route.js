@@ -60,11 +60,7 @@ const updateMemberLoginTracker = async (userId, email) => {
 export async function POST(request) {
   const { email, password } = await request.json();
   const sessionId = uuidv4();
-  // New improved admin check
-  const emailParts = email.split('@');
-  const isAdminEmail = emailParts.length === 2 && 
-                      emailParts[1] === 'mvsdlab.com' && 
-                      emailParts[0].toLowerCase().includes('admin');
+  const isAdminEmail = email.endsWith('@mvsdlab.com');
 
   const ipAddress = request.headers.get('x-forwarded-for') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
@@ -205,7 +201,7 @@ export async function POST(request) {
         response.cookies.set('eid', eid, cookieConfig);
         response.cookies.set('redirect', 
           table === 'admin' ? '/dashboard' :
-          ['Professor', 'PhD Candidate'].includes(user.type) ? '/upload' : '/home',
+          ['Professor', 'PhD Candidate'].includes(user.type) ? '/member_dashboard' : '/home',
           cookieConfig
         );
 
