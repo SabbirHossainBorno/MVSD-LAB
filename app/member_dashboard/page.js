@@ -141,16 +141,16 @@ const MemberDashboard = () => {
         <AnimatePresence>
           {!sidebarOpen && (
             <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSidebarOpen(true)}
-            className={`fixed z-[70] left-4 top-1/2 -translate-y-1/2 p-2 lg:hidden ${
-              darkMode ? 'text-gray-200' : 'text-gray-800'
-            }`}
-          >
-            <FiMenu className="w-6 h-6" />
-          </motion.button>
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  exit={{ opacity: 0 }}
+  onClick={() => setSidebarOpen(true)}
+  className={`fixed z-[70] top-4 left-4 p-2 lg:hidden ${
+    darkMode ? 'text-gray-200' : 'text-gray-800'
+  }`}
+>
+  <FiMenu className="w-6 h-6" />
+</motion.button>
           )}
         </AnimatePresence>
       )}
@@ -284,7 +284,7 @@ const MemberDashboard = () => {
       <main className={`transition-all duration-300 ${isDesktop ? 'ml-64' : ''}`}>
       <nav className={`fixed top-0 ${isDesktop ? 'left-64' : 'left-0'} right-0 z-50 p-4 border-b ${
   darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
-}`} style={{ height: "4rem" }}> {/* Add fixed height */}
+}`}>
           <div className="flex items-center justify-between">
             {/* Dark Mode Toggle (Desktop only) */}
             <div className="hidden md:flex items-center space-x-4">
