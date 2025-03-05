@@ -133,7 +133,7 @@ const MemberDashboard = () => {
   if (!mounted || loading) return <LoadingSpinner />;
 
   return (
-    <div className={`min-h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen overflow-x-hidden ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <ToastContainer position="top-right" autoClose={3000} />
 
       {/* Mobile Menu Toggle */}
