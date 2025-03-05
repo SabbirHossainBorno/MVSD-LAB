@@ -1,0 +1,17 @@
+2025-03-05 06:39:42-EID[]-SID[]-[INFO] TASK[Home - Stats]-Request initiated from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-05 06:39:43-EID[]-SID[]-[INFO] TASK[Home - Stats]-Fetched professor count from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-05 06:40:55-EID[]-SID[]-[INFO] TASK[Home - Member]-Fetching member details from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-05 06:40:55-EID[]-SID[]-[INFO] TASK[Home - Member]-Successfully fetched member details from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-05 06:51:29-EID[]-SID[87d3f616-9cb6-49de-9388-254dc724148a]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 123.200.7.107
+2025-03-05 06:51:29-EID[]-SID[87d3f616-9cb6-49de-9388-254dc724148a]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-05 06:51:29-EID[986631-MVSDLAB]-SID[87d3f616-9cb6-49de-9388-254dc724148a]-[INFO] TASK[Generate EID]-Generated EID 986631-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-05 06:51:29-EID[986631-MVSDLAB]-SID[87d3f616-9cb6-49de-9388-254dc724148a]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-05 06:51:31-EID[986631-MVSDLAB]-SID[87d3f616-9cb6-49de-9388-254dc724148a]-[INFO] TASK[Auth Check]-Authentication check successful for bbirhosdasainborno@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-05 06:51:32-EID[986631-MVSDLAB]-SID[87d3f616-9cb6-49de-9388-254dc724148a]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-05 06:55:45-EID[986631-MVSDLAB]-SID[87d3f616-9cb6-49de-9388-254dc724148a]-[INFO] TASK[Logout]-member bbirhosdasainborno@gmail.com logged out from 123.200.7.107
+2025-03-05 06:55:50-EID[]-SID[7aa69801-f964-4956-8090-2bd07944bf0d]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 123.200.7.107
+2025-03-05 06:55:50-EID[]-SID[7aa69801-f964-4956-8090-2bd07944bf0d]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-05 06:55:50-EID[982139-MVSDLAB]-SID[7aa69801-f964-4956-8090-2bd07944bf0d]-[INFO] TASK[Generate EID]-Generated EID 982139-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-05 06:55:50-EID[982139-MVSDLAB]-SID[7aa69801-f964-4956-8090-2bd07944bf0d]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-05 06:55:51-EID[982139-MVSDLAB]-SID[7aa69801-f964-4956-8090-2bd07944bf0d]-[INFO] TASK[Auth Check]-Authentication check successful for bbirhosdasainborno@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-05 06:55:51-EID[982139-MVSDLAB]-SID[7aa69801-f964-4956-8090-2bd07944bf0d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com

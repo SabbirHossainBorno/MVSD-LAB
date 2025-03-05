@@ -145,7 +145,7 @@ const MemberDashboard = () => {
   animate={{ opacity: 1 }}
   exit={{ opacity: 0 }}
   onClick={() => setSidebarOpen(true)}
-  className={`fixed z-[60] top-4 left-4 p-2 lg:hidden ${
+  className={`fixed z-[70] top-4 left-4 p-2 lg:hidden ${
     darkMode ? 'text-gray-200' : 'text-gray-800'
   }`}
 >
@@ -161,7 +161,7 @@ const MemberDashboard = () => {
         animate={isDesktop ? "open" : sidebarOpen ? "open" : "closed"}
         variants={sidebarVariants}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className={`fixed inset-y-0 left-0 w-64 z-40 flex flex-col justify-between ${
+        className={`fixed inset-y-0 left-0 w-64 z-[60] flex flex-col justify-between ${
           darkMode 
             ? 'bg-gray-800 border-r border-gray-700' 
             : 'bg-white border-r border-gray-200'
@@ -283,8 +283,8 @@ const MemberDashboard = () => {
       {/* Main Content */}
       <main className={`transition-all duration-300 ${isDesktop ? 'ml-64' : ''}`}>
       <nav className={`fixed top-0 ${isDesktop ? 'left-64' : 'left-0'} right-0 z-50 p-4 border-b ${
-    darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
-  }`}>
+  darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
+}`}>
           <div className="flex items-center justify-between">
             {/* Dark Mode Toggle (Desktop only) */}
             <div className="hidden md:flex items-center space-x-4">
