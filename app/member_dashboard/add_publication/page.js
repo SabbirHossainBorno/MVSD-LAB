@@ -6,14 +6,30 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import withAuth from '../../components/withAuth';
 
+const publicationTypes = [
+  'International Journal',
+  'Domestic Journal',
+  'International Conference', 
+  'Domestic Conference'
+];
+
 const AddPublication = ({ darkMode }) => {
   const [formData, setFormData] = useState({
+    type: '',
     title: '',
+    year: '',
+    journalName: '',
+    conferenceName: '',
     authors: [],
-    date: '',
-    abstract: '',
-    pdf: null
+    volume: '',
+    issue: '',
+    pageCount: '',
+    publishedDate: '',
+    impactFactor: '',
+    link: '',
+    document: null
   });
+
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newAuthor, setNewAuthor] = useState('');
@@ -40,22 +56,34 @@ const AddPublication = ({ darkMode }) => {
   // Handle file upload
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file && file.type === 'application/pdf') {
-      setFormData(prev => ({ ...prev, pdf: file }));
+    if (file && (file.type === 'application/pdf' || file.type === 'application/msword' || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+      setFormData(prev => ({ ...prev, document: file }));
     } else {
-      toast.error('Please upload a PDF file');
+      toast.error('Only PDF and DOC files are allowed');
     }
   };
 
   // Form validation
   const validateForm = () => {
     const newErrors = {};
+    if (!formData.type) newErrors.type = 'Publication type is required';
     if (!formData.title.trim()) newErrors.title = 'Title is required';
+    if (!formData.year) newErrors.year = 'Year is required';
     if (formData.authors.length === 0) newErrors.authors = 'At least one author required';
-    if (!formData.date) newErrors.date = 'Publication date required';
-    if (!formData.abstract.trim()) newErrors.abstract = 'Abstract is required';
-    if (!formData.pdf) newErrors.pdf = 'PDF upload required';
     
+    if (formData.type.includes('Journal')) {
+      if (!formData.journalName) newErrors.journalName = 'Journal name is required';
+      if (!formData.volume) newErrors.volume = 'Volume is required';
+      if (!formData.issue) newErrors.issue = 'Issue is required';
+    }
+    
+    if (formData.type.includes('Conference')) {
+      if (!formData.conferenceName) newErrors.conferenceName = 'Conference name is required';
+    }
+    
+    if (!formData.pageCount) newErrors.pageCount = 'Page count is required';
+    if (!formData.document) newErrors.document = 'Document upload required';
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -69,11 +97,26 @@ const AddPublication = ({ darkMode }) => {
     
     try {
       const formPayload = new FormData();
+      formPayload.append('type', formData.type);
       formPayload.append('title', formData.title);
+      formPayload.append('year', formData.year);
       formData.authors.forEach(author => formPayload.append('authors[]', author));
-      formPayload.append('date', formData.date);
-      formPayload.append('abstract', formData.abstract);
-      formPayload.append('pdf', formData.pdf);
+      formPayload.append('pageCount', formData.pageCount);
+      formPayload.append('document', formData.document);
+
+      if (formData.type.includes('Journal')) {
+        formPayload.append('journalName', formData.journalName);
+        formPayload.append('volume', formData.volume);
+        formPayload.append('issue', formData.issue);
+        formPayload.append('impactFactor', formData.impactFactor);
+      }
+      
+      if (formData.type.includes('Conference')) {
+        formPayload.append('conferenceName', formData.conferenceName);
+      }
+      
+      formPayload.append('link', formData.link);
+      formPayload.append('publishedDate', formData.publishedDate);
 
       const response = await fetch('/api/publications', {
         method: 'POST',
@@ -84,11 +127,19 @@ const AddPublication = ({ darkMode }) => {
       
       toast.success('Publication submitted successfully!');
       setFormData({
+        type: '',
         title: '',
+        year: '',
+        journalName: '',
+        conferenceName: '',
         authors: [],
-        date: '',
-        abstract: '',
-        pdf: null
+        volume: '',
+        issue: '',
+        pageCount: '',
+        publishedDate: '',
+        impactFactor: '',
+        link: '',
+        document: null
       });
     } catch (error) {
       toast.error(error.message || 'Submission failed. Please try again.');
@@ -97,38 +148,171 @@ const AddPublication = ({ darkMode }) => {
     }
   };
 
+  const isJournal = formData.type.includes('Journal');
+  const isConference = formData.type.includes('Conference');
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="h-full space-y-6"
     >
-      <div className={`p-6 rounded ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-sm`}>
+      <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg`}>
         <h1 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>
           Add New Publication
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Title Field */}
+          {/* Publication Type */}
           <div>
             <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              Publication Title *
+              Publication Type *
             </label>
-            <input
-              type="text"
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className={`w-full px-4 py-2.5 rounded border ${
+            <select
+              value={formData.type}
+              onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+              className={`w-full px-4 py-2.5 rounded-lg border ${
                 darkMode 
                   ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
                   : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
               } focus:outline-none focus:ring-2`}
-              placeholder="Enter publication title"
-              aria-label="Publication title"
               required
-            />
-            {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
+            >
+              <option value="">Select Publication Type</option>
+              {publicationTypes.map((type) => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+            {errors.type && <p className="text-red-500 text-sm mt-1">{errors.type}</p>}
           </div>
+
+          {/* Common Fields */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Publication Title *
+              </label>
+              <input
+                type="text"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                className={`w-full px-4 py-2.5 rounded-lg border ${
+                  darkMode 
+                    ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
+                    : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
+                } focus:outline-none focus:ring-2`}
+                placeholder="Enter publication title"
+                required
+              />
+              {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
+            </div>
+
+            <div>
+              <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Year *
+              </label>
+              <input
+                type="number"
+                value={formData.year}
+                onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                className={`w-full px-4 py-2.5 rounded-lg border ${
+                  darkMode 
+                    ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
+                    : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
+                } focus:outline-none focus:ring-2`}
+                placeholder="Enter publication year"
+                min="1900"
+                max={new Date().getFullYear()}
+                required
+              />
+              {errors.year && <p className="text-red-500 text-sm mt-1">{errors.year}</p>}
+            </div>
+          </div>
+
+          {/* Journal/Conference Specific Fields */}
+          {isJournal && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  Journal Name *
+                </label>
+                <input
+                  type="text"
+                  value={formData.journalName}
+                  onChange={(e) => setFormData({ ...formData, journalName: e.target.value })}
+                  className={`w-full px-4 py-2.5 rounded-lg border ${
+                    darkMode 
+                      ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
+                      : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
+                  } focus:outline-none focus:ring-2`}
+                  placeholder="Enter journal name"
+                  required
+                />
+                {errors.journalName && <p className="text-red-500 text-sm mt-1">{errors.journalName}</p>}
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    Volume *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.volume}
+                    onChange={(e) => setFormData({ ...formData, volume: e.target.value })}
+                    className={`w-full px-4 py-2.5 rounded-lg border ${
+                      darkMode 
+                        ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
+                        : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
+                    } focus:outline-none focus:ring-2`}
+                    placeholder="Volume"
+                    required
+                  />
+                  {errors.volume && <p className="text-red-500 text-sm mt-1">{errors.volume}</p>}
+                </div>
+
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    Issue *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.issue}
+                    onChange={(e) => setFormData({ ...formData, issue: e.target.value })}
+                    className={`w-full px-4 py-2.5 rounded-lg border ${
+                      darkMode 
+                        ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
+                        : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
+                    } focus:outline-none focus:ring-2`}
+                    placeholder="Issue"
+                    required
+                  />
+                  {errors.issue && <p className="text-red-500 text-sm mt-1">{errors.issue}</p>}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isConference && (
+            <div>
+              <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Conference Name *
+              </label>
+              <input
+                type="text"
+                value={formData.conferenceName}
+                onChange={(e) => setFormData({ ...formData, conferenceName: e.target.value })}
+                className={`w-full px-4 py-2.5 rounded-lg border ${
+                  darkMode 
+                    ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
+                    : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
+                } focus:outline-none focus:ring-2`}
+                placeholder="Enter conference name"
+                required
+              />
+              {errors.conferenceName && <p className="text-red-500 text-sm mt-1">{errors.conferenceName}</p>}
+            </div>
+          )}
 
           {/* Authors Field */}
           <div>
@@ -160,7 +344,7 @@ const AddPublication = ({ darkMode }) => {
                 type="text"
                 value={newAuthor}
                 onChange={(e) => setNewAuthor(e.target.value)}
-                className={`flex-1 px-4 py-2.5 rounded border ${
+                className={`flex-1 px-4 py-2.5 rounded-lg border ${
                   darkMode 
                     ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
                     : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
@@ -171,7 +355,7 @@ const AddPublication = ({ darkMode }) => {
               <button
                 type="button"
                 onClick={addAuthor}
-                className={`px-4 py-2.5 rounded ${
+                className={`px-4 py-2.5 rounded-lg ${
                   darkMode 
                     ? 'bg-purple-600 hover:bg-purple-500 text-white' 
                     : 'bg-purple-600 hover:bg-purple-700 text-white'
@@ -183,69 +367,102 @@ const AddPublication = ({ darkMode }) => {
             {errors.authors && <p className="text-red-500 text-sm mt-1">{errors.authors}</p>}
           </div>
 
-          {/* Publication Date */}
-          <div>
-            <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              Publication Date *
-            </label>
-            <input
-              type="date"
-              value={formData.date}
-              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-              className={`w-full px-4 py-2.5 rounded border ${
-                darkMode 
-                  ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
-                  : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
-              } focus:outline-none focus:ring-2`}
-              aria-label="Publication date"
-              required
-            />
-            {errors.date && <p className="text-red-500 text-sm mt-1">{errors.date}</p>}
+          {/* Additional Fields */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Page Count (e.g., 1-67) *
+              </label>
+              <input
+                type="text"
+                value={formData.pageCount}
+                onChange={(e) => setFormData({ ...formData, pageCount: e.target.value })}
+                className={`w-full px-4 py-2.5 rounded-lg border ${
+                  darkMode 
+                    ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
+                    : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
+                } focus:outline-none focus:ring-2`}
+                placeholder="Enter page range"
+                required
+              />
+              {errors.pageCount && <p className="text-red-500 text-sm mt-1">{errors.pageCount}</p>}
+            </div>
+
+            {isJournal && (
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  Impact Factor (IF)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={formData.impactFactor}
+                  onChange={(e) => setFormData({ ...formData, impactFactor: e.target.value })}
+                  className={`w-full px-4 py-2.5 rounded-lg border ${
+                    darkMode 
+                      ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
+                      : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
+                  } focus:outline-none focus:ring-2`}
+                  placeholder="Enter impact factor"
+                />
+              </div>
+            )}
+
+            <div>
+              <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Published Date (Optional)
+              </label>
+              <input
+                type="date"
+                value={formData.publishedDate}
+                onChange={(e) => setFormData({ ...formData, publishedDate: e.target.value })}
+                className={`w-full px-4 py-2.5 rounded-lg border ${
+                  darkMode 
+                    ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
+                    : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
+                } focus:outline-none focus:ring-2`}
+              />
+            </div>
+
+            <div>
+              <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Link (Optional)
+              </label>
+              <input
+                type="url"
+                value={formData.link}
+                onChange={(e) => setFormData({ ...formData, link: e.target.value })}
+                className={`w-full px-4 py-2.5 rounded-lg border ${
+                  darkMode 
+                    ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
+                    : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
+                } focus:outline-none focus:ring-2`}
+                placeholder="Enter publication URL"
+              />
+            </div>
           </div>
 
-          {/* Description */}
+          {/* Document Upload */}
           <div>
             <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              Abstract/Description *
-            </label>
-            <textarea
-              rows="5"
-              value={formData.abstract}
-              onChange={(e) => setFormData({ ...formData, abstract: e.target.value })}
-              className={`w-full px-4 py-2.5 rounded border ${
-                darkMode 
-                  ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' 
-                  : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'
-              } focus:outline-none focus:ring-2`}
-              placeholder="Enter publication abstract"
-              aria-label="Publication abstract"
-              required
-            ></textarea>
-            {errors.abstract && <p className="text-red-500 text-sm mt-1">{errors.abstract}</p>}
-          </div>
-
-          {/* PDF Upload */}
-          <div>
-            <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              Upload PDF *
+              Upload Document (PDF/DOC) *
             </label>
             <input
               type="file"
-              accept="application/pdf"
+              accept=".pdf,.doc,.docx"
               onChange={handleFileChange}
-              className={`w-full p-2 rounded border ${
+              className={`w-full p-2 rounded-lg border ${
                 darkMode 
                   ? 'bg-gray-700 border-gray-600 text-gray-100' 
                   : 'bg-white border-gray-300 text-gray-800'
-              } file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 ${
+              } file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 ${
                 darkMode 
                   ? 'file:bg-gray-600 file:text-gray-100' 
                   : 'file:bg-gray-200 file:text-gray-700'
               }`}
-              aria-label="Upload PDF"
               required
             />
-            {errors.pdf && <p className="text-red-500 text-sm mt-1">{errors.pdf}</p>}
+            {errors.document && <p className="text-red-500 text-sm mt-1">{errors.document}</p>}
           </div>
 
           {/* Submit Button */}
