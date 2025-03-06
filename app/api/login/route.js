@@ -11,13 +11,11 @@ const formatAlertMessage = (userType, email, ipAddress, userAgent, additionalInf
   let message = isAdmin 
     ? "MVSD LAB DASHBOARD\n------------------------------------\nAdmin Login Successful.\n"
     : "MVSD LAB MEMBER DASHBOARD\n--------------------------------------------------\nMember Login Successful.\n";
-
   message += `Email : ${email}\n`;
   
   if (!isAdmin && additionalInfo.memberId) {
     message += `ID : ${additionalInfo.memberId}\n`;
   }
-
   message += `IP : ${ipAddress}\nDevice INFO : ${userAgent}\nEID : ${additionalInfo.eid || 'N/A'}`;
   
   return message;
@@ -38,10 +36,10 @@ const updateMemberLoginTracker = async (userId, email) => {
        (id, email, last_login_time, last_login_date, total_login_count, login_state)
        VALUES ($1, $2, NOW(), NOW()::date, 1, 'Active')
        ON CONFLICT (id) DO UPDATE SET
-         last_login_time = NOW(),
-         last_login_date = NOW()::date,
-         total_login_count = member_login_info_tracker.total_login_count + 1,
-         login_state = 'Active'`,
+       last_login_time = NOW(),
+       last_login_date = NOW()::date,
+       total_login_count = member_login_info_tracker.total_login_count + 1,
+       login_state = 'Active'`,
       [userId, email]
     );
   } catch (error) {
@@ -56,12 +54,10 @@ const updateMemberLoginTracker = async (userId, email) => {
   }
 };
 
-
 export async function POST(request) {
   const { email, password } = await request.json();
   const sessionId = uuidv4();
   const isAdminEmail = email.endsWith('@mvsdlab.com');
-
   const ipAddress = request.headers.get('x-forwarded-for') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
 
@@ -74,7 +70,6 @@ export async function POST(request) {
     { eid: 'Login Attempt' }
   ).replace('Successful', 'Attempt');
   await sendTelegramAlert(attemptMessage);
-
   logger.info('Received login request', {
     meta: {
       eid: '',
@@ -95,7 +90,6 @@ export async function POST(request) {
           userType: table
         }
       });
-
       const res = await query(`SELECT * FROM ${table} WHERE email = $1`, [email]);
       if (res.rows.length > 0) {
         const user = res.rows[0];
@@ -116,7 +110,6 @@ export async function POST(request) {
           });
           return null;
         }
-
         // Member status check
         if (table === 'member' && user.status !== 'Active') {
           logger.warn('Inactive member login attempt', {
@@ -138,13 +131,12 @@ export async function POST(request) {
           ).replace('Successful', 'Failed (Inactive Member)');
           
           await sendTelegramAlert(inactiveMessage);
-        
+          
           return NextResponse.json({ 
             success: false, 
             message: 'Sorry You Are Not Active Member! Please Contact Administration' 
           });
         }
-
         const eid = `${Math.floor(100000 + Math.random() * 900000)}-MVSDLAB`;
         logger.info('Generated execution ID', {
           meta: {
@@ -154,12 +146,10 @@ export async function POST(request) {
             details: `Generated EID ${eid} for user ${email}`
           }
         });
-
         // Update member tracker
         if (table === 'member') {
           await updateMemberLoginTracker(user.id, email);
         }
-
         // Success alert
         const successMessage = formatAlertMessage(
           table,
@@ -172,7 +162,6 @@ export async function POST(request) {
           }
         );
         await sendTelegramAlert(successMessage);
-
         logger.info('Login success', {
           meta: {
             eid,
@@ -183,29 +172,30 @@ export async function POST(request) {
             userId: table === 'member' ? user.id : 'admin'
           }
         });
-
         // Update admin details
         if (table === 'admin') {
           await updateLoginDetails(email);
         }
-
         // Set response cookies
-        const response = NextResponse.json({ 
-          success: true, 
-          type: table === 'admin' ? 'admin' : 'user' 
-        });
-        
-        const cookieConfig = { httpOnly: true, secure: process.env.NODE_ENV === 'production' };
-        response.cookies.set('email', email, cookieConfig);
-        response.cookies.set('sessionId', sessionId, cookieConfig);
-        response.cookies.set('eid', eid, cookieConfig);
-        response.cookies.set('redirect', 
-          table === 'admin' ? '/dashboard' :
-          ['Professor', 'PhD Candidate'].includes(user.type) ? '/member_dashboard' : '/home',
-          cookieConfig
-        );
+const response = NextResponse.json({ 
+  success: true, 
+  type: table === 'admin' ? 'admin' : 'user' 
+});
 
-        return response;
+const cookieConfig = { httpOnly: true, secure: process.env.NODE_ENV === 'production' };
+response.cookies.set('email', email, cookieConfig);
+response.cookies.set('sessionId', sessionId, cookieConfig);
+response.cookies.set('eid', eid, cookieConfig);
+response.cookies.set('id', user.id, cookieConfig); // Ensure this line is present to set the memberId cookie
+response.cookies.set('type', user.type, cookieConfig); // Set the type cookie
+console.log('Setting memberId cookie:', user.id); // Debugging log
+console.log('Setting memberType cookie:', user.type); // Debugging log
+response.cookies.set('redirect', 
+  table === 'admin' ? '/dashboard' :
+  ['Professor', 'PhD Candidate'].includes(user.type) ? '/member_dashboard' : '/home',
+  cookieConfig
+);
+return response;
       }
       return null;
     };
@@ -215,7 +205,6 @@ export async function POST(request) {
       const adminResponse = await checkUser('admin', false);
       if (adminResponse) return adminResponse;
     }
-
     // Check member if not admin
     const memberResponse = await checkUser('member', true);
     if (memberResponse) return memberResponse;
@@ -229,7 +218,6 @@ export async function POST(request) {
       { eid: 'Failed Attempt' }
     ).replace('Successful', 'Failed');
     await sendTelegramAlert(failedMessage);
-
     logger.warn('Login failed', {
       meta: {
         sid: sessionId,
@@ -238,12 +226,10 @@ export async function POST(request) {
         userType: isAdminEmail ? 'admin' : 'member'
       }
     });
-
     return NextResponse.json({ 
       success: false, 
       message: 'Invalid email or password' 
     });
-
   } catch (error) {
     // Error handling
     const errorMessage = formatAlertMessage(
@@ -254,7 +240,6 @@ export async function POST(request) {
       { eid: 'Error', error: error.message }
     ).replace('Successful', 'Error');
     await sendTelegramAlert(errorMessage);
-
     logger.error('Login process error', {
       meta: {
         sid: sessionId,
@@ -263,7 +248,6 @@ export async function POST(request) {
         userType: isAdminEmail ? 'admin' : 'member'
       }
     });
-
     return NextResponse.json(
       { success: false, message: 'Internal server error' },
       { status: 500 }

@@ -1,6 +1,6 @@
 // app/member_dashboard/add_publication/page.js
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
@@ -34,6 +34,18 @@ const AddPublication = ({ darkMode }) => {
   const [newAuthor, setNewAuthor] = useState('');
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Retrieve type and id from cookies
+  useEffect(() => {
+    const memberId = Cookies.get('id');
+    const memberType = Cookies.get('type');
+    console.log('Member ID:', memberId); // Debugging log
+    console.log('Member Type:', memberType); // Debugging log
+
+    if (!memberId || !memberType) {
+      toast.error('Authentication required. Please login again.');
+    }
+  }, []);
 
   // Add author to list
   const addAuthor = () => {
@@ -92,8 +104,12 @@ const AddPublication = ({ darkMode }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const memberId = Cookies.get('id');
+    const memberType = Cookies.get('type');
 
-    if (!memberId) {
+    console.log('Member ID:', memberId); // Debugging log
+    console.log('Member Type:', memberType); // Debugging log
+
+    if (!memberId || !memberType) {
       toast.error('Authentication required. Please login again.');
       return;
     }
@@ -117,8 +133,9 @@ const AddPublication = ({ darkMode }) => {
       // Append the document file
       formPayload.append('document', documentFile);
 
-      // Add member ID
+      // Add member ID and type
       formPayload.append('memberId', memberId);
+      formPayload.append('memberType', memberType);
 
       const response = await fetch('/api/member_publication_add', {
         method: 'POST',
@@ -194,7 +211,7 @@ const AddPublication = ({ darkMode }) => {
           </div>
           {/* Common Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
+          <div>
               <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                 Publication Title *
               </label>
@@ -235,44 +252,44 @@ const AddPublication = ({ darkMode }) => {
                 <input
                   type="text"
                   value={formData.journalName}
-                onChange={(e) => setFormData({ ...formData, journalName: e.target.value })}
-                className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
-                placeholder="Enter journal name"
-                required
-              />
-              {errors.journalName && <p className="text-red-500 text-sm mt-1">{errors.journalName}</p>}
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                  Volume *
-                </label>
-                <input
-                  type="text"
-                  value={formData.volume}
-                  onChange={(e) => setFormData({ ...formData, volume: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, journalName: e.target.value })}
                   className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
-                  placeholder="Volume"
+                  placeholder="Enter journal name"
                   required
                 />
-                {errors.volume && <p className="text-red-500 text-sm mt-1">{errors.volume}</p>}
+                {errors.journalName && <p className="text-red-500 text-sm mt-1">{errors.journalName}</p>}
               </div>
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                  Issue *
-                </label>
-                <input
-                  type="text"
-                  value={formData.issue}
-                  onChange={(e) => setFormData({ ...formData, issue: e.target.value })}
-                  className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
-                  placeholder="Issue"
-                  required
-                />
-                {errors.issue && <p className="text-red-500 text-sm mt-1">{errors.issue}</p>}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    Volume *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.volume}
+                    onChange={(e) => setFormData({ ...formData, volume: e.target.value })}
+                    className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
+                    placeholder="Volume"
+                    required
+                  />
+                  {errors.volume && <p className="text-red-500 text-sm mt-1">{errors.volume}</p>}
+                </div>
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    Issue *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.issue}
+                    onChange={(e) => setFormData({ ...formData, issue: e.target.value })}
+                    className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
+                    placeholder="Issue"
+                    required
+                  />
+                  {errors.issue && <p className="text-red-500 text-sm mt-1">{errors.issue}</p>}
+                </div>
               </div>
             </div>
-          </div>
           )}
           {isConference && (
             <div>
