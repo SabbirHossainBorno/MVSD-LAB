@@ -17,3 +17,11 @@
 2025-03-06 06:58:19-EID[774300-MVSDLAB]-SID[b79300e7-d418-437c-a22c-2148492c886d]-[INFO] TASK[Auth Check]-Authentication check successful for bbirhosdasainborno@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
 2025-03-06 06:58:22-EID[774300-MVSDLAB]-SID[b79300e7-d418-437c-a22c-2148492c886d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
 2025-03-06 06:58:22-EID[774300-MVSDLAB]-SID[b79300e7-d418-437c-a22c-2148492c886d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-06 07:56:08-EID[]-SID[55c96a58-0f73-40e0-94de-ad61ccac318e]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 123.200.7.107
+2025-03-06 07:56:08-EID[]-SID[55c96a58-0f73-40e0-94de-ad61ccac318e]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-06 07:56:08-EID[958621-MVSDLAB]-SID[55c96a58-0f73-40e0-94de-ad61ccac318e]-[INFO] TASK[Generate EID]-Generated EID 958621-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-06 07:56:08-EID[958621-MVSDLAB]-SID[55c96a58-0f73-40e0-94de-ad61ccac318e]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-06 07:56:10-EID[958621-MVSDLAB]-SID[55c96a58-0f73-40e0-94de-ad61ccac318e]-[INFO] TASK[Auth Check]-Authentication check successful for bbirhosdasainborno@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-06 07:56:12-EID[958621-MVSDLAB]-SID[55c96a58-0f73-40e0-94de-ad61ccac318e]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-06 07:56:12-EID[958621-MVSDLAB]-SID[55c96a58-0f73-40e0-94de-ad61ccac318e]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-06 07:56:23-EID[958621-MVSDLAB]-SID[55c96a58-0f73-40e0-94de-ad61ccac318e]-[INFO] TASK[Auth Check]-Authentication check successful for bbirhosdasainborno@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
