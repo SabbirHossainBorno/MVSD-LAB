@@ -7,51 +7,50 @@ import path from 'path';
 import fs from 'fs';
 
 const formatAlertMessage = (title, details) => {
-    return `MVSD LAB MEMBER DASHBOARD\n--------------------------------------------------\n${title}\n${details}`;
+  return `MVSD LAB MEMBER DASHBOARD\n--------------------------------------------------\n${title}\n${details}`;
 };
 
 const typeCodes = {
-    'International Journal': 'INT_JOURNAL',
-    'Domestic Journal': 'DOM_JOURNAL',
-    'International Conference': 'INT_CONF',
-    'Domestic Conference': 'DOM_CONF'
-  };
+  'International Journal': 'INT_JOURNAL',
+  'Domestic Journal': 'DOM_JOURNAL',
+  'International Conference': 'INT_CONF',
+  'Domestic Conference': 'DOM_CONF'
+};
 
-  const getNextSequence = async (phdId, typeCode) => {
-    const result = await query(
-      `SELECT COUNT(*) FROM phd_candidate_publication_info 
-       WHERE phd_candidate_id = $1 AND type = $2`,
-      [phdId, typeCode]
-    );
-    return result.rows[0].count + 1;
-  };
-  
-  const generateFileName = (phdId, type, sequence, ext) => {
-    const typeCode = typeCodes[type];
-    return `${phdId}_PUB_${typeCode}_${sequence}${ext}`;
-  };
+const getNextSequence = async (phdId, typeCode) => {
+  const result = await query(
+    `SELECT COUNT(*) FROM phd_candidate_publication_info 
+     WHERE phd_candidate_id = $1 AND type = $2`,
+    [phdId, typeCode]
+  );
+  return result.rows[0].count + 1;
+};
 
-  const savePublicationDocument = async (file, phdId, publicationType) => {
-    const sequence = await getNextSequence(phdId, publicationType);
+const generateFileName = (phdId, type, sequence, ext) => {
+  const typeCode = typeCodes[type];
+  return `${phdId}_PUB_${typeCode}_${sequence}${ext}`;
+};
+
+const savePublicationDocument = async (file, phdId, publicationType) => {
+  const sequence = await getNextSequence(phdId, publicationType);
   const allowedTypes = ['application/pdf', 'application/msword', 
-                       'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
   if (!allowedTypes.includes(file.type)) {
     throw new Error('Invalid file type. Only PDF and DOC files are allowed.');
   }
-
   const ext = path.extname(file.name);
   const filename = generateFileName(phdId, publicationType, sequence, ext);
-  // Full path
   const targetPath = path.join(
     '/home/mvsd-lab/public/Storage/Documents/PhD_Candidate',
     filename
   );
-  
   try {
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
+    console.log(`Success: Document saved at ${targetPath}`);
     return `/Storage/Documents/PhD_Candidate/${filename}`;
   } catch (error) {
+    console.error(`Error: Failed to save document - ${error.message}`);
     throw new Error(`Failed to save document: ${error.message}`);
   }
 };
@@ -66,6 +65,7 @@ export async function POST(req) {
   try {
     // Validate member ID
     if (!memberId) {
+      console.warn('Warning: Member authentication failed');
       return NextResponse.json({ success: false, message: 'Member authentication failed' }, { status: 401 });
     }
 
@@ -74,12 +74,14 @@ export async function POST(req) {
       `SELECT type FROM member WHERE id = $1`,
       [memberId]
     );
-    
+
     if (memberCheck.rows.length === 0) {
+      console.warn('Warning: Member not found');
       return NextResponse.json({ success: false, message: 'Member not found' }, { status: 404 });
     }
-    
+
     if (memberCheck.rows[0].type !== 'PhD Candidate') {
+      console.warn('Warning: Publications can only be added by PhD Candidates');
       return NextResponse.json({ 
         success: false, 
         message: 'Publications can only be added by PhD Candidates' 
@@ -112,6 +114,7 @@ export async function POST(req) {
     ].filter(Boolean);
 
     if (requiredFields.length > 0) {
+      console.warn(`Warning: Missing required fields - ${requiredFields.join(', ')}`);
       return NextResponse.json({ 
         success: false, 
         message: `Missing required fields: ${requiredFields.join(', ')}` 
@@ -119,6 +122,7 @@ export async function POST(req) {
     }
 
     if (type.includes('Journal') && (!journalName || !volume || !issue)) {
+      console.warn('Warning: Journal publications require journal name, volume and issue');
       return NextResponse.json({ 
         success: false, 
         message: 'Journal publications require journal name, volume and issue' 
@@ -126,6 +130,7 @@ export async function POST(req) {
     }
 
     if (type.includes('Conference') && !conferenceName) {
+      console.warn('Warning: Conference publications require conference name');
       return NextResponse.json({ 
         success: false, 
         message: 'Conference publications require conference name' 
@@ -134,8 +139,9 @@ export async function POST(req) {
 
     let documentUrl;
     try {
-      documentUrl = await savePublicationDocument(documentFile, memberId);
+      documentUrl = await savePublicationDocument(documentFile, memberId, type);
     } catch (error) {
+      console.error(`Error: ${error.message}`);
       return NextResponse.json({ 
         success: false, 
         message: error.message 
@@ -144,8 +150,6 @@ export async function POST(req) {
 
     try {
       await query('BEGIN');
-
-      // Insert into phd_candidate_publication_info
       const insertQuery = `
         INSERT INTO phd_candidate_publication_info (
           phd_candidate_id, type, title, year, journal_name, conference_name, 
@@ -154,7 +158,6 @@ export async function POST(req) {
         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
         RETURNING id
       `;
-
       const result = await query(insertQuery, [
         memberId,
         type,
@@ -171,9 +174,8 @@ export async function POST(req) {
         link || null,
         documentUrl
       ]);
+      const publicationId = result.rows[0].id;
 
-
-      // Insert notification
       const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
       const Id = `${memberId}`; 
       const notificationTitle = `New Publication Added by ${memberId}`;
@@ -182,14 +184,13 @@ export async function POST(req) {
 
       await query('COMMIT');
 
-      // Send Telegram alert
       const successMessage = formatAlertMessage(
         'New Publication Added',
         `Member ID: ${memberId}\nType: ${type}`
       );
       await sendTelegramAlert(successMessage);
 
-      // Log success
+      console.log(`Success: Publication ${publicationId} added by member ${memberId}`);
       logger.info('Publication Added Successfully', {
         meta: {
           eid,
@@ -204,16 +205,14 @@ export async function POST(req) {
         publicationId,
         message: 'Publication added successfully'
       });
-
     } catch (error) {
       await query('ROLLBACK');
-      
       const errorMessage = formatAlertMessage(
         'Publication Add Failed',
         `Member ID: ${memberId}\nError: ${error.message}`
       );
       await sendTelegramAlert(errorMessage);
-
+      console.error(`Error: Publication add failed - ${error.message}`);
       logger.error('Publication Add Failed', {
         meta: {
           eid,
@@ -222,20 +221,18 @@ export async function POST(req) {
           details: `Member ID: ${memberId} - Error: ${error.message}`
         }
       });
-
       return NextResponse.json({ 
         success: false, 
         message: `Error adding publication: ${error.message}`
       }, { status: 500 });
     }
-
   } catch (error) {
     const errorMessage = formatAlertMessage(
       'Publication Add Failed',
       `System Error: ${error.message}\nIP: ${ipAddress}`
     );
     await sendTelegramAlert(errorMessage);
-
+    console.error(`Error: System error processing publication - ${error.message}`);
     logger.error('System Error Processing Publication', {
       meta: {
         eid,
@@ -244,10 +241,9 @@ export async function POST(req) {
         details: `System error: ${error.message}`
       }
     });
-
     return NextResponse.json({ 
-      success: false, 
-      message: `System error: ${error.message}`
-    }, { status: 500 });
+        success: false, 
+        message: `System error: ${error.message}`
+      }, { status: 500 });
+    }
   }
-}
