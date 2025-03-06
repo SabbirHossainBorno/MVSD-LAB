@@ -7,10 +7,32 @@ import path from 'path';
 import fs from 'fs';
 
 const formatAlertMessage = (title, details) => {
-  return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\n${details}`;
+    return `MVSD LAB MEMBER DASHBOARD\n--------------------------------------------------\n${title}\n${details}`;
 };
 
-const savePublicationDocument = async (file, memberId) => {
+const typeCodes = {
+    'International Journal': 'INT_JOURNAL',
+    'Domestic Journal': 'DOM_JOURNAL',
+    'International Conference': 'INT_CONF',
+    'Domestic Conference': 'DOM_CONF'
+  };
+
+  const getNextSequence = async (phdId, typeCode) => {
+    const result = await query(
+      `SELECT COUNT(*) FROM phd_candidate_publication_info 
+       WHERE phd_candidate_id = $1 AND type = $2`,
+      [phdId, typeCode]
+    );
+    return result.rows[0].count + 1;
+  };
+  
+  const generateFileName = (phdId, type, sequence, ext) => {
+    const typeCode = typeCodes[type];
+    return `${phdId}_PUB_${typeCode}_${sequence}${ext}`;
+  };
+
+  const savePublicationDocument = async (file, phdId, publicationType) => {
+    const sequence = await getNextSequence(phdId, publicationType);
   const allowedTypes = ['application/pdf', 'application/msword', 
                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
   if (!allowedTypes.includes(file.type)) {
@@ -18,13 +40,17 @@ const savePublicationDocument = async (file, memberId) => {
   }
 
   const ext = path.extname(file.name);
-  const filename = `${memberId}_PUB_${Date.now()}${ext}`;
-  const targetPath = path.join('/home/mvsd-lab/public/Storage/Documents/Publications', filename);
+  const filename = generateFileName(phdId, publicationType, sequence, ext);
+  // Full path
+  const targetPath = path.join(
+    '/home/mvsd-lab/public/Storage/Documents/PhD_Candidate',
+    filename
+  );
   
   try {
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
-    return `/Storage/Documents/Publications/${filename}`;
+    return `/Storage/Documents/PhD_Candidate/${filename}`;
   } catch (error) {
     throw new Error(`Failed to save document: ${error.message}`);
   }
@@ -146,22 +172,20 @@ export async function POST(req) {
         documentUrl
       ]);
 
-      const publicationId = result.rows[0].id;
 
       // Insert notification
-      const notificationId = `NOTIF${publicationId}`;
-      await query(
-        `INSERT INTO notification_details (id, title, status)
-         VALUES ($1, $2, $3)`,
-        [notificationId, `New Publication Added by ${memberId}`, 'Unread']
-      );
+      const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
+      const Id = `${memberId}`; 
+      const notificationTitle = `New Publication Added by ${memberId}`;
+      const notificationStatus = 'Unread';
+      await query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
 
       await query('COMMIT');
 
       // Send Telegram alert
       const successMessage = formatAlertMessage(
         'New Publication Added',
-        `Member ID: ${memberId}\nPublication ID: ${publicationId}\nType: ${type}`
+        `Member ID: ${memberId}\nType: ${type}`
       );
       await sendTelegramAlert(successMessage);
 

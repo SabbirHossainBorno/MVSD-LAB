@@ -4,14 +4,15 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
+import Cookies from 'js-cookie';
 import withAuth from '../../components/withAuth';
 
-const publicationTypes = [
-  'International Journal',
-  'Domestic Journal',
-  'International Conference', 
-  'Domestic Conference'
-];
+const typeCodes = {
+  'International Journal': 'INT_JOURNAL',
+  'Domestic Journal': 'DOM_JOURNAL',
+  'International Conference': 'INT_CONF',
+  'Domestic Conference': 'DOM_CONF'
+};
 
 const AddPublication = ({ darkMode }) => {
   const [formData, setFormData] = useState({
@@ -26,13 +27,14 @@ const AddPublication = ({ darkMode }) => {
     pageCount: '',
     publishedDate: '',
     impactFactor: '',
-    link: '',
-    document: null
+    link: ''
   });
 
+  const [documentFile, setDocumentFile] = useState(null);
+  const [newAuthor, setNewAuthor] = useState('');
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [newAuthor, setNewAuthor] = useState('');
+
 
   // Add author to list
   const addAuthor = () => {
@@ -91,41 +93,74 @@ const AddPublication = ({ darkMode }) => {
   // Submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
-    setIsSubmitting(true);
+    const memberId = Cookies.get('id');
     
+    if (!memberId) {
+      toast.error('Authentication required. Please login again.');
+      return;
+    }
+  
+    // Basic validation
+    const requiredFields = [
+      !formData.type && 'Publication Type',
+      !formData.title && 'Title',
+      !formData.year && 'Year',
+      formData.authors.length === 0 && 'Authors',
+      !formData.pageCount && 'Page Count',
+      !documentFile && 'Document'
+    ].filter(Boolean);
+  
+    if (requiredFields.length > 0) {
+      toast.error(`Missing required fields: ${requiredFields.join(', ')}`);
+      return;
+    }
+  
+    // Journal/Conference specific validation
+    if (formData.type.includes('Journal') && 
+       (!formData.journalName || !formData.volume || !formData.issue)) {
+      toast.error('Journal publications require Journal Name, Volume and Issue');
+      return;
+    }
+  
+    if (formData.type.includes('Conference') && !formData.conferenceName) {
+      toast.error('Conference publications require Conference Name');
+      return;
+    }
+  
+    setIsSubmitting(true);
+  
     try {
       const formPayload = new FormData();
-      formPayload.append('type', formData.type);
-      formPayload.append('title', formData.title);
-      formPayload.append('year', formData.year);
-      formData.authors.forEach(author => formPayload.append('authors[]', author));
-      formPayload.append('pageCount', formData.pageCount);
-      formPayload.append('document', formData.document);
-
-      if (formData.type.includes('Journal')) {
-        formPayload.append('journalName', formData.journalName);
-        formPayload.append('volume', formData.volume);
-        formPayload.append('issue', formData.issue);
-        formPayload.append('impactFactor', formData.impactFactor);
-      }
       
-      if (formData.type.includes('Conference')) {
-        formPayload.append('conferenceName', formData.conferenceName);
-      }
+      // Append all form data
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key === 'authors') {
+          formPayload.append(key, JSON.stringify(value));
+        } else {
+          formPayload.append(key, value);
+        }
+      });
       
-      formPayload.append('link', formData.link);
-      formPayload.append('publishedDate', formData.publishedDate);
-
-      const response = await fetch('/api/publications', {
+      // Append the document file
+      formPayload.append('document', documentFile);
+      
+      // Add member ID
+      formPayload.append('memberId', memberId);
+  
+      const response = await fetch('/api/member_publication_add', {
         method: 'POST',
         body: formPayload
       });
-
-      if (!response.ok) throw new Error('Submission failed');
+  
+      const result = await response.json();
       
+      if (!response.ok) {
+        throw new Error(result.message || 'Publication submission failed');
+      }
+  
       toast.success('Publication submitted successfully!');
+      
+      // Reset form
       setFormData({
         type: '',
         title: '',
@@ -138,11 +173,20 @@ const AddPublication = ({ darkMode }) => {
         pageCount: '',
         publishedDate: '',
         impactFactor: '',
-        link: '',
-        document: null
+        link: ''
       });
+      
+      // Reset file input
+      setDocumentFile(null);
+      document.querySelector('input[type="file"]').value = '';
+  
     } catch (error) {
-      toast.error(error.message || 'Submission failed. Please try again.');
+      toast.error(error.message || 'Failed to submit publication');
+      logger.error('Publication Submit Error', {
+        error: error.message,
+        memberId,
+        formData
+      });
     } finally {
       setIsSubmitting(false);
     }
