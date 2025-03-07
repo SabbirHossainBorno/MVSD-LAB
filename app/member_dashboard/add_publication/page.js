@@ -34,18 +34,16 @@ const AddPublication = ({ darkMode }) => {
   const [newAuthor, setNewAuthor] = useState('');
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   // Retrieve type and id from cookies
   useEffect(() => {
-    const checkAuth = () => {
-      const memberId = Cookies.get('id');
-      const memberType = Cookies.get('type');
-      console.log('Member ID:', memberId); // Debugging log
-      console.log('Member Type:', memberType); // Debugging log
-
+    const memberId = Cookies.get('id');
+    const memberType = Cookies.get('type');
+  
     if (!memberId || !memberType) {
       toast.error('Authentication required. Please login again.');
-    }
+      setIsAuthenticated(false);
     }
   }, []);
 
@@ -152,7 +150,13 @@ const AddPublication = ({ darkMode }) => {
         throw new Error(result.message || 'Publication submission failed');
       }
 
-      toast.success('Publication submitted successfully!');
+      if (response.ok) {
+        toast.success('Publication Submitted Successfully!');
+        // Reset form after success
+        setFormData({ ... });
+        setDocumentFile(null);
+        document.querySelector('input[type="file"]').value = '';
+      }
 
       // Reset form
       setFormData({

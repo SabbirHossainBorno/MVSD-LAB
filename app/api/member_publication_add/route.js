@@ -172,13 +172,24 @@ export async function POST(req) {
     try {
       await query('BEGIN');
       
-      const insertQuery = `
+      const query = `
         INSERT INTO phd_candidate_publication_info (
-            phd_candidate_id, type, title, year, journal_name, conference_name, 
-            authors, volume, issue, page_count, published_date, impact_factor, 
-            link, document_path
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-        RETURNING phd_candidate_id
+            phd_candidate_id,
+            type,
+            title,
+            year,
+            journal_name,
+            conference_name,
+            authors,
+            volume,
+            issue,
+            page_count,
+            published_date,
+            impact_factor,
+            link,
+            document_path,
+            approval_status
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING id;
         `;
       console.log('Executing Insert Query with Data:', [
         memberId, type, title, year, 
@@ -201,7 +212,8 @@ export async function POST(req) {
         publishedDate || null,
         impactFactor || null,
         link || null,
-        documentUrl
+        documentUrl,
+        'Pending' // Set default approval status
       ]);
       const publicationId = result.rows[0].phd_candidate_id;
 
