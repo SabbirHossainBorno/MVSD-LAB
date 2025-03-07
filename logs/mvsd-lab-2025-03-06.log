@@ -182,3 +182,16 @@
 2025-03-06 21:27:20-EID[699829-MVSDLAB]-SID[3df097e4-07e3-4fba-8a37-216bd7deb295]-[INFO] TASK[Add Publication]-Publication PHDC04MVSD added by member PHDC04MVSD
 2025-03-06 21:41:50-EID[699829-MVSDLAB]-SID[3df097e4-07e3-4fba-8a37-216bd7deb295]-[ERROR] TASK[Add Publication]-Member ID: PHDC04MVSD - Error: Database query failed: invalid input syntax for type json
 2025-03-06 21:50:49-EID[699829-MVSDLAB]-SID[3df097e4-07e3-4fba-8a37-216bd7deb295]-[INFO] TASK[Add Publication]-Publication PHDC04MVSD added by member PHDC04MVSD
+2025-03-06 23:44:33-EID[]-SID[25045eec-9482-4a1f-a651-30f018ddcc3c]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 123.200.7.107
+2025-03-06 23:44:33-EID[]-SID[25045eec-9482-4a1f-a651-30f018ddcc3c]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-06 23:44:34-EID[483785-MVSDLAB]-SID[25045eec-9482-4a1f-a651-30f018ddcc3c]-[INFO] TASK[Generate EID]-Generated EID 483785-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-06 23:44:36-EID[483785-MVSDLAB]-SID[25045eec-9482-4a1f-a651-30f018ddcc3c]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-06 23:44:44-EID[483785-MVSDLAB]-SID[25045eec-9482-4a1f-a651-30f018ddcc3c]-[INFO] TASK[Auth Check]-Authentication check successful for bbirhosdasainborno@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-06 23:44:44-EID[483785-MVSDLAB]-SID[25045eec-9482-4a1f-a651-30f018ddcc3c]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-06 23:44:45-EID[483785-MVSDLAB]-SID[25045eec-9482-4a1f-a651-30f018ddcc3c]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-06 23:44:54-EID[483785-MVSDLAB]-SID[25045eec-9482-4a1f-a651-30f018ddcc3c]-[INFO] TASK[Auth Check]-Authentication check successful for bbirhosdasainborno@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-06 23:48:15-EID[483785-MVSDLAB]-SID[25045eec-9482-4a1f-a651-30f018ddcc3c]-[INFO] TASK[Auth Check]-Authentication check successful for bbirhosdasainborno@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-06 23:48:16-EID[483785-MVSDLAB]-SID[25045eec-9482-4a1f-a651-30f018ddcc3c]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-06 23:48:16-EID[483785-MVSDLAB]-SID[25045eec-9482-4a1f-a651-30f018ddcc3c]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-06 23:48:19-EID[483785-MVSDLAB]-SID[25045eec-9482-4a1f-a651-30f018ddcc3c]-[INFO] TASK[Auth Check]-Authentication check successful for bbirhosdasainborno@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-06 23:49:39-EID[483785-MVSDLAB]-SID[25045eec-9482-4a1f-a651-30f018ddcc3c]-[INFO] TASK[Add Publication]-Publication added by member PHDC04MVSD

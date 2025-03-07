@@ -81,9 +81,7 @@ const AddPublication = ({ darkMode }) => {
     const newErrors = {};
     if (!formData.type) newErrors.type = 'Publication type is required';
     if (!formData.title.trim()) newErrors.title = 'Title is required';
-    if (formData.year < 1900 || formData.year > new Date().getFullYear()) {
-      newErrors.year = 'Invalid year';
-    }
+    if (!formData.year || formData.year < 1900 || formData.year > new Date().getFullYear()) newErrors.year = 'Invalid year';
     if (formData.authors.length === 0) newErrors.authors = 'At least one author required';
 
     if (formData.type.includes('Journal')) {
@@ -150,13 +148,7 @@ const AddPublication = ({ darkMode }) => {
         throw new Error(result.message || 'Publication submission failed');
       }
 
-      if (response.ok) {
-        toast.success('Publication Submitted Successfully!');
-        // Reset form after success
-        setFormData({ ... });
-        setDocumentFile(null);
-        document.querySelector('input[type="file"]').value = '';
-      }
+      toast.success('Publication Submitted Successfully!');
 
       // Reset form
       setFormData({

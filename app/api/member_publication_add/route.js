@@ -172,7 +172,7 @@ export async function POST(req) {
     try {
       await query('BEGIN');
       
-      const query = `
+      const insertQuery = `
         INSERT INTO phd_candidate_publication_info (
             phd_candidate_id,
             type,
@@ -215,7 +215,6 @@ export async function POST(req) {
         documentUrl,
         'Pending' // Set default approval status
       ]);
-      const publicationId = result.rows[0].phd_candidate_id;
 
       const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
       const Id = `${memberId}`; 
@@ -231,19 +230,18 @@ export async function POST(req) {
       );
       await sendTelegramAlert(successMessage);
 
-      console.log(`Success: Publication ${publicationId} added by member ${memberId}`);
+      console.log(`Success: Publication added by member ${memberId}`);
       logger.info('Publication Added Successfully', {
         meta: {
           eid,
           sid: sessionId,
           taskName: 'Add Publication',
-          details: `Publication ${publicationId} added by member ${memberId}`
+          details: `Publication added by member ${memberId}`
         }
       });
 
       return NextResponse.json({ 
-        success: true, 
-        publicationId,
+        success: true,
         message: 'Publication added successfully'
       });
     } catch (error) {
