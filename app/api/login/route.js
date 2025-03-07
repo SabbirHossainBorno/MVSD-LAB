@@ -186,8 +186,16 @@ const cookieConfig = { httpOnly: true, secure: process.env.NODE_ENV === 'product
 response.cookies.set('email', email, cookieConfig);
 response.cookies.set('sessionId', sessionId, cookieConfig);
 response.cookies.set('eid', eid, cookieConfig);
-response.cookies.set('id', user.id, cookieConfig); // Ensure this line is present to set the memberId cookie
-response.cookies.set('type', user.type, cookieConfig); // Set the type cookie
+// Set non-httpOnly cookies for client-side access
+response.cookies.set('id', user.id, { 
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'Lax'
+});
+
+response.cookies.set('type', user.type, {
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'Lax'
+});
 console.log('Setting memberId cookie:', user.id); // Debugging log
 console.log('Setting memberType cookie:', user.type); // Debugging log
 response.cookies.set('redirect', 

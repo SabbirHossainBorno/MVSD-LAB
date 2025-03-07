@@ -35,17 +35,25 @@ const AddPublication = ({ darkMode }) => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Retrieve type and id from cookies
   useEffect(() => {
-    const memberId = Cookies.get('id');
-    const memberType = Cookies.get('type');
-    console.log('Member ID:', memberId); // Debugging log
-    console.log('Member Type:', memberType); // Debugging log
-
-    if (!memberId || !memberType) {
-      toast.error('Authentication required. Please login again.');
-    }
-  }, []);
+    const checkAuth = () => {
+      const memberId = Cookies.get('id');
+      const memberType = Cookies.get('type');
+      
+      if (!memberId || !memberType) {
+        // Handle missing cookies
+        router.push('/login');
+      }
+    };
+  
+    // Check immediately
+    checkAuth();
+    
+    // Add event listener for future changes
+    const interval = setInterval(checkAuth, 1000);
+    
+    return () => clearInterval(interval);
+  }, [router]);
 
   // Add author to list
   const addAuthor = () => {
@@ -81,7 +89,9 @@ const AddPublication = ({ darkMode }) => {
     const newErrors = {};
     if (!formData.type) newErrors.type = 'Publication type is required';
     if (!formData.title.trim()) newErrors.title = 'Title is required';
-    if (!formData.year) newErrors.year = 'Year is required';
+    if (formData.year < 1900 || formData.year > new Date().getFullYear()) {
+      newErrors.year = 'Invalid year';
+    }
     if (formData.authors.length === 0) newErrors.authors = 'At least one author required';
 
     if (formData.type.includes('Journal')) {
