@@ -35,25 +35,19 @@ const AddPublication = ({ darkMode }) => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Retrieve type and id from cookies
   useEffect(() => {
     const checkAuth = () => {
       const memberId = Cookies.get('id');
       const memberType = Cookies.get('type');
-      
-      if (!memberId || !memberType) {
-        // Handle missing cookies
-        router.push('/login');
-      }
-    };
-  
-    // Check immediately
-    checkAuth();
-    
-    // Add event listener for future changes
-    const interval = setInterval(checkAuth, 1000);
-    
-    return () => clearInterval(interval);
-  }, [router]);
+      console.log('Member ID:', memberId); // Debugging log
+      console.log('Member Type:', memberType); // Debugging log
+
+    if (!memberId || !memberType) {
+      toast.error('Authentication required. Please login again.');
+    }
+    }
+  }, []);
 
   // Add author to list
   const addAuthor = () => {

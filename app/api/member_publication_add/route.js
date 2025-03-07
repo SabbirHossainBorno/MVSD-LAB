@@ -1,8 +1,8 @@
 // app/api/member_publication_add/route.js
 import { NextResponse } from 'next/server';
-import { query } from '../../../../lib/db';
-import logger from '../../../../lib/logger';
-import sendTelegramAlert from '../../../../lib/telegramAlert';
+import { query } from '../../../lib/db';
+import logger from '../../../lib/logger';
+import sendTelegramAlert from '../../../lib/telegramAlert';
 import path from 'path';
 import fs from 'fs';
 
