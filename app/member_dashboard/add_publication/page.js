@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 import withAuth from '../../components/withAuth';
+import LoadingSpinner from '../../components/LoadingSpinner'; // Importing the spinner
+
 
 const typeCodes = {
   'International Journal': 'INT_JOURNAL',
@@ -186,6 +188,12 @@ const AddPublication = ({ darkMode }) => {
       animate={{ opacity: 1, y: 0 }}
       className="h-full space-y-6"
     >
+            {/* Overlay and Loading Spinner */}
+            {isSubmitting && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-md z-50">
+          <LoadingSpinner />
+        </div>
+      )}
       <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg`}>
         <h1 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>
           Add New Publication
@@ -418,7 +426,6 @@ const AddPublication = ({ darkMode }) => {
             />
             {errors.document && <p className="text-red-500 text-sm mt-1">{errors.document}</p>}
           </div>
-          {/* Submit Button */}
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -426,7 +433,7 @@ const AddPublication = ({ darkMode }) => {
             className={`w-full py-3 rounded-lg font-medium transition-colors ${darkMode ? 'bg-purple-600 hover:bg-purple-500 text-gray-100' : 'bg-purple-600 hover:bg-purple-700 text-white'} ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`}
             type="submit"
           >
-            {isSubmitting ? 'Submitting...' : 'Submit Publication'}
+            Submit
           </motion.button>
         </form>
       </div>
