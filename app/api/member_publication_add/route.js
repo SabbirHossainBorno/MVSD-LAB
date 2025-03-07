@@ -1,4 +1,3 @@
-// app/api/member_publication_add/route.js
 import { NextResponse } from 'next/server';
 import { query } from '../../../lib/db';
 import logger from '../../../lib/logger';
@@ -94,7 +93,7 @@ export async function POST(req) {
     const year = formData.get('year');
     const journalName = formData.get('journalName');
     const conferenceName = formData.get('conferenceName');
-    const authors = JSON.parse(formData.get('authors'));
+    let authors = formData.get('authors');
     const volume = formData.get('volume');
     const issue = formData.get('issue');
     const pageCount = formData.get('pageCount');
@@ -102,6 +101,28 @@ export async function POST(req) {
     const impactFactor = formData.get('impactFactor');
     const link = formData.get('link');
     const documentFile = formData.get('document');
+    
+
+    console.log('Received Data:', {
+      type, title, year, journalName, conferenceName, authors, 
+      volume, issue, pageCount, publishedDate, impactFactor, link, documentFile
+    });
+
+    // Check authors field
+    try {
+        if (authors) {
+          console.log('Authors before JSON parse:', authors);
+          authors = JSON.parse(authors);  // Parse the authors if it is a string
+        }
+      } catch (error) {
+        console.error(`Error parsing authors: ${error.message}`);
+        return NextResponse.json({ 
+          success: false, 
+          message: 'Invalid JSON in authors field' 
+        }, { status: 400 });
+      }
+
+    const serializedAuthors = JSON.stringify(authors);
 
     // Validation
     const requiredFields = [
@@ -150,22 +171,30 @@ export async function POST(req) {
 
     try {
       await query('BEGIN');
+      
       const insertQuery = `
         INSERT INTO phd_candidate_publication_info (
-          phd_candidate_id, type, title, year, journal_name, conference_name, 
-          authors, volume, issue, page_count, published_date, impact_factor, 
-          link, document_path
+            phd_candidate_id, type, title, year, journal_name, conference_name, 
+            authors, volume, issue, page_count, published_date, impact_factor, 
+            link, document_path
         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-        RETURNING id
-      `;
+        RETURNING phd_candidate_id
+        `;
+      console.log('Executing Insert Query with Data:', [
+        memberId, type, title, year, 
+        type.includes('Journal') ? journalName : null,
+        type.includes('Conference') ? conferenceName : null,
+        authors, volume, issue, pageCount, 
+        publishedDate || null, impactFactor || null, link || null, documentUrl
+      ]);
       const result = await query(insertQuery, [
-        memberId,
+        memberId, 
         type,
         title,
         year,
         type.includes('Journal') ? journalName : null,
         type.includes('Conference') ? conferenceName : null,
-        authors,
+        serializedAuthors,  // Pass the serialized authors here
         volume,
         issue,
         pageCount,
@@ -174,7 +203,7 @@ export async function POST(req) {
         link || null,
         documentUrl
       ]);
-      const publicationId = result.rows[0].id;
+      const publicationId = result.rows[0].phd_candidate_id;
 
       const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
       const Id = `${memberId}`; 
@@ -223,7 +252,7 @@ export async function POST(req) {
       });
       return NextResponse.json({ 
         success: false, 
-        message: `Error adding publication: ${error.message}`
+        message: `Error adding publication: ${error.message}` 
       }, { status: 500 });
     }
   } catch (error) {
@@ -243,7 +272,7 @@ export async function POST(req) {
     });
     return NextResponse.json({ 
         success: false, 
-        message: `System error: ${error.message}`
+        message: `System error: ${error.message}` 
       }, { status: 500 });
-    }
   }
+}
