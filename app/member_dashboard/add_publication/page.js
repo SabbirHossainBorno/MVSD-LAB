@@ -190,10 +190,11 @@ const AddPublication = ({ darkMode }) => {
     >
             {/* Overlay and Loading Spinner */}
             {isSubmitting && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-md z-50">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <LoadingSpinner />
         </div>
       )}
+
       <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg`}>
         <h1 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>
           Add New Publication

@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { format } from 'date-fns';
 import withAuth from '../../components/withAuth';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { useCallback } from 'react';
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -19,7 +20,7 @@ const debounce = (func, delay) => {
   let timeoutId;
   return (...args) => {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func.apply(this, args), delay);
+    timeoutId = setTimeout(() => func(...args), delay);
   };
 };
 
@@ -32,7 +33,7 @@ function SubscribersList() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
 
-  const fetchSubscribers = debounce(async () => {
+  const fetchSubscribers = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams({
@@ -44,7 +45,7 @@ function SubscribersList() {
 
       const response = await fetch(`/api/subscribers_list?${params}`);
       const result = await response.json();
-      
+
       if (response.ok) {
         setSubscribers(result.subscribers);
       } else {
@@ -55,11 +56,15 @@ function SubscribersList() {
     } finally {
       setLoading(false);
     }
-  }, 300);
+  }, [searchTerm, sortConfig, dateRange]);  // Add dependencies here
 
   useEffect(() => {
-    fetchSubscribers();
-  }, [searchTerm, dateRange, sortConfig]);
+    const debouncedFetch = debounce(fetchSubscribers, 300);
+    debouncedFetch();
+    
+    // Cleanup function to cancel pending debounced calls
+    return () => debouncedFetch.cancel();
+  }, [fetchSubscribers]);  // Only depend on fetchSubscribers
 
   const handleSort = (field) => {
     setSortConfig(prev => ({

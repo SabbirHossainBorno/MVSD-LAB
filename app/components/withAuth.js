@@ -84,10 +84,10 @@ const withAuth = (WrappedComponent, requiredRole) => {
     }, [router.query]);
 
     useEffect(() => {
-      if (isAuthenticated && requiredRole && userRole !== requiredRole) {
-        setUnauthorized(true); // Set unauthorized state
+      if (isAuthenticated && userRole !== requiredRole) {
+        setUnauthorized(true);
       }
-    }, [isAuthenticated, requiredRole, userRole]);
+    }, [isAuthenticated, userRole]);
 
     useEffect(() => {
       if (unauthorized) {

@@ -182,11 +182,13 @@ const MemberDashboard = () => {
 
             {/* Centered Logo */}
             <div className="w-full flex justify-center mb-2">
-              <img 
-                src={darkMode ? "/images/memberDashboardSidebar_logo_dark.svg" : "/images/memberDashboardSidebar_logo_light.svg"} 
-                alt="Dashboard Logo"
-                className="h-16 w-auto"
-              />
+            <Image 
+              src={darkMode ? "/images/memberDashboardSidebar_logo_dark.svg" : "/images/memberDashboardSidebar_logo_light.svg"} 
+              alt="Dashboard Logo"
+              width={150} // Adjust width as needed
+              height={64} // Adjust height as needed
+              priority // Ensures the image loads quickly
+            />
             </div>
 
             {/* Subtle Separator */}
@@ -234,22 +236,22 @@ const MemberDashboard = () => {
                   }`}
                 >
                   {/* In the navigation menu where subItems are mapped */}
-{item.subItems.map((subItem) => (
-  <div
-    key={subItem.name}
-    className={`p-2.5 text-sm rounded mb-1 ${
-      darkMode 
-        ? 'hover:bg-gray-700/30 text-gray-300' 
-        : 'hover:bg-gray-100/70 text-gray-700'
-    }`}
-    onClick={() => {
-      setActiveMenu(subItem.link);
-      setSidebarOpen(false); // Close sidebar on mobile
-    }}
-  >
-    {subItem.name}
-  </div>
-))}
+                {item.subItems.map((subItem) => (
+                  <div
+                    key={subItem.name}
+                    className={`p-2.5 text-sm rounded mb-1 transition-colors cursor-pointer select-none ${
+                      darkMode 
+                        ? 'hover:bg-gray-700/30 text-gray-300' 
+                        : 'hover:bg-gray-100/70 text-gray-700'
+                    }`}
+                    onClick={() => {
+                      setActiveMenu(subItem.link);
+                      setSidebarOpen(false);
+                    }}
+                  >
+                    {subItem.name}
+                  </div>
+                ))}
                 </motion.div>
               )}
             </div>
