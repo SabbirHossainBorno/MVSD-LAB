@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import withAuth from '../components/withAuth';
 import LoadingSpinner from '../components/LoadingSpinner';
 import AddPublication from './add_publication/page';
+import PublicationList from './list_publication/page';
 import { 
   FiHome, FiFileText, FiUsers, FiSettings, FiLogOut, FiChevronDown, 
   FiChevronUp, FiBox, FiDatabase, FiStar, FiClock, FiMenu, FiX 
@@ -42,8 +43,8 @@ const menuItems = [
     name: 'Publications', 
     icon: <LiaProjectDiagramSolid className="w-5 h-5" />,
     subItems: [
-      { name: 'Add Publication', link: 'add_publication' }, // Updated link
-      { name: 'Publication List', link: 'list_publication' }
+      { name: 'Add Publication', link: 'add_publication' },
+      { name: 'Publication List', link: 'list_publication' } // Add this
     ]
   }
 ];
@@ -635,7 +636,7 @@ const MemberDashboard = () => {
         
           {/* Publication List Page (You can create similarly) */}
           {activeMenu === 'list_publication' && (
-            <div>{/* Your publication list component */}</div>
+            <PublicationList darkMode={darkMode} />
           )}
         </div>
 
