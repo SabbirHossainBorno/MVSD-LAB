@@ -108,10 +108,12 @@ const MemberDashboard = () => {
 
   // Access denied notification effect
   useEffect(() => {
-    if (searchParams.get('accessDenied')) {
-      toast.error('Access Denied! You do not have permission to view this page.');
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('accessDenied')) {
+      params.delete('accessDenied');
+      router.replace(window.location.pathname);
     }
-  }, [searchParams]);
+  }, [router]);
 
   // Logout handler
   const handleLogout = async () => {
@@ -640,4 +642,4 @@ const MemberDashboard = () => {
   );
 }
 
-export default withAuth(MemberDashboard);
+export default withAuth(MemberDashboard, 'member'); // <-- Required role

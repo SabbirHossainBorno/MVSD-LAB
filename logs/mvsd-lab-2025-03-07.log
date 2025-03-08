@@ -242,3 +242,71 @@
 2025-03-07 22:44:39-EID[]-SID[]-[INFO] TASK[Home - Member]-Fetching member details from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
 2025-03-07 22:44:39-EID[]-SID[]-[INFO] TASK[Home - Member]-Successfully fetched member details from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
 2025-03-07 22:44:43-EID[481893-MVSDLAB]-SID[2411135a-2a6a-4e2a-a89c-7208cf2d81af]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-03-07 23:19:08-EID[]-SID[c1fb75b0-d746-47e9-b15b-b541bbe6cf8c]-[INFO] TASK[Login]-Login attempt for amin@gmail.com from IP 123.200.7.107
+2025-03-07 23:19:08-EID[]-SID[c1fb75b0-d746-47e9-b15b-b541bbe6cf8c]-[INFO] TASK[DBCheck]-Looking for amin@gmail.com in member
+2025-03-07 23:19:08-EID[830651-MVSDLAB]-SID[c1fb75b0-d746-47e9-b15b-b541bbe6cf8c]-[INFO] TASK[Generate EID]-Generated EID 830651-MVSDLAB for user amin@gmail.com
+2025-03-07 23:19:09-EID[830651-MVSDLAB]-SID[c1fb75b0-d746-47e9-b15b-b541bbe6cf8c]-[INFO] TASK[AuthSuccess]-Successful member login for amin@gmail.com
+2025-03-07 23:19:10-EID[830651-MVSDLAB]-SID[c1fb75b0-d746-47e9-b15b-b541bbe6cf8c]-[INFO] TASK[Auth Check]-Authentication check successful for amin@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:19:10-EID[830651-MVSDLAB]-SID[c1fb75b0-d746-47e9-b15b-b541bbe6cf8c]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-03-07 23:19:20-EID[830651-MVSDLAB]-SID[c1fb75b0-d746-47e9-b15b-b541bbe6cf8c]-[INFO] TASK[Auth Check]-Authentication check successful for amin@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:19:20-EID[830651-MVSDLAB]-SID[c1fb75b0-d746-47e9-b15b-b541bbe6cf8c]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-03-07 23:19:27-EID[830651-MVSDLAB]-SID[c1fb75b0-d746-47e9-b15b-b541bbe6cf8c]-[INFO] TASK[Logout]-member amin@gmail.com logged out from 123.200.7.107
+2025-03-07 23:19:31-EID[]-SID[8dea2fd9-8dc3-4f52-9a8c-46f6fe49e6e8]-[INFO] TASK[Login]-Login attempt for amin@gmail.com from IP 123.200.7.107
+2025-03-07 23:19:31-EID[]-SID[8dea2fd9-8dc3-4f52-9a8c-46f6fe49e6e8]-[INFO] TASK[DBCheck]-Looking for amin@gmail.com in member
+2025-03-07 23:19:31-EID[799637-MVSDLAB]-SID[8dea2fd9-8dc3-4f52-9a8c-46f6fe49e6e8]-[INFO] TASK[Generate EID]-Generated EID 799637-MVSDLAB for user amin@gmail.com
+2025-03-07 23:19:31-EID[799637-MVSDLAB]-SID[8dea2fd9-8dc3-4f52-9a8c-46f6fe49e6e8]-[INFO] TASK[AuthSuccess]-Successful member login for amin@gmail.com
+2025-03-07 23:19:32-EID[799637-MVSDLAB]-SID[8dea2fd9-8dc3-4f52-9a8c-46f6fe49e6e8]-[INFO] TASK[Auth Check]-Authentication check successful for amin@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:19:32-EID[799637-MVSDLAB]-SID[8dea2fd9-8dc3-4f52-9a8c-46f6fe49e6e8]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-03-07 23:19:39-EID[799637-MVSDLAB]-SID[8dea2fd9-8dc3-4f52-9a8c-46f6fe49e6e8]-[INFO] TASK[Logout]-member amin@gmail.com logged out from 123.200.7.107
+2025-03-07 23:19:48-EID[]-SID[5f4c600f-dd05-4722-ba12-4de970b219de]-[INFO] TASK[Login]-Login attempt for amin@gmail.com from IP 123.200.7.107
+2025-03-07 23:19:48-EID[]-SID[5f4c600f-dd05-4722-ba12-4de970b219de]-[INFO] TASK[DBCheck]-Looking for amin@gmail.com in member
+2025-03-07 23:19:48-EID[340306-MVSDLAB]-SID[5f4c600f-dd05-4722-ba12-4de970b219de]-[INFO] TASK[Generate EID]-Generated EID 340306-MVSDLAB for user amin@gmail.com
+2025-03-07 23:19:48-EID[340306-MVSDLAB]-SID[5f4c600f-dd05-4722-ba12-4de970b219de]-[INFO] TASK[AuthSuccess]-Successful member login for amin@gmail.com
+2025-03-07 23:19:49-EID[340306-MVSDLAB]-SID[5f4c600f-dd05-4722-ba12-4de970b219de]-[INFO] TASK[Auth Check]-Authentication check successful for amin@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:19:49-EID[340306-MVSDLAB]-SID[5f4c600f-dd05-4722-ba12-4de970b219de]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-03-07 23:20:00-EID[340306-MVSDLAB]-SID[5f4c600f-dd05-4722-ba12-4de970b219de]-[INFO] TASK[Logout]-member amin@gmail.com logged out from 123.200.7.107
+2025-03-07 23:20:02-EID[]-SID[2d2e9864-f8a1-4749-9aba-b9d597a58d24]-[INFO] TASK[Login]-Login attempt for amin@gmail.com from IP 123.200.7.107
+2025-03-07 23:20:02-EID[]-SID[2d2e9864-f8a1-4749-9aba-b9d597a58d24]-[INFO] TASK[DBCheck]-Looking for amin@gmail.com in member
+2025-03-07 23:20:02-EID[291882-MVSDLAB]-SID[2d2e9864-f8a1-4749-9aba-b9d597a58d24]-[INFO] TASK[Generate EID]-Generated EID 291882-MVSDLAB for user amin@gmail.com
+2025-03-07 23:20:03-EID[291882-MVSDLAB]-SID[2d2e9864-f8a1-4749-9aba-b9d597a58d24]-[INFO] TASK[AuthSuccess]-Successful member login for amin@gmail.com
+2025-03-07 23:20:03-EID[291882-MVSDLAB]-SID[2d2e9864-f8a1-4749-9aba-b9d597a58d24]-[INFO] TASK[Auth Check]-Authentication check successful for amin@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:20:04-EID[291882-MVSDLAB]-SID[2d2e9864-f8a1-4749-9aba-b9d597a58d24]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-03-07 23:20:12-EID[291882-MVSDLAB]-SID[2d2e9864-f8a1-4749-9aba-b9d597a58d24]-[INFO] TASK[Logout]-member amin@gmail.com logged out from 123.200.7.107
+2025-03-07 23:20:18-EID[]-SID[2a4f4c39-99af-4dc5-9a8c-23fd3e5a1b23]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 123.200.7.107
+2025-03-07 23:20:18-EID[]-SID[2a4f4c39-99af-4dc5-9a8c-23fd3e5a1b23]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-07 23:20:18-EID[267995-MVSDLAB]-SID[2a4f4c39-99af-4dc5-9a8c-23fd3e5a1b23]-[INFO] TASK[Generate EID]-Generated EID 267995-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-07 23:20:18-EID[267995-MVSDLAB]-SID[2a4f4c39-99af-4dc5-9a8c-23fd3e5a1b23]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-07 23:20:19-EID[267995-MVSDLAB]-SID[2a4f4c39-99af-4dc5-9a8c-23fd3e5a1b23]-[INFO] TASK[Auth Check]-Authentication check successful for bbirhosdasainborno@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:20:19-EID[267995-MVSDLAB]-SID[2a4f4c39-99af-4dc5-9a8c-23fd3e5a1b23]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-07 23:20:26-EID[267995-MVSDLAB]-SID[2a4f4c39-99af-4dc5-9a8c-23fd3e5a1b23]-[INFO] TASK[Logout]-member bbirhosdasainborno@gmail.com logged out from 123.200.7.107
+2025-03-07 23:20:31-EID[]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[Login]-Login attempt for admin@mvsdlab.com from IP 123.200.7.107
+2025-03-07 23:20:31-EID[]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[DBCheck]-Looking for admin@mvsdlab.com in admin
+2025-03-07 23:20:31-EID[756802-MVSDLAB]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[Generate EID]-Generated EID 756802-MVSDLAB for user admin@mvsdlab.com
+2025-03-07 23:20:31-EID[756802-MVSDLAB]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[AuthSuccess]-Successful admin login for admin@mvsdlab.com
+2025-03-07 23:20:33-EID[756802-MVSDLAB]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[Auth Check]-Authentication check successful for admin@mvsdlab.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:20:33-EID[756802-MVSDLAB]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[Auth Check]-Authentication check successful for admin@mvsdlab.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:20:33-EID[756802-MVSDLAB]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:20:34-EID[756802-MVSDLAB]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[Auth Check]-Authentication check successful for admin@mvsdlab.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:20:34-EID[756802-MVSDLAB]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[Fetch Dashboard Data]-Fetching dashboard data for admin@mvsdlab.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:20:35-EID[756802-MVSDLAB]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[Fetch Dashboard Data]-Dashboard data fetched successfully for admin@mvsdlab.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:20:35-EID[756802-MVSDLAB]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[Fetch Chart Data]-Fetched chart data for the past 7 days from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:20:35-EID[756802-MVSDLAB]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[Fetch Chart Data]-Fetched chart data for the past 7 days from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:20:45-EID[756802-MVSDLAB]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[Auth Check]-Authentication check successful for admin@mvsdlab.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:20:46-EID[756802-MVSDLAB]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[Fetch Subscribers List]-Fetched 26 subscribers with filters: {"search":"","sortField":"date","sortOrder":"DESC","dateRange":""}
+2025-03-07 23:21:00-EID[756802-MVSDLAB]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[Update Notification Status]-Updated notification ID PHDC06MVSD to status Read from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:21:04-EID[756802-MVSDLAB]-SID[bb95888a-dad2-406a-a8d9-b769faf37358]-[INFO] TASK[Logout]-admin admin@mvsdlab.com logged out from 123.200.7.107
+2025-03-07 23:21:13-EID[]-SID[168370f1-1f99-4226-9c1d-4d6e389ac282]-[INFO] TASK[Login]-Login attempt for amin@gmail.com from IP 123.200.7.107
+2025-03-07 23:21:13-EID[]-SID[168370f1-1f99-4226-9c1d-4d6e389ac282]-[INFO] TASK[DBCheck]-Looking for amin@gmail.com in member
+2025-03-07 23:21:13-EID[581200-MVSDLAB]-SID[168370f1-1f99-4226-9c1d-4d6e389ac282]-[INFO] TASK[Generate EID]-Generated EID 581200-MVSDLAB for user amin@gmail.com
+2025-03-07 23:21:13-EID[581200-MVSDLAB]-SID[168370f1-1f99-4226-9c1d-4d6e389ac282]-[INFO] TASK[AuthSuccess]-Successful member login for amin@gmail.com
+2025-03-07 23:21:14-EID[581200-MVSDLAB]-SID[168370f1-1f99-4226-9c1d-4d6e389ac282]-[INFO] TASK[Auth Check]-Authentication check successful for amin@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:21:14-EID[581200-MVSDLAB]-SID[168370f1-1f99-4226-9c1d-4d6e389ac282]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-03-07 23:21:43-EID[581200-MVSDLAB]-SID[168370f1-1f99-4226-9c1d-4d6e389ac282]-[INFO] TASK[Logout]-member amin@gmail.com logged out from 123.200.7.107
+2025-03-07 23:31:48-EID[]-SID[ce77b941-267c-429f-8501-921d837d23dc]-[INFO] TASK[Login]-Login attempt for amin@gmail.com from IP 123.200.7.107
+2025-03-07 23:31:48-EID[]-SID[ce77b941-267c-429f-8501-921d837d23dc]-[INFO] TASK[DBCheck]-Looking for amin@gmail.com in member
+2025-03-07 23:31:48-EID[531074-MVSDLAB]-SID[ce77b941-267c-429f-8501-921d837d23dc]-[INFO] TASK[Generate EID]-Generated EID 531074-MVSDLAB for user amin@gmail.com
+2025-03-07 23:31:48-EID[531074-MVSDLAB]-SID[ce77b941-267c-429f-8501-921d837d23dc]-[INFO] TASK[AuthSuccess]-Successful member login for amin@gmail.com
+2025-03-07 23:31:59-EID[531074-MVSDLAB]-SID[ce77b941-267c-429f-8501-921d837d23dc]-[INFO] TASK[Auth Check]-Authentication check successful for amin@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+2025-03-07 23:32:01-EID[531074-MVSDLAB]-SID[ce77b941-267c-429f-8501-921d837d23dc]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-03-07 23:32:01-EID[531074-MVSDLAB]-SID[ce77b941-267c-429f-8501-921d837d23dc]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-03-07 23:36:07-EID[531074-MVSDLAB]-SID[ce77b941-267c-429f-8501-921d837d23dc]-[INFO] TASK[Auth Check]-Authentication check successful for amin@gmail.com from IP 123.200.7.107 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0

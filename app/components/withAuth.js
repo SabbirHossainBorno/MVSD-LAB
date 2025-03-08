@@ -92,7 +92,12 @@ const withAuth = (WrappedComponent, requiredRole) => {
     useEffect(() => {
       if (unauthorized) {
         toast.error('Access Denied! You do not have permission to view this page.');
-        router.push('/member_dashboard?accessDenied=true'); // Redirect to member dashboard with query parameter
+        
+        // Redirect without parameters
+        router.push('/member_dashboard'); 
+        
+        // Optional: Force reload to clear state
+        window.location.reload();
       }
     }, [unauthorized, router]);
 
