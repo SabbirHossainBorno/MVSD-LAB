@@ -2,32 +2,32 @@
 import { NextResponse } from 'next/server';
 import logger from '../../../lib/logger';
 import sendTelegramAlert from '../../../lib/telegramAlert';
-import { handleSessionExpiration } from '../../../lib/sessionUtils';
-import { query } from '../../../lib/db'; // Import your database query function
+import { query } from '../../../lib/db';
 
 const formatAlertMessage = (title, email, ipAddress, additionalInfo = '') => {
   return `MVSD LAB AUTH-CHECKER\n----------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}${additionalInfo}`;
 };
 
-const validateSession = (request) => {
-  const sessionId = request.cookies.get('sessionId')?.value;
-  const eid = request.cookies.get('eid')?.value || '';
-  const ip = request.headers.get('x-forwarded-for') || request.headers.get('remote-addr');
-  const userAgent = request.headers.get('user-agent');
-  const emailCookie = request.cookies.get('email');
-  const email = emailCookie ? emailCookie.value : null;
-
-  //console.log(`Session validation: email=${email}, sessionId=${sessionId}, ip=${ip}, userAgent=${userAgent}`);
-
-  return { sessionId, eid, ip, userAgent, email };
+// Security headers configuration
+const securityHeaders = {
+  'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'X-XSS-Protection': '1; mode=block',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'geolocation=(), microphone=()'
 };
 
 export async function GET(request) {
-  const { sessionId, eid, ip, userAgent, email } = validateSession(request);
+  const sessionId = request.cookies.get('sessionId')?.value;
+  const eid = request.cookies.get('eid')?.value || '';
+  const ip = request.headers.get('x-forwarded-for') || 'Unknown IP';
+  const userAgent = request.headers.get('user-agent') || 'Unknown UA';
+  const email = request.cookies.get('email')?.value;
 
-  // Handle unauthorized access
+  // Immediate response for missing credentials
   if (!email || !sessionId) {
-    const alertMessage = formatAlertMessage('Unauthorized Access Attempt!', email, ip);
+    const alertMessage = `MVSD LAB AUTH-CHECKER\n----------------------------------------\n🚨 Unauthorized Access Attempt!\nIP : ${ip}\nUA : ${userAgent}`;
     await sendTelegramAlert(alertMessage);
 
     logger.warn('Unauthorized access attempt', {
@@ -35,66 +35,179 @@ export async function GET(request) {
         eid,
         sid: sessionId,
         taskName: 'Auth Check',
-        details: `Unauthorized access attempt from IP ${ip} with User-Agent ${userAgent}`,
-      },
+        details: `IP: ${ip} | UA: ${userAgent}`,
+        severity: 'HIGH'
+      }
     });
 
-    //console.log(`Unauthorized access attempt: email=${email}, ip=${ip}, userAgent=${userAgent}`);
-
-    return NextResponse.json({ authenticated: false });
+    return NextResponse.json(
+      { authenticated: false, message: 'Missing credentials' },
+      { status: 401, headers: securityHeaders }
+    );
   }
 
-  try {
-    const now = new Date();
-    const lastActivity = request.cookies.get('lastActivity')?.value;
-    const lastActivityDate = new Date(lastActivity);
-    const diff = now - lastActivityDate;
-
-    if (diff > 10 * 60 * 1000) { // 10 minutes
-      await handleSessionExpiration(null);
-      return NextResponse.json({ authenticated: false, message: 'Session expired' });
-    }
-
-    // Fetch user role from the database
-    const res = await query('SELECT type FROM admin WHERE email = $1 UNION SELECT type FROM member WHERE email = $1', [email]);
-    if (res.rows.length > 0) {
-      const user = res.rows[0];
-      const alertMessage = formatAlertMessage('Authentication Check Successful', email, ip);
-      await sendTelegramAlert(alertMessage);
-
-      logger.info('Authentication check successful', {
-        meta: {
-          eid,
-          sid: sessionId,
-          taskName: 'Auth Check',
-          details: `Authentication check successful for ${email} from IP ${ip} with User-Agent ${userAgent}`,
-        },
-      });
-
-      return NextResponse.json({ authenticated: true, role: user.type });
-    }
-
-    return NextResponse.json({ authenticated: false });
-  } catch (error) {
-    console.error('Error during authentication check:', error);
-
-    const alertMessage = formatAlertMessage(
-      'Error during authentication check',
-      email,
-      ip,
-      `\nError : ${error.message}`
-    );
-    await sendTelegramAlert(alertMessage);
-
-    logger.error('Error during authentication check', {
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email.toLowerCase())) {
+    logger.warn('Invalid email format', {
       meta: {
+        email,
         eid,
         sid: sessionId,
         taskName: 'Auth Check',
-        details: `Error during authentication check for ${email}: ${error.message} from IP ${ip} with User-Agent ${userAgent}`,
-      },
+        details: `Invalid email format: ${email}`,
+        severity: 'MEDIUM'
+      }
     });
 
-    return NextResponse.json({ authenticated: false, message: 'Internal server error' });
+    return NextResponse.json(
+      { authenticated: false, message: 'Invalid email format' },
+      { status: 400, headers: securityHeaders }
+    );
+  }
+
+  try {
+    // Session expiration check
+    const lastActivity = request.cookies.get('lastActivity')?.value;
+    const SESSION_TIMEOUT = 10 * 60 * 1000; // 10 minutes
+    
+    if (lastActivity) {
+      const now = new Date();
+      const lastActivityDate = new Date(lastActivity);
+      const diff = now - lastActivityDate;
+
+      if (diff > SESSION_TIMEOUT) {
+        const alertMessage = formatAlertMessage('🔐 Session Expired', email, ip);
+        await sendTelegramAlert(alertMessage);
+
+        logger.info('Session expired', {
+          meta: {
+            email,
+            eid,
+            sid: sessionId,
+            taskName: 'Auth Check',
+            details: `Last activity: ${lastActivity}`,
+            severity: 'MEDIUM'
+          }
+        });
+
+        const response = NextResponse.json(
+          { authenticated: false, message: 'Session expired' },
+          { status: 401, headers: securityHeaders }
+        );
+        
+        // Clear authentication cookies
+        response.cookies.delete('sessionId');
+        response.cookies.delete('email');
+        return response;
+      }
+    }
+
+    // Role verification
+    let userType = null;
+    let userTable = null;
+
+    // Check admin table for organizational emails
+    if (email.endsWith('@mvsdlab.com')) {
+      const adminRes = await query(
+        'SELECT type, status FROM admin WHERE email = $1',
+        [email]
+      );
+      
+      if (adminRes.rows.length > 0) {
+        if (adminRes.rows[0].status !== 'Active') {
+          logger.warn('Inactive admin login attempt', {
+            meta: {
+              email,
+              eid,
+              sid: sessionId,
+              taskName: 'Auth Check',
+              details: 'Admin account not active',
+              severity: 'HIGH'
+            }
+          });
+          return NextResponse.json(
+            { authenticated: false, message: 'Account inactive' },
+            { status: 403, headers: securityHeaders }
+          );
+        }
+        userType = adminRes.rows[0].type;
+        userTable = 'admin';
+      }
+    }
+
+    // Check member table if not admin
+    if (!userType) {
+      const memberRes = await query(
+        `SELECT type, status FROM member 
+         WHERE email = $1 AND status = 'Active'`,
+        [email]
+      );
+      
+      if (memberRes.rows.length > 0) {
+        userType = memberRes.rows[0].type;
+        userTable = 'member';
+      }
+    }
+
+    if (!userType) {
+      logger.warn('No valid user found', {
+        meta: {
+          email,
+          eid,
+          sid: sessionId,
+          taskName: 'Auth Check',
+          details: 'No matching active account found',
+          severity: 'MEDIUM'
+        }
+      });
+      return NextResponse.json(
+        { authenticated: false, message: 'Account not found' },
+        { status: 404, headers: securityHeaders }
+      );
+    }
+
+    logger.info('Authentication successful', {
+      meta: {
+        email,
+        eid,
+        sid: sessionId,
+        taskName: 'Auth Check',
+        details: `User type : ${userType} (${userTable})`,
+        severity: 'LOW'
+      }
+    });
+
+    return NextResponse.json(
+      { authenticated: true, role: userType },
+      { headers: securityHeaders }
+    );
+
+  } catch (error) {
+    console.error('Authentication check error:', error);
+
+    const alertMessage = formatAlertMessage(
+      '❌ Auth Check Error',
+      email,
+      ip,
+      `\nError: ${error.message}`
+    );
+    await sendTelegramAlert(alertMessage);
+
+    logger.error('Authentication check failed', {
+      meta: {
+        email,
+        eid,
+        sid: sessionId,
+        taskName: 'Auth Check',
+        details: error.stack,
+        severity: 'CRITICAL'
+      }
+    });
+
+    return NextResponse.json(
+      { authenticated: false, message: 'Internal server error' },
+      { status: 500, headers: securityHeaders }
+    );
   }
 }
