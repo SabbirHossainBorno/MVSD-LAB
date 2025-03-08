@@ -543,8 +543,8 @@ const MemberDashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               { title: 'Research Papers', value: 12, icon: <FiFileText /> },
-              { title: 'Ongoing Projects', value: 3, icon: <FiDatabase /> },
-              { title: 'Collaborations', value: 8, icon: <FiUsers /> }
+              { title: 'Publications', value: 3, icon: <LiaProjectDiagramSolid /> },
+              { title: 'Ongoing Projects', value: 8, icon: <FiDatabase /> }
             ].map((card, index) => (
               <motion.div
                 key={card.title}
