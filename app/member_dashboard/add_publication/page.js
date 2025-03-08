@@ -108,9 +108,6 @@ const AddPublication = ({ darkMode }) => {
     const memberId = Cookies.get('id');
     const memberType = Cookies.get('type');
 
-    console.log('Member ID:', memberId); // Debugging log
-    console.log('Member Type:', memberType); // Debugging log
-
     if (!memberId || !memberType) {
       toast.error('Authentication required. Please login again.');
       return;
@@ -147,7 +144,7 @@ const AddPublication = ({ darkMode }) => {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || 'Publication submission failed');
+        throw new Error(result.message || 'Publication Submission Failed');
       }
 
       toast.success('Publication Submitted Successfully!');
@@ -195,7 +192,7 @@ const AddPublication = ({ darkMode }) => {
         </div>
       )}
 
-      <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg`}>
+      <div className={`p-6 rounded ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg`}>
         <h1 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>
           Add New Publication
         </h1>
@@ -208,7 +205,7 @@ const AddPublication = ({ darkMode }) => {
             <select
               value={formData.type}
               onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-              className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
+              className={`w-full px-4 py-2.5 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
               required
             >
               <option value="">Select Publication Type</option>
@@ -228,7 +225,7 @@ const AddPublication = ({ darkMode }) => {
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
+                className={`w-full px-4 py-2.5 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
                 placeholder="Enter publication title"
                 required
               />
@@ -242,7 +239,7 @@ const AddPublication = ({ darkMode }) => {
                 type="number"
                 value={formData.year}
                 onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-                className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
+                className={`w-full px-4 py-2.5 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
                 placeholder="Enter publication year"
                 min="1900"
                 max={new Date().getFullYear()}
@@ -262,7 +259,7 @@ const AddPublication = ({ darkMode }) => {
                   type="text"
                   value={formData.journalName}
                   onChange={(e) => setFormData({ ...formData, journalName: e.target.value })}
-                  className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
+                  className={`w-full px-4 py-2.5 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
                   placeholder="Enter journal name"
                   required
                 />
@@ -277,7 +274,7 @@ const AddPublication = ({ darkMode }) => {
                     type="text"
                     value={formData.volume}
                     onChange={(e) => setFormData({ ...formData, volume: e.target.value })}
-                    className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
+                    className={`w-full px-4 py-2.5 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
                     placeholder="Volume"
                     required
                   />
@@ -291,7 +288,7 @@ const AddPublication = ({ darkMode }) => {
                     type="text"
                     value={formData.issue}
                     onChange={(e) => setFormData({ ...formData, issue: e.target.value })}
-                    className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
+                    className={`w-full px-4 py-2.5 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
                     placeholder="Issue"
                     required
                   />
@@ -309,7 +306,7 @@ const AddPublication = ({ darkMode }) => {
                 type="text"
                 value={formData.conferenceName}
                 onChange={(e) => setFormData({ ...formData, conferenceName: e.target.value })}
-                className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
+                className={`w-full px-4 py-2.5 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
                 placeholder="Enter conference name"
                 required
               />
@@ -325,7 +322,7 @@ const AddPublication = ({ darkMode }) => {
               {formData.authors.map((author, index) => (
                 <div
                   key={index}
-                  className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm ${darkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-200 text-gray-700'}`}
+                  className={`flex items-center gap-2 px-3 py-1 rounded text-sm ${darkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-200 text-gray-700'}`}
                 >
                   {author}
                   <button
@@ -344,14 +341,14 @@ const AddPublication = ({ darkMode }) => {
                 type="text"
                 value={newAuthor}
                 onChange={(e) => setNewAuthor(e.target.value)}
-                className={`flex-1 px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
+                className={`flex-1 px-4 py-2.5 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
                 placeholder="Add author"
                 aria-label="Add author"
               />
               <button
                 type="button"
                 onClick={addAuthor}
-                className={`px-4 py-2.5 rounded-lg ${darkMode ? 'bg-purple-600 hover:bg-purple-500 text-white' : 'bg-purple-600 hover:bg-purple-700 text-white'}`}
+                className={`px-4 py-2.5 rounded ${darkMode ? 'bg-purple-600 hover:bg-purple-500 text-white' : 'bg-purple-600 hover:bg-purple-700 text-white'}`}
               >
                 Add
               </button>
@@ -368,7 +365,7 @@ const AddPublication = ({ darkMode }) => {
                 type="text"
                 value={formData.pageCount}
                 onChange={(e) => setFormData({ ...formData, pageCount: e.target.value })}
-                className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
+                className={`w-full px-4 py-2.5 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
                 placeholder="Enter page range"
                 required
               />
@@ -384,7 +381,7 @@ const AddPublication = ({ darkMode }) => {
                   step="0.01"
                   value={formData.impactFactor}
                   onChange={(e) => setFormData({ ...formData, impactFactor: e.target.value })}
-                  className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
+                  className={`w-full px-4 py-2.5 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
                   placeholder="Enter impact factor"
                 />
               </div>
@@ -397,7 +394,7 @@ const AddPublication = ({ darkMode }) => {
                 type="date"
                 value={formData.publishedDate}
                 onChange={(e) => setFormData({ ...formData, publishedDate: e.target.value })}
-                className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
+                className={`w-full px-4 py-2.5 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
               />
             </div>
             <div>
@@ -408,7 +405,7 @@ const AddPublication = ({ darkMode }) => {
                 type="url"
                 value={formData.link}
                 onChange={(e) => setFormData({ ...formData, link: e.target.value })}
-                className={`w-full px-4 py-2.5 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
+                className={`w-full px-4 py-2.5 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
                 placeholder="Enter publication URL"
               />
             </div>
@@ -422,7 +419,7 @@ const AddPublication = ({ darkMode }) => {
               type="file"
               accept=".pdf,.doc,.docx"
               onChange={handleFileChange}
-              className={`w-full p-2 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-800'} file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 ${darkMode ? 'file:bg-gray-600 file:text-gray-100' : 'file:bg-gray-200 file:text-gray-700'}`}
+              className={`w-full p-2 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-800'} file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 ${darkMode ? 'file:bg-gray-600 file:text-gray-100' : 'file:bg-gray-200 file:text-gray-700'}`}
               required
             />
             {errors.document && <p className="text-red-500 text-sm mt-1">{errors.document}</p>}
@@ -431,7 +428,7 @@ const AddPublication = ({ darkMode }) => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             disabled={isSubmitting}
-            className={`w-full py-3 rounded-lg font-medium transition-colors ${darkMode ? 'bg-purple-600 hover:bg-purple-500 text-gray-100' : 'bg-purple-600 hover:bg-purple-700 text-white'} ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`}
+            className={`w-full py-3 rounded font-medium transition-colors ${darkMode ? 'bg-purple-600 hover:bg-purple-500 text-gray-100' : 'bg-purple-600 hover:bg-purple-700 text-white'} ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`}
             type="submit"
           >
             Submit
@@ -442,4 +439,4 @@ const AddPublication = ({ darkMode }) => {
   );
 };
 
-export default withAuth(AddPublication);
+export default withAuth(AddPublication, 'member'); // <-- Required role

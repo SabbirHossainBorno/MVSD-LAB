@@ -192,10 +192,11 @@ response.cookies.set('id', user.id, {
   sameSite: 'Lax'
 });
 
-response.cookies.set('type', user.type, {
+response.cookies.set('type', user.type, { // 'Professor' or 'PhD Candidate'
   secure: process.env.NODE_ENV === 'production',
   sameSite: 'Lax'
 });
+
 console.log('Setting memberId cookie:', user.id); // Debugging log
 console.log('Setting memberType cookie:', user.type); // Debugging log
 response.cookies.set('redirect', 

@@ -134,6 +134,17 @@ export async function GET(request) {
         userType = adminRes.rows[0].type;
         userTable = 'admin';
       }
+    }else { // Explicit member check for non-admin emails
+      const memberRes = await query(
+        `SELECT type, status FROM member 
+         WHERE email = $1 AND status = 'Active'`,
+        [email]
+      );
+      
+      if (memberRes.rows.length > 0) {
+        userType = memberRes.rows[0].type;
+        userTable = 'member';
+      }
     }
 
     // Check member table if not admin

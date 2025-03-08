@@ -84,22 +84,33 @@ const withAuth = (WrappedComponent, requiredRole) => {
     }, [router.query]);
 
     useEffect(() => {
-      if (isAuthenticated && userRole !== requiredRole) {
-        setUnauthorized(true);
+      if (isAuthenticated && requiredRole) {
+        const validRoles = {
+          admin: ['admin'],
+          member: ['Professor', 'PhD Candidate'] // Actual member types from DB
+        };
+
+        if (!validRoles[requiredRole].includes(userRole)) {
+          setUnauthorized(true);
+        }
       }
-    }, [isAuthenticated, userRole]);
+    }, [isAuthenticated, userRole, requiredRole]);
 
     useEffect(() => {
       if (unauthorized) {
-        toast.error('Access Denied! You do not have permission to view this page.');
-        
-        // Redirect without parameters
-        router.push('/member_dashboard'); 
-        
-        // Optional: Force reload to clear state
-        window.location.reload();
+        if (!hasShownUnauthorizedToast.current) {
+          hasShownUnauthorizedToast.current = true;
+          toast.error('Access Denied! You do not have permission to view this page.');
+          
+          // Redirect based on required role
+          const redirectPath = requiredRole === 'admin' 
+            ? '/member_dashboard?accessDenied=true'
+            : '/login?authRequired=true';
+            
+          router.push(redirectPath);
+        }
       }
-    }, [unauthorized, router]);
+    }, [unauthorized, router, requiredRole]);
 
     if (loading) return <LoadingSpinner />;
 
