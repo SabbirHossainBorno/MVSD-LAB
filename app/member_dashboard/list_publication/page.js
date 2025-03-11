@@ -1,15 +1,28 @@
+// app/member_dashboard/member_publication_list/page.js
 'use client';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import withAuth from '../../components/withAuth';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { FiFileText, FiCheckCircle, FiClock, FiXCircle } from 'react-icons/fi';
+import { FiFileText, FiCheckCircle, FiClock, FiXCircle, FiExternalLink } from 'react-icons/fi';
 
 const statusConfig = {
-  Pending: { color: 'bg-yellow-100 text-yellow-800', icon: <FiClock className="w-4 h-4" /> },
-  Approved: { color: 'bg-green-100 text-green-800', icon: <FiCheckCircle className="w-4 h-4" /> },
-  Rejected: { color: 'bg-red-100 text-red-800', icon: <FiXCircle className="w-4 h-4" /> }
+  Pending: {
+    color: 'bg-yellow-100 dark:bg-yellow-900/20',
+    text: 'text-yellow-800 dark:text-yellow-300',
+    icon: <FiClock className="w-4 h-4" />
+  },
+  Approved: {
+    color: 'bg-green-100 dark:bg-green-900/20',
+    text: 'text-green-800 dark:text-green-300',
+    icon: <FiCheckCircle className="w-4 h-4" />
+  },
+  Rejected: {
+    color: 'bg-red-100 dark:bg-red-900/20',
+    text: 'text-red-800 dark:text-red-300',
+    icon: <FiXCircle className="w-4 h-4" />
+  }
 };
 
 const PublicationList = ({ darkMode }) => {
@@ -47,9 +60,9 @@ const PublicationList = ({ darkMode }) => {
 
         <div className="grid grid-cols-1 gap-4">
           {publications.map((pub) => {
-            // Define statusInfo inside map function to avoid "pub is not defined" error
-            const statusInfo = statusConfig[pub.approval_status] || {
-              color: 'bg-gray-200 text-gray-800',
+            const statusInfo = statusConfig[pub.approvalStatus] || {
+              color: 'bg-gray-200 dark:bg-gray-700',
+              text: 'text-gray-800 dark:text-gray-300',
               icon: null
             };
 
@@ -69,52 +82,66 @@ const PublicationList = ({ darkMode }) => {
                       </h3>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm mb-3">
                       <div>
                         <span className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Type: </span>
-                        <span className="font-medium">{pub.type}</span>
+                        <span className={`font-medium ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                          {pub.type}
+                        </span>
                       </div>
                       <div>
                         <span className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Year: </span>
-                        <span className="font-medium">{pub.year}</span>
+                        <span className={`font-medium ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                          {pub.year}
+                        </span>
                       </div>
-                      {pub.journal_name && (
+                      <div>
+                        <span className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Published: </span>
+                        <span className={`font-medium ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                          {new Date(pub.publishedDate).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                      {pub.journalName && (
                         <div>
                           <span className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Journal: </span>
-                          <span className="font-medium">{pub.journal_name}</span>
+                          <span className={`font-medium ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                            {pub.journalName}
+                          </span>
                         </div>
                       )}
-                      {pub.conference_name && (
+                      {pub.conferenceName && (
                         <div>
                           <span className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Conference: </span>
-                          <span className="font-medium">{pub.conference_name}</span>
+                          <span className={`font-medium ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                            {pub.conferenceName}
+                          </span>
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <div className="flex flex-col items-end gap-2">
-                    <span
-                      className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm ${statusInfo.color}`}
+                  <div className="flex flex-col items-end gap-2 ml-4">
+                    <div
+                      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm ${statusInfo.color} ${statusInfo.text}`}
                     >
                       {statusInfo.icon}
-                      {pub.approval_status || 'Unknown'}
-                    </span>
-                    <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                      Submitted: {new Date(pub.created_at).toLocaleDateString()}
-                    </span>
+                      {pub.approvalStatus || 'Unknown'}
+                    </div>
+                    <button
+                      onClick={() => window.open(pub.documentPath, '_blank')}
+                      className="flex items-center gap-1 px-3 py-1 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-md transition-colors"
+                    >
+                      <FiExternalLink className="w-4 h-4" />
+                      See Document
+                    </button>
                   </div>
                 </div>
 
-                {pub.impact_factor && (
-                  <div className="mt-2">
-                    <span className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Impact Factor: </span>
-                    <span className="font-medium">{pub.impact_factor}</span>
-                  </div>
-                )}
-
                 <div className="mt-3 flex items-center gap-2 flex-wrap">
-                  {JSON.parse(pub.authors).map((author, index) => (
+                  {pub.authors.map((author, index) => (
                     <span
                       key={index}
                       className={`px-2 py-1 rounded text-sm ${
@@ -124,6 +151,19 @@ const PublicationList = ({ darkMode }) => {
                       {author}
                     </span>
                   ))}
+                </div>
+
+                {/* Future Action Buttons (Placeholder) */}
+                <div className="flex gap-2 mt-4">
+                  <button className="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                    View
+                  </button>
+                  <button className="text-xs px-2 py-1 rounded bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300">
+                    Edit
+                  </button>
+                  <button className="text-xs px-2 py-1 rounded bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-300">
+                    Delete
+                  </button>
                 </div>
               </div>
             );

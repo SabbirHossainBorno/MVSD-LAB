@@ -16,3 +16,111 @@
 2025-03-11 14:59:40-EID[647624-MVSDLAB]-SID[9eece79e-a143-41a6-a470-df29ab2638b6]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
 2025-03-11 14:59:42-EID[647624-MVSDLAB]-SID[9eece79e-a143-41a6-a470-df29ab2638b6]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
 2025-03-11 14:59:42-EID[647624-MVSDLAB]-SID[9eece79e-a143-41a6-a470-df29ab2638b6]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 15:00:22-EID[647624-MVSDLAB]-SID[9eece79e-a143-41a6-a470-df29ab2638b6]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:00:30-EID[647624-MVSDLAB]-SID[9eece79e-a143-41a6-a470-df29ab2638b6]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:00:30-EID[647624-MVSDLAB]-SID[9eece79e-a143-41a6-a470-df29ab2638b6]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:00:33-EID[647624-MVSDLAB]-SID[9eece79e-a143-41a6-a470-df29ab2638b6]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:00:38-EID[647624-MVSDLAB]-SID[9eece79e-a143-41a6-a470-df29ab2638b6]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:00:41-EID[647624-MVSDLAB]-SID[9eece79e-a143-41a6-a470-df29ab2638b6]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:01:12-EID[647624-MVSDLAB]-SID[9eece79e-a143-41a6-a470-df29ab2638b6]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:01:13-EID[647624-MVSDLAB]-SID[9eece79e-a143-41a6-a470-df29ab2638b6]-[INFO] TASK[PublicationList]-Fetched 2 publications for PHDC04MVSD
+2025-03-11 15:01:15-EID[647624-MVSDLAB]-SID[9eece79e-a143-41a6-a470-df29ab2638b6]-[INFO] TASK[PublicationList]-Fetched 2 publications for PHDC04MVSD
+2025-03-11 15:11:56-EID[]-SID[9d153d58-fda3-4e0a-82c0-0c010de828a7]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 103.180.244.251
+2025-03-11 15:11:56-EID[]-SID[9d153d58-fda3-4e0a-82c0-0c010de828a7]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-11 15:11:56-EID[739597-MVSDLAB]-SID[9d153d58-fda3-4e0a-82c0-0c010de828a7]-[INFO] TASK[Generate EID]-Generated EID 739597-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-11 15:11:56-EID[739597-MVSDLAB]-SID[9d153d58-fda3-4e0a-82c0-0c010de828a7]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-11 15:13:16-EID[]-SID[9973feb7-ca16-4941-b4ad-6783664d15f6]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 103.180.244.251
+2025-03-11 15:13:16-EID[]-SID[9973feb7-ca16-4941-b4ad-6783664d15f6]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-11 15:13:16-EID[546897-MVSDLAB]-SID[9973feb7-ca16-4941-b4ad-6783664d15f6]-[INFO] TASK[Generate EID]-Generated EID 546897-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-11 15:13:17-EID[546897-MVSDLAB]-SID[9973feb7-ca16-4941-b4ad-6783664d15f6]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-11 15:25:51-EID[]-SID[88bb08b8-7e07-47f3-9df0-9a2f953eab67]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 103.180.244.251
+2025-03-11 15:25:51-EID[]-SID[88bb08b8-7e07-47f3-9df0-9a2f953eab67]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-11 15:25:51-EID[967872-MVSDLAB]-SID[88bb08b8-7e07-47f3-9df0-9a2f953eab67]-[INFO] TASK[Generate EID]-Generated EID 967872-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-11 15:25:52-EID[967872-MVSDLAB]-SID[88bb08b8-7e07-47f3-9df0-9a2f953eab67]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-11 15:31:22-EID[]-SID[67efb6c4-db91-46de-9089-b587f0604ce4]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 103.180.244.251
+2025-03-11 15:31:22-EID[]-SID[67efb6c4-db91-46de-9089-b587f0604ce4]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-11 15:31:22-EID[390840-MVSDLAB]-SID[67efb6c4-db91-46de-9089-b587f0604ce4]-[INFO] TASK[Generate EID]-Generated EID 390840-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-11 15:31:22-EID[390840-MVSDLAB]-SID[67efb6c4-db91-46de-9089-b587f0604ce4]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-11 15:31:27-EID[390840-MVSDLAB]-SID[67efb6c4-db91-46de-9089-b587f0604ce4]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:31:28-EID[390840-MVSDLAB]-SID[67efb6c4-db91-46de-9089-b587f0604ce4]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 15:31:28-EID[390840-MVSDLAB]-SID[67efb6c4-db91-46de-9089-b587f0604ce4]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 15:31:31-EID[390840-MVSDLAB]-SID[67efb6c4-db91-46de-9089-b587f0604ce4]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:31:32-EID[390840-MVSDLAB]-SID[67efb6c4-db91-46de-9089-b587f0604ce4]-[ERROR] TASK[PublicationList]-Publication ID: 2 - Unexpected token 'N', "Nadhira,Hy"... is not valid JSON
+2025-03-11 15:31:32-EID[390840-MVSDLAB]-SID[67efb6c4-db91-46de-9089-b587f0604ce4]-[ERROR] TASK[PublicationList]-Publication ID: 1 - Unexpected token 'M', "Md Masuduz"... is not valid JSON
+2025-03-11 15:31:32-EID[390840-MVSDLAB]-SID[67efb6c4-db91-46de-9089-b587f0604ce4]-[INFO] TASK[PublicationList]-Returning 0 valid publications
+2025-03-11 15:31:33-EID[390840-MVSDLAB]-SID[67efb6c4-db91-46de-9089-b587f0604ce4]-[ERROR] TASK[PublicationList]-Publication ID: 2 - Unexpected token 'N', "Nadhira,Hy"... is not valid JSON
+2025-03-11 15:31:33-EID[390840-MVSDLAB]-SID[67efb6c4-db91-46de-9089-b587f0604ce4]-[ERROR] TASK[PublicationList]-Publication ID: 1 - Unexpected token 'M', "Md Masuduz"... is not valid JSON
+2025-03-11 15:31:33-EID[390840-MVSDLAB]-SID[67efb6c4-db91-46de-9089-b587f0604ce4]-[INFO] TASK[PublicationList]-Returning 0 valid publications
+2025-03-11 15:31:50-EID[390840-MVSDLAB]-SID[67efb6c4-db91-46de-9089-b587f0604ce4]-[INFO] TASK[Logout]-member bbirhosdasainborno@gmail.com logged out from 103.180.244.251
+2025-03-11 15:36:03-EID[]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 103.180.244.251
+2025-03-11 15:36:03-EID[]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-11 15:36:03-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[Generate EID]-Generated EID 900155-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-11 15:36:03-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-11 15:36:05-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:36:06-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 15:36:06-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 15:36:09-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:36:11-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[PublicationList]-Returning 2 valid publications
+2025-03-11 15:36:11-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[PublicationList]-Returning 2 valid publications
+2025-03-11 15:39:45-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:39:46-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 15:39:46-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 15:40:01-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:40:02-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:40:52-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:40:54-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:41:14-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:41:16-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[PublicationList]-Returning 2 valid publications
+2025-03-11 15:41:16-EID[900155-MVSDLAB]-SID[ffe17d4e-cd72-4d54-bbb5-816d1ec86c0d]-[INFO] TASK[PublicationList]-Returning 2 valid publications
+2025-03-11 15:53:14-EID[]-SID[a71b2efd-ea68-46f9-8d17-48b14164c790]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 103.180.244.251
+2025-03-11 15:53:14-EID[]-SID[a71b2efd-ea68-46f9-8d17-48b14164c790]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-11 15:53:14-EID[759872-MVSDLAB]-SID[a71b2efd-ea68-46f9-8d17-48b14164c790]-[INFO] TASK[Generate EID]-Generated EID 759872-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-11 15:53:14-EID[759872-MVSDLAB]-SID[a71b2efd-ea68-46f9-8d17-48b14164c790]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-11 15:53:21-EID[759872-MVSDLAB]-SID[a71b2efd-ea68-46f9-8d17-48b14164c790]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:53:22-EID[759872-MVSDLAB]-SID[a71b2efd-ea68-46f9-8d17-48b14164c790]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 15:53:22-EID[759872-MVSDLAB]-SID[a71b2efd-ea68-46f9-8d17-48b14164c790]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 15:53:26-EID[759872-MVSDLAB]-SID[a71b2efd-ea68-46f9-8d17-48b14164c790]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 15:53:26-EID[759872-MVSDLAB]-SID[a71b2efd-ea68-46f9-8d17-48b14164c790]-[ERROR] TASK[PublicationList]-Error: Database query failed: syntax error at or near "is"
+Stack: Error: Database query failed: syntax error at or near "is"
+    at query (webpack-internal:///(rsc)/./lib/db.js:34:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async GET (webpack-internal:///(rsc)/./app/api/member_publication_list/route.js:126:24)
+    at async AppRouteRouteModule.do (/home/mvsd-lab/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:24:33911)
+    at async AppRouteRouteModule.handle (/home/mvsd-lab/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:24:41240)
+    at async doRender (/home/mvsd-lab/node_modules/next/dist/server/base-server.js:1517:42)
+    at async responseGenerator (/home/mvsd-lab/node_modules/next/dist/server/base-server.js:1906:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/home/mvsd-lab/node_modules/next/dist/server/base-server.js:1917:28)
+    at async DevServer.renderPageComponent (/home/mvsd-lab/node_modules/next/dist/server/base-server.js:2365:24)
+    at async DevServer.renderToResponseImpl (/home/mvsd-lab/node_modules/next/dist/server/base-server.js:2402:32)
+    at async DevServer.pipeImpl (/home/mvsd-lab/node_modules/next/dist/server/base-server.js:1009:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/home/mvsd-lab/node_modules/next/dist/server/next-server.js:301:17)
+    at async DevServer.handleRequestImpl (/home/mvsd-lab/node_modules/next/dist/server/base-server.js:898:17)
+    at async /home/mvsd-lab/node_modules/next/dist/server/dev/next-dev-server.js:371:20
+    at async Span.traceAsyncFn (/home/mvsd-lab/node_modules/next/dist/trace/trace.js:157:20)
+    at async DevServer.handleRequest (/home/mvsd-lab/node_modules/next/dist/server/dev/next-dev-server.js:368:24)
+    at async invokeRender (/home/mvsd-lab/node_modules/next/dist/server/lib/router-server.js:234:21)
+    at async handleRequest (/home/mvsd-lab/node_modules/next/dist/server/lib/router-server.js:422:24)
+    at async requestHandlerImpl (/home/mvsd-lab/node_modules/next/dist/server/lib/router-server.js:446:13)
+    at async Server.requestListener (/home/mvsd-lab/node_modules/next/dist/server/lib/start-server.js:158:13)
+2025-03-11 15:53:27-EID[759872-MVSDLAB]-SID[a71b2efd-ea68-46f9-8d17-48b14164c790]-[ERROR] TASK[PublicationList]-Error: Database query failed: syntax error at or near "is"
+Stack: Error: Database query failed: syntax error at or near "is"
+    at query (webpack-internal:///(rsc)/./lib/db.js:34:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async GET (webpack-internal:///(rsc)/./app/api/member_publication_list/route.js:126:24)
+    at async AppRouteRouteModule.do (/home/mvsd-lab/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:24:33911)
+    at async AppRouteRouteModule.handle (/home/mvsd-lab/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:24:41240)
+    at async doRender (/home/mvsd-lab/node_modules/next/dist/server/base-server.js:1517:42)
+    at async responseGenerator (/home/mvsd-lab/node_modules/next/dist/server/base-server.js:1906:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/home/mvsd-lab/node_modules/next/dist/server/base-server.js:1917:28)
+    at async DevServer.renderPageComponent (/home/mvsd-lab/node_modules/next/dist/server/base-server.js:2365:24)
+    at async DevServer.renderToResponseImpl (/home/mvsd-lab/node_modules/next/dist/server/base-server.js:2402:32)
+    at async DevServer.pipeImpl (/home/mvsd-lab/node_modules/next/dist/server/base-server.js:1009:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/home/mvsd-lab/node_modules/next/dist/server/next-server.js:301:17)
+    at async DevServer.handleRequestImpl (/home/mvsd-lab/node_modules/next/dist/server/base-server.js:898:17)
+    at async /home/mvsd-lab/node_modules/next/dist/server/dev/next-dev-server.js:371:20
+    at async Span.traceAsyncFn (/home/mvsd-lab/node_modules/next/dist/trace/trace.js:157:20)
+    at async DevServer.handleRequest (/home/mvsd-lab/node_modules/next/dist/server/dev/next-dev-server.js:368:24)
+    at async invokeRender (/home/mvsd-lab/node_modules/next/dist/server/lib/router-server.js:234:21)
+    at async handleRequest (/home/mvsd-lab/node_modules/next/dist/server/lib/router-server.js:422:24)
+    at async requestHandlerImpl (/home/mvsd-lab/node_modules/next/dist/server/lib/router-server.js:446:13)
+    at async Server.requestListener (/home/mvsd-lab/node_modules/next/dist/server/lib/start-server.js:158:13)
