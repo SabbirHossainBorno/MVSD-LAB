@@ -22,7 +22,6 @@ export async function GET(request) {
   const ipAddress = request.headers.get('x-forwarded-for') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown UA';
 
-  // Base metadata for all logs
   const baseMeta = {
     sid: sessionId,
     eid,
@@ -33,111 +32,20 @@ export async function GET(request) {
   };
 
   try {
-    logger.debug('Publication list request initiated', {
-      meta: {
-        ...baseMeta,
-        details: 'Starting publication list fetch process',
-        severity: 'LOW'
-      }
-    });
-
-    // Validate authentication
     if (!memberId) {
-      logger.warn('Unauthorized publication list access attempt', {
-        meta: {
-          ...baseMeta,
-          details: 'Missing member ID cookie',
-          severity: 'HIGH'
-        }
+      logger.warn('Unauthorized access attempt', {
+        meta: { ...baseMeta, details: 'Missing member ID', severity: 'HIGH' }
       });
-      
-      return NextResponse.json(
-        { error: 'Authentication required' }, 
-        { status: 401, headers: securityHeaders }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: securityHeaders });
     }
 
-    logger.debug('Member ID validation passed', {
-      meta: {
-        ...baseMeta,
-        details: `Processing member ID: ${memberId}`,
-        severity: 'LOW'
-      }
-    });
-
-    // Verify member exists and is PhD Candidate
-    const memberCheck = await query(
-      `SELECT type FROM member WHERE id = $1`,
-      [memberId]
-    );
-
-    logger.debug('Member check query executed', {
-      meta: {
-        ...baseMeta,
-        details: `Query returned ${memberCheck.rows.length} rows`,
-        severity: 'DEBUG'
-      }
-    });
-
-    if (memberCheck.rows.length === 0) {
-      logger.error('Member not found in database', {
-        meta: {
-          ...baseMeta,
-          details: `Database lookup failed for member ID: ${memberId}`,
-          severity: 'MEDIUM'
-        }
-      });
-      
-      return NextResponse.json(
-        { error: 'Member not found' }, 
-        { status: 404, headers: securityHeaders }
-      );
-    }
-
-    const memberType = memberCheck.rows[0].type;
-    if (memberType !== 'PhD Candidate') {
-      logger.warn('Unauthorized access attempt by non-PhD member', {
-        meta: {
-          ...baseMeta,
-          details: `Member type: ${memberType}`,
-          severity: 'HIGH'
-        }
-      });
-      
-      return NextResponse.json(
-        { error: 'Access restricted to PhD Candidates' }, 
-        { status: 403, headers: securityHeaders }
-      );
-    }
-
-    logger.debug('PhD candidate validation successful', {
-      meta: {
-        ...baseMeta,
-        details: 'User confirmed as PhD candidate',
-        severity: 'LOW'
-      }
-    });
-
-    // Fetch publications
-    logger.debug('Initiating publications fetch query', {
-      meta: {
-        ...baseMeta,
-        details: 'Executing SQL query for publications',
-        severity: 'DEBUG'
-      }
-    });
-
-    const result = await query(
+    // Get publications
+    const publicationsQuery = await query(
       `SELECT 
-        id, 
-        title, 
-        type, 
-        year, 
+        id, title, type, year, 
         journal_name AS "journalName",
         conference_name AS "conferenceName",
-        authors,
-        volume, 
-        issue, 
+        authors, volume, issue, 
         page_count AS "pageCount",
         published_date AS "publishedDate",
         impact_factor AS "impactFactor",
@@ -150,72 +58,53 @@ export async function GET(request) {
       [memberId]
     );
 
-    logger.debug('Publications query completed', {
-      meta: {
-        ...baseMeta,
-        details: `Found ${result.rows.length} publications`,
-        severity: 'DEBUG'
-      }
+    // Get statistics
+    const statsQuery = await query(
+      `SELECT 
+        COUNT(*) AS total,
+        SUM(CASE WHEN approval_status = 'Approved' THEN 1 ELSE 0 END) AS approved,
+        SUM(CASE WHEN approval_status = 'Pending' THEN 1 ELSE 0 END) AS pending,
+        SUM(CASE WHEN approval_status = 'Rejected' THEN 1 ELSE 0 END) AS rejected,
+        SUM(CASE WHEN type = 'Journal' AND approval_status = 'Approved' THEN 1 ELSE 0 END) AS approved_journals,
+        SUM(CASE WHEN type = 'Conference' AND approval_status = 'Approved' THEN 1 ELSE 0 END) AS approved_conferences,
+        SUM(CASE WHEN type = 'Journal' AND approval_status = 'Pending' THEN 1 ELSE 0 END) AS pending_journals,
+        SUM(CASE WHEN type = 'Conference' AND approval_status = 'Pending' THEN 1 ELSE 0 END) AS pending_conferences
+      FROM phd_candidate_publication_info
+      WHERE phd_candidate_id = $1`,
+      [memberId]
+    );
+
+    const stats = statsQuery.rows[0];
+    const publications = publicationsQuery.rows.map(pub => ({
+      ...pub,
+      authors: Array.isArray(pub.authors) ? pub.authors : JSON.parse(pub.authors || '[]'),
+      createdAt: new Date(pub.createdAt).toISOString(),
+      publishedDate: pub.publishedDate ? new Date(pub.publishedDate).toISOString() : null
+    }));
+
+    logger.info('Publication data fetched successfully', {
+      meta: { ...baseMeta, details: `Fetched ${publications.length} publications`, severity: 'LOW' }
     });
 
-    // Validate and parse authors data
-    const validatedPublications = result.rows.map(pub => {
-      try {
-        return {
-          ...pub,
-          authors: Array.isArray(pub.authors) 
-            ? pub.authors 
-            : JSON.parse(pub.authors || '[]'),
-          createdAt: new Date(pub.createdAt).toISOString(),
-          publishedDate: pub.publishedDate 
-            ? new Date(pub.publishedDate).toISOString() 
-            : null
-        };
-      } catch (e) {
-        logger.error('Publication data parsing failed', {
-          meta: {
-            ...baseMeta,
-            details: `Publication ID: ${pub.id} - ${e.message}`,
-            severity: 'MEDIUM'
-          }
-        });
-        return null;
-      }
-    }).filter(Boolean);
-
-    logger.info('Publications processed successfully', {
-      meta: {
-        ...baseMeta,
-        details: `Returning ${validatedPublications.length} valid publications`,
-        severity: 'LOW'
-      }
-    });
-
-    // Security alert
     await sendTelegramAlert(formatAlertMessage(
-      'Publication List Accessed',
-      `Member: ${memberId}\nIP: ${ipAddress}\nCount: ${validatedPublications.length}`
+      'Publication Data Accessed',
+      `Member: ${memberId}\nIP: ${ipAddress}\nPublications: ${publications.length}`
     ));
 
-    return NextResponse.json(validatedPublications, { headers: securityHeaders });
+    return NextResponse.json({ publications, stats }, { headers: securityHeaders });
 
   } catch (error) {
-    // Enhanced error logging
-    logger.error('Publication list fetch failure', {
-      meta: {
-        ...baseMeta,
-        details: `Error: ${error.message}\nStack: ${error.stack}`,
-        severity: 'CRITICAL'
-      }
+    logger.error('Publication data fetch failed', {
+      meta: { ...baseMeta, details: error.message, stack: error.stack, severity: 'CRITICAL' }
     });
 
     await sendTelegramAlert(formatAlertMessage(
-      'Publication List Error',
+      'Publication Data Error',
       `Member: ${memberId}\nError: ${error.message}\nIP: ${ipAddress}`
     ));
 
     return NextResponse.json(
-      { error: 'Failed to fetch publications' },
+      { error: 'Failed to fetch publication data' },
       { status: 500, headers: securityHeaders }
     );
   }

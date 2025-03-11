@@ -124,3 +124,84 @@ Stack: Error: Database query failed: syntax error at or near "is"
     at async handleRequest (/home/mvsd-lab/node_modules/next/dist/server/lib/router-server.js:422:24)
     at async requestHandlerImpl (/home/mvsd-lab/node_modules/next/dist/server/lib/router-server.js:446:13)
     at async Server.requestListener (/home/mvsd-lab/node_modules/next/dist/server/lib/start-server.js:158:13)
+2025-03-11 16:03:58-EID[]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 103.180.244.251
+2025-03-11 16:03:58-EID[]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-11 16:03:58-EID[307595-MVSDLAB]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[Generate EID]-Generated EID 307595-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-11 16:03:58-EID[307595-MVSDLAB]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-11 16:04:04-EID[307595-MVSDLAB]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:04:05-EID[307595-MVSDLAB]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:04:05-EID[307595-MVSDLAB]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:04:08-EID[307595-MVSDLAB]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:04:10-EID[307595-MVSDLAB]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[PublicationList]-Returning 2 valid publications
+2025-03-11 16:04:11-EID[307595-MVSDLAB]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[PublicationList]-Returning 2 valid publications
+2025-03-11 16:14:58-EID[307595-MVSDLAB]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:14:58-EID[307595-MVSDLAB]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:14:59-EID[307595-MVSDLAB]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:15:10-EID[307595-MVSDLAB]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:15:11-EID[307595-MVSDLAB]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:15:12-EID[307595-MVSDLAB]-SID[d0b671ea-0d66-4707-b2fe-94fc15c46cb1]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:32:36-EID[]-SID[b9c2b943-2c12-4b6e-ad6a-49fb755e9801]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 103.180.244.251
+2025-03-11 16:32:36-EID[]-SID[b9c2b943-2c12-4b6e-ad6a-49fb755e9801]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-11 16:32:36-EID[115948-MVSDLAB]-SID[b9c2b943-2c12-4b6e-ad6a-49fb755e9801]-[INFO] TASK[Generate EID]-Generated EID 115948-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-11 16:32:36-EID[115948-MVSDLAB]-SID[b9c2b943-2c12-4b6e-ad6a-49fb755e9801]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-11 16:37:50-EID[]-SID[a28ed70c-5d60-4216-92d2-b4cd1b7f65bd]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 103.180.244.251
+2025-03-11 16:37:50-EID[]-SID[a28ed70c-5d60-4216-92d2-b4cd1b7f65bd]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-11 16:37:50-EID[898090-MVSDLAB]-SID[a28ed70c-5d60-4216-92d2-b4cd1b7f65bd]-[INFO] TASK[Generate EID]-Generated EID 898090-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-11 16:37:50-EID[898090-MVSDLAB]-SID[a28ed70c-5d60-4216-92d2-b4cd1b7f65bd]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-11 16:43:48-EID[]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 103.180.244.251
+2025-03-11 16:43:48-EID[]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-11 16:43:48-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[Generate EID]-Generated EID 411855-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-11 16:43:49-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-11 16:44:02-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:44:03-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:44:03-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:44:07-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:44:08-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:44:09-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:47:51-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:47:55-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:47:56-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:47:57-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:49:15-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:49:16-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:49:17-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:49:22-EID[411855-MVSDLAB]-SID[075748c0-29d0-41c1-b818-aa2db90855fd]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:50:49-EID[]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 103.180.244.251
+2025-03-11 16:50:49-EID[]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-03-11 16:50:49-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Generate EID]-Generated EID 977873-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-03-11 16:50:49-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-03-11 16:51:12-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:51:13-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:51:14-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:51:16-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:51:18-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:51:18-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:51:51-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:51:51-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:51:52-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:51:54-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:51:55-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:51:55-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:52:32-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:52:32-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:52:32-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:52:41-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:52:41-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:52:42-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:53:08-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:53:09-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:53:09-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:53:12-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:53:18-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:53:46-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:53:47-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:53:47-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:53:50-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:53:51-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:53:51-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:54:20-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:54:20-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:54:21-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-03-11 16:55:15-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-03-11 16:55:15-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 16:55:16-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[PublicationList]-Fetched 2 publications

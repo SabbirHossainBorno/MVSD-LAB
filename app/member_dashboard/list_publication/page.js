@@ -5,45 +5,61 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import withAuth from '../../components/withAuth';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { FiFileText, FiCheckCircle, FiClock, FiXCircle, FiExternalLink } from 'react-icons/fi';
+import { FiFileText, FiCheckCircle, FiClock, FiXCircle, FiExternalLink, FiSearch, FiFilter, FiBarChart2 } from 'react-icons/fi';
 
 const statusConfig = {
   Pending: {
     color: 'bg-yellow-100 dark:bg-yellow-900/20',
     text: 'text-yellow-800 dark:text-yellow-300',
-    icon: <FiClock className="w-4 h-4" />
+    icon: <FiClock className="w-5 h-5" />
   },
   Approved: {
     color: 'bg-green-100 dark:bg-green-900/20',
     text: 'text-green-800 dark:text-green-300',
-    icon: <FiCheckCircle className="w-4 h-4" />
+    icon: <FiCheckCircle className="w-5 h-5" />
   },
   Rejected: {
     color: 'bg-red-100 dark:bg-red-900/20',
     text: 'text-red-800 dark:text-red-300',
-    icon: <FiXCircle className="w-4 h-4" />
+    icon: <FiXCircle className="w-5 h-5" />
   }
 };
 
 const PublicationList = ({ darkMode }) => {
   const [publications, setPublications] = useState([]);
+  const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
+  const [sortOrder, setSortOrder] = useState('desc');
 
   useEffect(() => {
-    const fetchPublications = async () => {
+    const fetchData = async () => {
       try {
         const response = await fetch('/api/member_publication_list');
-        if (!response.ok) throw new Error('Failed to fetch publications');
-        const data = await response.json();
-        setPublications(data);
+        if (!response.ok) throw new Error('Failed to fetch data');
+        const { publications, stats } = await response.json();
+        setPublications(publications);
+        setStats(stats);
       } catch (error) {
         toast.error(error.message);
       } finally {
         setLoading(false);
       }
     };
-    fetchPublications();
+    fetchData();
   }, []);
+
+  const filteredPublications = publications
+    .filter(pub => 
+      (statusFilter === 'All' || pub.approvalStatus === statusFilter) &&
+      (pub.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+       pub.authors.join(' ').toLowerCase().includes(searchQuery.toLowerCase()))
+    )
+    .sort((a, b) => sortOrder === 'asc' 
+      ? new Date(a.createdAt) - new Date(b.createdAt) 
+      : new Date(b.createdAt) - new Date(a.createdAt)
+    );
 
   if (loading) return <LoadingSpinner />;
 
@@ -51,133 +67,214 @@ const PublicationList = ({ darkMode }) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="h-full space-y-6"
+      className="h-full space-y-6 p-4"
     >
-      <div className={`p-6 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg`}>
-        <h1 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>
-          My Publications
-        </h1>
-
-        <div className="grid grid-cols-1 gap-4">
-          {publications.map((pub) => {
-            const statusInfo = statusConfig[pub.approvalStatus] || {
-              color: 'bg-gray-200 dark:bg-gray-700',
-              text: 'text-gray-800 dark:text-gray-300',
-              icon: null
-            };
-
-            return (
-              <div
-                key={pub.id}
-                className={`p-4 rounded-lg border ${
-                  darkMode ? 'border-gray-700 bg-gray-700/20' : 'border-gray-200 bg-white'
-                }`}
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <FiFileText className={`w-5 h-5 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`} />
-                      <h3 className={`text-lg font-semibold ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>
-                        {pub.title}
-                      </h3>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm mb-3">
-                      <div>
-                        <span className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Type: </span>
-                        <span className={`font-medium ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                          {pub.type}
-                        </span>
-                      </div>
-                      <div>
-                        <span className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Year: </span>
-                        <span className={`font-medium ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                          {pub.year}
-                        </span>
-                      </div>
-                      <div>
-                        <span className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Published: </span>
-                        <span className={`font-medium ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                          {new Date(pub.publishedDate).toLocaleDateString()}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-                      {pub.journalName && (
-                        <div>
-                          <span className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Journal: </span>
-                          <span className={`font-medium ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                            {pub.journalName}
-                          </span>
-                        </div>
-                      )}
-                      {pub.conferenceName && (
-                        <div>
-                          <span className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Conference: </span>
-                          <span className={`font-medium ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                            {pub.conferenceName}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col items-end gap-2 ml-4">
-                    <div
-                      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm ${statusInfo.color} ${statusInfo.text}`}
-                    >
-                      {statusInfo.icon}
-                      {pub.approvalStatus || 'Unknown'}
-                    </div>
-                    <button
-                      onClick={() => window.open(pub.documentPath, '_blank')}
-                      className="flex items-center gap-1 px-3 py-1 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-md transition-colors"
-                    >
-                      <FiExternalLink className="w-4 h-4" />
-                      See Document
-                    </button>
-                  </div>
-                </div>
-
-                <div className="mt-3 flex items-center gap-2 flex-wrap">
-                  {pub.authors.map((author, index) => (
-                    <span
-                      key={index}
-                      className={`px-2 py-1 rounded text-sm ${
-                        darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'
-                      }`}
-                    >
-                      {author}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Future Action Buttons (Placeholder) */}
-                <div className="flex gap-2 mt-4">
-                  <button className="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                    View
-                  </button>
-                  <button className="text-xs px-2 py-1 rounded bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300">
-                    Edit
-                  </button>
-                  <button className="text-xs px-2 py-1 rounded bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-300">
-                    Delete
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {publications.length === 0 && (
-          <div className={`text-center py-8 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-            No publications found. Start by submitting your first research work!
-          </div>
-        )}
+      {/* Updated Stat Cards with visible icons */}
+      <div className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 ${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-xl shadow-lg`}>
+        <StatCard 
+          darkMode={darkMode}
+          icon={<FiBarChart2 className={`w-6 h-6 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />}
+          title="Total Publications"
+          value={stats.total || 0}
+        />
+        <StatCard 
+          darkMode={darkMode}
+          icon={<FiCheckCircle className="w-6 h-6 text-green-500" />}
+          title="Approved"
+          value={stats.approved || 0}
+        />
+        <StatCard 
+          darkMode={darkMode}
+          icon={<FiClock className="w-6 h-6 text-yellow-500" />}
+          title="Pending"
+          value={stats.pending || 0}
+        />
+        <StatCard 
+          darkMode={darkMode}
+          icon={<FiFileText className="w-6 h-6 text-blue-500" />}
+          title="Approved Journals"
+          value={stats.approvedJournals || 0}
+        />
+        <StatCard 
+          darkMode={darkMode}
+          icon={<FiFileText className="w-6 h-6 text-purple-500" />}
+          title="Approved Conferences"
+          value={stats.approvedConferences || 0}
+        />
+        <StatCard 
+          darkMode={darkMode}
+          icon={<FiClock className="w-6 h-6 text-orange-500" />}
+          title="Pending Journals"
+          value={stats.pendingJournals || 0}
+        />
+        <StatCard 
+          darkMode={darkMode}
+          icon={<FiClock className="w-6 h-6 text-cyan-500" />}
+          title="Pending Conferences"
+          value={stats.pendingConferences || 0}
+        />
       </div>
+
+      {/* Filter Bar */}
+      <div className={`flex flex-col md:flex-row gap-4 p-6 ${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-xl shadow-lg`}>
+        <div className="relative flex-1">
+          <FiSearch className={`absolute left-3 top-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+          <input
+            type="text"
+            placeholder="Search publications..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className={`w-full pl-10 pr-4 py-2 rounded-lg ${darkMode ? 'bg-gray-700 text-gray-100' : 'bg-gray-100 text-gray-800'}`}
+          />
+        </div>
+        
+        <div className="flex gap-4">
+          <div className="relative">
+            <FiFilter className={`absolute left-3 top-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className={`pl-10 pr-4 py-2 rounded-lg ${darkMode ? 'bg-gray-700 text-gray-100' : 'bg-gray-100 text-gray-800'}`}
+            >
+              <option value="All">All Statuses</option>
+              <option value="Approved">Approved</option>
+              <option value="Pending">Pending</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className={`px-4 py-2 rounded-lg ${darkMode ? 'bg-gray-700 text-gray-100' : 'bg-gray-100 text-gray-800'}`}
+          >
+            <option value="desc">Newest First</option>
+            <option value="asc">Oldest First</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Publications List */}
+      <div className="grid grid-cols-1 gap-6">
+        {filteredPublications.map((pub) => (
+          <PublicationCard 
+            key={pub.id}
+            pub={pub}
+            darkMode={darkMode}
+            statusConfig={statusConfig}
+          />
+        ))}
+      </div>
+
+      {filteredPublications.length === 0 && (
+        <div className={`text-center py-8 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+          No matching publications found
+        </div>
+      )}
     </motion.div>
   );
 };
+
+const StatCard = ({ darkMode, icon, title, value }) => (
+  <div className={`flex items-center gap-4 p-4 rounded-xl ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+    <div className={`p-3 rounded-lg ${darkMode ? 'bg-gray-600' : 'bg-white'}`}>
+      {icon}
+    </div>
+    <div>
+      <div className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{title}</div>
+      <div className={`text-2xl font-bold ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>{value}</div>
+    </div>
+  </div>
+);
+
+const PublicationCard = ({ pub, darkMode, statusConfig }) => {
+  const statusInfo = statusConfig[pub.approvalStatus] || {
+    color: 'bg-gray-200 dark:bg-gray-700',
+    text: 'text-gray-800 dark:text-gray-300',
+    icon: null
+  };
+
+  return (
+    <div className={`p-6 rounded-xl border ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'} shadow-sm hover:shadow-md transition-shadow`}>
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex-1 space-y-4">
+          <div className="flex items-center gap-3">
+            <FiFileText className={`w-6 h-6 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`} />
+            <h3 className={`text-xl font-semibold ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>
+              {pub.title}
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <InfoItem darkMode={darkMode} label="Type" value={pub.type} />
+            <InfoItem darkMode={darkMode} label="Year" value={pub.year} />
+            <InfoItem darkMode={darkMode} label="Published" value={new Date(pub.publishedDate).toLocaleDateString()} />
+            <InfoItem darkMode={darkMode} label="Impact Factor" value={pub.impactFactor} />
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {pub.journalName && <InfoBadge darkMode={darkMode} label="Journal" value={pub.journalName} />}
+            {pub.conferenceName && <InfoBadge darkMode={darkMode} label="Conference" value={pub.conferenceName} />}
+          </div>
+
+          <div className="mt-4">
+            <h4 className={`text-sm font-medium mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              Authors:
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {pub.authors.map((author, index) => (
+                <span
+                  key={index}
+                  className={`px-3 py-1.5 rounded-full text-sm border ${
+                    darkMode 
+                      ? 'border-gray-600 bg-gray-700 text-gray-300 hover:bg-gray-600' 
+                      : 'border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100'
+                  } transition-colors flex items-center gap-2`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-blue-400" />
+                  {author}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-4 md:w-48">
+          <div className={`inline-flex items-center gap-3 px-4 py-2.5 rounded-full ${
+            statusInfo.color} ${statusInfo.text} transition-colors`}
+          >
+            <span className="shrink-0">{statusInfo.icon}</span>
+            <span className="font-medium text-sm">{pub.approvalStatus}</span>
+          </div>
+          
+          <button
+            onClick={() => window.open(pub.documentPath, '_blank')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
+              darkMode ? 'bg-gray-700 hover:bg-gray-600 text-blue-400' : 'bg-gray-100 hover:bg-gray-200 text-blue-600'
+            } transition-colors`}
+          >
+            <FiExternalLink className="w-5 h-5" />
+            View Document
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const InfoItem = ({ darkMode, label, value }) => (
+  <div className="space-y-1">
+    <div className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{label}</div>
+    <div className={`font-medium ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>{value || 'N/A'}</div>
+  </div>
+);
+
+const InfoBadge = ({ darkMode, label, value }) => (
+  <div className={`px-3 py-1 rounded-full text-sm ${
+    darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'
+  }`}>
+    <span className="font-medium">{label}:</span> {value}
+  </div>
+);
 
 export default withAuth(PublicationList, 'member');
