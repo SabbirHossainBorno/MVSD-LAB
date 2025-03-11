@@ -70,7 +70,7 @@ const PublicationList = ({ darkMode }) => {
       className="h-full space-y-6 p-4"
     >
       {/* Updated Stat Cards with visible icons */}
-      <div className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 ${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-xl shadow-lg`}>
+      <div className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 ${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-xl shadow-lg`}>
         <StatCard 
           darkMode={darkMode}
           icon={<FiBarChart2 className={`w-6 h-6 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />}

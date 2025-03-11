@@ -205,3 +205,6 @@ Stack: Error: Database query failed: syntax error at or near "is"
 2025-03-11 16:55:15-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
 2025-03-11 16:55:15-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[PublicationList]-Fetched 2 publications
 2025-03-11 16:55:16-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[PublicationList]-Fetched 2 publications
+2025-03-11 17:09:12-EID[977873-MVSDLAB]-SID[0b6d7278-f141-48da-89cc-95ac243ff59d]-[INFO] TASK[Auth Check]-Last activity: 2025-03-11T20:55:54.794Z
+2025-03-11 17:09:13-EID[977873-MVSDLAB]-SID[]-[WARN] TASK[DashboardAuth]-Missing authentication cookies
+2025-03-11 17:09:13-EID[977873-MVSDLAB]-SID[]-[WARN] TASK[DashboardAuth]-Missing authentication cookies
