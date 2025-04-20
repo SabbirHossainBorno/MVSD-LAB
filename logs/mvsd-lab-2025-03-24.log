@@ -1,7 +1,0 @@
-2025-03-24 20:58:00-EID[]-SID[f1eab2c8-f603-4852-be5f-95ffea9053c6]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 163.53.150.240
-2025-03-24 20:58:00-EID[]-SID[f1eab2c8-f603-4852-be5f-95ffea9053c6]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
-2025-03-24 20:58:00-EID[816563-MVSDLAB]-SID[f1eab2c8-f603-4852-be5f-95ffea9053c6]-[INFO] TASK[Generate EID]-Generated EID 816563-MVSDLAB for user bbirhosdasainborno@gmail.com
-2025-03-24 20:58:01-EID[816563-MVSDLAB]-SID[f1eab2c8-f603-4852-be5f-95ffea9053c6]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
-2025-03-24 20:58:02-EID[816563-MVSDLAB]-SID[f1eab2c8-f603-4852-be5f-95ffea9053c6]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
-2025-03-24 20:58:02-EID[816563-MVSDLAB]-SID[f1eab2c8-f603-4852-be5f-95ffea9053c6]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
-2025-03-24 20:58:10-EID[816563-MVSDLAB]-SID[f1eab2c8-f603-4852-be5f-95ffea9053c6]-[INFO] TASK[Logout]-member bbirhosdasainborno@gmail.com logged out from 163.53.150.240

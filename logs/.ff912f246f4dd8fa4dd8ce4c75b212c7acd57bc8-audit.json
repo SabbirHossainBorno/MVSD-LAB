@@ -6,111 +6,6 @@
     "auditLog": "logs/.ff912f246f4dd8fa4dd8ce4c75b212c7acd57bc8-audit.json",
     "files": [
         {
-            "date": 1740347566371,
-            "name": "logs/mvsd-lab-2025-02-23.log",
-            "hash": "c7721b2b0de5f915fec927ff9e11f0a43056f85af3ef5d6de1ec658edbfd3811"
-        },
-        {
-            "date": 1740401792575,
-            "name": "logs/mvsd-lab-2025-02-24.log",
-            "hash": "d3d28a533e4b7d39fb4c2531ab23c6b567c3ccd48dd6516d4bc27b4fcdf08176"
-        },
-        {
-            "date": 1740507735997,
-            "name": "logs/mvsd-lab-2025-02-25.log",
-            "hash": "991045508975ebd84ec99bdcf732ccf91968e885fd100daaa9aaee6bb47d7c7e"
-        },
-        {
-            "date": 1740554305543,
-            "name": "logs/mvsd-lab-2025-02-26.log",
-            "hash": "03f580ffccd0d8c61b0dd6c31be856dedf59502eb33fb39bca926a439e0ef2a7"
-        },
-        {
-            "date": 1740643094072,
-            "name": "logs/mvsd-lab-2025-02-27.log",
-            "hash": "1e9d4095d5e45a31b5a9f39a5fa68a40e71df9b43c8bb691576ff434c6147db8"
-        },
-        {
-            "date": 1740719385531,
-            "name": "logs/mvsd-lab-2025-02-28.log",
-            "hash": "f41fcb68c222f5eac28ec73605ed3cb3e476847a71bab9289e9243e1132d6c40"
-        },
-        {
-            "date": 1740805634874,
-            "name": "logs/mvsd-lab-2025-03-01.log",
-            "hash": "980f4f0fb709995ef8dfe685ef66bf0f27108227bfd045134c94ba9dfed4218c"
-        },
-        {
-            "date": 1740942963458,
-            "name": "logs/mvsd-lab-2025-03-02.log",
-            "hash": "9358c9da1aaf02b95f101da611aea7f9bbe153397e27d62f13d535257678c03e"
-        },
-        {
-            "date": 1741035051696,
-            "name": "logs/mvsd-lab-2025-03-03.log",
-            "hash": "c747a2298641335557e7c7398c0b8ed6e91d446753af001955e0769c4114c87a"
-        },
-        {
-            "date": 1741080470178,
-            "name": "logs/mvsd-lab-2025-03-04.log",
-            "hash": "b21724a3a0400afe993021dfccdffdde7fd445102e4496bb2bf328e454636f50"
-        },
-        {
-            "date": 1741174782921,
-            "name": "logs/mvsd-lab-2025-03-05.log",
-            "hash": "c27dc7a42a89efbdcaff34de3600fd1659af245efd7e16a81c8d388b68348d2e"
-        },
-        {
-            "date": 1741257202751,
-            "name": "logs/mvsd-lab-2025-03-06.log",
-            "hash": "e64824e442906d9f655fe93a38c0a80adba21ff7714be02f82d48c6c91840f3e"
-        },
-        {
-            "date": 1741325726528,
-            "name": "logs/mvsd-lab-2025-03-07.log",
-            "hash": "d950004aec38e35e114da7543e8da5c48d1cd0faf89e0bca9de7dc5b950a2d91"
-        },
-        {
-            "date": 1741410689484,
-            "name": "logs/mvsd-lab-2025-03-08.log",
-            "hash": "70c4eee86df34fe89b0a85d50aa234752b44232fd3406d7c2eb1310e9639cfb1"
-        },
-        {
-            "date": 1741617795989,
-            "name": "logs/mvsd-lab-2025-03-10.log",
-            "hash": "82a637b2e0c32a7ab78ed3630747bc68dd8a18af6b4948376f635cd024de31e7"
-        },
-        {
-            "date": 1741719385154,
-            "name": "logs/mvsd-lab-2025-03-11.log",
-            "hash": "3fce06931a01588fba71ec543d6ad1a760d9e408791b43ed7f857edf15f657c3"
-        },
-        {
-            "date": 1741803280270,
-            "name": "logs/mvsd-lab-2025-03-12.log",
-            "hash": "5fb2c837fce99072659f7f76a05e75a59d1d2bbb7abb8634d5b9f41e3194c4bd"
-        },
-        {
-            "date": 1741958062908,
-            "name": "logs/mvsd-lab-2025-03-14.log",
-            "hash": "930f0e1d2144c9acc139a93751c89f0e767821a7118401b32d8111f8c5a4a8a9"
-        },
-        {
-            "date": 1742037076751,
-            "name": "logs/mvsd-lab-2025-03-15.log",
-            "hash": "401b8dd333d0ca6fed69521bd5b7b80087bbe2d765e917369b42a6a58e8ee7b0"
-        },
-        {
-            "date": 1742154220194,
-            "name": "logs/mvsd-lab-2025-03-16.log",
-            "hash": "e00db301d3b11470dd84f0255324f173f2db56f8ef1c0570858446742d59bbdf"
-        },
-        {
-            "date": 1742203740153,
-            "name": "logs/mvsd-lab-2025-03-17.log",
-            "hash": "060e002a778b4c9bbc34eb7699336f3e7089f7af0e9bcccd5485fe7f31b36e44"
-        },
-        {
             "date": 1742672024943,
             "name": "logs/mvsd-lab-2025-03-22.log",
             "hash": "3882b3e33a113c534e1639e4cf24ed010e3357979aed7f19e0641254bee2ad11"
@@ -124,6 +19,11 @@
             "date": 1742864280622,
             "name": "logs/mvsd-lab-2025-03-24.log",
             "hash": "3fb36154e968068dfafb51ab48e1b59e96b87d463125905c5122ca3ef5f9e81f"
+        },
+        {
+            "date": 1745177192317,
+            "name": "logs/mvsd-lab-2025-04-20.log",
+            "hash": "f2ff3eff9b3b75e71aba1176da50ee7ea0cbe4da81dd92bde3a7691ed6b9811d"
         }
     ],
     "hashType": "sha256"
