@@ -14,6 +14,11 @@
             "date": 1747147603548,
             "name": "logs/mvsd-lab-2025-05-13.log",
             "hash": "fe62acdf5de752fc551234b55983ec406623c6dbeeb86ce2a4d32d3a37820726"
+        },
+        {
+            "date": 1747225919245,
+            "name": "logs/mvsd-lab-2025-05-14.log",
+            "hash": "df329e9a8613daf800698651ff8cf5bfbb2a7799c3e5b7c7c2d11bed57ff3eb8"
         }
     ],
     "hashType": "sha256"
