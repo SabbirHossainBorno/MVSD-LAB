@@ -182,7 +182,7 @@ export default function Navbar() {
                       pathname === '/member/post_doc_researcher' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Post Doc Researcher
+                    Post Doc
                   </Link>
                 </li>
                 <li>
@@ -192,17 +192,7 @@ export default function Navbar() {
                       pathname === '/member/phd_candidate' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Ph.D Candidate
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/member/masc_integrated_candidate"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/member/masc_integrated_candidate' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    MASc Integrated Candidate
+                    Ph.D
                   </Link>
                 </li>
                 <li>
@@ -212,7 +202,7 @@ export default function Navbar() {
                       pathname === '/member/masc_candidate' ? 'text-blue-500' : ''
                     }`}
                   >
-                    MASc Candidate
+                    Master&#39;s
                   </Link>
                 </li>
                 <li>
@@ -223,6 +213,16 @@ export default function Navbar() {
                     }`}
                   >
                     Staff
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/member/alumni"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/member/alumni' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Alumni
                   </Link>
                 </li>
               </ul>

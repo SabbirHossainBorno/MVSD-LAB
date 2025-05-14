@@ -41,8 +41,8 @@ const AddProfessor = () => {
   const [socialMedia, setSocialMedia] = useState([{ socialMedia_name: '', link: '' }]);
   const [education, setEducation] = useState([{ degree: '', institution: '', passing_year: '' }]);
   const [career, setCareer] = useState([{ position: '', organization: '', joining_year: '', leaving_year: '' }]);
-  const [citations, setCitations] = useState([{ title: '', link: '', organization: '' }]);
-  const [documents, setDocuments] = useState([{ title: '', documentType: '', documentsPhoto: '' }]);
+  const [research, setResearch] = useState([{ title: '', researchType: '', link: '' }]);
+  //const [documents, setDocuments] = useState([{ title: '', documentType: '', documentsPhoto: '' }]);
   const [awards, setAwards] = useState([{ title: '', year: '', details: '', awardPhoto: '' }]);
   const [loading, setLoading] = useState(false);
 
@@ -144,7 +144,7 @@ const AddProfessor = () => {
     data.append('socialMedia', JSON.stringify(socialMedia));
     data.append('education', JSON.stringify(formattedEducation));
     data.append('career', JSON.stringify(formattedCareer));
-    data.append('citations', JSON.stringify(citations));
+    data.append('researches', JSON.stringify(researches));
 
     awards.forEach((award, index) => {
       data.append(`awards[${index}][title]`, award.title || '');
@@ -364,7 +364,7 @@ const AddProfessor = () => {
 
               {/* ID Number */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">Identification Number</label>
+                <label className="block text-sm font-medium text-gray-300">Banner ID</label>
                 <div className="relative">
                   <input
                     type="number"
@@ -396,7 +396,7 @@ const AddProfessor = () => {
 
               {/* Joining Date */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">Joining Date</label>
+                <label className="block text-sm font-medium text-gray-300">Joining Status Date</label>
                 <div className="relative">
                   <input
                     type="date"
@@ -412,7 +412,7 @@ const AddProfessor = () => {
 
               {/* Leaving Date */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">Leaving Date</label>
+                <label className="block text-sm font-medium text-gray-300">Emeritus Status Date</label>
                 <div className="relative">
                   <input
                     type="date"
@@ -744,54 +744,68 @@ const AddProfessor = () => {
             </button>
           </section>
 
-          {/* Citations Section */}
+          {/* Research Paper Section */}
           <section className="bg-gray-700/30 rounded p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-purple-300">
-              <FiFileText className="w-6 h-6" /> Academic Citations
+              <FiFileText className="w-6 h-6" /> Research Paper
             </h2>
 
-            {citations.map((citation, index) => (
+            {research.map((research, index) => (
               <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Citation Title"
-                    value={citation.title}
-                    onChange={(e) => handleArrayChange(setCitations, index, 'title', e.target.value)}
+                    placeholder="Research Paper Title"
+                    value={research.title}
+                    onChange={(e) => handleArrayChange(setResearches, index, 'title', e.target.value)}
                     className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
                   <FiBook className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
 
+                {/* Research Paper Type */}
+                <div className="relative flex items-center">
+                {/* Left Icon */}
+                <FiInfo className="absolute left-3 text-gray-400 pointer-events-none" />
+
+                {/* Select Dropdown */}
+                <select
+                  name="researchType"
+                  value={research.researchType}
+                  onChange={(e) => handleArrayChange(setResearches, index, 'researchType', e.target.value)}
+                  className="w-full pl-10 pr-10 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                  required
+                >
+                  <option value="" disabled className="text-gray-400">Select Type</option>
+                  <option value="Conference Paper">Conference Paper</option>
+                  <option value="Journal Paper">Journal Paper</option>
+                  <option value="Book/Chapter">Book/Chapter</option>
+                  <option value="Patent">Patent</option>
+                  <option value="Project">Project</option>
+                  <option value="Other">Other</option>
+                </select>
+
+                {/* Right Icon */}
+                <FiChevronDown className="absolute right-3 text-gray-400 pointer-events-none" />
+                </div>
+
                 <div className="relative">
                   <input
                     type="url"
-                    placeholder="Citation URL"
-                    value={citation.link}
-                    onChange={(e) => handleArrayChange(setCitations, index, 'link', e.target.value)}
+                    placeholder="Research Paper URL"
+                    value={research.link}
+                    onChange={(e) => handleArrayChange(setResearches, index, 'link', e.target.value)}
                     className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
                   <FiLink className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
 
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Issuing Organization"
-                    value={citation.organization}
-                    onChange={(e) => handleArrayChange(setCitations, index, 'organization', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
-                    required
-                  />
-                  <FiBriefcase className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
-                </div>
-
-                {citations.length > 1 && (
+                {research.length > 1 && (
                   <button
                     type="button"
-                    onClick={() => removeField(setCitations, index)}
+                    onClick={() => removeField(setResearches, index)}
                     className="absolute -right-4 -top-4 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <FiX className="w-4 h-4" />
@@ -802,15 +816,17 @@ const AddProfessor = () => {
 
             <button
               type="button"
-              onClick={() => addNewField(setCitations, { title: '', link: '', organization: '' })}
+              onClick={() => addNewField(setResearches, { title: '', researchType: '', link: '' })}
               className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
               <FiPlus className="w-5 h-5" />
-              <span>Add Citation</span>
+              <span>Add Research Paper</span>
             </button>
           </section>
 
-          {/* Documents Section */}
+
+          {/*
+          //Documents Section
           <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-cyan-300">
               <FiFileText className="w-6 h-6" /> Documents
@@ -818,7 +834,7 @@ const AddProfessor = () => {
 
             {documents.map((document, index) => (
               <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
-              {/* Document Title Input */}
+              //Document Title Input
               <div className="relative flex items-center">
                 <input
                   type="text"
@@ -832,12 +848,12 @@ const AddProfessor = () => {
               </div>
             
 
-                {/* Document Type */}
+                //Document Type
                 <div className="relative flex items-center">
-                {/* Left Icon */}
+                //Left Icon
                 <FiInfo className="absolute left-3 text-gray-400 pointer-events-none" />
 
-                {/* Select Dropdown */}
+                //Select Dropdown
                 <select
                   name="documentType"
                   value={document.documentType}
@@ -854,12 +870,12 @@ const AddProfessor = () => {
                   <option value="Other">Other</option>
                 </select>
 
-                {/* Right Icon */}
+                //Right Icon
                 <FiChevronDown className="absolute right-3 text-gray-400 pointer-events-none" />
               </div>
 
 
-                {/* Document Upload */}
+                //Document Upload
                 <div className="relative space-y-2">
                   <div className="relative">
                     <input
@@ -881,7 +897,7 @@ const AddProfessor = () => {
                   </div>
                 </div>
 
-                {/* Remove Button */}
+                //Remove Button
                 {documents.length > 1 && (
                   <button
                     type="button"
@@ -894,7 +910,7 @@ const AddProfessor = () => {
               </div>
             ))}
 
-            {/* Add Document Button */}
+            //Add Document Button
               <button
                 type="button"
                 onClick={() => addNewField(setDocuments, { title: '', documentType: '', documentsPhoto: null })}
@@ -903,7 +919,9 @@ const AddProfessor = () => {
                 <FiPlus className="w-5 h-5" />
                 <span>Add Document</span>
               </button>
-          </section>
+          </section>  
+          
+          */}
 
           {/* Awards Section */}
           <section className="bg-gray-700/30 rounded p-6 shadow-inner">

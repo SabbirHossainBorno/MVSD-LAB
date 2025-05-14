@@ -89,7 +89,7 @@ export async function POST(req) {
     const socialMedia = JSON.parse(formData.get('socialMedia') || '[]');
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
-    const citations = JSON.parse(formData.get('citations') || '[]');
+    const researches = JSON.parse(formData.get('researches') || '[]');
     const documents = [];
 
     for (let i = 0; formData.has(`documents[${i}][title]`); i++) {
@@ -301,9 +301,9 @@ export async function POST(req) {
         ]);
       }
 
-      const insertCitationQuery = `INSERT INTO professor_citations_info (professor_id, title, link, organization_name) VALUES ($1, $2, $3, $4) RETURNING *;`;
-      for (const citation of citations) {
-        await query(insertCitationQuery, [professorId, citation.title, citation.link, citation.organization]);
+      const insertResearchQuery = `INSERT INTO professor_research_info (professor_id, title, link, "research_type") VALUES ($1, $2, $3, $4) RETURNING *;`;
+      for (const research of researches) {
+        await query(insertResearchQuery, [professorId, research.title, research.link, research.researchType]);
       }
 
       // Insert into professor_documents_info
