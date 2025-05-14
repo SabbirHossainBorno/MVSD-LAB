@@ -42,9 +42,9 @@ const AddProfessor = () => {
   const [education, setEducation] = useState([{ degree: '', institution: '', passing_year: '' }]);
   const [career, setCareer] = useState([{ position: '', organization: '', joining_year: '', leaving_year: '' }]);
   const [research, setResearch] = useState([{ title: '', researchType: '', link: '' }]);
-  //const [documents, setDocuments] = useState([{ title: '', documentType: '', documentsPhoto: '' }]);
   const [awards, setAwards] = useState([{ title: '', year: '', details: '', awardPhoto: '' }]);
   const [loading, setLoading] = useState(false);
+  const [otherEmails, setOtherEmails] = useState([]);
 
   const router = useRouter();
 
@@ -71,20 +71,23 @@ const AddProfessor = () => {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
   }, []);
+  
+  const addOtherEmail = useCallback(() => {
+    setOtherEmails(prev => [...prev, { id: Date.now(), value: '' }]);
+  }, []);
+
+  const removeOtherEmail = useCallback((id) => {
+    setOtherEmails(prev => prev.filter(email => email.id !== id));
+  }, []);
+
+  const handleOtherEmailChange = useCallback((id, value) => {
+    setOtherEmails(prev => prev.map(email => 
+      email.id === id ? { ...email, value } : email
+    ));
+  }, []);
 
 
   const handleArrayChange = useCallback((setter, index, field, value) => {
-    if (field === 'documentsPhoto' && value) {
-      const file = value;
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error('File size exceeds 5 MB.');
-        return;
-      }
-      if (!['image/jpeg', 'image/png', 'application/pdf'].includes(file.type)) {
-        toast.error('Invalid file type. Only JPG, JPEG, PNG, and PDF are allowed.');
-        return;
-      }
-    }
     setter((prevState) => {
       const newState = [...prevState];
       newState[index][field] = value;
@@ -108,15 +111,6 @@ const AddProfessor = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    // Check if all documents have a photo
-    for (const document of documents) {
-      if (!document.documentsPhoto) {
-        toast.error(`Document photo is missing for ${document.title}`);
-        setLoading(false);
-        return;
-      }
-    }
 
     if (formData.password !== formData.confirm_password) {
       toast.error('Passwords do not match');
@@ -144,7 +138,7 @@ const AddProfessor = () => {
     data.append('socialMedia', JSON.stringify(socialMedia));
     data.append('education', JSON.stringify(formattedEducation));
     data.append('career', JSON.stringify(formattedCareer));
-    data.append('researches', JSON.stringify(researches));
+    data.append('researches', JSON.stringify(research));
 
     awards.forEach((award, index) => {
       data.append(`awards[${index}][title]`, award.title || '');
@@ -155,14 +149,6 @@ const AddProfessor = () => {
       }
     });
 
-    // Properly handle documents
-    documents.forEach((document, index) => {
-      data.append(`documents[${index}][title]`, document.title);
-      data.append(`documents[${index}][documentType]`, document.documentType);
-      if (document.documentsPhoto) {
-        data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
-      }
-    });
 
     try {
       const response = await fetch('/api/professor_add', {
@@ -256,12 +242,50 @@ const AddProfessor = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    placeholder="Primary Email"
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
                     required
                   />
                   <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
               </div>
+
+              {/* Other Emails - New Fields */}
+<div className="space-y-2 col-span-full">
+  <div className="flex items-center justify-between mb-2">
+    <span className="block text-sm font-medium text-gray-300">Other Emails</span>
+    <button
+      type="button"
+      onClick={addOtherEmail}
+      className="flex items-center text-blue-400 hover:text-blue-300 transition-colors"
+    >
+      <FiPlus className="w-4 h-4 mr-1" />
+      Add Email
+    </button>
+  </div>
+  
+  {otherEmails.map((email) => (
+    <div key={email.id} className="relative group mb-2">
+      <div className="flex gap-2">
+        <input
+          type="email"
+          value={email.value}
+          onChange={(e) => handleOtherEmailChange(email.id, e.target.value)}
+          className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+          placeholder="Additional Email"
+        />
+        <button
+          type="button"
+          onClick={() => removeOtherEmail(email.id)}
+          className="px-3 bg-red-600/80 hover:bg-red-700 rounded transition-colors text-white flex items-center justify-center"
+        >
+          <FiX className="w-4 h-4" />
+        </button>
+      </div>
+      <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+    </div>
+  ))}
+</div>
 
               {/* Phone */}
               <div className="space-y-2">
@@ -750,14 +774,14 @@ const AddProfessor = () => {
               <FiFileText className="w-6 h-6" /> Research Paper
             </h2>
 
-            {research.map((research, index) => (
+            {research.map((researchItem, index) => (
               <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
                 <div className="relative">
                   <input
                     type="text"
                     placeholder="Research Paper Title"
-                    value={research.title}
-                    onChange={(e) => handleArrayChange(setResearches, index, 'title', e.target.value)}
+                    value={researchItem.title}
+                    onChange={(e) => handleArrayChange(setResearch, index, 'title', e.target.value)}
                     className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
@@ -772,8 +796,8 @@ const AddProfessor = () => {
                 {/* Select Dropdown */}
                 <select
                   name="researchType"
-                  value={research.researchType}
-                  onChange={(e) => handleArrayChange(setResearches, index, 'researchType', e.target.value)}
+                  value={researchItem.researchType}
+                  onChange={(e) => handleArrayChange(setResearch, index, 'researchType', e.target.value)}
                   className="w-full pl-10 pr-10 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
                   required
                 >
@@ -794,8 +818,8 @@ const AddProfessor = () => {
                   <input
                     type="url"
                     placeholder="Research Paper URL"
-                    value={research.link}
-                    onChange={(e) => handleArrayChange(setResearches, index, 'link', e.target.value)}
+                    value={researchItem.link}
+                    onChange={(e) => handleArrayChange(setResearch, index, 'link', e.target.value)}
                     className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
@@ -805,7 +829,7 @@ const AddProfessor = () => {
                 {research.length > 1 && (
                   <button
                     type="button"
-                    onClick={() => removeField(setResearches, index)}
+                    onClick={() => removeField(setResearch, index)}
                     className="absolute -right-4 -top-4 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <FiX className="w-4 h-4" />
@@ -816,112 +840,13 @@ const AddProfessor = () => {
 
             <button
               type="button"
-              onClick={() => addNewField(setResearches, { title: '', researchType: '', link: '' })}
+              onClick={() => addNewField(setResearch, { title: '', researchType: '', link: '' })}
               className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
               <FiPlus className="w-5 h-5" />
               <span>Add Research Paper</span>
             </button>
           </section>
-
-
-          {/*
-          //Documents Section
-          <section className="bg-gray-700/30 rounded-lg p-6 shadow-inner">
-            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-cyan-300">
-              <FiFileText className="w-6 h-6" /> Documents
-            </h2>
-
-            {documents.map((document, index) => (
-              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
-              //Document Title Input
-              <div className="relative flex items-center">
-                <input
-                  type="text"
-                  placeholder="Document Title"
-                  value={document.title}
-                  onChange={(e) => handleArrayChange(setDocuments, index, 'title', e.target.value)}
-                  className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
-                  required
-                />
-                <FiFileText className="absolute right-3 text-gray-400 pointer-events-none" />
-              </div>
-            
-
-                //Document Type
-                <div className="relative flex items-center">
-                //Left Icon
-                <FiInfo className="absolute left-3 text-gray-400 pointer-events-none" />
-
-                //Select Dropdown
-                <select
-                  name="documentType"
-                  value={document.documentType}
-                  onChange={(e) => handleArrayChange(setDocuments, index, 'documentType', e.target.value)}
-                  className="w-full pl-10 pr-10 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-                  required
-                >
-                  <option value="" disabled className="text-gray-400">Select Type</option>
-                  <option value="Education">Education</option>
-                  <option value="Medical">Medical</option>
-                  <option value="Career">Career</option>
-                  <option value="Personal">Personal</option>
-                  <option value="Official">Official</option>
-                  <option value="Other">Other</option>
-                </select>
-
-                //Right Icon
-                <FiChevronDown className="absolute right-3 text-gray-400 pointer-events-none" />
-              </div>
-
-
-                //Document Upload
-                <div className="relative space-y-2">
-                  <div className="relative">
-                    <input
-                      type="file"
-                      onChange={(e) => handleArrayChange(setDocuments, index, 'documentsPhoto', e.target.files[0])}
-                      className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-                      accept="image/*,application/pdf"
-                    />
-                    <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    {document.documentsPhoto && (
-                      <button
-                        type="button"
-                        onClick={() => handleArrayChange(setDocuments, index, 'documentsPhoto', null)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-300"
-                      >
-                        <FiX className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                //Remove Button
-                {documents.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeField(setDocuments, index)}
-                    className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
-                  >
-                    <FiX className="w-3.5 h-3.5" />
-                  </button>
-                )}
-              </div>
-            ))}
-
-            //Add Document Button
-              <button
-                type="button"
-                onClick={() => addNewField(setDocuments, { title: '', documentType: '', documentsPhoto: null })}
-                className="w-full md:w-auto flex items-center justify-center space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-              >
-                <FiPlus className="w-5 h-5" />
-                <span>Add Document</span>
-              </button>
-          </section>  
-          
-          */}
 
           {/* Awards Section */}
           <section className="bg-gray-700/30 rounded p-6 shadow-inner">
