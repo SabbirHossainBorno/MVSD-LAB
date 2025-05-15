@@ -70,6 +70,7 @@ export async function POST(req) {
     const passport_number = formData.get('passport_number');
     const dob = formData.get('dob');
     const email = formData.get('email'); // This is the professor's email
+    const otherEmails = JSON.parse(formData.get('otherEmails') || []);
     const password = formData.get('password');
     const short_bio = formData.get('short_bio');
     const joining_date = formData.get('joining_date');
@@ -89,16 +90,32 @@ export async function POST(req) {
       });
     }
 
+    
+
     // Validation
     if (!first_name || !last_name || !phone || !gender || !bloodGroup || !country || !idNumber || !passport_number || !dob || !email || !password || !short_bio || !joining_date) {
       return NextResponse.json({ message: 'All required fields must be filled.' }, { status: 400 });
-    }
-    
+    }  
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
     if (!passwordRegex.test(password)) {
       return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
     }
+
+    // ▼▼▼ ADD EMAIL VALIDATION HERE ▼▼▼
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Validate primary email
+    if (!emailRegex.test(email)) {
+      return NextResponse.json({ message: 'Primary email format is invalid' }, { status: 400 });
+    }
+
+    // Validate other emails
+    if (otherEmails.some(e => !emailRegex.test(e))) {
+      return NextResponse.json({ message: 'One or more secondary emails have invalid format' }, { status: 400 });
+    }
+
+    // ▲▲▲ END OF EMAIL VALIDATION ▲▲▲
 
     // Hash password before storing
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -133,21 +150,34 @@ export async function POST(req) {
       return NextResponse.json({ message: 'Award year cannot be greater than the current year.' }, { status: 400 });
     }
 
-    // Check for existing email, phone, ID number, and passport number
-    const emailCheckResult = await query('SELECT id FROM member WHERE email = $1', [email]);
+    // Combined email validation check for both primary and secondary emails
+    const emailCheckQuery = `
+      SELECT id 
+      FROM (
+        SELECT email, other_emails FROM member
+        UNION ALL
+        SELECT email, other_emails FROM professor_basic_info
+      ) AS combined
+      WHERE email = $1 OR $1 = ANY(other_emails)
+      OR $2 && other_emails
+      OR email = ANY($2)
+    `;
+
+    const emailCheckResult = await query(emailCheckQuery, [email, otherEmails]);
+
     if (emailCheckResult.rows.length > 0) {
       logger.warn('Validation Error: Email already exists', {
         meta: {
           eid,
           sid: sessionId,
           taskName: 'Add Professor',
-          details: `Attempt to add Professor failed - Email ${email} already exists.`
+          details: `Attempt to add Professor failed - Email ${email} or secondary emails already exist.`
         }
       });
 
       return NextResponse.json({ 
         success: false, 
-        message: 'Email already exists. Please try with a different email.' 
+        message: 'Primary email or secondary emails already exist in system.' 
       }, { status: 400 });
     }
 
@@ -223,17 +253,28 @@ export async function POST(req) {
       }
     }
 
+    // Convert empty array to NULL
+    const finalOtherEmails = otherEmails.length > 0 ? otherEmails : null;
+
+    
+
     try {
       await query('BEGIN');
 
       const insertProfessorQuery = `
         INSERT INTO professor_basic_info 
-          (id, first_name, last_name, phone, dob, email, password, short_bio, joining_date, leaving_date, photo, status, type, gender, "blood_group", country, passport_number, "id_number") 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'Active', $12, $13, $14, $15, $16, $17)
+          (id, first_name, last_name, phone, dob, email, password, short_bio, 
+          joining_date, leaving_date, photo, status, type, gender, "blood_group", 
+          country, passport_number, "id_number", other_emails) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'Active', $12, $13, $14, $15, $16, $17, $18)
         RETURNING *;
       `;
+
+      // Update query parameters array
       await query(insertProfessorQuery, [
-        professorId, first_name, last_name, phone, dob, email, password, short_bio, joining_date, leaving_date, photoUrl, type, gender, bloodGroup, country, passport_number, idNumber,
+        professorId, first_name, last_name, phone, dob, email, hashedPassword, short_bio, 
+        joining_date, leaving_date, photoUrl, type, gender, bloodGroup, country, 
+        passport_number, idNumber, finalOtherEmails  // Add otherEmails as last parameter
       ]);
 
       const insertSocialMediaQuery = `INSERT INTO professor_socialMedia_info (professor_id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
