@@ -60,6 +60,8 @@ export async function POST(req) {
   try {
     const formData = await req.formData();
 
+    console.log('Form data received');
+
     const first_name = formData.get('first_name');
     const last_name = formData.get('last_name');
     const phone = formData.get('phone');
@@ -90,6 +92,12 @@ export async function POST(req) {
       });
     }
 
+    console.log('Parsed form values:', {
+      first_name, last_name, email, otherEmails, phone, idNumber,
+      passport_number, socialMediaCount: socialMedia.length,
+      educationCount: education.length, careerCount: career.length,
+      researchCount: researches.length, awardsCount: awards.length
+    });
     
 
     // Validation
@@ -102,23 +110,17 @@ export async function POST(req) {
       return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
     }
 
-    // ▼▼▼ ADD EMAIL VALIDATION HERE ▼▼▼
+    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    // Validate primary email
     if (!emailRegex.test(email)) {
+      console.error('Validation failed: Invalid primary email format');
       return NextResponse.json({ message: 'Primary email format is invalid' }, { status: 400 });
     }
 
-    // Validate other emails
     if (otherEmails.some(e => !emailRegex.test(e))) {
+      console.error('Validation failed: Invalid secondary email(s)');
       return NextResponse.json({ message: 'One or more secondary emails have invalid format' }, { status: 400 });
     }
-
-    // ▲▲▲ END OF EMAIL VALIDATION ▲▲▲
-
-    // Hash password before storing
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     const currentDate = new Date();
     const dobDate = new Date(dob);
@@ -150,31 +152,28 @@ export async function POST(req) {
       return NextResponse.json({ message: 'Award year cannot be greater than the current year.' }, { status: 400 });
     }
 
-    // Combined email validation check for both primary and secondary emails
+    // Check for existing emails
+    console.log('Checking for existing emails...');
     const emailCheckQuery = `
       SELECT id 
       FROM (
-        SELECT email, other_emails FROM member
+        SELECT id, email, ARRAY[]::TEXT[] AS other_emails FROM member
         UNION ALL
-        SELECT email, other_emails FROM professor_basic_info
+        SELECT id, email, other_emails FROM professor_basic_info
       ) AS combined
-      WHERE email = $1 OR $1 = ANY(other_emails)
-      OR $2 && other_emails
-      OR email = ANY($2)
+      WHERE 
+        email = $1 
+        OR email = ANY($2::TEXT[])
+        OR $1 = ANY(other_emails)
+        OR other_emails && $2::TEXT[]
     `;
-
+    
     const emailCheckResult = await query(emailCheckQuery, [email, otherEmails]);
-
     if (emailCheckResult.rows.length > 0) {
+      console.error('Email conflict detected:', emailCheckResult.rows);
       logger.warn('Validation Error: Email already exists', {
-        meta: {
-          eid,
-          sid: sessionId,
-          taskName: 'Add Professor',
-          details: `Attempt to add Professor failed - Email ${email} or secondary emails already exist.`
-        }
+        meta: { eid, sid: sessionId, taskName: 'Add Professor' }
       });
-
       return NextResponse.json({ 
         success: false, 
         message: 'Primary email or secondary emails already exist in system.' 
@@ -253,14 +252,21 @@ export async function POST(req) {
       }
     }
 
-    // Convert empty array to NULL
+    // Prepare other emails (convert empty array to NULL)
     const finalOtherEmails = otherEmails.length > 0 ? otherEmails : null;
+    console.log('Final other emails:', finalOtherEmails);
+
 
     
-
+    // Database transaction
+    console.log('Starting database transaction...');
     try {
       await query('BEGIN');
+      console.log('Transaction started');
 
+
+      // Insert professor basic info
+      console.log('Inserting basic info...');
       const insertProfessorQuery = `
         INSERT INTO professor_basic_info 
           (id, first_name, last_name, phone, dob, email, password, short_bio, 
@@ -269,6 +275,8 @@ export async function POST(req) {
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'Active', $12, $13, $14, $15, $16, $17, $18)
         RETURNING *;
       `;
+
+      const hashedPassword = await bcrypt.hash(password, 10);
 
       // Update query parameters array
       await query(insertProfessorQuery, [
@@ -303,6 +311,10 @@ export async function POST(req) {
           professorId, car.position, car.organization, parseInt(car.joining_year), parseInt(car.leaving_year),
         ]);
       }
+
+
+      // Insert research
+      console.log('Inserting research...');
 
       const insertResearchQuery = `INSERT INTO professor_research_info (professor_id, title, link, "research_type") VALUES ($1, $2, $3, $4) RETURNING *;`;
       for (const research of researches) {
@@ -350,6 +362,7 @@ export async function POST(req) {
 
     } catch (error) {
       await query('ROLLBACK');
+      console.error('Database transaction failed:', error);
 
       const errorMessage = formatAlertMessage('Professor Add - API', `ID : ${professorId}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
       await sendTelegramAlert(errorMessage);
@@ -367,6 +380,7 @@ export async function POST(req) {
     }
 
   } catch (error) {
+    console.error('Unexpected error:', error);
     const errorMessage = formatAlertMessage('Professor Add - API', `IP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
     await sendTelegramAlert(errorMessage);
 

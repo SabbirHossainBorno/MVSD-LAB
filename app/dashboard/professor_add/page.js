@@ -112,61 +112,102 @@ const AddProfessor = () => {
     e.preventDefault();
     setLoading(true);
 
-    if (formData.password !== formData.confirm_password) {
-      toast.error('Passwords do not match');
-      setLoading(false);
-      return;
-    }
-
-    const data = new FormData();
-
-    for (const key in formData) {
-      data.append(key, formData[key]);
-    }
-
-    const formattedEducation = education.map(edu => ({
-      ...edu,
-      passing_year: edu.passing_year ? parseInt(edu.passing_year, 10) : null
-    }));
-
-    const formattedCareer = career.map(job => ({
-      ...job,
-      joining_year: job.joining_year ? parseInt(job.joining_year, 10) : null,
-      leaving_year: job.leaving_year ? parseInt(job.leaving_year, 10) : null
-    }));
-
-    data.append('socialMedia', JSON.stringify(socialMedia));
-    data.append('education', JSON.stringify(formattedEducation));
-    data.append('career', JSON.stringify(formattedCareer));
-    data.append('researches', JSON.stringify(research));
-
-    awards.forEach((award, index) => {
-      data.append(`awards[${index}][title]`, award.title || '');
-      data.append(`awards[${index}][year]`, award.year || '');
-      data.append(`awards[${index}][details]`, award.details || '');
-      if (award.awardPhoto) {
-        data.append(`awards[${index}][awardPhoto]`, award.awardPhoto);
-      }
-    });
-
-
     try {
+      // Validate passwords match
+      if (formData.password !== formData.confirm_password) {
+        toast.error('Passwords do not match');
+        return;
+      }
+
+      // Validate password complexity
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?`~-]).{8,}$/;
+      if (!passwordRegex.test(formData.password)) {
+        toast.error('Password must contain uppercase, lowercase, number, and special character');
+        return;
+      }
+
+      const data = new FormData();
+
+      // Process dates and handle empty values
+      const processDate = (date) => date || null;
+      const cleanedFormData = {
+        ...formData,
+        dob: processDate(formData.dob),
+        joining_date: processDate(formData.joining_date),
+        leaving_date: processDate(formData.leaving_date),
+      };
+
+      // Append cleaned form data
+      Object.entries(cleanedFormData).forEach(([key, value]) => {
+        if (value !== null) data.append(key, value);
+      });
+
+      // Process other emails
+      const formattedOtherEmails = otherEmails
+        .map(email => email.value.trim())
+        .filter(email => email !== '');
+      data.append('otherEmails', JSON.stringify(formattedOtherEmails));
+
+      // Process education and career data
+      const formattedEducation = education.map(edu => ({
+        ...edu,
+        passing_year: edu.passing_year ? parseInt(edu.passing_year, 10) : null
+      }));
+
+      const formattedCareer = career.map(job => ({
+        ...job,
+        joining_year: job.joining_year ? parseInt(job.joining_year, 10) : null,
+        leaving_year: job.leaving_year ? parseInt(job.leaving_year, 10) : null
+      }));
+
+      // Append structured data
+      data.append('socialMedia', JSON.stringify(socialMedia));
+      data.append('education', JSON.stringify(formattedEducation));
+      data.append('career', JSON.stringify(formattedCareer));
+      data.append('researches', JSON.stringify(research));
+
+      // Validate and process awards
+      awards.forEach((award, index) => {
+        if (award.awardPhoto) {
+          if (award.awardPhoto.size > 5 * 1024 * 1024) {
+            toast.error(`Award ${index + 1} photo exceeds 5MB limit`);
+            throw new Error('File size error');
+          }
+          if (!['image/jpeg', 'image/png', 'application/pdf'].includes(award.awardPhoto.type)) {
+            toast.error(`Award ${index + 1} must be JPG, PNG, or PDF`);
+            throw new Error('Invalid file type');
+          }
+        }
+        
+        data.append(`awards[${index}][title]`, award.title || '');
+        data.append(`awards[${index}][year]`, award.year || '');
+        data.append(`awards[${index}][details]`, award.details || '');
+        if (award.awardPhoto) {
+          data.append(`awards[${index}][awardPhoto]`, award.awardPhoto);
+        }
+      });
+
+      // API request
       const response = await fetch('/api/professor_add', {
         method: 'POST',
         body: data,
+        headers: {
+          'Accept': 'application/json',
+        },
       });
 
-      if (response.ok) {
-        toast.success('Professor Added Successfully!');
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 3000); // 2-second delay
-      } else {
-        const result = await response.json();
-        toast.error(result.message || 'An error occurred while adding the professor.');
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Failed to add professor');
       }
+
+      toast.success(`Professor Added Successfully! ID: ${result.professorId}`);
+      setTimeout(() => router.push('/dashboard'), 3000);
+
     } catch (error) {
-      toast.error('Failed To Add Professor');
+      console.error('Submission Error:', error);
+      toast.error(error.message || 'Failed to add professor. Please try again.');
     } finally {
       setLoading(false);
     }
