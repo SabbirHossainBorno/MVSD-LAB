@@ -129,12 +129,7 @@ const AddProfessor = () => {
         toast.error('Professor must be at least 18 years old');
         return;
       }
-  
-      // Phone validation
-      if (/^0/.test(formData.phone)) {
-        toast.error('Phone number cannot start with 0');
-        return;
-      }
+
   
       // ID validation 
       if (/^0/.test(formData.idNumber)) {
@@ -225,24 +220,46 @@ const AddProfessor = () => {
       const response = await fetch('/api/professor_add', {
         method: 'POST',
         body: data,
-        headers: {
-          'Accept': 'application/json',
-        },
+        headers: { 'Accept': 'application/json' },
       });
   
       const result = await response.json();
   
       if (response.ok) {
         toast.success(`Professor Added Successfully! ID: ${result.professorId}`);
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 3000);
+        setTimeout(() => router.push('/dashboard'), 3000);
       } else {
-        toast.error(result.message || 'An error occurred while adding the professor.');
+        // Handle specific backend validation errors
+        const errorMessage = result.message || 'Registration failed. Please check your inputs.';
+        
+        // Add specific error handling based on errorType
+        if (result.errorType) {
+          switch (result.errorType) {
+            case 'PRIMARY_EMAIL_CONFLICT':
+              toast.error('Primary email already exists in system');
+              break;
+            case 'SECONDARY_EMAIL_CONFLICT':
+              toast.error('One of your secondary emails is already a primary email elsewhere');
+              break;
+            case 'PHONE_CONFLICT':
+              toast.error('Phone number already registered');
+              break;
+            case 'ID_CONFLICT':
+              toast.error('Banner ID already exists');
+              break;
+            case 'PASSPORT_CONFLICT':
+              toast.error('Passport number already registered');
+              break;
+            default:
+              toast.error(errorMessage);
+          }
+        } else {
+          toast.error(errorMessage);
+        }
       }
     } catch (error) {
       console.error('Submission Error:', error);
-      toast.error(error.message || 'Failed to add professor. Please try again.');
+      toast.error(error.message || 'Network error. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -1023,20 +1040,24 @@ const AddProfessor = () => {
 
           {/* Submit Button */}
           <div className="flex justify-end">
-            <button
-              type="submit"
-              disabled={loading}
-              className="relative bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded font-semibold shadow-lg transform transition-all duration-200 hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <span className="flex items-center">
-                  <FiLoader className="animate-spin mr-2" />
-                  Processing...
-                </span>
-              ) : (
-                'Add Professor'
-              )}
-            </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`relative bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded font-semibold shadow-lg transition-all duration-200 ${
+              !loading && 'hover:from-blue-700 hover:to-purple-700 transform hover:scale-105'
+            } ${
+              loading ? 'opacity-70 cursor-not-allowed' : ''
+            }`}
+          >
+            {loading ? (
+              <span className="flex items-center justify-center">
+                <FiLoader className="animate-spin w-5 h-5 mr-2" />
+                <span className="pt-[2px]">Adding Professor....</span>
+              </span>
+            ) : (
+              'Add Professor'
+            )}
+          </button>
           </div>
         </form>
       </div>

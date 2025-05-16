@@ -98,6 +98,8 @@ export async function POST(req) {
       educationCount: education.length, careerCount: career.length,
       researchCount: researches.length, awardsCount: awards.length
     });
+
+    
     
 
     // Validation
@@ -152,104 +154,127 @@ export async function POST(req) {
       return NextResponse.json({ message: 'Award year cannot be greater than the current year.' }, { status: 400 });
     }
 
+    
+
     // Check for existing emails
     console.log('Checking for existing emails...');
     const emailCheckQuery = `
-      SELECT id 
-      FROM (
-        SELECT id, email, ARRAY[]::TEXT[] AS other_emails FROM member
-        UNION ALL
-        SELECT id, email, other_emails FROM professor_basic_info
-      ) AS combined
-      WHERE 
-        email = $1 
-        OR email = ANY($2::TEXT[])
-        OR $1 = ANY(other_emails)
-        OR other_emails && $2::TEXT[]
-    `;
+    SELECT id, email, other_emails 
+    FROM (
+      SELECT id, email, ARRAY[]::TEXT[] AS other_emails FROM member
+      UNION ALL
+      SELECT id, email, COALESCE(other_emails, ARRAY[]::TEXT[]) FROM professor_basic_info
+    ) AS combined
+    WHERE 
+      email = $1 
+      OR email = ANY($2::TEXT[])
+      OR $1 = ANY(other_emails)
+      OR other_emails && $2::TEXT[]
+  `;
     
     // Email conflict check
     const emailCheckResult = await query(emailCheckQuery, [email, otherEmails]);
     if (emailCheckResult.rows.length > 0) {
       const conflict = emailCheckResult.rows[0];
-      let message = '';
-      let logDetails = '';
+      let message = 'Email conflict detected';
+      let errorType = 'EMAIL_CONFLICT';
+      
+      const conflictEmails = conflict.other_emails || [];
       
       if (conflict.email === email) {
         message = 'Primary email already exists';
-        logDetails = `Primary email conflict: ${email}`;
-      } else if (conflict.other_emails.includes(email)) {
+        errorType = 'PRIMARY_EMAIL_CONFLICT';
+      } else if (conflictEmails.includes(email)) {
         message = 'Primary email exists in another profile';
-        logDetails = `Primary email found in other_emails: ${email}`;
+        errorType = 'SECONDARY_EMAIL_CONFLICT';
       } else {
-        message = 'Secondary email exists in another profile';
-        logDetails = `Secondary email conflict: ${otherEmails.join(', ')}`;
+        message = 'One of the secondary emails already exists';
+        errorType = 'SECONDARY_EMAIL_EXISTS';
       }
 
-      logger.warn('Validation Error: Email conflict', {
+      logger.warn(`Validation Error: ${errorType}`, {
         meta: {
           eid,
           sid: sessionId,
           taskName: 'Add Professor',
-          details: logDetails
+          details: message
         }
       });
 
-      return NextResponse.json({ 
-        success: false, 
-        message 
-      }, { status: 400 });
+      return NextResponse.json(
+        { 
+          success: false,
+          message,
+          errorType
+        }, 
+        { status: 400 }
+      );
     }
 
+    // Phone conflict check
     const phoneCheckResult = await query('SELECT id FROM member WHERE phone = $1', [phone]);
     if (phoneCheckResult.rows.length > 0) {
-      logger.warn('Validation Error: Phone number already exists', {
+      logger.warn('Validation Error: Phone conflict', {
         meta: {
           eid,
           sid: sessionId,
           taskName: 'Add Professor',
-          details: `Attempt to add Professor failed - Phone No : ${phone} already exists.`
+          details: `Phone number ${phone} already exists`
         }
       });
 
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Phone No already exists. Please try with a different phone no.' 
-      }, { status: 400 });
+      return NextResponse.json(
+        { 
+          success: false,
+          message: 'Phone number already registered',
+          errorType: 'PHONE_CONFLICT'
+        }, 
+        { status: 400 }
+      );
     }
 
+    // ID conflict check
     const idNumberCheckResult = await query('SELECT id FROM member WHERE id_number = $1', [idNumber]);
     if (idNumberCheckResult.rows.length > 0) {
-      logger.warn('Validation Error: ID number already exists', {
+      logger.warn('Validation Error: ID conflict', {
         meta: {
           eid,
           sid: sessionId,
           taskName: 'Add Professor',
-          details: `Attempt to add Professor failed - ID number ${idNumber} already exists.`
+          details: `Banner ID ${idNumber} already exists`
         }
       });
 
-      return NextResponse.json({ 
-        success: false, 
-        message: 'ID number already exists. Please try with a different ID number.' 
-      }, { status: 400 });
+      return NextResponse.json(
+        { 
+          success: false,
+          message: 'Banner ID already registered',
+          errorType: 'ID_CONFLICT'
+        }, 
+        { status: 400 }
+      );
     }
 
+    // Passport conflict check
     const passportNumberCheckResult = await query('SELECT id FROM member WHERE passport_number = $1', [passport_number]);
     if (passportNumberCheckResult.rows.length > 0) {
-      logger.warn('Validation Error: Passport number already exists', {
+      logger.warn('Validation Error: Passport conflict', {
         meta: {
           eid,
           sid: sessionId,
           taskName: 'Add Professor',
-          details: `Attempt to add Professor failed - Passport number ${passport_number} already exists.`
+          details: `Passport number ${passport_number} already exists`
         }
       });
 
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Passport number already exists. Please try with a different passport number.' 
-      }, { status: 400 });
+      return NextResponse.json(
+        { 
+          success: false,
+          message: 'Passport number already registered',
+          errorType: 'PASSPORT_CONFLICT'
+        }, 
+        { status: 400 }
+      );
     }
 
     const professorId = await generateProfessorId();
@@ -379,7 +404,11 @@ export async function POST(req) {
         }
       });
 
-      return NextResponse.json({ message: 'Professor information added successfully!' }, { status: 200 });
+      // In the successful commit block:
+      return NextResponse.json({ 
+        message: 'Professor information added successfully!',
+        professorId: professorId  // Add this line to include the ID in response
+      }, { status: 200 });
 
     } catch (error) {
       await query('ROLLBACK');
