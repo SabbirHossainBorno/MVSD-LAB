@@ -229,33 +229,20 @@ const AddProfessor = () => {
         toast.success(`Professor Added Successfully! ID: ${result.professorId}`);
         setTimeout(() => router.push('/dashboard'), 3000);
       } else {
-        // Handle specific backend validation errors
+        // Handle specific error types
         const errorMessage = result.message || 'Registration failed. Please check your inputs.';
         
-        // Add specific error handling based on errorType
-        if (result.errorType) {
-          switch (result.errorType) {
-            case 'PRIMARY_EMAIL_CONFLICT':
-              toast.error('Primary email already exists in system');
-              break;
-            case 'SECONDARY_EMAIL_CONFLICT':
-              toast.error('One of your secondary emails is already a primary email elsewhere');
-              break;
-            case 'PHONE_CONFLICT':
-              toast.error('Phone number already registered');
-              break;
-            case 'ID_CONFLICT':
-              toast.error('Banner ID already exists');
-              break;
-            case 'PASSPORT_CONFLICT':
-              toast.error('Passport number already registered');
-              break;
-            default:
-              toast.error(errorMessage);
-          }
-        } else {
-          toast.error(errorMessage);
-        }
+        // Custom messages based on errorType
+        const errorMap = {
+          'PRIMARY_EMAIL_CONFLICT': 'Primary email already exists in system',
+          'SECONDARY_EMAIL_CONFLICT': 'One of the secondary emails is already registered',
+          'PHONE_CONFLICT': 'Phone number already registered',
+          'ID_CONFLICT': 'Banner ID already exists',
+          'PASSPORT_CONFLICT': 'Passport number already registered',
+          // Add other error types as needed
+        };
+  
+        toast.error(errorMap[result.errorType] || errorMessage);
       }
     } catch (error) {
       console.error('Submission Error:', error);
@@ -1060,8 +1047,20 @@ const AddProfessor = () => {
           </button>
           </div>
         </form>
+        <ToastContainer 
+        position="bottom-right"
+        theme="dark"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        style={{ zIndex: 9999 }}  // Add this line
+      />
       </div>
-      <ToastContainer position="bottom-right" theme="dark" />
     </div>
   );
 };
