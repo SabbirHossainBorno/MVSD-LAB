@@ -111,23 +111,58 @@ const AddProfessor = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     try {
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        toast.error('Invalid primary email format');
+        return;
+      }
+  
+      // Date of Birth validation
+      const dobDate = new Date(formData.dob);
+      const ageDiff = Date.now() - dobDate.getTime();
+      const ageDate = new Date(ageDiff);
+      const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+      if (age < 18) {
+        toast.error('Professor must be at least 18 years old');
+        return;
+      }
+  
+      // Phone validation
+      if (/^0/.test(formData.phone)) {
+        toast.error('Phone number cannot start with 0');
+        return;
+      }
+  
+      // ID validation 
+      if (/^0/.test(formData.idNumber)) {
+        toast.error('ID number cannot start with 0');
+        return;
+      }
+  
+      // Passport validation
+      if (/^0/.test(formData.passport_number)) {
+        toast.error('Passport number cannot start with 0');
+        return;
+      }
+  
       // Validate passwords match
       if (formData.password !== formData.confirm_password) {
         toast.error('Passwords do not match');
         return;
       }
-
+  
       // Validate password complexity
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?`~-]).{8,}$/;
       if (!passwordRegex.test(formData.password)) {
         toast.error('Password must contain uppercase, lowercase, number, and special character');
         return;
       }
-
+  
       const data = new FormData();
-
+  
       // Process dates and handle empty values
       const processDate = (date) => date || null;
       const cleanedFormData = {
@@ -136,36 +171,36 @@ const AddProfessor = () => {
         joining_date: processDate(formData.joining_date),
         leaving_date: processDate(formData.leaving_date),
       };
-
+  
       // Append cleaned form data
       Object.entries(cleanedFormData).forEach(([key, value]) => {
         if (value !== null) data.append(key, value);
       });
-
+  
       // Process other emails
       const formattedOtherEmails = otherEmails
         .map(email => email.value.trim())
         .filter(email => email !== '');
       data.append('otherEmails', JSON.stringify(formattedOtherEmails));
-
+  
       // Process education and career data
       const formattedEducation = education.map(edu => ({
         ...edu,
         passing_year: edu.passing_year ? parseInt(edu.passing_year, 10) : null
       }));
-
+  
       const formattedCareer = career.map(job => ({
         ...job,
         joining_year: job.joining_year ? parseInt(job.joining_year, 10) : null,
         leaving_year: job.leaving_year ? parseInt(job.leaving_year, 10) : null
       }));
-
+  
       // Append structured data
       data.append('socialMedia', JSON.stringify(socialMedia));
       data.append('education', JSON.stringify(formattedEducation));
       data.append('career', JSON.stringify(formattedCareer));
       data.append('researches', JSON.stringify(research));
-
+  
       // Validate and process awards
       awards.forEach((award, index) => {
         if (award.awardPhoto) {
@@ -186,8 +221,7 @@ const AddProfessor = () => {
           data.append(`awards[${index}][awardPhoto]`, award.awardPhoto);
         }
       });
-
-      // API request
+  
       const response = await fetch('/api/professor_add', {
         method: 'POST',
         body: data,
@@ -195,16 +229,17 @@ const AddProfessor = () => {
           'Accept': 'application/json',
         },
       });
-
+  
       const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || 'Failed to add professor');
+  
+      if (response.ok) {
+        toast.success(`Professor Added Successfully! ID: ${result.professorId}`);
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 3000);
+      } else {
+        toast.error(result.message || 'An error occurred while adding the professor.');
       }
-
-      toast.success(`Professor Added Successfully! ID: ${result.professorId}`);
-      setTimeout(() => router.push('/dashboard'), 3000);
-
     } catch (error) {
       console.error('Submission Error:', error);
       toast.error(error.message || 'Failed to add professor. Please try again.');
@@ -212,6 +247,7 @@ const AddProfessor = () => {
       setLoading(false);
     }
   };
+  
 
   if (loading) return <LoadingSpinner />;
 
@@ -292,41 +328,41 @@ const AddProfessor = () => {
               </div>
 
               {/* Other Emails - New Fields */}
-<div className="space-y-2 col-span-full">
-  <div className="flex items-center justify-between mb-2">
-    <span className="block text-sm font-medium text-gray-300">Other Emails</span>
-    <button
-      type="button"
-      onClick={addOtherEmail}
-      className="flex items-center text-blue-400 hover:text-blue-300 transition-colors"
-    >
-      <FiPlus className="w-4 h-4 mr-1" />
-      Add Email
-    </button>
-  </div>
-  
-  {otherEmails.map((email) => (
-    <div key={email.id} className="relative group mb-2">
-      <div className="flex gap-2">
-        <input
-          type="email"
-          value={email.value}
-          onChange={(e) => handleOtherEmailChange(email.id, e.target.value)}
-          className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
-          placeholder="Additional Email"
-        />
-        <button
-          type="button"
-          onClick={() => removeOtherEmail(email.id)}
-          className="px-3 bg-red-600/80 hover:bg-red-700 rounded transition-colors text-white flex items-center justify-center"
-        >
-          <FiX className="w-4 h-4" />
-        </button>
-      </div>
-      <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-    </div>
-  ))}
-</div>
+              <div className="space-y-2 col-span-full">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="block text-sm font-medium text-gray-300">Other Emails</span>
+                  <button
+                    type="button"
+                    onClick={addOtherEmail}
+                    className="flex items-center text-blue-400 hover:text-blue-300 transition-colors"
+                  >
+                    <FiPlus className="w-4 h-4 mr-1" />
+                    Add Email
+                  </button>
+                </div>
+                
+                {otherEmails.map((email) => (
+                  <div key={email.id} className="relative group mb-2">
+                    <div className="flex gap-2">
+                      <input
+                        type="email"
+                        value={email.value}
+                        onChange={(e) => handleOtherEmailChange(email.id, e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+                        placeholder="Additional Email"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeOtherEmail(email.id)}
+                        className="px-3 bg-red-600/80 hover:bg-red-700 rounded transition-colors text-white flex items-center justify-center"
+                      >
+                        <FiX className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  </div>
+                ))}
+              </div>
 
               {/* Phone */}
               <div className="space-y-2">

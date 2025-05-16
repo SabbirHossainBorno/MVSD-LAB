@@ -168,15 +168,36 @@ export async function POST(req) {
         OR other_emails && $2::TEXT[]
     `;
     
+    // Email conflict check
     const emailCheckResult = await query(emailCheckQuery, [email, otherEmails]);
     if (emailCheckResult.rows.length > 0) {
-      console.error('Email conflict detected:', emailCheckResult.rows);
-      logger.warn('Validation Error: Email already exists', {
-        meta: { eid, sid: sessionId, taskName: 'Add Professor' }
+      const conflict = emailCheckResult.rows[0];
+      let message = '';
+      let logDetails = '';
+      
+      if (conflict.email === email) {
+        message = 'Primary email already exists';
+        logDetails = `Primary email conflict: ${email}`;
+      } else if (conflict.other_emails.includes(email)) {
+        message = 'Primary email exists in another profile';
+        logDetails = `Primary email found in other_emails: ${email}`;
+      } else {
+        message = 'Secondary email exists in another profile';
+        logDetails = `Secondary email conflict: ${otherEmails.join(', ')}`;
+      }
+
+      logger.warn('Validation Error: Email conflict', {
+        meta: {
+          eid,
+          sid: sessionId,
+          taskName: 'Add Professor',
+          details: logDetails
+        }
       });
+
       return NextResponse.json({ 
         success: false, 
-        message: 'Primary email or secondary emails already exist in system.' 
+        message 
       }, { status: 400 });
     }
 
