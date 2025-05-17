@@ -40,12 +40,15 @@ const EditProfessor = () => {
       try {
         const response = await fetch(`/api/professor_edit/${id}`);
         const data = await response.json();
+         console.log('Received other_emails:', data.other_emails); // Add this
         setFormData({
+          ...data,
           first_name: data.first_name || '',
           last_name: data.last_name || '',
           phone: data.phone || '',
           short_bio: data.short_bio || '',
           status: data.status, // Directly use the status from the database
+          other_emails: data.other_emails || [],
           leaving_date: data.leaving_date || '', // Only leaving_date can be null
         });
         setPhoto(data.photo || null);
@@ -65,22 +68,38 @@ const EditProfessor = () => {
 
 
   const handleChange = useCallback((e) => {
-    const { name, value, files } = e.target;
-    if (name === 'photo' && files.length > 0) {
-      const file = files[0];
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error('File size exceeds 5 MB.');
-        return;
-      }
-      if (!['image/jpeg', 'image/png'].includes(file.type)) {
-        toast.error('Invalid file type. Only JPG, JPEG, and PNG are allowed.');
-        return;
-      }
-      setPhoto(file);
-    } else {
-      setFormData((prevData) => ({ ...prevData, [name]: value }));
+  const { name, value, files } = e.target;
+  
+  if (name === 'leaving_date') {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+      status: value ? 'Emeritus' : prev.status === 'Inactive' ? 'Inactive' : 'Active'
+    }));
+  } else if (name === 'status') {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+      leaving_date: value === 'Active' ? '' : prev.leaving_date
+    }));
+  } else if (name === 'photo' && files.length > 0) {
+    const file = files[0];
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('File size exceeds 5 MB.');
+      return;
     }
-  }, []);
+    if (!['image/jpeg', 'image/png'].includes(file.type)) {
+      toast.error('Invalid file type. Only JPG, JPEG, and PNG are allowed.');
+      return;
+    }
+    setPhoto(file);
+  } else {
+    setFormData(prev => ({ 
+      ...prev,
+      [name]: value 
+    }));
+  }
+}, []);
   
 
   const addNewField = useCallback((setter, newItem) => {
@@ -107,13 +126,23 @@ const EditProfessor = () => {
   const handleSubmit = async (section) => {
     setLoading(true);
     const data = new FormData();
+
+    // Add debug logging
+  console.log('Submitting section:', section);
+  console.log('Form data before processing:', formData);
   
     switch (section) {
       case 'basicInfo':
-        for (const key in formData) {
-          data.append(key, formData[key]);
-        }
-        break;
+        const basicData = {
+        ...formData,
+        other_emails: JSON.stringify(formData.other_emails)
+      };
+      
+      for (const key in basicData) {
+        console.log('Appending key:', key, 'value:', basicData[key]);
+        data.append(key, basicData[key]);
+      }
+      break;
       case 'photo':
         data.append('photo', photo);
         break;
@@ -151,6 +180,11 @@ const EditProfessor = () => {
       default:
         break;
     }
+
+    console.log('Final FormData entries:');
+  for (const [key, value] of data.entries()) {
+    console.log(key, value);
+  }
   
     try {
       const response = await fetch(`/api/professor_edit/${id}`, {
@@ -302,24 +336,38 @@ const EditProfessor = () => {
                   <FiFileText className="absolute left-3 top-4 text-gray-400" />
                 </div>
               </div>
-              {/* Status */}
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">Status</label>
-                <div className="relative">
-                  <select
-                    name="status"
-                    value={formData.status}
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-                    required
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                  </select>
-                  <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                </div>
-              </div>
+{/* Status */}
+<div className="space-y-2">
+  <label className="block text-sm font-medium text-gray-300">Status</label>
+  <div className="relative">
+    {formData.leaving_date ? (
+      <div className="relative">
+        <input
+          type="text"
+          readOnly
+          value="Emeritus"
+          className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 cursor-not-allowed"
+        />
+        <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+      </div>
+    ) : (
+      <select
+        name="status"
+        value={formData.status}
+        onChange={handleChange}
+        className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+        required
+      >
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+    )}
+    <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+    {!formData.leaving_date && (
+      <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+    )}
+  </div>
+</div>
               {/* Leaving Date */}
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300">Leaving Date</label>

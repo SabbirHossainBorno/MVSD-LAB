@@ -103,12 +103,12 @@ export async function GET(req, { params }) {
       }
     });
 
-    const professorQuery = `
-      SELECT *, 
-        COALESCE(other_emails, '{}'::varchar[]) as other_emails 
-      FROM professor_basic_info 
-      WHERE id = $1;
-    `;
+const professorQuery = `
+  SELECT *, 
+    COALESCE(other_emails, '{}'::varchar[]) as other_emails 
+  FROM professor_basic_info 
+  WHERE id = $1;
+`;
     const professorResult = await query(professorQuery, [id]);
 
     if (professorResult.rows.length === 0) {
@@ -144,7 +144,7 @@ export async function GET(req, { params }) {
     const awardsResult = await query(awardsQuery, [id]);
 
     const responseData = {
-      ...professor,
+      ...professorResult.rows[0],  // This includes other_emails
       socialMedia: socialMediaResult.rows,
       education: educationResult.rows,
       career: careerResult.rows,
@@ -217,7 +217,17 @@ export async function POST(req, { params }) {
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
     const researches = JSON.parse(formData.get('researches') || '[]');
-    const other_emails = JSON.parse(formData.get('other_emails') || '[]');
+    let other_emails = [];
+    try {
+      const emailsValue = formData.get('other_emails');
+      other_emails = emailsValue ? JSON.parse(emailsValue) : [];
+    } catch (error) {
+      await query('ROLLBACK');
+      return NextResponse.json(
+        { message: 'Invalid other_emails format - must be a valid JSON array' },
+        { status: 400 }
+      );
+    }
     
     const awards = [];
     for (let i = 0; formData.has(`awards[${i}][title]`); i++) {
@@ -260,6 +270,23 @@ export async function POST(req, { params }) {
       });
     }
 
+    // Status validation
+if (status === 'Emeritus' && !leaving_date) {
+  await query('ROLLBACK');
+  return NextResponse.json(
+    { message: 'Emeritus status requires a leaving date' },
+    { status: 400 }
+  );
+}
+
+if (status === 'Active' && leaving_date) {
+  await query('ROLLBACK');
+  return NextResponse.json(
+    { message: 'Active status cannot have a leaving date' },
+    { status: 400 }
+  );
+}
+
     // Add email validation check
     if (other_emails.length > 0) {
       // Check against all existing emails in the system
@@ -273,7 +300,11 @@ export async function POST(req, { params }) {
             SELECT email FROM member
           ) all_emails
           WHERE email = ANY($1)
-        AS exists`;
+        ) AS exists`;
+
+        // Add debug logging for other_emails (~line 287)
+console.log('Raw other_emails value:', emailsValue);
+console.log('Parsed other_emails:', other_emails);
 
       try {
         const checkResult = await query(emailCheckQuery, [other_emails]);
@@ -296,7 +327,7 @@ export async function POST(req, { params }) {
 
     // Update basic info
     if (first_name || last_name || phone || short_bio || status || leaving_date) {
-      const newStatus = leaving_date ? 'Inactive' : status;
+      const newStatus = formData.get('leaving_date') ? 'Emeritus' : status;
       const updateBasicInfoQuery = `
         UPDATE professor_basic_info
         SET 
@@ -322,9 +353,20 @@ export async function POST(req, { params }) {
 
       const updateMemberQuery = `
         UPDATE member
-        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6, updated_at = NOW()
-        WHERE id = $7
-      `;
+          SET 
+            first_name = $1,
+            last_name = $2,
+            phone = $3,
+            short_bio = $4,
+            status = $5,
+            leaving_date = $6,
+            updated_at = NOW(),
+            is_active = CASE 
+              WHEN $5 = 'Active' THEN TRUE
+              ELSE FALSE
+            END
+          WHERE id = $7
+        `;
       await query(updateMemberQuery, [first_name, last_name, phone, short_bio, newStatus, leaving_date, id]);
       logger.info('Basic INFO Updated', {
         meta: {
@@ -528,6 +570,8 @@ export async function POST(req, { params }) {
     return NextResponse.json({ message: 'Professor information updated successfully!' }, { status: 200 });
 
   } catch (error) {
+    console.error('Full error object:', error);
+  console.error('Error stack:', error.stack);
     await query('ROLLBACK');
 
     const errorMessage = formatAlertMessage('Error Updating Professor Information', `ID : ${id}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
