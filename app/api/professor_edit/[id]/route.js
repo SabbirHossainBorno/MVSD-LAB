@@ -103,7 +103,12 @@ export async function GET(req, { params }) {
       }
     });
 
-    const professorQuery = `SELECT * FROM professor_basic_info WHERE id = $1;`;
+    const professorQuery = `
+      SELECT *, 
+        COALESCE(other_emails, '{}'::varchar[]) as other_emails 
+      FROM professor_basic_info 
+      WHERE id = $1;
+    `;
     const professorResult = await query(professorQuery, [id]);
 
     if (professorResult.rows.length === 0) {
@@ -212,6 +217,7 @@ export async function POST(req, { params }) {
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
     const researches = JSON.parse(formData.get('researches') || '[]');
+    const other_emails = JSON.parse(formData.get('other_emails') || '[]');
     
     const awards = [];
     for (let i = 0; formData.has(`awards[${i}][title]`); i++) {
@@ -254,15 +260,65 @@ export async function POST(req, { params }) {
       });
     }
 
+    // Add email validation check
+    if (other_emails.length > 0) {
+      // Check against all existing emails in the system
+      const emailCheckQuery = `
+        SELECT EXISTS(
+          SELECT 1 FROM (
+            SELECT email FROM professor_basic_info
+            UNION ALL
+            SELECT unnest(other_emails) FROM professor_basic_info
+            UNION ALL
+            SELECT email FROM member
+          ) all_emails
+          WHERE email = ANY($1)
+        AS exists`;
+
+      try {
+        const checkResult = await query(emailCheckQuery, [other_emails]);
+        
+        if (checkResult.rows[0].exists) {
+          await query('ROLLBACK');
+          return NextResponse.json(
+            { message: 'One or more emails already exist in the system' },
+            { status: 400 }
+          );
+        }
+      } catch (error) {
+        await query('ROLLBACK');
+        return NextResponse.json(
+          { message: 'Error validating emails' },
+          { status: 500 }
+        );
+      }
+    }
+
     // Update basic info
     if (first_name || last_name || phone || short_bio || status || leaving_date) {
       const newStatus = leaving_date ? 'Inactive' : status;
       const updateBasicInfoQuery = `
         UPDATE professor_basic_info
-        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6
+        SET 
+          first_name = $1, 
+          last_name = $2, 
+          phone = $3, 
+          short_bio = $4, 
+          status = $5, 
+          leaving_date = $6,
+          other_emails = $8
         WHERE id = $7
       `;
-      await query(updateBasicInfoQuery, [first_name, last_name, phone, short_bio, newStatus, leaving_date, id]);
+      await query(updateBasicInfoQuery, [
+        first_name, 
+        last_name, 
+        phone, 
+        short_bio, 
+        newStatus, 
+        leaving_date, 
+        id,
+        other_emails  // Added as 8th parameter
+      ]);
 
       const updateMemberQuery = `
         UPDATE member

@@ -11,7 +11,7 @@ import CustomPopup from '../../../components/CustomPopup'; // Import the custom 
 import {
   FiUser, FiPhone, FiCalendar, FiBook, FiBriefcase, FiFileText,
   FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
-  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo, FiRefreshCcw,
+  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiMail, FiActivity, FiInfo, FiRefreshCcw,
 } from 'react-icons/fi';
 
 const EditProfessor = () => {
@@ -22,6 +22,7 @@ const EditProfessor = () => {
     short_bio: '',
     status: 'Active',
     leaving_date: '',
+    other_emails: [],
   });
   const [photo, setPhoto] = useState(null);
   const [socialMedia, setSocialMedia] = useState([]);
@@ -227,6 +228,7 @@ const EditProfessor = () => {
                   <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
               </div>
+              
               {/* Phone */}
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300">Phone</label>
@@ -242,6 +244,50 @@ const EditProfessor = () => {
                   <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
               </div>
+
+{/* Other Emails Section */}
+<div className="space-y-2 col-span-full">
+  <label className="block text-sm font-medium text-gray-300">Other Emails</label>
+  {formData.other_emails?.map((email, index) => (
+    <div key={index} className="flex gap-2 mb-2 group">
+      <div className="relative flex-1">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => {
+            const newEmails = [...formData.other_emails];
+            newEmails[index] = e.target.value;
+            setFormData(prev => ({ ...prev, other_emails: newEmails }));
+          }}
+          className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+          required
+        />
+        <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+      </div>
+      <button
+        type="button"
+        onClick={() => {
+          const newEmails = formData.other_emails.filter((_, i) => i !== index);
+          setFormData(prev => ({ ...prev, other_emails: newEmails }));
+        }}
+        className="px-3 py-2 text-red-500 hover:text-red-400 transition-colors"
+      >
+        <FiTrash2 />
+      </button>
+    </div>
+  ))}
+  <button
+    type="button"
+    onClick={() => setFormData(prev => ({
+      ...prev,
+      other_emails: [...(prev.other_emails || []), '']
+    }))}
+    className="flex items-center text-blue-400 hover:text-blue-300 text-sm"
+  >
+    <FiPlus className="mr-1" /> Add Email
+  </button>
+</div>
+              
               {/* Short Bio */}
               <div className="space-y-2 col-span-full">
                 <label className="block text-sm font-medium text-gray-300">Short Bio</label>
@@ -580,75 +626,81 @@ const EditProfessor = () => {
           </section>
 
           {/* Research Paper Section */}
-          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
-            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-purple-300">
-              <FiFileText className="w-6 h-6" /> Research Paper
-            </h2>
-            {researches.map((research, index) => (
-              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Research Paper Title"
-                    value={research.title}
-                    onChange={(e) => handleArrayChange(setResearch, index, 'title', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
-                    required
-                  />
-                  <FiBook className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
-                </div>
-                <div className="relative">
-                  <input
-                    type="url"
-                    placeholder="Research Paper URL"
-                    value={research.link}
-                    onChange={(e) => handleArrayChange(setResearch, index, 'link', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
-                    required
-                  />
-                  <FiLink className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
-                </div>
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Research Paper Type"
-                    value={research.research_type}
-                    onChange={(e) => handleArrayChange(setResearch, index, 'research_type', e.target.value)}
-                    className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
-                    required
-                  />
-                  <FiBriefcase className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
-                </div>
-                {research.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeField(setResearch, index)}
-                    className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
-                  >
-                    <FiX className="w-3.5 h-3.5" />
-                  </button>
-                )}
-              </div>
-            ))}
-            <div className="mt-4 flex items-center space-x-4">
-            <button
-              type="button"
-              onClick={() => addNewField(setResearch, { title: '', link: '', research_type: '' })}
-              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-            >
-              <FiPlus className="w-5 h-5" />
-              <span>Add Research Paper</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSubmit('research')}
-              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-            >
-              <FiRefreshCcw className="w-4 h-4" />
-              <span>Update Research Paper</span>
-            </button>
-            </div>
-          </section>      
+<section className="bg-gray-700/30 rounded p-6 shadow-inner">
+  <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-purple-300">
+    <FiFileText className="w-6 h-6" /> Research Papers
+  </h2>
+  
+  {researches.map((researchItem, index) => (
+    <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
+      {/* Title Input */}
+      <div className="relative">
+        <input
+          type="text"
+          placeholder="Research Title"
+          value={researchItem.title}
+          onChange={(e) => handleArrayChange(setResearch, index, 'title', e.target.value)}
+          className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
+          required
+        />
+        <FiBook className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+      </div>
+
+      {/* Type Selector */}
+      <div className="relative">
+        <select
+          value={researchItem.research_type}
+          onChange={(e) => handleArrayChange(setResearch, index, 'research_type', e.target.value)}
+          className="w-full pl-10 pr-10 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+          required
+        >
+          <option value="" disabled>Select Type</option>
+          <option value="Conference Paper">Conference Paper</option>
+          <option value="Journal Paper">Journal Paper</option>
+          <option value="Book/Chapter">Book/Chapter</option>
+          <option value="Patent">Patent</option>
+          <option value="Project">Project</option>
+          <option value="Other">Other</option>
+        </select>
+        <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+      </div>
+
+      {/* URL Input */}
+      <div className="relative">
+        <input
+          type="url"
+          placeholder="Research URL"
+          value={researchItem.link}
+          onChange={(e) => handleArrayChange(setResearch, index, 'link', e.target.value)}
+          className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
+          required
+        />
+        <FiLink className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+      </div>
+
+      {/* Remove Button - Always visible except when only one item remains */}
+      {researches.length > 1 && (
+        <button
+          type="button"
+          onClick={() => removeField(setResearch, index)}
+          className="absolute -right-2 -top-2 bg-red-600/90 hover:bg-red-700 text-white p-1 rounded-full shadow-lg"
+        >
+          <FiX className="w-3.5 h-3.5" />
+        </button>
+      )}
+    </div>
+  ))}
+
+  <button
+    type="button"
+    onClick={() => addNewField(setResearch, { title: '', research_type: '', link: '' })}
+    className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+  >
+    <FiPlus className="w-5 h-5" />
+    <span>Add Research Paper</span>
+  </button>
+</section>   
 
           {/* Awards Section */}
           <section className="bg-gray-700/30 rounded p-6 shadow-inner">
