@@ -40,46 +40,6 @@ const saveProfilePhoto = async (file, professorId, eid, sessionId) => {
   }
 };
 
-const saveDocumentPhoto = async (file, professorId, index, document_type, eid, sessionId) => {
-  if (!file) {
-    logger.warn('No file provided for document photo', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Edit Professor Data',
-        details: `No file provided for document photo for professor ID: ${professorId}`
-      }
-    });
-    throw new Error('No file provided for document photo');
-  }
-  const filename = `${professorId}_Document_${document_type}_${index}${path.extname(file.name)}`;
-  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Professor', filename);
-
-  try {
-    const buffer = await file.arrayBuffer();
-    fs.writeFileSync(targetPath, Buffer.from(buffer));
-    logger.info('Document photo saved successfully', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Edit Professor Data',
-        details: `Document photo saved at ${targetPath} for professor ID: ${professorId}`
-      }
-    });
-    return `/Storage/Images/Professor/${filename}`;
-  } catch (error) {
-    logger.error('Failed to save document photo', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Edit Professor Data',
-        details: `Failed to save document photo at ${targetPath} for professor ID: ${professorId}. Error: ${error.message}`
-      }
-    });
-    throw new Error(`Failed to save document photo: ${error.message}`);
-  }
-};
-
 const saveAwardPhoto = async (file, professorId, index, eid, sessionId) => {
   if (!file) {
     logger.warn('No file provided for award photo', {
@@ -172,11 +132,8 @@ export async function GET(req, { params }) {
     const careerQuery = `SELECT * FROM professor_career_info WHERE professor_id = $1;`;
     const careerResult = await query(careerQuery, [id]);
 
-    const citationsQuery = `SELECT * FROM professor_citations_info WHERE professor_id = $1;`;
-    const citationsResult = await query(citationsQuery, [id]);
-
-    const documentsQuery = `SELECT * FROM professor_document_info WHERE professor_id = $1;`;
-    const documentsResult = await query(documentsQuery, [id]);
+    const researchQuery = `SELECT * FROM professor_research_info WHERE professor_id = $1;`;
+    const researchResult = await query(researchQuery, [id]);
 
     const awardsQuery = `SELECT * FROM professor_award_info WHERE professor_id = $1;`;
     const awardsResult = await query(awardsQuery, [id]);
@@ -186,13 +143,7 @@ export async function GET(req, { params }) {
       socialMedia: socialMediaResult.rows,
       education: educationResult.rows,
       career: careerResult.rows,
-      citations: citationsResult.rows,
-      documents: documentsResult.rows.map(doc => ({
-        title: doc.title,
-        document_type: doc.document_type,
-        documentsPhoto: doc.document_photo, // Fix property name mismatch
-        existing: true
-      })),
+      researches: researchResult.rows,
       awards: awardsResult.rows.map(award => ({ ...award, existing: true })),
     };
 
@@ -222,93 +173,6 @@ export async function GET(req, { params }) {
       }
     });
     return NextResponse.json({ message: `Failed to fetch professor data: ${error.message}` }, { status: 500 });
-  }
-}
-
-// Main function to handle the DELETE request
-export async function DELETE(req, { params }) {
-  const { id } = await params; // Await params before using its properties
-  const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
-  const eid = req.cookies.get('eid')?.value || 'Unknown EID';
-  const adminEmail = req.cookies.get('email')?.value || 'Unknown Email';
-  const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
-  const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
-
-  try {
-    const { documentId, documentType, documentTitle, documentPhoto } = await req.json();
-
-    // Delete the document from the database
-    const deleteDocumentQuery = `
-      DELETE FROM professor_document_info
-      WHERE professor_id = $1 AND document_type = $2 AND title = $3 AND document_photo = $4
-    `;
-    await query(deleteDocumentQuery, [id, documentType, documentTitle, documentPhoto]);
-
-    // Construct the full file path
-    const basePath = '/home/mvsd-lab/public';
-    const filePath = path.join(basePath, documentPhoto);
-
-    // Check if the file exists before attempting to delete it
-    fs.access(filePath, fs.constants.F_OK, (err) => {
-      if (err) {
-        logger.error('File does not exist', {
-          meta: {
-            eid,
-            sid: sessionId,
-            taskName: 'Edit Professor Data',
-            details: `File does not exist at path: ${filePath} for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
-          }
-        });
-      } else {
-        // Remove the file from the server
-        fs.unlink(filePath, (err) => {
-          if (err) {
-            logger.error('Failed to delete file', {
-              meta: {
-                eid,
-                sid: sessionId,
-                taskName: 'Edit Professor Data',
-                details: `Failed to delete file at path: ${filePath} for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}. Error: ${err.message}`
-              }
-            });
-          } else {
-            logger.info('File deleted successfully', {
-              meta: {
-                eid,
-                sid: sessionId,
-                taskName: 'Edit Professor Data',
-                details: `File deleted successfully at path: ${filePath} for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
-              }
-            });
-          }
-        });
-      }
-    });
-
-    const successMessage = formatAlertMessage('Document Deleted Successfully', `ID: ${id}\nDocument: ${documentTitle}\nStatus: 200`);
-    await sendTelegramAlert(successMessage);
-    logger.info('Document deleted successfully', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Edit Professor Data',
-        details: `Document deleted for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
-      }
-    });
-
-    return NextResponse.json({ message: 'Document deleted successfully' }, { status: 200 });
-  } catch (error) {
-    const errorMessage = formatAlertMessage('Error Deleting Document', `ID: ${id}\nError: ${error.message}\nStatus: 500`);
-    await sendTelegramAlert(errorMessage);
-    logger.error('Error deleting document', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Edit Professor Data',
-        details: `Error deleting document for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
-      }
-    });
-    return NextResponse.json({ message: `Failed to delete document: ${error.message}` }, { status: 500 });
   }
 }
 
@@ -347,22 +211,7 @@ export async function POST(req, { params }) {
     const socialMedia = JSON.parse(formData.get('socialMedia') || '[]');
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
-    const citations = JSON.parse(formData.get('citations') || '[]');
-
-    const documents = [];
-    for (let i = 0; formData.has(`documents[${i}][title]`); i++) {
-      const documentPhoto = formData.get(`documents[${i}][documentsPhoto]`);
-      const documentType = formData.get(`documents[${i}][document_type]`); // Retrieve document_type
-      if (!formData.get(`documents[${i}][existing]`) === 'true' && !documentPhoto) {
-        return NextResponse.json({ message: `Document photo is required for new document: ${formData.get(`documents[${i}][title]`)}` }, { status: 400 });
-      }
-      documents.push({
-        title: formData.get(`documents[${i}][title]`),
-        document_type: documentType, // Ensure document_type is included
-        documentsPhoto: documentPhoto,
-        existing: formData.get(`documents[${i}][existing]`) === 'true',
-      });
-    }
+    const researches = JSON.parse(formData.get('researches') || '[]');
     
     const awards = [];
     for (let i = 0; formData.has(`awards[${i}][title]`); i++) {
@@ -506,62 +355,30 @@ export async function POST(req, { params }) {
       });
     }
 
-    // Update citations
-    if (citations.length > 0) {
-      const deleteCitationsQuery = `
-        DELETE FROM professor_citations_info
+    // Update Research Paper
+    if (researches.length > 0) {
+      const deleteResearchQuery = `
+        DELETE FROM professor_research_info
         WHERE professor_id = $1
       `;
-      await query(deleteCitationsQuery, [id]);
+      await query(deleteResearchQuery, [id]);
 
-      const insertCitationsQuery = `
-        INSERT INTO professor_citations_info (professor_id, title, link, organization_name)
+      const insertResearchQuery = `
+        INSERT INTO professor_research_info (professor_id, title, link, research_type)
         VALUES ($1, $2, $3, $4)
       `;
-      for (const citation of citations) {
-        await query(insertCitationsQuery, [id, citation.title, citation.link, citation.organization_name]);
+      for (const research of researches) {
+        await query(insertResearchQuery, [id, research.title, research.link, research.research_type]);
       }
-      logger.info('Citation INFO Updated', {
+      logger.info('Research Paper INFO Updated', {
         meta: {
           eid,
           sid: sessionId,
           taskName: 'Edit Professor Data',
-          details: `Citation info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+          details: `Research Paper info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
     }
-
-
-
-// Update documents
-if (documents.length > 0) {
-  const newDocuments = documents.filter(document => !document.existing);
-
-  const insertDocumentsQuery = `
-    INSERT INTO professor_document_info (professor_id, title, document_type, document_photo) VALUES ($1, $2, $3, $4)
-  `;
-  const currentDocumentsCountQuery = `
-    SELECT COUNT(*) FROM professor_document_info WHERE professor_id = $1
-  `;
-  const currentDocumentsCountResult = await query(currentDocumentsCountQuery, [id]);
-  const currentDocumentsCount = parseInt(currentDocumentsCountResult.rows[0].count, 10);
-  for (let i = 0; i < newDocuments.length; i++) {
-    const document = newDocuments[i];
-    let documentUrl = null;
-    if (document.documentsPhoto) {
-      documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, currentDocumentsCount + i + 1, document.document_type, eid, sessionId); // Pass document_type
-    }
-    await query(insertDocumentsQuery, [id, document.title, document.document_type, documentUrl]);
-  }
-  logger.info('Document INFO Updated', {
-    meta: {
-      eid,
-      sid: sessionId,
-      taskName: 'Edit Professor Data',
-      details: `Document info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
-    }
-  });
-}
 
     // Update awards
     if (awards.length > 0) {

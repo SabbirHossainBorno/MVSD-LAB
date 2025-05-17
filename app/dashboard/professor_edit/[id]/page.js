@@ -27,14 +27,12 @@ const EditProfessor = () => {
   const [socialMedia, setSocialMedia] = useState([]);
   const [education, setEducation] = useState([]);
   const [career, setCareer] = useState([]);
-  const [citations, setCitations] = useState([]);
-  const [documents, setDocuments] = useState([]);
+  const [researches, setResearch] = useState([]);
   const [awards, setAwards] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { id } = useParams();
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const [documentToDelete, setDocumentToDelete] = useState(null);
 
   useEffect(() => {
     const fetchProfessorData = async () => {
@@ -53,8 +51,7 @@ const EditProfessor = () => {
         setSocialMedia(data.socialMedia || []);
         setEducation(data.education || []);
         setCareer(data.career || []);
-        setCitations(data.citations || []);
-        setDocuments(data.documents || []);
+        setResearch(data.researches || []);
         setAwards(data.awards || []);
       } catch (error) {
         toast.error('Failed to fetch professor data');
@@ -65,42 +62,6 @@ const EditProfessor = () => {
     fetchProfessorData();
   }, [id]);
 
-  const handleDeleteClick = (document) => {
-    setDocumentToDelete(document);
-    setShowDeletePopup(true);
-  };
-
-  const handleDeleteConfirm = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(`/api/professor_edit/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          documentId: documentToDelete.serial,
-          documentType: documentToDelete.document_type,
-          documentTitle: documentToDelete.title,
-          documentPhoto: documentToDelete.documentsPhoto,
-        }),
-      });
-  
-      if (response.ok) {
-        toast.success('Document Deleted Successfully!');
-        // Refresh the page or update the state to remove the deleted document
-        setDocuments((prevDocuments) => prevDocuments.filter(doc => doc.serial !== documentToDelete.serial));
-      } else {
-        toast.error('Failed to delete document');
-      }
-    } catch (error) {
-      toast.error('Failed to delete document');
-    } finally {
-      setLoading(false);
-      setShowDeletePopup(false);
-      setDocumentToDelete(null);
-    }
-  };
 
   const handleChange = useCallback((e) => {
     const { name, value, files } = e.target;
@@ -119,25 +80,6 @@ const EditProfessor = () => {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
   }, []);
-
-  const handleArrayChange = useCallback((setter, index, field, value) => {
-    if (field === 'documentsPhoto' && value) {
-      const file = value;
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error('File size exceeds 5 MB.');
-        return;
-      }
-      if (!['image/jpeg', 'image/png', 'application/pdf'].includes(file.type)) {
-        toast.error('Invalid file type. Only JPG, JPEG, PNG, and PDF are allowed.');
-        return;
-      }
-    }
-    setter((prevState) => {
-      const newState = [...prevState];
-      newState[index][field] = value;
-      return newState;
-    });
-  }, []);
   
 
   const addNewField = useCallback((setter, newItem) => {
@@ -150,6 +92,14 @@ const EditProfessor = () => {
         return prevState.filter((_, i) => i !== index);
       }
       return prevState;
+    });
+  }, []);
+
+  const handleArrayChange = useCallback((setter, index, field, value) => {
+    setter((prevState) => {
+      const newState = [...prevState];
+      newState[index][field] = value;
+      return newState;
     });
   }, []);
 
@@ -175,24 +125,9 @@ const EditProfessor = () => {
       case 'career':
         data.append('career', JSON.stringify(career));
         break;
-      case 'citations':
-        data.append('citations', JSON.stringify(citations));
+      case 'researches':
+        data.append('researches', JSON.stringify(researches));
         break;
-        case 'documents':
-      documents.forEach((document, index) => {
-        if (!document.existing && !document.documentsPhoto) {
-          toast.error(`Document photo is required for new document: ${document.title}`);
-          setLoading(false);
-          return;
-        }
-        data.append(`documents[${index}][title]`, document.title);
-        data.append(`documents[${index}][document_type]`, document.document_type); // Ensure document_type is appended
-        if (document.documentsPhoto) {
-          data.append(`documents[${index}][documentsPhoto]`, document.documentsPhoto);
-        }
-        data.append(`documents[${index}][existing]`, document.existing ? 'true' : 'false');
-      });
-      break;
       case 'awards':
         awards.forEach((award, index) => {
           data.append(`awards[${index}][title]`, award.title);
@@ -644,19 +579,19 @@ const EditProfessor = () => {
             </div>
           </section>
 
-          {/* Citations Section */}
+          {/* Research Paper Section */}
           <section className="bg-gray-700/30 rounded p-6 shadow-inner">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-purple-300">
-              <FiFileText className="w-6 h-6" /> Academic Citations
+              <FiFileText className="w-6 h-6" /> Research Paper
             </h2>
-            {citations.map((citation, index) => (
+            {researches.map((research, index) => (
               <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Citation Title"
-                    value={citation.title}
-                    onChange={(e) => handleArrayChange(setCitations, index, 'title', e.target.value)}
+                    placeholder="Research Paper Title"
+                    value={research.title}
+                    onChange={(e) => handleArrayChange(setResearch, index, 'title', e.target.value)}
                     className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
@@ -665,9 +600,9 @@ const EditProfessor = () => {
                 <div className="relative">
                   <input
                     type="url"
-                    placeholder="Citation URL"
-                    value={citation.link}
-                    onChange={(e) => handleArrayChange(setCitations, index, 'link', e.target.value)}
+                    placeholder="Research Paper URL"
+                    value={research.link}
+                    onChange={(e) => handleArrayChange(setResearch, index, 'link', e.target.value)}
                     className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
@@ -676,18 +611,18 @@ const EditProfessor = () => {
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Issuing Organization"
-                    value={citation.organization_name}
-                    onChange={(e) => handleArrayChange(setCitations, index, 'organization_name', e.target.value)}
+                    placeholder="Research Paper Type"
+                    value={research.research_type}
+                    onChange={(e) => handleArrayChange(setResearch, index, 'research_type', e.target.value)}
                     className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     required
                   />
                   <FiBriefcase className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
-                {citations.length > 1 && (
+                {research.length > 1 && (
                   <button
                     type="button"
-                    onClick={() => removeField(setCitations, index)}
+                    onClick={() => removeField(setResearch, index)}
                     className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
                   >
                     <FiX className="w-3.5 h-3.5" />
@@ -698,145 +633,22 @@ const EditProfessor = () => {
             <div className="mt-4 flex items-center space-x-4">
             <button
               type="button"
-              onClick={() => addNewField(setCitations, { title: '', link: '', organization_name: '' })}
+              onClick={() => addNewField(setResearch, { title: '', link: '', research_type: '' })}
               className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
               <FiPlus className="w-5 h-5" />
-              <span>Add Citation</span>
+              <span>Add Research Paper</span>
             </button>
             <button
               type="button"
-              onClick={() => handleSubmit('citations')}
+              onClick={() => handleSubmit('research')}
               className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
               <FiRefreshCcw className="w-4 h-4" />
-              <span>Update Citations</span>
+              <span>Update Research Paper</span>
             </button>
             </div>
-          </section>
-
-          {/* Document Section */}
-<section className="bg-gray-700/30 rounded p-6 shadow-inner relative">
-  <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-cyan-300">
-    <FiFileText className="w-6 h-6" /> Documents
-  </h2>
-  {documents.map((document, index) => (
-    <div key={index} className="group relative grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-800/50 p-4 rounded hover:bg-gray-800/70 transition-colors">
-      {/* Document Title Input */}
-      <div className="relative flex items-center">
-        <input
-          type="text"
-          placeholder="Document Title"
-          value={document.title}
-          onChange={(e) => handleArrayChange(setDocuments, index, 'title', e.target.value)}
-          className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
-          required
-          readOnly={document.existing} // Make read-only if existing
-        />
-        <FiFileText className="absolute right-3 text-gray-400 pointer-events-none" />
-      </div>
-      {/* Document Type */}
-      <div className="relative flex items-center">
-        <FiInfo className="absolute left-3 text-gray-400 pointer-events-none" />
-        <select
-          name="document_type"
-          value={document.document_type}
-          onChange={(e) => handleArrayChange(setDocuments, index, 'document_type', e.target.value)}
-          className="w-full pl-10 pr-10 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-          required
-          disabled={document.existing} // Disable if existing
-        >
-          <option value="" disabled className="text-gray-400">Select Type</option>
-          <option value="Education">Education</option>
-          <option value="Medical">Medical</option>
-          <option value="Career">Career</option>
-          <option value="Personal">Personal</option>
-          <option value="Official">Official</option>
-          <option value="Other">Other</option>
-        </select>
-        <FiChevronDown className="absolute right-3 text-gray-400 pointer-events-none" />
-      </div>
-      {/* Document Upload */}
-      <div className="relative space-y-2">
-        {document.existing ? (
-          <div className="relative">
-            <p className="text-gray-400 mb-2">Current Document Photo:</p>
-            <Image
-              src={document.documentsPhoto}
-              alt="Document Photo"
-              width={64}
-              height={64}
-              className="w-16 h-16 object-cover mb-4"
-            />
-          </div>
-        ) : (
-          <div className="relative">
-            <input
-              type="file"
-              onChange={(e) => handleArrayChange(setDocuments, index, 'documentsPhoto', e.target.files[0])}
-              className="w-full pl-10 pr-12 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-              accept="image/*,application/pdf"
-            />
-            <FiUpload className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            {document.documentsPhoto && (
-              <button
-                type="button"
-                onClick={() => handleArrayChange(setDocuments, index, 'documentsPhoto', null)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 hover:text-red-300"
-              >
-                <FiX className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-        )}
-      </div>
-      {/* Remove Button */}
-      {document.existing && (
-        <button
-          type="button"
-          onClick={() => handleDeleteClick(document)}
-          className="absolute right-0 -top-3 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-opacity"
-        >
-          <FiTrash2 className="w-3.5 h-3.5" />
-        </button>
-      )}
-    </div>
-  ))}
-  <div className="mt-4 flex items-center space-x-4">
-    {/* Add Document Button */}
-    <button
-      type="button"
-      onClick={() => addNewField(setDocuments, { title: '', document_type: '', documentsPhoto: null, existing: false })}
-      className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-    >
-      <FiPlus className="w-5 h-5" />
-      <span>Add Document</span>
-    </button>
-    <button
-      type="button"
-      onClick={() => handleSubmit('documents')}
-      className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-    >
-      <FiRefreshCcw className="w-4 h-4" />
-      <span>Update Documents</span>
-    </button>
-  </div>
-  {/* Custom Popup */}
-{showDeletePopup && documentToDelete && (
-  <div className="absolute inset-0 flex items-center justify-center">
-    <CustomPopup
-      isOpen={showDeletePopup}
-      onClose={() => setShowDeletePopup(false)}
-      onConfirm={handleDeleteConfirm}
-      title="Are You Sure?"
-      warning={`You Won't Be Able To Revert This!`}
-      message={`Document INFO : ${documentToDelete.title} - [${documentToDelete.document_type}]`}
-    />
-  </div>
-)}
-</section>
-
-      
+          </section>      
 
           {/* Awards Section */}
           <section className="bg-gray-700/30 rounded p-6 shadow-inner">

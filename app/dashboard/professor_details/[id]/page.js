@@ -168,31 +168,26 @@ const ProfessorDetails = () => {
             <div className="space-y-4">
               <InfoItem icon={<FiMail />} label="Email" value={professorDetails.basicInfo.email} />
               <InfoItem
-  icon={<FiMail />}
-  label="Other Email"
-  value={
-    Array.isArray(professorDetails.basicInfo.other_emails) && 
-    professorDetails.basicInfo.other_emails.length > 0 ? (
-      <div className="flex flex-wrap gap-2">
-        {professorDetails.basicInfo.other_emails.map((email, index) => (
-          <span key={index} className="flex items-center">
-            <a 
-              href={`mailto:${email}`}
-              className="text-blue-400 hover:text-blue-300 break-all"
-            >
-              {email}
-            </a>
-            {index !== professorDetails.basicInfo.other_emails.length - 1 && (
-              <span className="text-gray-400 mx-2">|</span>
-            )}
-          </span>
-        ))}
-      </div>
-    ) : (
-      <span className="text-gray-400">N/A</span>
-    )
-  }
-/>
+                icon={<FiMail />}
+                label="Other Email"
+                value={
+                  Array.isArray(professorDetails.basicInfo.other_emails) && 
+                  professorDetails.basicInfo.other_emails.length > 0 ? (
+                    <div className="flex flex-wrap items-center gap-x-2">
+                      {professorDetails.basicInfo.other_emails.map((email, index) => (
+                        <span key={index} className="flex items-center">
+                          <span className="break-words">{email}</span>
+                          {index !== professorDetails.basicInfo.other_emails.length - 1 && (
+                            <span className="mx-2">|</span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <span>N/A</span>
+                  )
+                }
+              />
               <InfoItem icon={<FiPhone />} label="Phone" value={professorDetails.basicInfo.phone} />
               <InfoItem icon={<FiCalendar />} label="Date of Birth" value={formatDate(professorDetails.basicInfo.dob)} />
               <InfoItem icon={<FiCalendar />} label="Joining Status Date" value={formatDate(professorDetails.basicInfo.joining_date)} />
