@@ -41,13 +41,9 @@ export async function GET(req, { params }) {
     const professorCareerQuery = `SELECT * FROM professor_career_info WHERE professor_id = $1;`;
     const professorCareerResult = await query(professorCareerQuery, [id]);
 
-    // Fetch professor citations
-    const professorCitationsQuery = `SELECT * FROM professor_citations_info WHERE professor_id = $1;`;
-    const professorCitationsResult = await query(professorCitationsQuery, [id]);
-
-    // Fetch professor documents
-    const professorDocumentsQuery = `SELECT * FROM professor_document_info WHERE professor_id = $1;`;
-    const professorDocumentsResult = await query(professorDocumentsQuery, [id]);
+    // Fetch professor Research Paper
+    const professorResearchQuery = `SELECT * FROM professor_research_info WHERE professor_id = $1;`;
+    const professorResearchResult = await query(professorResearchQuery, [id]);
 
     // Fetch professor awards
     const professorAwardsQuery = `SELECT * FROM professor_award_info WHERE professor_id = $1;`;
@@ -61,8 +57,7 @@ export async function GET(req, { params }) {
       basicInfo: professorBasicInfoResult.rows[0],
       education: professorEducationResult.rows,
       career: professorCareerResult.rows,
-      citations: professorCitationsResult.rows,
-      documents: professorDocumentsResult.rows,
+      researches: professorResearchResult.rows,
       awards: professorAwardsResult.rows,
       socialMedia: professorSocialMediaResult.rows,
     };

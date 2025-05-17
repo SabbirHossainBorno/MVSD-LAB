@@ -217,46 +217,30 @@ const ProfessorDetails = () => {
           </section>
         )}
 
-        {/* Citations Section */}
-        {professorDetails.citations?.length > 0 && (
+        {/* Research Paper Section */}
+        {professorDetails.researches?.length > 0 && (
           <section className="bg-gray-800/50 backdrop-blur-lg p-8 rounded shadow-xl">
             <h2 className="text-2xl font-semibold mb-6 text-yellow-300 flex items-center gap-2">
-              <FiFile className="inline-block" /> Citations
+              <FiFile className="inline-block" /> Research Paper
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {professorDetails.citations.map((citation, index) => (
+              {professorDetails.researches.map((research, index) => (
                 <div key={index} className="bg-gray-700 p-6 rounded-lg hover:bg-gray-600/50 transition-colors">
-                  <h3 className="text-lg font-semibold text-blue-400">{citation.title}</h3>
-                  <p className="text-gray-300 mt-2">{citation.organization_name}</p>
+                  <h3 className="text-lg font-semibold text-blue-400">
+                    {research.research_type}
+                  </h3>
+                  <h3 className="text-m font-semibold text-blue-400">
+                    {research.title}
+                  </h3>
                   <a
-                    href={citation.link}
+                    href={research.link}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block mt-4 text-blue-400 hover:text-blue-300 transition-colors"
                   >
-                    View Citation →
+                    View Research Paper →
                   </a>
                 </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Documents Gallery */}
-        {professorDetails.documents?.length > 0 && (
-          <section className="bg-gray-800/50 backdrop-blur-lg p-8 rounded shadow-xl">
-            <h2 className="text-2xl font-semibold mb-6 text-cyan-300 flex items-center gap-2">
-              <FiFile className="inline-block" /> Documents
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {professorDetails.documents.map((doc, index) => (
-                <DocumentCard
-                  key={index}
-                  title={doc.title}
-                  type={doc.document_type}
-                  imageUrl={formatImageUrl(doc.document_photo)}
-                  onClick={() => handleImageClick(formatImageUrl(doc.document_photo))}
-                />
               ))}
             </div>
           </section>
