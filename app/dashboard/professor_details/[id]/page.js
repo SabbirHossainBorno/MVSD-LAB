@@ -167,11 +167,37 @@ const ProfessorDetails = () => {
             </h2>
             <div className="space-y-4">
               <InfoItem icon={<FiMail />} label="Email" value={professorDetails.basicInfo.email} />
+              <InfoItem
+  icon={<FiMail />}
+  label="Other Email"
+  value={
+    Array.isArray(professorDetails.basicInfo.other_emails) && 
+    professorDetails.basicInfo.other_emails.length > 0 ? (
+      <div className="flex flex-wrap gap-2">
+        {professorDetails.basicInfo.other_emails.map((email, index) => (
+          <span key={index} className="flex items-center">
+            <a 
+              href={`mailto:${email}`}
+              className="text-blue-400 hover:text-blue-300 break-all"
+            >
+              {email}
+            </a>
+            {index !== professorDetails.basicInfo.other_emails.length - 1 && (
+              <span className="text-gray-400 mx-2">|</span>
+            )}
+          </span>
+        ))}
+      </div>
+    ) : (
+      <span className="text-gray-400">N/A</span>
+    )
+  }
+/>
               <InfoItem icon={<FiPhone />} label="Phone" value={professorDetails.basicInfo.phone} />
               <InfoItem icon={<FiCalendar />} label="Date of Birth" value={formatDate(professorDetails.basicInfo.dob)} />
-              <InfoItem icon={<FiCalendar />} label="Joining Date" value={formatDate(professorDetails.basicInfo.joining_date)} />
-              <InfoItem icon={<FiCalendar />} label="Leaving Date" value={formatDate(professorDetails.basicInfo.leaving_date)} />
-              <InfoItem icon={<FaRegIdBadge />} label="ID Number" value={professorDetails.basicInfo.id_number} />
+              <InfoItem icon={<FiCalendar />} label="Joining Status Date" value={formatDate(professorDetails.basicInfo.joining_date)} />
+              <InfoItem icon={<FiCalendar />} label="Emeritus Status Date" value={formatDate(professorDetails.basicInfo.leaving_date)} />
+              <InfoItem icon={<FaRegIdBadge />} label="Banner ID" value={professorDetails.basicInfo.id_number} />
               <InfoItem icon={<GiPassport />} label="Passport Number" value={professorDetails.basicInfo.passport_number} />
             </div>
           </section>
@@ -223,23 +249,42 @@ const ProfessorDetails = () => {
             <h2 className="text-2xl font-semibold mb-6 text-yellow-300 flex items-center gap-2">
               <FiFile className="inline-block" /> Research Paper
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 md:gap-8">
               {professorDetails.researches.map((research, index) => (
-                <div key={index} className="bg-gray-700 p-6 rounded-lg hover:bg-gray-600/50 transition-colors">
-                  <h3 className="text-lg font-semibold text-blue-400">
-                    {research.research_type}
-                  </h3>
-                  <h3 className="text-m font-semibold text-blue-400">
-                    {research.title}
-                  </h3>
-                  <a
-                    href={research.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block mt-4 text-blue-400 hover:text-blue-300 transition-colors"
-                  >
-                    View Research Paper →
-                  </a>
+                <div
+                  key={index}
+                  className="group relative bg-gray-800/50 hover:bg-gray-700/40 p-6 rounded-xl border border-gray-700 hover:border-blue-400/20 transition-all duration-300 ease-out shadow-lg hover:shadow-xl"
+                >
+                  {/* Content Wrapper */}
+                  <div className="flex flex-col h-full">
+                    {/* Research Type Badge */}
+                    <span className="inline-block mb-4 px-3 py-1 text-sm font-semibold text-blue-400 bg-blue-900/30 rounded-full w-fit">
+                      {research.research_type}
+                    </span>
+
+                    {/* Title */}
+                    <h3 className="text-lg md:text-xl font-bold text-gray-100 mb-3 line-clamp-3">
+                      {research.title}
+                    </h3>
+
+                    {/* Link with Hover Animation */}
+                    <div className="mt-auto pt-4">
+                      <a
+                        href={research.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center font-medium text-blue-400 hover:text-blue-300 transition-colors group/link"
+                      >
+                        <span className="mr-2">View Research Paper</span>
+                        <span className="inline-block transition-transform duration-300 group-hover/link:translate-x-1">
+                          →
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Hover Effect Element */}
+                  <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-blue-400/10 transition-all duration-300 pointer-events-none" />
                 </div>
               ))}
             </div>
