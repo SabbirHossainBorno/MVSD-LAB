@@ -11,7 +11,7 @@ import CustomPopup from '../../../components/CustomPopup'; // Import the custom 
 import {
   FiUser, FiPhone, FiCalendar, FiBook, FiBriefcase, FiFileText,
   FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
-  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiMail, FiActivity, FiInfo, FiRefreshCcw,
+  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiMail, FiActivity, FiInfo, FiRefreshCcw, FiCheckCircle, FiXCircle,
 } from 'react-icons/fi';
 
 const EditProfessor = () => {
@@ -100,6 +100,26 @@ const EditProfessor = () => {
     }));
   }
 }, []);
+
+
+
+
+const [password, setPassword] = useState('');
+const [confirmPassword, setConfirmPassword] = useState('');
+
+const checkPasswordStrength = (password) => {
+  return {
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    number: /[0-9]/.test(password),
+    specialChar: /[^A-Za-z0-9]/.test(password),
+  };
+};
+
+const strength = checkPasswordStrength(password);
+const strengthLevel = Object.values(strength).filter(Boolean).length;
+
   
 
   const addNewField = useCallback((setter, newItem) => {
@@ -912,46 +932,61 @@ const EditProfessor = () => {
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-red-300">
               <FiAlertCircle className="w-6 h-6" /> Password
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">New Password</label>
-                <div className="relative">
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
-                    required
-                  />
-                  <FiAlertCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">Confirm Password</label>
-                <div className="relative">
-                  <input
-                    type="password"
-                    name="confirm_password"
-                    value={formData.confirm_password}
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
-                    required
-                  />
-                  <FiAlertCircle className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                </div>
-              </div>
-            </div>
-            <div className="mt-4 flex items-center space-x-4">
-            <button
-              type="button"
-              onClick={() => handleSubmit('password')}
-              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-            >
-              <FiRefreshCcw className="w-4 h-4" />
-              <span>Update Password</span>
-            </button>
-            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md mt-6 space-y-4">
+  <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Change Password</h2>
+
+  <input
+    type="password"
+    name="password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    placeholder="New Password"
+    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
+  <input
+    type="password"
+    name="confirm_password"
+    value={confirmPassword}
+    onChange={(e) => setConfirmPassword(e.target.value)}
+    placeholder="Confirm Password"
+    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
+
+  {/* Progress Bar */}
+  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mt-2">
+    <div
+      className={`h-3 rounded-full transition-all duration-300 ${strengthLevel >= 4 ? 'bg-green-500' : strengthLevel >= 2 ? 'bg-yellow-500' : 'bg-red-500'}`}
+      style={{ width: `${(strengthLevel / 5) * 100}%` }}
+    ></div>
+  </div>
+
+  {/* Checklist */}
+  <ul className="text-sm space-y-1 mt-2 text-gray-700 dark:text-gray-300">
+    <li className={`flex items-center gap-2 ${strength.length ? 'text-green-600' : 'text-red-600'}`}>
+      {strength.length ? <FiCheckCircle /> : <FiXCircle />} At least 8 characters
+    </li>
+    <li className={`flex items-center gap-2 ${strength.uppercase ? 'text-green-600' : 'text-red-600'}`}>
+      {strength.uppercase ? <FiCheckCircle /> : <FiXCircle />} At least one uppercase letter
+    </li>
+    <li className={`flex items-center gap-2 ${strength.lowercase ? 'text-green-600' : 'text-red-600'}`}>
+      {strength.lowercase ? <FiCheckCircle /> : <FiXCircle />} At least one lowercase letter
+    </li>
+    <li className={`flex items-center gap-2 ${strength.number ? 'text-green-600' : 'text-red-600'}`}>
+      {strength.number ? <FiCheckCircle /> : <FiXCircle />} At least one number
+    </li>
+    <li className={`flex items-center gap-2 ${strength.specialChar ? 'text-green-600' : 'text-red-600'}`}>
+      {strength.specialChar ? <FiCheckCircle /> : <FiXCircle />} At least one special character
+    </li>
+  </ul>
+
+  <button
+    onClick={() => handleSubmit('password')}
+    className="mt-4 px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md"
+    disabled={strengthLevel < 5}
+  >
+    Update Password
+  </button>
+</div>
           </section>
         </form>
       </div>
