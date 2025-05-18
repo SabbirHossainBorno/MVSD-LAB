@@ -104,21 +104,21 @@ const EditProfessor = () => {
 
 
 
-const [password, setPassword] = useState('');
-const [confirmPassword, setConfirmPassword] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
-const checkPasswordStrength = (password) => {
-  return {
-    length: password.length >= 8,
-    uppercase: /[A-Z]/.test(password),
-    lowercase: /[a-z]/.test(password),
-    number: /[0-9]/.test(password),
-    specialChar: /[^A-Za-z0-9]/.test(password),
-  };
-};
+    const checkPasswordStrength = (password) => {
+      return {
+        length: password.length >= 8,
+        uppercase: /[A-Z]/.test(password),
+        lowercase: /[a-z]/.test(password),
+        number: /[0-9]/.test(password),
+        specialChar: /[^A-Za-z0-9]/.test(password),
+      };
+    };
 
-const strength = checkPasswordStrength(password);
-const strengthLevel = Object.values(strength).filter(Boolean).length;
+    const strength = checkPasswordStrength(password);
+    const strengthLevel = Object.values(strength).filter(Boolean).length;
 
   
 
@@ -144,17 +144,11 @@ const strengthLevel = Object.values(strength).filter(Boolean).length;
   }, []);
 
   const handleSubmit = async (section) => {
-    setLoading(true);
+  setLoading(true);
   const data = new FormData();
+  data.append('section', section); // Identify which section is being updated
 
-   // Always include basic fields needed for all sections
-  data.append('section', section); // Add section identifier
-
-    // Add debug logging
-  console.log('Submitting section:', section);
-  console.log('Form data before processing:', formData);
-  
-    switch (section) {
+  switch (section) {
     case 'basicInfo':
       // Only append basic info fields
       data.append('first_name', formData.first_name);
@@ -193,12 +187,22 @@ const strengthLevel = Object.values(strength).filter(Boolean).length;
         });
         break;
       case 'password':
-        if (formData.password !== formData.confirm_password) {
+        if (password !== confirmPassword) {
           toast.error("Passwords do not match");
           setLoading(false);
           return;
         }
-        data.append('password', formData.password);
+
+        const strength = checkPasswordStrength(password);
+        const strengthLevel = Object.values(strength).filter(Boolean).length;
+
+        if (strengthLevel < 3) {
+          toast.error("Password is too weak. Please use a mix of uppercase, lowercase, numbers, and special characters.");
+          setLoading(false);
+          return;
+        }
+
+        data.append('password', password);
         break;
       default:
         break;
@@ -302,48 +306,48 @@ const strengthLevel = Object.values(strength).filter(Boolean).length;
                 </div>
               </div>
 
-{/* Other Emails Section */}
-<div className="space-y-2 col-span-full">
-  <label className="block text-sm font-medium text-gray-300">Other Emails</label>
-  {formData.other_emails?.map((email, index) => (
-    <div key={index} className="flex gap-2 mb-2 group">
-      <div className="relative flex-1">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => {
-            const newEmails = [...formData.other_emails];
-            newEmails[index] = e.target.value;
-            setFormData(prev => ({ ...prev, other_emails: newEmails }));
-          }}
-          className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
-          required
-        />
-        <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-      </div>
-      <button
-        type="button"
-        onClick={() => {
-          const newEmails = formData.other_emails.filter((_, i) => i !== index);
-          setFormData(prev => ({ ...prev, other_emails: newEmails }));
-        }}
-        className="px-3 py-2 text-red-500 hover:text-red-400 transition-colors"
-      >
-        <FiTrash2 />
-      </button>
-    </div>
-  ))}
-  <button
-    type="button"
-    onClick={() => setFormData(prev => ({
-      ...prev,
-      other_emails: [...(prev.other_emails || []), '']
-    }))}
-    className="flex items-center text-blue-400 hover:text-blue-300 text-sm"
-  >
-    <FiPlus className="mr-1" /> Add Email
-  </button>
-</div>
+              {/* Other Emails Section */}
+              <div className="space-y-2 col-span-full">
+                <label className="block text-sm font-medium text-gray-300">Other Emails</label>
+                {formData.other_emails?.map((email, index) => (
+                  <div key={index} className="flex gap-2 mb-2 group">
+                    <div className="relative flex-1">
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => {
+                          const newEmails = [...formData.other_emails];
+                          newEmails[index] = e.target.value;
+                          setFormData(prev => ({ ...prev, other_emails: newEmails }));
+                        }}
+                        className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                        required
+                      />
+                      <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newEmails = formData.other_emails.filter((_, i) => i !== index);
+                        setFormData(prev => ({ ...prev, other_emails: newEmails }));
+                      }}
+                      className="px-3 py-2 text-red-500 hover:text-red-400 transition-colors"
+                    >
+                      <FiTrash2 />
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => setFormData(prev => ({
+                    ...prev,
+                    other_emails: [...(prev.other_emails || []), '']
+                  }))}
+                  className="flex items-center text-blue-400 hover:text-blue-300 text-sm"
+                >
+                  <FiPlus className="mr-1" /> Add Email
+                </button>
+              </div>
               
               {/* Short Bio */}
               <div className="space-y-2 col-span-full">
@@ -359,38 +363,38 @@ const strengthLevel = Object.values(strength).filter(Boolean).length;
                   <FiFileText className="absolute left-3 top-4 text-gray-400" />
                 </div>
               </div>
-{/* Status */}
-<div className="space-y-2">
-  <label className="block text-sm font-medium text-gray-300">Status</label>
-  <div className="relative">
-    {formData.leaving_date ? (
-      <div className="relative">
-        <input
-          type="text"
-          readOnly
-          value="Emeritus"
-          className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 cursor-not-allowed"
-        />
-        <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-      </div>
-    ) : (
-      <select
-        name="status"
-        value={formData.status}
-        onChange={handleChange}
-        className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-        required
-      >
-        <option value="Active">Active</option>
-        <option value="Inactive">Inactive</option>
-      </select>
-    )}
-    <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-    {!formData.leaving_date && (
-      <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-    )}
-  </div>
-</div>
+              {/* Status */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">Status</label>
+                <div className="relative">
+                  {formData.leaving_date ? (
+                    <div className="relative">
+                      <input
+                        type="text"
+                        readOnly
+                        value="Emeritus"
+                        className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 cursor-not-allowed"
+                      />
+                      <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    </div>
+                  ) : (
+                    <select
+                      name="status"
+                      value={formData.status}
+                      onChange={handleChange}
+                      className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                      required
+                    >
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                  )}
+                  <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  {!formData.leaving_date && (
+                    <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                  )}
+                </div>
+              </div>
               {/* Leaving Date */}
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300">Leaving Date</label>
@@ -932,61 +936,68 @@ const strengthLevel = Object.values(strength).filter(Boolean).length;
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-red-300">
               <FiAlertCircle className="w-6 h-6" /> Password
             </h2>
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md mt-6 space-y-4">
-  <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Change Password</h2>
+            <div className="bg-white dark:bg-gray-800 rounded p-6 shadow-md mt-6 space-y-4">
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Change Password</h2>
 
-  <input
-    type="password"
-    name="password"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    placeholder="New Password"
-    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-  />
-  <input
-    type="password"
-    name="confirm_password"
-    value={confirmPassword}
-    onChange={(e) => setConfirmPassword(e.target.value)}
-    placeholder="Confirm Password"
-    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-  />
+              <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="New Password"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            />
 
-  {/* Progress Bar */}
-  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mt-2">
-    <div
-      className={`h-3 rounded-full transition-all duration-300 ${strengthLevel >= 4 ? 'bg-green-500' : strengthLevel >= 2 ? 'bg-yellow-500' : 'bg-red-500'}`}
-      style={{ width: `${(strengthLevel / 5) * 100}%` }}
-    ></div>
-  </div>
+            <input
+              type="password"
+              name="confirm_password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm Password"
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            />
 
-  {/* Checklist */}
-  <ul className="text-sm space-y-1 mt-2 text-gray-700 dark:text-gray-300">
-    <li className={`flex items-center gap-2 ${strength.length ? 'text-green-600' : 'text-red-600'}`}>
-      {strength.length ? <FiCheckCircle /> : <FiXCircle />} At least 8 characters
-    </li>
-    <li className={`flex items-center gap-2 ${strength.uppercase ? 'text-green-600' : 'text-red-600'}`}>
-      {strength.uppercase ? <FiCheckCircle /> : <FiXCircle />} At least one uppercase letter
-    </li>
-    <li className={`flex items-center gap-2 ${strength.lowercase ? 'text-green-600' : 'text-red-600'}`}>
-      {strength.lowercase ? <FiCheckCircle /> : <FiXCircle />} At least one lowercase letter
-    </li>
-    <li className={`flex items-center gap-2 ${strength.number ? 'text-green-600' : 'text-red-600'}`}>
-      {strength.number ? <FiCheckCircle /> : <FiXCircle />} At least one number
-    </li>
-    <li className={`flex items-center gap-2 ${strength.specialChar ? 'text-green-600' : 'text-red-600'}`}>
-      {strength.specialChar ? <FiCheckCircle /> : <FiXCircle />} At least one special character
-    </li>
-  </ul>
 
-  <button
-    onClick={() => handleSubmit('password')}
-    className="mt-4 px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md"
-    disabled={strengthLevel < 5}
-  >
-    Update Password
-  </button>
-</div>
+                                
+
+                                
+
+              {/* Progress Bar */}
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mt-2">
+                <div
+                  className={`h-3 rounded-full transition-all duration-300 ${strengthLevel >= 4 ? 'bg-green-500' : strengthLevel >= 2 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                  style={{ width: `${(strengthLevel / 5) * 100}%` }}
+                ></div>
+              </div>
+
+              {/* Checklist */}
+              <ul className="text-sm space-y-1 mt-2 text-gray-700 dark:text-gray-300">
+                <li className={`flex items-center gap-2 ${strength.length ? 'text-green-600' : 'text-red-600'}`}>
+                  {strength.length ? <FiCheckCircle /> : <FiXCircle />} At least 8 characters
+                </li>
+                <li className={`flex items-center gap-2 ${strength.uppercase ? 'text-green-600' : 'text-red-600'}`}>
+                  {strength.uppercase ? <FiCheckCircle /> : <FiXCircle />} At least one uppercase letter
+                </li>
+                <li className={`flex items-center gap-2 ${strength.lowercase ? 'text-green-600' : 'text-red-600'}`}>
+                  {strength.lowercase ? <FiCheckCircle /> : <FiXCircle />} At least one lowercase letter
+                </li>
+                <li className={`flex items-center gap-2 ${strength.number ? 'text-green-600' : 'text-red-600'}`}>
+                  {strength.number ? <FiCheckCircle /> : <FiXCircle />} At least one number
+                </li>
+                <li className={`flex items-center gap-2 ${strength.specialChar ? 'text-green-600' : 'text-red-600'}`}>
+                  {strength.specialChar ? <FiCheckCircle /> : <FiXCircle />} At least one special character
+                </li>
+              </ul>
+
+              <button
+                onClick={() => handleSubmit('password')}
+                className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+                disabled={strengthLevel < 5}
+              >
+                <FiRefreshCcw className="w-4 h-4" />
+                <span>Update Password</span>
+              </button>
+            </div>
           </section>
         </form>
       </div>
