@@ -203,7 +203,11 @@ export async function POST(req, { params }) {
       }
     });
 
-    const formData = await req.formData();
+    
+const formData = await req.formData();
+const section = formData.get('section');
+console.log('🔍 Section being updated:', section);
+
 
     
     
