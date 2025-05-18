@@ -10,7 +10,7 @@ import Image from 'next/image';
 import {
   FiUser, FiPhone, FiCalendar, FiBook, FiBriefcase, FiFileText,
   FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
-  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo, FiRefreshCcw, FiXCircle,
+  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo, FiRefreshCcw, FiXCircle, FiMail,
 } from 'react-icons/fi';
 
 const EditProfessor = () => {
@@ -21,6 +21,7 @@ const EditProfessor = () => {
     short_bio: '',
     status: 'Active',
     leaving_date: '',
+    other_emails: [],
   });
   const [photo, setPhoto] = useState(null);
   const [socialMedia, setSocialMedia] = useState([]);
@@ -43,6 +44,7 @@ const EditProfessor = () => {
           phone: data.phone || '',
           short_bio: data.short_bio || '',
           status: data.status, // Directly use the status from the database
+          other_emails: data.other_emails || [],
           leaving_date: data.leaving_date || '', // Only leaving_date can be null
         });
         setPhoto(data.photo || null);
@@ -264,6 +266,48 @@ const EditProfessor = () => {
                   />
                   <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
+              </div>
+              {/* Other Emails Section */}
+              <div className="space-y-2 col-span-full">
+                <label className="block text-sm font-medium text-gray-300">Other Emails</label>
+                {formData.other_emails?.map((email, index) => (
+                  <div key={index} className="flex gap-2 mb-2 group">
+                    <div className="relative flex-1">
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => {
+                          const newEmails = [...formData.other_emails];
+                          newEmails[index] = e.target.value;
+                          setFormData(prev => ({ ...prev, other_emails: newEmails }));
+                        }}
+                        className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                        required
+                      />
+                      <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newEmails = formData.other_emails.filter((_, i) => i !== index);
+                        setFormData(prev => ({ ...prev, other_emails: newEmails }));
+                      }}
+                      className="px-3 py-2 text-red-500 hover:text-red-400 transition-colors"
+                    >
+                      <FiTrash2 />
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => setFormData(prev => ({
+                    ...prev,
+                    other_emails: [...(prev.other_emails || []), '']
+                  }))}
+                  className="flex items-center text-blue-400 hover:text-blue-300 text-sm"
+                >
+                  <FiPlus className="mr-1" /> Add Email
+                </button>
               </div>
               {/* Short Bio */}
               <div className="space-y-2 col-span-full">
