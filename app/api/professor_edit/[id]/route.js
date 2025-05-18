@@ -40,6 +40,7 @@ const saveProfilePhoto = async (file, professorId, eid, sessionId) => {
   }
 };
 
+
 const saveAwardPhoto = async (file, professorId, index, eid, sessionId) => {
   if (!file) {
     logger.warn('No file provided for award photo', {
@@ -103,12 +104,7 @@ export async function GET(req, { params }) {
       }
     });
 
-const professorQuery = `
-  SELECT *, 
-    COALESCE(other_emails, '{}'::varchar[]) as other_emails 
-  FROM professor_basic_info 
-  WHERE id = $1;
-`;
+    const professorQuery = `SELECT * FROM professor_basic_info WHERE id = $1;`;
     const professorResult = await query(professorQuery, [id]);
 
     if (professorResult.rows.length === 0) {
@@ -144,7 +140,7 @@ const professorQuery = `
     const awardsResult = await query(awardsQuery, [id]);
 
     const responseData = {
-      ...professorResult.rows[0],  // This includes other_emails
+      ...professor,
       socialMedia: socialMediaResult.rows,
       education: educationResult.rows,
       career: careerResult.rows,
@@ -181,6 +177,7 @@ const professorQuery = `
   }
 }
 
+
 // Main function to handle the POST request
 export async function POST(req, { params }) {
   const { id } = await params;  // Await params before using its properties
@@ -203,14 +200,7 @@ export async function POST(req, { params }) {
       }
     });
 
-    
-const formData = await req.formData();
-const section = formData.get('section');
-console.log('🔍 Section being updated:', section);
-
-
-    
-    
+    const formData = await req.formData();
 
     // Extract form data
     const first_name = formData.get('first_name');
@@ -224,17 +214,6 @@ console.log('🔍 Section being updated:', section);
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
     const researches = JSON.parse(formData.get('researches') || '[]');
-    let other_emails = [];
-    try {
-      const emailsValue = formData.get('other_emails');
-      other_emails = emailsValue ? JSON.parse(emailsValue) : [];
-    } catch (error) {
-      await query('ROLLBACK');
-      return NextResponse.json(
-        { message: 'Invalid other_emails format - must be a valid JSON array' },
-        { status: 400 }
-      );
-    }
     
     const awards = [];
     for (let i = 0; formData.has(`awards[${i}][title]`); i++) {
@@ -277,103 +256,21 @@ console.log('🔍 Section being updated:', section);
       });
     }
 
-    // Status validation
-if (status === 'Emeritus' && !leaving_date) {
-  await query('ROLLBACK');
-  return NextResponse.json(
-    { message: 'Emeritus status requires a leaving date' },
-    { status: 400 }
-  );
-}
-
-if (status === 'Active' && leaving_date) {
-  await query('ROLLBACK');
-  return NextResponse.json(
-    { message: 'Active status cannot have a leaving date' },
-    { status: 400 }
-  );
-}
-
-    // Add email validation check
-    if (other_emails.length > 0) {
-      // Check against all existing emails in the system
-      const emailCheckQuery = `
-        SELECT EXISTS(
-          SELECT 1 FROM (
-            SELECT email FROM professor_basic_info
-            UNION ALL
-            SELECT unnest(other_emails) FROM professor_basic_info
-            UNION ALL
-            SELECT email FROM member
-          ) all_emails
-          WHERE email = ANY($1)
-        ) AS exists`;
-
-        // Add debug logging for other_emails (~line 287)
-console.log('Raw other_emails value:', emailsValue);
-console.log('Parsed other_emails:', other_emails);
-
-      try {
-        const checkResult = await query(emailCheckQuery, [other_emails]);
-        
-        if (checkResult.rows[0].exists) {
-          await query('ROLLBACK');
-          return NextResponse.json(
-            { message: 'One or more emails already exist in the system' },
-            { status: 400 }
-          );
-        }
-      } catch (error) {
-        await query('ROLLBACK');
-        return NextResponse.json(
-          { message: 'Error validating emails' },
-          { status: 500 }
-        );
-      }
-    }
-
     // Update basic info
     if (first_name || last_name || phone || short_bio || status || leaving_date) {
-      const newStatus = formData.get('leaving_date') ? 'Emeritus' : status;
+      const newStatus = leaving_date ? 'Inactive' : status;
       const updateBasicInfoQuery = `
         UPDATE professor_basic_info
-        SET 
-          first_name = $1, 
-          last_name = $2, 
-          phone = $3, 
-          short_bio = $4, 
-          status = $5, 
-          leaving_date = $6,
-          other_emails = $8
+        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6
         WHERE id = $7
       `;
-      await query(updateBasicInfoQuery, [
-        first_name, 
-        last_name, 
-        phone, 
-        short_bio, 
-        newStatus, 
-        leaving_date, 
-        id,
-        other_emails  // Added as 8th parameter
-      ]);
+      await query(updateBasicInfoQuery, [first_name, last_name, phone, short_bio, newStatus, leaving_date, id]);
 
       const updateMemberQuery = `
         UPDATE member
-          SET 
-            first_name = $1,
-            last_name = $2,
-            phone = $3,
-            short_bio = $4,
-            status = $5,
-            leaving_date = $6,
-            updated_at = NOW(),
-            is_active = CASE 
-              WHEN $5 = 'Active' THEN TRUE
-              ELSE FALSE
-            END
-          WHERE id = $7
-        `;
+        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6, updated_at = NOW()
+        WHERE id = $7
+      `;
       await query(updateMemberQuery, [first_name, last_name, phone, short_bio, newStatus, leaving_date, id]);
       logger.info('Basic INFO Updated', {
         meta: {
@@ -577,8 +474,6 @@ console.log('Parsed other_emails:', other_emails);
     return NextResponse.json({ message: 'Professor information updated successfully!' }, { status: 200 });
 
   } catch (error) {
-    console.error('Full error object:', error);
-  console.error('Error stack:', error.stack);
     await query('ROLLBACK');
 
     const errorMessage = formatAlertMessage('Error Updating Professor Information', `ID : ${id}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);

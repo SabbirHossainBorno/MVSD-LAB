@@ -7,11 +7,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import withAuth from '../../../components/withAuth';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import Image from 'next/image';
-import CustomPopup from '../../../components/CustomPopup'; // Import the custom popup component
 import {
   FiUser, FiPhone, FiCalendar, FiBook, FiBriefcase, FiFileText,
   FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
-  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiMail, FiActivity, FiInfo, FiRefreshCcw, FiCheckCircle, FiXCircle,
+  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo, FiRefreshCcw, FiXCircle,
 } from 'react-icons/fi';
 
 const EditProfessor = () => {
@@ -22,7 +21,6 @@ const EditProfessor = () => {
     short_bio: '',
     status: 'Active',
     leaving_date: '',
-    other_emails: [],
   });
   const [photo, setPhoto] = useState(null);
   const [socialMedia, setSocialMedia] = useState([]);
@@ -33,22 +31,18 @@ const EditProfessor = () => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { id } = useParams();
-  const [showDeletePopup, setShowDeletePopup] = useState(false);
 
   useEffect(() => {
     const fetchProfessorData = async () => {
       try {
         const response = await fetch(`/api/professor_edit/${id}`);
         const data = await response.json();
-         console.log('Received other_emails:', data.other_emails); // Add this
         setFormData({
-          ...data,
           first_name: data.first_name || '',
           last_name: data.last_name || '',
           phone: data.phone || '',
           short_bio: data.short_bio || '',
           status: data.status, // Directly use the status from the database
-          other_emails: data.other_emails || [],
           leaving_date: data.leaving_date || '', // Only leaving_date can be null
         });
         setPhoto(data.photo || null);
@@ -66,45 +60,33 @@ const EditProfessor = () => {
     fetchProfessorData();
   }, [id]);
 
-
   const handleChange = useCallback((e) => {
-  const { name, value, files } = e.target;
-  
-  if (name === 'leaving_date') {
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-      status: value ? 'Emeritus' : prev.status === 'Inactive' ? 'Inactive' : 'Active'
-    }));
-  } else if (name === 'status') {
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-      leaving_date: value === 'Active' ? '' : prev.leaving_date
-    }));
-  } else if (name === 'photo' && files.length > 0) {
-    const file = files[0];
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('File size exceeds 5 MB.');
-      return;
+    const { name, value, files } = e.target;
+    if (name === 'photo' && files.length > 0) {
+      const file = files[0];
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('File size exceeds 5 MB.');
+        return;
+      }
+      if (!['image/jpeg', 'image/png'].includes(file.type)) {
+        toast.error('Invalid file type. Only JPG, JPEG, and PNG are allowed.');
+        return;
+      }
+      setPhoto(file);
+    } else {
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
-    if (!['image/jpeg', 'image/png'].includes(file.type)) {
-      toast.error('Invalid file type. Only JPG, JPEG, and PNG are allowed.');
-      return;
-    }
-    setPhoto(file);
-  } else {
-    setFormData(prev => ({ 
-      ...prev,
-      [name]: value 
-    }));
-  }
-}, []);
+  }, []);
 
+  const handleArrayChange = useCallback((setter, index, field, value) => {
+    setter((prevState) => {
+      const newState = [...prevState];
+      newState[index][field] = value;
+      return newState;
+    });
+  }, []);
 
-
-
-    const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
     const checkPasswordStrength = (password) => {
@@ -119,7 +101,6 @@ const EditProfessor = () => {
 
     const strength = checkPasswordStrength(password);
     const strengthLevel = Object.values(strength).filter(Boolean).length;
-
   
 
   const addNewField = useCallback((setter, newItem) => {
@@ -135,31 +116,16 @@ const EditProfessor = () => {
     });
   }, []);
 
-  const handleArrayChange = useCallback((setter, index, field, value) => {
-    setter((prevState) => {
-      const newState = [...prevState];
-      newState[index][field] = value;
-      return newState;
-    });
-  }, []);
-
   const handleSubmit = async (section) => {
-  setLoading(true);
-  const data = new FormData();
-  data.append('section', section); // Identify which section is being updated
-
-  switch (section) {
-    case 'basicInfo':
-      // Only append basic info fields
-      data.append('first_name', formData.first_name);
-      data.append('last_name', formData.last_name);
-      data.append('phone', formData.phone);
-      data.append('short_bio', formData.short_bio);
-      data.append('status', formData.status);
-      data.append('leaving_date', formData.leaving_date);
-      data.append('other_emails', JSON.stringify(formData.other_emails));
-      break;
-
+    setLoading(true);
+    const data = new FormData();
+  
+    switch (section) {
+      case 'basicInfo':
+        for (const key in formData) {
+          data.append(key, formData[key]);
+        }
+        break;
       case 'photo':
         data.append('photo', photo);
         break;
@@ -207,11 +173,6 @@ const EditProfessor = () => {
       default:
         break;
     }
-
-    console.log('Final FormData entries:');
-  for (const [key, value] of data.entries()) {
-    console.log(key, value);
-  }
   
     try {
       const response = await fetch(`/api/professor_edit/${id}`, {
@@ -289,7 +250,6 @@ const EditProfessor = () => {
                   <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
               </div>
-              
               {/* Phone */}
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300">Phone</label>
@@ -305,50 +265,6 @@ const EditProfessor = () => {
                   <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
               </div>
-
-              {/* Other Emails Section */}
-              <div className="space-y-2 col-span-full">
-                <label className="block text-sm font-medium text-gray-300">Other Emails</label>
-                {formData.other_emails?.map((email, index) => (
-                  <div key={index} className="flex gap-2 mb-2 group">
-                    <div className="relative flex-1">
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => {
-                          const newEmails = [...formData.other_emails];
-                          newEmails[index] = e.target.value;
-                          setFormData(prev => ({ ...prev, other_emails: newEmails }));
-                        }}
-                        className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
-                        required
-                      />
-                      <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const newEmails = formData.other_emails.filter((_, i) => i !== index);
-                        setFormData(prev => ({ ...prev, other_emails: newEmails }));
-                      }}
-                      className="px-3 py-2 text-red-500 hover:text-red-400 transition-colors"
-                    >
-                      <FiTrash2 />
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => setFormData(prev => ({
-                    ...prev,
-                    other_emails: [...(prev.other_emails || []), '']
-                  }))}
-                  className="flex items-center text-blue-400 hover:text-blue-300 text-sm"
-                >
-                  <FiPlus className="mr-1" /> Add Email
-                </button>
-              </div>
-              
               {/* Short Bio */}
               <div className="space-y-2 col-span-full">
                 <label className="block text-sm font-medium text-gray-300">Short Bio</label>
@@ -367,32 +283,18 @@ const EditProfessor = () => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300">Status</label>
                 <div className="relative">
-                  {formData.leaving_date ? (
-                    <div className="relative">
-                      <input
-                        type="text"
-                        readOnly
-                        value="Emeritus"
-                        className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 cursor-not-allowed"
-                      />
-                      <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    </div>
-                  ) : (
-                    <select
-                      name="status"
-                      value={formData.status}
-                      onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-                      required
-                    >
-                      <option value="Active">Active</option>
-                      <option value="Inactive">Inactive</option>
-                    </select>
-                  )}
+                  <select
+                    name="status"
+                    value={formData.status}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                    required
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
                   <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  {!formData.leaving_date && (
-                    <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                  )}
+                  <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 </div>
               </div>
               {/* Leaving Date */}
@@ -785,7 +687,8 @@ const EditProfessor = () => {
                 <span>Update Research Paper</span>
               </button>
             </div>
-          </section>   
+          </section>
+ 
 
           {/* Awards Section */}
           <section className="bg-gray-700/30 rounded p-6 shadow-inner">
@@ -957,11 +860,6 @@ const EditProfessor = () => {
               className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
             />
 
-
-                                
-
-                                
-
               {/* Progress Bar */}
               <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mt-2">
                 <div
@@ -999,6 +897,8 @@ const EditProfessor = () => {
               </button>
             </div>
           </section>
+
+
         </form>
       </div>
       <ToastContainer position="bottom-right" theme="dark" />
