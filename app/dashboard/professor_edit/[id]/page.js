@@ -125,24 +125,27 @@ const EditProfessor = () => {
 
   const handleSubmit = async (section) => {
     setLoading(true);
-    const data = new FormData();
+  const data = new FormData();
+
+   // Always include basic fields needed for all sections
+  data.append('section', section); // Add section identifier
 
     // Add debug logging
   console.log('Submitting section:', section);
   console.log('Form data before processing:', formData);
   
     switch (section) {
-      case 'basicInfo':
-        const basicData = {
-        ...formData,
-        other_emails: JSON.stringify(formData.other_emails)
-      };
-      
-      for (const key in basicData) {
-        console.log('Appending key:', key, 'value:', basicData[key]);
-        data.append(key, basicData[key]);
-      }
+    case 'basicInfo':
+      // Only append basic info fields
+      data.append('first_name', formData.first_name);
+      data.append('last_name', formData.last_name);
+      data.append('phone', formData.phone);
+      data.append('short_bio', formData.short_bio);
+      data.append('status', formData.status);
+      data.append('leaving_date', formData.leaving_date);
+      data.append('other_emails', JSON.stringify(formData.other_emails));
       break;
+      
       case 'photo':
         data.append('photo', photo);
         break;

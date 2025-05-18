@@ -204,6 +204,7 @@ export async function POST(req, { params }) {
     });
 
     const formData = await req.formData();
+    
 
     // Extract form data
     const first_name = formData.get('first_name');
