@@ -352,7 +352,7 @@ export async function POST(req, { params }) {
           eid,
           sid: sessionId,
           taskName: 'Edit Professor Data',
-          details: `Basic info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+          details: `Basic info updated for professor ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}------Phone: ${phone}, Emails: ${other_emails.join(', ')}`
         }
       });
     }
