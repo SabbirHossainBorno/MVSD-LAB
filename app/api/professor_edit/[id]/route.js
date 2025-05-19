@@ -341,7 +341,7 @@ export async function POST(req, { params }) {
 
     // Update basic info
     if (first_name || last_name || phone || short_bio || status || leaving_date) {
-      const newStatus = leaving_date ? 'Inactive' : status;
+      const newStatus = leaving_date ? 'Emeritus' : status;
       const updateBasicInfoQuery = `
         UPDATE professor_basic_info
         SET 
