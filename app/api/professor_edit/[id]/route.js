@@ -280,6 +280,14 @@ export async function POST(req, { params }) {
         // Validate email format
         if (!emailRegex.test(email)) {
           await query('ROLLBACK');
+          logger.error('Invalid email format', {
+            meta: {
+              eid,
+              sid: sessionId,
+              taskName: 'Edit Professor Data',
+              details: `Invalid email format: ${email} for professor ${id}`
+            }
+          });
           return NextResponse.json(
             { message: `Invalid email format: ${email}` },
             { status: 400 }
@@ -293,6 +301,14 @@ export async function POST(req, { params }) {
         );
         if (memberCheck.rows.length > 0) {
           await query('ROLLBACK');
+          logger.error('Email conflict with primary email', {
+            meta: {
+              eid,
+              sid: sessionId,
+              taskName: 'Edit Professor Data',
+              details: `Email ${email} conflicts with existing primary email for professor ${id}`
+            }
+          });
           return NextResponse.json(
             { message: `Email ${email} is already registered as primary email.` },
             { status: 400 }
@@ -307,6 +323,14 @@ export async function POST(req, { params }) {
         );
         if (professorCheck.rows.length > 0) {
           await query('ROLLBACK');
+          logger.error('Email conflict with other professor', {
+            meta: {
+              eid,
+              sid: sessionId,
+              taskName: 'Edit Professor Data',
+              details: `Email ${email} exists in another professor's records (professor ${id})`
+            }
+          });
           return NextResponse.json(
             { message: `Email ${email} exists in another professor's records.` },
             { status: 400 }

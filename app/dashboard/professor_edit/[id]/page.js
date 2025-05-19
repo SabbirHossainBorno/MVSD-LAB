@@ -121,21 +121,22 @@ const EditProfessor = () => {
   const handleSubmit = async (section) => {
     setLoading(true);
     const data = new FormData();
-  
+
+    // Clear previous toasts when making new submission
+    toast.dismiss();
+
     switch (section) {
       case 'basicInfo':
-        // Append basic info fields individually
         data.append('first_name', formData.first_name);
         data.append('last_name', formData.last_name);
         data.append('phone', formData.phone);
         data.append('short_bio', formData.short_bio);
         data.append('status', formData.status);
         data.append('leaving_date', formData.leaving_date);
-        // Stringify other_emails array
         data.append('other_emails', JSON.stringify(formData.other_emails));
         break;
       case 'photo':
-        data.append('photo', photo);
+        if (photo) data.append('photo', photo);
         break;
       case 'socialMedia':
         data.append('socialMedia', JSON.stringify(socialMedia));
@@ -171,7 +172,7 @@ const EditProfessor = () => {
         const strengthLevel = Object.values(strength).filter(Boolean).length;
 
         if (strengthLevel < 3) {
-          toast.error("Password is too weak. Please use a mix of uppercase, lowercase, numbers, and special characters.");
+          toast.error("Password must contain at least 3 of: uppercase, lowercase, number, special character");
           setLoading(false);
           return;
         }
@@ -181,22 +182,35 @@ const EditProfessor = () => {
       default:
         break;
     }
-  
+
     try {
       const response = await fetch(`/api/professor_edit/${id}`, {
         method: 'POST',
         body: data,
       });
-  
-      if (response.ok) {
-        toast.success('Professor Updated successfully!');
-        router.push('/dashboard');
-      } else {
-        const result = await response.json();
-        toast.error(result.message || 'An error occurred while updating the professor.');
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || `Server responded with ${response.status}`);
       }
+
+      toast.success('Professor updated successfully!', {
+        autoClose: 3000,
+        hideProgressBar: false,
+      });
+      
+      // Only redirect if it's a password change or basic info update
+      if (['password', 'basicInfo'].includes(section)) {
+        router.push('/dashboard');
+      }
+
     } catch (error) {
-      toast.error('Failed to update professor');
+      console.error('Update error:', error);
+      toast.error(error.message || 'Failed to update professor details', {
+        autoClose: 5000,
+        hideProgressBar: false,
+      });
     } finally {
       setLoading(false);
     }
@@ -951,7 +965,7 @@ const EditProfessor = () => {
 
         </form>
       </div>
-      <ToastContainer position="bottom-right" theme="dark" />
+      <ToastContainer/>
     </div>
   );
 };
