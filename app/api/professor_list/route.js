@@ -29,13 +29,15 @@ export async function GET(req) {
     const totalCountsQuery = `
       SELECT COUNT(*) AS total, 
              COUNT(*) FILTER (WHERE status ILIKE 'Active') AS active_count,
-             COUNT(*) FILTER (WHERE status ILIKE 'Inactive') AS inactive_count
+             COUNT(*) FILTER (WHERE status ILIKE 'Inactive') AS inactive_count,
+             COUNT(*) FILTER (WHERE status ILIKE 'Emeritus') AS emeritus_count
       FROM professor_basic_info
     `;
     const totalCountsResult = await query(totalCountsQuery);
     const totalProfessors = parseInt(totalCountsResult.rows[0].total, 10);
     const activeProfessors = parseInt(totalCountsResult.rows[0].active_count, 10);
     const inactiveProfessors = parseInt(totalCountsResult.rows[0].inactive_count, 10);
+    const emeritusProfessors = parseInt(totalCountsResult.rows[0].emeritus_count, 10);
 
     // Fetch filtered list of professors
     let searchQuery = `
@@ -72,6 +74,7 @@ export async function GET(req) {
       totalProfessors,
       activeProfessors,
       inactiveProfessors,
+      emeritusProfessors,
       totalPages,
     });
   } catch (error) {

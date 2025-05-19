@@ -104,7 +104,13 @@ export async function GET(req, { params }) {
       }
     });
 
-    const professorQuery = `SELECT * FROM professor_basic_info WHERE id = $1;`;
+    const professorQuery = `
+      SELECT 
+        *,
+        TO_CHAR(leaving_date, 'YYYY-MM-DD') as leaving_date 
+      FROM professor_basic_info 
+      WHERE id = $1
+    `;
     const professorResult = await query(professorQuery, [id]);
 
     if (professorResult.rows.length === 0) {
@@ -341,36 +347,48 @@ export async function POST(req, { params }) {
 
     // Update basic info
     if (first_name || last_name || phone || short_bio || status || leaving_date) {
-      const newStatus = leaving_date ? 'Emeritus' : status;
-      const updateBasicInfoQuery = `
-        UPDATE professor_basic_info
-        SET 
-          first_name = $1,
-          last_name = $2,
-          phone = $3,
-          short_bio = $4,
-          status = $5,
-          leaving_date = $6,
-          other_emails = $7
-        WHERE id = $8
-      `;
-      await query(updateBasicInfoQuery, [
-        first_name,
-        last_name,
-        phone,
-        short_bio,
-        newStatus,
-        leaving_date,
-        other_emails,
-        id
-      ]);
+  // Validate Emeritus status
+  if (status === 'Emeritus' && !leaving_date) {
+    await query('ROLLBACK');
+    return NextResponse.json(
+      { message: 'Leaving date is required for Emeritus status' },
+      { status: 400 }
+    );
+  }
+
+  // Auto-clear leaving date for Active status
+  const cleanLeavingDate = status === 'Active' ? null : leaving_date;
+
+  const updateBasicInfoQuery = `
+    UPDATE professor_basic_info
+    SET 
+      first_name = $1,
+      last_name = $2,
+      phone = $3,
+      short_bio = $4,
+      status = $5,
+      leaving_date = $6,
+      other_emails = $7
+    WHERE id = $8
+  `;
+
+  await query(updateBasicInfoQuery, [
+    first_name,
+    last_name,
+    phone,
+    short_bio,
+    status,
+    cleanLeavingDate,  // This will be null for Active status
+    other_emails,
+    id
+  ]);
 
       const updateMemberQuery = `
         UPDATE member
         SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6, updated_at = NOW()
         WHERE id = $7
       `;
-      await query(updateMemberQuery, [first_name, last_name, phone, short_bio, newStatus, leaving_date, id]);
+      await query(updateMemberQuery, [first_name, last_name, phone, short_bio, status, leaving_date, id]);
       logger.info('Basic INFO Updated', {
         meta: {
           eid,

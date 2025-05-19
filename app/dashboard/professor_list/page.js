@@ -29,6 +29,7 @@ const ProfessorsList = () => {
   const [totalProfessors, setTotalProfessors] = useState(0);
   const [activeProfessors, setActiveProfessors] = useState(0);
   const [inactiveProfessors, setInactiveProfessors] = useState(0);
+  const [emeritusProfessors, setEmeritusProfessors] = useState(0);
 
 
 
@@ -46,6 +47,7 @@ const ProfessorsList = () => {
           setTotalProfessors(data.totalProfessors ?? 0);
           setActiveProfessors(data.activeProfessors ?? 0);
           setInactiveProfessors(data.inactiveProfessors ?? 0);
+          setEmeritusProfessors(data.emeritusProfessors ?? 0);
         } else {
           toast.error(data.message);
         }
@@ -106,12 +108,21 @@ const ProfessorsList = () => {
         </h1>
 
         {/* Responsive Stats Container */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 max-w-2xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 md:gap-4 max-w-2xl mx-auto">
+
           {/* Total Professors */}
           <div className="bg-blue-600/20 px-3 py-2 md:px-4 md:py-2 rounded flex items-center justify-center sm:justify-start w-full">
             <FiBookOpen className="mr-2 text-blue-400 text-sm md:text-base" />
             <span className="font-medium text-sm md:text-base whitespace-nowrap">
               Total {totalProfessors}
+            </span>
+          </div>
+
+          {/* Emeritus Professors */}
+          <div className="bg-yellow-600/20 px-3 py-2 md:px-4 md:py-2 rounded flex items-center justify-center sm:justify-start w-full">
+            <span className="w-2 h-2 bg-yellow-400 rounded-full mr-2"></span>
+            <span className="font-medium text-sm md:text-base whitespace-nowrap">
+              Emeritus {emeritusProfessors}
             </span>
           </div>
 
@@ -130,6 +141,7 @@ const ProfessorsList = () => {
               Inactive {inactiveProfessors}
             </span>
           </div>
+
           </div>
         </div>
       </div>
@@ -166,10 +178,13 @@ const ProfessorsList = () => {
                   All Professors
                 </option>
                 <option value="active" className="text-gray-300 bg-gray-800 hover:bg-blue-600">
-                  Active Scholars
+                  Active
                 </option>
                 <option value="inactive" className="text-gray-300 bg-gray-800 hover:bg-blue-600">
-                  Inactive Professors
+                  Inactive
+                </option>
+                <option value="emeritus" className="text-gray-300 bg-gray-800 hover:bg-blue-600">
+                  Emeritus
                 </option>
               </select>
               <FiFilter className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 text-gray-400 text-lg sm:text-xl pointer-events-none" />
