@@ -10,7 +10,7 @@ import Image from 'next/image';
 import {
   FiUser, FiPhone, FiCalendar, FiBook, FiBriefcase, FiFileText,
   FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
-  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo, FiRefreshCcw, FiXCircle, FiMail,
+  FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo, FiRefreshCcw, FiXCircle, FiMail, FiCheckCircle,
 } from 'react-icons/fi';
 
 const EditProfessor = () => {
@@ -124,9 +124,15 @@ const EditProfessor = () => {
   
     switch (section) {
       case 'basicInfo':
-        for (const key in formData) {
-          data.append(key, formData[key]);
-        }
+        // Append basic info fields individually
+        data.append('first_name', formData.first_name);
+        data.append('last_name', formData.last_name);
+        data.append('phone', formData.phone);
+        data.append('short_bio', formData.short_bio);
+        data.append('status', formData.status);
+        data.append('leaving_date', formData.leaving_date);
+        // Stringify other_emails array
+        data.append('other_emails', JSON.stringify(formData.other_emails));
         break;
       case 'photo':
         data.append('photo', photo);

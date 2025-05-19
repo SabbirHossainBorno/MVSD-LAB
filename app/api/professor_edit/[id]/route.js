@@ -214,6 +214,7 @@ export async function POST(req, { params }) {
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
     const researches = JSON.parse(formData.get('researches') || '[]');
+    const other_emails = JSON.parse(formData.get('other_emails') || '[]');
     
     const awards = [];
     for (let i = 0; formData.has(`awards[${i}][title]`); i++) {
@@ -256,15 +257,89 @@ export async function POST(req, { params }) {
       });
     }
 
+    // Validate phone uniqueness
+    if (phone) {
+      const phoneCheck = await query(
+        'SELECT id FROM member WHERE phone = $1 AND id != $2',
+        [phone, id]
+      );
+      if (phoneCheck.rows.length > 0) {
+        await query('ROLLBACK');
+        return NextResponse.json(
+          { message: 'Phone number is already in use by another member.' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Validate other emails
+    if (other_emails.length > 0) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      
+      for (const email of other_emails) {
+        // Validate email format
+        if (!emailRegex.test(email)) {
+          await query('ROLLBACK');
+          return NextResponse.json(
+            { message: `Invalid email format: ${email}` },
+            { status: 400 }
+          );
+        }
+
+        // Check against primary emails
+        const memberCheck = await query(
+          'SELECT id FROM member WHERE email = $1',
+          [email]
+        );
+        if (memberCheck.rows.length > 0) {
+          await query('ROLLBACK');
+          return NextResponse.json(
+            { message: `Email ${email} is already registered as primary email.` },
+            { status: 400 }
+          );
+        }
+
+        // Check against other professors' additional emails
+        const professorCheck = await query(
+          `SELECT id FROM professor_basic_info 
+          WHERE $1 = ANY(other_emails) AND id != $2`,
+          [email, id]
+        );
+        if (professorCheck.rows.length > 0) {
+          await query('ROLLBACK');
+          return NextResponse.json(
+            { message: `Email ${email} exists in another professor's records.` },
+            { status: 400 }
+          );
+        }
+      }
+    }
+
     // Update basic info
     if (first_name || last_name || phone || short_bio || status || leaving_date) {
       const newStatus = leaving_date ? 'Inactive' : status;
       const updateBasicInfoQuery = `
         UPDATE professor_basic_info
-        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6
-        WHERE id = $7
+        SET 
+          first_name = $1,
+          last_name = $2,
+          phone = $3,
+          short_bio = $4,
+          status = $5,
+          leaving_date = $6,
+          other_emails = $7
+        WHERE id = $8
       `;
-      await query(updateBasicInfoQuery, [first_name, last_name, phone, short_bio, newStatus, leaving_date, id]);
+      await query(updateBasicInfoQuery, [
+        first_name,
+        last_name,
+        phone,
+        short_bio,
+        newStatus,
+        leaving_date,
+        other_emails,
+        id
+      ]);
 
       const updateMemberQuery = `
         UPDATE member
