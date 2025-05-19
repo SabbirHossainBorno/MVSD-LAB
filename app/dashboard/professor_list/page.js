@@ -244,7 +244,13 @@ const ProfessorsList = () => {
                         <FiUser className="w-8 h-8 text-gray-400" />
                       </div>
                     )}
-                    <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-gray-800 ${professor.status === 'Active' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                    <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-gray-800 ${
+                        professor.status === 'Active' 
+                          ? 'bg-green-500' 
+                          : professor.status === 'Inactive' 
+                            ? 'bg-red-500' 
+                            : 'bg-yellow-500'
+                      }`}></div>
                   </div>
 
                   <div className="flex-1 min-w-0">

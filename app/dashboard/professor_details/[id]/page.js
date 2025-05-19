@@ -113,17 +113,21 @@ const ProfessorDetails = () => {
                 </div>
                 {/* Status Indicator */}
                 <div className={`absolute -top-2.5 -right-2.5 flex items-center gap-1.5 px-3 py-0.5 rounded text-xs font-semibold backdrop-blur-lg border ${
-                  professorDetails.basicInfo.status === 'Active' 
+                  professorDetails.basicInfo.status === 'Active'
                     ? 'bg-green-500/20 border-green-400/30 text-green-400'
-                    : 'bg-red-500/20 border-red-400/30 text-red-400'
+                    : professorDetails.basicInfo.status === 'Inactive'
+                      ? 'bg-red-500/20 border-red-400/30 text-red-400'
+                      : 'bg-yellow-500/20 border-yellow-400/30 text-yellow-400'
                 }`}>
                   <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${
-                    professorDetails.basicInfo.status === 'Active' 
-                      ? 'bg-green-400' 
-                      : 'bg-red-400'
+                    professorDetails.basicInfo.status === 'Active'
+                      ? 'bg-green-400'
+                      : professorDetails.basicInfo.status === 'Inactive'
+                        ? 'bg-red-400'
+                        : 'bg-yellow-400'
                   }`} />
                   {professorDetails.basicInfo.status}
-                  </div>
+                </div>
               </div>
             </div>
 
