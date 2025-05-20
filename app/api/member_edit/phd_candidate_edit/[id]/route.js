@@ -40,47 +40,6 @@ const saveProfilePhoto = async (file, phdCandidateId, eid, sessionId) => {
   }
 };
 
-const saveDocumentPhoto = async (file, phdCandidateId, index, document_type, eid, sessionId) => {
-  if (!file) {
-    logger.warn('No file provided for document photo', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Edit PhD Candidate Data',
-        details: `No file provided for document photo for phd candidate ID: ${phdCandidateId}`
-      }
-    });
-    throw new Error('No file provided for document photo');
-  }
-  const filename = `${phdCandidateId}_Document_${document_type}_${index}${path.extname(file.name)}`;
-  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/PhD_Candidate', filename);
-
-  try {
-    const buffer = await file.arrayBuffer();
-    fs.writeFileSync(targetPath, Buffer.from(buffer));
-    logger.info('Document photo saved successfully', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Edit PhD Candidate Data',
-        details: `Document photo saved at ${targetPath} for phd candidate ID: ${phdCandidateId}`
-      }
-    });
-    return `/Storage/Images/PhD_Candidate/${filename}`;
-  } catch (error) {
-    logger.error('Failed to save document photo', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Edit PhD Candidate Data',
-        details: `Failed to save document photo at ${targetPath} for phd candidate ID: ${phdCandidateId}. Error: ${error.message}`
-      }
-    });
-    throw new Error(`Failed to save document photo: ${error.message}`);
-  }
-};
-
-
 // Main function to handle the GET request
 export async function GET(req, { params }) {
   const { id } = await params;  // Await params before using its properties
@@ -132,20 +91,11 @@ export async function GET(req, { params }) {
     const careerQuery = `SELECT * FROM phd_candidate_career_info WHERE phd_candidate_id = $1;`;
     const careerResult = await query(careerQuery, [id]);
 
-    const documentsQuery = `SELECT * FROM phd_candidate_document_info WHERE phd_candidate_id = $1;`;
-    const documentsResult = await query(documentsQuery, [id]);
-
     const responseData = {
       ...phdCandidate,
       socialMedia: socialMediaResult.rows,
       education: educationResult.rows,
       career: careerResult.rows,
-      documents: documentsResult.rows.map(doc => ({
-        title: doc.title,
-        document_type: doc.document_type,
-        documentsPhoto: doc.document_photo, // Fix property name mismatch
-        existing: true
-      })),
     };
 
     const successMessage = formatAlertMessage('Successfully Fetched PhD Candidate Data', `ID: ${id}\nIP: ${ipAddress}\nStatus: 200`);
@@ -174,93 +124,6 @@ export async function GET(req, { params }) {
       }
     });
     return NextResponse.json({ message: `Failed to fetch phd candidate data: ${error.message}` }, { status: 500 });
-  }
-}
-
-// Main function to handle the DELETE request
-export async function DELETE(req, { params }) {
-  const { id } = await params; // Await params before using its properties
-  const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
-  const eid = req.cookies.get('eid')?.value || 'Unknown EID';
-  const adminEmail = req.cookies.get('email')?.value || 'Unknown Email';
-  const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
-  const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
-
-  try {
-    const { documentId, documentType, documentTitle, documentPhoto } = await req.json();
-
-    // Delete the document from the database
-    const deleteDocumentQuery = `
-      DELETE FROM phd_candidate_document_info
-      WHERE phd_candidate_id = $1 AND document_type = $2 AND title = $3 AND document_photo = $4
-    `;
-    await query(deleteDocumentQuery, [id, documentType, documentTitle, documentPhoto]);
-
-    // Construct the full file path
-    const basePath = '/home/mvsd-lab/public';
-    const filePath = path.join(basePath, documentPhoto);
-
-    // Check if the file exists before attempting to delete it
-    fs.access(filePath, fs.constants.F_OK, (err) => {
-      if (err) {
-        logger.error('File does not exist', {
-          meta: {
-            eid,
-            sid: sessionId,
-            taskName: 'Edit PhD Candidate Data',
-            details: `File does not exist at path: ${filePath} for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
-          }
-        });
-      } else {
-        // Remove the file from the server
-        fs.unlink(filePath, (err) => {
-          if (err) {
-            logger.error('Failed to delete file', {
-              meta: {
-                eid,
-                sid: sessionId,
-                taskName: 'Edit PhD Candidate Data',
-                details: `Failed to delete file at path: ${filePath} for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}. Error: ${err.message}`
-              }
-            });
-          } else {
-            logger.info('File deleted successfully', {
-              meta: {
-                eid,
-                sid: sessionId,
-                taskName: 'Edit PhD Candidate Data',
-                details: `File deleted successfully at path: ${filePath} for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
-              }
-            });
-          }
-        });
-      }
-    });
-
-    const successMessage = formatAlertMessage('Document Deleted Successfully', `ID: ${id}\nDocument: ${documentTitle}\nStatus: 200`);
-    await sendTelegramAlert(successMessage);
-    logger.info('Document deleted successfully', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Edit PhD Candidate Data',
-        details: `Document deleted for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
-      }
-    });
-
-    return NextResponse.json({ message: 'Document deleted successfully' }, { status: 200 });
-  } catch (error) {
-    const errorMessage = formatAlertMessage('Error Deleting Document', `ID: ${id}\nError: ${error.message}\nStatus: 500`);
-    await sendTelegramAlert(errorMessage);
-    logger.error('Error deleting document', {
-      meta: {
-        eid,
-        sid: sessionId,
-        taskName: 'Edit PhD Candidate Data',
-        details: `Error deleting document for ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
-      }
-    });
-    return NextResponse.json({ message: `Failed to delete document: ${error.message}` }, { status: 500 });
   }
 }
 
@@ -299,21 +162,7 @@ export async function POST(req, { params }) {
     const socialMedia = JSON.parse(formData.get('socialMedia') || '[]');
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
-
-    const documents = [];
-    for (let i = 0; formData.has(`documents[${i}][title]`); i++) {
-      const documentPhoto = formData.get(`documents[${i}][documentsPhoto]`);
-      const documentType = formData.get(`documents[${i}][document_type]`); // Retrieve document_type
-      if (!formData.get(`documents[${i}][existing]`) === 'true' && !documentPhoto) {
-        return NextResponse.json({ message: `Document photo is required for new document: ${formData.get(`documents[${i}][title]`)}` }, { status: 400 });
-      }
-      documents.push({
-        title: formData.get(`documents[${i}][title]`),
-        document_type: documentType, // Ensure document_type is included
-        documentsPhoto: documentPhoto,
-        existing: formData.get(`documents[${i}][existing]`) === 'true',
-      });
-    }
+    const other_emails = JSON.parse(formData.get('other_emails') || '[]');
     
     const password = formData.get('password');
 
@@ -346,15 +195,99 @@ export async function POST(req, { params }) {
       });
     }
 
+
+    // Validate phone uniqueness
+    if (phone) {
+      const phoneCheck = await query(
+        'SELECT id FROM member WHERE phone = $1 AND id != $2',
+        [phone, id]
+      );
+      if (phoneCheck.rows.length > 0) {
+        await query('ROLLBACK');
+        return NextResponse.json(
+          { message: 'Phone number is already in use by another member.' },
+          { status: 400 }
+        );
+      }
+    }
+
+
+    // Validate other emails
+    if (other_emails.length > 0) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      
+      for (const email of other_emails) {
+        // Validate email format
+        if (!emailRegex.test(email)) {
+          await query('ROLLBACK');
+          logger.error('Invalid email format', {
+            meta: {
+              eid,
+              sid: sessionId,
+              taskName: 'Edit PhD Candidate Data',
+              details: `Invalid email format: ${email} for PhD Candidate ${id}`
+            }
+          });
+          return NextResponse.json(
+            { message: `Invalid email format: ${email}` },
+            { status: 400 }
+          );
+        }
+
+        // Check against primary emails
+        const memberCheck = await query(
+          'SELECT id FROM member WHERE email = $1',
+          [email]
+        );
+        if (memberCheck.rows.length > 0) {
+          await query('ROLLBACK');
+          logger.error('Email conflict with primary email', {
+            meta: {
+              eid,
+              sid: sessionId,
+              taskName: 'Edit PhD Candidate Data',
+              details: `Email ${email} conflicts with existing primary email for PhD Candidate ${id}`
+            }
+          });
+          return NextResponse.json(
+            { message: `Email ${email} is already registered as primary email.` },
+            { status: 400 }
+          );
+        }
+
+        // Check against other PhD Candidate's additional emails
+        const PhdCandidateCheck = await query(
+          `SELECT id FROM phd_candidate_basic_info 
+          WHERE $1 = ANY(other_emails) AND id != $2`,
+          [email, id]
+        );
+        if (PhdCandidateCheck.rows.length > 0) {
+          await query('ROLLBACK');
+          logger.error('Email conflict with other PhD Candidate', {
+            meta: {
+              eid,
+              sid: sessionId,
+              taskName: 'Edit PhD Candidate Data',
+              details: `Email ${email} exists in another PhD Candidate's records (PhD Candidate ${id})`
+            }
+          });
+          return NextResponse.json(
+            { message: `Email ${email} exists in another PhD Candidate's records.` },
+            { status: 400 }
+          );
+        }
+      }
+    }
+
     // Update basic info
     if (first_name || last_name || phone || short_bio || status || leaving_date) {
       const newStatus = leaving_date ? 'Inactive' : status;
       const updateBasicInfoQuery = `
         UPDATE phd_candidate_basic_info
-        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, completion_date = $6
-        WHERE id = $7
+        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, completion_date = $6, other_emails = $7
+        WHERE id = $8
       `;
-      await query(updateBasicInfoQuery, [first_name, last_name, phone, short_bio, newStatus, leaving_date, id]);
+      await query(updateBasicInfoQuery, [first_name, last_name, phone, short_bio, newStatus, leaving_date, other_emails, id]);
 
       const updateMemberQuery = `
         UPDATE member
@@ -367,7 +300,7 @@ export async function POST(req, { params }) {
           eid,
           sid: sessionId,
           taskName: 'Edit PhD Candidate Data',
-          details: `Basic info updated for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
+          details: `Basic info updated for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}, Emails: ${other_emails.join(', ')}`
         }
       });
     }
@@ -443,36 +376,6 @@ export async function POST(req, { params }) {
           sid: sessionId,
           taskName: 'Edit PhD Candidate Data',
           details: `Career info updated for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
-        }
-      });
-    }
-
-    // Update documents
-    if (documents.length > 0) {
-      const newDocuments = documents.filter(document => !document.existing);
-
-      const insertDocumentsQuery = `
-        INSERT INTO phd_candidate_document_info (phd_candidate_id, title, document_type, document_photo) VALUES ($1, $2, $3, $4)
-      `;
-      const currentDocumentsCountQuery = `
-        SELECT COUNT(*) FROM phd_candidate_document_info WHERE phd_candidate_id = $1
-      `;
-      const currentDocumentsCountResult = await query(currentDocumentsCountQuery, [id]);
-      const currentDocumentsCount = parseInt(currentDocumentsCountResult.rows[0].count, 10);
-      for (let i = 0; i < newDocuments.length; i++) {
-        const document = newDocuments[i];
-        let documentUrl = null;
-        if (document.documentsPhoto) {
-          documentUrl = await saveDocumentPhoto(document.documentsPhoto, id, currentDocumentsCount + i + 1, document.document_type, eid, sessionId); // Pass document_type
-        }
-        await query(insertDocumentsQuery, [id, document.title, document.document_type, documentUrl]);
-      }
-      logger.info('Document INFO Updated', {
-        meta: {
-          eid,
-          sid: sessionId,
-          taskName: 'Edit PhD Candidate Data',
-          details: `Document info updated for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
     }

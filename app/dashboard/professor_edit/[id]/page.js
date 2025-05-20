@@ -109,7 +109,7 @@ const EditProfessor = () => {
   }, []);
 
   const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
     const checkPasswordStrength = (password) => {
       return {
@@ -383,50 +383,49 @@ const EditProfessor = () => {
                   <FiFileText className="absolute left-3 top-4 text-gray-400" />
                 </div>
               </div>
-{/* Status Field */}
-<div className="space-y-2">
-  <label className="block text-sm font-medium text-gray-300">Status</label>
-  <div className="relative">
-    <select
-      name="status"
-      value={formData.status}
-      onChange={handleChange}  // Use the central handleChange
-      className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-      required
-    >
-      <option value="Active">Active</option>
-      <option value="Inactive">Inactive</option>
-      <option value="Emeritus">Emeritus</option>
-    </select>
-    <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-    <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-  </div>
-</div>
+            {/* Status Field */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-300">Status</label>
+              <div className="relative">
+                <select
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}  // Use the central handleChange
+                  className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                  required
+                >
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                  <option value="Emeritus">Emeritus</option>
+                </select>
+                <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
 
-{/* Leaving Date Field */}
-<div className="space-y-2">
-  <label className="block text-sm font-medium text-gray-300">
-    Leaving Date
-    {formData.status === 'Emeritus' && (
-      <span className="text-red-500 ml-1">*</span>
-    )}
-  </label>
-  <div className="relative">
-    <input
-      type="date"
-      name="leaving_date"
-      value={formData.leaving_date || ''}
-      onChange={handleChange}
-      className={`w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none appearance-none ${
-        formData.status === 'Active' ? 'opacity-50 cursor-not-allowed' : ''
-      }`}
-      required={formData.status === 'Emeritus'}
-      disabled={formData.status === 'Active'}
-    />
-    <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-  </div>
-</div>
-
+            {/* Leaving Date Field */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-300">
+                Leaving Date
+                {formData.status === 'Emeritus' && (
+                  <span className="text-red-500 ml-1">*</span>
+                )}
+              </label>
+              <div className="relative">
+                <input
+                  type="date"
+                  name="leaving_date"
+                  value={formData.leaving_date || ''}
+                  onChange={handleChange}
+                  className={`w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none appearance-none ${
+                    formData.status === 'Active' ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                  required={formData.status === 'Emeritus'}
+                  disabled={formData.status === 'Active'}
+                />
+                <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              </div>
+            </div>
             </div>
             <div className="mt-4 flex items-center space-x-4">
             <button
