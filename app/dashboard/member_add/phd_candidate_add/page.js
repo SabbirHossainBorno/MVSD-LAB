@@ -402,7 +402,7 @@ const AddPhdCandidate = () => {
 
               {/* ID Number */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">Identification Number</label>
+                <label className="block text-sm font-medium text-gray-300">Banner ID</label>
                 <div className="relative">
                   <input
                     type="number"
@@ -434,7 +434,7 @@ const AddPhdCandidate = () => {
 
               {/* Admission Date */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">Admission Date</label>
+                <label className="block text-sm font-medium text-gray-300">Enrollment Date</label>
                 <div className="relative">
                   <input
                     type="date"
@@ -450,7 +450,7 @@ const AddPhdCandidate = () => {
 
               {/* Completion Date */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">Completion Date</label>
+                <label className="block text-sm font-medium text-gray-300">Graduation Date</label>
                 <div className="relative">
                   <input
                     type="date"

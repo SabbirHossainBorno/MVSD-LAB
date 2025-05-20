@@ -301,7 +301,7 @@ export async function POST(req) {
         type,
         passport_number,
         idNumber,
-        , finalOtherEmails
+        finalOtherEmails
       ]);
 
       // Insert into phd_candidate_socialmedia_info
