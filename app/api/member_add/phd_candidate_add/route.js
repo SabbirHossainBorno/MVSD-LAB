@@ -36,17 +36,6 @@ const saveProfilePhoto = async (file, phdCandidateId) => {
   }
 };
 
-const saveDocumentPhoto = async (file, phdCandidateId, index, documentType) => {
-  const filename = `${phdCandidateId}_Document_${documentType}_${index}${path.extname(file.name)}`;
-  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/PhD_Candidate', filename);
-  try {
-    const buffer = await file.arrayBuffer();
-    fs.writeFileSync(targetPath, Buffer.from(buffer));
-    return `/Storage/Images/PhD_Candidate/${filename}`;
-  } catch (error) {
-    throw new Error(`Failed to save document photo: ${error.message}`);
-  }
-};
 
 export async function POST(req) {
   const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
@@ -67,6 +56,7 @@ export async function POST(req) {
     const passport_number = formData.get('passport_number');
     const dob = formData.get('dob');
     const email = formData.get('email');
+    const otherEmails = JSON.parse(formData.get('otherEmails') || []);
     const password = formData.get('password');
     const short_bio = formData.get('short_bio');
     const admission_date = formData.get('admission_date');
@@ -75,15 +65,6 @@ export async function POST(req) {
     const socialMedia = JSON.parse(formData.get('socialMedia') || '[]');
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
-    const documents = [];
-
-    for (let i = 0; formData.has(`documents[${i}][title]`); i++) {
-      documents.push({
-        title: formData.get(`documents[${i}][title]`),
-        documentType: formData.get(`documents[${i}][documentType]`),
-        documentsPhoto: formData.get(`documents[${i}][documentsPhoto]`),
-      });
-    }
 
     // Validation
     if (!first_name || !last_name || !phone || !gender || !bloodGroup || !country || !idNumber || !passport_number || !dob || !email || !password || !short_bio || !admission_date) {
@@ -94,6 +75,18 @@ export async function POST(req) {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-])[A-Za-z\d!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~-]{8,}$/;
     if (!passwordRegex.test(password)) {
       return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      console.error('Validation failed: Invalid primary email format');
+      return NextResponse.json({ message: 'Primary email format is invalid' }, { status: 400 });
+    }
+
+    if (otherEmails.some(e => !emailRegex.test(e))) {
+      console.error('Validation failed: Invalid secondary email(s)');
+      return NextResponse.json({ message: 'One or more secondary emails have invalid format' }, { status: 400 });
     }
 
     // Hash password before storing
@@ -126,21 +119,82 @@ export async function POST(req) {
       return NextResponse.json({ message: 'Joining year and leaving year cannot be greater than the current year.' }, { status: 400 });
     }
 
+
     // Check for existing email, phone, ID number, and passport number
-    const emailCheckResult = await query('SELECT id FROM member WHERE email = $1', [email]);
+    const emailCheckQuery = `
+      SELECT id, email, other_emails 
+      FROM (
+        SELECT id, email, ARRAY[]::TEXT[] AS other_emails FROM member
+        UNION ALL
+        SELECT id, email, COALESCE(other_emails, ARRAY[]::TEXT[]) FROM phd_candidate_basic_info
+      ) AS combined
+      WHERE 
+        email = $1 
+        OR email = ANY($2::TEXT[])
+        OR $1 = ANY(other_emails)
+        OR other_emails && $2::TEXT[]
+    `;
+
+    const emailCheckResult = await query(emailCheckQuery, [email, otherEmails || []]);
+
     if (emailCheckResult.rows.length > 0) {
-      logger.warn('Validation Error: Email already exists', {
+      // Analyze conflict type
+      let emailConflict = false;
+      let otherEmailConflict = false;
+      
+      const conflictingEntries = emailCheckResult.rows.map(row => {
+        const conflict = {
+          id: row.id,
+          reasons: []
+        };
+
+        // Check primary email match
+        if (row.email === email) {
+          emailConflict = true;
+          conflict.reasons.push(`primary email (${email})`);
+        }
+
+        // Check other emails match
+        const conflictOtherEmails = [];
+        if (row.other_emails.some(e => [email, ...(otherEmails || [])].includes(e))) {
+          conflictOtherEmails.push(...row.other_emails.filter(e => [email, ...(otherEmails || [])].includes(e)));
+        }
+
+        if (conflictOtherEmails.length > 0) {
+          otherEmailConflict = true;
+          conflict.reasons.push(`other emails: ${conflictOtherEmails.join(', ')}`);
+        }
+
+        return conflict;
+      });
+
+      // Build error message
+      let errorMessage;
+      if (emailConflict && otherEmailConflict) {
+        errorMessage = 'Email and other emails already exist in our system.';
+      } else if (emailConflict) {
+        errorMessage = 'Email already exists. Please use a different primary email.';
+      } else {
+        errorMessage = 'One or more alternative emails already exist in our system.';
+      }
+
+      logger.warn('Validation Error: Email conflict detected', {
         meta: {
           eid,
           sid: sessionId,
           taskName: 'Add PhD Candidate',
-          details: `Attempt to add PhD Candidate failed - Email ${email} already exists.`
+          details: {
+            message: errorMessage,
+            attemptedEmail: email,
+            attemptedOtherEmails: otherEmails,
+            conflictingEntries
+          }
         }
       });
 
       return NextResponse.json({ 
         success: false, 
-        message: 'Email already exists. Please try with a different email.' 
+        message: errorMessage 
       }, { status: 400 });
     }
 
@@ -209,32 +263,23 @@ export async function POST(req) {
       }
     }
 
-    // Save document photos
-    const documentUrls = [];
-    if (documents.length > 0) {
-      for (let i = 0; i < documents.length; i++) {
-        const documentFile = documents[i].documentsPhoto;
-        if (documentFile) {
-          try {
-            const documentUrl = await saveDocumentPhoto(documentFile, phdCandidateId, i, documents[i].documentType);
-            documentUrls.push(documentUrl);
-          } catch (error) {
-            return NextResponse.json({ message: `Failed to save document photo: ${error.message}` }, { status: 500 });
-          }
-        } else {
-          return NextResponse.json({ message: 'PhD Candidate document photo is missing' }, { status: 400 });
-        }
-      }
-    }
+    // Prepare other emails (convert empty array to NULL)
+    const finalOtherEmails = otherEmails.length > 0 ? otherEmails : null;
+    console.log('Final other emails:', finalOtherEmails);
+
+
+    
+    // Database transaction
+    console.log('Starting database transaction...');
 
     try {
       await query('BEGIN');
 
       const insertPhdCandidateQuery = `
         INSERT INTO phd_candidate_basic_info 
-        (id, first_name, last_name, phone, gender, "blood_group", country, dob, email, password, short_bio, admission_date, completion_date, photo, status, type, passport_number, "id_number")
+        (id, first_name, last_name, phone, gender, "blood_group", country, dob, email, password, short_bio, admission_date, completion_date, photo, status, type, passport_number, "id_number", other_emails)
         VALUES 
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'Active', $15, $16, $17)
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'Active', $15, $16, $17, $18)
         RETURNING *;
       `;
 
@@ -255,7 +300,8 @@ export async function POST(req) {
         photoUrl,
         type,
         passport_number,
-        idNumber
+        idNumber,
+        , finalOtherEmails
       ]);
 
       // Insert into phd_candidate_socialmedia_info
@@ -299,21 +345,6 @@ export async function POST(req) {
       const insertCareerQuery = `INSERT INTO phd_candidate_career_info (phd_candidate_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
       for (const car of career) {
         await query(insertCareerQuery, [phdCandidateId, car.position, car.organization_name, car.joining_year, car.leaving_year]);
-      }
-
-      // Insert into phd_candidate_documents_info
-      const insertDocumentsQuery = `INSERT INTO phd_candidate_document_info ("phd_candidate_id", "title", "document_type", "document_photo") VALUES ($1, $2, $3, $4) RETURNING *;`;
-      for (let i = 0; i < documents.length; i++) {
-        const document = documents[i];
-        const documentUrl = documentUrls[i]; // Get the URL of the saved document photo
-
-        if (!documentUrl) {
-          throw new Error('Document URL is null');
-        }
-
-        await query(insertDocumentsQuery, [
-          phdCandidateId, document.title, document.documentType, documentUrl,
-        ]);
       }
 
       const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
