@@ -61,19 +61,39 @@ const EditPhdCandidate = () => {
 
   const handleChange = useCallback((e) => {
     const { name, value, files } = e.target;
+    
     if (name === 'photo' && files.length > 0) {
-      const file = files[0];
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error('File size exceeds 5 MB.');
-        return;
-      }
-      if (!['image/jpeg', 'image/png'].includes(file.type)) {
-        toast.error('Invalid file type. Only JPG, JPEG, and PNG are allowed.');
-        return;
-      }
-      setPhoto(file);
+      // Existing photo handling
     } else {
-      setFormData((prevData) => ({ ...prevData, [name]: value }));
+      setFormData(prev => {
+        const newState = { ...prev };
+        
+        // Handle status changes
+        if (name === 'status') {
+          newState.status = value;
+          // Clear leaving date when switching to Active
+          if (value === 'Active') {
+            newState.leaving_date = '';
+          }
+        }
+        // Handle leaving date changes
+        else if (name === 'leaving_date') {
+          newState.leaving_date = value;
+          // Auto-update status to Graduate when date is entered
+          if (value) {
+            newState.status = 'Graduate';
+          } else if (prev.status === 'Graduate') {
+            // Revert to Inactive if date is cleared
+            newState.status = 'Inactive';
+          }
+        }
+        // Handle all other fields
+        else {
+          newState[name] = value;
+        }
+        
+        return newState;
+      });
     }
   }, []);
 
@@ -169,15 +189,48 @@ const EditPhdCandidate = () => {
         body: data,
       });
   
-      if (response.ok) {
-        toast.success('PhD Candidate Updated successfully!');
-        router.push('/dashboard');
-      } else {
-        const result = await response.json();
-        toast.error(result.message || 'An error occurred while updating the PhD Candidate.');
+      const result = await response.json();
+
+      // Determine actual status from DB data
+      const dbStatus = data.status;
+      const dbLeavingDate = data.completion_date;
+
+      // Convert database null to empty string for input field
+      const formattedLeavingDate = dbLeavingDate 
+        ? new Date(dbLeavingDate).toISOString().split('T')[0]
+        : '';
+
+      // Determine actual status from DB data
+      const actualStatus = dbLeavingDate && dbStatus === 'Inactive'
+        ? 'Graduate'
+        : dbStatus;
+
+      setFormData({
+        ...data,
+        status: actualStatus,
+        leaving_date: data.completion_date || '',
+      });
+
+      if (!response.ok) {
+        throw new Error(result.message || `Server responded with ${response.status}`);
       }
+
+      toast.success('Professor updated successfully!', {
+        autoClose: 3000,
+        hideProgressBar: false,
+      });
+      
+      // Only redirect if it's a password change or basic info update
+      if (['password', 'basicInfo'].includes(section)) {
+        router.push('/dashboard');
+      }
+
     } catch (error) {
-      toast.error('Failed to update PhD Candidate');
+      console.error('Update error:', error);
+      toast.error(error.message || 'Failed to update professor details', {
+        autoClose: 5000,
+        hideProgressBar: false,
+      });
     } finally {
       setLoading(false);
     }
@@ -310,39 +363,48 @@ const EditPhdCandidate = () => {
                   <FiFileText className="absolute left-3 top-4 text-gray-400" />
                 </div>
               </div>
-              {/* Status */}
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">Status</label>
-                <div className="relative">
-                  <select
-                    name="status"
-                    value={formData.status}
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-                    required
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                  </select>
-                  <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                </div>
+              {/* Status Field */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-300">Status</label>
+              <div className="relative">
+                <select
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}  // Use the central handleChange
+                  className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                  required
+                >
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                  <option value="Graduate">Graduate</option>
+                </select>
+                <FiInfo className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
               </div>
+            </div>
               {/* Graduation Date Date */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">Graduation Date</label>
-                <div className="relative">
+              <label className="block text-sm font-medium text-gray-300">
+                Graduation Date
+                {formData.status === 'Graduate' && (
+                  <span className="text-red-500 ml-1">*</span>
+                )}
+              </label>
+              <div className="relative">
                 <input
                   type="date"
-                  name="leaving_date" // ✅ Must match `handleChange`
-                  value={formData.leaving_date}
+                  name="leaving_date"
+                  value={formData.leaving_date || ''}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none appearance-none"
+                  className={`w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none appearance-none ${
+                    formData.status === 'Active' ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                  required={formData.status === 'Graduate'}
+                  disabled={formData.status === 'Active'}
                 />
-
-                  <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                </div>
+                <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               </div>
+            </div>
             </div>
             <div className="mt-4 flex items-center space-x-4">
             <button

@@ -388,7 +388,7 @@ export async function POST(req, { params }) {
         SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, leaving_date = $6, updated_at = NOW()
         WHERE id = $7
       `;
-      await query(updateMemberQuery, [first_name, last_name, phone, short_bio, status, leaving_date, id]);
+      await query(updateMemberQuery, [first_name, last_name, phone, short_bio, status, cleanLeavingDate, id]);
       logger.info('Basic INFO Updated', {
         meta: {
           eid,
