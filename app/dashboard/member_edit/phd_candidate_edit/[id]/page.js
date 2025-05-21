@@ -43,7 +43,7 @@ const EditPhdCandidate = () => {
           short_bio: data.short_bio || '',
           status: data.status, // Directly use the status from the database
           other_emails: data.other_emails || [],
-          leaving_date: data.leaving_date || '', // Only leaving_date can be null
+          leaving_date: data.completion_date || '', // Only leaving_date can be null
         });
         setPhoto(data.photo || null);
         setSocialMedia(data.socialMedia || []);
@@ -59,43 +59,49 @@ const EditPhdCandidate = () => {
   }, [id]);
 
 
-  const handleChange = useCallback((e) => {
-    const { name, value, files } = e.target;
-    
-    if (name === 'photo' && files.length > 0) {
-      // Existing photo handling
-    } else {
-      setFormData(prev => {
-        const newState = { ...prev };
+const handleChange = useCallback((e) => {
+  const { name, value, files } = e.target;
+  
+  if (name === 'photo' && files.length > 0) {
+    // Existing photo handling
+  } else {
+    setFormData(prev => {
+      const newState = { ...prev };
+      
+      // Handle status changes
+      if (name === 'status') {
+        newState.status = value;
+        // Automatically set alumni status based on status
+        newState.alumni_status = value === 'Graduate' ? 'Valid' : 'Invalid';
         
-        // Handle status changes
-        if (name === 'status') {
-          newState.status = value;
-          // Clear leaving date when switching to Active
-          if (value === 'Active') {
-            newState.leaving_date = '';
-          }
+        // Clear leaving date when switching to Active
+        if (value === 'Active') {
+          newState.leaving_date = '';
         }
-        // Handle leaving date changes
-        else if (name === 'leaving_date') {
-          newState.leaving_date = value;
-          // Auto-update status to Graduate when date is entered
-          if (value) {
-            newState.status = 'Graduate';
-          } else if (prev.status === 'Graduate') {
-            // Revert to Inactive if date is cleared
-            newState.status = 'Inactive';
-          }
-        }
-        // Handle all other fields
-        else {
-          newState[name] = value;
-        }
+      }
+      // Handle leaving date changes
+      else if (name === 'leaving_date') {
+        newState.leaving_date = value;
         
-        return newState;
-      });
-    }
-  }, []);
+        if (value) {
+          // Auto-update status to Graduate and set valid alumni status
+          newState.status = 'Graduate';
+          newState.alumni_status = 'Valid';
+        } else if (prev.status === 'Graduate') {
+          // Revert to Inactive and invalid alumni status
+          newState.status = 'Inactive';
+          newState.alumni_status = 'Invalid';
+        }
+      }
+      // Handle all other fields
+      else {
+        newState[name] = value;
+      }
+      
+      return newState;
+    });
+  }
+}, []);
 
   const handleArrayChange = useCallback((setter, index, field, value) => {
     setter((prevState) => {
@@ -400,7 +406,8 @@ const EditPhdCandidate = () => {
                     formData.status === 'Active' ? 'opacity-50 cursor-not-allowed' : ''
                   }`}
                   required={formData.status === 'Graduate'}
-                  disabled={formData.status === 'Active'}
+                  disabled={formData.status !== 'Graduate'}
+
                 />
                 <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               </div>

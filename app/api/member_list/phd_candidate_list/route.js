@@ -29,13 +29,15 @@ export async function GET(req) {
     const totalCountsQuery = `
       SELECT COUNT(*) AS total, 
              COUNT(*) FILTER (WHERE status ILIKE 'Active') AS active_count,
-             COUNT(*) FILTER (WHERE status ILIKE 'Inactive') AS inactive_count
+             COUNT(*) FILTER (WHERE status ILIKE 'Inactive') AS inactive_count,
+             COUNT(*) FILTER (WHERE status ILIKE 'Graduate') AS graduate_count
       FROM phd_candidate_basic_info
     `;
     const totalCountsResult = await query(totalCountsQuery);
     const totalPhdCandidates = parseInt(totalCountsResult.rows[0].total, 10);
     const activePhdCandidates = parseInt(totalCountsResult.rows[0].active_count, 10);
     const inactivePhdCandidates = parseInt(totalCountsResult.rows[0].inactive_count, 10);
+    const graduatePhdCandidates = parseInt(totalCountsResult.rows[0].graduate_count, 10);
 
     // Fetch filtered list of PhD candidates
     let searchQuery = `
@@ -73,6 +75,7 @@ export async function GET(req) {
       totalPhdCandidates,
       activePhdCandidates,
       inactivePhdCandidates,
+      graduatePhdCandidates,
       totalPages,
     });
   } catch (error) {

@@ -168,6 +168,8 @@ export async function POST(req, { params }) {
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
     const other_emails = JSON.parse(formData.get('other_emails') || '[]');
+
+    const alumni_status = status === 'Graduate' ? 'Valid' : 'Invalid';
     
     const password = formData.get('password');
 
@@ -299,10 +301,28 @@ export async function POST(req, { params }) {
       
       const updateBasicInfoQuery = `
         UPDATE phd_candidate_basic_info
-        SET first_name = $1, last_name = $2, phone = $3, short_bio = $4, status = $5, completion_date = $6, other_emails = $7
-        WHERE id = $8
+        SET 
+          first_name = $1, 
+          last_name = $2, 
+          phone = $3, 
+          short_bio = $4, 
+          status = $5, 
+          completion_date = $6, 
+          other_emails = $7,
+          alumni_status = $8
+        WHERE id = $9
       `;
-      await query(updateBasicInfoQuery, [first_name, last_name, phone, short_bio, status, cleanLeavingDate, other_emails, id]);
+      await query(updateBasicInfoQuery, [
+        first_name,
+        last_name,
+        phone,
+        short_bio,
+        status,
+        cleanLeavingDate,
+        other_emails,
+        alumni_status,  // New parameter
+        id              // Moved to position 9
+      ]);
 
       const updateMemberQuery = `
         UPDATE member

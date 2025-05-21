@@ -421,7 +421,7 @@ const EditProfessor = () => {
                     formData.status === 'Active' ? 'opacity-50 cursor-not-allowed' : ''
                   }`}
                   required={formData.status === 'Emeritus'}
-                  disabled={formData.status === 'Active'}
+                  disabled={formData.status !== 'Emeritus'}
                 />
                 <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               </div>

@@ -23,6 +23,7 @@ const PhdCandidatesList = () => {
   const [totalPhdCandidates, setTotalPhdCandidates] = useState(0);
   const [activePhdCandidates, setActivePhdCandidates] = useState(0);
   const [inactivePhdCandidates, setInactivePhdCandidates] = useState(0);
+  const [graduatePhdCandidates, setGraduatePhdCandidates] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -37,6 +38,7 @@ const PhdCandidatesList = () => {
           setTotalPhdCandidates(data.totalPhdCandidates ?? 0);
           setActivePhdCandidates(data.activePhdCandidates ?? 0);
           setInactivePhdCandidates(data.inactivePhdCandidates ?? 0);
+          setGraduatePhdCandidates(data.graduatePhdCandidates ?? 0);
         } else {
           toast.error(data.message);
         }
@@ -92,11 +94,17 @@ const PhdCandidatesList = () => {
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-300 text-center mb-4 md:mb-6">
               PhD Candidates Directory
             </h1>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 max-w-2xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 md:gap-4 max-w-2xl mx-auto">
               <div className="bg-blue-600/20 px-3 py-2 md:px-4 md:py-2 rounded flex items-center justify-center sm:justify-start w-full">
                 <FiBookOpen className="mr-2 text-blue-400 text-sm md:text-base" />
                 <span className="font-medium text-sm md:text-base whitespace-nowrap">
                   Total {totalPhdCandidates}
+                </span>
+              </div>
+              <div className="bg-yellow-600/20 px-3 py-2 md:px-4 md:py-2 rounded flex items-center justify-center sm:justify-start w-full">
+                <span className="w-2 h-2 bg-yellow-400 rounded mr-2"></span>
+                <span className="font-medium text-sm md:text-base whitespace-nowrap">
+                  Graduate {graduatePhdCandidates}
                 </span>
               </div>
               <div className="bg-green-600/20 px-3 py-2 md:px-4 md:py-2 rounded flex items-center justify-center sm:justify-start w-full">
@@ -142,10 +150,13 @@ const PhdCandidatesList = () => {
                   All PhD Candidates
                 </option>
                 <option value="active" className="text-gray-300 bg-gray-800 hover:bg-blue-600">
-                  Active Scholars
+                  Active
                 </option>
                 <option value="inactive" className="text-gray-300 bg-gray-800 hover:bg-blue-600">
-                  Inactive Candidates
+                  Inactive
+                </option>
+                <option value="graduate" className="text-gray-300 bg-gray-800 hover:bg-blue-600">
+                  Graduate
                 </option>
               </select>
               <FiFilter className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 text-gray-400 text-lg sm:text-xl pointer-events-none" />
@@ -202,7 +213,15 @@ const PhdCandidatesList = () => {
                         <FiUser className="w-8 h-8 text-gray-400" />
                       </div>
                     )}
-                    <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-gray-800 ${phdCandidate.status === 'Active' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                    <div
+                      className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-gray-800 ${
+                        phdCandidate.status === 'Active'
+                          ? 'bg-green-500'
+                          : phdCandidate.status === 'Graduate'
+                          ? 'bg-yellow-500'
+                          : 'bg-red-500'
+                      }`}
+                    />
                   </div>
 
                   <div className="flex-1 min-w-0">
