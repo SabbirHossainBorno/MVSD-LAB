@@ -156,12 +156,33 @@ const PhdCandidateDetails = () => {
             </h2>
             <div className="space-y-4">
               <InfoItem icon={<FiMail />} label="Email" value={phdCandidateDetails.basicInfo.email} />
+              <InfoItem
+                icon={<FiMail />}
+                label="Other Email"
+                value={
+                  Array.isArray(phdCandidateDetails.basicInfo.other_emails) && 
+                  phdCandidateDetails.basicInfo.other_emails.length > 0 ? (
+                    <div className="flex flex-wrap items-center gap-x-2">
+                      {phdCandidateDetails.basicInfo.other_emails.map((email, index) => (
+                        <span key={index} className="flex items-center">
+                          <span className="break-words">{email}</span>
+                          {index !== phdCandidateDetails.basicInfo.other_emails.length - 1 && (
+                            <span className="mx-2">|</span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <span>N/A</span>
+                  )
+                }
+              />
               <InfoItem icon={<FiPhone />} label="Phone" value={phdCandidateDetails.basicInfo.phone} />
               <InfoItem icon={<FiCalendar />} label="Date of Birth" value={formatDate(phdCandidateDetails.basicInfo.dob)} />
-              <InfoItem icon={<FiCalendar />} label="Admission Date" value={formatDate(phdCandidateDetails.basicInfo.admission_date)} />
-              <InfoItem icon={<FiCalendar />} label="Completion Date" value={formatDate(phdCandidateDetails.basicInfo.completion_date)} />
+              <InfoItem icon={<FiCalendar />} label="Enrollment Date" value={formatDate(phdCandidateDetails.basicInfo.admission_date)} />
+              <InfoItem icon={<FiCalendar />} label="Graduation Date" value={formatDate(phdCandidateDetails.basicInfo.completion_date)} />
               <InfoItem icon={<MdOutlineBloodtype />} label="Blood Group" value={phdCandidateDetails.basicInfo.blood_group} />
-              <InfoItem icon={<FaRegIdBadge />} label="ID Number" value={phdCandidateDetails.basicInfo.id_number} />
+              <InfoItem icon={<FaRegIdBadge />} label="Banner ID" value={phdCandidateDetails.basicInfo.id_number} />
               <InfoItem icon={<GiPassport />} label="Passport Number" value={phdCandidateDetails.basicInfo.passport_number} />
             </div>
           </section>
