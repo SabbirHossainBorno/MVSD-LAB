@@ -16,8 +16,6 @@ import { GiPassport } from "react-icons/gi";
 const PhdCandidateDetails = () => {
   const [phdCandidateDetails, setPhdCandidateDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
   const { id } = useParams();
   const router = useRouter(); // Initialize router
 
@@ -40,16 +38,6 @@ const PhdCandidateDetails = () => {
     return () => controller.abort(); // Cleanup on unmount
   }, [id]);
   
-
-  const handleImageClick = (imageUrl) => {
-    setSelectedImage(imageUrl);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedImage(null);
-  };
 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
@@ -218,49 +206,6 @@ const PhdCandidateDetails = () => {
             </div>
           </section>
         )}
-
-        {/* Documents Gallery */}
-        {phdCandidateDetails.documents?.length > 0 && (
-          <section className="bg-gray-800/50 backdrop-blur-lg p-8 rounded shadow-xl">
-            <h2 className="text-2xl font-semibold mb-6 text-cyan-300 flex items-center gap-2">
-              <FiFile className="inline-block" /> Documents
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {phdCandidateDetails.documents.map((doc, index) => (
-                <DocumentCard
-                  key={index}
-                  title={doc.title}
-                  type={doc.document_type}
-                  imageUrl={formatImageUrl(doc.document_photo)}
-                  onClick={() => handleImageClick(formatImageUrl(doc.document_photo))}
-                />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Image Modal */}
-        {isModalOpen && (
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-xl flex items-center justify-center z-50 p-4">
-            <div className="relative max-w-4xl w-full">
-              <button
-                onClick={handleCloseModal}
-                className="absolute -top-2 -right-2 text-white hover:text-blue-300 z-50 transition-colors"
-              >
-                <FiX className="w-8 h-8" />
-              </button>
-              <div className="bg-gray-900 rounded overflow-hidden shadow-2xl p-2">
-                <Image
-                  src={selectedImage}
-                  alt="Document preview"
-                  width={1200}
-                  height={800}
-                  className="object-contain w-full h-full max-h-[80vh]"
-                />
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
@@ -285,32 +230,6 @@ const TimelineItem = ({ title, subtitle, year, isLast }) => (
       <h3 className="text-lg font-semibold text-gray-100">{title}</h3>
       <p className="text-gray-400">{subtitle}</p>
       <p className="text-sm text-blue-400">{year}</p>
-    </div>
-  </div>
-);
-
-const DocumentCard = ({ title, type, imageUrl, onClick }) => (
-  <div 
-    className="group relative bg-gray-700 rounded overflow-hidden cursor-pointer transform transition-all hover:-translate-y-2 shadow-lg"
-    onClick={onClick}
-  >
-    <div className="aspect-square bg-gray-600 relative">
-      {imageUrl ? (
-        <Image
-          src={imageUrl}
-          alt={title}
-          fill
-          className="object-cover group-hover:opacity-80 transition-opacity"
-        />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center text-gray-400">
-          <FiFile className="w-12 h-12" />
-        </div>
-      )}
-    </div>
-    <div className="p-4 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent">
-      <h4 className="font-medium text-white truncate">{title}</h4>
-      <p className="text-sm text-gray-400 truncate">{type}</p>
     </div>
   </div>
 );

@@ -41,11 +41,7 @@ export async function GET(req, context) {
     // Fetch PhD candidate career info
     const phdCandidateCareerQuery = `SELECT * FROM phd_candidate_career_info WHERE phd_candidate_id = $1;`;
     const phdCandidateCareerResult = await query(phdCandidateCareerQuery, [id]);
-  
-    // Fetch PhD candidate documents
-    const phdCandidateDocumentsQuery = `SELECT * FROM phd_candidate_document_info WHERE phd_candidate_id = $1;`;
-    const phdCandidateDocumentsResult = await query(phdCandidateDocumentsQuery, [id]);
-  
+
     // Fetch PhD candidate social media info
     const phdCandidateSocialMediaQuery = `SELECT * FROM phd_candidate_socialMedia_info WHERE phd_candidate_id = $1;`;
     const phdCandidateSocialMediaResult = await query(phdCandidateSocialMediaQuery, [id]);
@@ -54,7 +50,6 @@ export async function GET(req, context) {
       basicInfo: phdCandidateBasicInfoResult.rows[0],
       education: phdCandidateEducationResult.rows,
       career: phdCandidateCareerResult.rows,
-      documents: phdCandidateDocumentsResult.rows,
       socialMedia: phdCandidateSocialMediaResult.rows,
     };
 
