@@ -1,37 +1,36 @@
+// app/api/alumni_list/[id]/route.js
 import { NextResponse } from 'next/server';
 import { query } from '../../../../lib/db';
-import logger from '../../../../lib/logger';
-import sendTelegramAlert from '../../../../lib/telegramAlert';
 
-const formatAlertMessage = (title, details) => {
-  return `MVSD LAB ALUMNI SYSTEM\n-----------------------------\n${title}\n${details}`;
-};
-
-export async function GET(request, { params }) {
-  const { id } = params;
-  const sessionId = request.cookies.get('sessionId')?.value || 'Unknown Session';
-  const eid = request.cookies.get('eid')?.value || 'Unknown EID';
-  const ipAddress = request.headers.get('x-forwarded-for') || request.ip || 'Unknown IP';
-
+export async function GET(request) {
+  const url = new URL(request.url);
+  let id = '';
+  
   try {
-    console.log(`🔍 Fetching alumni details for ID: ${id}`);
+    console.log('🔵 API Request Received:', url.pathname);
+    
+    // Extract ID from URL path
+    const pathSegments = url.pathname.split('/');
+    id = pathSegments[pathSegments.length - 1];
+    console.log('🆔 Extracted ID:', id);
 
     // Validate ID format
     if (!/^PHDC\d{2}MVSD$/.test(id)) {
-      console.warn(`⚠️ Invalid ID format: ${id}`);
+      console.log('❌ Invalid ID Format:', id);
       return NextResponse.json(
         { success: false, message: 'Invalid alumni ID format' },
         { status: 400 }
       );
     }
 
-    // Detail Query with Relationships
+    console.log('🔍 Executing Database Query for ID:', id);
+    
     const detailQuery = `
       SELECT 
         b.*,
-        COALESCE(json_agg(s) FILTER (WHERE s.serial IS NOT NULL), '[]') AS social_media,
-        COALESCE(json_agg(e) FILTER (WHERE e.serial IS NOT NULL), '[]') AS education,
-        COALESCE(json_agg(c) FILTER (WHERE c.serial IS NOT NULL), '[]') AS career
+        COALESCE(json_agg(DISTINCT s) FILTER (WHERE s.phd_candidate_id IS NOT NULL), '[]') AS social_media,
+        COALESCE(json_agg(DISTINCT e) FILTER (WHERE e.phd_candidate_id IS NOT NULL), '[]') AS education,
+        COALESCE(json_agg(DISTINCT c) FILTER (WHERE c.phd_candidate_id IS NOT NULL), '[]') AS career
       FROM phd_candidate_basic_info b
       LEFT JOIN phd_candidate_socialmedia_info s ON b.id = s.phd_candidate_id
       LEFT JOIN phd_candidate_education_info e ON b.id = e.phd_candidate_id
@@ -41,82 +40,82 @@ export async function GET(request, { params }) {
     `;
 
     const result = await query(detailQuery, [id]);
+    console.log('📊 Database Query Result:', {
+      rowCount: result.rowCount,
+      rows: result.rows.length > 0 ? 'Data Found' : 'No Data'
+    });
 
-    // Handle not found
     if (result.rows.length === 0) {
-      console.warn(`❌ Alumni not found: ${id}`);
-      logger.warn('Alumni not found', {
-        meta: {
-          eid,
-          sid: sessionId,
-          task: 'FETCH_ALUMNI_DETAIL',
-          requestedId: id
-        }
-      });
-
+      console.log('❌ No Alumni Found for ID:', id);
       return NextResponse.json(
         { success: false, message: 'Alumni not found' },
         { status: 404 }
       );
     }
 
-    // Transform response
-    const alumni = result.rows[0];
-    const transformedData = {
-      ...alumni,
-      socialMedia: alumni.social_media,
-      education: alumni.education,
-      career: alumni.career
-    };
-    
-    delete transformedData.social_media;
-    delete transformedData.education;
-    delete transformedData.career;
-
-    console.log(`✅ Found alumni: ${transformedData.first_name} ${transformedData.last_name}`);
-
-    logger.info('Alumni details fetched', {
-      meta: {
-        eid,
-        sid: sessionId,
-        task: 'FETCH_ALUMNI_DETAIL',
-        details: {
-          id,
-          name: `${transformedData.first_name} ${transformedData.last_name}`
-        }
-      }
+    const rawData = result.rows[0];
+    console.log('📦 Raw Database Response:', {
+      id: rawData.id,
+      social_media: rawData.social_media?.length || 0,
+      education: rawData.education?.length || 0,
+      career: rawData.career?.length || 0
     });
 
+    // Transform data for frontend
+    const transformed = {
+      id: rawData.id,
+      firstName: rawData.first_name,
+      lastName: rawData.last_name,
+      email: rawData.email,
+      phone: rawData.phone,
+      completionDate: new Date(rawData.completion_date).toISOString(),
+      photo: rawData.photo,
+      socialMedia: rawData.social_media?.map(sm => ({
+        name: sm.socialmedia_name,
+        link: sm.link
+      })) || [],
+      education: rawData.education?.map(edu => ({
+        degree: edu.degree,
+        institution: edu.institution,
+        passingYear: edu.passing_year
+      })) || [],
+      career: rawData.career?.map(job => ({
+        position: job.position,
+        organization: job.organization_name,
+        joiningYear: job.joining_year,
+        leavingYear: job.leaving_year
+      })) || []
+    };
+
+    console.log('🔄 Transformed Data:', {
+      id: transformed.id,
+      socialMediaCount: transformed.socialMedia.length,
+      educationCount: transformed.education.length,
+      careerCount: transformed.career.length
+    });
+
+    console.log('✅ Successfully Processed Request for ID:', id);
     return NextResponse.json({
       success: true,
-      alumni: transformedData
+      alumni: transformed
     });
 
   } catch (error) {
-    console.error(`❌ Alumni detail error for ${id}:`, error);
-    logger.error('Alumni detail fetch failed', {
-      meta: {
-        eid,
-        sid: sessionId,
-        task: 'FETCH_ALUMNI_DETAIL',
-        error: {
-          message: error.message,
-          stack: error.stack,
-          id,
-          ip: ipAddress
-        }
-      }
+    console.error('‼️ Error Processing Request:', {
+      id,
+      errorMessage: error.message,
+      errorStack: error.stack
     });
-
-    await sendTelegramAlert(
-      formatAlertMessage(
-        'Alumni Detail Error',
-        `ID: ${id}\nError: ${error.message.slice(0, 100)}`
-      )
-    );
-
+    
     return NextResponse.json(
-      { success: false, message: 'Failed to fetch alumni details' },
+      { 
+        success: false, 
+        message: 'Internal server error',
+        errorDetails: process.env.NODE_ENV === 'development' ? {
+          message: error.message,
+          stack: error.stack
+        } : undefined
+      },
       { status: 500 }
     );
   }
