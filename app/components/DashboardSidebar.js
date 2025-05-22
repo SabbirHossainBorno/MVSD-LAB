@@ -72,6 +72,13 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
           </div>
         </Link>
 
+        <Link href="/dashboard/alumni_list">
+          <div className={`block w-full p-2 mb-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isActive('/dashboard/alumni_list') ? 'bg-indigo-700' : ''}`}>
+            <Image src="/icons/alumni_list.svg" alt="Alumni List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
+            <span className="text-md font-medium">Alumni List</span>
+          </div>
+        </Link>
+
         {/* Add Member Dropdown */}
         <div className="relative">
           <button
@@ -90,7 +97,17 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
             <div className="relative w-full mt-2 mb-2 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950 rounded shadow-lg z-20">
               <Link href="/dashboard/member_add/phd_candidate_add" onClick={handleLinkClick}>
                 <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                  <span className="text-sm font-semibold text-white">PHd Candidate</span>
+                  <span className="text-sm font-semibold text-white">PHd</span>
+                </div>
+              </Link>
+              <Link href="/dashboard/add_member/post_doc_candidate" onClick={handleLinkClick}>
+                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                  <span className="text-sm font-semibold text-white">Post Doc</span>
+                </div>
+              </Link>
+              <Link href="/dashboard/add_member/masc_candidate" onClick={handleLinkClick}>
+                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                  <span className="text-sm font-semibold text-white">Master&apos;s</span>
                 </div>
               </Link>
               <Link href="/dashboard/add_member/staff" onClick={handleLinkClick}>
@@ -98,16 +115,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
                   <span className="text-sm font-semibold text-white">Staff</span>
                 </div>
               </Link>
-              <Link href="/dashboard/add_member/post_doc_candidate" onClick={handleLinkClick}>
-                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                  <span className="text-sm font-semibold text-white">Post Doc Candidate</span>
-                </div>
-              </Link>
-              <Link href="/dashboard/add_member/masc_candidate" onClick={handleLinkClick}>
-                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                  <span className="text-sm font-semibold text-white">MASc Candidate</span>
-                </div>
-              </Link>
+
             </div>
           )}
         </div>
