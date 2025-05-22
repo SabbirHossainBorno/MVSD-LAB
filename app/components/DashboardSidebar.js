@@ -75,7 +75,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         <Link href="/dashboard/alumni_list">
           <div className={`block w-full p-2 mb-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isActive('/dashboard/alumni_list') ? 'bg-indigo-700' : ''}`}>
             <Image src="/icons/alumni_list.svg" alt="Alumni List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">Alumni List</span>
+            <span className="text-md font-medium">Alumni Directory</span>
           </div>
         </Link>
 
@@ -138,7 +138,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
               <div className="relative w-full mt-2 mb-2 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950 rounded shadow-lg z-20">
                 <Link href="/dashboard/member_list/phd_candidate_list" onClick={handleLinkClick}>
                   <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                    <span className="text-sm font-semibold text-white">PHd Candidate</span>
+                    <span className="text-sm font-semibold text-white">PHd</span>
                   </div>
                 </Link>
               </div>

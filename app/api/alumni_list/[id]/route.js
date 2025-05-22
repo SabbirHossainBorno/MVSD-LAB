@@ -22,33 +22,27 @@ export async function GET(request, context) {
   try {
     const queryText = `
       SELECT 
-        b.*, 
-        json_agg(s.*) AS social_media,
-        json_agg(e.*) AS education,
-        json_agg(c.*) AS career
+        b.*,
+        (
+          SELECT json_agg(s.*) 
+          FROM phd_candidate_socialmedia_info s 
+          WHERE s.phd_candidate_id = b.id
+        ) AS social_media,
+        (
+          SELECT json_agg(e.*) 
+          FROM phd_candidate_education_info e 
+          WHERE e.phd_candidate_id = b.id
+        ) AS education,
+        (
+          SELECT json_agg(c.*) 
+          FROM phd_candidate_career_info c 
+          WHERE c.phd_candidate_id = b.id
+        ) AS career
       FROM phd_candidate_basic_info b
-      LEFT JOIN phd_candidate_socialmedia_info s ON b.id = s.phd_candidate_id
-      LEFT JOIN phd_candidate_education_info e ON b.id = e.phd_candidate_id
-      LEFT JOIN phd_candidate_career_info c ON b.id = c.phd_candidate_id
       WHERE b.id = $1
-      GROUP BY b.id
     `;
 
     const result = await query(queryText, [id]);
-
-    const alumni = result.rows[0];
-
-    // ✅ Console log the fetched data (customize fields as needed)
-    console.log('✅ Alumni data fetched:', {
-      id: alumni.id,
-      full_name: alumni.full_name || alumni.name || 'Unknown Name',
-      email: alumni.email || 'N/A',
-      department: alumni.department || 'N/A',
-      degree: alumni.degree || 'N/A',
-      career_count: alumni.career?.length || 0,
-      education_count: alumni.education?.length || 0,
-      social_media_count: alumni.social_media?.length || 0
-    });
 
     if (result.rows.length === 0) {
       return NextResponse.json({ message: 'Alumni not found' }, { status: 404 });

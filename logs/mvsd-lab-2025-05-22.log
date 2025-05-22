@@ -272,3 +272,62 @@
 2025-05-22 17:54:50-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[ERROR] TASK[Fetch Alumni Details]-Error fetching PHDC05MVSD: alumni is not defined
 2025-05-22 17:55:39-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
 2025-05-22 17:56:18-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:00:24-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:00:33-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC07MVSD from IP 103.180.244.251
+2025-05-22 18:02:50-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:02:51-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:02:51-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:02:52-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:02:52-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:02:53-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni List]-Fetched alumni list from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:03:08-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:08:06-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:08:06-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:08:06-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:08:07-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:08:08-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:08:08-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni List]-Fetched alumni list from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:08:21-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:10:34-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:10:39-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC07MVSD from IP 103.180.244.251
+2025-05-22 18:10:47-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:14:01-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:14:18-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:14:43-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:14:50-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC07MVSD from IP 103.180.244.251
+2025-05-22 18:15:05-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:16:31-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:16:32-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:16:32-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:16:33-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:16:33-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:16:34-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni List]-Fetched alumni list from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:16:43-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:16:43-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:16:44-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:16:44-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:16:44-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:16:45-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni List]-Fetched alumni list from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:16:48-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:16:51-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:19:29-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:19:30-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:19:30-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:19:31-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:19:32-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:19:32-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni List]-Fetched alumni list from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:19:35-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:19:37-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:19:59-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:25:26-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:25:29-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:25:31-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:25:51-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:25:51-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:25:51-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-22 18:25:54-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:25:55-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni List]-Fetched alumni list from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:25:55-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-22 18:25:57-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:26:30-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Fetch Alumni Details]-Fetched details for PHDC05MVSD from IP 103.180.244.251
+2025-05-22 18:26:38-EID[540429-MVSDLAB]-SID[0a3bacc4-79c4-4b00-b76a-5e96c90a429f]-[INFO] TASK[Logout]-admin admin@mvsdlab.com logged out from 103.180.244.251
