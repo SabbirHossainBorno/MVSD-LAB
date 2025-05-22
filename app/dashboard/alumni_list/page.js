@@ -68,31 +68,28 @@ const AlumniList = () => {
   }, []);
 
   // Fetch alumni data
-  useEffect(() => {
-    const fetchAlumni = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(
-          `/api/alumni_list?page=${currentPage}&search=${searchTerm}&sortOrder=${sortOrder}`
-        );
-        const data = await res.json();
-        if (res.ok) {
-          setAlumni(data.alumni || []);
-          setTotalPages(data.totalPages || 1);
-          setTotalAlumni(data.totalAlumni || 0);
-        } else {
-          toast.error(data.message);
-        }
-      } catch (error) {
-        toast.error('Failed to fetch alumni');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const debounceFetch = setTimeout(fetchAlumni, 300);
-    return () => clearTimeout(debounceFetch);
-  }, [currentPage, searchTerm, sortOrder]);
+  const fetchAlumni = async () => {
+  setLoading(true);
+  try {
+    const res = await fetch(
+      `/api/alumni_list?page=${currentPage}&search=${searchTerm}&sortOrder=${sortOrder}`
+    );
+    const data = await res.json();
+    
+    if (res.ok) {
+      setAlumni(data.alumni || []);
+      // Fix the total alumni count access
+      setTotalPages(data.pagination?.totalPages || 1);
+      setTotalAlumni(data.pagination?.totalAlumni || 0);
+    } else {
+      toast.error(data.message);
+    }
+  } catch (error) {
+    toast.error('Failed to fetch alumni');
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Handlers
   const handleSearch = (e) => {
@@ -110,18 +107,24 @@ const AlumniList = () => {
   };
 
   const handleCardClick = async (id) => {
-    try {
-      const response = await fetch(`/api/alumni_list/${id}`);
-      const data = await response.json();
-      if (response.ok) {
-        setSelectedAlumni(data);
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error('Failed to fetch alumni details');
+  try {
+    const response = await fetch(`/api/alumni_list/${id}`);
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to fetch details');
     }
-  };
+    
+    if (data.success) {
+      setSelectedAlumni(data.alumni);
+    } else {
+      toast.error(data.message || 'Invalid alumni data');
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.error('Details fetch error:', error);
+  }
+};
 
   if (loading) return <LoadingSpinner />;
 
@@ -143,7 +146,7 @@ const AlumniList = () => {
             <div className="flex justify-center">
               <div className="bg-purple-600/20 px-6 py-3 rounded-full flex items-center">
                 <FiUser className="mr-2 text-purple-300" />
-                <span className="font-medium text-lg">Total Alumni: {totalAlumni}</span>
+                <span className="font-medium text-lg">Total Alumni : {totalAlumni}</span>
               </div>
             </div>
           </div>

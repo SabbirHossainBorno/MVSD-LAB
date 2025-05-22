@@ -743,3 +743,45 @@
 2025-05-21 20:55:51-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
 2025-05-21 20:55:52-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[FETCH_ALUMNI_LIST]-[object Object]
 2025-05-21 20:55:53-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-21 21:00:04-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:00:04-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:00:04-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:00:12-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-21 21:00:13-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[FETCH_ALUMNI_LIST]-[object Object]
+2025-05-21 21:00:14-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-21 21:01:23-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:01:24-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:01:24-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:01:24-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-21 21:01:24-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-21 21:01:25-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[FETCH_ALUMNI_LIST]-[object Object]
+2025-05-21 21:02:48-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[FETCH_ALUMNI_LIST]-[object Object]
+2025-05-21 21:02:51-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[FETCH_ALUMNI_LIST]-[object Object]
+2025-05-21 21:04:54-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:04:55-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:04:55-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:04:56-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-21 21:04:56-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-21 21:05:12-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:05:12-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:05:12-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:05:12-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-21 21:05:13-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-21 21:07:27-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:07:27-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:07:27-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:07:32-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-21 21:07:32-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-21 21:08:02-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:08:05-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:08:05-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:08:05-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-21 21:08:06-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-21 21:08:42-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:08:46-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Professors List]-Fetched professors list successfully from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-21 21:09:32-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:12:16-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:12:17-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:12:17-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-05-21 21:12:17-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-05-21 21:12:17-EID[281870-MVSDLAB]-SID[8a60b2f7-fa91-4bbd-8fce-0340e71023ae]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
