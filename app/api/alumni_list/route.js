@@ -18,20 +18,22 @@ export async function GET(request, { params }) {
   const userAgent = request.headers.get('user-agent') || 'Unknown UA';
 
   try {
-    // Handle individual alumni detail request
     if (params?.id) {
+      console.log(`📡 Alumni detail request for ID: ${params.id}`);
       return handleAlumniDetail(params.id, sessionId, eid, ipAddress, userAgent);
     }
 
-    // Handle alumni list request
+    // Handle list request
     const page = parseInt(searchParams.get('page')) || 1;
     const searchTerm = searchParams.get('search') || '';
     const sortOrder = searchParams.get('sortOrder') || 'desc';
     const resultsPerPage = 12;
     const offset = (page - 1) * resultsPerPage;
 
-    // Base SQL query
-    let baseQuery = `
+    console.log(`🔍 Alumni list request - Page: ${page}, Search: "${searchTerm}", Sort: ${sortOrder}`);
+
+    // Base query
+    const baseQuery = `
       SELECT 
         id, first_name, last_name, photo, 
         TO_CHAR(completion_date, 'YYYY-MM-DD') as completion_date,
@@ -46,10 +48,22 @@ export async function GET(request, { params }) {
       )
     `;
 
-    // Get total count
-    const countQuery = `SELECT COUNT(*) FROM (${baseQuery}) AS total`;
+    // Get total count (FIXED: Changed 'count' to 'total')
+    const countQuery = `
+      SELECT COUNT(*) AS total 
+      FROM phd_candidate_basic_info 
+      WHERE alumni_status = 'Valid'
+      AND (
+        first_name ILIKE $1 OR 
+        last_name ILIKE $1 OR 
+        email ILIKE $1 OR 
+        phone::text ILIKE $1
+      )
+    `;
+    
     const countResult = await query(countQuery, [`%${searchTerm}%`]);
-    const totalAlumni = Number(countResult.rows[0].count);
+    const totalAlumni = Number(countResult.rows[0].total); // Fixed this line
+    console.log(`📊 Total alumni count: ${totalAlumni}`);
 
     // Get paginated results
     const dataQuery = `
@@ -64,7 +78,9 @@ export async function GET(request, { params }) {
       offset
     ]);
 
-    // Log successful request
+    console.log(`✅ Fetched ${alumniData.rows.length} alumni records`);
+
+    // Logging
     logger.info('Alumni list fetched successfully', {
       meta: {
         eid,
@@ -98,7 +114,7 @@ export async function GET(request, { params }) {
     });
 
   } catch (error) {
-    // Error handling
+    console.error('❌ Alumni list error:', error);
     const errorMessage = `ALUMNI_LIST_ERROR: ${error.message}`;
     
     logger.error(errorMessage, {
@@ -131,8 +147,10 @@ export async function GET(request, { params }) {
 
 async function handleAlumniDetail(id, sessionId, eid, ipAddress, userAgent) {
   try {
-    // Validate ID format
+    console.log(`🔍 Alumni detail request for ID: ${id}`);
+    
     if (!/^PHDC\d{2}MVSD$/.test(id)) {
+      console.warn(`⚠️ Invalid ID format: ${id}`);
       return NextResponse.json(
         { success: false, message: 'Invalid alumni ID format' },
         { status: 400 }
@@ -154,8 +172,10 @@ async function handleAlumniDetail(id, sessionId, eid, ipAddress, userAgent) {
     `;
 
     const result = await query(detailQuery, [id]);
+    console.log(`📄 Detail query returned ${result.rows.length} rows`);
 
     if (result.rows.length === 0) {
+      console.warn(`❌ Alumni not found: ${id}`);
       logger.warn('Alumni not found', {
         meta: {
           eid,
@@ -172,8 +192,8 @@ async function handleAlumniDetail(id, sessionId, eid, ipAddress, userAgent) {
     }
 
     const alumni = result.rows[0];
+    console.log(`✅ Found alumni: ${alumni.first_name} ${alumni.last_name}`);
     
-    // Transform data for easier consumption
     const transformed = {
       ...alumni,
       socialMedia: alumni.social_media,
@@ -186,12 +206,10 @@ async function handleAlumniDetail(id, sessionId, eid, ipAddress, userAgent) {
       dob: alumni.dob ? new Date(alumni.dob).toISOString() : null
     };
 
-    // Remove unnecessary fields
     delete transformed.social_media;
     delete transformed.education;
     delete transformed.career;
 
-    // Log detail access
     logger.info('Alumni details fetched', {
       meta: {
         eid,
@@ -211,6 +229,7 @@ async function handleAlumniDetail(id, sessionId, eid, ipAddress, userAgent) {
     });
 
   } catch (error) {
+    console.error(`❌ Alumni detail error for ID ${id}:`, error);
     const errorMessage = `ALUMNI_DETAIL_ERROR: ${error.message}`;
     
     logger.error(errorMessage, {

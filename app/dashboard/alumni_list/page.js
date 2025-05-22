@@ -9,11 +9,9 @@ import withAuth from '../../components/withAuth';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Image from 'next/image';
 import { format } from 'date-fns';
-import { FiSearch, FiFilter, FiArrowUp, FiArrowDown, FiX, FiUser, FiBriefcase, FiBook, FiGlobe, FiMail, FiSmartphone, FiCalendar, FiInfo } from 'react-icons/fi';
+import { FiSearch, FiArrowUp, FiArrowDown, FiX, FiUser, FiBriefcase, FiBook, FiGlobe, FiMail, FiSmartphone, FiCalendar, FiExternalLink } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import Modal from 'react-modal';
-
-Modal.setAppElement('#__next');
 
 const AlumniList = () => {
   const [alumni, setAlumni] = useState([]);
@@ -24,7 +22,50 @@ const AlumniList = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalAlumni, setTotalAlumni] = useState(0);
   const [selectedAlumni, setSelectedAlumni] = useState(null);
+  const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
+
+  // Fix for modal initialization
+  useEffect(() => {
+    setIsMounted(true);
+    
+    if (typeof window !== 'undefined') {
+      // Create dedicated modal root element
+      const modalRoot = document.createElement('div');
+      modalRoot.setAttribute('id', 'modal-root');
+      document.body.appendChild(modalRoot);
+      
+      // Configure react-modal
+      Modal.setAppElement('#modal-root');
+      Modal.defaultStyles = {
+        overlay: {
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          zIndex: 1000,
+        },
+        content: {
+          position: 'relative',
+          inset: 'auto',
+          margin: '2rem auto',
+          background: 'rgb(17 24 39 / 0.95)',
+          backdropFilter: 'blur(20px)',
+          borderRadius: '1rem',
+          border: 'none',
+          padding: '2rem',
+          maxWidth: '42rem',
+        }
+      };
+
+      return () => {
+        // Cleanup modal root on unmount
+        document.body.removeChild(modalRoot);
+      };
+    }
+  }, []);
 
   // Fetch alumni data
   useEffect(() => {
@@ -228,105 +269,107 @@ const AlumniList = () => {
         )}
 
         {/* Detail Modal */}
-        <Modal
-          isOpen={!!selectedAlumni}
-          onRequestClose={() => setSelectedAlumni(null)}
-          className="bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl p-8 max-w-2xl mx-4 my-8"
-          overlayClassName="fixed inset-0 bg-black/50 backdrop-blur-sm"
-        >
-          {selectedAlumni && (
-            <div className="relative space-y-6">
-              <button
-                onClick={() => setSelectedAlumni(null)}
-                className="absolute top-4 right-4 p-2 hover:bg-gray-800 rounded-full"
-              >
-                <FiX className="w-6 h-6" />
-              </button>
+        {isMounted && (
+          <Modal
+            isOpen={!!selectedAlumni}
+            onRequestClose={() => setSelectedAlumni(null)}
+            className="modal-content"
+            overlayClassName="modal-overlay"
+          >
+            {selectedAlumni && (
+              <div className="relative space-y-6">
+                <button
+                  onClick={() => setSelectedAlumni(null)}
+                  className="absolute top-4 right-4 p-2 hover:bg-gray-800 rounded-full"
+                >
+                  <FiX className="w-6 h-6" />
+                </button>
 
-              {/* Profile Header */}
-              <div className="flex items-center gap-6">
-                <div className="w-24 h-24 relative">
-                  <Image
-                    src={`/Storage/Images/PhD_Candidate/${selectedAlumni.photo.split('/').pop()}`}
-                    alt={selectedAlumni.first_name}
-                    width={96}
-                    height={96}
-                    className="rounded-xl border-2 border-purple-500"
-                  />
+                {/* Profile Header */}
+                <div className="flex items-center gap-6">
+                  <div className="w-24 h-24 relative">
+                    <Image
+                      src={`/Storage/Images/PhD_Candidate/${selectedAlumni.photo.split('/').pop()}`}
+                      alt={selectedAlumni.first_name}
+                      width={96}
+                      height={96}
+                      className="rounded-xl border-2 border-purple-500"
+                    />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold">
+                      {selectedAlumni.first_name} {selectedAlumni.last_name}
+                    </h2>
+                    <p className="text-purple-300">{selectedAlumni.id}</p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-2xl font-bold">
-                    {selectedAlumni.first_name} {selectedAlumni.last_name}
-                  </h2>
-                  <p className="text-purple-300">{selectedAlumni.id}</p>
+
+                {/* Details Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Personal Info */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <FiUser className="text-purple-400" /> Personal Information
+                    </h3>
+                    <DetailItem icon={<FiMail />} label="Email" value={selectedAlumni.email} />
+                    <DetailItem icon={<FiSmartphone />} label="Phone" value={selectedAlumni.phone} />
+                    <DetailItem icon={<FiCalendar />} label="Graduation Date" 
+                      value={format(new Date(selectedAlumni.completion_date), 'd MMM yyyy')} />
+                  </div>
+
+                  {/* Professional Info */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <FiBriefcase className="text-purple-400" /> Career
+                    </h3>
+                    {selectedAlumni.career?.map((job, i) => (
+                      <div key={i} className="space-y-1">
+                        <p className="font-medium">{job.position}</p>
+                        <p className="text-gray-400 text-sm">{job.organization_name}</p>
+                        <p className="text-gray-400 text-xs">
+                          {job.joining_year} - {job.leaving_year || 'Present'}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Education */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <FiBook className="text-purple-400" /> Education
+                    </h3>
+                    {selectedAlumni.education?.map((edu, i) => (
+                      <div key={i} className="space-y-1">
+                        <p className="font-medium">{edu.degree}</p>
+                        <p className="text-gray-400 text-sm">{edu.institution}</p>
+                        <p className="text-gray-400 text-xs">Graduated {edu.passing_year}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Social Media */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <FiGlobe className="text-purple-400" /> Social Profiles
+                    </h3>
+                    {selectedAlumni.socialMedia?.map((sm, i) => (
+                      <a
+                        key={i}
+                        href={sm.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-purple-300 hover:text-purple-200 transition-colors"
+                      >
+                        <FiExternalLink />
+                        {sm.socialmedia_name}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
-
-              {/* Details Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Personal Info */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold flex items-center gap-2">
-                    <FiUser className="text-purple-400" /> Personal Information
-                  </h3>
-                  <DetailItem icon={<FiMail />} label="Email" value={selectedAlumni.email} />
-                  <DetailItem icon={<FiSmartphone />} label="Phone" value={selectedAlumni.phone} />
-                  <DetailItem icon={<FiCalendar />} label="Graduation Date" 
-                    value={format(new Date(selectedAlumni.completion_date), 'd MMM yyyy')} />
-                </div>
-
-                {/* Professional Info */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold flex items-center gap-2">
-                    <FiBriefcase className="text-purple-400" /> Career
-                  </h3>
-                  {selectedAlumni.career?.map((job, i) => (
-                    <div key={i} className="space-y-1">
-                      <p className="font-medium">{job.position}</p>
-                      <p className="text-gray-400 text-sm">{job.organization_name}</p>
-                      <p className="text-gray-400 text-xs">
-                        {job.joining_year} - {job.leaving_year || 'Present'}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Education */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold flex items-center gap-2">
-                    <FiBook className="text-purple-400" /> Education
-                  </h3>
-                  {selectedAlumni.education?.map((edu, i) => (
-                    <div key={i} className="space-y-1">
-                      <p className="font-medium">{edu.degree}</p>
-                      <p className="text-gray-400 text-sm">{edu.institution}</p>
-                      <p className="text-gray-400 text-xs">Graduated {edu.passing_year}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Social Media */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold flex items-center gap-2">
-                    <FiGlobe className="text-purple-400" /> Social Profiles
-                  </h3>
-                  {selectedAlumni.socialMedia?.map((sm, i) => (
-                    <a
-                      key={i}
-                      href={sm.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-purple-300 hover:text-purple-200 transition-colors"
-                    >
-                      <FiExternalLink />
-                      {sm.socialmedia_name}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-        </Modal>
+            )}
+          </Modal>
+        )}
       </div>
     </div>
   );
