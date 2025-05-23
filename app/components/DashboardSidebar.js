@@ -144,7 +144,11 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
           <motion.button
             onClick={() => handleDropdownClick('director')}
             className={`w-full flex items-center justify-between p-2 rounded space-x-2 cursor-pointer transition-all ${
-              isDropdownActive(['/dashboard/director_add', '/dashboard/director_list']) ? 'bg-indigo-600/30' : 'hover:bg-gray-800/50'
+              isDropdownActive([
+                '/dashboard/director_add', 
+                '/dashboard/director_list', 
+                '/dashboard/director_details/[id]'
+              ]) ? 'bg-indigo-600/30' : 'hover:bg-gray-800/50'
             }`}
           >
             <div className="flex items-center space-x-3">

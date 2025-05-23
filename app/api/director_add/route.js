@@ -17,7 +17,7 @@ const generateDirectorId = async () => {
     const maxId = result.rows[0]?.max_id || 'D00MVSD';
     const numericPart = parseInt(maxId.substring(1, 3), 10) || 0;
     const nextId = numericPart + 1;
-    return `P${String(nextId).padStart(2, '0')}MVSD`;
+    return `D${String(nextId).padStart(2, '0')}MVSD`;
   } catch (error) {
     throw new Error(`Error generating Director ID: ${error.message}`);
   }
@@ -234,7 +234,7 @@ export async function POST(req) {
     }
 
     // ID conflict check
-    const idNumberCheckResult = await query('SELECT id FROM member WHERE banner_id = $1', [bannerID]);
+    const idNumberCheckResult = await query('SELECT id FROM member WHERE id_number = $1', [bannerID]);
     if (idNumberCheckResult.rows.length > 0) {
       logger.warn('Validation Error: ID conflict', {
         meta: {
@@ -338,7 +338,7 @@ export async function POST(req) {
 
       const insertMemberQuery = `
         INSERT INTO member 
-          (id, first_name, last_name, phone, dob, email, password, short_bio, joining_date, leaving_date, photo, status, type, gender, "blood_group", country, passport_number, "banner_id") 
+          (id, first_name, last_name, phone, dob, email, password, short_bio, joining_date, leaving_date, photo, status, type, gender, "blood_group", country, passport_number, "id_number") 
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'Active', $12, $13, $14, $15, $16, $17)
         RETURNING *;
       `;
@@ -400,7 +400,7 @@ export async function POST(req) {
           eid,
           sid: sessionId,
           taskName: 'Add Director',
-          details: `A new director added successfully with ID ${directorId} by ${adminEmail} from IP ${ipAddress} with User-Agent ${userAgent}`
+          details: `A new director added successfully with ID ${directorId} by ${adminEmail}`
         }
       });
 
@@ -422,7 +422,7 @@ export async function POST(req) {
           eid,
           sid: sessionId,
           taskName: 'Add Director',
-          details: `Error adding director with ID ${directorId} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+          details: `Error adding director with ID ${directorId}. ERROR : ${error.message}`
         }
       });
 
@@ -439,7 +439,7 @@ export async function POST(req) {
         eid,
         sid: sessionId,
         taskName: 'Add Director',
-        details: `Error processing form data from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+        details: `Error processing form dat. ERROR : ${error.message}`
       }
     });
 
