@@ -18,10 +18,17 @@ const itemVariants = {
 
 const debounce = (func, delay) => {
   let timeoutId;
-  return (...args) => {
+  const debouncedFunc = (...args) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => func(...args), delay);
   };
+  
+  // Add cancel method to clear the timeout
+  debouncedFunc.cancel = () => {
+    clearTimeout(timeoutId);
+  };
+  
+  return debouncedFunc;
 };
 
 function SubscribersList() {
@@ -64,7 +71,7 @@ function SubscribersList() {
     
     // Cleanup function to cancel pending debounced calls
     return () => debouncedFetch.cancel();
-  }, [fetchSubscribers]);  // Only depend on fetchSubscribers
+  }, [fetchSubscribers]);
 
   const handleSort = (field) => {
     setSortConfig(prev => ({

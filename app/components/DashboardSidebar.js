@@ -5,16 +5,34 @@ import { useEffect, useCallback, useState } from 'react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MdOutlineAddCircleOutline, MdList } from 'react-icons/md';
+import { FiAward, FiBook, FiBriefcase } from 'react-icons/fi';
+import { GiArchiveResearch } from "react-icons/gi";
 
 export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [isDesktop, setIsDesktop] = useState(false);
   const pathname = usePathname();
 
+  // Detect desktop screen size
+  useEffect(() => {
+    const checkDesktop = () => {
+      const isDesktop = window.innerWidth >= 768;
+      setIsDesktop(isDesktop);
+      // Auto-close mobile menu on desktop
+      if (isDesktop && !isOpen) toggleDashboardSidebar(true);
+    };
+    
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, [isOpen]);
+
   const handleClickOutside = useCallback((event) => {
-    if (!event.target.closest('aside') && isOpen) {
+    if (!isDesktop && !event.target.closest('aside') && isOpen) {
       toggleDashboardSidebar();
     }
-  }, [isOpen, toggleDashboardSidebar]);
+  }, [isOpen, isDesktop, toggleDashboardSidebar]);
 
   useEffect(() => {
     document.addEventListener('click', handleClickOutside);
@@ -29,8 +47,8 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
   const isDropdownActive = (paths) => paths.some((path) => pathname.startsWith(path));
 
   const sidebarVariants = {
-    open: { x: 0, opacity: 1 },
-    closed: { x: '-100%', opacity: 0 }
+    open: { x: 0 },
+    closed: { x: '-100%' }
   };
 
   const dropdownVariants = {
@@ -45,10 +63,12 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
 
   return (
     <motion.aside
-      initial="closed"
-      animate={isOpen ? "open" : "closed"}
+      initial={false}
+      animate={isDesktop ? "open" : isOpen ? "open" : "closed"}
       variants={sidebarVariants}
-      className="fixed md:relative top-0 left-0 w-72 h-full bg-gray-900/80 backdrop-blur-lg text-white z-50 shadow-2xl overflow-hidden md:translate-x-0"
+      className={`fixed top-0 left-0 w-64 h-full bg-gray-900 text-white z-50 shadow-lg md:relative md:translate-x-0 ${
+        isDesktop ? '' : 'overflow-y-auto'
+      }`}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
     >
       {/* Logo Section */}
@@ -74,7 +94,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         {/* Dashboard */}
         <motion.div variants={navItemVariants} whileHover="hover" className="group">
           <Link href="/dashboard">
-            <div className={`flex items-center p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+            <div className={`flex items-center p-2 rounded space-x-2 cursor-pointer transition-all ${
               isActive('/dashboard') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
             }`}>
               <Image src="/icons/dashboard.png" alt="Dashboard" width={24} height={24} className="w-5 h-5" />
@@ -86,7 +106,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         {/* Home */}
         <motion.div variants={navItemVariants} whileHover="hover" className="group">
           <Link href="/home">
-            <div className={`flex items-center p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+            <div className={`flex items-center p-2 rounded space-x-2 cursor-pointer transition-all ${
               isActive('/home') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
             }`}>
               <Image src="/icons/home.png" alt="Home" width={24} height={24} className="w-5 h-5" />
@@ -98,7 +118,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         {/* Subscriber List */}
         <motion.div variants={navItemVariants} whileHover="hover" className="group">
           <Link href="/dashboard/subscribers_list">
-            <div className={`flex items-center p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+            <div className={`flex items-center p-2 rounded space-x-2 cursor-pointer transition-all ${
               isActive('/dashboard/subscribers_list') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
             }`}>
               <Image src="/icons/subscriber_list.png" alt="Subscriber List" width={24} height={24} className="w-5 h-5" />
@@ -110,7 +130,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         {/* Alumni Directory */}
         <motion.div variants={navItemVariants} whileHover="hover" className="group">
           <Link href="/dashboard/alumni_list">
-            <div className={`flex items-center p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+            <div className={`flex items-center p-2 rounded space-x-2 cursor-pointer transition-all ${
               isActive('/dashboard/alumni_list') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
             }`}>
               <Image src="/icons/alumni_list.svg" alt="Alumni List" width={24} height={24} className="w-5 h-5" />
@@ -123,7 +143,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         <motion.div className="relative">
           <motion.button
             onClick={() => handleDropdownClick('director')}
-            className={`w-full flex items-center justify-between p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+            className={`w-full flex items-center justify-between p-2 rounded space-x-2 cursor-pointer transition-all ${
               isDropdownActive(['/dashboard/director_add', '/dashboard/director_list']) ? 'bg-indigo-600/30' : 'hover:bg-gray-800/50'
             }`}
           >
@@ -148,13 +168,19 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
                 className="ml-8 pl-3 border-l-2 border-indigo-500/20"
               >
                 <Link href="/dashboard/director_add">
-                  <div className="p-2 hover:bg-indigo-500/10 rounded-lg transition-colors">
-                    <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">Add Director</span>
+                  <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2">
+                    <MdOutlineAddCircleOutline className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
+                    <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">
+                      Add Director
+                    </span>
                   </div>
                 </Link>
                 <Link href="/dashboard/director_list">
-                  <div className="p-2 hover:bg-indigo-500/10 rounded-lg transition-colors">
-                    <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">Director List</span>
+                  <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2">
+                    <MdList className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
+                    <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">
+                      Director List
+                    </span>
                   </div>
                 </Link>
               </motion.div>
@@ -166,7 +192,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         <motion.div className="relative">
           <motion.button
             onClick={() => handleDropdownClick('professor')}
-            className={`w-full flex items-center justify-between p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+            className={`w-full flex items-center justify-between p-2 rounded space-x-2 cursor-pointer transition-all ${
               isDropdownActive(['/dashboard/professor_add', '/dashboard/professor_list']) ? 'bg-indigo-600/30' : 'hover:bg-gray-800/50'
             }`}
           >
@@ -191,12 +217,14 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
                 className="ml-8 pl-3 border-l-2 border-indigo-500/20"
               >
                 <Link href="/dashboard/professor_add">
-                  <div className="p-2 hover:bg-indigo-500/10 rounded-lg transition-colors">
+                  <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2">
+                    <MdOutlineAddCircleOutline className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                     <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">Add Professor</span>
                   </div>
                 </Link>
                 <Link href="/dashboard/professor_list">
-                  <div className="p-2 hover:bg-indigo-500/10 rounded-lg transition-colors">
+                  <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2">
+                    <MdList className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                     <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">Professor List</span>
                   </div>
                 </Link>
@@ -209,7 +237,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         <motion.div className="relative">
           <motion.button
             onClick={() => handleDropdownClick('addMember')}
-            className={`w-full flex items-center justify-between p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+            className={`w-full flex items-center justify-between p-2 rounded space-x-2 cursor-pointer transition-all ${
               isDropdownActive(['/dashboard/member_add']) ? 'bg-indigo-600/30' : 'hover:bg-gray-800/50'
             }`}
           >
@@ -234,14 +262,33 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
                 className="ml-8 pl-3 border-l-2 border-indigo-500/20"
               >
                 {[
-                  { path: '/dashboard/member_add/phd_candidate_add', label: 'PhD Candidate' },
-                  { path: '/dashboard/add_member/post_doc_candidate', label: 'Post Doc' },
-                  { path: '/dashboard/add_member/masc_candidate', label: "Master's" },
-                  { path: '/dashboard/add_member/staff', label: 'Staff' }
+                  { 
+                    path: '/dashboard/member_add/phd_candidate_add', 
+                    label: 'PhD Candidate',
+                    icon: <FiAward className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
+                  },
+                  { 
+                    path: '/dashboard/add_member/post_doc_candidate_add', 
+                    label: 'Post Doc',
+                    icon: <FiBook className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
+                  },
+                  { 
+                    path: '/dashboard/add_member/masters_candidate_add', 
+                    label: "Master's",
+                    icon: <GiArchiveResearch className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
+                  },
+                  { 
+                    path: '/dashboard/add_member/staff_member_add', 
+                    label: 'Staff',
+                    icon: <FiBriefcase className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
+                  }
                 ].map((item) => (
                   <Link key={item.path} href={item.path}>
-                    <div className="p-2 hover:bg-indigo-500/10 rounded-lg transition-colors">
-                      <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">{item.label}</span>
+                    <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2">
+                      {item.icon}
+                      <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">
+                        {item.label}
+                      </span>
                     </div>
                   </Link>
                 ))}
@@ -254,7 +301,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         <motion.div className="relative">
           <motion.button
             onClick={() => handleDropdownClick('memberList')}
-            className={`w-full flex items-center justify-between p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+            className={`w-full flex items-center justify-between p-2 rounded space-x-2 cursor-pointer transition-all ${
               isDropdownActive(['/dashboard/member_list']) ? 'bg-indigo-600/30' : 'hover:bg-gray-800/50'
             }`}
           >
@@ -278,11 +325,37 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
                 variants={dropdownVariants}
                 className="ml-8 pl-3 border-l-2 border-indigo-500/20"
               >
-                <Link href="/dashboard/member_list/phd_candidate_list">
-                  <div className="p-2 hover:bg-indigo-500/10 rounded-lg transition-colors">
-                    <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">PhD Candidates</span>
-                  </div>
-                </Link>
+                {[
+                  {
+                    path: '/dashboard/member_list/phd_candidate_list',
+                    label: 'PhD',
+                    icon: <FiAward className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
+                  },
+                  {
+                    path: '/dashboard/member_list/post_doc_candidate_list',
+                    label: 'Post Docs',
+                    icon: <FiBook className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
+                  },
+                  {
+                    path: '/dashboard/member_list/masters_candidate_list',
+                    label: "Master's",
+                    icon: <GiArchiveResearch className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
+                  },
+                  {
+                    path: '/dashboard/member_list/staff_member_list',
+                    label: 'Staff Members',
+                    icon: <FiBriefcase className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
+                  }
+                ].map((item) => (
+                  <Link key={item.path} href={item.path}>
+                    <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2">
+                      {item.icon}
+                      <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">
+                        {item.label}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
               </motion.div>
             )}
           </AnimatePresence>
@@ -291,7 +364,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         {/* System Monitor */}
         <motion.div variants={navItemVariants} whileHover="hover" className="group">
           <Link href="/dashboard/system_monitor">
-            <div className={`flex items-center p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+            <div className={`flex items-center p-2 rounded space-x-2 cursor-pointer transition-all ${
               isActive('/dashboard/system_monitor') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
             }`}>
               <Image src="/icons/SystemMonitor.png" alt="System Monitor" width={24} height={24} className="w-5 h-5" />
@@ -303,7 +376,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
         {/* Messages */}
         <motion.div variants={navItemVariants} whileHover="hover" className="group">
           <Link href="/dashboard/message">
-            <div className={`flex items-center p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+            <div className={`flex items-center p-2 rounded space-x-2 cursor-pointer transition-all ${
               isActive('/dashboard/message') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
             }`}>
               <Image src="/icons/message.png" alt="Message" width={24} height={24} className="w-5 h-5" />
@@ -316,7 +389,9 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
       {/* Footer */}
       <div className="absolute bottom-0 w-full p-4 border-t border-gray-700/50 bg-gray-900/50 backdrop-blur-sm">
         <p className="text-xs text-center text-gray-400">
-          © {new Date().getFullYear()} MVSD LAB
+          © {new Date().getFullYear()} <a href="https://www.mvsdlab.com" target="_blank" className="font-semibold text-white hover:text-indigo-400 transition duration-300">
+            MVSD LAB
+          </a>
           <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">
             Innovation Through Collaboration
