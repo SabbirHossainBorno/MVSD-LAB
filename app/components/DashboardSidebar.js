@@ -147,7 +147,8 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
               isDropdownActive([
                 '/dashboard/director_add', 
                 '/dashboard/director_list', 
-                '/dashboard/director_details/[id]'
+                '/dashboard/director_details/',
+                '/dashboard/director_edit/'
               ]) ? 'bg-indigo-600/30' : 'hover:bg-gray-800/50'
             }`}
           >
