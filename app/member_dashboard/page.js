@@ -32,15 +32,7 @@ const menuItems = [
     subItems: []
   },
   { 
-    name: 'Research', 
-    icon: <FiFileText className="w-5 h-5" />,
-    subItems: [
-      { name: 'Add Research', link: 'add_research' },
-      { name: 'Research List', link: 'list_research' }
-    ]
-  },
-  { 
-    name: 'Publications', 
+    name: 'Research/Publication', 
     icon: <LiaProjectDiagramSolid className="w-5 h-5" />,
     subItems: [
       { name: 'Add Publication', link: 'add_publication' },
@@ -167,7 +159,7 @@ const MemberDashboard = () => {
         animate={isDesktop ? "open" : sidebarOpen ? "open" : "closed"}
         variants={sidebarVariants}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className={`fixed inset-y-0 left-0 w-64 z-[60] flex flex-col justify-between ${
+        className={`fixed inset-y-0 left-0 w-72 z-[60] flex flex-col justify-between ${
           darkMode 
             ? 'bg-gray-800 border-r border-gray-700' 
             : 'bg-white border-r border-gray-200'
@@ -289,8 +281,8 @@ const MemberDashboard = () => {
   </motion.aside>
 
       {/* Main Content */}
-      <main className={`transition-all duration-300 ${isDesktop ? 'ml-64' : ''}`}>
-      <nav className={`fixed top-0 ${isDesktop ? 'left-64' : 'left-0'} right-0 z-50 p-4 border-b ${
+      <main className={`transition-all duration-300 ${isDesktop ? 'ml-72' : ''}`}>
+      <nav className={`fixed top-0 ${isDesktop ? 'left-72' : 'left-0'} right-0 z-50 p-4 border-b ${
         darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
       }`}>
       <div className="flex items-center justify-between">

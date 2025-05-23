@@ -104,7 +104,7 @@ const DirectorsList = () => {
         <div className="relative bg-gray-800/50 backdrop-blur-lg rounded shadow-2xl p-6 md:p-8 w-full mx-auto">
         {/* Responsive Heading */}
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-300 text-center mb-4 md:mb-6">
-          Director's Directory
+          Director&apos;s Directory
         </h1>
 
         {/* Responsive Stats Container */}
