@@ -39,8 +39,12 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
     return () => document.removeEventListener('click', handleClickOutside);
   }, [handleClickOutside]);
 
-  const handleDropdownClick = (dropdown) => {
-    setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
+  const handleDropdownClick = (dropdown, forceClose = false) => {
+    if (forceClose) {
+      setActiveDropdown(null);
+    } else {
+      setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
+    }
   };
 
   const isActive = (path) => pathname === path;
@@ -173,15 +177,22 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
                 className="ml-8 pl-3 border-l-2 border-indigo-500/20"
               >
                 <Link href="/dashboard/director_add">
-                  <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2">
+                  <div 
+                    className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2"
+                    onClick={() => handleDropdownClick('professor', true)}
+                  >
                     <MdOutlineAddCircleOutline className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                     <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">
                       Add Director
                     </span>
                   </div>
                 </Link>
+
                 <Link href="/dashboard/director_list">
-                  <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2">
+                  <div 
+                    className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2"
+                    onClick={() => handleDropdownClick('professor', true)}
+                  >
                     <MdList className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                     <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">
                       Director List
@@ -198,7 +209,12 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
           <motion.button
             onClick={() => handleDropdownClick('professor')}
             className={`w-full flex items-center justify-between p-2 rounded space-x-2 cursor-pointer transition-all ${
-              isDropdownActive(['/dashboard/professor_add', '/dashboard/professor_list']) ? 'bg-indigo-600/30' : 'hover:bg-gray-800/50'
+              isDropdownActive([
+                '/dashboard/professor_add', 
+                '/dashboard/professor_list', 
+                '/dashboard/professor_details/',
+                '/dashboard/professor_edit/'
+              ]) ? 'bg-indigo-600/30' : 'hover:bg-gray-800/50'
             }`}
           >
             <div className="flex items-center space-x-3">
@@ -222,13 +238,17 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
                 className="ml-8 pl-3 border-l-2 border-indigo-500/20"
               >
                 <Link href="/dashboard/professor_add">
-                  <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2">
+                  <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2"
+                  onClick={() => handleDropdownClick('director', true)}
+                  >
                     <MdOutlineAddCircleOutline className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                     <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">Add Professor</span>
                   </div>
                 </Link>
                 <Link href="/dashboard/professor_list">
-                  <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2">
+                  <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2"
+                  onClick={() => handleDropdownClick('director', true)}
+                  >
                     <MdList className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                     <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">Professor List</span>
                   </div>
@@ -289,7 +309,9 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
                   }
                 ].map((item) => (
                   <Link key={item.path} href={item.path}>
-                    <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2">
+                    <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2"
+                    onClick={() => handleDropdownClick('addMember', true)}
+                    >
                       {item.icon}
                       <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">
                         {item.label}
@@ -353,7 +375,9 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
                   }
                 ].map((item) => (
                   <Link key={item.path} href={item.path}>
-                    <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2">
+                    <div className="p-2 hover:bg-indigo-500/10 rounded transition-colors flex items-center gap-2"
+                    onClick={() => handleDropdownClick('memberList', true)}
+                    >
                       {item.icon}
                       <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">
                         {item.label}

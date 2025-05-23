@@ -17,7 +17,7 @@ const saveProfilePhoto = async (file, directorId, eid, sessionId) => {
 
   try {
     const buffer = await file.arrayBuffer();
-    fs.writeFileSync(targetPath, buffer.from(buffer));
+    fs.writeFileSync(targetPath, Buffer.from(buffer));
     logger.info('Profile photo saved successfully', {
       meta: {
         eid,

@@ -66,8 +66,9 @@ const EditProfessor = () => {
     const { name, value, files } = e.target;
     
     if (name === 'photo' && files.length > 0) {
-      // Existing photo handling
-    } else {
+    const file = files[0];
+    setPhoto(file); // Update photo state with selected file
+  } else {
       setFormData(prev => {
         const newState = { ...prev };
         
