@@ -59,6 +59,48 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
             <span className="text-md font-medium">Subscriber List</span>
           </div>
         </Link>
+
+        {/* Professor Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => handleDropdownClick('addMember')}
+            className={`block w-full p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isDropdownActive(['/dashboard/professor_add']) ? 'bg-indigo-700' : ''}`}
+          >
+            <Image src="/icons/add_member.png" alt="Professor" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
+            <span className="text-md font-medium">Professor</span>
+            <svg className={`w-4 h-4 ml-auto transition-transform transform ${activeDropdown === 'addMember' ? 'rotate-180' : 'rotate-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+
+          {/* Dropdown Menu */}
+          {activeDropdown === 'addMember' && (
+            <div className="relative w-full mt-2 mb-2 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950 rounded shadow-lg z-20">
+              <Link href="/dashboard/member_add/phd_candidate_add" onClick={handleLinkClick}>
+                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                  <span className="text-sm font-semibold text-white">PHd</span>
+                </div>
+              </Link>
+              <Link href="/dashboard/add_member/post_doc_candidate" onClick={handleLinkClick}>
+                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                  <span className="text-sm font-semibold text-white">Post Doc</span>
+                </div>
+              </Link>
+              <Link href="/dashboard/add_member/masc_candidate" onClick={handleLinkClick}>
+                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                  <span className="text-sm font-semibold text-white">Master&apos;s</span>
+                </div>
+              </Link>
+              <Link href="/dashboard/add_member/staff" onClick={handleLinkClick}>
+                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
+                  <span className="text-sm font-semibold text-white">Staff</span>
+                </div>
+              </Link>
+
+            </div>
+          )}
+          </div>
+        
         <Link href="/dashboard/professor_add">
           <div className={`block w-full p-2 mb-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isActive('/dashboard/professor_add') ? 'bg-indigo-700' : ''}`}>
             <Image src="/icons/add_professor.png" alt="Add Professor" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
@@ -118,7 +160,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
 
             </div>
           )}
-        </div>
+          </div>
 
         {/* Member List Dropdown */}
         <div className="relative">
