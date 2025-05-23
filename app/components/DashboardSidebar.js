@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useCallback, useState } from 'react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -24,199 +25,304 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
   };
 
-  const handleLinkClick = () => {
-    setActiveDropdown(null);
-  };
-
   const isActive = (path) => pathname === path;
   const isDropdownActive = (paths) => paths.some((path) => pathname.startsWith(path));
 
+  const sidebarVariants = {
+    open: { x: 0, opacity: 1 },
+    closed: { x: '-100%', opacity: 0 }
+  };
+
+  const dropdownVariants = {
+    open: { opacity: 1, height: 'auto' },
+    closed: { opacity: 0, height: 0 }
+  };
+
+  const navItemVariants = {
+    rest: { scale: 1 },
+    hover: { scale: 1.02 }
+  };
+
   return (
-    <aside className={`fixed top-0 left-0 w-64 bg-gray-900 text-white h-full p-6 transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:w-64 md:flex md:flex-col z-50 shadow-lg overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent`}>
-      {/* Logo and Title - Fixed */}
-      <div className="flex flex-col items-center justify-center sticky top-0 bg-gray-900 p-2 z-40">
-        <Image src="/images/dashboardSidebar_logo.svg" alt="Logo" width={340} height={240} className="object-contain mb-1"/>
-        <hr className="w-full border-t-4 border-indigo-600 mt-1 rounded"/>
+    <motion.aside
+      initial="closed"
+      animate={isOpen ? "open" : "closed"}
+      variants={sidebarVariants}
+      className="fixed md:relative top-0 left-0 w-72 h-full bg-gray-900/80 backdrop-blur-lg text-white z-50 shadow-2xl overflow-hidden md:translate-x-0"
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+    >
+      {/* Logo Section */}
+      <div className="p-6 border-b border-gray-700/50 relative group">
+        <motion.div
+          initial={{ scale: 0.95 }}
+          animate={{ scale: 1 }}
+          className="flex items-center justify-center"
+        >
+          <Image 
+            src="/images/dashboardSidebar_logo.svg" 
+            alt="MVSD Lab Logo" 
+            width={240} 
+            height={160}
+            className="hover:scale-105 transition-transform duration-300"
+          />
+        </motion.div>
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-indigo-600 opacity-30 group-hover:opacity-100 transition-opacity" />
       </div>
 
-      {/* Navigation Links */}
-      <nav className="flex-1 space-y-2 overflow-y-auto p-2">
-        <Link href="/dashboard">
-          <div className={`block w-full p-2 mb-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isActive('/dashboard') ? 'bg-indigo-700' : ''}`}>
-            <Image src="/icons/dashboard.png" alt="Dashboard" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">Dashboard</span>
-          </div>
-        </Link>
-        <Link href="/home">
-          <div className={`block w-full p-2 mb-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isActive('/home') ? 'bg-indigo-700' : ''}`}>
-            <Image src="/icons/home.png" alt="Home" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">Home</span>
-          </div>
-        </Link>
-        <Link href="/dashboard/subscribers_list">
-          <div className={`block w-full p-2 mb-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isActive('/dashboard/subscribers_list') ? 'bg-indigo-700' : ''}`}>
-            <Image src="/icons/subscriber_list.png" alt="Subscriber List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">Subscriber List</span>
-          </div>
-        </Link>
-
-        {/* Professor Dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => handleDropdownClick('addMember')}
-            className={`block w-full p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isDropdownActive(['/dashboard/professor_add']) ? 'bg-indigo-700' : ''}`}
-          >
-            <Image src="/icons/add_member.png" alt="Professor" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">Professor</span>
-            <svg className={`w-4 h-4 ml-auto transition-transform transform ${activeDropdown === 'addMember' ? 'rotate-180' : 'rotate-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </button>
-
-          {/* Dropdown Menu */}
-          {activeDropdown === 'addMember' && (
-            <div className="relative w-full mt-2 mb-2 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950 rounded shadow-lg z-20">
-              <Link href="/dashboard/member_add/phd_candidate_add" onClick={handleLinkClick}>
-                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                  <span className="text-sm font-semibold text-white">PHd</span>
-                </div>
-              </Link>
-              <Link href="/dashboard/add_member/post_doc_candidate" onClick={handleLinkClick}>
-                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                  <span className="text-sm font-semibold text-white">Post Doc</span>
-                </div>
-              </Link>
-              <Link href="/dashboard/add_member/masc_candidate" onClick={handleLinkClick}>
-                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                  <span className="text-sm font-semibold text-white">Master&apos;s</span>
-                </div>
-              </Link>
-              <Link href="/dashboard/add_member/staff" onClick={handleLinkClick}>
-                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                  <span className="text-sm font-semibold text-white">Staff</span>
-                </div>
-              </Link>
-
+      {/* Navigation Items */}
+      <nav className="p-4 space-y-2 overflow-y-auto h-[calc(100vh-160px)]">
+        {/* Dashboard */}
+        <motion.div variants={navItemVariants} whileHover="hover" className="group">
+          <Link href="/dashboard">
+            <div className={`flex items-center p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+              isActive('/dashboard') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
+            }`}>
+              <Image src="/icons/dashboard.png" alt="Dashboard" width={24} height={24} className="w-5 h-5" />
+              <span className="font-medium">Dashboard</span>
             </div>
-          )}
-          </div>
-        
-        <Link href="/dashboard/professor_add">
-          <div className={`block w-full p-2 mb-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isActive('/dashboard/professor_add') ? 'bg-indigo-700' : ''}`}>
-            <Image src="/icons/add_professor.png" alt="Add Professor" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">Add Professor</span>
-          </div>
-        </Link>
-        <Link href="/dashboard/professor_list">
-          <div className={`block w-full p-2 mb-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isActive('/dashboard/professor_list') ? 'bg-indigo-700' : ''}`}>
-            <Image src="/icons/professor_list.png" alt="Professors List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">Professor List</span>
-          </div>
-        </Link>
+          </Link>
+        </motion.div>
 
-        <Link href="/dashboard/alumni_list">
-          <div className={`block w-full p-2 mb-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isActive('/dashboard/alumni_list') ? 'bg-indigo-700' : ''}`}>
-            <Image src="/icons/alumni_list.svg" alt="Alumni List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">Alumni Directory</span>
-          </div>
-        </Link>
-
-        {/* Add Member Dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => handleDropdownClick('addMember')}
-            className={`block w-full p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isDropdownActive(['/dashboard/member_add']) ? 'bg-indigo-700' : ''}`}
-          >
-            <Image src="/icons/add_member.png" alt="Add Member" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">Add Member</span>
-            <svg className={`w-4 h-4 ml-auto transition-transform transform ${activeDropdown === 'addMember' ? 'rotate-180' : 'rotate-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </button>
-
-          {/* Dropdown Menu */}
-          {activeDropdown === 'addMember' && (
-            <div className="relative w-full mt-2 mb-2 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950 rounded shadow-lg z-20">
-              <Link href="/dashboard/member_add/phd_candidate_add" onClick={handleLinkClick}>
-                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                  <span className="text-sm font-semibold text-white">PHd</span>
-                </div>
-              </Link>
-              <Link href="/dashboard/add_member/post_doc_candidate" onClick={handleLinkClick}>
-                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                  <span className="text-sm font-semibold text-white">Post Doc</span>
-                </div>
-              </Link>
-              <Link href="/dashboard/add_member/masc_candidate" onClick={handleLinkClick}>
-                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                  <span className="text-sm font-semibold text-white">Master&apos;s</span>
-                </div>
-              </Link>
-              <Link href="/dashboard/add_member/staff" onClick={handleLinkClick}>
-                <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                  <span className="text-sm font-semibold text-white">Staff</span>
-                </div>
-              </Link>
-
+        {/* Home */}
+        <motion.div variants={navItemVariants} whileHover="hover" className="group">
+          <Link href="/home">
+            <div className={`flex items-center p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+              isActive('/home') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
+            }`}>
+              <Image src="/icons/home.png" alt="Home" width={24} height={24} className="w-5 h-5" />
+              <span className="font-medium">Home</span>
             </div>
-          )}
-          </div>
+          </Link>
+        </motion.div>
 
-        {/* Member List Dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => handleDropdownClick('memberList')}
-            className={`block w-full p-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isDropdownActive(['/dashboard/member_list']) ? 'bg-indigo-700' : ''}`}
+        {/* Subscriber List */}
+        <motion.div variants={navItemVariants} whileHover="hover" className="group">
+          <Link href="/dashboard/subscribers_list">
+            <div className={`flex items-center p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+              isActive('/dashboard/subscribers_list') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
+            }`}>
+              <Image src="/icons/subscriber_list.png" alt="Subscriber List" width={24} height={24} className="w-5 h-5" />
+              <span className="font-medium">Subscriber List</span>
+            </div>
+          </Link>
+        </motion.div>
+
+        {/* Alumni Directory */}
+        <motion.div variants={navItemVariants} whileHover="hover" className="group">
+          <Link href="/dashboard/alumni_list">
+            <div className={`flex items-center p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+              isActive('/dashboard/alumni_list') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
+            }`}>
+              <Image src="/icons/alumni_list.svg" alt="Alumni List" width={24} height={24} className="w-5 h-5" />
+              <span className="font-medium">Alumni Directory</span>
+            </div>
+          </Link>
+        </motion.div>
+
+        {/* Director Dropdown */}
+        <motion.div className="relative">
+          <motion.button
+            onClick={() => handleDropdownClick('director')}
+            className={`w-full flex items-center justify-between p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+              isDropdownActive(['/dashboard/director_add', '/dashboard/director_list']) ? 'bg-indigo-600/30' : 'hover:bg-gray-800/50'
+            }`}
           >
-            <Image src="/icons/member_list.svg" alt="Member List" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">Member List</span>
-            <svg className={`w-4 h-4 ml-auto transition-transform transform ${activeDropdown === 'memberList' ? 'rotate-180' : 'rotate-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-            </button>
+            <div className="flex items-center space-x-3">
+              <Image src="/icons/director.png" alt="Director" width={24} height={24} className="w-5 h-5" />
+              <span className="font-medium">Director</span>
+            </div>
+            <motion.div animate={{ rotate: activeDropdown === 'director' ? 180 : 0 }}>
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </motion.div>
+          </motion.button>
 
-            {/* Dropdown Menu */}
-            {activeDropdown === 'memberList' && (
-              <div className="relative w-full mt-2 mb-2 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950 rounded shadow-lg z-20">
-                <Link href="/dashboard/member_list/phd_candidate_list" onClick={handleLinkClick}>
-                  <div className="block px-4 py-2 rounded transition-colors hover:bg-indigo-600 flex items-center space-x-2 cursor-pointer">
-                    <span className="text-sm font-semibold text-white">PHd</span>
+          <AnimatePresence>
+            {activeDropdown === 'director' && (
+              <motion.div
+                initial="closed"
+                animate="open"
+                exit="closed"
+                variants={dropdownVariants}
+                className="ml-8 pl-3 border-l-2 border-indigo-500/20"
+              >
+                <Link href="/dashboard/director_add">
+                  <div className="p-2 hover:bg-indigo-500/10 rounded-lg transition-colors">
+                    <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">Add Director</span>
                   </div>
                 </Link>
-              </div>
+                <Link href="/dashboard/director_list">
+                  <div className="p-2 hover:bg-indigo-500/10 rounded-lg transition-colors">
+                    <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">Director List</span>
+                  </div>
+                </Link>
+              </motion.div>
             )}
-        </div>
+          </AnimatePresence>
+        </motion.div>
 
-        {/* System Monitor Option */}
-        <Link href="/dashboard/system_monitor">
-          <div className={`block w-full p-2 mb-2 mt-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isActive('/dashboard/system_monitor') ? 'bg-indigo-700' : ''}`}>
-            <Image src="/icons/SystemMonitor.png" alt="System Monitor" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">System Monitor</span>
-          </div>
-        </Link>
+        {/* Professor Dropdown */}
+        <motion.div className="relative">
+          <motion.button
+            onClick={() => handleDropdownClick('professor')}
+            className={`w-full flex items-center justify-between p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+              isDropdownActive(['/dashboard/professor_add', '/dashboard/professor_list']) ? 'bg-indigo-600/30' : 'hover:bg-gray-800/50'
+            }`}
+          >
+            <div className="flex items-center space-x-3">
+              <Image src="/icons/professor.png" alt="Professor" width={24} height={24} className="w-5 h-5" />
+              <span className="font-medium">Professor</span>
+            </div>
+            <motion.div animate={{ rotate: activeDropdown === 'professor' ? 180 : 0 }}>
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </motion.div>
+          </motion.button>
 
-        {/* Message */}
-        <Link href="/dashboard/message">
-          <div className={`block w-full p-2 mb-2 rounded transition-colors hover:bg-indigo-700 group flex items-center space-x-2 cursor-pointer ${isActive('/dashboard/message') ? 'bg-indigo-700' : ''}`}>
-            <Image src="/icons/message.png" alt="Message" width={24} height={24} className="text-gray-300 group-hover:text-white"/>
-            <span className="text-md font-medium">Message</span>
-          </div>
-        </Link>
+          <AnimatePresence>
+            {activeDropdown === 'professor' && (
+              <motion.div
+                initial="closed"
+                animate="open"
+                exit="closed"
+                variants={dropdownVariants}
+                className="ml-8 pl-3 border-l-2 border-indigo-500/20"
+              >
+                <Link href="/dashboard/professor_add">
+                  <div className="p-2 hover:bg-indigo-500/10 rounded-lg transition-colors">
+                    <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">Add Professor</span>
+                  </div>
+                </Link>
+                <Link href="/dashboard/professor_list">
+                  <div className="p-2 hover:bg-indigo-500/10 rounded-lg transition-colors">
+                    <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">Professor List</span>
+                  </div>
+                </Link>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* Add Member Dropdown */}
+        <motion.div className="relative">
+          <motion.button
+            onClick={() => handleDropdownClick('addMember')}
+            className={`w-full flex items-center justify-between p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+              isDropdownActive(['/dashboard/member_add']) ? 'bg-indigo-600/30' : 'hover:bg-gray-800/50'
+            }`}
+          >
+            <div className="flex items-center space-x-3">
+              <Image src="/icons/add_member.png" alt="Add Member" width={24} height={24} className="w-5 h-5" />
+              <span className="font-medium">Add Member</span>
+            </div>
+            <motion.div animate={{ rotate: activeDropdown === 'addMember' ? 180 : 0 }}>
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </motion.div>
+          </motion.button>
+
+          <AnimatePresence>
+            {activeDropdown === 'addMember' && (
+              <motion.div
+                initial="closed"
+                animate="open"
+                exit="closed"
+                variants={dropdownVariants}
+                className="ml-8 pl-3 border-l-2 border-indigo-500/20"
+              >
+                {[
+                  { path: '/dashboard/member_add/phd_candidate_add', label: 'PhD Candidate' },
+                  { path: '/dashboard/add_member/post_doc_candidate', label: 'Post Doc' },
+                  { path: '/dashboard/add_member/masc_candidate', label: "Master's" },
+                  { path: '/dashboard/add_member/staff', label: 'Staff' }
+                ].map((item) => (
+                  <Link key={item.path} href={item.path}>
+                    <div className="p-2 hover:bg-indigo-500/10 rounded-lg transition-colors">
+                      <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">{item.label}</span>
+                    </div>
+                  </Link>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* Member List Dropdown */}
+        <motion.div className="relative">
+          <motion.button
+            onClick={() => handleDropdownClick('memberList')}
+            className={`w-full flex items-center justify-between p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+              isDropdownActive(['/dashboard/member_list']) ? 'bg-indigo-600/30' : 'hover:bg-gray-800/50'
+            }`}
+          >
+            <div className="flex items-center space-x-3">
+              <Image src="/icons/member_list.svg" alt="Member List" width={24} height={24} className="w-5 h-5" />
+              <span className="font-medium">Member List</span>
+            </div>
+            <motion.div animate={{ rotate: activeDropdown === 'memberList' ? 180 : 0 }}>
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </motion.div>
+          </motion.button>
+
+          <AnimatePresence>
+            {activeDropdown === 'memberList' && (
+              <motion.div
+                initial="closed"
+                animate="open"
+                exit="closed"
+                variants={dropdownVariants}
+                className="ml-8 pl-3 border-l-2 border-indigo-500/20"
+              >
+                <Link href="/dashboard/member_list/phd_candidate_list">
+                  <div className="p-2 hover:bg-indigo-500/10 rounded-lg transition-colors">
+                    <span className="text-sm font-medium text-gray-300 hover:text-indigo-400">PhD Candidates</span>
+                  </div>
+                </Link>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* System Monitor */}
+        <motion.div variants={navItemVariants} whileHover="hover" className="group">
+          <Link href="/dashboard/system_monitor">
+            <div className={`flex items-center p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+              isActive('/dashboard/system_monitor') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
+            }`}>
+              <Image src="/icons/SystemMonitor.png" alt="System Monitor" width={24} height={24} className="w-5 h-5" />
+              <span className="font-medium">System Monitor</span>
+            </div>
+          </Link>
+        </motion.div>
+
+        {/* Messages */}
+        <motion.div variants={navItemVariants} whileHover="hover" className="group">
+          <Link href="/dashboard/message">
+            <div className={`flex items-center p-3 rounded-xl space-x-3 cursor-pointer transition-all ${
+              isActive('/dashboard/message') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
+            }`}>
+              <Image src="/icons/message.png" alt="Message" width={24} height={24} className="w-5 h-5" />
+              <span className="font-medium">Messages</span>
+            </div>
+          </Link>
+        </motion.div>
       </nav>
 
       {/* Footer */}
-      <div className="sticky bottom-0 w-full bg-transparent mt-2 z-40 flex justify-center items-center">
-        <p className="text-xs text-gray-400 font-medium text-center">
-          ©  
-          <a href="https://www.mvsdlab.com" target="_blank" className="font-semibold text-white hover:text-indigo-400 transition duration-300">
-            MVSD LAB
-          </a>  
-          , 2025, All Rights Reserved.
+      <div className="absolute bottom-0 w-full p-4 border-t border-gray-700/50 bg-gray-900/50 backdrop-blur-sm">
+        <p className="text-xs text-center text-gray-400">
+          © {new Date().getFullYear()} MVSD LAB
+          <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">
+            Innovation Through Collaboration
+          </span>
         </p>
       </div>
-
-
-
-    </aside>
+    </motion.aside>
   );
 }
