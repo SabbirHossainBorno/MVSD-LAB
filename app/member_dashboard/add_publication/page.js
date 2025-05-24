@@ -86,25 +86,18 @@ const AddPublication = ({ darkMode }) => {
       const memberId = Cookies.get('id');
       const memberType = Cookies.get('type');
 
-      // Manually append fields with correct names
+      // Manually append fields with backend-expected keys
       formPayload.append('type', formData.type);
       formPayload.append('title', formData.title);
-      formPayload.append('publishing_year', formData.year); // Changed from 'year'
+      formPayload.append('publishing_year', formData.year); // Correct backend key
       formPayload.append('authors', JSON.stringify(formData.authors));
-      formPayload.append('publishedDate', formData.publishedDate);
+      formPayload.append('published_date', formData.publishedDate); // Correct backend key
       formPayload.append('link', formData.link);
       if (formData.document) {
         formPayload.append('document', formData.document);
       }
 
-      Object.entries(formData).forEach(([key, value]) => {
-        if (key === 'authors') {
-          formPayload.append(key, JSON.stringify(value));
-        } else if (value !== null) {
-          formPayload.append(key, value);
-        }
-      });
-
+      // Add member metadata
       formPayload.append('memberId', memberId);
       formPayload.append('memberType', memberType);
 
@@ -113,9 +106,15 @@ const AddPublication = ({ darkMode }) => {
         body: formPayload
       });
 
-      if (!response.ok) throw new Error('Submission failed');
+      const responseData = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(responseData.message || 'Submission failed');
+      }
       
       toast.success('Publication submitted successfully!');
+      
+      // Reset form
       setFormData({
         type: '',
         title: '',
@@ -125,10 +124,12 @@ const AddPublication = ({ darkMode }) => {
         link: '',
         document: null
       });
+      
+      // Reset file input
       document.querySelector('input[type="file"]').value = '';
 
     } catch (error) {
-      toast.error(error.message || 'Submission failed');
+      toast.error(error.message || 'Submission failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -196,7 +197,6 @@ const AddPublication = ({ darkMode }) => {
                 type="number"
                 value={formData.year}
                 onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-                name="publishing_year"
                 className={`w-full px-4 py-2.5 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
                 placeholder="Enter Publication/Research Year"
                 min="1900"

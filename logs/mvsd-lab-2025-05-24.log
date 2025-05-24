@@ -88,3 +88,83 @@
 2025-05-24 15:26:43-EID[875704-MVSDLAB]-SID[049660eb-fce9-4d47-8db5-3443d2acd715]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
 2025-05-24 15:26:46-EID[875704-MVSDLAB]-SID[049660eb-fce9-4d47-8db5-3443d2acd715]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
 2025-05-24 15:26:46-EID[875704-MVSDLAB]-SID[049660eb-fce9-4d47-8db5-3443d2acd715]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:03:25-EID[]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 103.180.244.251
+2025-05-24 17:03:25-EID[]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-05-24 17:03:25-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[Generate EID]-Generated EID 639066-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-05-24 17:03:26-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-05-24 17:03:27-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:03:28-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:03:28-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:03:30-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:03:41-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:03:41-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:03:42-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:03:44-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:04:47-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:04:47-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:04:47-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:04:50-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:04:52-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:04:52-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:04:53-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:04:55-EID[639066-MVSDLAB]-SID[f0089d48-aa11-4d28-8eb5-8aafdba7ad39]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:05:41-EID[]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Login]-Login attempt for bbirhosdasainborno@gmail.com from IP 103.180.244.251
+2025-05-24 17:05:41-EID[]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DBCheck]-Looking for bbirhosdasainborno@gmail.com in member
+2025-05-24 17:05:41-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Generate EID]-Generated EID 371170-MVSDLAB for user bbirhosdasainborno@gmail.com
+2025-05-24 17:05:41-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[AuthSuccess]-Successful member login for bbirhosdasainborno@gmail.com
+2025-05-24 17:05:44-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:05:45-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:05:45-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:06:01-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:07:33-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:07:35-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:07:35-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:07:37-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:10:58-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:11:03-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:14:24-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:14:26-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:14:27-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:14:28-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:14:52-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Add Publication]-PUB_RES_ID: PUB01RESMVSD, Member: PHDC04MVSD
+2025-05-24 17:16:12-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Add Publication]-PUB_RES_ID: PUB02RESMVSD, Member: PHDC04MVSD
+2025-05-24 17:23:49-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:23:49-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:24:07-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:24:14-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:24:14-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:24:15-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:24:18-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:29:01-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:29:01-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:29:02-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:29:04-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:30:36-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:30:47-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:30:48-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:30:48-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:30:50-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:31:55-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:31:56-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:31:56-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:31:58-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:33:21-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:33:33-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:33:34-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:33:34-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:33:36-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:34:15-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:36:07-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:36:13-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:36:14-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:37:06-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:37:07-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:37:07-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:37:35-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:37:37-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:37:37-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:37:39-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:37:39-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:37:39-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[DashboardData]-Fetched data for bbirhosdasainborno@gmail.com
+2025-05-24 17:37:42-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-24 17:37:57-EID[371170-MVSDLAB]-SID[bd4b526d-9728-4d2d-ac78-3f69c8a41cd0]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)

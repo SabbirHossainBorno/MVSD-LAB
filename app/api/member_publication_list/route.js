@@ -33,26 +33,23 @@ export async function GET(request) {
 
   try {
     if (!memberId) {
-      logger.warn('Unauthorized access attempt', {
-        meta: { ...baseMeta, details: 'Missing member ID', severity: 'HIGH' }
-      });
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: securityHeaders });
     }
 
     // Get publications
     const publicationsQuery = await query(
       `SELECT 
-        id, title, type, year, 
-        journal_name AS "journalName",
-        conference_name AS "conferenceName",
-        authors, volume, issue, 
-        page_count AS "pageCount",
+        pub_res_id AS id,
+        type,
+        title,
+        publishing_year AS year,
+        authors,
         published_date AS "publishedDate",
-        impact_factor AS "impactFactor",
+        link,
         document_path AS "documentPath",
         approval_status AS "approvalStatus",
         created_at AS "createdAt"
-      FROM phd_candidate_publication_info
+      FROM phd_candidate_pub_res_info
       WHERE phd_candidate_id = $1
       ORDER BY created_at DESC`,
       [memberId]
@@ -64,12 +61,8 @@ export async function GET(request) {
         COUNT(*) AS total,
         SUM(CASE WHEN approval_status = 'Approved' THEN 1 ELSE 0 END) AS approved,
         SUM(CASE WHEN approval_status = 'Pending' THEN 1 ELSE 0 END) AS pending,
-        SUM(CASE WHEN approval_status = 'Rejected' THEN 1 ELSE 0 END) AS rejected,
-        SUM(CASE WHEN type = 'Journal' AND approval_status = 'Approved' THEN 1 ELSE 0 END) AS approved_journals,
-        SUM(CASE WHEN type = 'Conference' AND approval_status = 'Approved' THEN 1 ELSE 0 END) AS approved_conferences,
-        SUM(CASE WHEN type = 'Journal' AND approval_status = 'Pending' THEN 1 ELSE 0 END) AS pending_journals,
-        SUM(CASE WHEN type = 'Conference' AND approval_status = 'Pending' THEN 1 ELSE 0 END) AS pending_conferences
-      FROM phd_candidate_publication_info
+        SUM(CASE WHEN approval_status = 'Rejected' THEN 1 ELSE 0 END) AS rejected
+      FROM phd_candidate_pub_res_info
       WHERE phd_candidate_id = $1`,
       [memberId]
     );
@@ -81,10 +74,6 @@ export async function GET(request) {
       createdAt: new Date(pub.createdAt).toISOString(),
       publishedDate: pub.publishedDate ? new Date(pub.publishedDate).toISOString() : null
     }));
-
-    logger.info('Publication data fetched successfully', {
-      meta: { ...baseMeta, details: `Fetched ${publications.length} publications`, severity: 'LOW' }
-    });
 
     await sendTelegramAlert(formatAlertMessage(
       'Publication Data Accessed',

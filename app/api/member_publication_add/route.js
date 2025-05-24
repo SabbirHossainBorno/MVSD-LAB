@@ -91,6 +91,16 @@ export async function POST(req) {
     // Process form data
     console.log('[Form Processing] Parsing form data');
     const formData = await req.formData();
+
+    // Add year parsing and validation here
+    const publishingYear = parseInt(formData.get('publishing_year'));
+    if (isNaN(publishingYear) || publishingYear < 1900 || publishingYear > new Date().getFullYear()) {
+      console.error(`[Validation Failed] Invalid year: ${formData.get('publishing_year')}`);
+      return NextResponse.json(
+        { success: false, message: 'Invalid publication year' },
+        { status: 400 }
+      );
+    }
     
     // Handle document upload
     let documentPath = null;
@@ -118,9 +128,9 @@ export async function POST(req) {
       phd_candidate_id: memberId,
       type: formData.get('type'),
       title: formData.get('title'),
-      publishing_year: formData.get('publishing_year'),
+      publishing_year: publishingYear,
       authors: JSON.parse(formData.get('authors')),
-      published_date: formData.get('publishedDate') || null,
+      published_date: formData.get('published_date') || null,
       link: formData.get('link'),
       document_path: documentPath
     };
