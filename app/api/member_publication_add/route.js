@@ -1,4 +1,4 @@
-//app/api/member_publication_add/route.js
+// app/api/member_publication_add/route.js
 import { NextResponse } from 'next/server';
 import { query } from '../../../lib/db';
 import logger from '../../../lib/logger';
@@ -10,47 +10,41 @@ const formatAlertMessage = (title, details) => {
   return `MVSD LAB MEMBER DASHBOARD\n--------------------------------------------------\n${title}\n${details}`;
 };
 
-const typeCodes = {
-  'International Journal': 'INT_JOURNAL',
-  'Domestic Journal': 'DOM_JOURNAL',
-  'International Conference': 'INT_CONF',
-  'Domestic Conference': 'DOM_CONF'
-};
-
-const getNextSequence = async (phdId, typeCode) => {
+const generatePublicationId = async () => {
   const result = await query(
-    `SELECT COUNT(*) FROM phd_candidate_publication_info 
-     WHERE phd_candidate_id = $1 AND type = $2`,
-    [phdId, typeCode]
+    'SELECT pub_res_id FROM phd_candidate_pub_res_info ORDER BY pub_res_id DESC LIMIT 1'
   );
-  return result.rows[0].count + 1;
-};
 
-const generateFileName = (phdId, type, sequence, ext) => {
-  const typeCode = typeCodes[type];
-  return `${phdId}_PUB_${typeCode}_${sequence}${ext}`;
-};
-
-const savePublicationDocument = async (file, phdId, publicationType) => {
-  const sequence = await getNextSequence(phdId, publicationType);
-  const allowedTypes = ['application/pdf', 'application/msword', 
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-  if (!allowedTypes.includes(file.type)) {
-    throw new Error('Invalid file type. Only PDF and DOC files are allowed.');
+  let lastNumber = 0;
+  if (result.rows.length > 0) {
+    const lastId = result.rows[0].pub_res_id;
+    const match = lastId.match(/PUB(\d+)RESMVSD/);
+    if (match) lastNumber = parseInt(match[1]);
   }
-  const ext = path.extname(file.name);
-  const filename = generateFileName(phdId, publicationType, sequence, ext);
+
+  const newNumber = lastNumber + 1;
+  return `PUB${newNumber.toString().padStart(2, '0')}RESMVSD`;
+};
+
+const savePublicationDocument = async (file, pubResId) => {
+  if (!file) return null;
+  
+  const allowedTypes = ['application/pdf'];
+  if (!allowedTypes.includes(file.type)) {
+    throw new Error('Only PDF files are allowed');
+  }
+
+  const filename = `${pubResId}${path.extname(file.name)}`;
   const targetPath = path.join(
     '/home/mvsd-lab/public/Storage/Documents/PhD_Candidate',
     filename
   );
+
   try {
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
-    console.log(`Success: Document saved at ${targetPath}`);
     return `/Storage/Documents/PhD_Candidate/${filename}`;
   } catch (error) {
-    console.error(`Error: Failed to save document - ${error.message}`);
     throw new Error(`Failed to save document: ${error.message}`);
   }
 };
@@ -59,231 +53,229 @@ export async function POST(req) {
   const sessionId = req.cookies.get('sessionId')?.value || 'Unknown Session';
   const eid = req.cookies.get('eid')?.value || 'Unknown EID';
   const memberId = req.cookies.get('id')?.value;
-  const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('remote-addr') || 'Unknown IP';
-  const userAgent = req.headers.get('user-agent') || 'Unknown User-Agent';
+  const ipAddress = req.headers.get('x-forwarded-for') || 'Unknown IP';
+
+  console.log(`[${new Date().toISOString()}] Starting publication submission process for member: ${memberId}`);
+  console.log(`[Request Metadata] IP: ${ipAddress}, Session: ${sessionId}, EID: ${eid}`);
 
   try {
-    // Validate member ID
+    // Validate authentication
     if (!memberId) {
-      console.warn('Warning: Member authentication failed');
-      return NextResponse.json({ success: false, message: 'Member authentication failed' }, { status: 401 });
+      console.error('[Auth Error] No member ID found in cookies');
+      return NextResponse.json(
+        { success: false, message: 'Authentication required' }, 
+        { status: 401 }
+      );
     }
 
-    // Verify member exists and is PhD Candidate
+    // Verify member is PhD Candidate
+    console.log(`[Member Verification] Checking member status for: ${memberId}`);
     const memberCheck = await query(
       `SELECT type FROM member WHERE id = $1`,
       [memberId]
     );
 
-    if (memberCheck.rows.length === 0) {
-      console.warn('Warning: Member not found');
-      return NextResponse.json({ success: false, message: 'Member not found' }, { status: 404 });
+    if (memberCheck.rows.length === 0 || memberCheck.rows[0].type !== 'PhD Candidate') {
+      console.warn(`[Authorization Failed] Member ${memberId} is not a PhD candidate`);
+      return NextResponse.json(
+        { success: false, message: 'Publications can only be added by PhD Candidates' },
+        { status: 403 }
+      );
     }
 
-    if (memberCheck.rows[0].type !== 'PhD Candidate') {
-      console.warn('Warning: Publications can only be added by PhD Candidates');
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Publications can only be added by PhD Candidates' 
-      }, { status: 403 });
-    }
+    // Generate publication ID
+    console.log('[ID Generation] Generating new publication ID');
+    const pubResId = await generatePublicationId();
+    console.log(`[ID Generated] New PUB_RES_ID: ${pubResId}`);
 
+    // Process form data
+    console.log('[Form Processing] Parsing form data');
     const formData = await req.formData();
-    const type = formData.get('type');
-    const title = formData.get('title');
-    const year = formData.get('year');
-    const journalName = formData.get('journalName');
-    const conferenceName = formData.get('conferenceName');
-    let authors = formData.get('authors');
-    const volume = formData.get('volume');
-    const issue = formData.get('issue');
-    const pageCount = formData.get('pageCount');
-    const publishedDate = formData.get('publishedDate');
-    const impactFactor = formData.get('impactFactor');
-    const link = formData.get('link');
-    const documentFile = formData.get('document');
     
+    // Handle document upload
+    let documentPath = null;
+    const documentFile = formData.get('document');
+    if (documentFile) {
+      console.log(`[File Upload] Processing document upload - File name: ${documentFile.name}, Size: ${documentFile.size} bytes`);
+      try {
+        documentPath = await savePublicationDocument(documentFile, pubResId);
+        console.log(`[File Upload Success] Document stored at: ${documentPath}`);
+      } catch (error) {
+        console.error('[File Upload Failed]', error.message);
+        return NextResponse.json(
+          { success: false, message: error.message },
+          { status: 400 }
+        );
+      }
+    } else {
+      console.log('[File Upload] No document provided, proceeding without file upload');
+    }
 
-    console.log('Received Data:', {
-      type, title, year, journalName, conferenceName, authors, 
-      volume, issue, pageCount, publishedDate, impactFactor, link, documentFile
+    // Prepare publication data
+    console.log('[Data Preparation] Parsing and validating form data');
+    const publicationData = {
+      pub_res_id: pubResId,
+      phd_candidate_id: memberId,
+      type: formData.get('type'),
+      title: formData.get('title'),
+      publishing_year: formData.get('publishing_year'),
+      authors: JSON.parse(formData.get('authors')),
+      published_date: formData.get('publishedDate') || null,
+      link: formData.get('link'),
+      document_path: documentPath
+    };
+
+    console.log('[Publication Data]', {
+      type: publicationData.type,
+      title: publicationData.title.substring(0, 50) + '...',
+      year: publicationData.publishing_year,
+      authorCount: publicationData.authors.length,
+      hasDocument: !!documentPath
     });
 
-    // Check authors field
-    try {
-        if (authors) {
-          console.log('Authors before JSON parse:', authors);
-          authors = JSON.parse(authors);  // Parse the authors if it is a string
-        }
-      } catch (error) {
-        console.error(`Error parsing authors: ${error.message}`);
-        return NextResponse.json({ 
-          success: false, 
-          message: 'Invalid JSON in authors field' 
-        }, { status: 400 });
-      }
+    // Validate required fields
+    console.log('[Validation] Checking required fields');
+    const requiredFields = {
+      type: 'Publication type',
+      title: 'Title',
+      publishing_year: 'Publishing year',
+      authors: 'Authors',
+      link: 'Link'
+    };
 
-    const serializedAuthors = JSON.stringify(authors);
+    const missingFields = Object.entries(requiredFields)
+      .filter(([key]) => !publicationData[key])
+      .map(([, name]) => name);
 
-    // Validation
-    const requiredFields = [
-      !type && 'Publication Type',
-      !title && 'Title',
-      !year && 'Year',
-      !authors?.length && 'Authors',
-      !pageCount && 'Page Count',
-      !documentFile && 'Document'
-    ].filter(Boolean);
-
-    if (requiredFields.length > 0) {
-      console.warn(`Warning: Missing required fields - ${requiredFields.join(', ')}`);
-      return NextResponse.json({ 
-        success: false, 
-        message: `Missing required fields: ${requiredFields.join(', ')}` 
-      }, { status: 400 });
+    if (missingFields.length > 0) {
+      console.error('[Validation Failed] Missing fields:', missingFields);
+      return NextResponse.json(
+        { success: false, message: `Missing required fields: ${missingFields.join(', ')}` },
+        { status: 400 }
+      );
     }
 
-    if (type.includes('Journal') && (!journalName || !volume || !issue)) {
-      console.warn('Warning: Journal publications require journal name, volume and issue');
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Journal publications require journal name, volume and issue' 
-      }, { status: 400 });
+    // Validate year format
+    if (isNaN(publicationData.publishing_year) || 
+        publicationData.publishing_year < 1900 || 
+        publicationData.publishing_year > new Date().getFullYear()) {
+      console.error(`[Validation Failed] Invalid year: ${publicationData.publishing_year}`);
+      return NextResponse.json(
+        { success: false, message: 'Invalid publication year' },
+        { status: 400 }
+      );
     }
 
-    if (type.includes('Conference') && !conferenceName) {
-      console.warn('Warning: Conference publications require conference name');
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Conference publications require conference name' 
-      }, { status: 400 });
-    }
-
-    let documentUrl;
-    try {
-      documentUrl = await savePublicationDocument(documentFile, memberId, type);
-    } catch (error) {
-      console.error(`Error: ${error.message}`);
-      return NextResponse.json({ 
-        success: false, 
-        message: error.message 
-      }, { status: 400 });
-    }
+    // Database transaction
+    console.log('[Database] Starting transaction');
+    await query('BEGIN');
 
     try {
-      await query('BEGIN');
-      
+      // Insert publication
+      console.log('[Database] Executing publication insert');
       const insertQuery = `
-        INSERT INTO phd_candidate_publication_info (
-            phd_candidate_id,
-            type,
-            title,
-            year,
-            journal_name,
-            conference_name,
-            authors,
-            volume,
-            issue,
-            page_count,
-            published_date,
-            impact_factor,
-            link,
-            document_path,
-            approval_status
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING id;
-        `;
-      console.log('Executing Insert Query with Data:', [
-        memberId, type, title, year, 
-        type.includes('Journal') ? journalName : null,
-        type.includes('Conference') ? conferenceName : null,
-        authors, volume, issue, pageCount, 
-        publishedDate || null, impactFactor || null, link || null, documentUrl
-      ]);
+        INSERT INTO phd_candidate_pub_res_info (
+          pub_res_id,
+          phd_candidate_id,
+          type,
+          title,
+          publishing_year,
+          authors,
+          published_date,
+          link,
+          document_path,
+          approval_status
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'Pending')
+        RETURNING pub_res_id;
+      `;
+
       const result = await query(insertQuery, [
-        memberId, 
-        type,
-        title,
-        year,
-        type.includes('Journal') ? journalName : null,
-        type.includes('Conference') ? conferenceName : null,
-        serializedAuthors,  // Pass the serialized authors here
-        volume,
-        issue,
-        pageCount,
-        publishedDate || null,
-        impactFactor || null,
-        link || null,
-        documentUrl,
-        'Pending' // Set default approval status
+        publicationData.pub_res_id,
+        publicationData.phd_candidate_id,
+        publicationData.type,
+        publicationData.title,
+        publicationData.publishing_year,
+        JSON.stringify(publicationData.authors),
+        publicationData.published_date,
+        publicationData.link,
+        publicationData.document_path
       ]);
 
-      const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
-      const Id = `${memberId}`; 
-      const notificationTitle = `New Publication Added by ${memberId}`;
-      const notificationStatus = 'Unread';
-      await query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
+      console.log(`[Database] Insert successful for PUB_RES_ID: ${result.rows[0].pub_res_id}`);
+
+      // Create notification
+      console.log('[Notification] Creating notification entry');
+      const notificationQuery = `
+        INSERT INTO notification_details (
+          id,
+          title,
+          status
+        ) VALUES ($1, $2, $3)
+      `;
+
+      await query(notificationQuery, [
+        pubResId,
+        `New Publication/Research Submitted: ${publicationData.title.substring(0, 30)}...`,
+        'Unread'
+      ]);
+
+      console.log('[Notification] Notification created successfully');
 
       await query('COMMIT');
+      console.log('[Database] Transaction committed successfully');
 
-      const successMessage = formatAlertMessage(
-        'New Publication Added',
-        `Member ID: ${memberId}\nType: ${type}`
-      );
-      await sendTelegramAlert(successMessage);
-
-      console.log(`Success: Publication added by member ${memberId}`);
-      logger.info('Publication Added Successfully', {
-        meta: {
-          eid,
-          sid: sessionId,
-          taskName: 'Add Publication',
-          details: `Publication added by member ${memberId}`
-        }
-      });
-
-      return NextResponse.json({ 
-        success: true,
-        message: 'Publication added successfully'
-      });
-    } catch (error) {
+    } catch (dbError) {
+      console.error('[Database Error] Rolling back transaction:', dbError.message);
       await query('ROLLBACK');
-      const errorMessage = formatAlertMessage(
-        'Publication Add Failed',
-        `Member ID: ${memberId}\nError: ${error.message}`
-      );
-      await sendTelegramAlert(errorMessage);
-      console.error(`Error: Publication add failed - ${error.message}`);
-      logger.error('Publication Add Failed', {
-        meta: {
-          eid,
-          sid: sessionId,
-          taskName: 'Add Publication',
-          details: `Member ID: ${memberId} - Error: ${error.message}`
-        }
-      });
-      return NextResponse.json({ 
-        success: false, 
-        message: `Error adding publication: ${error.message}` 
-      }, { status: 500 });
+      throw dbError;
     }
-  } catch (error) {
-    const errorMessage = formatAlertMessage(
-      'Publication Add Failed',
-      `System Error: ${error.message}\nIP: ${ipAddress}`
-    );
-    await sendTelegramAlert(errorMessage);
-    console.error(`Error: System error processing publication - ${error.message}`);
-    logger.error('System Error Processing Publication', {
+
+    // Log success
+    console.log(`[Success] Publication submitted successfully - PUB_RES_ID: ${pubResId}`);
+    logger.info('Publication submitted successfully', {
       meta: {
         eid,
         sid: sessionId,
         taskName: 'Add Publication',
-        details: `System error: ${error.message}`
+        details: `PUB_RES_ID: ${pubResId}, Member: ${memberId}`
       }
     });
-    return NextResponse.json({ 
-        success: false, 
-        message: `System error: ${error.message}` 
-      }, { status: 500 });
+
+    // Send Telegram alert
+    const successMessage = formatAlertMessage(
+      'New Publication/Research Submission',
+      `PUB_RES_ID: ${pubResId}\nMember: ${memberId}\nType: ${publicationData.type}`
+    );
+    await sendTelegramAlert(successMessage);
+
+    return NextResponse.json({
+      success: true,
+      message: 'Publication/Research submitted successfully',
+      pub_res_id: pubResId
+    });
+
+  } catch (error) {
+    console.error('[System Error]', error);
+    await query('ROLLBACK');
+    
+    logger.error('Publication submission failed', {
+      meta: {
+        eid,
+        sid: sessionId,
+        taskName: 'Add Publication',
+        details: `Error: ${error.message}\nStack: ${error.stack}`
+      }
+    });
+
+    const errorMessage = formatAlertMessage(
+      'Submission Failed',
+      `Error: ${error.message}\nIP: ${ipAddress}\nStack: ${error.stack.substring(0, 200)}...`
+    );
+    await sendTelegramAlert(errorMessage);
+
+    return NextResponse.json(
+      { success: false, message: `Submission failed: ${error.message}` },
+      { status: 500 }
+    );
   }
 }
