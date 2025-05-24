@@ -86,6 +86,17 @@ const AddPublication = ({ darkMode }) => {
       const memberId = Cookies.get('id');
       const memberType = Cookies.get('type');
 
+      // Manually append fields with correct names
+      formPayload.append('type', formData.type);
+      formPayload.append('title', formData.title);
+      formPayload.append('publishing_year', formData.year); // Changed from 'year'
+      formPayload.append('authors', JSON.stringify(formData.authors));
+      formPayload.append('publishedDate', formData.publishedDate);
+      formPayload.append('link', formData.link);
+      if (formData.document) {
+        formPayload.append('document', formData.document);
+      }
+
       Object.entries(formData).forEach(([key, value]) => {
         if (key === 'authors') {
           formPayload.append(key, JSON.stringify(value));
@@ -185,6 +196,7 @@ const AddPublication = ({ darkMode }) => {
                 type="number"
                 value={formData.year}
                 onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                name="publishing_year"
                 className={`w-full px-4 py-2.5 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
                 placeholder="Enter Publication/Research Year"
                 min="1900"
