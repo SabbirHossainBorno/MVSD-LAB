@@ -61,3 +61,22 @@
 2025-05-25 09:16:48-EID[177067-MVSDLAB]-SID[2be91e8d-f4f8-4386-b5b5-c87bcb969bec]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
 2025-05-25 09:20:31-EID[177067-MVSDLAB]-SID[2be91e8d-f4f8-4386-b5b5-c87bcb969bec]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
 2025-05-25 09:20:34-EID[177067-MVSDLAB]-SID[2be91e8d-f4f8-4386-b5b5-c87bcb969bec]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-25 10:21:23-EID[]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[Login]-Login attempt for amin@gmail.com from IP 123.200.7.106
+2025-05-25 10:21:23-EID[]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[DBCheck]-Looking for amin@gmail.com in member
+2025-05-25 10:21:23-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[Generate EID]-Generated EID 293687-MVSDLAB for user amin@gmail.com
+2025-05-25 10:21:23-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[AuthSuccess]-Successful member login for amin@gmail.com
+2025-05-25 10:21:25-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-25 10:21:26-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-05-25 10:21:26-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-05-25 10:21:30-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-25 10:22:12-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-25 10:22:13-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-05-25 10:22:13-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-05-25 10:22:28-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-25 10:23:00-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-25 10:23:00-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-05-25 10:23:00-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-05-25 10:23:45-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-25 10:24:38-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-25 10:24:40-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-05-25 10:24:40-EID[293687-MVSDLAB]-SID[cf77fd2f-4ea8-42e3-b2e7-23ac602247ce]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com

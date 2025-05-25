@@ -9,8 +9,8 @@ import { FiEdit, FiFileText, FiCheckCircle, FiClock, FiXCircle, FiExternalLink, 
 
 const statusConfig = {
   Pending: {
-    color: 'bg-amber-100 dark:bg-amber-900/30',
-    text: 'text-amber-900 dark:text-amber-200',
+    color: 'bg-yellow-100 dark:bg-yellow-900/30',
+    text: 'text-yellow-900 dark:text-yellow-200',
     icon: <FiClock className="w-5 h-5" />
   },
   Approved: {
@@ -85,7 +85,7 @@ const PublicationList = ({ darkMode }) => {
         />
         <StatCard 
           darkMode={darkMode}
-          icon={<FiClock className="w-6 h-6 text-amber-500" />}
+          icon={<FiClock className="w-6 h-6 text-yellow-500" />}
           title="Pending"
           value={stats.pending || 0}
         />
