@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
 import withAuth from '../../components/withAuth';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { FiEdit, FiFileText, FiCheckCircle, FiClock, FiXCircle, FiExternalLink, FiSearch, FiFilter, FiAlertCircle } from 'react-icons/fi';
+import { FiEdit, FiFileText, FiCheckCircle, FiClock, FiXCircle, FiExternalLink, FiSearch, FiFilter, FiMessageSquare } from 'react-icons/fi';
 
 const statusConfig = {
   Pending: {
@@ -55,8 +55,7 @@ const PublicationList = ({ darkMode }) => {
       (statusFilter === 'All' || pub.approvalStatus === statusFilter) &&
       (pub.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       pub.authors.join(' ').toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  )
+    ))
     .sort((a, b) => sortOrder === 'asc' 
       ? new Date(a.createdAt) - new Date(b.createdAt) 
       : new Date(b.createdAt) - new Date(a.createdAt)
@@ -71,39 +70,35 @@ const PublicationList = ({ darkMode }) => {
       className="h-full space-y-8 p-4"
     >
       {/* Stats Grid */}
-      <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-2xl shadow-xl`}>
+      <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-3xl shadow-2xl backdrop-blur-sm`}>
         <StatCard 
           darkMode={darkMode}
-          icon={<FiFileText className={`w-6 h-6 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />}
+          icon={<FiFileText className="w-6 h-6 text-blue-500" />}
           title="Total Publications"
           value={stats.total || 0}
-          trend={stats.totalChange}
         />
         <StatCard 
           darkMode={darkMode}
           icon={<FiCheckCircle className="w-6 h-6 text-emerald-500" />}
           title="Approved"
           value={stats.approved || 0}
-          trend={stats.approvedChange}
         />
         <StatCard 
           darkMode={darkMode}
           icon={<FiClock className="w-6 h-6 text-amber-500" />}
           title="Pending"
           value={stats.pending || 0}
-          trend={stats.pendingChange}
         />
         <StatCard 
           darkMode={darkMode}
           icon={<FiXCircle className="w-6 h-6 text-rose-500" />}
           title="Rejected"
           value={stats.rejected || 0}
-          trend={stats.rejectedChange}
         />
       </div>
 
       {/* Filter Section */}
-      <div className={`flex flex-col md:flex-row gap-4 p-6 ${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-2xl shadow-xl`}>
+      <div className={`flex flex-col md:flex-row gap-4 p-6 ${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-3xl shadow-2xl backdrop-blur-sm`}>
         <div className="relative flex-1">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <FiSearch className={`w-5 h-5 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
@@ -115,9 +110,9 @@ const PublicationList = ({ darkMode }) => {
             onChange={(e) => setSearchQuery(e.target.value)}
             className={`w-full pl-10 pr-4 py-3 rounded-xl border-0 ring-1 ${
               darkMode 
-                ? 'bg-gray-700 text-gray-100 ring-gray-600 focus:ring-2 focus:ring-blue-500' 
-                : 'bg-gray-50 text-gray-800 ring-gray-200 focus:ring-2 focus:ring-blue-500'
-            } transition-all`}
+                ? 'bg-gray-700/50 text-gray-100 ring-gray-600 focus:ring-2 focus:ring-blue-500' 
+                : 'bg-gray-50/70 text-gray-800 ring-gray-200 focus:ring-2 focus:ring-blue-500'
+            } transition-all placeholder-gray-400`}
           />
         </div>
         
@@ -131,8 +126,8 @@ const PublicationList = ({ darkMode }) => {
               onChange={(e) => setStatusFilter(e.target.value)}
               className={`w-full pl-10 pr-4 py-3 rounded-xl border-0 ring-1 ${
                 darkMode 
-                  ? 'bg-gray-700 text-gray-100 ring-gray-600 focus:ring-2 focus:ring-blue-500' 
-                  : 'bg-gray-50 text-gray-800 ring-gray-200 focus:ring-2 focus:ring-blue-500'
+                  ? 'bg-gray-700/50 text-gray-100 ring-gray-600 focus:ring-2 focus:ring-blue-500' 
+                  : 'bg-gray-50/70 text-gray-800 ring-gray-200 focus:ring-2 focus:ring-blue-500'
               } appearance-none transition-all`}
             >
               <option value="All">All Statuses</option>
@@ -147,8 +142,8 @@ const PublicationList = ({ darkMode }) => {
             onChange={(e) => setSortOrder(e.target.value)}
             className={`px-4 py-3 rounded-xl border-0 ring-1 ${
               darkMode 
-                ? 'bg-gray-700 text-gray-100 ring-gray-600 focus:ring-2 focus:ring-blue-500' 
-                : 'bg-gray-50 text-gray-800 ring-gray-200 focus:ring-2 focus:ring-blue-500'
+                ? 'bg-gray-700/50 text-gray-100 ring-gray-600 focus:ring-2 focus:ring-blue-500' 
+                : 'bg-gray-50/70 text-gray-800 ring-gray-200 focus:ring-2 focus:ring-blue-500'
             } transition-all`}
           >
             <option value="desc">Newest First</option>
@@ -165,7 +160,7 @@ const PublicationList = ({ darkMode }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.3 }}
           >
             <PublicationCard 
               pub={pub}
@@ -177,7 +172,11 @@ const PublicationList = ({ darkMode }) => {
       </AnimatePresence>
 
       {filteredPublications.length === 0 && (
-        <div className={`text-center p-8 rounded-2xl ${darkMode ? 'bg-gray-800 text-gray-400' : 'bg-white text-gray-500'} shadow-xl`}>
+        <div className={`text-center p-8 rounded-3xl ${
+          darkMode 
+            ? 'bg-gray-800/50 text-gray-400' 
+            : 'bg-white/70 text-gray-500'
+        } shadow-2xl backdrop-blur-sm`}>
           No publications found matching your criteria
         </div>
       )}
@@ -185,11 +184,15 @@ const PublicationList = ({ darkMode }) => {
   );
 };
 
-const StatCard = ({ darkMode, icon, title, value, trend }) => (
+const StatCard = ({ darkMode, icon, title, value }) => (
   <div className={`flex items-center gap-4 p-4 rounded-xl transition-all ${
-    darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-50 hover:bg-gray-100'
+    darkMode 
+      ? 'bg-gray-700/30 hover:bg-gray-700/50' 
+      : 'bg-gray-50/70 hover:bg-gray-100/70'
+  } backdrop-blur-sm border ${
+    darkMode ? 'border-gray-600/30' : 'border-gray-200/50'
   }`}>
-    <div className={`p-3 rounded-lg ${darkMode ? 'bg-gray-600' : 'bg-white'} shadow-sm`}>
+    <div className={`p-3 rounded-lg ${darkMode ? 'bg-gray-600/30' : 'bg-white/50'} shadow-sm`}>
       {icon}
     </div>
     <div>
@@ -201,17 +204,18 @@ const StatCard = ({ darkMode, icon, title, value, trend }) => (
 
 const PublicationCard = ({ pub, darkMode, statusConfig }) => {
   const statusInfo = statusConfig[pub.approvalStatus] || {
-    color: 'bg-gray-200 dark:bg-gray-700',
+    color: 'bg-gray-100 dark:bg-gray-700',
     text: 'text-gray-800 dark:text-gray-300',
-    icon: null
+    icon: null,
+    border: 'border-gray-200 dark:border-gray-600'
   };
 
   return (
     <div className={`group p-6 rounded-2xl border ${
       darkMode 
-        ? 'border-gray-700 bg-gray-800 hover:border-gray-600' 
-        : 'border-gray-200 bg-white hover:border-gray-300'
-    } shadow-sm hover:shadow-lg transition-all mb-4`}>
+        ? 'border-gray-600/30 bg-gray-800/30 hover:border-gray-500/50' 
+        : 'border-gray-200/50 bg-white/70 hover:border-gray-300'
+    } shadow-lg hover:shadow-xl transition-all mb-4 backdrop-blur-sm`}>
       <div className="flex flex-col md:flex-row gap-6">
         <div className="flex-1 space-y-4">
           <div className="flex items-center justify-between gap-3">
@@ -221,15 +225,29 @@ const PublicationCard = ({ pub, darkMode, statusConfig }) => {
                 {pub.title}
               </h3>
             </div>
-            {pub.approvalStatus === 'Pending' && (
-              <button className={`p-2 rounded-lg ${
-                darkMode 
-                  ? 'text-gray-300 hover:bg-gray-700' 
-                  : 'text-gray-600 hover:bg-gray-100'
-              } transition-colors`}>
-                <FiEdit className="w-5 h-5" />
-              </button>
-            )}
+            <div className="flex items-center gap-2">
+              {pub.approvalStatus === 'Pending' && (
+                <button className={`p-2 rounded-lg ${
+                  darkMode 
+                    ? 'text-gray-300 hover:bg-gray-700/30' 
+                    : 'text-gray-600 hover:bg-gray-100'
+                } transition-colors`}>
+                  <FiEdit className="w-5 h-5" />
+                </button>
+              )}
+              <a 
+                href={pub.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`p-2 rounded-lg ${
+                  darkMode 
+                    ? 'text-blue-400 hover:bg-gray-700/30' 
+                    : 'text-blue-600 hover:bg-gray-100'
+                } transition-colors`}
+              >
+                <FiExternalLink className="w-5 h-5" />
+              </a>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -242,23 +260,16 @@ const PublicationCard = ({ pub, darkMode, statusConfig }) => {
           </div>
 
           <div className="mt-4">
-            <div className="flex items-center gap-2 mb-3">
-              <h4 className={`text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                Authors:
-              </h4>
-              <button onClick={() => window.open(pub.link, '_blank')} className={`p-1 rounded-md ${
-                darkMode ? 'text-blue-400 hover:bg-gray-700' : 'text-blue-600 hover:bg-gray-100'
-              }`}>
-                <FiExternalLink className="w-4 h-4" />
-              </button>
-            </div>
+            <h4 className={`text-sm font-medium mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              Authors
+            </h4>
             <div className="flex flex-wrap gap-2">
               {pub.authors.map((author, index) => (
                 <span
                   key={index}
                   className={`px-3 py-1.5 rounded-full text-sm ${
                     darkMode 
-                      ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+                      ? 'bg-gray-700/30 text-gray-300 hover:bg-gray-700/50' 
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   } transition-colors`}
                 >
@@ -269,18 +280,12 @@ const PublicationCard = ({ pub, darkMode, statusConfig }) => {
           </div>
 
           {pub.feedback && (
-            <div className={`mt-4 p-4 rounded-xl ${
-              darkMode ? 'bg-gray-700' : 'bg-gray-50'
+            <div className={`mt-4 p-4 rounded-xl border ${statusInfo.border} ${
+              darkMode ? 'bg-gray-700/30' : 'bg-gray-50/70'
             }`}>
               <div className="flex items-center gap-2 mb-2">
-                <FiAlertCircle className={`w-5 h-5 ${
-                  pub.approvalStatus === 'Approved' 
-                    ? 'text-emerald-500' 
-                    : 'text-rose-500'
-                }`} />
-                <span className={`text-sm font-medium ${
-                  darkMode ? 'text-gray-300' : 'text-gray-700'
-                }`}>
+                <FiMessageSquare className={`w-5 h-5 ${statusInfo.text}`} />
+                <span className={`text-sm font-medium ${statusInfo.text}`}>
                   Director's Feedback
                 </span>
               </div>
@@ -293,7 +298,7 @@ const PublicationCard = ({ pub, darkMode, statusConfig }) => {
 
         <div className="flex flex-col gap-4 md:w-48">
           <div className={`inline-flex items-center gap-3 px-4 py-2.5 rounded-full ${
-            statusInfo.color} ${statusInfo.text} transition-colors`}
+            statusInfo.color} ${statusInfo.text} ${statusInfo.border} border transition-colors`}
           >
             <span className="shrink-0">{statusInfo.icon}</span>
             <span className="font-medium text-sm">{pub.approvalStatus}</span>
@@ -304,7 +309,7 @@ const PublicationCard = ({ pub, darkMode, statusConfig }) => {
               onClick={() => window.open(pub.documentPath, '_blank')}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
                 darkMode 
-                  ? 'bg-gray-700 hover:bg-gray-600 text-blue-400' 
+                  ? 'bg-gray-700/30 hover:bg-gray-700/50 text-blue-400' 
                   : 'bg-gray-100 hover:bg-gray-200 text-blue-600'
               } transition-colors`}
             >
