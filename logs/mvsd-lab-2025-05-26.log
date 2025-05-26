@@ -3,3 +3,11 @@
 2025-05-26 00:09:03-EID[455927-MVSDLAB]-SID[4c9fe0c4-5d0c-4d56-a791-4a0de866c3cd]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
 2025-05-26 00:09:08-EID[455927-MVSDLAB]-SID[4c9fe0c4-5d0c-4d56-a791-4a0de866c3cd]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
 2025-05-26 00:09:28-EID[455927-MVSDLAB]-SID[4c9fe0c4-5d0c-4d56-a791-4a0de866c3cd]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-26 02:57:49-EID[]-SID[7d3e6998-9d64-41e9-93e3-ca58d0cd01a9]-[INFO] TASK[Login]-Login attempt for amin@gmail.com from IP 123.200.7.106
+2025-05-26 02:57:49-EID[]-SID[7d3e6998-9d64-41e9-93e3-ca58d0cd01a9]-[INFO] TASK[DBCheck]-Looking for amin@gmail.com in member
+2025-05-26 02:57:49-EID[762356-MVSDLAB]-SID[7d3e6998-9d64-41e9-93e3-ca58d0cd01a9]-[INFO] TASK[Generate EID]-Generated EID 762356-MVSDLAB for user amin@gmail.com
+2025-05-26 02:57:49-EID[762356-MVSDLAB]-SID[7d3e6998-9d64-41e9-93e3-ca58d0cd01a9]-[INFO] TASK[AuthSuccess]-Successful member login for amin@gmail.com
+2025-05-26 02:57:51-EID[762356-MVSDLAB]-SID[7d3e6998-9d64-41e9-93e3-ca58d0cd01a9]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-26 02:57:52-EID[762356-MVSDLAB]-SID[7d3e6998-9d64-41e9-93e3-ca58d0cd01a9]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-05-26 02:57:52-EID[762356-MVSDLAB]-SID[7d3e6998-9d64-41e9-93e3-ca58d0cd01a9]-[INFO] TASK[DashboardData]-Fetched data for amin@gmail.com
+2025-05-26 02:58:45-EID[762356-MVSDLAB]-SID[7d3e6998-9d64-41e9-93e3-ca58d0cd01a9]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
