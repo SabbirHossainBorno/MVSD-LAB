@@ -35,6 +35,8 @@ const EditPublication = ({ params, darkMode }) => {
         const response = await fetch(`/api/member_publication_edit/${id}`);
         if (!response.ok) throw new Error('Failed to fetch publication');
         const data = await response.json();
+
+        console.log('API Response:', data); // Debug log
         
         if (data.publication.approvalStatus === 'Approved') {
           setIsApproved(true);
@@ -46,12 +48,15 @@ const EditPublication = ({ params, darkMode }) => {
           type: data.publication.type,
           title: data.publication.title,
           year: data.publication.year,
-          authors: data.publication.authors,
+          authors: Array.isArray(data.publication.authors)  // Add validation
+          ? data.publication.authors 
+          : [],
           publishedDate: data.publication.publishedDate || '',
           link: data.publication.link,
           document: null
         });
         setExistingDocument(data.publication.documentPath);
+        console.log('Fetched authors:', data.publication.authors);
       } catch (error) {
         toast.error(error.message);
         router.push('/member_dashboard/member_publication_list');
@@ -240,21 +245,24 @@ const EditPublication = ({ params, darkMode }) => {
               Authors *
             </label>
             <div className="flex flex-wrap gap-2 mb-2">
-              {formData.authors.map((author, index) => (
-                <div
-                  key={index}
-                  className={`flex items-center gap-2 px-3 py-1 rounded text-sm ${darkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-200 text-gray-700'}`}
-                >
-                  {author}
-                  <button
-                    type="button"
-                    onClick={() => removeAuthor(index)}
-                    className="hover:text-red-500 focus:outline-none"
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
+              {formData.authors?.length > 0 ? (
+                formData.authors.map((author, index) => (
+                  <div key={index} className={`flex items-center gap-2 px-3 py-1 rounded text-sm ${darkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-200 text-gray-700'}`}>
+                    {author}
+                    <button
+                      type="button"
+                      onClick={() => removeAuthor(index)}
+                      className="hover:text-red-500 focus:outline-none"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  No authors listed
+                </p>
+              )}
             </div>
             <div className="flex gap-2">
               <input

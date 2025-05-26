@@ -123,7 +123,9 @@ export async function GET(req, { params }) {
 
     const publication = {
       ...rawData,
-      authors: safeParseJSON(rawData.authors, []),
+      authors: Array.isArray(rawData.authors) 
+        ? rawData.authors 
+        : safeParseJSON(rawData.authors || '[]', []),
       publishedDate: rawData.publishedDate ? new Date(rawData.publishedDate).toISOString() : null
     };
 
