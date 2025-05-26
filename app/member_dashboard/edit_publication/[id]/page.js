@@ -305,68 +305,81 @@ const EditPublication = ({ params, darkMode }) => {
             </div>
           </div>
 
-          {/* Document Upload */}
-          <div>
-            <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              Upload Document (PDF - Optional)
-            </label>
-            <input
-              type="file"
-              accept=".pdf"
-              onChange={handleFileChange}
-              className={`w-full p-2 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-800'} file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 ${darkMode ? 'file:bg-gray-600 file:text-gray-100' : 'file:bg-gray-200 file:text-gray-700'}`}
-            />
-          </div>
-        </form>
-          
-          {/* Replace the existing document section with this */}
+{/* Document Section */}
 <div className="space-y-4">
-  {existingDocument && !formData.document && (
-    <div className="flex items-center gap-4">
-      <a
-        href={existingDocument}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`inline-flex items-center gap-2 px-4 py-2 rounded ${
-          darkMode ? 'bg-gray-700 text-blue-400 hover:bg-gray-600' : 'bg-gray-100 text-blue-600 hover:bg-gray-200'
-        }`}
-      >
-        <FiExternalLink className="w-5 h-5" />
-        View Current Document
-      </a>
-      <button
-        type="button"
-        onClick={() => {
-          setExistingDocument(null);
-          setFormData(prev => ({ ...prev, document: 'REMOVE' }));
-        }}
-        className={`px-4 py-2 rounded ${
-          darkMode ? 'text-red-400 hover:bg-gray-700' : 'text-red-600 hover:bg-gray-100'
-        }`}
-      >
-        Remove Document
-      </button>
+  {existingDocument && (
+    <div className="flex items-center gap-4 mb-4">
+      <div className="flex-1">
+        <span className={`block text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          Existing Document
+        </span>
+        <div className="flex items-center gap-2 mt-1">
+          <FiFileText className={`w-5 h-5 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`} />
+          <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            {existingDocument.split('/').pop()}
+          </span>
+        </div>
+      </div>
+      <div className="flex gap-2">
+        <a
+          href={existingDocument}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`px-3 py-1.5 rounded flex items-center gap-2 ${
+            darkMode ? 'bg-gray-700 text-blue-400 hover:bg-gray-600' : 'bg-gray-100 text-blue-600 hover:bg-gray-200'
+          }`}
+        >
+          <FiExternalLink className="w-4 h-4" />
+          View
+        </a>
+        <button
+          type="button"
+          onClick={() => {
+            setExistingDocument(null);
+            setFormData(prev => ({ ...prev, document: 'REMOVE' }));
+          }}
+          className={`px-3 py-1.5 rounded flex items-center gap-2 ${
+            darkMode ? 'bg-gray-700 text-red-400 hover:bg-gray-600' : 'bg-gray-100 text-red-600 hover:bg-gray-200'
+          }`}
+        >
+          <FiXCircle className="w-4 h-4" />
+          Remove
+        </button>
+      </div>
     </div>
   )}
 
-  {(!existingDocument || formData.document) && (
-    <div>
-      <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-        {existingDocument ? 'Upload New Document (PDF)' : 'Upload Document (PDF - Optional)'}
-      </label>
+  {/* Document Upload Field */}
+  <div>
+    <label className={`block text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+      {existingDocument ? 'Upload New Document' : 'Upload Document (PDF - Optional)'}
+    </label>
+    <div className="mt-1">
       <input
         type="file"
         accept=".pdf"
         onChange={handleFileChange}
+        disabled={!!existingDocument}
         className={`w-full p-2 rounded border ${
           darkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-800'
         } file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 ${
           darkMode ? 'file:bg-gray-600 file:text-gray-100' : 'file:bg-gray-200 file:text-gray-700'
-        }`}
+        } ${existingDocument ? 'opacity-50 cursor-not-allowed' : ''}`}
       />
+      {existingDocument && (
+        <p className={`mt-2 text-sm ${
+          darkMode ? 'text-yellow-400' : 'text-yellow-600'
+        }`}>
+          To upload a new document, please remove the existing one first.
+        </p>
+      )}
     </div>
-  )}
+  </div>
 </div>
+        </form>
+          
+          {/* Replace the existing document section with this */}
+
 
           <motion.button
   whileHover={{ scale: 1.02 }}
