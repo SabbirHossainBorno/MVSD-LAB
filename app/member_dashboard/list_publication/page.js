@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
 import withAuth from '../../components/withAuth';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import Link from 'next/link';
 import { FiEdit, FiFileText, FiCheckCircle, FiClock, FiXCircle, FiExternalLink, FiSearch, FiFilter, FiMessageSquare } from 'react-icons/fi';
 
 const statusConfig = {
@@ -28,6 +29,7 @@ const statusConfig = {
 const PublicationList = ({ darkMode }) => {
   const [publications, setPublications] = useState([]);
   const [stats, setStats] = useState({});
+  
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -226,14 +228,16 @@ const PublicationCard = ({ pub, darkMode, statusConfig }) => {
               </h3>
             </div>
             <div className="flex items-center gap-2">
-              {pub.approvalStatus === 'Pending' && (
-                <button className={`p-2 rounded-lg ${
-                  darkMode 
-                    ? 'text-gray-300 hover:bg-gray-700/30' 
-                    : 'text-gray-600 hover:bg-gray-100'
-                } transition-colors`}>
-                  <FiEdit className="w-5 h-5" />
-                </button>
+              {['Pending', 'Rejected'].includes(pub.approvalStatus) && (
+                <Link href={`/member_dashboard/edit_publication/${pub.id}`}>
+                  <button className={`p-2 rounded-lg ${
+                    darkMode 
+                      ? 'text-gray-300 hover:bg-gray-700/30' 
+                      : 'text-gray-600 hover:bg-gray-100'
+                  } transition-colors`}>
+                    <FiEdit className="w-5 h-5" />
+                  </button>
+                </Link>
               )}
               <a 
                 href={pub.link} 

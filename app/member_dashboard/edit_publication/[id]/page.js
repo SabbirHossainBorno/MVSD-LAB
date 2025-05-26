@@ -5,8 +5,9 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
-import withAuth from '../../../../components/withAuth';
-import LoadingSpinner from '../../../../components/LoadingSpinner';
+import withAuth from '../../../components/withAuth';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import { FiEdit, FiFileText, FiCheckCircle, FiClock, FiXCircle, FiExternalLink, FiSearch, FiFilter, FiMessageSquare } from 'react-icons/fi';
 
 const typeCodes = {
   'Conference Paper': 'CONF_PAPER',
