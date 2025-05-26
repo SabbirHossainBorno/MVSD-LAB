@@ -117,12 +117,17 @@ const EditPublication = ({ params, darkMode }) => {
       formPayload.append('authors', JSON.stringify(formData.authors));
       formPayload.append('published_date', formData.publishedDate);
       formPayload.append('link', formData.link);
-      if (formData.document) {
-        formPayload.append('document', formData.document);
-      }
-      if (existingDocument) {
-        formPayload.append('existingDocument', existingDocument);
-      }
+      // Handle document removal
+    if (formData.document === 'REMOVE') {
+      formPayload.append('removeDocument', 'true');
+    } else if (formData.document) {
+      formPayload.append('document', formData.document);
+    }
+
+      // Add this to clear existing document if removed
+    if (!existingDocument) {
+      formPayload.append('existingDocument', '');
+    }
 
       const response = await fetch(`/api/member_publication_edit/${id}`, {
         method: 'PUT',
@@ -278,7 +283,7 @@ const EditPublication = ({ params, darkMode }) => {
               </label>
               <input
                 type="date"
-                value={formData.publishedDate}
+                value={formData.publishedDate?.split('T')[0] || ''} // Convert ISO to YYYY-MM-DD
                 onChange={(e) => setFormData({ ...formData, publishedDate: e.target.value })}
                 className={`w-full px-4 py-2.5 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100 focus:ring-purple-500' : 'bg-white border-gray-300 text-gray-800 focus:ring-purple-600'} focus:outline-none focus:ring-2`}
               />
@@ -312,49 +317,68 @@ const EditPublication = ({ params, darkMode }) => {
               className={`w-full p-2 rounded border ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-800'} file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 ${darkMode ? 'file:bg-gray-600 file:text-gray-100' : 'file:bg-gray-200 file:text-gray-700'}`}
             />
           </div>
-
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            disabled={isSubmitting}
-            className={`w-full py-3 rounded font-medium transition-colors ${darkMode ? 'bg-purple-600 hover:bg-purple-500 text-gray-100' : 'bg-purple-600 hover:bg-purple-700 text-white'} ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`}
-            type="submit"
-          >
-            {isSubmitting ? 'Submitting...' : 'Submit'}
-          </motion.button>
         </form>
           
-          {/* Existing document display */}
-          {existingDocument && (
-            <div>
-              <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                Existing Document
-              </label>
-              <a
-                href={existingDocument}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded ${
-                  darkMode ? 'bg-gray-700 text-blue-400 hover:bg-gray-600' : 'bg-gray-100 text-blue-600 hover:bg-gray-200'
-                }`}
-              >
-                <FiExternalLink className="w-5 h-5" />
-                View Current Document
-              </a>
-            </div>
-          )}
+          {/* Replace the existing document section with this */}
+<div className="space-y-4">
+  {existingDocument && !formData.document && (
+    <div className="flex items-center gap-4">
+      <a
+        href={existingDocument}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`inline-flex items-center gap-2 px-4 py-2 rounded ${
+          darkMode ? 'bg-gray-700 text-blue-400 hover:bg-gray-600' : 'bg-gray-100 text-blue-600 hover:bg-gray-200'
+        }`}
+      >
+        <FiExternalLink className="w-5 h-5" />
+        View Current Document
+      </a>
+      <button
+        type="button"
+        onClick={() => {
+          setExistingDocument(null);
+          setFormData(prev => ({ ...prev, document: 'REMOVE' }));
+        }}
+        className={`px-4 py-2 rounded ${
+          darkMode ? 'text-red-400 hover:bg-gray-700' : 'text-red-600 hover:bg-gray-100'
+        }`}
+      >
+        Remove Document
+      </button>
+    </div>
+  )}
+
+  {(!existingDocument || formData.document) && (
+    <div>
+      <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+        {existingDocument ? 'Upload New Document (PDF)' : 'Upload Document (PDF - Optional)'}
+      </label>
+      <input
+        type="file"
+        accept=".pdf"
+        onChange={handleFileChange}
+        className={`w-full p-2 rounded border ${
+          darkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-800'
+        } file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 ${
+          darkMode ? 'file:bg-gray-600 file:text-gray-100' : 'file:bg-gray-200 file:text-gray-700'
+        }`}
+      />
+    </div>
+  )}
+</div>
 
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            disabled={isSubmitting}
-            className={`w-full py-3 rounded font-medium transition-colors ${
-              darkMode ? 'bg-purple-600 hover:bg-purple-500 text-gray-100' : 'bg-purple-600 hover:bg-purple-700 text-white'
-            } ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`}
-            type="submit"
-          >
-            {isSubmitting ? 'Updating...' : 'Re-Submit'}
-          </motion.button>
+  whileHover={{ scale: 1.02 }}
+  whileTap={{ scale: 0.98 }}
+  disabled={isSubmitting}
+  className={`w-full py-3 rounded font-medium transition-colors ${
+    darkMode ? 'bg-purple-600 hover:bg-purple-500 text-gray-100' : 'bg-purple-600 hover:bg-purple-700 text-white'
+  } ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`}
+  type="submit"
+>
+  {isSubmitting ? 'Re-Submitting...' : 'Re-Submit'}
+</motion.button>
         </form>
       </div>
     </motion.div>
