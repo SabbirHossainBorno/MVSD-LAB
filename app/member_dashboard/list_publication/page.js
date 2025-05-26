@@ -290,7 +290,7 @@ const PublicationCard = ({ pub, darkMode, statusConfig }) => {
               <div className="flex items-center gap-2 mb-2">
                 <FiMessageSquare className={`w-5 h-5 ${statusInfo.text}`} />
                 <span className={`text-sm font-medium ${statusInfo.text}`}>
-                  Director's Feedback
+                  Director&apos;s Feedback
                 </span>
               </div>
               <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
