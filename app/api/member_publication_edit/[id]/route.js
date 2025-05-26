@@ -208,14 +208,33 @@ export async function PUT(req, { params }) {
     console.log(`Parsing form data for ${id}`);
     const formData = await req.formData();
     const existingDocument = formData.get('existingDocument');
+    const removeDocument = formData.get('removeDocument') === 'true';
     const documentFile = formData.get('document');
 
-    // Handle document upload
-    let documentPath = existingDocument;
-    if (documentFile && documentFile.size > 0) {
+    // Validate document operations
+    if (removeDocument && documentFile) {
+      console.error('Cannot remove and upload document at the same time');
+      return NextResponse.json(
+        { success: false, message: 'Cannot remove and upload document simultaneously' },
+        { status: 400, headers: SECURITY_HEADERS }
+      );
+    }
+
+    // Handle document removal
+    if (removeDocument) {
+      console.log(`Removing document for ${id}`);
+      if (existingDocument) {
+        const fullPath = path.join('/home/mvsd-lab/public', existingDocument);
+        if (fs.existsSync(fullPath)) {
+          fs.unlinkSync(fullPath);
+        }
+      }
+      documentPath = null;
+    } 
+    // Handle new document upload
+    else if (documentFile && documentFile.size > 0) {
       console.log(`Processing document upload for ${id}`);
       documentPath = await savePublicationDocument(documentFile, id, existingDocument);
-      console.log(`New document path: ${documentPath}`);
     }
 
     // Validate and parse form data
@@ -251,10 +270,17 @@ export async function PUT(req, { params }) {
       console.log(`Updating publication ${id}`);
       await query(
         `UPDATE phd_candidate_pub_res_info
-         SET type = $1, title = $2, publishing_year = $3,
-             authors = $4, published_date = $5, link = $6,
-             document_path = $7, approval_status = 'Pending', updated_at = NOW()
-         WHERE pub_res_id = $8`,
+        SET
+          type = $1,
+          title = $2,
+          publishing_year = $3,
+          authors = $4,
+          published_date = $5,
+          link = $6,
+          document_path = $7,
+          approval_status = 'Pending',
+          updated_at = NOW()
+        WHERE pub_res_id = $8`,
         [
           updateData.type,
           updateData.title,
@@ -262,7 +288,7 @@ export async function PUT(req, { params }) {
           JSON.stringify(updateData.authors),
           updateData.published_date,
           updateData.link,
-          updateData.document_path,
+          documentPath,  // Use the modified documentPath here
           id
         ]
       );
@@ -298,7 +324,9 @@ export async function PUT(req, { params }) {
 
     await sendTelegramAlert(formatAlertMessage(
       'Publication Updated',
-      `ID: ${id}\nMember: ${memberId}`
+      `ID: ${id}\nMember: ${memberId}\nDocument: ${
+        removeDocument ? 'Removed' : documentFile ? 'Updated' : 'Unchanged'
+      }`
     ));
 
     return NextResponse.json(
