@@ -36,7 +36,7 @@ const menuItems = [
     icon: <LiaProjectDiagramSolid className="w-5 h-5" />,
     subItems: [
       { name: 'Add Publication', link: 'add_publication' },
-      { name: 'Publication List', link: 'publications' }
+      { name: 'Publication List', link: 'list_publication' }
     ]
   }
 ];
@@ -628,7 +628,7 @@ const MemberDashboard = () => {
           )}
         
           {/* Publication List Page (You can create similarly) */}
-          {activeMenu === 'publications' && (
+          {activeMenu === 'list_publication' && (
             <PublicationList darkMode={darkMode} />
           )}
         </div>
