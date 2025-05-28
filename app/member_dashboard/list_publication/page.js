@@ -230,14 +230,14 @@ const PublicationCard = ({ pub, darkMode, statusConfig }) => {
             <div className="flex items-center gap-2">
               {['Pending', 'Rejected'].includes(pub.approvalStatus) && (
                 <Link href={`/member_dashboard/edit_publication/${pub.id}`}>
-                  <button className={`p-2 rounded-lg ${
-                    darkMode 
-                      ? 'text-gray-300 hover:bg-gray-700/30' 
-                      : 'text-gray-600 hover:bg-gray-100'
-                  } transition-colors`}>
-                    <FiEdit className="w-5 h-5" />
-                  </button>
-                </Link>
+  <button className={`p-2 rounded-lg ${
+    darkMode 
+      ? 'text-gray-300 hover:bg-gray-700/30' 
+      : 'text-gray-600 hover:bg-gray-100'
+  } transition-colors`}>
+    <FiEdit className="w-5 h-5" />
+  </button>
+</Link>
               )}
               <a 
                 href={pub.link} 
