@@ -1,4 +1,4 @@
-// app/api/member_publication_edit/[id]/route.js
+// app/api/member_publication_edit/route.js
 import { NextResponse } from 'next/server';
 import { query } from '../../../../lib/db';
 import logger from '../../../../lib/logger';
@@ -6,7 +6,7 @@ import sendTelegramAlert from '../../../../lib/telegramAlert';
 import path from 'path';
 import fs from 'fs';
 
-// Constants
+// Security headers configuration
 const SECURITY_HEADERS = {
   'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
   'X-Content-Type-Options': 'nosniff',
@@ -16,45 +16,54 @@ const SECURITY_HEADERS = {
   'Cache-Control': 'no-store, max-age=0'
 };
 
+// Constants
 const ID_REGEX = /^PUB\d{2,}RESMVSD$/;
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
+// Telegram alert formatter
 const formatAlertMessage = (title, details) => {
   return `MVSD LAB ALERT\n====================\n${title}\n${details}\nIP: ${details.ip}\nTime: ${new Date().toISOString()}`;
 };
 
-// Helper Functions
+// Helper: Safe JSON parsing
 const safeParseJSON = (str, fallback = []) => {
   try {
     return JSON.parse(str);
   } catch (e) {
-    console.error(`JSON parse failed for string: ${str}`);
+    console.error(`[JSON PARSE ERROR] Failed for string: ${str}`, e.stack);
     return fallback;
   }
 };
 
+// Helper: Validate filename
 const validateFilename = (filename) => {
   return /^[\w\-\.]+$/.test(filename) && path.extname(filename) === '.pdf';
 };
 
+// Helper: Save publication document with detailed logging
 const savePublicationDocument = async (file, pubResId, existingPath) => {
   try {
-    console.log(`Starting document processing for ${pubResId}`);
+    console.log(`[DOCUMENT PROCESSING] Starting for ${pubResId}`);
+    console.log(`File info: ${file.name} (${(file.size/1024/1024).toFixed(2)}MB)`);
     
     if (!file || file.size > MAX_FILE_SIZE) {
-      throw new Error('Invalid file or size exceeds 5MB limit');
+      throw new Error(`Invalid file or size exceeds 5MB limit (${(file.size/1024/1024).toFixed(2)}MB)`);
     }
 
     if (!validateFilename(file.name)) {
-      throw new Error('Invalid filename format');
+      throw new Error(`Invalid filename format: ${file.name}`);
     }
 
-    // Remove existing file
+    // Remove existing file if exists
     if (existingPath) {
       const fullPath = path.join('/home/mvsd-lab/public', existingPath);
-      console.log(`Removing existing document at ${fullPath}`);
+      console.log(`[REMOVE EXISTING] Attempting to remove: ${fullPath}`);
+      
       if (fs.existsSync(fullPath)) {
         fs.unlinkSync(fullPath);
+        console.log(`[REMOVED] Successfully deleted: ${fullPath}`);
+      } else {
+        console.warn(`[REMOVE WARNING] File not found: ${fullPath}`);
       }
     }
 
@@ -65,26 +74,29 @@ const savePublicationDocument = async (file, pubResId, existingPath) => {
       filename
     );
 
-    console.log(`Saving new document to ${targetPath}`);
+    console.log(`[SAVING DOCUMENT] Path: ${targetPath}`);
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
     
+    console.log(`[DOCUMENT SAVED] Successfully saved: ${filename}`);
     return `/Storage/Documents/PhD_Candidate/${filename}`;
+    
   } catch (error) {
-    console.error('Document processing failed:', error.message);
+    console.error(`[DOCUMENT ERROR] Processing failed: ${error.message}`);
     throw new Error(`File upload failed: ${error.message}`);
   }
 };
 
-// API Handlers
-export async function GET(req, { params }) {
+// GET Handler: Fetch publication data
+export async function GET(request, { params }) {
   const { id } = params;
-  console.log(`[GET] Received request for publication ${id}`);
+  console.log(`[GET START] Received request for publication ID: ${id}`);
+  const ipAddress = request.headers.get('x-forwarded-for') || 'Unknown IP';
 
   try {
     // Validate ID format
     if (!ID_REGEX.test(id)) {
-      console.error(`Invalid ID format: ${id}`);
+      console.error(`[INVALID ID] Format: ${id}`);
       return NextResponse.json(
         { error: 'Invalid publication ID format' },
         { status: 400, headers: SECURITY_HEADERS }
@@ -92,7 +104,7 @@ export async function GET(req, { params }) {
     }
 
     // Database query
-    console.log(`Querying database for ${id}`);
+    console.log(`[DATABASE QUERY] Fetching publication: ${id}`);
     const result = await query(
       `SELECT 
         pub_res_id AS id,
@@ -110,7 +122,7 @@ export async function GET(req, { params }) {
     );
 
     if (result.rows.length === 0) {
-      console.log(`Publication ${id} not found`);
+      console.log(`[NOT FOUND] Publication not found: ${id}`);
       return NextResponse.json(
         { error: 'Publication not found' },
         { status: 404, headers: SECURITY_HEADERS }
@@ -119,7 +131,7 @@ export async function GET(req, { params }) {
 
     // Process result
     const rawData = result.rows[0];
-    console.log(`Raw database response:`, JSON.stringify(rawData, null, 2));
+    console.log(`[DATABASE RESPONSE] Raw data:`, JSON.stringify(rawData, null, 2));
 
     const publication = {
       ...rawData,
@@ -129,11 +141,11 @@ export async function GET(req, { params }) {
       publishedDate: rawData.publishedDate ? new Date(rawData.publishedDate).toISOString() : null
     };
 
-    console.log(`Successfully fetched ${id}`);
+    console.log(`[GET SUCCESS] Retrieved publication: ${publication.title}`);
     return NextResponse.json({ publication }, { headers: SECURITY_HEADERS });
 
   } catch (error) {
-    console.error(`GET failed for ${id}:`, error);
+    console.error(`[GET FAILED] ID: ${id}`, error.stack);
     logger.error('Publication fetch failed', {
       meta: {
         id,
@@ -155,27 +167,30 @@ export async function GET(req, { params }) {
   }
 }
 
-export async function PUT(req, { params }) {
+// PUT Handler: Update publication
+export async function PUT(request, { params }) {
   const { id } = params;
-  const sessionId = req.cookies.get('sessionId')?.value || 'Unknown';
-  const eid = req.cookies.get('eid')?.value || 'Unknown';
-  const memberId = req.cookies.get('id')?.value;
-  const ipAddress = req.headers.get('x-forwarded-for') || 'Unknown';
+  const sessionId = request.cookies.get('sessionId')?.value || 'Unknown';
+  const eid = request.cookies.get('eid')?.value || 'Unknown';
+  const memberId = request.cookies.get('id')?.value;
+  const ipAddress = request.headers.get('x-forwarded-for') || 'Unknown IP';
 
-  console.log(`[PUT] Starting update for ${id} by ${memberId}`);
+  console.log(`[PUT START] Update request for ID: ${id} by member: ${memberId}`);
+  console.log(`Session: ${sessionId}, EID: ${eid}, IP: ${ipAddress}`);
 
   try {
-    // Validate inputs
-    if (!memberId || !/^\d+$/.test(memberId)) {
-      console.error(`Invalid member ID: ${memberId}`);
+    // Validate authentication - FIXED MEMBER ID VALIDATION
+    if (!memberId) {
+      console.error(`[AUTH ERROR] Member ID not found: ${memberId}`);
       return NextResponse.json(
         { success: false, message: 'Authentication required' }, 
         { status: 401, headers: SECURITY_HEADERS }
       );
     }
 
+    // Validate ID format
     if (!ID_REGEX.test(id)) {
-      console.error(`Invalid publication ID: ${id}`);
+      console.error(`[INVALID ID] Format: ${id}`);
       return NextResponse.json(
         { success: false, message: 'Invalid publication ID' },
         { status: 400, headers: SECURITY_HEADERS }
@@ -183,23 +198,25 @@ export async function PUT(req, { params }) {
     }
 
     // Check publication status
-    console.log(`Checking status for ${id}`);
+    console.log(`[STATUS CHECK] Verifying publication status: ${id}`);
     const statusCheck = await query(
-      `SELECT approval_status FROM phd_candidate_pub_res_info
+      `SELECT approval_status, document_path 
+       FROM phd_candidate_pub_res_info
        WHERE pub_res_id = $1 AND phd_candidate_id = $2`,
       [id, memberId]
     );
 
     if (statusCheck.rows.length === 0) {
-      console.log(`No publication found for ${id} and member ${memberId}`);
+      console.log(`[NOT FOUND] Publication not found: ${id}`);
       return NextResponse.json(
         { success: false, message: 'Publication not found' },
         { status: 404, headers: SECURITY_HEADERS }
       );
     }
 
+    const existingDocumentPath = statusCheck.rows[0].document_path;
     if (statusCheck.rows[0].approval_status === 'Approved') {
-      console.log(`Attempt to modify approved publication ${id}`);
+      console.log(`[APPROVAL ERROR] Attempt to modify approved publication: ${id}`);
       return NextResponse.json(
         { success: false, message: 'Approved publications cannot be modified' },
         { status: 403, headers: SECURITY_HEADERS }
@@ -207,71 +224,82 @@ export async function PUT(req, { params }) {
     }
 
     // Process form data
-    console.log(`Parsing form data for ${id}`);
-    const formData = await req.formData();
-    const existingDocument = formData.get('existingDocument');
+    console.log(`[FORM DATA] Parsing form data`);
+    const formData = await request.formData();
     const removeDocument = formData.get('removeDocument') === 'true';
     const documentFile = formData.get('document');
+    
+    console.log(`Document operations - Remove: ${removeDocument}, New file: ${documentFile ? 'Yes' : 'No'}`);
 
-    // Validate document operations
-    if (removeDocument && documentFile) {
-      console.error('Cannot remove and upload document at the same time');
-      return NextResponse.json(
-        { success: false, message: 'Cannot remove and upload document simultaneously' },
-        { status: 400, headers: SECURITY_HEADERS }
-      );
-    }
-
-    // Handle document removal
+    // Handle document operations
+    let documentPath = existingDocumentPath || null;
+    
     if (removeDocument) {
-      console.log(`Removing document for ${id}`);
-      if (existingDocument) {
-        const fullPath = path.join('/home/mvsd-lab/public', existingDocument);
+      console.log(`[DOCUMENT REMOVAL] Requested for ID: ${id}`);
+      if (documentPath) {
+        const fullPath = path.join('/home/mvsd-lab/public', documentPath);
+        console.log(`[REMOVING] Attempting to remove: ${fullPath}`);
+        
         if (fs.existsSync(fullPath)) {
           fs.unlinkSync(fullPath);
+          console.log(`[REMOVED] Successfully deleted: ${fullPath}`);
         }
+        documentPath = null;
       }
-      documentPath = null;
     } 
-    // Handle new document upload
-    else if (documentFile && documentFile.size > 0) {
-      console.log(`Processing document upload for ${id}`);
-      documentPath = await savePublicationDocument(documentFile, id, existingDocument);
+    
+    if (documentFile && documentFile.size > 0) {
+      console.log(`[DOCUMENT UPLOAD] Processing new file`);
+      try {
+        documentPath = await savePublicationDocument(
+          documentFile, 
+          id, 
+          removeDocument ? null : existingDocumentPath
+        );
+      } catch (fileError) {
+        console.error(`[UPLOAD ERROR] ${fileError.message}`);
+        return NextResponse.json(
+          { success: false, message: fileError.message },
+          { status: 400, headers: SECURITY_HEADERS }
+        );
+      }
     }
 
     // Validate and parse form data
-    console.log(`Validating form data for ${id}`);
+    console.log(`[DATA VALIDATION] Processing form fields`);
     const updateData = {
       type: formData.get('type'),
       title: formData.get('title')?.trim(),
       publishing_year: Number(formData.get('publishing_year')),
       authors: safeParseJSON(formData.get('authors')),
-      published_date: (() => {
-        const date = formData.get('published_date');
-        return date && !isNaN(new Date(date)) ? new Date(date).toISOString() : null;
-      })(),
+      published_date: formData.get('published_date') || null,
       link: formData.get('link')?.trim(),
-      document_path: documentPath
     };
 
     // Validate required fields
-    if (!updateData.type || !updateData.title || !updateData.publishing_year || 
-        !updateData.authors?.length || !updateData.link) {
-      console.error('Missing required fields:', updateData);
+    const missingFields = [];
+    if (!updateData.type) missingFields.push('type');
+    if (!updateData.title) missingFields.push('title');
+    if (!updateData.publishing_year) missingFields.push('year');
+    if (!updateData.authors?.length) missingFields.push('authors');
+    if (!updateData.link) missingFields.push('link');
+    
+    if (missingFields.length > 0) {
+      console.error(`[VALIDATION ERROR] Missing fields: ${missingFields.join(', ')}`);
       return NextResponse.json(
-        { success: false, message: 'Missing required fields' },
+        { success: false, message: 'Missing required fields', missingFields },
         { status: 400, headers: SECURITY_HEADERS }
       );
     }
 
     // Database transaction
-    console.log(`Starting database transaction for ${id}`);
+    console.log(`[TRANSACTION START] Beginning database update`);
     await query('BEGIN');
 
     try {
-      console.log(`Updating publication ${id}`);
-      await query(
-        `UPDATE phd_candidate_pub_res_info
+      console.log(`[DATABASE UPDATE] Executing update query`);
+      const updateQuery = `
+        UPDATE phd_candidate_pub_res_info
         SET
           type = $1,
           title = $2,
@@ -282,20 +310,25 @@ export async function PUT(req, { params }) {
           document_path = $7,
           approval_status = 'Pending',
           updated_at = NOW()
-        WHERE pub_res_id = $8`,
-        [
-          updateData.type,
-          updateData.title,
-          updateData.publishing_year,
-          JSON.stringify(updateData.authors),
-          updateData.published_date,
-          updateData.link,
-          documentPath,  // Use the modified documentPath here
-          id
-        ]
-      );
+        WHERE pub_res_id = $8
+        RETURNING *`;
+      
+      const result = await query(updateQuery, [
+        updateData.type,
+        updateData.title,
+        updateData.publishing_year,
+        JSON.stringify(updateData.authors),
+        updateData.published_date,
+        updateData.link,
+        documentPath,
+        id
+      ]);
 
-      console.log(`Updating notifications for ${id}`);
+      console.log(`[UPDATE SUCCESS] Affected rows: ${result.rowCount}`);
+      console.log(`Updated data:`, JSON.stringify(result.rows[0], null, 2));
+
+      // Update notification
+      console.log(`[NOTIFICATION UPDATE] Creating notification`);
       await query(
         `UPDATE notification_details
          SET title = $1, status = 'Unread', created_at = NOW()
@@ -304,16 +337,16 @@ export async function PUT(req, { params }) {
       );
 
       await query('COMMIT');
-      console.log(`Transaction committed for ${id}`);
+      console.log(`[TRANSACTION COMPLETE] Update committed`);
 
     } catch (dbError) {
       await query('ROLLBACK');
-      console.error(`Database error for ${id}:`, dbError);
-      throw dbError;
+      console.error(`[DATABASE ERROR] Rollback initiated: ${dbError.message}`);
+      throw new Error(`Database operation failed: ${dbError.message}`);
     }
 
     // Log success
-    console.log(`Successfully updated ${id}`);
+    console.log(`[UPDATE COMPLETE] Successfully updated ID: ${id}`);
     logger.info('Publication updated', {
       meta: {
         id,
@@ -326,9 +359,7 @@ export async function PUT(req, { params }) {
 
     await sendTelegramAlert(formatAlertMessage(
       'Publication Updated',
-      `ID: ${id}\nMember: ${memberId}\nDocument: ${
-        removeDocument ? 'Removed' : documentFile ? 'Updated' : 'Unchanged'
-      }`
+      `ID: ${id}\nMember: ${memberId}\nTitle: ${updateData.title}`
     ));
 
     return NextResponse.json(
@@ -337,7 +368,7 @@ export async function PUT(req, { params }) {
     );
 
   } catch (error) {
-    console.error(`Update failed for ${id}:`, error);
+    console.error(`[UPDATE FAILED] ID: ${id}`, error.stack);
     logger.error('Publication update failed', {
       meta: {
         id,
@@ -346,12 +377,13 @@ export async function PUT(req, { params }) {
         stack: error.stack,
         sessionId,
         eid,
-        ip: ipAddress
+        ip: ipAddress,
+        severity: 'CRITICAL'
       }
     });
 
     await sendTelegramAlert(formatAlertMessage(
-      'Update Failed',
+      'Publication Update Failed',
       `ID: ${id}\nError: ${error.message}`
     ));
 

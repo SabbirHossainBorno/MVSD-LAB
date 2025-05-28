@@ -230,14 +230,14 @@ const PublicationCard = ({ pub, darkMode, statusConfig }) => {
             <div className="flex items-center gap-2">
               {['Pending', 'Rejected'].includes(pub.approvalStatus) && (
                 <Link href={`/member_dashboard/edit_publication/${pub.id}`}>
-  <button className={`p-2 rounded-lg ${
-    darkMode 
-      ? 'text-gray-300 hover:bg-gray-700/30' 
-      : 'text-gray-600 hover:bg-gray-100'
-  } transition-colors`}>
-    <FiEdit className="w-5 h-5" />
-  </button>
-</Link>
+                  <button className={`p-2 rounded-lg ${
+                    darkMode 
+                      ? 'text-gray-300 hover:bg-gray-700/30' 
+                      : 'text-gray-600 hover:bg-gray-100'
+                  } transition-colors`}>
+                    <FiEdit className="w-5 h-5" />
+                  </button>
+                </Link>
               )}
               <a 
                 href={pub.link} 
@@ -256,10 +256,9 @@ const PublicationCard = ({ pub, darkMode, statusConfig }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <InfoItem darkMode={darkMode} label="Type" value={pub.type} />
-            <InfoItem darkMode={darkMode} label="Year" value={pub.year} />
-            <InfoItem darkMode={darkMode} label="Submitted" value={new Date(pub.createdAt).toLocaleDateString()} />
+            <InfoItem darkMode={darkMode} label="Publishing Year" value={pub.year} />
             {pub.publishedDate && (
-              <InfoItem darkMode={darkMode} label="Published" value={new Date(pub.publishedDate).toLocaleDateString()} />
+              <InfoItem darkMode={darkMode} label="Published Year" value={new Date(pub.publishedDate).toLocaleDateString()} />
             )}
           </div>
 
@@ -269,16 +268,19 @@ const PublicationCard = ({ pub, darkMode, statusConfig }) => {
             </h4>
             <div className="flex flex-wrap gap-2">
               {pub.authors.map((author, index) => (
-                <span
-                  key={index}
-                  className={`px-3 py-1.5 rounded-full text-sm ${
+                <div 
+                  key={index} 
+                  className={`relative inline-flex items-center px-3 py-1.5 rounded-full text-sm ${
                     darkMode 
                       ? 'bg-gray-700/30 text-gray-300 hover:bg-gray-700/50' 
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   } transition-colors`}
                 >
                   {author}
-                </span>
+                  <sup className="absolute -top-1.5 -right-1.5 flex items-center justify-center w-4 h-4 rounded-full bg-blue-500 text-white text-[0.5rem] font-bold">
+                    {index + 1}
+                  </sup>
+                </div>
               ))}
             </div>
           </div>
