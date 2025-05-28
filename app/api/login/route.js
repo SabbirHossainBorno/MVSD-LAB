@@ -201,7 +201,7 @@ console.log('Setting memberId cookie:', user.id); // Debugging log
 console.log('Setting memberType cookie:', user.type); // Debugging log
 response.cookies.set('redirect', 
   table === 'admin' ? '/dashboard' :
-  ['Professor', 'PhD Candidate'].includes(user.type) ? '/member_dashboard' : '/home',
+  ['PhD Candidate'].includes(user.type) ? '/member_dashboard' : '/home',
   cookieConfig
 );
 return response;
