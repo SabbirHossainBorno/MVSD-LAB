@@ -26,26 +26,78 @@ const generatePublicationId = async () => {
   return `PUB${newNumber.toString().padStart(2, '0')}RESMVSD`;
 };
 
-const savePublicationDocument = async (file, pubResId) => {
-  if (!file) return null;
-  
-  const allowedTypes = ['application/pdf'];
-  if (!allowedTypes.includes(file.type)) {
-    throw new Error('Only PDF files are allowed');
-  }
-
-  const filename = `${pubResId}${path.extname(file.name)}`;
-  const targetPath = path.join(
-    '/home/mvsd-lab/public/Storage/Documents/PhD_Candidate',
-    filename
-  );
-
+// Helper: Save publication document with proper renaming
+const savePublicationDocument = async (file, pubResId, existingPath) => {
   try {
-    const buffer = await file.arrayBuffer();
-    fs.writeFileSync(targetPath, Buffer.from(buffer));
-    return `/Storage/Documents/PhD_Candidate/${filename}`;
+    console.log(`[DOCUMENT PROCESSING] Starting for ${pubResId}`);
+    
+    // Validate file exists
+    if (!file) {
+      throw new Error('No file provided for upload');
+    }
+    
+    console.log(`Original file name: ${file.name} (${(file.size/1024/1024).toFixed(2)}MB)`);
+
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      throw new Error(`File size exceeds 5MB limit (${(file.size/1024/1024).toFixed(2)}MB)`);
+    }
+
+    // Validate file type - only PDF allowed
+    const allowedTypes = ['application/pdf'];
+    if (!allowedTypes.includes(file.type)) {
+      throw new Error('Only PDF files are allowed');
+    }
+
+    // Get and validate file extension
+    const extension = path.extname(file.name).toLowerCase();
+    if (extension !== '.pdf') {
+      throw new Error('File must have .pdf extension');
+    }
+
+    // Remove existing file if exists
+    if (existingPath) {
+      const fullPath = path.join('/home/mvsd-lab/public', existingPath);
+      console.log(`[REMOVE EXISTING] Attempting to remove: ${fullPath}`);
+      
+      if (fs.existsSync(fullPath)) {
+        try {
+          fs.unlinkSync(fullPath);
+          console.log(`[REMOVED] Successfully deleted: ${fullPath}`);
+        } catch (removeError) {
+          console.error(`[REMOVE ERROR] Failed to delete: ${fullPath}`, removeError);
+          throw new Error(`Failed to remove existing document: ${removeError.message}`);
+        }
+      } else {
+        console.warn(`[REMOVE WARNING] File not found: ${fullPath}`);
+      }
+    }
+
+    // Create new filename using publication ID and original extension
+    const newFilename = `${pubResId}${extension}`;
+    const targetPath = path.join(
+      '/home/mvsd-lab/public/Storage/Documents/PhD_Candidate',
+      newFilename
+    );
+
+    console.log(`[SAVING DOCUMENT] New filename: ${newFilename}`);
+    console.log(`Saving to: ${targetPath}`);
+    
+    try {
+      // Convert file to buffer and save
+      const buffer = await file.arrayBuffer();
+      fs.writeFileSync(targetPath, Buffer.from(buffer));
+      console.log(`[DOCUMENT SAVED] Successfully saved: ${newFilename}`);
+      
+      return `/Storage/Documents/PhD_Candidate/${newFilename}`;
+    } catch (writeError) {
+      console.error(`[SAVE ERROR] Failed to write file: ${writeError.message}`);
+      throw new Error(`Failed to save document: ${writeError.message}`);
+    }
+    
   } catch (error) {
-    throw new Error(`Failed to save document: ${error.message}`);
+    console.error(`[DOCUMENT PROCESSING ERROR] ${error.message}`);
+    throw error;
   }
 };
 

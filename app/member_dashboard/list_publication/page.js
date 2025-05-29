@@ -258,7 +258,7 @@ const PublicationCard = ({ pub, darkMode, statusConfig }) => {
             <InfoItem darkMode={darkMode} label="Type" value={pub.type} />
             <InfoItem darkMode={darkMode} label="Publishing Year" value={pub.year} />
             {pub.publishedDate && (
-              <InfoItem darkMode={darkMode} label="Published Year" value={new Date(pub.publishedDate).toLocaleDateString()} />
+              <InfoItem darkMode={darkMode} label="Published Date" value={new Date(pub.publishedDate).toLocaleDateString()} />
             )}
           </div>
 

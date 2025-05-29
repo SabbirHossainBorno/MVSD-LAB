@@ -40,18 +40,32 @@ const validateFilename = (filename) => {
   return /^[\w\-\.]+$/.test(filename) && path.extname(filename) === '.pdf';
 };
 
-// Helper: Save publication document with detailed logging
+// Helper: Save publication document with enhanced validation
 const savePublicationDocument = async (file, pubResId, existingPath) => {
   try {
     console.log(`[DOCUMENT PROCESSING] Starting for ${pubResId}`);
-    console.log(`File info: ${file.name} (${(file.size/1024/1024).toFixed(2)}MB)`);
     
-    if (!file || file.size > MAX_FILE_SIZE) {
-      throw new Error(`Invalid file or size exceeds 5MB limit (${(file.size/1024/1024).toFixed(2)}MB)`);
+    // Validate file exists
+    if (!file) {
+      throw new Error('No file provided for upload');
+    }
+    
+    console.log(`File info: ${file.name} (${(file.size/1024/1024).toFixed(2)}MB)`);
+
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      throw new Error(`File size exceeds 5MB limit (${(file.size/1024/1024).toFixed(2)}MB)`);
     }
 
+    // Validate file type
+    const allowedTypes = ['application/pdf'];
+    if (!allowedTypes.includes(file.type)) {
+      throw new Error('Only PDF files are allowed');
+    }
+
+    // Validate filename format
     if (!validateFilename(file.name)) {
-      throw new Error(`Invalid filename format: ${file.name}`);
+      throw new Error(`Invalid filename: ${file.name}. Only alphanumeric names with .pdf extension are allowed`);
     }
 
     // Remove existing file if exists
@@ -60,14 +74,19 @@ const savePublicationDocument = async (file, pubResId, existingPath) => {
       console.log(`[REMOVE EXISTING] Attempting to remove: ${fullPath}`);
       
       if (fs.existsSync(fullPath)) {
-        fs.unlinkSync(fullPath);
-        console.log(`[REMOVED] Successfully deleted: ${fullPath}`);
+        try {
+          fs.unlinkSync(fullPath);
+          console.log(`[REMOVED] Successfully deleted: ${fullPath}`);
+        } catch (removeError) {
+          console.error(`[REMOVE ERROR] Failed to delete: ${fullPath}`, removeError);
+          throw new Error(`Failed to remove existing document: ${removeError.message}`);
+        }
       } else {
         console.warn(`[REMOVE WARNING] File not found: ${fullPath}`);
       }
     }
 
-    // Create new file
+    // Create new filename
     const filename = `${pubResId}${path.extname(file.name)}`;
     const targetPath = path.join(
       '/home/mvsd-lab/public/Storage/Documents/PhD_Candidate',
@@ -75,15 +94,22 @@ const savePublicationDocument = async (file, pubResId, existingPath) => {
     );
 
     console.log(`[SAVING DOCUMENT] Path: ${targetPath}`);
-    const buffer = await file.arrayBuffer();
-    fs.writeFileSync(targetPath, Buffer.from(buffer));
     
-    console.log(`[DOCUMENT SAVED] Successfully saved: ${filename}`);
-    return `/Storage/Documents/PhD_Candidate/${filename}`;
+    try {
+      // Convert file to buffer and save
+      const buffer = await file.arrayBuffer();
+      fs.writeFileSync(targetPath, Buffer.from(buffer));
+      console.log(`[DOCUMENT SAVED] Successfully saved: ${filename}`);
+      
+      return `/Storage/Documents/PhD_Candidate/${filename}`;
+    } catch (writeError) {
+      console.error(`[SAVE ERROR] Failed to write file: ${writeError.message}`);
+      throw new Error(`Failed to save document: ${writeError.message}`);
+    }
     
   } catch (error) {
-    console.error(`[DOCUMENT ERROR] Processing failed: ${error.message}`);
-    throw new Error(`File upload failed: ${error.message}`);
+    console.error(`[DOCUMENT PROCESSING ERROR] ${error.message}`);
+    throw error; // Rethrow to preserve original error
   }
 };
 
@@ -249,7 +275,7 @@ export async function PUT(request, { params }) {
     } 
     
     if (documentFile && documentFile.size > 0) {
-      console.log(`[DOCUMENT UPLOAD] Processing new file`);
+      console.log(`[DOCUMENT UPLOAD] Processing new file: ${documentFile.name} (${(documentFile.size/1024/1024).toFixed(2)}MB)`);
       try {
         documentPath = await savePublicationDocument(
           documentFile, 
