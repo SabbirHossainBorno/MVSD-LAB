@@ -5,6 +5,9 @@ import logger from '../../../lib/logger';
 import sendTelegramAlert from '../../../lib/telegramAlert';
 import path from 'path';
 import fs from 'fs';
+import nodemailer from 'nodemailer';
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 const formatAlertMessage = (title, details) => {
   return `MVSD LAB MEMBER DASHBOARD\n--------------------------------------------------\n${title}\n${details}`;
@@ -285,6 +288,112 @@ export async function POST(req) {
 
       await query('COMMIT');
       console.log('[Database] Transaction committed successfully');
+
+      try {
+  console.log('[Email Notification] Preparing to send notifications');
+  
+  // 1. Get director's email
+  const directorResult = await query(
+    `SELECT email FROM director_basic_info WHERE id = 'D01MVSD'`
+  );
+  
+  const directorEmail = directorResult.rows[0]?.email;
+  
+  // 2. Get member's email
+  const memberResult = await query(
+    `SELECT email FROM member WHERE id = $1`,
+    [memberId]
+  );
+  
+  const memberEmail = memberResult.rows[0]?.email;
+  
+  if (!directorEmail || !memberEmail) {
+    console.warn('[Email Notification] Missing emails - Director:', directorEmail, 'Member:', memberEmail);
+  } else {
+    // Create email transporter
+    const transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: parseInt(process.env.EMAIL_PORT),
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+    
+    // 3. Prepare email templates
+    const directorEmailContent = `Dear Director,
+
+    A new publication/research has been submitted by ${memberId} (${memberEmail}).
+
+    Publication Details:
+    - ID: ${pubResId}
+    - Title: ${publicationData.title}
+    - Type: ${publicationData.type}
+    - Year: ${publicationData.publishing_year}
+    - Authors: ${publicationData.authors.join(', ')}
+    - Link: ${publicationData.link}
+
+    This submission is now pending your review and approval in the MVSD Lab Member Dashboard.
+
+    Sincerely,
+    MVSD Lab System`;
+
+        const memberEmailContent = `Dear Research Member,
+
+    Your publication/research has been successfully submitted:
+
+    Title: ${publicationData.title}
+    Type: ${publicationData.type}
+    Year: ${publicationData.publishing_year}
+    Publication ID: ${pubResId}
+
+    Your submission is now pending review by the director. You'll be notified once it's approved.
+
+    Thank you for your contribution to MVSD Lab research.
+
+    Best regards,
+    MVSD Lab Team`;
+
+        // 4. Send emails
+        const emailPromises = [];
+        
+        if (directorEmail) {
+          emailPromises.push(
+            transporter.sendMail({
+              from: process.env.EMAIL_FROM,
+              to: directorEmail,
+              subject: `New Publication Submission - ${pubResId}`,
+              text: directorEmailContent
+            })
+          );
+        }
+        
+        if (memberEmail) {
+          emailPromises.push(
+            transporter.sendMail({
+              from: process.env.EMAIL_FROM,
+              to: memberEmail,
+              subject: `Publication Submitted Successfully - ${pubResId}`,
+              text: memberEmailContent
+            })
+          );
+        }
+        
+        // Wait for all emails to send
+        await Promise.all(emailPromises);
+        console.log('[Email Notification] Emails sent successfully');
+      }
+    } catch (emailError) {
+      console.error('[Email Notification Failed]', emailError.message);
+      logger.error('Email sending failed', {
+        meta: {
+          pub_res_id: pubResId,
+          error: emailError.message,
+          taskName: 'Add Publication Email'
+        }
+      });
+    }
 
     } catch (dbError) {
       console.error('[Database Error] Rolling back transaction:', dbError.message);
