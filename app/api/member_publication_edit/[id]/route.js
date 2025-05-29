@@ -5,6 +5,7 @@ import logger from '../../../../lib/logger';
 import sendTelegramAlert from '../../../../lib/telegramAlert';
 import path from 'path';
 import fs from 'fs';
+import nodemailer from 'nodemailer';
 
 // Security headers configuration
 const SECURITY_HEADERS = {
@@ -35,11 +36,6 @@ const safeParseJSON = (str, fallback = []) => {
   }
 };
 
-// Helper: Validate filename
-const validateFilename = (filename) => {
-  return /^[\w\-\.]+$/.test(filename) && path.extname(filename) === '.pdf';
-};
-
 // Helper: Save publication document with enhanced validation
 const savePublicationDocument = async (file, pubResId, existingPath) => {
   try {
@@ -63,9 +59,10 @@ const savePublicationDocument = async (file, pubResId, existingPath) => {
       throw new Error('Only PDF files are allowed');
     }
 
-    // Validate filename format
-    if (!validateFilename(file.name)) {
-      throw new Error(`Invalid filename: ${file.name}. Only alphanumeric names with .pdf extension are allowed`);
+    // Get file extension
+    const extension = path.extname(file.name).toLowerCase();
+    if (extension !== '.pdf') {
+      throw new Error('File must have .pdf extension');
     }
 
     // Remove existing file if exists
@@ -87,7 +84,7 @@ const savePublicationDocument = async (file, pubResId, existingPath) => {
     }
 
     // Create new filename
-    const filename = `${pubResId}${path.extname(file.name)}`;
+    const filename = `${pubResId}${extension}`;
     const targetPath = path.join(
       '/home/mvsd-lab/public/Storage/Documents/PhD_Candidate',
       filename
@@ -205,7 +202,7 @@ export async function PUT(request, { params }) {
   console.log(`Session: ${sessionId}, EID: ${eid}, IP: ${ipAddress}`);
 
   try {
-    // Validate authentication - FIXED MEMBER ID VALIDATION
+    // Validate authentication
     if (!memberId) {
       console.error(`[AUTH ERROR] Member ID not found: ${memberId}`);
       return NextResponse.json(
@@ -364,6 +361,151 @@ export async function PUT(request, { params }) {
 
       await query('COMMIT');
       console.log(`[TRANSACTION COMPLETE] Update committed`);
+
+      // EMAIL NOTIFICATION SECTION
+      try {
+        console.log('[Email Notification] Preparing to send notifications');
+        
+        // 1. Get director's email
+        const directorResult = await query(
+          `SELECT email FROM director_basic_info WHERE id = 'D01MVSD'`
+        );
+        const directorEmail = directorResult.rows[0]?.email;
+        
+        // 2. Get member's email
+        const memberResult = await query(
+          `SELECT email FROM member WHERE id = $1`,
+          [memberId]
+        );
+        const memberEmail = memberResult.rows[0]?.email;
+        
+        if (directorEmail || memberEmail) {
+          // Create email transporter
+          const transporter = nodemailer.createTransport({
+            host: process.env.EMAIL_HOST,
+            port: parseInt(process.env.EMAIL_PORT),
+            secure: true,
+            auth: {
+              user: process.env.EMAIL_USER,
+              pass: process.env.EMAIL_PASS
+            }
+          });
+
+          // Prepare emails
+          const emails = [];
+          
+          // Director notification
+if (directorEmail) {
+  const directorEmailHTML = `
+    <p>Dear Director,</p>
+    
+    <p>A Publication/Research has been updated by <strong>${memberId}</strong> (${memberEmail}).</p>
+    
+    <p>Publication Details:</p>
+    <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+      <tr>
+        <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">Publication/Research ID</td>
+        <td style="padding: 8px; border: 1px solid #ddd;">${id}</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Title</td>
+        <td style="padding: 8px; border: 1px solid #ddd;">${updateData.title}</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Type</td>
+        <td style="padding: 8px; border: 1px solid #ddd;">${updateData.type}</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Publishing Year</td>
+        <td style="padding: 8px; border: 1px solid #ddd;">${updateData.publishing_year}</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Authors</td>
+        <td style="padding: 8px; border: 1px solid #ddd;">${updateData.authors.join(', ')}</td>
+      </tr>
+    </table>
+    
+    <p>This updated version is now pending your review and approval in the <a href="https://www.mvsdlab.com/login">MVSD LAB Director Portal</a>.</p>
+    
+    <p>Sincerely,<br>
+    <strong>MVSD LAB</strong></p>
+    
+    <p style="margin-top: 20px; font-size: 12px; color: #666;">
+      <strong>Quick Action:</strong> <a href="https://www.mvsdlab.com/login">Review Publication/Research Now</a>
+    </p>
+  `;
+
+  emails.push({
+    from: process.env.EMAIL_FROM,
+    to: directorEmail,
+    subject: `Publication Updated - ${id}`,
+    html: directorEmailHTML
+  });
+}
+          
+          // Member confirmation (HTML version)
+    if (memberEmail) {
+      const memberEmailContentHTML = `
+        <p>Dear Researcher,</p>
+        
+        <p>Your Publication/Research has been successfully updated:</p>
+        
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Publication/Research ID</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${id}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">Title</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${updateData.title}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Type</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${updateData.type}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Publishing Year</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${updateData.publishing_year}</td>
+          </tr>
+        </table>
+        
+        <p>The updated version is now pending review by the director. You'll be notified once it's approved.</p>
+        
+        <p>Thank you for your contribution to MVSD LAB's Publication/Research.</p>
+        
+        <p>Best Regards,<br>
+        <strong>MVSD LAB</strong></p>
+        
+        <p style="margin-top: 20px; font-size: 12px; color: #666;">
+          You can view your submissions at : <a href="https://www.mvsdlab.com/login">MVSD LAB Member Dashboard</a>
+        </p>
+      `;
+
+      emails.push({
+        from: process.env.EMAIL_FROM,
+        to: memberEmail,
+        subject: `Publication Updated Successfully - ${id}`,
+        html: memberEmailContentHTML
+      });
+    }
+          
+          // Send all emails
+          await Promise.all(emails.map(email => transporter.sendMail(email)));
+          console.log(`[Email] Sent ${emails.length} notifications`);
+        } else {
+          console.log('[Email] No valid email addresses found for notifications');
+        }
+      } catch (emailError) {
+        console.error('[Email Error]', emailError.message);
+        logger.error('Email sending failed after publication update', {
+          meta: {
+            id,
+            memberId,
+            error: emailError.message
+          }
+        });
+      }
+      // END EMAIL NOTIFICATION SECTION
 
     } catch (dbError) {
       await query('ROLLBACK');
