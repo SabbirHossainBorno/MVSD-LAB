@@ -289,176 +289,158 @@ export async function POST(req) {
       await query('COMMIT');
       console.log('[Database] Transaction committed successfully');
 
+      // Email notification section
       try {
-  console.log('[Email Notification] Preparing to send notifications');
-  
-  // 1. Get director's email
-  const directorResult = await query(
-    `SELECT email FROM director_basic_info WHERE id = 'D01MVSD'`
-  );
-  
-  const directorEmail = directorResult.rows[0]?.email;
-  
-  // 2. Get member's email
-  const memberResult = await query(
-    `SELECT email FROM member WHERE id = $1`,
-    [memberId]
-  );
-  
-  const memberEmail = memberResult.rows[0]?.email;
-  
-  if (!directorEmail || !memberEmail) {
-    console.warn('[Email Notification] Missing emails - Director:', directorEmail, 'Member:', memberEmail);
-  } else {
-    // Create email transporter
-    const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: parseInt(process.env.EMAIL_PORT),
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-    
-const directorEmailHTML = `
-  <p>Dear Director,</p>
-  
-  <p>A <strong>new Publication/Research</strong> has been submitted by <strong>${memberId}</strong> (${memberEmail}).</p>
-  
-  <p>Publication Details:</p>
-  <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
-    <tr>
-      <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">Publication/Research ID</td>
-      <td style="padding: 8px; border: 1px solid #ddd;">${pubResId}</td>
-    </tr>
-    <tr>
-      <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Title</td>
-      <td style="padding: 8px; border: 1px solid #ddd;">${publicationData.title}</td>
-    </tr>
-    <tr>
-      <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Type</td>
-      <td style="padding: 8px; border: 1px solid #ddd;">${publicationData.type}</td>
-    </tr>
-    <tr>
-      <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Publishing Year</td>
-      <td style="padding: 8px; border: 1px solid #ddd;">${publicationData.publishing_year}</td>
-    </tr>
-    <tr>
-      <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Authors</td>
-      <td style="padding: 8px; border: 1px solid #ddd;">${publicationData.authors.join(', ')}</td>
-    </tr>
-    <tr>
-      <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Link</td>
-      <td style="padding: 8px; border: 1px solid #ddd;">
-        <a href="${publicationData.link}">${publicationData.link}</a>
-      </td>
-    </tr>
-  </table>
-  
-  <p>This submission is now pending your review and approval in the <a href="https://www.mvsdlab.com/login">MVSD LAB Director Portal</a>.</p>
-  
-  <p>Sincerely,<br>
-  <strong>MVSD LAB</strong></p>
-  
-  <p style="margin-top: 20px; font-size: 12px; color: #666;">
-    <strong>Quick Action:</strong> <a href="https://www.mvsdlab.com/login">Review New Publication Now</a>
-  </p>
-`;
+        console.log('[Email Notification] Preparing to send notifications');
+        
+        // 1. Get director's email
+        const directorResult = await query(
+          `SELECT email FROM director_basic_info WHERE id = 'D01MVSD'`
+        );
+        const directorEmail = directorResult.rows[0]?.email;
+        
+        // 2. Get member's email
+        const memberResult = await query(
+          `SELECT email FROM member WHERE id = $1`,
+          [memberId]
+        );
+        const memberEmail = memberResult.rows[0]?.email;
+        
+        if (!directorEmail && !memberEmail) {
+          console.log('[Email Notification] No emails to send');
+        } else {
+          // Create email transporter
+          const transporter = nodemailer.createTransport({
+            host: process.env.EMAIL_HOST,
+            port: parseInt(process.env.EMAIL_PORT),
+            secure: true,
+            auth: {
+              user: process.env.EMAIL_USER,
+              pass: process.env.EMAIL_PASS,
+            },
+          });
 
-// Then push to emails array
-emails.push({
-  from: process.env.EMAIL_FROM,
-  to: directorEmail,
-  subject: `New Publication Submitted - ${pubResId}`,
-  html: directorEmailHTML
-});
+          const emailPromises = [];
 
-        // Member confirmation (HTML version)
-    if (memberEmail) {
-      const memberEmailContentHTML = `
-        <p>Dear Research Member,</p>
-        
-        <p>Your Publication/Research has been successfully submitted:</p>
-        
-        <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
-          <tr>
-            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Publication/Research ID</td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${pubResId}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">Title</td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${publicationData.title}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Type</td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${publicationData.type}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Publishing Year</td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${publicationData.publishing_year}</td>
-          </tr>
-        </table>
-        
-        <p>Your submission is now pending review by the director. You'll be notified once it's approved.</p>
-        
-        <p>Thank you for your contribution to MVSD LAB Publication/Research.</p>
-        
-        <p>Best Regards,<br>
-        <strong>MVSD LAB</strong></p>
-        
-        <p style="margin-top: 20px; font-size: 12px; color: #666;">
-          You can view your submissions at : <a href="https://www.mvsdlab.com/login">MVSD LAB Member Dashboard</a>
-        </p>
-      `;
+          // Director email
+          if (directorEmail) {
+            const directorEmailHTML = `
+              <p>Dear Director,</p>
+              
+              <p>A <strong>new Publication/Research</strong> has been submitted by <strong>${memberId}</strong> (${memberEmail}).</p>
+              
+              <p>Publication Details:</p>
+              <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">Publication/Research ID</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${pubResId}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Title</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${publicationData.title}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Type</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${publicationData.type}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Publishing Year</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${publicationData.publishing_year}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Authors</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${publicationData.authors.join(', ')}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Link</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">
+                    <a href="${publicationData.link}">${publicationData.link}</a>
+                  </td>
+                </tr>
+              </table>
+              
+              <p>This submission is now pending your review and approval in the <a href="https://www.mvsdlab.com/login">MVSD LAB Director Portal</a>.</p>
+              
+              <p>Sincerely,<br>
+              <strong>MVSD LAB</strong></p>
+              
+              <p style="margin-top: 20px; font-size: 12px; color: #666;">
+                <strong>Quick Action:</strong> <a href="https://www.mvsdlab.com/login">Review New Publication Now</a>
+              </p>
+            `;
 
-      emails.push({
-        from: process.env.EMAIL_FROM,
-        to: memberEmail,
-        subject: `Publication Submitted Successfully - ${pubResId}`,
-        html: memberEmailContentHTML
-      });
-    }
+            emailPromises.push(
+              transporter.sendMail({
+                from: process.env.EMAIL_FROM,
+                to: directorEmail,
+                subject: `New Publication Submitted - ${pubResId}`,
+                html: directorEmailHTML
+              })
+            );
+          }
 
-        // 4. Send emails
-        const emailPromises = [];
-        
-        if (directorEmail) {
-          emailPromises.push(
-            transporter.sendMail({
-              from: process.env.EMAIL_FROM,
-              to: directorEmail,
-              subject: `New Publication Submission - ${pubResId}`,
-              text: directorEmailContent
-            })
-          );
+          // Member confirmation email
+          if (memberEmail) {
+            const memberEmailContentHTML = `
+              <p>Dear Research Member,</p>
+              
+              <p>Your Publication/Research has been successfully submitted:</p>
+              
+              <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Publication/Research ID</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${pubResId}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">Title</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${publicationData.title}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Type</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${publicationData.type}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Publishing Year</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${publicationData.publishing_year}</td>
+                </tr>
+              </table>
+              
+              <p>Your submission is now pending review by the director. You'll be notified once it's approved.</p>
+              
+              <p>Thank you for your contribution to MVSD LAB Publication/Research.</p>
+              
+              <p>Best Regards,<br>
+              <strong>MVSD LAB</strong></p>
+              
+              <p style="margin-top: 20px; font-size: 12px; color: #666;">
+                You can view your submissions at : <a href="https://www.mvsdlab.com/login">MVSD LAB Member Dashboard</a>
+              </p>
+            `;
+            
+            emailPromises.push(
+              transporter.sendMail({
+                from: process.env.EMAIL_FROM,
+                to: memberEmail,
+                subject: `Publication Submitted Successfully - ${pubResId}`,
+                html: memberEmailContentHTML
+              })
+            );
+          }
+
+          // Send all emails
+          await Promise.all(emailPromises);
+          console.log('[Email Notification] Emails sent successfully');
         }
-        
-        if (memberEmail) {
-          emailPromises.push(
-            transporter.sendMail({
-              from: process.env.EMAIL_FROM,
-              to: memberEmail,
-              subject: `Publication Submitted Successfully - ${pubResId}`,
-              text: memberEmailContent
-            })
-          );
-        }
-        
-        // Wait for all emails to send
-        await Promise.all(emailPromises);
-        console.log('[Email Notification] Emails sent successfully');
+      } catch (emailError) {
+        console.error('[Email Notification Failed]', emailError.message);
+        logger.error('Email sending failed', {
+          meta: {
+            pub_res_id: pubResId,
+            error: emailError.message,
+            taskName: 'Add Publication Email'
+          }
+        });
       }
-    } catch (emailError) {
-      console.error('[Email Notification Failed]', emailError.message);
-      logger.error('Email sending failed', {
-        meta: {
-          pub_res_id: pubResId,
-          error: emailError.message,
-          taskName: 'Add Publication Email'
-        }
-      });
-    }
 
     } catch (dbError) {
       console.error('[Database Error] Rolling back transaction:', dbError.message);

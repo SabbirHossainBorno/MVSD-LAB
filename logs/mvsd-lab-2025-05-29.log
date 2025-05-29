@@ -95,3 +95,23 @@
 2025-05-29 16:50:05-EID[917222-MVSDLAB]-SID[d15084cc-62dd-4e47-9d26-a6ff685d3587]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
 2025-05-29 16:50:05-EID[917222-MVSDLAB]-SID[d15084cc-62dd-4e47-9d26-a6ff685d3587]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
 2025-05-29 16:59:14-EID[917222-MVSDLAB]-SID[d15084cc-62dd-4e47-9d26-a6ff685d3587]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-29 17:03:19-EID[917222-MVSDLAB]-SID[d15084cc-62dd-4e47-9d26-a6ff685d3587]-[INFO] TASK[Add Publication]-PUB_RES_ID: PUB05RESMVSD, Member: PHDC06MVSD
+2025-05-29 17:04:21-EID[917222-MVSDLAB]-SID[d15084cc-62dd-4e47-9d26-a6ff685d3587]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-29 17:05:59-EID[917222-MVSDLAB]-SID[d15084cc-62dd-4e47-9d26-a6ff685d3587]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-29 17:06:15-EID[917222-MVSDLAB]-SID[d15084cc-62dd-4e47-9d26-a6ff685d3587]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-29 17:06:16-EID[917222-MVSDLAB]-SID[d15084cc-62dd-4e47-9d26-a6ff685d3587]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-05-29 17:06:16-EID[917222-MVSDLAB]-SID[d15084cc-62dd-4e47-9d26-a6ff685d3587]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-05-29 17:11:00-EID[917222-MVSDLAB]-SID[d15084cc-62dd-4e47-9d26-a6ff685d3587]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-29 17:12:17-EID[917222-MVSDLAB]-SID[d15084cc-62dd-4e47-9d26-a6ff685d3587]-[INFO] TASK[Add Publication]-PUB_RES_ID: PUB06RESMVSD, Member: PHDC06MVSD
+2025-05-29 17:23:17-EID[]-SID[3aa3f44c-59ef-4438-8641-db0d321946eb]-[INFO] TASK[Login]-Login attempt for borno6655aiub@gmail.com from IP 103.180.244.251
+2025-05-29 17:23:17-EID[]-SID[3aa3f44c-59ef-4438-8641-db0d321946eb]-[INFO] TASK[DBCheck]-Looking for borno6655aiub@gmail.com in member
+2025-05-29 17:23:17-EID[945369-MVSDLAB]-SID[3aa3f44c-59ef-4438-8641-db0d321946eb]-[INFO] TASK[Generate EID]-Generated EID 945369-MVSDLAB for user borno6655aiub@gmail.com
+2025-05-29 17:23:18-EID[945369-MVSDLAB]-SID[3aa3f44c-59ef-4438-8641-db0d321946eb]-[INFO] TASK[AuthSuccess]-Successful member login for borno6655aiub@gmail.com
+2025-05-29 17:23:20-EID[945369-MVSDLAB]-SID[3aa3f44c-59ef-4438-8641-db0d321946eb]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-29 17:23:22-EID[945369-MVSDLAB]-SID[3aa3f44c-59ef-4438-8641-db0d321946eb]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-05-29 17:23:22-EID[945369-MVSDLAB]-SID[3aa3f44c-59ef-4438-8641-db0d321946eb]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-05-29 17:23:24-EID[945369-MVSDLAB]-SID[3aa3f44c-59ef-4438-8641-db0d321946eb]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-29 17:23:46-EID[945369-MVSDLAB]-SID[3aa3f44c-59ef-4438-8641-db0d321946eb]-[INFO] TASK[Add Publication]-PUB_RES_ID: PUB07RESMVSD, Member: PHDC06MVSD
+2025-05-29 17:30:45-EID[945369-MVSDLAB]-SID[3aa3f44c-59ef-4438-8641-db0d321946eb]-[INFO] TASK[Add Publication]-PUB_RES_ID: PUB08RESMVSD, Member: PHDC06MVSD
+2025-05-29 17:30:55-EID[945369-MVSDLAB]-SID[3aa3f44c-59ef-4438-8641-db0d321946eb]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-05-29 17:33:36-EID[945369-MVSDLAB]-SID[3aa3f44c-59ef-4438-8641-db0d321946eb]-[INFO] TASK[Logout]-member borno6655aiub@gmail.com logged out from 103.180.244.251
