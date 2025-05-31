@@ -134,6 +134,34 @@ export async function POST(request) {
           });
           return null;
         }
+
+        if (table === 'member' && user.type === 'Director') {
+          // Verify against director_basic_info
+          const directorRes = await query(
+            `SELECT * FROM director_basic_info WHERE email = $1`,
+            [email]
+          );
+          
+          if (directorRes.rows.length === 0) {
+            logger.warn('Director not found in director_basic_info', {
+              meta: { email }
+            });
+            return null;
+          }
+          
+          const director = directorRes.rows[0];
+          const passwordValid = await bcrypt.compare(password, director.password);
+          
+          if (!passwordValid) {
+            logger.warn('Director password mismatch', { meta: { email } });
+            return null;
+          }
+          
+          // Update director tracker
+          await updateDirectorLoginTracker(user.id, email);
+          return { user, type: 'director' }; // Return special type for director
+        }
+        
         // Member status check
         if (table === 'member' && user.status !== 'Active') {
           logger.warn('Inactive member login attempt', {
@@ -145,38 +173,6 @@ export async function POST(request) {
             }
           });
 
-          if (table === 'member') {
-            // Check if user is director
-            if (user.type === 'Director') {
-              // Verify against director_basic_info
-              const directorRes = await query(
-                `SELECT * FROM director_basic_info WHERE email = $1`,
-                [email]
-              );
-              
-              if (directorRes.rows.length === 0) {
-                logger.warn('Director not found in director_basic_info', {
-                  meta: { email }
-                });
-                return null;
-              }
-              
-              const director = directorRes.rows[0];
-              const passwordValid = await bcrypt.compare(password, director.password);
-              
-              if (!passwordValid) {
-                logger.warn('Director password mismatch', { meta: { email } });
-                return null;
-              }
-              
-              // Update director tracker
-              await updateDirectorLoginTracker(user.id, email);
-              userType = 'director';
-            } else {
-              // Regular member handling
-              await updateMemberLoginTracker(user.id, email);
-            }
-          }
           
           // Send Telegram alert
           const inactiveMessage = formatAlertMessage(

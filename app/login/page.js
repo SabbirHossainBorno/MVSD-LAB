@@ -49,6 +49,9 @@ function LoginPage() {
         if (result.type === 'admin') {
           toast.success('Welcome! BOSS');
           router.push('/dashboard');
+        } else if (result.type === 'director') {
+          toast.success('Welcome! MVSD LAB DIRECTOR');
+          router.push('/director_dashboard');
         } else {
           toast.success('Welcome! MVSD LAB MEMBER');
           router.push('/member_dashboard');

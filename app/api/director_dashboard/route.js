@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { query } from '@/lib/db';
-import logger from '@/lib/logger';
+import { query } from '../../../lib/db';
+import logger from '../../../lib/logger';
 
 export async function GET(request) {
   const sessionId = request.cookies.get('sessionId')?.value;
