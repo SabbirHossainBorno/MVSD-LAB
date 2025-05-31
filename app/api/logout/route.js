@@ -28,6 +28,16 @@ const updateMemberLogoutDetails = async (email) => {
   );
 };
 
+const updateDirectorLogoutDetails = async (email) => {
+  await query(
+    `UPDATE director_login_info_tracker 
+     SET last_logout_time = NOW(), 
+         login_state = 'Idle' 
+     WHERE email = $1`,
+    [email]
+  );
+};
+
 export async function POST(request) {
   let email = '';
   let userType = 'member';
@@ -43,6 +53,8 @@ export async function POST(request) {
     // Update appropriate table
     if (userType === 'admin') {
       await updateAdminLogoutDetails(email);
+    } else if (userType === 'Director') {
+      await updateDirectorLogoutDetails(email);
     } else {
       await updateMemberLogoutDetails(email);
     }

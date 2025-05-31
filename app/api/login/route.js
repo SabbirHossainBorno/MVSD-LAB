@@ -54,6 +54,30 @@ const updateMemberLoginTracker = async (userId, email) => {
   }
 };
 
+const updateDirectorLoginTracker = async (userId, email) => {
+  try {
+    await query(
+      `INSERT INTO director_login_info_tracker 
+       (id, email, last_login_time, last_login_date, total_login_count, login_state)
+       VALUES ($1, $2, NOW(), NOW()::date, 1, 'Active')
+       ON CONFLICT (id) DO UPDATE SET
+       last_login_time = NOW(),
+       last_login_date = NOW()::date,
+       total_login_count = director_login_info_tracker.total_login_count + 1,
+       login_state = 'Active'`,
+      [userId, email]
+    );
+  } catch (error) {
+    logger.error('Director login tracker update failed', {
+      meta: {
+        taskName: 'LoginTracking',
+        details: `Error updating tracker for ${email}: ${error.message}`
+      }
+    });
+    throw error;
+  }
+};
+
 export async function POST(request) {
   const { email, password } = await request.json();
   const sessionId = uuidv4();
@@ -120,6 +144,39 @@ export async function POST(request) {
               userType: 'member'
             }
           });
+
+          if (table === 'member') {
+            // Check if user is director
+            if (user.type === 'Director') {
+              // Verify against director_basic_info
+              const directorRes = await query(
+                `SELECT * FROM director_basic_info WHERE email = $1`,
+                [email]
+              );
+              
+              if (directorRes.rows.length === 0) {
+                logger.warn('Director not found in director_basic_info', {
+                  meta: { email }
+                });
+                return null;
+              }
+              
+              const director = directorRes.rows[0];
+              const passwordValid = await bcrypt.compare(password, director.password);
+              
+              if (!passwordValid) {
+                logger.warn('Director password mismatch', { meta: { email } });
+                return null;
+              }
+              
+              // Update director tracker
+              await updateDirectorLoginTracker(user.id, email);
+              userType = 'director';
+            } else {
+              // Regular member handling
+              await updateMemberLoginTracker(user.id, email);
+            }
+          }
           
           // Send Telegram alert
           const inactiveMessage = formatAlertMessage(
@@ -177,34 +234,34 @@ export async function POST(request) {
           await updateLoginDetails(email);
         }
         // Set response cookies
-const response = NextResponse.json({ 
-  success: true, 
-  type: table === 'admin' ? 'admin' : 'user' 
-});
+        const response = NextResponse.json({ 
+          success: true, 
+          type: table === 'admin' ? 'admin' : 'user' 
+        });
 
-const cookieConfig = { httpOnly: true, secure: process.env.NODE_ENV === 'production' };
-response.cookies.set('email', email, cookieConfig);
-response.cookies.set('sessionId', sessionId, cookieConfig);
-response.cookies.set('eid', eid, cookieConfig);
-// Set non-httpOnly cookies for client-side access
-response.cookies.set('id', user.id, { 
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'Lax'
-});
+        const cookieConfig = { httpOnly: true, secure: process.env.NODE_ENV === 'production' };
+        response.cookies.set('email', email, cookieConfig);
+        response.cookies.set('sessionId', sessionId, cookieConfig);
+        response.cookies.set('eid', eid, cookieConfig);
+        // Set non-httpOnly cookies for client-side access
+        response.cookies.set('id', user.id, { 
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'Lax'
+        });
 
-response.cookies.set('type', user.type, { // 'Professor' or 'PhD Candidate'
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'Lax'
-});
+        response.cookies.set('type', user.type, { // 'Professor' or 'PhD Candidate'
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'Lax'
+        });
 
-console.log('Setting memberId cookie:', user.id); // Debugging log
-console.log('Setting memberType cookie:', user.type); // Debugging log
-response.cookies.set('redirect', 
-  table === 'admin' ? '/dashboard' :
-  ['PhD Candidate'].includes(user.type) ? '/member_dashboard' : '/home',
-  cookieConfig
-);
-return response;
+        console.log('Setting memberId cookie:', user.id); // Debugging log
+        console.log('Setting memberType cookie:', user.type); // Debugging log
+        response.cookies.set('redirect', 
+          table === 'admin' ? '/dashboard' :
+          ['PhD Candidate'].includes(user.type) ? '/member_dashboard' : '/home',
+          cookieConfig
+        );
+        return response;
       }
       return null;
     };

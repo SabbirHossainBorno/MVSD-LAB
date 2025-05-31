@@ -87,10 +87,11 @@ const withAuth = (WrappedComponent, requiredRole) => {
       if (isAuthenticated && requiredRole) {
         const validRoles = {
           admin: ['admin'],
-          member: ['Professor', 'PhD Candidate'] // Actual member types from DB
+          member: ['PhD Candidate', 'Masters'],
+          director: ['Director']
         };
 
-        if (!validRoles[requiredRole].includes(userRole)) {
+        if (requiredRole === 'director' && !validRoles.director.includes(userRole)) {
           setUnauthorized(true);
         }
       }
