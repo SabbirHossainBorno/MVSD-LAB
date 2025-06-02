@@ -6,18 +6,21 @@ import logger from '../../../lib/logger';
 import sendTelegramAlert from '../../../lib/telegramAlert';
 
 const formatAlertMessage = (userType, email, ipAddress, userAgent, additionalInfo = {}) => {
-  const isAdmin = userType === 'admin';
-  let message = isAdmin 
-    ? "MVSD LAB DASHBOARD\n------------------------------------\nAdmin Login Successful.\n"
-    : "MVSD LAB MEMBER DASHBOARD\n--------------------------------------------------\nMember Login Successful.\n";
-  message += `Email : ${email}\n`;
-  
-  if (!isAdmin && additionalInfo.memberId) {
-    message += `ID : ${additionalInfo.memberId}\n`;
+  switch(userType) {
+    case 'admin':
+      return `MVSD LAB DASHBOARD\n------------------------------------\nAdmin Login ${additionalInfo.status || 'Successful'}.\n` +
+             `Email : ${email}\nIP : ${ipAddress}\nDevice INFO : ${userAgent}\nEID : ${additionalInfo.eid || 'N/A'}`;
+      
+    case 'director':
+      return `MVSD LAB DIRECTOR DASHBOARD\n--------------------------------------------------\nDirector Login ${additionalInfo.status || 'Successful'}.\n` +
+             `Email : ${email}\nID : ${additionalInfo.memberId || 'N/A'}\n` +
+             `IP : ${ipAddress}\nDevice INFO : ${userAgent}\nEID : ${additionalInfo.eid || 'N/A'}`;
+      
+    default: // member
+      return `MVSD LAB MEMBER DASHBOARD\n--------------------------------------------------\nMember Login ${additionalInfo.status || 'Successful'}.\n` +
+             `Email : ${email}\nID : ${additionalInfo.memberId || 'N/A'}\n` +
+             `IP : ${ipAddress}\nDevice INFO : ${userAgent}\nEID : ${additionalInfo.eid || 'N/A'}`;
   }
-  message += `IP : ${ipAddress}\nDevice INFO : ${userAgent}\nEID : ${additionalInfo.eid || 'N/A'}`;
-  
-  return message;
 };
 
 const updateLoginDetails = async (email) => {
@@ -79,12 +82,24 @@ const updateDirectorLoginTracker = async (userId, email) => {
 // Helper function to create login response
 const createLoginResponse = async (user, userType, table, sessionId, email, ipAddress, userAgent) => {
   const eid = `${Math.floor(100000 + Math.random() * 900000)}-MVSDLAB`;
+  
+  // Log director-specific details
+  if (userType === 'director') {
+    logger.info('Director login detected', {
+      meta: {
+        sid: sessionId,
+        taskName: 'DirectorLogin',
+        details: `Director ID: ${user.id}, Email: ${email}`
+      }
+    });
+  }
+  
   logger.info('Generated execution ID', {
     meta: {
       eid,
       sid: sessionId,
       taskName: 'Generate EID',
-      details: `Generated EID ${eid} for user ${email}`
+      details: `Generated EID ${eid} for ${userType} ${email}`
     }
   });
   
@@ -97,17 +112,19 @@ const createLoginResponse = async (user, userType, table, sessionId, email, ipAd
     }
   }
   
-  // Success alert
+  // Success alert with director-specific format
   const successMessage = formatAlertMessage(
-    table,
+    userType,
     email,
     ipAddress,
     userAgent,
     {
       eid,
-      memberId: table === 'member' ? user.id : undefined
+      memberId: user.id,
+      status: 'Successful'
     }
   );
+  
   await sendTelegramAlert(successMessage);
   
   logger.info('Login success', {
@@ -115,9 +132,9 @@ const createLoginResponse = async (user, userType, table, sessionId, email, ipAd
       eid,
       sid: sessionId,
       taskName: 'AuthSuccess',
-      details: `Successful ${table} login for ${email}`,
-      userType: table,
-      userId: table === 'member' ? user.id : 'admin'
+      details: `Successful ${userType} login for ${email}`,
+      userType: userType,
+      userId: user.id
     }
   });
   
@@ -174,14 +191,18 @@ export async function POST(request) {
   const ipAddress = request.headers.get('x-forwarded-for') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
 
+  // Determine initial user type for attempt message
+  let attemptUserType = isAdminEmail ? 'admin' : 'member';
+  
   // Login attempt alert
   const attemptMessage = formatAlertMessage(
-    isAdminEmail ? 'admin' : 'member',
+    attemptUserType,
     email,
     ipAddress,
     userAgent,
-    { eid: 'Login Attempt' }
-  ).replace('Successful', 'Attempt');
+    { eid: 'Login Attempt', status: 'Attempt' }
+  );
+  
   await sendTelegramAlert(attemptMessage);
   
   logger.info('Received login request', {
@@ -190,7 +211,7 @@ export async function POST(request) {
       sid: sessionId,
       taskName: 'Login',
       details: `Login attempt for ${email} from IP ${ipAddress}`,
-      userType: isAdminEmail ? 'admin' : 'member'
+      userType: attemptUserType
     }
   });
 
@@ -209,10 +230,29 @@ export async function POST(request) {
       if (res.rows.length > 0) {
         const user = res.rows[0];
         
+        // Add director-specific logging
+        if (table === 'member' && user.type === 'Director') {
+          logger.info('Director login detected in member table', {
+            meta: {
+              sid: sessionId,
+              taskName: 'DirectorCheck',
+              details: `Found director: ${user.id}`
+            }
+          });
+        }
+        
         // Password validation
         let passwordValid;
         if (table === 'member' && user.type === 'Director') {
           // For directors, validate against director_basic_info
+          logger.info('Checking director_basic_info for password validation', {
+            meta: {
+              sid: sessionId,
+              taskName: 'DirectorAuth',
+              details: `Validating director ${user.id}`
+            }
+          });
+          
           const directorRes = await query(
             `SELECT * FROM director_basic_info WHERE email = $1`,
             [email]
@@ -220,7 +260,11 @@ export async function POST(request) {
           
           if (directorRes.rows.length === 0) {
             logger.warn('Director not found in director_basic_info', {
-              meta: { email }
+              meta: { 
+                sid: sessionId,
+                email,
+                userId: user.id
+              }
             });
             return null;
           }
@@ -240,7 +284,8 @@ export async function POST(request) {
               sid: sessionId,
               taskName: 'AuthCheck',
               details: `Invalid password for ${email}`,
-              userType: table
+              userType: table,
+              userId: user.id
             }
           });
           return null;
@@ -266,7 +311,8 @@ export async function POST(request) {
               sid: sessionId,
               taskName: 'AuthCheck',
               details: `Inactive member ${email} blocked`,
-              userType: 'member'
+              userType: 'member',
+              userId: user.id
             }
           });
           
@@ -275,8 +321,8 @@ export async function POST(request) {
             email,
             ipAddress,
             userAgent,
-            { eid: 'Inactive Login Attempt' }
-          ).replace('Successful', 'Failed (Inactive Member)');
+            { eid: 'Inactive Login Attempt', status: 'Failed (Inactive Member)' }
+          );
           
           await sendTelegramAlert(inactiveMessage);
           
@@ -312,12 +358,12 @@ export async function POST(request) {
 
     // Failed login handling
     const failedMessage = formatAlertMessage(
-      isAdminEmail ? 'admin' : 'member',
+      attemptUserType,
       email,
       ipAddress,
       userAgent,
-      { eid: 'Failed Attempt' }
-    ).replace('Successful', 'Failed');
+      { eid: 'Failed Attempt', status: 'Failed' }
+    );
     
     await sendTelegramAlert(failedMessage);
     
@@ -326,7 +372,7 @@ export async function POST(request) {
         sid: sessionId,
         taskName: 'AuthFailure',
         details: `Failed login for ${email}`,
-        userType: isAdminEmail ? 'admin' : 'member'
+        userType: attemptUserType
       }
     });
     
@@ -338,12 +384,12 @@ export async function POST(request) {
   } catch (error) {
     // Error handling
     const errorMessage = formatAlertMessage(
-      isAdminEmail ? 'admin' : 'member',
+      attemptUserType,
       email,
       ipAddress,
       userAgent,
-      { eid: 'Error', error: error.message }
-    ).replace('Successful', 'Error');
+      { eid: 'Error', error: error.message, status: 'Error' }
+    );
     
     await sendTelegramAlert(errorMessage);
     
@@ -352,7 +398,7 @@ export async function POST(request) {
         sid: sessionId,
         taskName: 'SystemError',
         details: `Error: ${error.message}`,
-        userType: isAdminEmail ? 'admin' : 'member',
+        userType: attemptUserType,
         stack: error.stack
       }
     });
