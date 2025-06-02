@@ -82,38 +82,53 @@ export default function DirectorDashboardSidebar({ isOpen, onClose, isDarkMode }
       animate={isOpen || window.innerWidth >= 768 ? "open" : "closed"}
       variants={sidebarVariants}
     >
-      {/* Top Section with Logo */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-        <div className="flex items-center space-x-3">
-          <div className="bg-white dark:bg-gray-700 rounded-xl p-2 shadow">
+      {/* Top Section with Centered Logo and Title */}
+      <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+        {/* Centered Logo and Title */}
+        <div className="flex flex-col items-center justify-center w-full relative">
+          {/* Logo with animation */}
+          <motion.div 
+            className="mb-1" // minimal bottom spacing
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5, type: "spring" }}
+          >
             {isDarkMode ? (
               <img 
                 src="/images/memberDashboardSidebar_logo_dark.svg" 
                 alt="MVSD Lab Logo Dark" 
-                className="w-10 h-10"
+                className="w-48 h-auto mx-auto" // larger width + centered
               />
             ) : (
               <img 
                 src="/images/memberDashboardSidebar_logo_light.svg" 
                 alt="MVSD Lab Logo Light" 
-                className="w-10 h-10"
+                className="w-48 h-auto mx-auto" // larger width + centered
               />
             )}
-          </div>
-          <div>
-            <h2 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-400">
+          </motion.div>
+
+          {/* Title with animation */}
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <h2 className="text-s md:text-m font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-400 text-center">
               Director Portal
             </h2>
-            <p className="text-xs text-gray-500 dark:text-gray-400">MVSD Research Lab</p>
-          </div>
+          </motion.div>
         </div>
+
+        {/* Close Button (visible only on small screens) */}
         <button 
           onClick={onClose}
-          className="md:hidden text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+          className="absolute right-4 top-3 md:hidden text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
         >
           <X size={20} />
         </button>
       </div>
+
       
       {/* Navigation Menu */}
       <nav className="mt-6 px-2">
@@ -147,22 +162,7 @@ export default function DirectorDashboardSidebar({ isOpen, onClose, isDarkMode }
       </nav>
       
       {/* Bottom Section */}
-      <div className="absolute bottom-0 w-full p-4 border-t border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center space-x-3">
-            <div className="bg-gradient-to-br from-blue-400 to-indigo-500 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold">
-              D
-            </div>
-            <div>
-              <p className="text-sm font-medium">Dr. Director</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">director@mvsdlab.edu</p>
-            </div>
-          </div>
-          <button className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white">
-            <LogOut size={18} />
-          </button>
-        </div>
-        
+      <div className="absolute bottom-0 w-full p-4 border-t border-gray-200 dark:border-gray-700">  
         <div className="text-center text-xs text-gray-500 dark:text-gray-400 mt-4">
           MVSD LAB © {new Date().getFullYear()}
         </div>

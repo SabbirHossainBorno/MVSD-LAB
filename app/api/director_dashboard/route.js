@@ -17,57 +17,34 @@ export async function GET(request) {
       }
     });
     
-    // 1. Fetch dashboard stats
-    console.log(`[DirectorDashboard][${sessionId}] Fetching dashboard stats...`);
-    const statsQuery = `
-      SELECT 
-        (SELECT COUNT(*) FROM research_proposals WHERE status = 'pending') AS pending_proposals,
-        (SELECT COUNT(*) FROM budget_requests WHERE status = 'pending') AS pending_budgets,
-        (SELECT COUNT(*) FROM publication_requests WHERE status = 'pending') AS pending_publications,
-        (SELECT COUNT(*) FROM member WHERE status = 'Active') AS active_members
+    // 1. Fetch director info
+    console.log(`[DirectorDashboard][${sessionId}] Fetching director info...`);
+    const directorQuery = `
+      SELECT id, email, photo, first_name, last_name
+      FROM director_basic_info
+      WHERE id = $1
     `;
+    const directorResult = await query(directorQuery, [directorId]);
     
-    const statsResult = await query(statsQuery);
-    console.log(`[DirectorDashboard][${sessionId}] Stats query results:`, JSON.stringify(statsResult.rows[0]));
+    if (directorResult.rows.length === 0) {
+      throw new Error('Director not found');
+    }
     
-    // 2. Fetch recent activity
-    console.log(`[DirectorDashboard][${sessionId}] Fetching recent activity for director: ${directorId}...`);
-    const activityQuery = `
-      SELECT id, activity_type, description, timestamp 
-      FROM director_activity_log
-      WHERE director_id = $1
-      ORDER BY timestamp DESC
-      LIMIT 5
-    `;
+    const directorInfo = directorResult.rows[0];
+    console.log(`[DirectorDashboard][${sessionId}] Director info fetched:`, JSON.stringify(directorInfo));
+  
     
-    const activityResult = await query(activityQuery, [directorId]);
-    console.log(`[DirectorDashboard][${sessionId}] Activity results: ${activityResult.rowCount} items found`);
-    
-    // 3. Fetch pending approvals
-    console.log(`[DirectorDashboard][${sessionId}] Fetching pending approvals...`);
-    const approvalsQuery = `
-      SELECT id, request_type, requester_name, submitted_at
-      FROM approval_requests
-      WHERE status = 'pending'
-      ORDER BY submitted_at DESC
-      LIMIT 5
-    `;
-    
-    const approvalsResult = await query(approvalsQuery);
-    console.log(`[DirectorDashboard][${sessionId}] Approvals results: ${approvalsResult.rowCount} items found`);
-    
-    // 4. Format response data
+    // 5. Format response data
     const responseData = {
       success: true,
-      stats: statsResult.rows[0],
-      recentActivity: activityResult.rows.map(item => ({
-        ...item,
-        timestamp: new Date(item.timestamp).toISOString()
-      })),
-      pendingApprovals: approvalsResult.rows.map(item => ({
-        ...item,
-        submitted_at: new Date(item.submitted_at).toISOString()
-      }))
+      director: {
+        id: directorInfo.id,
+        email: directorInfo.email,
+        photo: directorInfo.photo,
+        firstName: directorInfo.first_name,
+        lastName: directorInfo.last_name,
+        fullName: `${directorInfo.first_name} ${directorInfo.last_name}`
+      }
     };
     
     console.log(`[DirectorDashboard][${sessionId}] Data fetch completed successfully`);
