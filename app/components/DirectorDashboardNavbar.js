@@ -3,7 +3,12 @@ import { useRouter } from 'next/navigation';
 import { Sun, Moon, Bell, User, LogOut, Settings } from 'react-feather';
 import Cookies from 'js-cookie';
 
-export default function DirectorDashboardNavbar({ directorId, email }) {
+export default function DirectorDashboardNavbar({ 
+  directorId, 
+  email,
+  setSidebarOpen,
+  sidebarOpen
+}) {
   const [darkMode, setDarkMode] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -34,14 +39,22 @@ export default function DirectorDashboardNavbar({ directorId, email }) {
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-md py-4 px-6 flex items-center justify-between">
       <div className="flex items-center">
+        {/* Mobile Menu Button */}
         <button 
-          className="md:hidden mr-4 text-gray-600 dark:text-gray-300"
-          onClick={() => document.querySelector('.sidebar').classList.toggle('hidden')}
+          className="lg:hidden mr-4 text-gray-600 dark:text-gray-300"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
+          {sidebarOpen ? (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
         </button>
+        
         <h1 className="text-xl font-bold text-gray-800 dark:text-white">
           MVSD LAB Director Dashboard
         </h1>

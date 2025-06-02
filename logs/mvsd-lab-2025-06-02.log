@@ -34,3 +34,10 @@
 2025-06-02 00:21:25-EID[953418-MVSDLAB]-SID[d9ceceee-40c6-42c9-a020-33d80543a844]-[INFO] TASK[Update Notification Status]-Updated notification ID PUB06RESMVSD to status Read from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
 2025-06-02 00:21:25-EID[953418-MVSDLAB]-SID[d9ceceee-40c6-42c9-a020-33d80543a844]-[INFO] TASK[Update Notification Status]-Updated notification ID PUB05RESMVSD to status Read from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
 2025-06-02 00:21:32-EID[953418-MVSDLAB]-SID[d9ceceee-40c6-42c9-a020-33d80543a844]-[INFO] TASK[Logout]-admin admin@mvsdlab.com logged out from 123.200.7.106
+2025-06-02 15:56:01-EID[]-SID[6285c07a-650b-47b0-9dec-241758db466f]-[INFO] TASK[Login]-Login attempt for borno6655netflix@gmail.com from IP 103.180.244.251
+2025-06-02 15:56:01-EID[]-SID[6285c07a-650b-47b0-9dec-241758db466f]-[INFO] TASK[DBCheck]-Looking for borno6655netflix@gmail.com in member
+2025-06-02 15:56:03-EID[]-SID[6285c07a-650b-47b0-9dec-241758db466f]-[INFO] TASK[DirectorCheck]-Found director: D01MVSD
+2025-06-02 15:56:03-EID[]-SID[6285c07a-650b-47b0-9dec-241758db466f]-[INFO] TASK[DirectorAuth]-Validating director D01MVSD
+2025-06-02 15:56:03-EID[]-SID[6285c07a-650b-47b0-9dec-241758db466f]-[INFO] TASK[DirectorLogin]-Director ID: D01MVSD, Email: borno6655netflix@gmail.com
+2025-06-02 15:56:03-EID[607210-MVSDLAB]-SID[6285c07a-650b-47b0-9dec-241758db466f]-[INFO] TASK[Generate EID]-Generated EID 607210-MVSDLAB for director borno6655netflix@gmail.com
+2025-06-02 15:56:03-EID[607210-MVSDLAB]-SID[6285c07a-650b-47b0-9dec-241758db466f]-[INFO] TASK[AuthSuccess]-Successful director login for borno6655netflix@gmail.com

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, ClipboardCheck } from 'react-feather';
+import { LayoutDashboard, ClipboardCheck, BookOpen } from 'react-feather';
 
 export default function DirectorDashboardSidebar() {
   const pathname = usePathname();
@@ -15,11 +15,16 @@ export default function DirectorDashboardSidebar() {
       name: 'Approval Panel', 
       path: '/director_dashboard/approval',
       icon: <ClipboardCheck size={20} />
+    },
+    { 
+      name: 'Publications', 
+      path: '/director_dashboard/publications',
+      icon: <BookOpen size={20} />
     }
   ];
 
   return (
-    <div className="sidebar h-full bg-gray-800 text-white w-64 fixed inset-y-0 left-0 transform md:translate-x-0 transition duration-300 ease-in-out z-30">
+    <div className="sidebar h-full bg-gray-800 text-white w-64 fixed inset-y-0 left-0 z-30">
       <div className="p-4 border-b border-gray-700">
         <div className="flex items-center justify-center">
           <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
