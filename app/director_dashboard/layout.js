@@ -1,46 +1,74 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { useState, useEffect } from 'react';
 import DirectorDashboardNavbar from '../components/DirectorDashboardNavbar';
 import DirectorDashboardSidebar from '../components/DirectorDashboardSidebar';
-import LoadingSpinner from '../components/LoadingSpinner';
-import { usePathname } from 'next/navigation';
+import withAuth from '../components/withAuth';
+import { motion, AnimatePresence } from 'framer-motion';
 
-export default function DirectorLayout({ children }) {
+function DirectorsLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const pathname = usePathname();
-  
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains('dark');
+    setIsDarkMode(isDark);
+  }, []);
+
+  // Close sidebar when clicking outside on mobile
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      const sidebar = document.querySelector('.sidebar');
+      if (sidebarOpen && window.innerWidth < 768 && sidebar && !sidebar.contains(e.target)) {
+        setSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [sidebarOpen]);
+
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
-      {/* Mobile Sidebar */}
-      <div 
-        className={`fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity lg:hidden ${
-          sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-        onClick={() => setSidebarOpen(false)}
-      />
-      
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
       {/* Sidebar */}
       <div 
-        className={`fixed inset-y-0 left-0 z-50 w-64 transform transition duration-300 ease-in-out lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-30 w-64 transform transition-all duration-300 ease-in-out ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        } md:translate-x-0 md:static`}
       >
-        <DirectorDashboardSidebar />
+        <DirectorDashboardSidebar 
+          isOpen={sidebarOpen} 
+          onClose={() => setSidebarOpen(false)} 
+          isDarkMode={isDarkMode}
+        />
       </div>
       
-      {/* Main Content */}
-      <div className="flex flex-col flex-1 overflow-hidden lg:ml-64">
+      {/* Overlay for mobile */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-20 bg-black bg-opacity-50 md:hidden"
+            onClick={() => setSidebarOpen(false)}
+          ></motion.div>
+        )}
+      </AnimatePresence>
+      
+      {/* Main content area */}
+      <div className="flex flex-col flex-1 w-full min-w-0">
         <DirectorDashboardNavbar 
-          setSidebarOpen={setSidebarOpen} 
-          sidebarOpen={sidebarOpen}
+          onMenuClick={() => setSidebarOpen(!sidebarOpen)} 
+          onDarkModeToggle={(mode) => setIsDarkMode(mode)}
         />
+        
         <main className="flex-1 overflow-y-auto p-4 md:p-6">
-          <Suspense fallback={<LoadingSpinner />}>
-            {children}
-          </Suspense>
+          {children}
         </main>
       </div>
     </div>
   );
 }
+
+export default withAuth(DirectorsLayout, 'director');

@@ -41,3 +41,40 @@
 2025-06-02 15:56:03-EID[]-SID[6285c07a-650b-47b0-9dec-241758db466f]-[INFO] TASK[DirectorLogin]-Director ID: D01MVSD, Email: borno6655netflix@gmail.com
 2025-06-02 15:56:03-EID[607210-MVSDLAB]-SID[6285c07a-650b-47b0-9dec-241758db466f]-[INFO] TASK[Generate EID]-Generated EID 607210-MVSDLAB for director borno6655netflix@gmail.com
 2025-06-02 15:56:03-EID[607210-MVSDLAB]-SID[6285c07a-650b-47b0-9dec-241758db466f]-[INFO] TASK[AuthSuccess]-Successful director login for borno6655netflix@gmail.com
+2025-06-02 16:08:46-EID[607210-MVSDLAB]-SID[6285c07a-650b-47b0-9dec-241758db466f]-[INFO] TASK[Auth Check]-Last activity: 2025-06-02T19:56:03.249Z
+2025-06-02 16:09:05-EID[607210-MVSDLAB]-SID[]-[WARN] TASK[Auth Check]-IP: 103.180.244.251 | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-06-02 16:09:27-EID[607210-MVSDLAB]-SID[]-[WARN] TASK[Auth Check]-IP: 103.180.244.251 | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-06-02 16:10:08-EID[607210-MVSDLAB]-SID[]-[WARN] TASK[Auth Check]-IP: 103.180.244.251 | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-06-02 16:15:59-EID[607210-MVSDLAB]-SID[]-[WARN] TASK[Auth Check]-IP: 103.180.244.251 | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-06-02 16:29:13-EID[607210-MVSDLAB]-SID[]-[WARN] TASK[Auth Check]-IP: 103.180.244.251 | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-06-02 16:29:46-EID[607210-MVSDLAB]-SID[]-[WARN] TASK[Auth Check]-IP: 103.180.244.251 | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0
+2025-06-02 16:30:07-EID[]-SID[f8e98222-eab4-42e0-b46a-64fe7eec7209]-[INFO] TASK[Login]-Login attempt for borno6655netflix@gmail.com from IP 103.180.244.251
+2025-06-02 16:30:07-EID[]-SID[f8e98222-eab4-42e0-b46a-64fe7eec7209]-[INFO] TASK[DBCheck]-Looking for borno6655netflix@gmail.com in member
+2025-06-02 16:30:07-EID[]-SID[f8e98222-eab4-42e0-b46a-64fe7eec7209]-[INFO] TASK[DirectorCheck]-Found director: D01MVSD
+2025-06-02 16:30:07-EID[]-SID[f8e98222-eab4-42e0-b46a-64fe7eec7209]-[INFO] TASK[DirectorAuth]-Validating director D01MVSD
+2025-06-02 16:30:07-EID[]-SID[f8e98222-eab4-42e0-b46a-64fe7eec7209]-[INFO] TASK[DirectorLogin]-Director ID: D01MVSD, Email: borno6655netflix@gmail.com
+2025-06-02 16:30:07-EID[819225-MVSDLAB]-SID[f8e98222-eab4-42e0-b46a-64fe7eec7209]-[INFO] TASK[Generate EID]-Generated EID 819225-MVSDLAB for director borno6655netflix@gmail.com
+2025-06-02 16:30:07-EID[819225-MVSDLAB]-SID[f8e98222-eab4-42e0-b46a-64fe7eec7209]-[INFO] TASK[AuthSuccess]-Successful director login for borno6655netflix@gmail.com
+2025-06-02 16:30:08-EID[819225-MVSDLAB]-SID[f8e98222-eab4-42e0-b46a-64fe7eec7209]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-02 16:32:07-EID[819225-MVSDLAB]-SID[f8e98222-eab4-42e0-b46a-64fe7eec7209]-[INFO] TASK[Logout]-member borno6655netflix@gmail.com logged out from 103.180.244.251
+2025-06-02 16:32:20-EID[]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Login]-Login attempt for borno6655netflix@gmail.com from IP 103.180.244.251
+2025-06-02 16:32:20-EID[]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[DBCheck]-Looking for borno6655netflix@gmail.com in member
+2025-06-02 16:32:20-EID[]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[DirectorCheck]-Found director: D01MVSD
+2025-06-02 16:32:20-EID[]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[DirectorAuth]-Validating director D01MVSD
+2025-06-02 16:32:20-EID[]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[DirectorLogin]-Director ID: D01MVSD, Email: borno6655netflix@gmail.com
+2025-06-02 16:32:20-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Generate EID]-Generated EID 155153-MVSDLAB for director borno6655netflix@gmail.com
+2025-06-02 16:32:20-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[AuthSuccess]-Successful director login for borno6655netflix@gmail.com
+2025-06-02 16:32:23-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-02 16:35:04-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-02 16:41:25-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-02 16:41:27-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-02 16:41:38-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-02 16:43:29-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-02 16:43:45-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-02 16:43:57-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-02 16:48:45-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-02 16:48:45-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-02 16:48:46-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-02 16:48:48-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-02 16:58:58-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-02 16:59:28-EID[155153-MVSDLAB]-SID[fc42f6a9-99cd-4c56-b542-781d8b44e3ec]-[INFO] TASK[Auth Check]-User type : Director (member)
