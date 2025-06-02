@@ -20,3 +20,8 @@
 2025-06-01 22:16:55-EID[208722-MVSDLAB]-SID[b1dfa598-9777-42de-8b82-2ee0e708aab9]-[INFO] TASK[Logout]-admin admin@mvsdlab.com logged out from 123.200.7.106
 2025-06-01 22:17:23-EID[]-SID[2ad7f817-024b-4590-87d3-3531c21f6361]-[INFO] TASK[Login]-Login attempt for borno6655netflix@gmail.com from IP 123.200.7.106
 2025-06-01 22:17:23-EID[]-SID[2ad7f817-024b-4590-87d3-3531c21f6361]-[INFO] TASK[DBCheck]-Looking for borno6655netflix@gmail.com in member
+2025-06-01 23:14:29-EID[]-SID[4516843f-dc6a-480e-b650-cfb24c69b7cf]-[INFO] TASK[Login]-Login attempt for borno6655netflix@gmail.com from IP 123.200.7.106
+2025-06-01 23:14:29-EID[]-SID[4516843f-dc6a-480e-b650-cfb24c69b7cf]-[INFO] TASK[DBCheck]-Looking for borno6655netflix@gmail.com in member
+2025-06-01 23:14:29-EID[370781-MVSDLAB]-SID[4516843f-dc6a-480e-b650-cfb24c69b7cf]-[INFO] TASK[Generate EID]-Generated EID 370781-MVSDLAB for user borno6655netflix@gmail.com
+2025-06-01 23:14:30-EID[370781-MVSDLAB]-SID[4516843f-dc6a-480e-b650-cfb24c69b7cf]-[INFO] TASK[AuthSuccess]-Successful member login for borno6655netflix@gmail.com
+2025-06-01 23:14:34-EID[370781-MVSDLAB]-SID[4516843f-dc6a-480e-b650-cfb24c69b7cf]-[INFO] TASK[Auth Check]-User type : Director (member)

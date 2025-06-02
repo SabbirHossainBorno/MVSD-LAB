@@ -1,4 +1,3 @@
-// app/api/login/route.js
 import { NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
@@ -49,7 +48,6 @@ const updateMemberLoginTracker = async (userId, email) => {
         details: `Error updating tracker for ${email}: ${error.message}`
       }
     });
-    // Propagate the error to prevent login success
     throw error;
   }
 };
@@ -78,6 +76,97 @@ const updateDirectorLoginTracker = async (userId, email) => {
   }
 };
 
+// Helper function to create login response
+const createLoginResponse = async (user, userType, table, sessionId, email, ipAddress, userAgent) => {
+  const eid = `${Math.floor(100000 + Math.random() * 900000)}-MVSDLAB`;
+  logger.info('Generated execution ID', {
+    meta: {
+      eid,
+      sid: sessionId,
+      taskName: 'Generate EID',
+      details: `Generated EID ${eid} for user ${email}`
+    }
+  });
+  
+  // Update tracker based on user type
+  if (table === 'member') {
+    if (userType === 'director') {
+      await updateDirectorLoginTracker(user.id, email);
+    } else {
+      await updateMemberLoginTracker(user.id, email);
+    }
+  }
+  
+  // Success alert
+  const successMessage = formatAlertMessage(
+    table,
+    email,
+    ipAddress,
+    userAgent,
+    {
+      eid,
+      memberId: table === 'member' ? user.id : undefined
+    }
+  );
+  await sendTelegramAlert(successMessage);
+  
+  logger.info('Login success', {
+    meta: {
+      eid,
+      sid: sessionId,
+      taskName: 'AuthSuccess',
+      details: `Successful ${table} login for ${email}`,
+      userType: table,
+      userId: table === 'member' ? user.id : 'admin'
+    }
+  });
+  
+  // Update admin details if applicable
+  if (table === 'admin') {
+    await updateLoginDetails(email);
+  }
+  
+  // Set response cookies
+  const response = NextResponse.json({ 
+    success: true, 
+    type: userType
+  });
+
+  const cookieConfig = { 
+    httpOnly: true, 
+    secure: process.env.NODE_ENV === 'production' 
+  };
+  
+  response.cookies.set('email', email, cookieConfig);
+  response.cookies.set('sessionId', sessionId, cookieConfig);
+  response.cookies.set('eid', eid, cookieConfig);
+  
+  // Set non-httpOnly cookies for client-side access
+  response.cookies.set('id', user.id, { 
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Lax'
+  });
+
+  response.cookies.set('type', user.type, {
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Lax'
+  });
+
+  // Set redirect path based on user type
+  let redirectPath = '/home';
+  if (userType === 'admin') {
+    redirectPath = '/dashboard';
+  } else if (userType === 'director') {
+    redirectPath = '/director_dashboard';
+  } else if (['PhD Candidate', 'Professor'].includes(user.type)) {
+    redirectPath = '/member_dashboard';
+  }
+
+  response.cookies.set('redirect', redirectPath, cookieConfig);
+  
+  return response;
+};
+
 export async function POST(request) {
   const { email, password } = await request.json();
   const sessionId = uuidv4();
@@ -94,6 +183,7 @@ export async function POST(request) {
     { eid: 'Login Attempt' }
   ).replace('Successful', 'Attempt');
   await sendTelegramAlert(attemptMessage);
+  
   logger.info('Received login request', {
     meta: {
       eid: '',
@@ -114,29 +204,15 @@ export async function POST(request) {
           userType: table
         }
       });
+      
       const res = await query(`SELECT * FROM ${table} WHERE email = $1`, [email]);
       if (res.rows.length > 0) {
         const user = res.rows[0];
         
         // Password validation
-        const passwordValid = comparePassword 
-          ? await bcrypt.compare(password, user.password)
-          : password === user.password;
-        
-        if (!passwordValid) {
-          logger.warn('Password mismatch', {
-            meta: {
-              sid: sessionId,
-              taskName: 'AuthCheck',
-              details: `Invalid password for ${email}`,
-              userType: table
-            }
-          });
-          return null;
-        }
-
+        let passwordValid;
         if (table === 'member' && user.type === 'Director') {
-          // Verify against director_basic_info
+          // For directors, validate against director_basic_info
           const directorRes = await query(
             `SELECT * FROM director_basic_info WHERE email = $1`,
             [email]
@@ -150,16 +226,37 @@ export async function POST(request) {
           }
           
           const director = directorRes.rows[0];
-          const passwordValid = await bcrypt.compare(password, director.password);
-          
-          if (!passwordValid) {
-            logger.warn('Director password mismatch', { meta: { email } });
-            return null;
-          }
-          
-          // Update director tracker
-          await updateDirectorLoginTracker(user.id, email);
-          return { user, type: 'director' }; // Return special type for director
+          passwordValid = await bcrypt.compare(password, director.password);
+        } else {
+          // For others, validate normally
+          passwordValid = comparePassword 
+            ? await bcrypt.compare(password, user.password)
+            : password === user.password;
+        }
+        
+        if (!passwordValid) {
+          logger.warn('Password mismatch', {
+            meta: {
+              sid: sessionId,
+              taskName: 'AuthCheck',
+              details: `Invalid password for ${email}`,
+              userType: table
+            }
+          });
+          return null;
+        }
+        
+        // Handle director login
+        if (table === 'member' && user.type === 'Director') {
+          return createLoginResponse(
+            user, 
+            'director', 
+            table, 
+            sessionId, 
+            email, 
+            ipAddress, 
+            userAgent
+          );
         }
         
         // Member status check
@@ -172,9 +269,7 @@ export async function POST(request) {
               userType: 'member'
             }
           });
-
           
-          // Send Telegram alert
           const inactiveMessage = formatAlertMessage(
             'member',
             email,
@@ -190,74 +285,17 @@ export async function POST(request) {
             message: 'Sorry You Are Not Active Member! Please Contact Administration' 
           });
         }
-        const eid = `${Math.floor(100000 + Math.random() * 900000)}-MVSDLAB`;
-        logger.info('Generated execution ID', {
-          meta: {
-            eid,
-            sid: sessionId,
-            taskName: 'Generate EID',
-            details: `Generated EID ${eid} for user ${email}`
-          }
-        });
-        // Update member tracker
-        if (table === 'member') {
-          await updateMemberLoginTracker(user.id, email);
-        }
-        // Success alert
-        const successMessage = formatAlertMessage(
-          table,
-          email,
-          ipAddress,
-          userAgent,
-          {
-            eid,
-            memberId: table === 'member' ? user.id : undefined
-          }
+        
+        // Create response for non-director users
+        return createLoginResponse(
+          user, 
+          table === 'admin' ? 'admin' : 'user', 
+          table, 
+          sessionId, 
+          email, 
+          ipAddress, 
+          userAgent
         );
-        await sendTelegramAlert(successMessage);
-        logger.info('Login success', {
-          meta: {
-            eid,
-            sid: sessionId,
-            taskName: 'AuthSuccess',
-            details: `Successful ${table} login for ${email}`,
-            userType: table,
-            userId: table === 'member' ? user.id : 'admin'
-          }
-        });
-        // Update admin details
-        if (table === 'admin') {
-          await updateLoginDetails(email);
-        }
-        // Set response cookies
-        const response = NextResponse.json({ 
-          success: true, 
-          type: table === 'admin' ? 'admin' : 'user' 
-        });
-
-        const cookieConfig = { httpOnly: true, secure: process.env.NODE_ENV === 'production' };
-        response.cookies.set('email', email, cookieConfig);
-        response.cookies.set('sessionId', sessionId, cookieConfig);
-        response.cookies.set('eid', eid, cookieConfig);
-        // Set non-httpOnly cookies for client-side access
-        response.cookies.set('id', user.id, { 
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'Lax'
-        });
-
-        response.cookies.set('type', user.type, { // 'Professor' or 'PhD Candidate'
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'Lax'
-        });
-
-        console.log('Setting memberId cookie:', user.id); // Debugging log
-        console.log('Setting memberType cookie:', user.type); // Debugging log
-        response.cookies.set('redirect', 
-          table === 'admin' ? '/dashboard' :
-          ['PhD Candidate'].includes(user.type) ? '/member_dashboard' : '/home',
-          cookieConfig
-        );
-        return response;
       }
       return null;
     };
@@ -267,6 +305,7 @@ export async function POST(request) {
       const adminResponse = await checkUser('admin', false);
       if (adminResponse) return adminResponse;
     }
+    
     // Check member if not admin
     const memberResponse = await checkUser('member', true);
     if (memberResponse) return memberResponse;
@@ -279,7 +318,9 @@ export async function POST(request) {
       userAgent,
       { eid: 'Failed Attempt' }
     ).replace('Successful', 'Failed');
+    
     await sendTelegramAlert(failedMessage);
+    
     logger.warn('Login failed', {
       meta: {
         sid: sessionId,
@@ -288,10 +329,12 @@ export async function POST(request) {
         userType: isAdminEmail ? 'admin' : 'member'
       }
     });
+    
     return NextResponse.json({ 
       success: false, 
       message: 'Invalid email or password' 
     });
+    
   } catch (error) {
     // Error handling
     const errorMessage = formatAlertMessage(
@@ -301,17 +344,25 @@ export async function POST(request) {
       userAgent,
       { eid: 'Error', error: error.message }
     ).replace('Successful', 'Error');
+    
     await sendTelegramAlert(errorMessage);
+    
     logger.error('Login process error', {
       meta: {
         sid: sessionId,
         taskName: 'SystemError',
         details: `Error: ${error.message}`,
-        userType: isAdminEmail ? 'admin' : 'member'
+        userType: isAdminEmail ? 'admin' : 'member',
+        stack: error.stack
       }
     });
+    
     return NextResponse.json(
-      { success: false, message: 'Internal server error' },
+      { 
+        success: false, 
+        message: 'Internal server error',
+        error: error.message
+      },
       { status: 500 }
     );
   }
