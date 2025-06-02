@@ -89,6 +89,11 @@
             "date": 1748719373862,
             "name": "logs/mvsd-lab-2025-05-31.log",
             "hash": "9606ec028ed1d29a4ac2dfadc897861bb08d4795efb13f33a7cbcf241b5890dc"
+        },
+        {
+            "date": 1748830538705,
+            "name": "logs/mvsd-lab-2025-06-01.log",
+            "hash": "35120526b74a65a547cc3bf6268ae4da68c7a498ade737549544e458237085bb"
         }
     ],
     "hashType": "sha256"
