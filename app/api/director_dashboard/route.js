@@ -33,16 +33,19 @@ export async function GET(request) {
     const directorInfo = directorResult.rows[0];
     console.log(`[DirectorDashboard][${sessionId}] Director info fetched:`, JSON.stringify(directorInfo));
 
-    // Get total count of pending publications
-    const totalCountQuery = `
-      SELECT COUNT(*) AS total 
-      FROM phd_candidate_pub_res_info 
-      WHERE approval_status = 'Pending'
+    // 2. Fetch publication statistics
+    console.log(`[DirectorDashboard][${sessionId}] Fetching publication statistics...`);
+    const statsQuery = `
+      SELECT 
+        COUNT(*) FILTER (WHERE approval_status = 'Pending') AS pending,
+        COUNT(*) FILTER (WHERE approval_status = 'Approved') AS approved,
+        COUNT(*) FILTER (WHERE approval_status = 'Rejected') AS rejected
+      FROM phd_candidate_pub_res_info;
     `;
-    const totalCountResult = await query(totalCountQuery);
-    const totalPendingCount = totalCountResult.rows[0].total;
-  
-    // 2. Fetch pending publications
+    const statsResult = await query(statsQuery);
+    const stats = statsResult.rows[0];
+    
+    // 3. Fetch pending publications
     console.log(`[DirectorDashboard][${sessionId}] Fetching pending publications...`);
     const publicationsQuery = `
       SELECT pub_res_id, phd_candidate_id, type, title, publishing_year, 
@@ -56,7 +59,7 @@ export async function GET(request) {
     const publicationsResult = await query(publicationsQuery);
     console.log(`[DirectorDashboard][${sessionId}] Publications results: ${publicationsResult.rowCount} items found`);
     
-    // 3. Format combined response
+    // 4. Format combined response
     const responseData = {
       success: true,
       director: {
@@ -65,11 +68,14 @@ export async function GET(request) {
         photo: directorInfo.photo,
         firstName: directorInfo.first_name,
         lastName: directorInfo.last_name,
-        fullName: `${directorInfo.first_name} ${directorInfo.last_name}`,
-        pendingPublications: publicationsResult.rows,
-      totalPendingCount: totalPendingCount
+        fullName: `${directorInfo.first_name} ${directorInfo.last_name}`
       },
-      pendingPublications: publicationsResult.rows
+      pendingPublications: publicationsResult.rows,
+      stats: {
+        pending: stats.pending,
+        approved: stats.approved,
+        rejected: stats.rejected
+      }
     };
     
     console.log(`[DirectorDashboard][${sessionId}] Data fetch completed successfully`);
