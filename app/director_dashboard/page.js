@@ -86,20 +86,16 @@ export default function DirectorDashboard() {
     }
   };
 
-  const formatAuthors = (authors) => {
+  const renderAuthors = (authors) => {
+    // If authors is already an array, use it directly
+    if (Array.isArray(authors)) {
+      return authors;
+    }
+    
+    // Try to parse if it's a string
     try {
-      const parsed = JSON.parse(authors);
-      if (Array.isArray(parsed)) {
-        return parsed;
-      }
-      if (typeof parsed === 'string') {
-        return parsed.split(',').map(a => a.trim());
-      }
-      return [authors];
+      return JSON.parse(authors);
     } catch {
-      if (typeof authors === 'string') {
-        return authors.split(',').map(a => a.trim());
-      }
       return [authors];
     }
   };
@@ -205,19 +201,14 @@ export default function DirectorDashboard() {
       <div className="bg-white rounded-2xl shadow-xl p-5 border border-gray-100">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <div>
-            <h2 className="text-xl font-bold text-gray-800">Pending Publications</h2>
+            <h2 className="text-xl font-bold text-gray-800">Pending Publication/Research</h2>
             <p className="text-gray-600 mt-1">Review and approve submissions from researchers</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1.5 rounded-full">
-              {publications.length} pending
-            </span>
           </div>
         </div>
         
         <div className="space-y-4">
           {publications.length > 0 ? publications.map((pub, index) => {
-            const authors = formatAuthors(pub.authors);
+            const authors = renderAuthors(pub.authors);
             
             return (
               <motion.div 
@@ -256,17 +247,17 @@ export default function DirectorDashboard() {
                   <h4 className="text-sm font-medium text-gray-600 mb-2">
                     Authors
                   </h4>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap items-baseline gap-1">
                     {authors.map((author, idx) => (
-                      <div 
-                        key={idx} 
-                        className="relative inline-flex items-center px-3 py-1.5 rounded-full text-xs bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
-                      >
-                        {author}
-                        <sup className="absolute -top-1.5 -right-1.5 flex items-center justify-center w-4 h-4 rounded-full bg-blue-500 text-white text-[0.5rem] font-bold">
+                      <span key={idx} className="inline-flex items-center">
+                        <span className="text-sm text-gray-800">{author}</span>
+                        <sup className="ml-0.5 text-[0.7rem] font-bold text-blue-600">
                           {idx + 1}
                         </sup>
-                      </div>
+                        {idx < authors.length - 1 && (
+                          <span className="mx-1 text-gray-400">,</span>
+                        )}
+                      </span>
                     ))}
                   </div>
                 </div>

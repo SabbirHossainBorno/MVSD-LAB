@@ -48,7 +48,8 @@ export async function GET(request) {
         link,
         document_path AS "documentPath",
         approval_status AS "approvalStatus",
-        created_at AS "createdAt"
+        created_at AS "createdAt",
+        feedback
       FROM phd_candidate_pub_res_info
       WHERE phd_candidate_id = $1
       ORDER BY created_at DESC`,
