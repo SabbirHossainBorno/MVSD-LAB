@@ -12,6 +12,7 @@ export default function DirectorDashboardNavbar({ onMenuClick, onDarkModeToggle 
   const [directorData, setDirectorData] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const [avatarError, setAvatarError] = useState(false);
 
   // Fetch director data from dashboard API
   useEffect(() => {
@@ -117,19 +118,12 @@ export default function DirectorDashboardNavbar({ onMenuClick, onDarkModeToggle 
             onClick={() => setProfileOpen(!profileOpen)}
             className="flex items-center space-x-2 group"
           >
-            {!loading && directorData?.photo ? (
+            {!loading && directorData?.photo && !avatarError ? (
               <img 
                 src={directorData.photo} 
                 alt={directorData.fullName} 
                 className="w-10 h-10 rounded-full object-cover shadow group-hover:scale-105 transition-transform"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.parentNode.innerHTML = `
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold shadow">
-                      ${directorData?.firstName?.charAt(0) || 'D'}
-                    </div>
-                  `;
-                }}
+                onError={() => setAvatarError(true)} // Set error state on failure
               />
             ) : (
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold shadow group-hover:scale-105 transition-transform">
