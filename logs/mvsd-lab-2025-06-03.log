@@ -7,3 +7,25 @@
 2025-06-03 04:45:41-EID[627724-MVSDLAB]-SID[ac6140ab-f56c-4430-9b09-6f3da70a0c88]-[INFO] TASK[AuthSuccess]-Successful director login for borno6655netflix@gmail.com
 2025-06-03 04:45:54-EID[627724-MVSDLAB]-SID[ac6140ab-f56c-4430-9b09-6f3da70a0c88]-[INFO] TASK[Auth Check]-User type : Director (member)
 2025-06-03 04:51:48-EID[627724-MVSDLAB]-SID[ac6140ab-f56c-4430-9b09-6f3da70a0c88]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-03 05:16:22-EID[]-SID[ce94346f-1dd1-4c31-a7eb-54874041cd53]-[INFO] TASK[Login]-Login attempt for borno6655netflix@gmail.com from IP 103.180.244.251
+2025-06-03 05:16:22-EID[]-SID[ce94346f-1dd1-4c31-a7eb-54874041cd53]-[INFO] TASK[DBCheck]-Looking for borno6655netflix@gmail.com in member
+2025-06-03 05:16:22-EID[]-SID[ce94346f-1dd1-4c31-a7eb-54874041cd53]-[INFO] TASK[DirectorCheck]-Found director: D01MVSD
+2025-06-03 05:16:22-EID[]-SID[ce94346f-1dd1-4c31-a7eb-54874041cd53]-[INFO] TASK[DirectorAuth]-Validating director D01MVSD
+2025-06-03 05:16:22-EID[]-SID[ce94346f-1dd1-4c31-a7eb-54874041cd53]-[INFO] TASK[DirectorLogin]-Director ID: D01MVSD, Email: borno6655netflix@gmail.com
+2025-06-03 05:16:22-EID[303743-MVSDLAB]-SID[ce94346f-1dd1-4c31-a7eb-54874041cd53]-[INFO] TASK[Generate EID]-Generated EID 303743-MVSDLAB for director borno6655netflix@gmail.com
+2025-06-03 05:16:22-EID[303743-MVSDLAB]-SID[ce94346f-1dd1-4c31-a7eb-54874041cd53]-[INFO] TASK[AuthSuccess]-Successful director login for borno6655netflix@gmail.com
+2025-06-03 05:16:25-EID[303743-MVSDLAB]-SID[ce94346f-1dd1-4c31-a7eb-54874041cd53]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-03 05:16:51-EID[303743-MVSDLAB]-SID[ce94346f-1dd1-4c31-a7eb-54874041cd53]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-03 05:25:18-EID[303743-MVSDLAB]-SID[ce94346f-1dd1-4c31-a7eb-54874041cd53]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-03 05:27:07-EID[303743-MVSDLAB]-SID[ce94346f-1dd1-4c31-a7eb-54874041cd53]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-03 05:29:44-EID[303743-MVSDLAB]-SID[ce94346f-1dd1-4c31-a7eb-54874041cd53]-[INFO] TASK[Logout]-member borno6655netflix@gmail.com logged out from 103.180.244.251
+2025-06-03 05:29:53-EID[]-SID[e2b84d98-8191-43e3-a71a-583e2bec9627]-[INFO] TASK[Login]-Login attempt for borno6655aiub@gmail.com from IP 103.180.244.251
+2025-06-03 05:29:53-EID[]-SID[e2b84d98-8191-43e3-a71a-583e2bec9627]-[INFO] TASK[DBCheck]-Looking for borno6655aiub@gmail.com in member
+2025-06-03 05:29:53-EID[947893-MVSDLAB]-SID[e2b84d98-8191-43e3-a71a-583e2bec9627]-[INFO] TASK[Generate EID]-Generated EID 947893-MVSDLAB for user borno6655aiub@gmail.com
+2025-06-03 05:29:53-EID[947893-MVSDLAB]-SID[e2b84d98-8191-43e3-a71a-583e2bec9627]-[INFO] TASK[AuthSuccess]-Successful user login for borno6655aiub@gmail.com
+2025-06-03 05:30:08-EID[947893-MVSDLAB]-SID[e2b84d98-8191-43e3-a71a-583e2bec9627]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-03 05:30:12-EID[947893-MVSDLAB]-SID[e2b84d98-8191-43e3-a71a-583e2bec9627]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-03 05:30:13-EID[947893-MVSDLAB]-SID[e2b84d98-8191-43e3-a71a-583e2bec9627]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-03 05:30:15-EID[947893-MVSDLAB]-SID[e2b84d98-8191-43e3-a71a-583e2bec9627]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-03 05:30:26-EID[947893-MVSDLAB]-SID[e2b84d98-8191-43e3-a71a-583e2bec9627]-[ERROR] TASK[PublicationList]-Connection terminated due to connection timeout
+2025-06-03 05:30:57-EID[947893-MVSDLAB]-SID[e2b84d98-8191-43e3-a71a-583e2bec9627]-[INFO] TASK[Logout]-member borno6655aiub@gmail.com logged out from 103.180.244.251

@@ -22,19 +22,6 @@ export async function POST(request) {
       return NextResponse.json({ success: false, message: 'Publication not found' }, { status: 404 });
     }
     
-    // Log activity
-    const activityQuery = `
-      INSERT INTO director_activity_log (director_id, activity_type, description)
-      VALUES ($1, $2, $3)
-    `;
-    
-    const activityDescription = `Publication "${result.rows[0].title.substring(0, 20)}..." ${status.toLowerCase()}`;
-    await query(activityQuery, [
-      'D01MVSD', // Replace with actual director ID from session
-      status === 'Approved' ? 'Publication Approved' : 'Publication Rejected',
-      activityDescription
-    ]);
-    
     return NextResponse.json({ success: true, updatedPublication: result.rows[0] });
     
   } catch (error) {

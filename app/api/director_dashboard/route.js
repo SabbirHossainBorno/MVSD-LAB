@@ -33,8 +33,21 @@ export async function GET(request) {
     const directorInfo = directorResult.rows[0];
     console.log(`[DirectorDashboard][${sessionId}] Director info fetched:`, JSON.stringify(directorInfo));
   
+    // 2. Fetch pending publications
+    console.log(`[DirectorDashboard][${sessionId}] Fetching pending publications...`);
+    const publicationsQuery = `
+      SELECT pub_res_id, phd_candidate_id, type, title, publishing_year, 
+             published_date, authors, link, document_path, created_at
+      FROM phd_candidate_pub_res_info
+      WHERE approval_status = 'Pending'
+      ORDER BY created_at DESC
+      LIMIT 5
+    `;
     
-    // 5. Format response data
+    const publicationsResult = await query(publicationsQuery);
+    console.log(`[DirectorDashboard][${sessionId}] Publications results: ${publicationsResult.rowCount} items found`);
+    
+    // 3. Format combined response
     const responseData = {
       success: true,
       director: {
@@ -44,7 +57,8 @@ export async function GET(request) {
         firstName: directorInfo.first_name,
         lastName: directorInfo.last_name,
         fullName: `${directorInfo.first_name} ${directorInfo.last_name}`
-      }
+      },
+      pendingPublications: publicationsResult.rows
     };
     
     console.log(`[DirectorDashboard][${sessionId}] Data fetch completed successfully`);
