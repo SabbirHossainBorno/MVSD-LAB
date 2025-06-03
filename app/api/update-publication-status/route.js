@@ -34,25 +34,34 @@ export async function POST(request) {
     
     // Create notification
     console.log('[Notification] Creating notification entry');
-    const notificationTitle = status === 'Approved' 
-      ? `Publication Approved: ${updatedPublication.title.substring(0, 30)}...`
-      : `Publication Requires Revision: ${updatedPublication.title.substring(0, 30)}...`;
     
-    const notificationQuery = `
-      INSERT INTO notification_details (
-        id,
-        title,
-        status
-      ) VALUES ($1, $2, $3)
-    `;
+    let notificationTitle;
+    if (status === 'Approved') {
+      notificationTitle = `Publication Approved: ${updatedPublication.title.substring(0, 30)}...`;
+    } else if (status === 'Rejected') {
+      notificationTitle = `Publication Rejected: ${updatedPublication.title.substring(0, 30)}...`;
+    } else {
+      notificationTitle = `Publication Requires Revision: ${updatedPublication.title.substring(0, 30)}...`;
+    }
+    
+    // Create notification
+      console.log('[Notification] Creating notification entry');
+      const notificationQuery = `
+        INSERT INTO notification_details (
+          id,
+          title,
+          status
+        ) VALUES ($1, $2, $3)
+      `;
 
-    await query(notificationQuery, [
-      pub_res_id,
-      notificationTitle,
-      'Unread'
-    ]);
+      await query(notificationQuery, [
+        pub_res_id,
+        notificationTitle,
+        'Unread'
+      ]);
 
-    console.log('[Notification] Notification created successfully');
+      console.log('[Notification] Notification created successfully');
+    ;
     
     // Commit transaction
     await query('COMMIT');
@@ -106,15 +115,26 @@ export async function POST(request) {
 
         const emailPromises = [];
 
+        // Status colors for email styling
+        let statusColor;
+        if (status === 'Approved') {
+          statusColor = 'green';
+        } else if (status === 'Rejected') {
+          statusColor = 'red';
+        } else {
+          statusColor = 'orange';
+        }
+
         // Director email
         if (directorEmail) {
-          const directorSubject = status === 'Approved' 
-            ? `Publication Approved - ${pub_res_id}` 
-            : `Publication Revision Required - ${pub_res_id}`;
-            
-          const actionTaken = status === 'Approved' 
-            ? 'approved' 
-            : 'marked as requiring revision';
+          let actionTaken;
+          if (status === 'Approved') {
+            actionTaken = 'approved';
+          } else if (status === 'Rejected') {
+            actionTaken = 'rejected';
+          } else {
+            actionTaken = 'marked as requiring revision';
+          }
             
           const directorEmailHTML = `
             <p>Dear Director,</p>
@@ -132,7 +152,7 @@ export async function POST(request) {
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Status</td>
-                <td style="padding: 8px; border: 1px solid #ddd; color: ${status === 'Approved' ? 'green' : 'orange'}; font-weight: bold;">
+                <td style="padding: 8px; border: 1px solid #ddd; color: ${statusColor}; font-weight: bold;">
                   ${status}
                 </td>
               </tr>
@@ -152,6 +172,8 @@ export async function POST(request) {
             <strong>MVSD LAB</strong></p>
           `;
 
+          const directorSubject = `Publication ${status} - ${pub_res_id}`;
+          
           emailPromises.push(
             transporter.sendMail({
               from: process.env.EMAIL_FROM,
@@ -165,13 +187,29 @@ export async function POST(request) {
 
         // Member notification email
         if (memberEmail) {
-          const memberSubject = status === 'Approved' 
-            ? `Publication Approved - ${pub_res_id}` 
-            : `Publication Requires Revision - ${pub_res_id}`;
-            
-          const statusMessage = status === 'Approved' 
-            ? 'approved by the director' 
-            : 'marked as requiring revision by the director';
+          let statusMessage;
+          let actionMessage;
+          let resubmissionNote = '';
+          
+          if (status === 'Approved') {
+            statusMessage = 'approved by the director';
+            actionMessage = `
+              <p>Congratulations! Your publication is now approved and visible in the MVSD LAB portfolio.</p>
+              <p><strong>Resubmission:</strong> This publication cannot be resubmitted as it's now finalized.</p>
+            `;
+          } else if (status === 'Rejected') {
+            statusMessage = 'rejected by the director';
+            actionMessage = `
+              <p>We regret to inform you that your publication has been rejected.</p>
+              <p><strong>Resubmission:</strong> You can resubmit this publication after making changes. Please review the feedback below.</p>
+            `;
+          } else {
+            statusMessage = 'marked as requiring revision by the director';
+            actionMessage = `
+              <p><strong>Action Required:</strong> Please review the feedback and submit a revised version.</p>
+              <p><strong>Resubmission:</strong> You can resubmit this publication after making the requested revisions.</p>
+            `;
+          }
             
           const memberEmailHTML = `
             <p>Dear Research Member,</p>
@@ -189,7 +227,7 @@ export async function POST(request) {
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Status</td>
-                <td style="padding: 8px; border: 1px solid #ddd; color: ${status === 'Approved' ? 'green' : 'orange'}; font-weight: bold;">
+                <td style="padding: 8px; border: 1px solid #ddd; color: ${statusColor}; font-weight: bold;">
                   ${status}
                 </td>
               </tr>
@@ -203,11 +241,7 @@ export async function POST(request) {
               ` : ''}
             </table>
             
-            ${status === 'Requires Revision' ? `
-              <p><strong>Action Required:</strong> Please review the feedback and submit a revised version.</p>
-            ` : `
-              <p>Congratulations! Your publication is now approved and visible in the MVSD LAB portfolio.</p>
-            `}
+            ${actionMessage}
             
             <p>You can view your publication in the <a href="https://www.mvsdlab.com/login">MVSD LAB Member Dashboard</a>.</p>
             
@@ -215,6 +249,8 @@ export async function POST(request) {
             <strong>MVSD LAB</strong></p>
           `;
 
+          const memberSubject = `Publication ${status} - ${pub_res_id}`;
+          
           emailPromises.push(
             transporter.sendMail({
               from: process.env.EMAIL_FROM,

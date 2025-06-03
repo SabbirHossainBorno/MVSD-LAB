@@ -32,6 +32,15 @@ export async function GET(request) {
     
     const directorInfo = directorResult.rows[0];
     console.log(`[DirectorDashboard][${sessionId}] Director info fetched:`, JSON.stringify(directorInfo));
+
+    // Get total count of pending publications
+    const totalCountQuery = `
+      SELECT COUNT(*) AS total 
+      FROM phd_candidate_pub_res_info 
+      WHERE approval_status = 'Pending'
+    `;
+    const totalCountResult = await query(totalCountQuery);
+    const totalPendingCount = totalCountResult.rows[0].total;
   
     // 2. Fetch pending publications
     console.log(`[DirectorDashboard][${sessionId}] Fetching pending publications...`);
@@ -56,7 +65,9 @@ export async function GET(request) {
         photo: directorInfo.photo,
         firstName: directorInfo.first_name,
         lastName: directorInfo.last_name,
-        fullName: `${directorInfo.first_name} ${directorInfo.last_name}`
+        fullName: `${directorInfo.first_name} ${directorInfo.last_name}`,
+        pendingPublications: publicationsResult.rows,
+      totalPendingCount: totalPendingCount
       },
       pendingPublications: publicationsResult.rows
     };
