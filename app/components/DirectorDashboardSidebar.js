@@ -104,7 +104,7 @@ export default function DirectorDashboardSidebar({ isOpen, onClose }) {
         {/* Close Button (visible only on small screens) */}
         <button 
           onClick={onClose}
-          className="absolute right-4 top-4 md:hidden text-sky-300 hover:text-white p-1 rounded-full hover:bg-sky-900/40 transition-colors"
+          className="absolute right-1 top-1 md:hidden text-sky-300 hover:text-white p-1 rounded-full hover:bg-sky-900/40 transition-colors"
         >
           <X size={20} />
         </button>

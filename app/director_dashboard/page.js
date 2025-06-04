@@ -134,53 +134,52 @@ export default function DirectorDashboard() {
 
 return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
-      <FeedbackModal
-        isOpen={showFeedbackModal}
-        onClose={() => setShowFeedbackModal(false)}
-        onSubmit={handleFeedbackSubmit}
-        actionType={actionType}
-        publicationTitle={activePublication?.title || ''}
-      />
+    <FeedbackModal
+      isOpen={showFeedbackModal}
+      onClose={() => setShowFeedbackModal(false)}
+      onSubmit={handleFeedbackSubmit}
+      actionType={actionType}
+      publicationTitle={activePublication?.title || ''}
+      publicationId={activePublication?.pub_res_id || ''}
+      candidateId={activePublication?.phd_candidate_id || ''}
+      submittedDate={activePublication?.created_at ? formatDate(activePublication.created_at) : ''}
+    />
       
       {/* Dashboard Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
-          <p className="text-gray-600 mt-1">Review and manage research publications</p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        {/* Left Section */}
+        <div className="flex-1 min-w-0">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Dashboard</h1>
+          <p className="text-gray-600 mt-1 text-sm sm:text-base">Review and manage research publications</p>
         </div>
+        
+        {/* Last Login Card */}
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           whileHover={{ scale: 1.02 }}
-          className="relative bg-white px-4 py-3 rounded-xl shadow-sm border border-gray-200 overflow-hidden"
+          className="relative w-full sm:w-auto bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
         >
           {/* Background pattern */}
           <div className="absolute inset-0 z-0 opacity-10">
-            <div className="absolute top-0 left-0 w-8 h-8 rounded-full bg-blue-400 -translate-x-1/2 -translate-y-1/2"></div>
-            <div className="absolute bottom-0 right-0 w-12 h-12 rounded-full bg-blue-300 translate-x-1/3 translate-y-1/3"></div>
+            <div className="absolute top-0 left-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-blue-400 -translate-x-1/3 -translate-y-1/3"></div>
+            <div className="absolute bottom-0 right-0 w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-blue-300 translate-x-1/4 translate-y-1/4"></div>
           </div>
           
-          <div className="relative z-10 flex items-center gap-3">
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-2 rounded-lg shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="relative z-10 flex items-center p-3 sm:px-4 sm:py-3">
+            <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-1.5 sm:p-2 rounded-lg shadow-sm flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             
-            <div>
-              <p className="text-xs font-medium text-gray-500">Last login</p>
-              <p className="text-sm font-medium text-gray-800">
+            <div className="ml-3 min-w-0">
+              <p className="text-xs font-medium text-gray-500 truncate">Last login</p>
+              <p className="text-sm font-medium text-gray-800 truncate">
                 {lastLogin ? formatLastLogin(lastLogin) : "Loading..."}
               </p>
             </div>
           </div>
-          
-          {/* Animated status */}
-          <motion.div 
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ repeat: Infinity, duration: 1.5 }}
-            className="absolute top-2 right-3 w-2 h-2 bg-blue-500 rounded-full"
-          ></motion.div>
         </motion.div>
       </div>
       
@@ -285,8 +284,15 @@ return (
             <h2 className="text-lg font-bold text-gray-800">Pending Publication/Research</h2>
             <p className="text-gray-600 text-sm mt-1">Review submissions from researchers</p>
           </div>
-          <div className="text-xs text-gray-500 bg-gray-50 px-3 py-1.5 rounded-full">
-            Recent {publications.length} Pending
+          <div className="relative inline-flex items-center group">
+            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-800 text-xs font-medium px-4 py-1.5 rounded border border-indigo-100 shadow-inner flex items-center transition-all duration-300 group-hover:shadow-md group-hover:border-indigo-200">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>
+                Recent <span className="font-semibold">{publications.length}</span> Pending
+              </span>
+            </div>
           </div>
         </div>
         
@@ -318,38 +324,23 @@ return (
         </h4>
       </div>
       
-      {/* Right Section */}
-      <div className="relative group">
-  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-lg p-2.5 shadow-sm inline-block">
-    <div className="flex flex-col gap-1">
-      <div className="flex items-center">
-        <div className="bg-blue-100 p-1 rounded-full mr-2">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      <div className="inline-flex items-center bg-gradient-to-r from-blue-50 to-indigo-50 rounded pl-2 pr-3 py-0.5 border border-blue-100 shadow-sm text-xs">
+        <div className="flex items-center pr-2 border-r border-blue-100 mr-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-2.5 w-2.5 text-blue-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
           </svg>
+          <span className="font-medium text-blue-700 mr-1">On :</span>
+          <span className="font-semibold text-gray-800">{formatDate(pub.created_at)}</span>
         </div>
-        <span className="text-xs font-medium text-blue-700">
-          Submitted On : {formatDate(pub.created_at)}
-        </span>
-      </div>
-      <div className="h-px bg-blue-100 my-1.5"></div>
-      
-      <div className="flex items-center">
-        <div className="bg-indigo-100 p-1 rounded-full mr-2">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        
+        <div className="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-2.5 w-2.5 text-indigo-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
           </svg>
+          <span className="font-medium text-indigo-700 mr-1">By :</span>
+          <span className="font-semibold text-gray-800 truncate max-w-[80px]">{pub.phd_candidate_id}</span>
         </div>
-        <span className="text-xs font-medium text-indigo-700">
-          Submitted By : {pub.phd_candidate_id}
-        </span>
       </div>
-    </div>
-  </div>
-  
-  {/* Hover effect */}
-  <div className="absolute -inset-1 bg-gradient-to-br from-blue-100/30 to-indigo-100/30 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
-</div>
     </div>
     
     {/* Bottom Line */}
@@ -401,7 +392,7 @@ return (
       <div className="flex gap-1">
         <button 
           onClick={() => handleActionClick(pub, 'reject')}
-          className="text-xs px-2 py-1 bg-gradient-to-r from-red-100 to-red-50 border border-red-200 text-red-700 rounded-lg hover:bg-red-200 transition-all duration-200 flex items-center"
+          className="text-xs px-2 py-1 bg-gradient-to-r from-red-100 to-red-50 border border-red-200 text-red-700 rounded hover:bg-red-200 transition-all duration-200 flex items-center"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -411,7 +402,7 @@ return (
         
         <button 
           onClick={() => handleActionClick(pub, 'approve')}
-          className="text-xs px-2 py-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:opacity-90 transition-all duration-200 flex items-center shadow-sm"
+          className="text-xs px-2 py-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded hover:opacity-90 transition-all duration-200 flex items-center shadow-sm"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
