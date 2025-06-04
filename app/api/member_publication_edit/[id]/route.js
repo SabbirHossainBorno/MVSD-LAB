@@ -356,7 +356,7 @@ export async function PUT(request, { params }) {
         `UPDATE notification_details
          SET title = $1, status = 'Unread', created_at = NOW()
          WHERE id = $2`,
-        [`Updated: ${updateData.title.substring(0, 30)}...`, id]
+        [`A Publication/Research Re-Submitted: ${updateData.title.substring(0, 30)}...`, id]
       );
 
       await query('COMMIT');

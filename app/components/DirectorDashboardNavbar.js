@@ -13,11 +13,12 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
   const router = useRouter();
   const [avatarError, setAvatarError] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [notificationLoading, setNotificationLoading] = useState(true);
   
   const notificationsRef = useRef(null);
   const profileRef = useRef(null);
 
-  // Fetch director data from dashboard API
+  // Fetch director data
   useEffect(() => {
     const fetchDirectorData = async () => {
       try {
@@ -25,42 +26,37 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
         if (response.ok) {
           const data = await response.json();
           setDirectorData(data.director);
-          
-          // Mock notifications
-          setNotifications([
-            {
-              id: 1,
-              title: "New Publication Submitted",
-              message: "Dr. Smith submitted a new research paper",
-              time: "2 hours ago",
-              read: false
-            },
-            {
-              id: 2,
-              title: "System Update",
-              message: "New dashboard features are now available",
-              time: "1 day ago",
-              read: true
-            },
-            {
-              id: 3,
-              title: "Reminder",
-              message: "Quarterly review meeting next week",
-              time: "3 days ago",
-              read: true
-            }
-          ]);
-        } else {
-          console.error('Failed to fetch director data');
         }
-      } catch (error) {
-        console.error('Error fetching director data:', error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchDirectorData();
+  }, []);
+
+  // Fetch notifications
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        setNotificationLoading(true);
+        const response = await fetch('/api/notification');
+        if (response.ok) {
+          const data = await response.json();
+          // Filter for publication notifications only
+          const pubNotifications = data.filter(notif => 
+            notif.id && notif.id.startsWith('PUB')
+          );
+          setNotifications(pubNotifications);
+        }
+      } finally {
+        setNotificationLoading(false);
+      }
+    };
+
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 120000);
+    return () => clearInterval(interval);
   }, []);
 
   // Close dropdowns when clicking outside
@@ -75,9 +71,7 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
     };
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleLogout = async () => {
@@ -89,7 +83,84 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
     }
   };
 
-  const unreadNotifications = notifications.filter(n => !n.read).length;
+  // Format notification time
+  const formatNotificationTime = (dateString) => {
+    if (!dateString) return "Just now";
+    
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - date) / 1000);
+    
+    if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`;
+    
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
+    
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `${diffInHours} hours ago`;
+    
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays === 1) return "Yesterday";
+    
+    return `${diffInDays} days ago`;
+  };
+
+  // Mark notification as read
+  const markAsRead = async (serial) => {
+    try {
+      // Optimistic UI update
+      setNotifications(prev => prev.map(n => 
+        n.serial === serial ? { ...n, status: 'Read' } : n
+      ));
+      
+      // Update in the backend
+      await fetch('/api/notification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ notificationSerial: serial, status: 'Read' })
+      });
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+      // Revert if error
+      setNotifications(prev => prev.map(n => 
+        n.serial === serial ? { ...n, status: 'Unread' } : n
+      ));
+    }
+  };
+
+  // Mark all notifications as read
+  const markAllAsRead = async () => {
+    const unreadSerials = notifications
+      .filter(n => n.status === 'Unread')
+      .map(n => n.serial);
+    
+    if (unreadSerials.length === 0) return;
+    
+    try {
+      // Optimistic UI update
+      setNotifications(prev => prev.map(n => 
+        unreadSerials.includes(n.serial) ? { ...n, status: 'Read' } : n
+      ));
+      
+      // Update in the backend
+      await fetch('/api/notification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          notificationSerials: unreadSerials, 
+          status: 'Read' 
+        })
+      });
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+      // Revert if error
+      setNotifications(prev => prev.map(n => 
+        unreadSerials.includes(n.serial) ? { ...n, status: 'Unread' } : n
+      ));
+    }
+  };
+
+  const unreadNotifications = notifications.filter(n => n.status === 'Unread').length;
 
   return (
     <nav className="bg-[rgba(5,10,20,0.92)] backdrop-blur-xl py-3 px-6 flex items-center justify-between sticky top-0 z-40 border-b border-slate-800/70 shadow-2xl"> 
@@ -105,17 +176,17 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
       
       {/* Centered title */}
       <div className="flex-1 flex justify-center">
-  <div className="relative group">
-    <h1 className="text-2xl md:text-3xl font-bold text-center tracking-tight">
-      <span className="relative inline-block">
-        <span className="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
-          Director Portal
-        </span>
-        <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-sky-400/40 to-indigo-400/40 rounded-full transition-all duration-300 group-hover:opacity-100 group-hover:from-sky-400 group-hover:to-indigo-400"></div>
-      </span>
-    </h1>
-  </div>
-</div>
+        <div className="relative group">
+          <h1 className="text-2xl md:text-3xl font-bold text-center tracking-tight">
+            <span className="relative inline-block">
+              <span className="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
+                Director Portal
+              </span>
+              <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-sky-400/40 to-indigo-400/40 rounded-full transition-all duration-300 group-hover:opacity-100 group-hover:from-sky-400 group-hover:to-indigo-400"></div>
+            </span>
+          </h1>
+        </div>
+      </div>
       
       {/* Right section with icons */}
       <div className="flex items-center space-x-5">
@@ -140,43 +211,59 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
             </div>
           </button>
           
-          {/* Notifications dropdown - only shown when open */}
+          {/* Notifications dropdown */}
           {notificationsOpen && (
             <div className="absolute right-0 mt-2 w-80 bg-[rgba(8,15,30,0.97)] backdrop-blur-xl shadow-2xl rounded-xl z-50 border border-slate-800/70 overflow-hidden transform transition-all duration-200">
               <div className="p-4 border-b border-slate-800/70">
                 <div className="flex justify-between items-center">
-                  <h3 className="font-semibold text-white">Notifications</h3>
+                  <h3 className="font-semibold text-white">Publications</h3>
                   <span className="text-xs text-sky-400">{unreadNotifications} Unread</span>
                 </div>
               </div>
               <div className="max-h-60 overflow-y-auto">
-                {notifications.length > 0 ? (
+                {notificationLoading ? (
+                  <div className="p-6 flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-sky-500"></div>
+                  </div>
+                ) : notifications.length > 0 ? (
                   notifications.map(notification => (
                     <div 
-                      key={notification.id} 
-                      className={`p-4 border-b border-slate-800/50 hover:bg-slate-800/40 transition-colors ${!notification.read ? 'bg-slate-800/30' : ''}`}
+                      key={notification.serial}
+                      className={`p-4 border-b border-slate-800/50 hover:bg-slate-800/40 transition-colors cursor-pointer ${
+                        notification.status === 'Unread' ? 'bg-slate-800/30' : ''
+                      }`}
+                      onClick={() => markAsRead(notification.serial)}
                     >
                       <div className="flex items-start">
-                        <div className={`mr-3 mt-1 w-2 h-2 rounded-full ${notification.read ? 'bg-slate-600' : 'bg-sky-400'}`}></div>
+                        <div className={`mr-3 mt-1 w-2 h-2 rounded-full ${
+                          notification.status === 'Unread' ? 'bg-sky-400 animate-pulse' : 'bg-slate-600'
+                        }`}></div>
                         <div className="flex-1">
-                          <h4 className="font-medium text-white">{notification.title}</h4>
-                          <p className="text-sm text-slate-300 mt-1">{notification.message}</p>
-                          <p className="text-xs text-slate-500 mt-2">{notification.time}</p>
+                          <h4 className="font-medium text-white text-sm">{notification.title}</h4>
+                          <p className="text-xs text-slate-300 mt-1 line-clamp-2">{notification.message}</p>
+                          <p className="text-xs text-slate-500 mt-2">
+                            {formatNotificationTime(notification.created_at)}
+                          </p>
                         </div>
                       </div>
                     </div>
                   ))
                 ) : (
                   <div className="p-6 text-center">
-                    <p className="text-sm text-slate-500">No Notifications</p>
+                    <p className="text-sm text-slate-500">No New Publications</p>
                   </div>
                 )}
               </div>
-              <div className="p-3 border-t border-slate-800/70">
-                <button className="text-xs text-sky-400 hover:text-sky-300 w-full text-center">
-                  Mark all as read
-                </button>
-              </div>
+              {notifications.length > 0 && (
+                <div className="p-3 border-t border-slate-800/70">
+                  <button 
+                    className="text-xs text-sky-400 hover:text-sky-300 w-full text-center"
+                    onClick={markAllAsRead}
+                  >
+                    Mark all as read
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -208,7 +295,7 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
             />
           </button>
           
-          {/* Profile dropdown - only shown when open */}
+          {/* Profile dropdown */}
           {profileOpen && (
             <div className="absolute right-0 mt-2 w-60 bg-[rgba(8,15,30,0.97)] backdrop-blur-xl shadow-2xl rounded-xl z-50 border border-slate-800/70 overflow-hidden transform transition-all duration-200">
               <div className="p-4 border-b border-slate-800/70">

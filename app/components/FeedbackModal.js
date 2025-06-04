@@ -67,67 +67,61 @@ export default function FeedbackModal({
                     {actionType === 'approve' ? 'Approve Publication/Research' : 'Reject Publication/Research'}
                   </h2>
                 </div>
-                <button
-                  onClick={onClose}
-                  className="text-white/80 hover:text-white rounded-full p-1 transition"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
               </div>
             </div>
             
             {/* Modal Body */}
             <div className="p-6">
               <div className="mb-5">
-                <div className="text-sm font-medium text-gray-500 mb-1">Publication</div>
+                <div className="text-sm font-medium text-gray-500 mb-1">Publication/Research</div>
                 <div className="text-lg font-semibold text-gray-800 bg-gray-50 rounded-lg px-4 py-3 mb-4">
                   {publicationTitle}
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-                  <div className="bg-blue-50 rounded-xl p-4">
-                    <div className="flex items-center mb-2">
-                      <div className="bg-blue-100 p-2 rounded-lg mr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+
+                  <div className="bg-blue-50 rounded-xl p-2">
+                    <div className="flex items-center mb-1">
+                      <div className="bg-blue-100 p-2 rounded-lg mr-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
                         </svg>
                       </div>
                       <div>
-                        <div className="text-xs text-blue-600 font-medium">PUBLICATION/RESEARCH ID</div>
-                        <div className="text-sm font-semibold text-gray-800">{publicationId}</div>
+                        <div className="text-[9px] text-amber-600 font-medium uppercase tracking-wide">PUB/RES ID</div>
+                        <div className="text-[10px] font-semibold text-gray-800 break-all leading-tight">{publicationId}</div>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="bg-purple-50 rounded-xl p-4">
-                    <div className="flex items-center mb-2">
-                      <div className="bg-purple-100 p-2 rounded-lg mr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-600" viewBox="0 0 20 20" fill="currentColor">
+                  <div className="bg-purple-50 rounded-xl p-2">
+                    <div className="flex items-center mb-1">
+                      <div className="bg-purple-100 p-2 rounded-lg mr-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-purple-600" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                         </svg>
                       </div>
                       <div>
-                        <div className="text-xs text-purple-600 font-medium">SUBMITTED BY</div>
-                        <div className="text-sm font-semibold text-gray-800">{candidateId}</div>
+                        <div className="text-[9px] text-amber-600 font-medium uppercase tracking-wide">SUBMITTED BY</div>
+                        <div className="text-[10px] font-semibold text-gray-800 break-all leading-tight">{candidateId}</div>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="bg-amber-50 rounded-xl p-4 col-span-1 md:col-span-2">
+                  <div className="bg-amber-50 rounded-xl p-2">
                     <div className="flex items-center">
-                      <div className="bg-amber-100 p-2 rounded-lg mr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-600" viewBox="0 0 20 20" fill="currentColor">
+                      <div className="bg-amber-100 p-2 rounded-lg mr-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-amber-600" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                         </svg>
                       </div>
                       <div>
-                        <div className="text-xs text-amber-600 font-medium">SUBMITTED ON</div>
-                        <div className="text-sm font-semibold text-gray-800">{submittedDate}</div>
+                        <div className="text-[9px] text-amber-600 font-medium uppercase tracking-wide">SUBMITTED ON</div>
+                        <div className="text-[10px] font-semibold text-gray-800 break-all leading-tight">{submittedDate}</div>
                       </div>
                     </div>
                   </div>
+
                 </div>
               </div>
               
