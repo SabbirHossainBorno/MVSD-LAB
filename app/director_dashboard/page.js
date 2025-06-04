@@ -18,6 +18,7 @@ export default function DirectorDashboard() {
     approved: 0,
     rejected: 0
   });
+  const [lastLogin, setLastLogin] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +30,11 @@ export default function DirectorDashboard() {
         if (data.success) {
           setPublications(data.pendingPublications);
           setDashboardStats(data.stats);
+
+          // Set last login time from API response
+          if (data.director.lastLogin) {
+            setLastLogin(new Date(data.director.lastLogin));
+          }
         } else {
           throw new Error(data.message || 'Failed to fetch data');
         }
@@ -99,6 +105,20 @@ export default function DirectorDashboard() {
       return [authors];
     }
   };
+  const formatLastLogin = (date) => {
+    if (!date) return "First login";
+    
+    const now = new Date();
+    const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) {
+      return `Today at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    } else if (diffDays === 1) {
+      return `Yesterday at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    } else {
+      return `${date.toLocaleDateString()} at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    }
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -112,7 +132,7 @@ export default function DirectorDashboard() {
   if (loading) return <LoadingSpinner />;
   if (error) return <div className="p-6 text-red-500">Error: {error}</div>;
 
-  return (
+return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       <FeedbackModal
         isOpen={showFeedbackModal}
@@ -128,58 +148,119 @@ export default function DirectorDashboard() {
           <h1 className="text-2xl font-bold text-gray-800">Director Dashboard</h1>
           <p className="text-gray-600 mt-1">Review and manage research publications</p>
         </div>
-        <div className="text-sm text-gray-500 bg-white px-4 py-2.5 rounded-xl shadow-sm border border-gray-100">
-          Last login: Today at {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-        </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileHover={{ scale: 1.02 }}
+          className="relative bg-white px-4 py-3 rounded-xl shadow-sm border border-gray-200 overflow-hidden"
+        >
+          {/* Background pattern */}
+          <div className="absolute inset-0 z-0 opacity-10">
+            <div className="absolute top-0 left-0 w-8 h-8 rounded-full bg-blue-400 -translate-x-1/2 -translate-y-1/2"></div>
+            <div className="absolute bottom-0 right-0 w-12 h-12 rounded-full bg-blue-300 translate-x-1/3 translate-y-1/3"></div>
+          </div>
+          
+          <div className="relative z-10 flex items-center gap-3">
+            <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-2 rounded-lg shadow-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            
+            <div>
+              <p className="text-xs font-medium text-gray-500">Last login</p>
+              <p className="text-sm font-medium text-gray-800">
+                {lastLogin ? formatLastLogin(lastLogin) : "Loading..."}
+              </p>
+            </div>
+          </div>
+          
+          {/* Animated status */}
+          <motion.div 
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+            className="absolute top-2 right-3 w-2 h-2 bg-blue-500 rounded-full"
+          ></motion.div>
+        </motion.div>
       </div>
       
-      {/* Stats Overview */}
+      {/* Stats Overview - Compact Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        {/* Pending Card - Yellow Theme */}
         <motion.div 
-          whileHover={{ scale: 1.03 }}
-          className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl p-5 shadow-lg"
+          whileHover={{ scale: 1.03, y: -5 }}
+          className="bg-white rounded-2xl p-5 border border-amber-100 shadow-lg relative overflow-hidden"
         >
-          <div className="flex justify-between items-center">
+          {/* Decorative Elements */}
+          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-amber-50 opacity-80"></div>
+          <div className="absolute -bottom-8 -left-8 w-20 h-20 rounded-full bg-amber-100 opacity-40"></div>
+          
+          <div className="flex justify-between items-center relative z-10">
             <div>
-              <h3 className="text-sm font-medium opacity-80">Pending</h3>
-              <p className="text-2xl font-bold mt-1">{dashboardStats.pending}</p>
+              <h3 className="text-sm font-medium text-amber-700">Pending</h3>
+              <p className="text-3xl font-bold mt-1 text-amber-600">{dashboardStats.pending}</p>
+              <div className="flex items-center mt-2">
+                <div className="w-8 h-1 bg-amber-300 rounded-full mr-1"></div>
+                <div className="w-6 h-1 bg-amber-200 rounded-full mr-1"></div>
+                <div className="w-4 h-1 bg-amber-100 rounded-full"></div>
+              </div>
             </div>
-            <div className="bg-white/20 p-3 rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="bg-gradient-to-br from-amber-400 to-amber-500 p-3 rounded-xl shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
           </div>
         </motion.div>
         
+        {/* Approved Card - Green Theme */}
         <motion.div 
-          whileHover={{ scale: 1.03 }}
-          className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl p-5 shadow-lg"
+          whileHover={{ scale: 1.03, y: -5 }}
+          className="bg-white rounded-2xl p-5 border border-emerald-100 shadow-lg relative overflow-hidden"
         >
-          <div className="flex justify-between items-center">
+          {/* Decorative Elements */}
+          <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-50 opacity-60 transform rotate-45 translate-x-4 -translate-y-4"></div>
+          
+          <div className="flex justify-between items-center relative z-10">
             <div>
-              <h3 className="text-sm font-medium opacity-80">Approved</h3>
-              <p className="text-2xl font-bold mt-1">{dashboardStats.approved}</p>
+              <h3 className="text-sm font-medium text-emerald-700">Approved</h3>
+              <p className="text-3xl font-bold mt-1 text-emerald-600">{dashboardStats.approved}</p>
+              <div className="mt-2 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-emerald-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-xs text-emerald-500 font-medium">All time</span>
+              </div>
             </div>
-            <div className="bg-white/20 p-3 rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="bg-gradient-to-br from-emerald-400 to-emerald-600 p-3 rounded-xl shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
           </div>
         </motion.div>
         
+        {/* Rejected Card - Red Theme */}
         <motion.div 
-          whileHover={{ scale: 1.03 }}
-          className="bg-gradient-to-r from-red-500 to-rose-600 text-white rounded-xl p-5 shadow-lg"
+          whileHover={{ scale: 1.03, y: -5 }}
+          className="bg-white rounded-2xl p-5 border border-rose-100 shadow-lg relative overflow-hidden"
         >
-          <div className="flex justify-between items-center">
+          {/* Decorative Elements */}
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-rose-50 rounded-full opacity-50 -translate-x-6 translate-y-6"></div>
+          
+          <div className="flex justify-between items-center relative z-10">
             <div>
-              <h3 className="text-sm font-medium opacity-80">Rejected</h3>
-              <p className="text-2xl font-bold mt-1">{dashboardStats.rejected}</p>
+              <h3 className="text-sm font-medium text-rose-700">Rejected</h3>
+              <p className="text-3xl font-bold mt-1 text-rose-600">{dashboardStats.rejected}</p>
+              <div className="mt-2 flex items-center">
+                <div className="w-4 h-4 rounded-full bg-rose-200 mr-2 flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-rose-500"></div>
+                </div>
+                <span className="text-xs text-rose-500 font-medium">Requires review</span>
+              </div>
             </div>
-            <div className="bg-white/20 p-3 rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="bg-gradient-to-br from-rose-400 to-rose-600 p-3 rounded-xl shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
@@ -191,137 +272,114 @@ export default function DirectorDashboard() {
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 p-4 bg-green-100 border border-green-200 text-green-700 rounded-xl"
+          className="mb-6 p-3 bg-green-100 border border-green-200 text-green-700 rounded-xl text-sm"
         >
           {successMessage}
         </motion.div>
       )}
       
-      {/* Publications Section */}
-      <div className="bg-white rounded-2xl shadow-xl p-5 border border-gray-100">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+      {/* Publications Section - Compact Design */}
+      <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
           <div>
-            <h2 className="text-xl font-bold text-gray-800">Pending Publication/Research</h2>
-            <p className="text-gray-600 mt-1">Review and approve submissions from researchers</p>
+            <h2 className="text-lg font-bold text-gray-800">Pending Publications</h2>
+            <p className="text-gray-600 text-sm mt-1">Review submissions from researchers</p>
+          </div>
+          <div className="text-xs text-gray-500 bg-gray-50 px-3 py-1.5 rounded-full">
+            {publications.length} pending • {dashboardStats.pending} total
           </div>
         </div>
         
-        <div className="space-y-4">
+        <div className="space-y-3">
           {publications.length > 0 ? publications.map((pub, index) => {
             const authors = renderAuthors(pub.authors);
             
             return (
               <motion.div 
                 key={pub.pub_res_id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="bg-gray-50 rounded-xl border border-gray-200 p-4 hover:shadow-md transition-all duration-300"
+                transition={{ duration: 0.2, delay: index * 0.03 }}
+                className="bg-gray-50 rounded-lg border border-gray-200 p-3 hover:shadow-sm transition-all duration-200"
               >
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-start gap-4">
-                  <div className="flex-1">
-                    <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <span className="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-0.5 rounded">
                         {pub.type}
                       </span>
-                      <span className="text-xs font-mono bg-gray-100 text-gray-500 px-2 py-1 rounded">
+                      <span className="text-xs text-gray-500 truncate">
                         ID: {pub.pub_res_id}
                       </span>
                     </div>
-                    <h4 className="font-semibold text-gray-900 text-base">
+                    <h4 className="font-semibold text-gray-900 text-sm truncate" title={pub.title}>
                       {pub.title}
                     </h4>
                   </div>
                   
-                  <div className="text-right">
-                    <span className="text-xs text-gray-500">
-                      Submitted on
-                    </span>
-                    <span className="text-sm font-medium text-gray-700 block">
+                  <div className="text-right text-xs">
+                    <span className="text-gray-500 block">
                       {formatDate(pub.created_at)}
                     </span>
                   </div>
                 </div>
                 
-                <div className="mt-4">
-                  <h4 className="text-sm font-medium text-gray-600 mb-2">
-                    Authors
-                  </h4>
-                  <div className="flex flex-wrap items-baseline gap-1">
-                    {authors.map((author, idx) => (
-                      <span key={idx} className="inline-flex items-center">
-                        <span className="text-sm text-gray-800">{author}</span>
-                        <sup className="ml-0.5 text-[0.7rem] font-bold text-blue-600">
-                          {idx + 1}
-                        </sup>
-                        {idx < authors.length - 1 && (
-                          <span className="mx-1 text-gray-400">,</span>
-                        )}
-                      </span>
-                    ))}
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  <div className="text-xs text-gray-600 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    {authors.length} authors
+                  </div>
+                  <div className="text-xs text-gray-600 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    {pub.publishing_year}
                   </div>
                 </div>
                 
-                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-600 mb-1">
-                      Published Date
-                    </h4>
-                    <p className="text-sm text-gray-800">
-                      {formatDate(pub.published_date)}
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-600 mb-1">
-                      Publishing Year
-                    </h4>
-                    <p className="text-sm text-gray-800">
-                      {pub.publishing_year}
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="mt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-4 border-t border-gray-200">
-                  <div className="flex flex-wrap gap-3">
+                <div className="mt-3 flex justify-between items-center gap-3 pt-3 border-t border-gray-200">
+                  <div className="flex gap-1">
                     <a 
                       href={pub.link} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 text-sm flex items-center font-medium"
+                      className="text-xs text-blue-600 hover:text-blue-800 flex items-center p-1.5 rounded-md hover:bg-blue-50 transition-colors"
+                      title="View Online"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                       </svg>
-                      View Online
                     </a>
                     <a 
                       href={pub.document_path} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 text-sm flex items-center font-medium"
+                      className="text-xs text-blue-600 hover:text-blue-800 flex items-center p-1.5 rounded-md hover:bg-blue-50 transition-colors"
+                      title="Download PDF"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
                       </svg>
-                      Download PDF
                     </a>
                   </div>
                   
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex gap-1">
                     <button 
                       onClick={() => handleActionClick(pub, 'reject')}
-                      className="px-3 py-1.5 bg-gradient-to-r from-gray-100 to-gray-50 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 flex items-center shadow-sm text-sm"
+                      className="text-xs px-2 py-1 bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 flex items-center"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                       Reject
                     </button>
                     <button 
                       onClick={() => handleActionClick(pub, 'approve')}
-                      className="px-3 py-1.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:opacity-90 transition-all duration-200 flex items-center shadow-md text-sm"
+                      className="text-xs px-2 py-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:opacity-90 transition-all duration-200 flex items-center shadow-sm"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       Approve
@@ -334,15 +392,15 @@ export default function DirectorDashboard() {
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-12 px-4 bg-gray-50 rounded-xl border border-gray-200"
+              className="text-center py-8 px-4 bg-gray-50 rounded-lg border border-gray-200"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto mb-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              <h3 className="text-xl font-medium text-gray-700 mb-1">
+              <h3 className="text-lg font-medium text-gray-700 mb-1">
                 No pending publications
               </h3>
-              <p className="text-gray-500 max-w-md mx-auto">
+              <p className="text-gray-500 text-sm max-w-md mx-auto">
                 All publications have been reviewed. Check back later for new submissions.
               </p>
             </motion.div>

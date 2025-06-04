@@ -33,7 +33,19 @@ export async function GET(request) {
     const directorInfo = directorResult.rows[0];
     console.log(`[DirectorDashboard][${sessionId}] Director info fetched:`, JSON.stringify(directorInfo));
 
-    // 2. Fetch publication statistics
+    // 2. Fetch last login time from tracker table
+    console.log(`[DirectorDashboard][${sessionId}] Fetching last login time...`);
+    const loginQuery = `
+      SELECT last_login_time 
+      FROM director_login_info_tracker
+      WHERE email = $1
+      ORDER BY last_login_time DESC
+      LIMIT 1
+    `;
+    const loginResult = await query(loginQuery, [directorInfo.email]);
+    const lastLoginTime = loginResult.rows[0]?.last_login_time || null;
+
+    // 3. Fetch publication statistics
     console.log(`[DirectorDashboard][${sessionId}] Fetching publication statistics...`);
     const statsQuery = `
       SELECT 
@@ -45,7 +57,7 @@ export async function GET(request) {
     const statsResult = await query(statsQuery);
     const stats = statsResult.rows[0];
     
-    // 3. Fetch pending publications
+    // 4. Fetch pending publications
     console.log(`[DirectorDashboard][${sessionId}] Fetching pending publications...`);
     const publicationsQuery = `
       SELECT pub_res_id, phd_candidate_id, type, title, publishing_year, 
@@ -59,7 +71,7 @@ export async function GET(request) {
     const publicationsResult = await query(publicationsQuery);
     console.log(`[DirectorDashboard][${sessionId}] Publications results: ${publicationsResult.rowCount} items found`);
     
-    // 4. Format combined response
+    // 5. Format combined response
     const responseData = {
       success: true,
       director: {
@@ -68,7 +80,8 @@ export async function GET(request) {
         photo: directorInfo.photo,
         firstName: directorInfo.first_name,
         lastName: directorInfo.last_name,
-        fullName: `${directorInfo.first_name} ${directorInfo.last_name}`
+        fullName: `${directorInfo.first_name} ${directorInfo.last_name}`,
+        lastLogin: lastLoginTime  // Add this property
       },
       pendingPublications: publicationsResult.rows,
       stats: {

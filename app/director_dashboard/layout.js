@@ -8,12 +8,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 function DirectorsLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    const isDark = document.documentElement.classList.contains('dark');
-    setIsDarkMode(isDark);
-  }, []);
 
   // Close sidebar when clicking outside on mobile
   useEffect(() => {
@@ -29,7 +23,7 @@ function DirectorsLayout({ children }) {
   }, [sidebarOpen]);
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
       <div 
         className={`fixed inset-y-0 left-0 z-30 w-64 transform transition-all duration-300 ease-in-out ${
@@ -39,7 +33,6 @@ function DirectorsLayout({ children }) {
         <DirectorDashboardSidebar 
           isOpen={sidebarOpen} 
           onClose={() => setSidebarOpen(false)} 
-          isDarkMode={isDarkMode}
         />
       </div>
       
@@ -60,7 +53,6 @@ function DirectorsLayout({ children }) {
       <div className="flex flex-col flex-1 w-full min-w-0">
         <DirectorDashboardNavbar 
           onMenuClick={() => setSidebarOpen(!sidebarOpen)} 
-          onDarkModeToggle={(mode) => setIsDarkMode(mode)}
         />
         
         <main className="flex-1 overflow-y-auto p-4 md:p-6">
