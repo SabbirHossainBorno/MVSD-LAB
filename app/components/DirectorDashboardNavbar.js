@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Bell, User, Menu, LogOut, ChevronDown } from 'react-feather';
+import { motion } from 'framer-motion';
 
 export default function DirectorDashboardNavbar({ onMenuClick }) {
   const [profileOpen, setProfileOpen] = useState(false);
@@ -104,12 +105,17 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
       
       {/* Centered title */}
       <div className="flex-1 flex justify-center">
-        <h1 className="text-2xl font-bold text-white text-center tracking-tight">
-          <span className="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
-            MVSD LAB
-          </span>
-        </h1>
-      </div>
+  <div className="relative group">
+    <h1 className="text-2xl md:text-3xl font-bold text-center tracking-tight">
+      <span className="relative inline-block">
+        <span className="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
+          Director Portal
+        </span>
+        <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-sky-400/40 to-indigo-400/40 rounded-full transition-all duration-300 group-hover:opacity-100 group-hover:from-sky-400 group-hover:to-indigo-400"></div>
+      </span>
+    </h1>
+  </div>
+</div>
       
       {/* Right section with icons */}
       <div className="flex items-center space-x-5">

@@ -50,10 +50,10 @@ function LoginPage() {
           toast.success('Welcome! BOSS');
           router.push('/dashboard');
         } else if (result.type === 'director') {
-          toast.success('Welcome! MVSD LAB DIRECTOR');
+          toast.success('Welcome! DIRECTOR');
           router.push('/director_dashboard');
         } else {
-          toast.success('Welcome! MVSD LAB MEMBER');
+          toast.success('Welcome! MEMBER');
           router.push('/member_dashboard');
         }
       } else {

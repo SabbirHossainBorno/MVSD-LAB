@@ -145,7 +145,7 @@ return (
       {/* Dashboard Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Director Dashboard</h1>
+          <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
           <p className="text-gray-600 mt-1">Review and manage research publications</p>
         </div>
         <motion.div 
@@ -282,7 +282,7 @@ return (
       <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
           <div>
-            <h2 className="text-lg font-bold text-gray-800">Pending Publications</h2>
+            <h2 className="text-lg font-bold text-gray-800">Pending Publication/Research</h2>
             <p className="text-gray-600 text-sm mt-1">Review submissions from researchers</p>
           </div>
           <div className="text-xs text-gray-500 bg-gray-50 px-3 py-1.5 rounded-full">
@@ -296,97 +296,132 @@ return (
             
             return (
               <motion.div 
-                key={pub.pub_res_id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2, delay: index * 0.03 }}
-                className="bg-gray-50 rounded-lg border border-gray-200 p-3 hover:shadow-sm transition-all duration-200"
-              >
-                <div className="flex justify-between items-start">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-0.5 rounded">
-                        {pub.type}
-                      </span>
-                      <span className="text-xs text-gray-500 truncate">
-                        ID: {pub.pub_res_id}
-                      </span>
-                    </div>
-                    <h4 className="font-semibold text-gray-900 text-sm truncate" title={pub.title}>
-                      {pub.title}
-                    </h4>
-                  </div>
-                  
-                  <div className="text-right text-xs">
-                    <span className="text-gray-500 block">
-                      {formatDate(pub.created_at)}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="mt-2 flex flex-wrap items-center gap-2">
-                  <div className="text-xs text-gray-600 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    {authors.length} authors
-                  </div>
-                  <div className="text-xs text-gray-600 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    {pub.publishing_year}
-                  </div>
-                </div>
-                
-                <div className="mt-3 flex justify-between items-center gap-3 pt-3 border-t border-gray-200">
-                  <div className="flex gap-1">
-                    <a 
-                      href={pub.link} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-xs text-blue-600 hover:text-blue-800 flex items-center p-1.5 rounded-md hover:bg-blue-50 transition-colors"
-                      title="View Online"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </a>
-                    <a 
-                      href={pub.document_path} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-xs text-blue-600 hover:text-blue-800 flex items-center p-1.5 rounded-md hover:bg-blue-50 transition-colors"
-                      title="Download PDF"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-                      </svg>
-                    </a>
-                  </div>
-                  
-                  <div className="flex gap-1">
-                    <button 
-                      onClick={() => handleActionClick(pub, 'reject')}
-                      className="text-xs px-2 py-1 bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 flex items-center"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                      Reject
-                    </button>
-                    <button 
-                      onClick={() => handleActionClick(pub, 'approve')}
-                      className="text-xs px-2 py-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:opacity-90 transition-all duration-200 flex items-center shadow-sm"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      Approve
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
+  key={pub.pub_res_id}
+  initial={{ opacity: 0, y: 10 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.2, delay: index * 0.03 }}
+  className="bg-white rounded-lg border border-gray-200 p-3 hover:shadow-sm transition-all duration-200"
+>
+  <div className="flex flex-col gap-3">
+    {/* Top Line */}
+    <div className="flex flex-wrap justify-between items-start gap-2">
+      {/* Left Section */}
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-xs font-bold bg-purple-100 text-purple-800 px-2 py-0.5 rounded">
+          {pub.pub_res_id}
+        </span>
+        <span className="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-0.5 rounded">
+          {pub.type}
+        </span>
+        <h4 className="font-semibold text-gray-900 text-sm truncate" title={pub.title}>
+          {pub.title}
+        </h4>
+      </div>
+      
+      {/* Right Section */}
+      <div className="relative group">
+  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-lg p-2.5 shadow-sm inline-block">
+    <div className="flex flex-col gap-1">
+      <div className="flex items-center">
+        <div className="bg-blue-100 p-1 rounded-full mr-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <span className="text-xs font-medium text-blue-700">
+          Submitted On : {formatDate(pub.created_at)}
+        </span>
+      </div>
+      <div className="h-px bg-blue-100 my-1.5"></div>
+      
+      <div className="flex items-center">
+        <div className="bg-indigo-100 p-1 rounded-full mr-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        </div>
+        <span className="text-xs font-medium text-indigo-700">
+          Submitted By : {pub.phd_candidate_id}
+        </span>
+      </div>
+    </div>
+  </div>
+  
+  {/* Hover effect */}
+  <div className="absolute -inset-1 bg-gradient-to-br from-blue-100/30 to-indigo-100/30 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+</div>
+    </div>
+    
+    {/* Bottom Line */}
+    <div className="flex flex-wrap justify-between items-center gap-2">
+      {/* Metadata */}
+      <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600">
+        <div className="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          {authors.length} authors
+        </div>
+        
+        <div className="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          {pub.publishing_year}
+        </div>
+        
+        <div className="flex items-center gap-1">
+          <a 
+            href={pub.link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 flex items-center p-1 rounded hover:bg-blue-50 transition-colors"
+            title="View Online"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
+          
+          <a 
+            href={pub.document_path} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 flex items-center p-1 rounded hover:bg-blue-50 transition-colors"
+            title="Download PDF"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+            </svg>
+          </a>
+        </div>
+      </div>
+      
+      {/* Buttons */}
+      <div className="flex gap-1">
+        <button 
+          onClick={() => handleActionClick(pub, 'reject')}
+          className="text-xs px-2 py-1 bg-gradient-to-r from-red-100 to-red-50 border border-red-200 text-red-700 rounded-lg hover:bg-red-200 transition-all duration-200 flex items-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          Reject
+        </button>
+        
+        <button 
+          onClick={() => handleActionClick(pub, 'approve')}
+          className="text-xs px-2 py-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:opacity-90 transition-all duration-200 flex items-center shadow-sm"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          Approve
+        </button>
+      </div>
+    </div>
+  </div>
+</motion.div>
             );
           }) : (
             <motion.div 
