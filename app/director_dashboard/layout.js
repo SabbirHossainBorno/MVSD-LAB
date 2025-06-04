@@ -8,23 +8,35 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 function DirectorsLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if mobile
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
 
   // Close sidebar when clicking outside on mobile
   useEffect(() => {
     const handleClickOutside = (e) => {
       const sidebar = document.querySelector('.sidebar');
-      if (sidebarOpen && window.innerWidth < 768 && sidebar && !sidebar.contains(e.target)) {
+      if (sidebarOpen && isMobile && sidebar && !sidebar.contains(e.target)) {
         setSidebarOpen(false);
       }
     };
 
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
-  }, [sidebarOpen]);
+  }, [sidebarOpen, isMobile]);
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
+      {/* Sidebar - Fixed position */}
       <div 
         className={`fixed inset-y-0 left-0 z-30 w-64 transform transition-all duration-300 ease-in-out ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'

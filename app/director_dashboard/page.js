@@ -286,7 +286,7 @@ return (
             <p className="text-gray-600 text-sm mt-1">Review submissions from researchers</p>
           </div>
           <div className="text-xs text-gray-500 bg-gray-50 px-3 py-1.5 rounded-full">
-            {publications.length} pending • {dashboardStats.pending} total
+            Recent {publications.length} Pending
           </div>
         </div>
         
