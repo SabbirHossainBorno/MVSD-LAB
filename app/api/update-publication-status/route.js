@@ -37,9 +37,9 @@ export async function POST(request) {
     
     let notificationTitle;
     if (status === 'Approved') {
-      notificationTitle = `Publication Approved: ${updatedPublication.title.substring(0, 30)}...`;
+      notificationTitle = `${pub_res_id} Publication/Research Approved: ${updatedPublication.title.substring(0, 30)}...`;
     } else if (status === 'Rejected') {
-      notificationTitle = `Publication Rejected: ${updatedPublication.title.substring(0, 30)}...`;
+      notificationTitle = `${pub_res_id} Publication Rejected: ${updatedPublication.title.substring(0, 30)}...`;
     } else {
       notificationTitle = `Publication Requires Revision: ${updatedPublication.title.substring(0, 30)}...`;
     }

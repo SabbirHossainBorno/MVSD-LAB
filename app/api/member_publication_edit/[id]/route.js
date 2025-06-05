@@ -350,13 +350,29 @@ export async function PUT(request, { params }) {
       console.log(`[UPDATE SUCCESS] Affected rows: ${result.rowCount}`);
       console.log(`Updated data:`, JSON.stringify(result.rows[0], null, 2));
 
-      // Update notification
-      console.log(`[NOTIFICATION UPDATE] Creating notification`);
+      // Generate current timestamp for both notifications
+      const currentTimestamp = new Date().toISOString();
+      
+      // 1. ADMIN NOTIFICATION: Create new notification in notification_details table
+      console.log(`[ADMIN NOTIFICATION] Creating new notification for admin view`);
+      const adminNotificationTitle = `[${id}] Publication/Research Re-Submitted: ${updateData.title} By ${memberId}`;
+      
       await query(
-        `UPDATE notification_details
-         SET title = $1, status = 'Unread', created_at = NOW()
-         WHERE id = $2`,
-        [`A Publication/Research Re-Submitted: ${updateData.title.substring(0, 30)}...`, id]
+        `INSERT INTO notification_details (id, title, status, created_at)
+        VALUES ($1, $2, 'Unread', $3)`,
+        [id, adminNotificationTitle, currentTimestamp]
+      );
+
+      // 2. DIRECTOR NOTIFICATION: Create new notification in director_notification_details
+      console.log(`[DIRECTOR NOTIFICATION] Creating new notification for director`);
+      const directorNotificationTitle = `[${id}] Publication/Research Re-Submitted: ${updateData.title} By ${memberId}`;
+      
+      await query(
+        `INSERT INTO director_notification_details 
+          (mvsdlab_id, pub_res_id, title, created_at) 
+        VALUES 
+          ($1, $2, $3, $4)`,
+        [memberId, id, directorNotificationTitle, currentTimestamp]
       );
 
       await query('COMMIT');

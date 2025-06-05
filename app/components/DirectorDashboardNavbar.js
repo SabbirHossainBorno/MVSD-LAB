@@ -216,7 +216,7 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
             <div className="absolute right-0 mt-2 w-80 bg-[rgba(8,15,30,0.97)] backdrop-blur-xl shadow-2xl rounded-xl z-50 border border-slate-800/70 overflow-hidden transform transition-all duration-200">
               <div className="p-4 border-b border-slate-800/70">
                 <div className="flex justify-between items-center">
-                  <h3 className="font-semibold text-white">Publications</h3>
+                  <h3 className="font-semibold text-white">Notification</h3>
                   <span className="text-xs text-sky-400">{unreadNotifications} Unread</span>
                 </div>
               </div>

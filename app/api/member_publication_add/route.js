@@ -280,9 +280,25 @@ export async function POST(req) {
 
       await query(notificationQuery, [
         pubResId,
-        `New Publication/Research Submitted: ${publicationData.title.substring(0, 30)}...`,
+        `[${pubResId}] New Publication/Research Submitted: ${publicationData.title} By ${memberId}`,
         'Unread'
       ]);
+
+      console.log('[DIRECTOR NOTIFICATION] Creating notification entry');
+      const directorNotificationQuery = `
+        INSERT INTO director_notification_details (
+          mvsdlab_id,
+          pub_res_id,
+          title
+        ) VALUES ($1, $2, $3)
+      `;
+
+      await query(directorNotificationQuery, [
+        memberId,
+        pubResId,
+        `[${pubResId}] New Publication/Research Submitted: ${publicationData.title} By ${memberId}`
+      ]);
+      
 
       console.log('[Notification] Notification created successfully');
 
