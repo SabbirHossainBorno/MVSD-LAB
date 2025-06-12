@@ -1,3 +1,4 @@
+//app/components/DirectorDashboardNavbar.js
 'use client';
 
 import { useState, useEffect, useRef } from 'react';

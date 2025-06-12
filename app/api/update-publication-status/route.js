@@ -172,7 +172,7 @@ export async function POST(request) {
             <strong>MVSD LAB</strong></p>
           `;
 
-          const directorSubject = `Publication ${status} - ${pub_res_id}`;
+          const directorSubject = `Publication/Research ${status} - ${pub_res_id}`;
           
           emailPromises.push(
             transporter.sendMail({
@@ -249,7 +249,7 @@ export async function POST(request) {
             <strong>MVSD LAB</strong></p>
           `;
 
-          const memberSubject = `Publication ${status} - ${pub_res_id}`;
+          const memberSubject = `Publication/Research ${status} - ${pub_res_id}`;
           
           emailPromises.push(
             transporter.sendMail({

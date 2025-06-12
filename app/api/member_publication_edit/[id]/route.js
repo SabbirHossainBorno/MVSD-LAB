@@ -454,7 +454,7 @@ if (directorEmail) {
   emails.push({
     from: process.env.EMAIL_FROM,
     to: directorEmail,
-    subject: `Publication Updated - ${id}`,
+    subject: `Publication/Research Re-Submitted - ${id}`,
     html: directorEmailHTML
   });
 }
@@ -500,7 +500,7 @@ if (directorEmail) {
       emails.push({
         from: process.env.EMAIL_FROM,
         to: memberEmail,
-        subject: `Publication Updated Successfully - ${id}`,
+        subject: `Publication/Research Re-Submitted Successfully - ${id}`,
         html: memberEmailContentHTML
       });
     }

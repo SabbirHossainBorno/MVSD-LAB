@@ -389,7 +389,7 @@ export async function POST(req) {
               transporter.sendMail({
                 from: process.env.EMAIL_FROM,
                 to: directorEmail,
-                subject: `New Publication Submitted - ${pubResId}`,
+                subject: `New Publication/Research Submitted - ${pubResId}`,
                 html: directorEmailHTML
               })
             );
@@ -437,7 +437,7 @@ export async function POST(req) {
               transporter.sendMail({
                 from: process.env.EMAIL_FROM,
                 to: memberEmail,
-                subject: `Publication Submitted Successfully - ${pubResId}`,
+                subject: `Publication/Research Submitted Successfully - ${pubResId}`,
                 html: memberEmailContentHTML
               })
             );

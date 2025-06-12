@@ -1,3 +1,5 @@
+//app/components/DirectorDashboardSidebar.js
+
 'use client';
 
 import Link from 'next/link';
