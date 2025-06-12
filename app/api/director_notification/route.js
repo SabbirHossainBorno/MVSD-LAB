@@ -20,7 +20,7 @@ export async function GET(request) {
         serial, 
         title, 
         status, 
-        created_at AT TIME ZONE 'UTC' AS created_at_utc
+        created_at
         FROM director_notification_details 
         ORDER BY created_at DESC
     `;

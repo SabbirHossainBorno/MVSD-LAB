@@ -346,3 +346,20 @@
 2025-06-12 17:59:38-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Auth Check]-User type : Director (member)
 2025-06-12 17:59:38-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
 2025-06-12 17:59:38-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 18:00:37-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 18:00:37-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 18:00:38-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 18:00:55-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Update Director Notification]-Updated status to Read from IP 123.200.7.106
+2025-06-12 18:01:56-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 18:01:56-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 12 notifications from IP 123.200.7.106
+2025-06-12 18:01:56-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 12 notifications from IP 123.200.7.106
+2025-06-12 18:02:36-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Update Director Notification]-Updated status to Read from IP 123.200.7.106
+2025-06-12 18:03:57-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 12 notifications from IP 123.200.7.106
+2025-06-12 18:05:58-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 12 notifications from IP 123.200.7.106
+2025-06-12 18:07:57-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 12 notifications from IP 123.200.7.106
+2025-06-12 18:09:57-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 12 notifications from IP 123.200.7.106
+2025-06-12 18:11:57-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 12 notifications from IP 123.200.7.106
+2025-06-12 18:13:57-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 12 notifications from IP 123.200.7.106
+2025-06-12 18:16:19-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 12 notifications from IP 123.200.7.106
+2025-06-12 18:18:19-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 12 notifications from IP 123.200.7.106
+2025-06-12 18:20:19-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 12 notifications from IP 123.200.7.106

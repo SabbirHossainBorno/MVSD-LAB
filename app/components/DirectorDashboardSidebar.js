@@ -19,7 +19,7 @@ export default function DirectorDashboardSidebar({ isOpen, onClose }) {
     },
     { 
       name: 'Approval Panel', 
-      path: '/director_dashboard/approval',
+      path: '/director_dashboard/approval_panel',
       icon: <Clipboard size={20} className="text-sky-300" />,
       delay: 0.2
     },
