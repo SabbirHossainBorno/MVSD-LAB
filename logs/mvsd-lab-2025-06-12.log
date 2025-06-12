@@ -193,3 +193,156 @@
 2025-06-12 16:54:40-EID[481178-MVSDLAB]-SID[8fb2c24b-67d6-4937-a88a-1ba57ea5f5f7]-[INFO] TASK[Auth Check]-User type : Director (member)
 2025-06-12 16:54:40-EID[481178-MVSDLAB]-SID[8fb2c24b-67d6-4937-a88a-1ba57ea5f5f7]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
 2025-06-12 16:54:40-EID[481178-MVSDLAB]-SID[8fb2c24b-67d6-4937-a88a-1ba57ea5f5f7]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 17:01:19-EID[481178-MVSDLAB]-SID[8fb2c24b-67d6-4937-a88a-1ba57ea5f5f7]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:01:22-EID[481178-MVSDLAB]-SID[8fb2c24b-67d6-4937-a88a-1ba57ea5f5f7]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 17:01:23-EID[481178-MVSDLAB]-SID[8fb2c24b-67d6-4937-a88a-1ba57ea5f5f7]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 17:02:04-EID[481178-MVSDLAB]-SID[8fb2c24b-67d6-4937-a88a-1ba57ea5f5f7]-[INFO] TASK[Logout]-member borno6655netflix@gmail.com logged out from 123.200.7.106
+2025-06-12 17:02:14-EID[]-SID[bff40746-c9b0-4217-97de-dae123fafc5a]-[INFO] TASK[Login]-Login attempt for borno6655aiub@gmail.com from IP 123.200.7.106
+2025-06-12 17:02:14-EID[]-SID[bff40746-c9b0-4217-97de-dae123fafc5a]-[INFO] TASK[DBCheck]-Looking for borno6655aiub@gmail.com in member
+2025-06-12 17:02:14-EID[436621-MVSDLAB]-SID[bff40746-c9b0-4217-97de-dae123fafc5a]-[INFO] TASK[Generate EID]-Generated EID 436621-MVSDLAB for user borno6655aiub@gmail.com
+2025-06-12 17:02:14-EID[436621-MVSDLAB]-SID[bff40746-c9b0-4217-97de-dae123fafc5a]-[INFO] TASK[AuthSuccess]-Successful user login for borno6655aiub@gmail.com
+2025-06-12 17:02:17-EID[436621-MVSDLAB]-SID[bff40746-c9b0-4217-97de-dae123fafc5a]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 17:02:18-EID[436621-MVSDLAB]-SID[bff40746-c9b0-4217-97de-dae123fafc5a]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 17:02:18-EID[436621-MVSDLAB]-SID[bff40746-c9b0-4217-97de-dae123fafc5a]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 17:02:20-EID[436621-MVSDLAB]-SID[bff40746-c9b0-4217-97de-dae123fafc5a]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 17:02:39-EID[436621-MVSDLAB]-SID[bff40746-c9b0-4217-97de-dae123fafc5a]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 17:02:51-EID[436621-MVSDLAB]-SID[bff40746-c9b0-4217-97de-dae123fafc5a]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 17:02:51-EID[436621-MVSDLAB]-SID[bff40746-c9b0-4217-97de-dae123fafc5a]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 17:02:52-EID[436621-MVSDLAB]-SID[bff40746-c9b0-4217-97de-dae123fafc5a]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 17:02:55-EID[436621-MVSDLAB]-SID[bff40746-c9b0-4217-97de-dae123fafc5a]-[INFO] TASK[Logout]-member borno6655aiub@gmail.com logged out from 123.200.7.106
+2025-06-12 17:03:00-EID[]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Login]-Login attempt for borno6655netflix@gmail.com from IP 123.200.7.106
+2025-06-12 17:03:00-EID[]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[DBCheck]-Looking for borno6655netflix@gmail.com in member
+2025-06-12 17:03:00-EID[]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[DirectorCheck]-Found director: D01MVSD
+2025-06-12 17:03:00-EID[]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[DirectorAuth]-Validating director D01MVSD
+2025-06-12 17:03:00-EID[]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[DirectorLogin]-Director ID: D01MVSD, Email: borno6655netflix@gmail.com
+2025-06-12 17:03:00-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Generate EID]-Generated EID 550611-MVSDLAB for director borno6655netflix@gmail.com
+2025-06-12 17:03:00-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[AuthSuccess]-Successful director login for borno6655netflix@gmail.com
+2025-06-12 17:03:01-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:03:02-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 7 notifications from IP 123.200.7.106
+2025-06-12 17:03:02-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 7 notifications from IP 123.200.7.106
+2025-06-12 17:05:03-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 7 notifications from IP 123.200.7.106
+2025-06-12 17:07:02-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 7 notifications from IP 123.200.7.106
+2025-06-12 17:09:02-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 7 notifications from IP 123.200.7.106
+2025-06-12 17:11:02-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 7 notifications from IP 123.200.7.106
+2025-06-12 17:12:46-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:12:49-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-12 17:12:49-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-12 17:13:15-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[ERROR] TASK[Update Director Notification]-IP 123.200.7.106: Notification with serial 254 not found
+2025-06-12 17:13:19-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:13:19-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 7 notifications from IP 123.200.7.106
+2025-06-12 17:13:20-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 7 notifications from IP 123.200.7.106
+2025-06-12 17:13:47-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:13:47-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 7 notifications from IP 123.200.7.106
+2025-06-12 17:13:53-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:13:54-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 7 notifications from IP 123.200.7.106
+2025-06-12 17:13:54-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 7 notifications from IP 123.200.7.106
+2025-06-12 17:14:05-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:14:06-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-12 17:14:07-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-12 17:14:11-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Update Notification Status]-Updated notification ID undefined to status Read from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-12 17:14:22-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:14:22-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-12 17:14:22-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-12 17:15:32-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:15:33-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 7 notifications from IP 123.200.7.106
+2025-06-12 17:15:33-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 7 notifications from IP 123.200.7.106
+2025-06-12 17:15:42-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Update Director Notification]-Updated status to Read from IP 123.200.7.106
+2025-06-12 17:16:05-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:16:06-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 7 notifications from IP 123.200.7.106
+2025-06-12 17:16:06-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 7 notifications from IP 123.200.7.106
+2025-06-12 17:18:06-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 8 notifications from IP 123.200.7.106
+2025-06-12 17:18:30-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:18:30-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 8 notifications from IP 123.200.7.106
+2025-06-12 17:18:31-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 8 notifications from IP 123.200.7.106
+2025-06-12 17:18:53-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Update Director Notification]-Updated status to Read from IP 123.200.7.106
+2025-06-12 17:20:31-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 8 notifications from IP 123.200.7.106
+2025-06-12 17:22:31-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 8 notifications from IP 123.200.7.106
+2025-06-12 17:24:31-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 8 notifications from IP 123.200.7.106
+2025-06-12 17:26:31-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 8 notifications from IP 123.200.7.106
+2025-06-12 17:28:31-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 8 notifications from IP 123.200.7.106
+2025-06-12 17:29:52-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:29:57-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 8 notifications from IP 123.200.7.106
+2025-06-12 17:29:57-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 8 notifications from IP 123.200.7.106
+2025-06-12 17:31:33-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:31:36-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 8 notifications from IP 123.200.7.106
+2025-06-12 17:31:37-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Fetch Director Notifications]-Fetched 8 notifications from IP 123.200.7.106
+2025-06-12 17:31:55-EID[550611-MVSDLAB]-SID[527d9e34-66cc-429f-b27f-1ce51cf8cf87]-[INFO] TASK[Logout]-member borno6655netflix@gmail.com logged out from 123.200.7.106
+2025-06-12 17:32:09-EID[]-SID[a782858a-397a-4d79-b4e9-0ffe3bddf530]-[INFO] TASK[Login]-Login attempt for borno6655aiub@gmail.com from IP 123.200.7.106
+2025-06-12 17:32:09-EID[]-SID[a782858a-397a-4d79-b4e9-0ffe3bddf530]-[INFO] TASK[DBCheck]-Looking for borno6655aiub@gmail.com in member
+2025-06-12 17:32:09-EID[178590-MVSDLAB]-SID[a782858a-397a-4d79-b4e9-0ffe3bddf530]-[INFO] TASK[Generate EID]-Generated EID 178590-MVSDLAB for user borno6655aiub@gmail.com
+2025-06-12 17:32:10-EID[178590-MVSDLAB]-SID[a782858a-397a-4d79-b4e9-0ffe3bddf530]-[INFO] TASK[AuthSuccess]-Successful user login for borno6655aiub@gmail.com
+2025-06-12 17:32:35-EID[178590-MVSDLAB]-SID[a782858a-397a-4d79-b4e9-0ffe3bddf530]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 17:32:38-EID[178590-MVSDLAB]-SID[a782858a-397a-4d79-b4e9-0ffe3bddf530]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 17:32:39-EID[178590-MVSDLAB]-SID[a782858a-397a-4d79-b4e9-0ffe3bddf530]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 17:32:59-EID[178590-MVSDLAB]-SID[a782858a-397a-4d79-b4e9-0ffe3bddf530]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 17:33:16-EID[178590-MVSDLAB]-SID[a782858a-397a-4d79-b4e9-0ffe3bddf530]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 17:33:36-EID[178590-MVSDLAB]-SID[a782858a-397a-4d79-b4e9-0ffe3bddf530]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 17:33:37-EID[178590-MVSDLAB]-SID[a782858a-397a-4d79-b4e9-0ffe3bddf530]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 17:33:37-EID[178590-MVSDLAB]-SID[a782858a-397a-4d79-b4e9-0ffe3bddf530]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 17:33:40-EID[178590-MVSDLAB]-SID[a782858a-397a-4d79-b4e9-0ffe3bddf530]-[INFO] TASK[Logout]-member borno6655aiub@gmail.com logged out from 123.200.7.106
+2025-06-12 17:33:47-EID[]-SID[93e200f6-3efa-4bd3-a329-9f00b13a0582]-[INFO] TASK[Login]-Login attempt for borno6655netflix@gmail.com from IP 123.200.7.106
+2025-06-12 17:33:47-EID[]-SID[93e200f6-3efa-4bd3-a329-9f00b13a0582]-[INFO] TASK[DBCheck]-Looking for borno6655netflix@gmail.com in member
+2025-06-12 17:33:47-EID[]-SID[93e200f6-3efa-4bd3-a329-9f00b13a0582]-[INFO] TASK[DirectorCheck]-Found director: D01MVSD
+2025-06-12 17:33:47-EID[]-SID[93e200f6-3efa-4bd3-a329-9f00b13a0582]-[INFO] TASK[DirectorAuth]-Validating director D01MVSD
+2025-06-12 17:33:47-EID[]-SID[93e200f6-3efa-4bd3-a329-9f00b13a0582]-[INFO] TASK[DirectorLogin]-Director ID: D01MVSD, Email: borno6655netflix@gmail.com
+2025-06-12 17:33:47-EID[540401-MVSDLAB]-SID[93e200f6-3efa-4bd3-a329-9f00b13a0582]-[INFO] TASK[Generate EID]-Generated EID 540401-MVSDLAB for director borno6655netflix@gmail.com
+2025-06-12 17:33:48-EID[540401-MVSDLAB]-SID[93e200f6-3efa-4bd3-a329-9f00b13a0582]-[INFO] TASK[AuthSuccess]-Successful director login for borno6655netflix@gmail.com
+2025-06-12 17:33:48-EID[540401-MVSDLAB]-SID[93e200f6-3efa-4bd3-a329-9f00b13a0582]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:33:49-EID[540401-MVSDLAB]-SID[93e200f6-3efa-4bd3-a329-9f00b13a0582]-[INFO] TASK[Fetch Director Notifications]-Fetched 9 notifications from IP 123.200.7.106
+2025-06-12 17:33:50-EID[540401-MVSDLAB]-SID[93e200f6-3efa-4bd3-a329-9f00b13a0582]-[INFO] TASK[Fetch Director Notifications]-Fetched 9 notifications from IP 123.200.7.106
+2025-06-12 17:35:50-EID[540401-MVSDLAB]-SID[93e200f6-3efa-4bd3-a329-9f00b13a0582]-[INFO] TASK[Fetch Director Notifications]-Fetched 9 notifications from IP 123.200.7.106
+2025-06-12 17:37:50-EID[540401-MVSDLAB]-SID[93e200f6-3efa-4bd3-a329-9f00b13a0582]-[INFO] TASK[Fetch Director Notifications]-Fetched 9 notifications from IP 123.200.7.106
+2025-06-12 17:39:50-EID[540401-MVSDLAB]-SID[93e200f6-3efa-4bd3-a329-9f00b13a0582]-[INFO] TASK[Fetch Director Notifications]-Fetched 9 notifications from IP 123.200.7.106
+2025-06-12 17:41:50-EID[540401-MVSDLAB]-SID[93e200f6-3efa-4bd3-a329-9f00b13a0582]-[INFO] TASK[Fetch Director Notifications]-Fetched 9 notifications from IP 123.200.7.106
+2025-06-12 17:42:44-EID[540401-MVSDLAB]-SID[93e200f6-3efa-4bd3-a329-9f00b13a0582]-[INFO] TASK[Logout]-member borno6655netflix@gmail.com logged out from 123.200.7.106
+2025-06-12 17:42:55-EID[]-SID[05ec302d-9504-497e-8992-f927a1000f39]-[INFO] TASK[Login]-Login attempt for borno6655aiub@gmail.com from IP 123.200.7.106
+2025-06-12 17:42:55-EID[]-SID[05ec302d-9504-497e-8992-f927a1000f39]-[INFO] TASK[DBCheck]-Looking for borno6655aiub@gmail.com in member
+2025-06-12 17:42:55-EID[443651-MVSDLAB]-SID[05ec302d-9504-497e-8992-f927a1000f39]-[INFO] TASK[Generate EID]-Generated EID 443651-MVSDLAB for user borno6655aiub@gmail.com
+2025-06-12 17:42:56-EID[443651-MVSDLAB]-SID[05ec302d-9504-497e-8992-f927a1000f39]-[INFO] TASK[AuthSuccess]-Successful user login for borno6655aiub@gmail.com
+2025-06-12 17:42:57-EID[443651-MVSDLAB]-SID[05ec302d-9504-497e-8992-f927a1000f39]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 17:42:58-EID[443651-MVSDLAB]-SID[05ec302d-9504-497e-8992-f927a1000f39]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 17:42:58-EID[443651-MVSDLAB]-SID[05ec302d-9504-497e-8992-f927a1000f39]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 17:43:35-EID[443651-MVSDLAB]-SID[05ec302d-9504-497e-8992-f927a1000f39]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 17:43:40-EID[443651-MVSDLAB]-SID[05ec302d-9504-497e-8992-f927a1000f39]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 17:44:04-EID[443651-MVSDLAB]-SID[05ec302d-9504-497e-8992-f927a1000f39]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 17:44:04-EID[443651-MVSDLAB]-SID[05ec302d-9504-497e-8992-f927a1000f39]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 17:44:04-EID[443651-MVSDLAB]-SID[05ec302d-9504-497e-8992-f927a1000f39]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 17:44:07-EID[443651-MVSDLAB]-SID[05ec302d-9504-497e-8992-f927a1000f39]-[INFO] TASK[Logout]-member borno6655aiub@gmail.com logged out from 123.200.7.106
+2025-06-12 17:44:12-EID[]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[Login]-Login attempt for borno6655netflix@gmail.com from IP 123.200.7.106
+2025-06-12 17:44:12-EID[]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[DBCheck]-Looking for borno6655netflix@gmail.com in member
+2025-06-12 17:44:12-EID[]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[DirectorCheck]-Found director: D01MVSD
+2025-06-12 17:44:12-EID[]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[DirectorAuth]-Validating director D01MVSD
+2025-06-12 17:44:12-EID[]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[DirectorLogin]-Director ID: D01MVSD, Email: borno6655netflix@gmail.com
+2025-06-12 17:44:12-EID[283012-MVSDLAB]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[Generate EID]-Generated EID 283012-MVSDLAB for director borno6655netflix@gmail.com
+2025-06-12 17:44:12-EID[283012-MVSDLAB]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[AuthSuccess]-Successful director login for borno6655netflix@gmail.com
+2025-06-12 17:44:13-EID[283012-MVSDLAB]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:44:15-EID[283012-MVSDLAB]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[Fetch Director Notifications]-Fetched 10 notifications from IP 123.200.7.106
+2025-06-12 17:44:16-EID[283012-MVSDLAB]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[Fetch Director Notifications]-Fetched 10 notifications from IP 123.200.7.106
+2025-06-12 17:44:46-EID[283012-MVSDLAB]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[Update Director Notification]-Updated status to Read from IP 123.200.7.106
+2025-06-12 17:45:52-EID[283012-MVSDLAB]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:45:56-EID[283012-MVSDLAB]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 17:45:56-EID[283012-MVSDLAB]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 17:47:53-EID[283012-MVSDLAB]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 17:49:53-EID[283012-MVSDLAB]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 17:51:53-EID[283012-MVSDLAB]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 17:53:53-EID[283012-MVSDLAB]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 17:55:53-EID[283012-MVSDLAB]-SID[4a3eae2d-8206-4fa2-8fdf-fe9bb972292c]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 17:58:35-EID[]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Login]-Login attempt for borno6655netflix@gmail.com from IP 123.200.7.106
+2025-06-12 17:58:35-EID[]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[DBCheck]-Looking for borno6655netflix@gmail.com in member
+2025-06-12 17:58:35-EID[]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[DirectorCheck]-Found director: D01MVSD
+2025-06-12 17:58:35-EID[]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[DirectorAuth]-Validating director D01MVSD
+2025-06-12 17:58:35-EID[]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[DirectorLogin]-Director ID: D01MVSD, Email: borno6655netflix@gmail.com
+2025-06-12 17:58:35-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Generate EID]-Generated EID 129466-MVSDLAB for director borno6655netflix@gmail.com
+2025-06-12 17:58:35-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[AuthSuccess]-Successful director login for borno6655netflix@gmail.com
+2025-06-12 17:58:37-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:58:40-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 17:58:40-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 17:58:50-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:58:50-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 17:58:50-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 17:59:25-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:59:26-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 17:59:26-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 17:59:38-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 17:59:38-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106
+2025-06-12 17:59:38-EID[129466-MVSDLAB]-SID[848cf2a7-36f4-4a2b-8ad5-97f9bcdfe7a9]-[INFO] TASK[Fetch Director Notifications]-Fetched 11 notifications from IP 123.200.7.106

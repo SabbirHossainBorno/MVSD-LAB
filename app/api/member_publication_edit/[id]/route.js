@@ -358,9 +358,9 @@ export async function PUT(request, { params }) {
       const adminNotificationTitle = `[${id}] Publication/Research Re-Submitted: ${updateData.title} By ${memberId}`;
       
       await query(
-        `INSERT INTO notification_details (id, title, status, created_at)
-        VALUES ($1, $2, 'Unread', $3)`,
-        [id, adminNotificationTitle, currentTimestamp]
+        `INSERT INTO notification_details (id, title, status)
+        VALUES ($1, $2, 'Unread')`,  // Let DB set created_at/updated_at
+        [id, adminNotificationTitle]
       );
 
       // 2. DIRECTOR NOTIFICATION: Create new notification in director_notification_details
@@ -369,10 +369,10 @@ export async function PUT(request, { params }) {
       
       await query(
         `INSERT INTO director_notification_details 
-          (mvsdlab_id, pub_res_id, title, created_at) 
+        (mvsdlab_id, pub_res_id, title) 
         VALUES 
-          ($1, $2, $3, $4)`,
-        [memberId, id, directorNotificationTitle, currentTimestamp]
+        ($1, $2, $3)`,  // Let DB set timestamps
+        [memberId, id, directorNotificationTitle]
       );
 
       await query('COMMIT');

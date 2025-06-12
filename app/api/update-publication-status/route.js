@@ -39,9 +39,9 @@ export async function POST(request) {
     if (status === 'Approved') {
       notificationTitle = `${pub_res_id} Publication/Research Approved: ${updatedPublication.title.substring(0, 30)}...`;
     } else if (status === 'Rejected') {
-      notificationTitle = `${pub_res_id} Publication Rejected: ${updatedPublication.title.substring(0, 30)}...`;
+      notificationTitle = `${pub_res_id} Publication/Research Rejected: ${updatedPublication.title.substring(0, 30)}...`;
     } else {
-      notificationTitle = `Publication Requires Revision: ${updatedPublication.title.substring(0, 30)}...`;
+      notificationTitle = `Publication/Research Requires Revision: ${updatedPublication.title.substring(0, 30)}...`;
     }
     
     // Create notification
@@ -62,6 +62,26 @@ export async function POST(request) {
 
       console.log('[Notification] Notification created successfully');
     ;
+
+    // ADDED: Create notification in director_notification_details table
+    console.log('[DIRECTOR NOTIFICATION] Creating director notification entry');
+    const directorNotificationTitle = `[${pub_res_id}] Publication/Research ${status}: ${updatedPublication.title.substring(0, 50)}...`;
+    
+    const directorNotificationQuery = `
+      INSERT INTO director_notification_details (
+        mvsdlab_id,
+        pub_res_id,
+        title,
+        status
+      ) VALUES ($1, $2, $3, 'Unread')
+    `;
+
+    await query(directorNotificationQuery, [
+      updatedPublication.phd_candidate_id,  // PhD candidate ID
+      pub_res_id,
+      directorNotificationTitle
+    ]);
+    console.log('[DIRECTOR NOTIFICATION] Notification created in director_notification_details');
     
     // Commit transaction
     await query('COMMIT');
