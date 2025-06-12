@@ -1,4 +1,4 @@
-//app/components/DirectorDashboardNavbar.js
+// app/components/DirectorDashboardNavbar.js
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -36,19 +36,16 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
     fetchDirectorData();
   }, []);
 
-  // Fetch notifications
+  // Fetch director-specific notifications
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
         setNotificationLoading(true);
-        const response = await fetch('/api/notification');
+        const response = await fetch('/api/director_notification');
+        
         if (response.ok) {
           const data = await response.json();
-          // Filter for publication notifications only
-          const pubNotifications = data.filter(notif => 
-            notif.id && notif.id.startsWith('PUB')
-          );
-          setNotifications(pubNotifications);
+          setNotifications(data);
         }
       } finally {
         setNotificationLoading(false);
@@ -106,7 +103,7 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
     return `${diffInDays} days ago`;
   };
 
-  // Mark notification as read
+  // Mark single notification as read
   const markAsRead = async (serial) => {
     try {
       // Optimistic UI update
@@ -115,7 +112,7 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
       ));
       
       // Update in the backend
-      await fetch('/api/notification', {
+      await fetch('/api/director_notification', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notificationSerial: serial, status: 'Read' })
@@ -144,7 +141,7 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
       ));
       
       // Update in the backend
-      await fetch('/api/notification', {
+      await fetch('/api/director_notification', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -199,6 +196,8 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
               setProfileOpen(false);
             }}
             className="p-2 rounded-full relative group"
+            aria-label="Notifications"
+            aria-expanded={notificationsOpen}
           >
             <div className="relative">
               <div className="p-1.5 rounded-full bg-slate-800/60 group-hover:bg-slate-800 transition-colors">
@@ -214,7 +213,12 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
           
           {/* Notifications dropdown */}
           {notificationsOpen && (
-            <div className="absolute right-0 mt-2 w-80 bg-[rgba(8,15,30,0.97)] backdrop-blur-xl shadow-2xl rounded-xl z-50 border border-slate-800/70 overflow-hidden transform transition-all duration-200">
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="absolute right-0 mt-2 w-80 bg-[rgba(8,15,30,0.97)] backdrop-blur-xl shadow-2xl rounded-xl z-50 border border-slate-800/70 overflow-hidden"
+            >
               <div className="p-4 border-b border-slate-800/70">
                 <div className="flex justify-between items-center">
                   <h3 className="font-semibold text-white">Notification</h3>
@@ -234,6 +238,7 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
                         notification.status === 'Unread' ? 'bg-slate-800/30' : ''
                       }`}
                       onClick={() => markAsRead(notification.serial)}
+                      aria-label={`Mark notification as read: ${notification.title}`}
                     >
                       <div className="flex items-start">
                         <div className={`mr-3 mt-1 w-2 h-2 rounded-full ${
@@ -241,7 +246,6 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
                         }`}></div>
                         <div className="flex-1">
                           <h4 className="font-medium text-white text-sm">{notification.title}</h4>
-                          <p className="text-xs text-slate-300 mt-1 line-clamp-2">{notification.message}</p>
                           <p className="text-xs text-slate-500 mt-2">
                             {formatNotificationTime(notification.created_at)}
                           </p>
@@ -255,17 +259,18 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
                   </div>
                 )}
               </div>
-              {notifications.length > 0 && (
+              {notifications.length > 0 && unreadNotifications > 0 && (
                 <div className="p-3 border-t border-slate-800/70">
                   <button 
                     className="text-xs text-sky-400 hover:text-sky-300 w-full text-center"
                     onClick={markAllAsRead}
+                    aria-label="Mark all notifications as read"
                   >
                     Mark all as read
                   </button>
                 </div>
               )}
-            </div>
+            </motion.div>
           )}
         </div>
         
@@ -277,6 +282,8 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
               setNotificationsOpen(false);
             }}
             className="flex items-center space-x-2 group"
+            aria-label="Profile options"
+            aria-expanded={profileOpen}
           >
             {!loading && directorData?.photo && !avatarError ? (
               <img 
@@ -298,7 +305,12 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
           
           {/* Profile dropdown */}
           {profileOpen && (
-            <div className="absolute right-0 mt-2 w-60 bg-[rgba(8,15,30,0.97)] backdrop-blur-xl shadow-2xl rounded-xl z-50 border border-slate-800/70 overflow-hidden transform transition-all duration-200">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="absolute right-0 mt-2 w-60 bg-[rgba(8,15,30,0.97)] backdrop-blur-xl shadow-2xl rounded-xl z-50 border border-slate-800/70 overflow-hidden"
+            >
               <div className="p-4 border-b border-slate-800/70">
                 <div className="flex items-center">
                   {!loading && directorData?.photo && !avatarError ? (
@@ -330,6 +342,7 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
                     router.push('/director_profile');
                   }}
                   className="flex items-center w-full px-4 py-3 text-sm text-slate-300 hover:bg-slate-800/40 transition-colors"
+                  aria-label="View my profile"
                 >
                   <User size={16} className="mr-3 text-sky-400" />
                   My Profile
@@ -340,6 +353,7 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
                     handleLogout();
                   }}
                   className="flex items-center w-full px-4 py-3 text-sm text-slate-300 hover:bg-slate-800/40 transition-colors"
+                  aria-label="Log out"
                 >
                   <LogOut size={16} className="mr-3 text-rose-400" />
                   Logout
@@ -351,7 +365,7 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
                   {directorData?.email || 'director@mvsdlab.edu'}
                 </p>
               </div>
-            </div>
+            </motion.div>
           )}
         </div>
       </div>
