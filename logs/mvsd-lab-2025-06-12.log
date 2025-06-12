@@ -113,3 +113,38 @@
 2025-06-12 14:51:11-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
 2025-06-12 14:51:12-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
 2025-06-12 14:53:09-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:15:49-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:15:52-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-12 15:15:54-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:15:55-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:17:03-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Update Director Notification]-Updated status to Read from IP 123.200.7.106
+2025-06-12 15:17:53-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:19:53-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:21:53-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:23:53-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:25:53-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:27:53-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:30:19-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:30:26-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Update Director Notification]-Updated status to Read from IP 123.200.7.106
+2025-06-12 15:31:53-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:34:19-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:36:19-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:38:19-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:40:19-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:42:19-EID[306389-MVSDLAB]-SID[c025b41f-fc01-460c-8a50-b7d5d9ccbbe8]-[INFO] TASK[Fetch Director Notifications]-Fetched 6 notifications from IP 123.200.7.106
+2025-06-12 15:53:57-EID[]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[Login]-Login attempt for borno6655aiub@gmail.com from IP 123.200.7.106
+2025-06-12 15:53:57-EID[]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[DBCheck]-Looking for borno6655aiub@gmail.com in member
+2025-06-12 15:53:57-EID[173281-MVSDLAB]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[Generate EID]-Generated EID 173281-MVSDLAB for user borno6655aiub@gmail.com
+2025-06-12 15:53:57-EID[173281-MVSDLAB]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[AuthSuccess]-Successful user login for borno6655aiub@gmail.com
+2025-06-12 15:54:16-EID[173281-MVSDLAB]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 15:54:16-EID[173281-MVSDLAB]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 15:54:16-EID[173281-MVSDLAB]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 15:54:19-EID[173281-MVSDLAB]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 15:57:35-EID[173281-MVSDLAB]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 15:57:36-EID[173281-MVSDLAB]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 15:57:37-EID[173281-MVSDLAB]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 15:57:37-EID[173281-MVSDLAB]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 15:58:16-EID[173281-MVSDLAB]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-12 15:58:17-EID[173281-MVSDLAB]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 15:58:18-EID[173281-MVSDLAB]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[DashboardData]-Fetched data for borno6655aiub@gmail.com
+2025-06-12 15:58:26-EID[173281-MVSDLAB]-SID[dc1b6e8b-124e-4f19-97c4-7a4177fe4f85]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)

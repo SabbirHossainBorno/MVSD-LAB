@@ -10,19 +10,25 @@ import { FiEdit, FiFileText, FiCheckCircle, FiClock, FiXCircle, FiExternalLink, 
 
 const statusConfig = {
   Pending: {
-    color: 'bg-yellow-100 dark:bg-yellow-900/30',
-    text: 'text-yellow-900 dark:text-yellow-200',
-    icon: <FiClock className="w-5 h-5" />
+    bgColor: 'bg-amber-500/10',
+    textColor: 'text-amber-600 dark:text-amber-400',
+    borderColor: 'border-amber-500/30',
+    icon: <FiClock className="w-4 h-4" />,
+    pillClass: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
   },
   Approved: {
-    color: 'bg-emerald-100 dark:bg-emerald-900/30',
-    text: 'text-emerald-900 dark:text-emerald-200',
-    icon: <FiCheckCircle className="w-5 h-5" />
+    bgColor: 'bg-emerald-500/10',
+    textColor: 'text-emerald-600 dark:text-emerald-400',
+    borderColor: 'border-emerald-500/30',
+    icon: <FiCheckCircle className="w-4 h-4" />,
+    pillClass: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
   },
   Rejected: {
-    color: 'bg-rose-100 dark:bg-rose-900/30',
-    text: 'text-rose-900 dark:text-rose-200',
-    icon: <FiXCircle className="w-5 h-5" />
+    bgColor: 'bg-red-500/10',
+    textColor: 'text-red-600 dark:text-red-400',
+    borderColor: 'border-red-500/30',
+    icon: <FiXCircle className="w-4 h-4" />,
+    pillClass: 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20'
   }
 };
 
@@ -286,20 +292,18 @@ const PublicationCard = ({ pub, darkMode, statusConfig }) => {
           </div>
 
           {pub.feedback && (
-            <div className={`mt-4 p-4 rounded-xl border ${statusInfo.border} ${
-              darkMode ? 'bg-gray-700/30' : 'bg-gray-50/70'
-            }`}>
-              <div className="flex items-center gap-2 mb-2">
-                <FiMessageSquare className={`w-5 h-5 ${statusInfo.text}`} />
-                <span className={`text-sm font-medium ${statusInfo.text}`}>
-                  Director&apos;s Feedback
-                </span>
+              <div className={`rounded-lg p-4 ${statusInfo.bgColor} border ${statusInfo.borderColor}`}>
+                <div className="flex items-center gap-2 mb-2">
+                  <FiMessageSquare className={`w-5 h-5 ${statusInfo.textColor}`} />
+                  <span className={`text-sm font-medium ${statusInfo.textColor}`}>
+                    Director's Feedback
+                  </span>
+                </div>
+                <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  {pub.feedback}
+                </p>
               </div>
-              <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                {pub.feedback}
-              </p>
-            </div>
-          )}
+            )}
         </div>
 
         <div className="flex flex-col gap-4 md:w-48">

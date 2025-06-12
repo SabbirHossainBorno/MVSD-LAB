@@ -82,26 +82,34 @@ export default function DirectorDashboardNavbar({ onMenuClick }) {
   };
 
   // Format notification time
-  const formatNotificationTime = (dateString) => {
-    if (!dateString) return "Just now";
-    
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInSeconds = Math.floor((now - date) / 1000);
-    
-    if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`;
-    
-    const diffInMinutes = Math.floor(diffInSeconds / 60);
-    if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
-    
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    if (diffInHours < 24) return `${diffInHours} hours ago`;
-    
-    const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays === 1) return "Yesterday";
-    
-    return `${diffInDays} days ago`;
-  };
+const formatNotificationTime = (dateString) => {
+  if (!dateString) return "Just now";
+  
+  // Convert database format to ISO format by replacing space with 'T'
+  const isoFormatted = dateString.replace(' ', 'T') + 'Z';
+  const date = new Date(isoFormatted);
+  
+  if (isNaN(date)) {
+    // Fallback if date parsing fails
+    return "Recently";
+  }
+  
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - date) / 1000);
+  
+  if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`;
+  
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
+  
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24) return `${diffInHours} hours ago`;
+  
+  const diffInDays = Math.floor(diffInHours / 24);
+  if (diffInDays === 1) return "Yesterday";
+  
+  return `${diffInDays} days ago`;
+};
 
   // Mark single notification as read
   const markAsRead = async (serial) => {
