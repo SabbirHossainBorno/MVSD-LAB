@@ -16,7 +16,8 @@ export async function GET(request) {
 
   try {
     const notificationsQuery = `
-      SELECT serial, title, status, created_at
+      SELECT serial, title, status, 
+             created_at AT TIME ZONE 'UTC' AS created_at_utc
       FROM director_notification_details 
       ORDER BY created_at DESC
     `;

@@ -212,10 +212,10 @@ const StatCard = ({ darkMode, icon, title, value }) => (
 
 const PublicationCard = ({ pub, darkMode, statusConfig }) => {
   const statusInfo = statusConfig[pub.approvalStatus] || {
-    color: 'bg-gray-100 dark:bg-gray-700',
-    text: 'text-gray-800 dark:text-gray-300',
-    icon: null,
-    border: 'border-gray-200 dark:border-gray-600'
+    bgColor: 'bg-gray-100 dark:bg-gray-700',
+    textColor: 'text-gray-800 dark:text-gray-300',
+    borderColor: 'border-gray-200 dark:border-gray-600',
+    pillClass: 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-600'
   };
 
   return (
@@ -276,7 +276,7 @@ const PublicationCard = ({ pub, darkMode, statusConfig }) => {
               {pub.authors.map((author, index) => (
                 <div 
                   key={index} 
-                  className={`relative inline-flex items-center px-3 py-1.5 rounded-full text-sm ${
+                  className={`relative inline-flex items-center px-3 py-1.5 rounded-lg text-sm ${
                     darkMode 
                       ? 'bg-gray-700/30 text-gray-300 hover:bg-gray-700/50' 
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -292,26 +292,25 @@ const PublicationCard = ({ pub, darkMode, statusConfig }) => {
           </div>
 
           {pub.feedback && (
-              <div className={`rounded-lg p-4 ${statusInfo.bgColor} border ${statusInfo.borderColor}`}>
-                <div className="flex items-center gap-2 mb-2">
-                  <FiMessageSquare className={`w-5 h-5 ${statusInfo.textColor}`} />
-                  <span className={`text-sm font-medium ${statusInfo.textColor}`}>
-                    Director's Feedback
-                  </span>
-                </div>
-                <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                  {pub.feedback}
-                </p>
+            <div className={`w-full rounded-lg p-4 ${statusInfo.bgColor} border ${statusInfo.borderColor}`}>
+              <div className="flex items-center gap-2 mb-2">
+                <FiMessageSquare className={`w-5 h-5 ${statusInfo.textColor}`} />
+                <span className={`text-sm font-medium ${statusInfo.textColor}`}>
+                  Director's Feedback
+                </span>
               </div>
-            )}
+              <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                {pub.feedback}
+              </p>
+            </div>
+          )}
+
         </div>
 
         <div className="flex flex-col gap-4 md:w-48">
-          <div className={`inline-flex items-center gap-3 px-4 py-2.5 rounded-full ${
-            statusInfo.color} ${statusInfo.text} ${statusInfo.border} border transition-colors`}
-          >
-            <span className="shrink-0">{statusInfo.icon}</span>
-            <span className="font-medium text-sm">{pub.approvalStatus}</span>
+          <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium ${statusInfo.pillClass} border`}>
+            {statusInfo.icon}
+            {pub.approvalStatus}
           </div>
           
           {pub.documentPath && (
