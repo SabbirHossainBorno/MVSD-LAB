@@ -218,3 +218,13 @@
 2025-06-13 12:03:18-EID[176887-MVSDLAB]-SID[d638bcf5-3b88-4efc-9d8a-80e28d34d4dc]-[INFO] TASK[Auth Check]-User type : Director (member)
 2025-06-13 12:03:18-EID[176887-MVSDLAB]-SID[d638bcf5-3b88-4efc-9d8a-80e28d34d4dc]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 37.111.194.59
 2025-06-13 12:04:31-EID[176887-MVSDLAB]-SID[d638bcf5-3b88-4efc-9d8a-80e28d34d4dc]-[INFO] TASK[Logout]-member director.mvsdlab@gmail.com logged out from 37.111.194.59
+2025-06-13 16:59:40-EID[]-SID[c568ebc1-8c97-4166-827b-9e9cb91d75ff]-[INFO] TASK[Login]-Login attempt for director.mvsdlab@gmail.com from IP 103.180.244.251
+2025-06-13 16:59:40-EID[]-SID[c568ebc1-8c97-4166-827b-9e9cb91d75ff]-[INFO] TASK[DBCheck]-Looking for director.mvsdlab@gmail.com in member
+2025-06-13 16:59:41-EID[]-SID[c568ebc1-8c97-4166-827b-9e9cb91d75ff]-[INFO] TASK[DirectorCheck]-Found director: D01MVSD
+2025-06-13 16:59:41-EID[]-SID[c568ebc1-8c97-4166-827b-9e9cb91d75ff]-[INFO] TASK[DirectorAuth]-Validating director D01MVSD
+2025-06-13 16:59:41-EID[]-SID[c568ebc1-8c97-4166-827b-9e9cb91d75ff]-[INFO] TASK[DirectorLogin]-Director ID: D01MVSD, Email: director.mvsdlab@gmail.com
+2025-06-13 16:59:41-EID[969744-MVSDLAB]-SID[c568ebc1-8c97-4166-827b-9e9cb91d75ff]-[INFO] TASK[Generate EID]-Generated EID 969744-MVSDLAB for director director.mvsdlab@gmail.com
+2025-06-13 16:59:41-EID[969744-MVSDLAB]-SID[c568ebc1-8c97-4166-827b-9e9cb91d75ff]-[INFO] TASK[AuthSuccess]-Successful director login for director.mvsdlab@gmail.com
+2025-06-13 16:59:42-EID[969744-MVSDLAB]-SID[c568ebc1-8c97-4166-827b-9e9cb91d75ff]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 16:59:42-EID[969744-MVSDLAB]-SID[c568ebc1-8c97-4166-827b-9e9cb91d75ff]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 16:59:47-EID[969744-MVSDLAB]-SID[c568ebc1-8c97-4166-827b-9e9cb91d75ff]-[INFO] TASK[Logout]-member director.mvsdlab@gmail.com logged out from 103.180.244.251
