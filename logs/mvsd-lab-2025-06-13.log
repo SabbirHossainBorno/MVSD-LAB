@@ -1,0 +1,26 @@
+2025-06-13 06:57:40-EID[]-SID[dee5a539-8e1d-4f13-8d49-d097c939868c]-[INFO] TASK[Login]-Login attempt for borno6655netflix@gmail.com from IP 103.180.244.251
+2025-06-13 06:57:40-EID[]-SID[dee5a539-8e1d-4f13-8d49-d097c939868c]-[INFO] TASK[DBCheck]-Looking for borno6655netflix@gmail.com in member
+2025-06-13 06:57:40-EID[]-SID[dee5a539-8e1d-4f13-8d49-d097c939868c]-[WARN] TASK[AuthFailure]-Failed login for borno6655netflix@gmail.com
+2025-06-13 06:57:56-EID[]-SID[2630272b-bd7b-46a5-ab14-7f79bea1d2ba]-[INFO] TASK[Login]-Login attempt for director.mvsdlab@gmail.com from IP 103.180.244.251
+2025-06-13 06:57:56-EID[]-SID[2630272b-bd7b-46a5-ab14-7f79bea1d2ba]-[INFO] TASK[DBCheck]-Looking for director.mvsdlab@gmail.com in member
+2025-06-13 06:57:56-EID[]-SID[2630272b-bd7b-46a5-ab14-7f79bea1d2ba]-[INFO] TASK[DirectorCheck]-Found director: D01MVSD
+2025-06-13 06:57:56-EID[]-SID[2630272b-bd7b-46a5-ab14-7f79bea1d2ba]-[INFO] TASK[DirectorAuth]-Validating director D01MVSD
+2025-06-13 06:57:56-EID[]-SID[2630272b-bd7b-46a5-ab14-7f79bea1d2ba]-[INFO] TASK[DirectorLogin]-Director ID: D01MVSD, Email: director.mvsdlab@gmail.com
+2025-06-13 06:57:56-EID[772926-MVSDLAB]-SID[2630272b-bd7b-46a5-ab14-7f79bea1d2ba]-[INFO] TASK[Generate EID]-Generated EID 772926-MVSDLAB for director director.mvsdlab@gmail.com
+2025-06-13 06:57:56-EID[772926-MVSDLAB]-SID[2630272b-bd7b-46a5-ab14-7f79bea1d2ba]-[INFO] TASK[AuthSuccess]-Successful director login for director.mvsdlab@gmail.com
+2025-06-13 06:57:57-EID[772926-MVSDLAB]-SID[2630272b-bd7b-46a5-ab14-7f79bea1d2ba]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 06:57:57-EID[772926-MVSDLAB]-SID[2630272b-bd7b-46a5-ab14-7f79bea1d2ba]-[INFO] TASK[Fetch Director Notifications]-Fetched 13 notifications from IP 103.180.244.251
+2025-06-13 06:58:24-EID[772926-MVSDLAB]-SID[2630272b-bd7b-46a5-ab14-7f79bea1d2ba]-[INFO] TASK[Logout]-member director.mvsdlab@gmail.com logged out from 103.180.244.251
+2025-06-13 06:58:32-EID[]-SID[253e8692-856d-4ba6-a13b-f8e9c7519904]-[INFO] TASK[Login]-Login attempt for admin@mvsdlab.com from IP 103.180.244.251
+2025-06-13 06:58:32-EID[]-SID[253e8692-856d-4ba6-a13b-f8e9c7519904]-[INFO] TASK[DBCheck]-Looking for admin@mvsdlab.com in admin
+2025-06-13 06:58:32-EID[807046-MVSDLAB]-SID[253e8692-856d-4ba6-a13b-f8e9c7519904]-[INFO] TASK[Generate EID]-Generated EID 807046-MVSDLAB for admin admin@mvsdlab.com
+2025-06-13 06:58:32-EID[807046-MVSDLAB]-SID[253e8692-856d-4ba6-a13b-f8e9c7519904]-[INFO] TASK[AuthSuccess]-Successful admin login for admin@mvsdlab.com
+2025-06-13 06:58:33-EID[807046-MVSDLAB]-SID[253e8692-856d-4ba6-a13b-f8e9c7519904]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-06-13 06:58:34-EID[807046-MVSDLAB]-SID[253e8692-856d-4ba6-a13b-f8e9c7519904]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-06-13 06:58:34-EID[807046-MVSDLAB]-SID[253e8692-856d-4ba6-a13b-f8e9c7519904]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-06-13 06:58:34-EID[807046-MVSDLAB]-SID[253e8692-856d-4ba6-a13b-f8e9c7519904]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-13 06:58:35-EID[807046-MVSDLAB]-SID[253e8692-856d-4ba6-a13b-f8e9c7519904]-[INFO] TASK[Fetch Dashboard Data]-Fetching dashboard data for admin@mvsdlab.com from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-13 06:58:35-EID[807046-MVSDLAB]-SID[253e8692-856d-4ba6-a13b-f8e9c7519904]-[INFO] TASK[Fetch Dashboard Data]-Dashboard data fetched successfully for admin@mvsdlab.com from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-13 06:58:35-EID[807046-MVSDLAB]-SID[253e8692-856d-4ba6-a13b-f8e9c7519904]-[INFO] TASK[Fetch Chart Data]-Fetched chart data for the past 7 days from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-13 06:58:35-EID[807046-MVSDLAB]-SID[253e8692-856d-4ba6-a13b-f8e9c7519904]-[INFO] TASK[Fetch Chart Data]-Fetched chart data for the past 7 days from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-13 06:58:38-EID[807046-MVSDLAB]-SID[253e8692-856d-4ba6-a13b-f8e9c7519904]-[INFO] TASK[Auth Check]-User type : admin (admin)
