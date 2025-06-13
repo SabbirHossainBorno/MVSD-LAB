@@ -22,30 +22,6 @@ export default function DirectorDashboardSidebar({ isOpen, onClose }) {
       path: '/director_dashboard/approval_panel',
       icon: <Clipboard size={20} className="text-sky-300" />,
       delay: 0.2
-    },
-    { 
-      name: 'Analytics', 
-      path: '/director_dashboard/analytics',
-      icon: <BarChart2 size={20} className="text-sky-300" />,
-      delay: 0.3
-    },
-    { 
-      name: 'Publications', 
-      path: '/director_dashboard/publications',
-      icon: <BookOpen size={20} className="text-sky-300" />,
-      delay: 0.4
-    },
-    { 
-      name: 'Team', 
-      path: '/director_dashboard/team',
-      icon: <Users size={20} className="text-sky-300" />,
-      delay: 0.5
-    },
-    { 
-      name: 'Settings', 
-      path: '/director_dashboard/settings',
-      icon: <Settings size={20} className="text-sky-300" />,
-      delay: 0.6
     }
   ];
 

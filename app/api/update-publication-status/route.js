@@ -82,6 +82,29 @@ export async function POST(request) {
       directorNotificationTitle
     ]);
     console.log('[DIRECTOR NOTIFICATION] Notification created in director_notification_details');
+
+    // MEMBER NOTIFICATION
+    console.log('[MEMBER NOTIFICATION] Creating member notification entry');
+
+    const memberNotificationTitle = `[${pub_res_id}] Publication/Research ${status}: ${updatedPublication.title.substring(0, 50)}...`;
+
+    const memberNotificationQuery = `
+      INSERT INTO member_notification_details (
+        mvsdlab_id,
+        pub_res_id,
+        title,
+        status
+      ) VALUES ($1, $2, $3, 'Unread')
+    `;
+
+    await query(memberNotificationQuery, [
+      updatedPublication.phd_candidate_id, // same ID used in director notification
+      pub_res_id,
+      memberNotificationTitle
+    ]);
+
+    console.log('[MEMBER NOTIFICATION] Notification created in member_notification_details');
+
     
     // Commit transaction
     await query('COMMIT');
