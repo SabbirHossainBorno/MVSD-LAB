@@ -108,19 +108,48 @@ export default function DirectorDashboard() {
     }
   };
   const formatLastLogin = (date) => {
-    if (!date) return "First login";
-    
-    const now = new Date();
-    const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 0) {
-      return `Today at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-    } else if (diffDays === 1) {
-      return `Yesterday at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-    } else {
-      return `${date.toLocaleDateString()} at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-    }
+  if (!date) return "First login";
+  
+  // Options for formatting date and time in server's timezone
+  const options = {
+    timeZone: 'America/New_York',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
   };
+  
+  // Format date and time
+  const formattedDateTime = new Intl.DateTimeFormat('en-US', options).format(date);
+  
+  // Extract components for custom formatting
+  const parts = new Intl.DateTimeFormat('en-US', options).formatToParts(date);
+  
+  // Get day, month, year, time, and period (AM/PM)
+  const day = parts.find(p => p.type === 'day').value;
+  const month = parts.find(p => p.type === 'month').value;
+  const year = parts.find(p => p.type === 'year').value;
+  const hour = parts.find(p => p.type === 'hour').value;
+  const minute = parts.find(p => p.type === 'minute').value;
+  const period = parts.find(p => p.type === 'dayPeriod').value;
+  
+  // Get timezone abbreviation
+  const timeZone = new Intl.DateTimeFormat('en-US', {
+    timeZoneName: 'short',
+    timeZone: 'America/New_York'
+  }).formatToParts(date).find(p => p.type === 'timeZoneName').value;
+  
+  // Add ordinal suffix to day
+  const getOrdinal = (n) => {
+    const s = ["th", "st", "nd", "rd"];
+    const v = n % 100;
+    return n + (s[(v-20)%10] || s[v] || s[0]);
+  };
+  
+  return `${getOrdinal(parseInt(day))} ${month}, ${year} | ${hour}:${minute} ${period.toUpperCase()} (${timeZone})`;
+};
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -321,7 +350,10 @@ return (
         <span className="text-xs font-medium bg-blue-100 text-blue-800 px-2 py-0.5 rounded">
           {pub.type}
         </span>
-        <h4 className="font-semibold text-gray-900 text-sm truncate" title={pub.title}>
+        <h4 
+          className="font-semibold text-gray-900 text-sm line-clamp-2 break-words"
+          title={pub.title}
+        >
           {pub.title}
         </h4>
       </div>

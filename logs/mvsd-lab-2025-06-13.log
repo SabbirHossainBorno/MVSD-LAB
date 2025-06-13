@@ -228,3 +228,124 @@
 2025-06-13 16:59:42-EID[969744-MVSDLAB]-SID[c568ebc1-8c97-4166-827b-9e9cb91d75ff]-[INFO] TASK[Auth Check]-User type : Director (member)
 2025-06-13 16:59:42-EID[969744-MVSDLAB]-SID[c568ebc1-8c97-4166-827b-9e9cb91d75ff]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
 2025-06-13 16:59:47-EID[969744-MVSDLAB]-SID[c568ebc1-8c97-4166-827b-9e9cb91d75ff]-[INFO] TASK[Logout]-member director.mvsdlab@gmail.com logged out from 103.180.244.251
+2025-06-13 17:01:46-EID[]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Login]-Login attempt for director.mvsdlab@gmail.com from IP 103.180.244.251
+2025-06-13 17:01:46-EID[]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[DBCheck]-Looking for director.mvsdlab@gmail.com in member
+2025-06-13 17:01:46-EID[]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[DirectorCheck]-Found director: D01MVSD
+2025-06-13 17:01:46-EID[]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[DirectorAuth]-Validating director D01MVSD
+2025-06-13 17:01:46-EID[]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[DirectorLogin]-Director ID: D01MVSD, Email: director.mvsdlab@gmail.com
+2025-06-13 17:01:46-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Generate EID]-Generated EID 540551-MVSDLAB for director director.mvsdlab@gmail.com
+2025-06-13 17:01:46-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[AuthSuccess]-Successful director login for director.mvsdlab@gmail.com
+2025-06-13 17:01:59-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:02:00-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:02:01-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:02:34-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:02:34-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:02:35-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:04:37-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:06:34-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:08:34-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:10:36-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:11:22-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:11:23-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:11:23-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:12:09-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:12:10-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:12:10-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:12:41-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:12:41-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:12:42-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:14:42-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:16:39-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:16:41-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:16:42-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:18:40-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:20:41-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:22:23-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:22:24-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:22:24-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:22:36-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:22:37-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:22:37-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:24:23-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:24:27-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:24:27-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:26:23-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:28:23-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:30:24-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:32:04-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:32:06-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:32:07-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:33:10-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:33:11-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:33:11-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:33:38-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:33:39-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:33:39-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:35:40-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:37:39-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:39:40-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:40:12-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:40:14-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:40:15-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:40:37-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:40:37-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:40:38-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:40:44-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:40:45-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:40:45-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:41:08-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:41:09-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:41:09-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:41:14-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:41:15-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:41:15-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:41:48-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:41:49-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:41:49-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:41:58-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:41:58-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:41:58-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:43:58-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:45:59-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:47:58-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:49:58-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:50:37-EID[540551-MVSDLAB]-SID[25cfc555-df67-4d41-8637-76c641c64678]-[INFO] TASK[Logout]-member director.mvsdlab@gmail.com logged out from 103.180.244.251
+2025-06-13 17:51:14-EID[]-SID[927effae-9b23-4f3f-93e2-b4078e01c81a]-[INFO] TASK[Login]-Login attempt for director.mvsdlab@gmail.com from IP 103.180.244.251
+2025-06-13 17:51:14-EID[]-SID[927effae-9b23-4f3f-93e2-b4078e01c81a]-[INFO] TASK[DBCheck]-Looking for director.mvsdlab@gmail.com in member
+2025-06-13 17:51:14-EID[]-SID[927effae-9b23-4f3f-93e2-b4078e01c81a]-[INFO] TASK[DirectorCheck]-Found director: D01MVSD
+2025-06-13 17:51:14-EID[]-SID[927effae-9b23-4f3f-93e2-b4078e01c81a]-[INFO] TASK[DirectorAuth]-Validating director D01MVSD
+2025-06-13 17:51:14-EID[]-SID[927effae-9b23-4f3f-93e2-b4078e01c81a]-[INFO] TASK[DirectorLogin]-Director ID: D01MVSD, Email: director.mvsdlab@gmail.com
+2025-06-13 17:51:14-EID[396731-MVSDLAB]-SID[927effae-9b23-4f3f-93e2-b4078e01c81a]-[INFO] TASK[Generate EID]-Generated EID 396731-MVSDLAB for director director.mvsdlab@gmail.com
+2025-06-13 17:51:14-EID[396731-MVSDLAB]-SID[927effae-9b23-4f3f-93e2-b4078e01c81a]-[INFO] TASK[AuthSuccess]-Successful director login for director.mvsdlab@gmail.com
+2025-06-13 17:51:17-EID[396731-MVSDLAB]-SID[927effae-9b23-4f3f-93e2-b4078e01c81a]-[INFO] TASK[Auth Check]-User type : Director (member)
+2025-06-13 17:51:20-EID[396731-MVSDLAB]-SID[927effae-9b23-4f3f-93e2-b4078e01c81a]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:51:20-EID[396731-MVSDLAB]-SID[927effae-9b23-4f3f-93e2-b4078e01c81a]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:53:17-EID[396731-MVSDLAB]-SID[927effae-9b23-4f3f-93e2-b4078e01c81a]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:55:17-EID[396731-MVSDLAB]-SID[927effae-9b23-4f3f-93e2-b4078e01c81a]-[INFO] TASK[Fetch Director Notifications]-Fetched 16 notifications from IP 103.180.244.251
+2025-06-13 17:55:38-EID[396731-MVSDLAB]-SID[927effae-9b23-4f3f-93e2-b4078e01c81a]-[INFO] TASK[Logout]-member director.mvsdlab@gmail.com logged out from 103.180.244.251
+2025-06-13 17:55:45-EID[]-SID[f5855d3a-9bc8-4dc0-9757-3e3abf945093]-[INFO] TASK[Login]-Login attempt for phd.mvsdlab@gmail.com from IP 103.180.244.251
+2025-06-13 17:55:45-EID[]-SID[f5855d3a-9bc8-4dc0-9757-3e3abf945093]-[INFO] TASK[DBCheck]-Looking for phd.mvsdlab@gmail.com in member
+2025-06-13 17:55:45-EID[653037-MVSDLAB]-SID[f5855d3a-9bc8-4dc0-9757-3e3abf945093]-[INFO] TASK[Generate EID]-Generated EID 653037-MVSDLAB for user phd.mvsdlab@gmail.com
+2025-06-13 17:55:45-EID[653037-MVSDLAB]-SID[f5855d3a-9bc8-4dc0-9757-3e3abf945093]-[INFO] TASK[AuthSuccess]-Successful user login for phd.mvsdlab@gmail.com
+2025-06-13 17:56:07-EID[653037-MVSDLAB]-SID[f5855d3a-9bc8-4dc0-9757-3e3abf945093]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-13 17:56:08-EID[653037-MVSDLAB]-SID[f5855d3a-9bc8-4dc0-9757-3e3abf945093]-[INFO] TASK[DashboardData]-Fetched data for phd.mvsdlab@gmail.com
+2025-06-13 17:56:09-EID[653037-MVSDLAB]-SID[f5855d3a-9bc8-4dc0-9757-3e3abf945093]-[INFO] TASK[DashboardData]-Fetched data for phd.mvsdlab@gmail.com
+2025-06-13 17:56:25-EID[653037-MVSDLAB]-SID[f5855d3a-9bc8-4dc0-9757-3e3abf945093]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-13 17:56:39-EID[653037-MVSDLAB]-SID[f5855d3a-9bc8-4dc0-9757-3e3abf945093]-[INFO] TASK[Logout]-member phd.mvsdlab@gmail.com logged out from 103.180.244.251
+2025-06-13 17:56:44-EID[]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[Login]-Login attempt for admin@mvsdlab.com from IP 103.180.244.251
+2025-06-13 17:56:44-EID[]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[DBCheck]-Looking for admin@mvsdlab.com in admin
+2025-06-13 17:56:44-EID[203929-MVSDLAB]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[Generate EID]-Generated EID 203929-MVSDLAB for admin admin@mvsdlab.com
+2025-06-13 17:56:44-EID[203929-MVSDLAB]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[AuthSuccess]-Successful admin login for admin@mvsdlab.com
+2025-06-13 17:59:41-EID[203929-MVSDLAB]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-06-13 17:59:41-EID[203929-MVSDLAB]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-06-13 17:59:41-EID[203929-MVSDLAB]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[Auth Check]-User type : admin (admin)
+2025-06-13 17:59:43-EID[203929-MVSDLAB]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-13 17:59:44-EID[203929-MVSDLAB]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[Fetch Notifications]-Fetched notifications from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-13 17:59:44-EID[203929-MVSDLAB]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[Fetch Dashboard Data]-Fetching dashboard data for admin@mvsdlab.com from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-13 17:59:44-EID[203929-MVSDLAB]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[Fetch Dashboard Data]-Dashboard data fetched successfully for admin@mvsdlab.com from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-13 17:59:45-EID[203929-MVSDLAB]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[Fetch Dashboard Data]-Fetching dashboard data for admin@mvsdlab.com from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-13 17:59:45-EID[203929-MVSDLAB]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[Fetch Dashboard Data]-Dashboard data fetched successfully for admin@mvsdlab.com from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-13 17:59:46-EID[203929-MVSDLAB]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[Fetch Chart Data]-Fetched chart data for the past 7 days from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-13 17:59:46-EID[203929-MVSDLAB]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[Fetch Chart Data]-Fetched chart data for the past 7 days from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-13 17:59:46-EID[203929-MVSDLAB]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[Fetch Chart Data]-Fetched chart data for the past 7 days from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+2025-06-13 17:59:46-EID[203929-MVSDLAB]-SID[6d540599-cd0d-41bc-8c76-08ea3627b8de]-[INFO] TASK[Fetch Chart Data]-Fetched chart data for the past 7 days from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0

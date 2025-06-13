@@ -62,10 +62,10 @@ const updateDirectorLoginTracker = async (userId, email) => {
        (id, email, last_login_time, last_login_date, total_login_count, login_state)
        VALUES ($1, $2, NOW(), NOW()::date, 1, 'Active')
        ON CONFLICT (id) DO UPDATE SET
-       last_login_time = NOW(),
-       last_login_date = NOW()::date,
-       total_login_count = director_login_info_tracker.total_login_count + 1,
-       login_state = 'Active'`,
+         last_login_time = EXCLUDED.last_login_time,
+         last_login_date = EXCLUDED.last_login_date,
+         total_login_count = director_login_info_tracker.total_login_count + 1,
+         login_state = 'Active'`,
       [userId, email]
     );
   } catch (error) {
