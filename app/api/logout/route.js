@@ -45,15 +45,22 @@ export async function POST(request) {
     email = request.cookies.get('email')?.value;
     const sessionId = request.cookies.get('sessionId')?.value;
     const eid = request.cookies.get('eid')?.value;
+    const id = request.cookies.get('id')?.value;
     const ipAddress = request.headers.get('x-forwarded-for') || 'Unknown IP';
 
-    // Determine user type
-    userType = email.endsWith('@mvsdlab.com') ? 'admin' : 'member';
+    // Determine user type - FIXED LOGIC
+    if (id && id.startsWith('D')) {
+      userType = 'director';
+    } else if (email && email.endsWith('@mvsdlab.com')) {
+      userType = 'admin';
+    } else {
+      userType = 'member';
+    }
 
     // Update appropriate table
     if (userType === 'admin') {
       await updateAdminLogoutDetails(email);
-    } else if (userType === 'Director') {
+    } else if (userType === 'director') {
       await updateDirectorLogoutDetails(email);
     } else {
       await updateMemberLogoutDetails(email);
