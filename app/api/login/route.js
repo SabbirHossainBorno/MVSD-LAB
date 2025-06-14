@@ -9,7 +9,8 @@ import { DateTime } from 'luxon';
 
 // Get current time in America/New_York (EDT/EST)
 const getCurrentDateTime = () => {
-  return DateTime.now().setZone('America/New_York').toFormat('yyyy-LL-dd HH:mm:ss');
+  const now = DateTime.now().setZone('America/New_York');
+  return now.toFormat("yyyy-LL-dd hh:mm:ss a") + ' (' + now.offsetNameShort + ')';
 };
 
 // Format Telegram alert message
@@ -22,27 +23,27 @@ const formatAlertMessage = (userType, email, ipAddress, userAgent, additionalInf
 
   switch (userType.toLowerCase()) {
     case 'admin':
-      title = '🔐 MVSD LAB ADMIN LOGIN 🔐';
+      title = '🟩 [ MVSD LAB | ADMIN LOGIN ]';
       break;
 
     case 'director':
-      title = '🔐 MVSD DIRECTOR LOGIN 🔐';
-      idLine = `Director ID : ${additionalInfo.memberId || 'N/A'}\n`;
+      title = '🟩 [ MVSD LAB | DIRECTOR LOGIN ]';
+      idLine = `🆔 Director ID : ${additionalInfo.memberId || 'N/A'}\n`;
       break;
 
     default:
-      title = '🔐 MVSD MEMBER LOGIN 🔐';
-      idLine = `Member ID  : ${additionalInfo.memberId || 'N/A'}\n`;
+      title = '🟩 [ MVSD LAB | MEMBER LOGIN ]';
+      idLine = `🆔 Member ID   : ${additionalInfo.memberId || 'N/A'}\n`;
   }
 
   const message = `${title}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-Email       : ${email}
-${idLine}IP Address  : ${ipAddress}
-Device Info : ${userAgent}
-EID         : ${eid}
-Time        : ${time}
-Status      : ${status}`;
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📧 Email       : ${email}
+${idLine}🌐 IP Address  : ${ipAddress}
+🖥️ Device Info : ${userAgent}
+🔖 EID         : ${eid}
+🕒 Time        : ${time}
+📌 Status      : ${status}`;
 
   return `\`\`\`\n${message}\n\`\`\``; // Telegram code block
 };
@@ -220,10 +221,28 @@ export async function POST(request) {
   const ipAddress = request.headers.get('x-forwarded-for') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
 
-  // Initial userType guess for alert purposes
-  let attemptUserType = isAdminEmail ? 'admin' : 'member';
+  // Determine user type for login attempt alert
+  let attemptUserType = 'member';
+  if (isAdminEmail) {
+    attemptUserType = 'admin';
+  } else {
+    try {
+      const directorCheck = await query(
+        `SELECT id FROM member WHERE email = $1 AND type = 'Director'`,
+        [email]
+      );
+      if (directorCheck.rows.length > 0) {
+        attemptUserType = 'director';
+      }
+    } catch (err) {
+      // Log error but continue, fallback to member
+      logger.error('Error checking director type for attempt alert', {
+        meta: { email, error: err.message }
+      });
+    }
+  }
 
-  // Alert for login attempt
+  // Send login attempt alert with correct userType
   const attemptMessage = formatAlertMessage(
     attemptUserType,
     email,

@@ -1,29 +1,39 @@
 // app/api/logout/route.js
 import { NextResponse } from 'next/server';
+import { DateTime } from 'luxon';
 import logger from '../../../lib/logger';
 import sendTelegramAlert from '../../../lib/telegramAlert';
 import { query } from '../../../lib/db';
 
 // Format alert message for Telegram
-const formatAlertMessage = (userType, email, ipAddress, idValue, userAgent, timeString) => {
+const formatAlertMessage = (userType, email, ipAddress, idValue, eidValue, userAgent, timeString) => {
   const getTitle = () => {
     switch (userType) {
       case 'admin':
-        return '🔐 MVSD LAB ADMIN LOGOUT 🔐';
+        return '🟥 [ MVSD LAB | ADMIN LOGOUT ]';
       case 'director':
-        return '🧑‍💼 MVSD LAB DIRECTOR LOGOUT 🧑‍💼';
+        return '🟥 [ MVSD LAB | DIRECTOR LOGOUT ]';
       default:
-        return '👤 MVSD LAB MEMBER LOGOUT 👤';
+        return '🟥 [ MVSD LAB | MEMBER LOGOUT ]';
     }
   };
 
-  return `${getTitle()}\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-         `Email       : ${email}\n` +
-         `IP Address  : ${ipAddress}\n` +
-         `Device Info : ${userAgent}\n` +
-         `EID         : ${idValue || 'N/A'}\n` +
-         `Time        : ${timeString}`+
-         `Status      : Successful\n`;
+  let idLine = '';
+  if (userType === 'director') {
+    idLine = `🆔 Director ID : ${idValue || 'N/A'}\n`;
+  } else if (userType === 'member') {
+    idLine = `🆔 Member ID   : ${idValue || 'N/A'}\n`;
+  }
+  // For admin, no ID line
+
+  return `${getTitle()}\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+         `📧 Email       : ${email || 'N/A'}\n` +
+         `${idLine}` +
+         `🌐 IP Address  : ${ipAddress}\n` +
+         `🖥️ Device Info : ${userAgent}\n` +
+         `🔖 EID         : ${eidValue || 'N/A'}\n` +
+         `🕒 Time        : ${timeString}\n` +
+         `📌 Status      : Successful`;
 };
 
 // Update status for each user type
@@ -61,24 +71,16 @@ export async function POST(request) {
   const ipAddress = request.headers.get('x-forwarded-for') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown Device';
 
-  // Format time in America/New_York with AM/PM
-  const timeString = new Date().toLocaleString('en-GB', {
-    timeZone: 'America/New_York',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: true
-  }).replace(',', '') + ' (America/New_York)';
+  // Format time in America/New_York (EST/EDT)
+  const now = DateTime.now().setZone('America/New_York');
+  const timeString = `${now.toFormat("yyyy-LL-dd hh:mm:ss a")} (${now.offsetNameShort})`;
 
   try {
-    // Read cookies
-    email = request.cookies.get('email')?.value;
-    const sessionId = request.cookies.get('sessionId')?.value;
-    const eid = request.cookies.get('eid')?.value;
-    const id = request.cookies.get('id')?.value;
+    // Read cookies BEFORE clearing
+    email = request.cookies.get('email')?.value || '';
+    const sessionId = request.cookies.get('sessionId')?.value || '';
+    const eid = request.cookies.get('eid')?.value || '';
+    const id = request.cookies.get('id')?.value || '';
 
     // Determine user type
     if (id && id.startsWith('D')) {
@@ -98,15 +100,16 @@ export async function POST(request) {
       await updateMemberLogoutDetails(email);
     }
 
-    // Prepare ID or EID for alert
+    // Prepare ID value for alert message
+    // Admin: idValue = 'N/A'
+    // Director and Member: idValue = id cookie
     let idValue = 'N/A';
-    if (userType === 'admin') {
-      idValue = eid || 'N/A';
-    } else if (userType === 'director') {
+    if (userType === 'director' || userType === 'member') {
       idValue = id || 'N/A';
-    } else {
-      idValue = eid ? eid.split('-')[0] : 'N/A';
     }
+
+    // EID always full eid cookie (or N/A)
+    const eidValue = eid || 'N/A';
 
     // Send Telegram alert
     const alertMessage = formatAlertMessage(
@@ -114,6 +117,7 @@ export async function POST(request) {
       email,
       ipAddress,
       idValue,
+      eidValue,
       userAgent,
       timeString
     );
@@ -135,7 +139,7 @@ export async function POST(request) {
 
     // Clear all session cookies
     const response = NextResponse.json({ message: 'Logout Successful' });
-    ['email', 'sessionId', 'eid', 'lastActivity', 'redirect'].forEach(cookie => {
+    ['email', 'sessionId', 'eid', 'id', 'lastActivity', 'redirect'].forEach(cookie => {
       response.cookies.set(cookie, '', { maxAge: 0 });
     });
 
