@@ -16,6 +16,8 @@ const withAuth = (WrappedComponent, requiredRole) => {
     const [unauthorized, setUnauthorized] = useState(false); // State to handle unauthorized access
     const router = useRouter();
     const hasShownUnauthorizedToast = useRef(false);
+    const TIMEOUT_DURATION = 1 * 60 * 1000; // 1 minute
+    let globalListenersAdded = false;
 
     const handleUnauthorizedAccess = useCallback(async () => {
       if (!hasShownUnauthorizedToast.current) {
@@ -48,27 +50,39 @@ const withAuth = (WrappedComponent, requiredRole) => {
 
     useEffect(() => {
       setIsClient(true);
-      const handleActivity = () => {
-        Cookies.set('lastActivity', new Date().toISOString());
-      };
-      window.addEventListener('mousemove', handleActivity);
-      window.addEventListener('keydown', handleActivity);
-      const interval = setInterval(() => {
-        const lastActivity = Cookies.get('lastActivity');
-        if (lastActivity) {
-          const now = new Date();
-          const lastActivityDate = new Date(lastActivity);
-          const diff = now - lastActivityDate;
-          if (diff > 10 * 60 * 1000) { // 10 minutes
-            handleSessionExpiration(router);
+      
+      // Only setup global listeners once
+      if (!globalListenersAdded) {
+        globalListenersAdded = true;
+        
+        const handleActivity = () => {
+          Cookies.set('lastActivity', new Date().toISOString());
+        };
+
+        // Add event listeners
+        window.addEventListener('mousemove', handleActivity);
+        window.addEventListener('keydown', handleActivity);
+
+        // Setup session checker
+        const interval = setInterval(() => {
+          const lastActivity = Cookies.get('lastActivity');
+          if (lastActivity) {
+            const now = new Date();
+            const lastActivityDate = new Date(lastActivity);
+            const diff = now - lastActivityDate;
+            if (diff > 10 * 60 * 1000) {
+              handleSessionExpiration(router);
+            }
           }
-        }
-      }, 60000);
-      return () => {
-        clearInterval(interval);
-        window.removeEventListener('mousemove', handleActivity);
-        window.removeEventListener('keydown', handleActivity);
-      };
+        }, 60000);
+
+        return () => {
+          clearInterval(interval);
+          window.removeEventListener('mousemove', handleActivity);
+          window.removeEventListener('keydown', handleActivity);
+          globalListenersAdded = false;
+        };
+      }
     }, [router]);
 
     useEffect(() => {
@@ -77,11 +91,6 @@ const withAuth = (WrappedComponent, requiredRole) => {
       }
     }, [isClient, checkAuth]);
 
-    useEffect(() => {
-      if (router.query?.sessionExpired) {
-        toast.error('Session Expired! Please Login Again.');
-      }
-    }, [router.query]);
 
     useEffect(() => {
       if (isAuthenticated && requiredRole) {
