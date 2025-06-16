@@ -7,15 +7,31 @@ import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { handleSessionExpiration } from '../../lib/sessionUtils';
 
+// Debounce utility function (moved outside component)
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
 const withAuth = (WrappedComponent, requiredRole) => {
   const Wrapper = (props) => {
     const [isClient, setIsClient] = useState(false);
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userRole, setUserRole] = useState(null);
-    const [unauthorized, setUnauthorized] = useState(false); // State to handle unauthorized access
+    const [unauthorized, setUnauthorized] = useState(false);
     const router = useRouter();
     const hasShownUnauthorizedToast = useRef(false);
+    
+    // Moved useRef to top level
+    const isHandlingExpiration = useRef(false);
 
     const handleUnauthorizedAccess = useCallback(async () => {
       if (!hasShownUnauthorizedToast.current) {
@@ -32,8 +48,8 @@ const withAuth = (WrappedComponent, requiredRole) => {
         const result = await response.json();
         if (result.authenticated) {
           setIsAuthenticated(true);
-          setUserRole(result.role); // Set the user's role
-          hasShownUnauthorizedToast.current = false; // Reset the flag on successful authentication
+          setUserRole(result.role);
+          hasShownUnauthorizedToast.current = false;
         } else {
           await handleUnauthorizedAccess();
         }
@@ -47,56 +63,40 @@ const withAuth = (WrappedComponent, requiredRole) => {
     }, [handleUnauthorizedAccess]);
 
     useEffect(() => {
-    setIsClient(true);
-    const handleActivity = () => {
-      Cookies.set('lastActivity', new Date().toISOString());
-    };
-
-    // Add debounce to prevent rapid firing
-    const debouncedActivity = debounce(handleActivity, 1000);
-    
-    window.addEventListener('mousemove', debouncedActivity);
-    window.addEventListener('keydown', debouncedActivity);
-    
-    // Use a ref to track session expiration state
-    const isHandlingExpiration = useRef(false);
-    
-    const interval = setInterval(() => {
-      const lastActivity = Cookies.get('lastActivity');
-      if (lastActivity && !isHandlingExpiration.current) {
-        const now = new Date();
-        const lastActivityDate = new Date(lastActivity);
-        const diff = now - lastActivityDate;
-        
-        if (diff > 1 * 60 * 1000) { // 1 minute for testing
-          isHandlingExpiration.current = true;
-          console.log('Session expired - handling expiration');
-          handleSessionExpiration(router).finally(() => {
-            isHandlingExpiration.current = false;
-          });
-        }
-      }
-    }, 30000); // Check every 30 seconds instead of 60
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener('mousemove', debouncedActivity);
-      window.removeEventListener('keydown', debouncedActivity);
-    };
-  }, [router]);
-
-  // Add debounce utility function
-  function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
+      setIsClient(true);
+      const handleActivity = () => {
+        Cookies.set('lastActivity', new Date().toISOString());
       };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  }
+
+      // Add debounce to prevent rapid firing
+      const debouncedActivity = debounce(handleActivity, 1000);
+      
+      window.addEventListener('mousemove', debouncedActivity);
+      window.addEventListener('keydown', debouncedActivity);
+      
+      const interval = setInterval(() => {
+        const lastActivity = Cookies.get('lastActivity');
+        if (lastActivity && !isHandlingExpiration.current) {
+          const now = new Date();
+          const lastActivityDate = new Date(lastActivity);
+          const diff = now - lastActivityDate;
+          
+          if (diff > 10 * 60 * 1000) { // 1 minute for testing
+            isHandlingExpiration.current = true;
+            console.log('Session expired - handling expiration');
+            handleSessionExpiration(router).finally(() => {
+              isHandlingExpiration.current = false;
+            });
+          }
+        }
+      }, 30000); // Check every 30 seconds
+
+      return () => {
+        clearInterval(interval);
+        window.removeEventListener('mousemove', debouncedActivity);
+        window.removeEventListener('keydown', debouncedActivity);
+      };
+    }, [router]);
 
     useEffect(() => {
       if (isClient) {
@@ -125,18 +125,13 @@ const withAuth = (WrappedComponent, requiredRole) => {
     }, [isAuthenticated, userRole, requiredRole]);
 
     useEffect(() => {
-      if (unauthorized) {
-        if (!hasShownUnauthorizedToast.current) {
-          hasShownUnauthorizedToast.current = true;
-          toast.error('Access Denied! You do not have permission to view this page.');
-          
-          // Redirect based on required role
-          const redirectPath = requiredRole === 'admin' 
-            ? '/member_dashboard?accessDenied=true'
-            : '/login?authRequired=true';
-            
-          router.push(redirectPath);
-        }
+      if (unauthorized && !hasShownUnauthorizedToast.current) {
+        hasShownUnauthorizedToast.current = true;
+        toast.error('Access Denied! You do not have permission to view this page.');
+        const redirectPath = requiredRole === 'admin' 
+          ? '/member_dashboard?accessDenied=true'
+          : '/login?authRequired=true';
+        router.push(redirectPath);
       }
     }, [unauthorized, router, requiredRole]);
 

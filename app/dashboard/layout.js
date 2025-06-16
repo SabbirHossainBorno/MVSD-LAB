@@ -1,27 +1,29 @@
 // app/dashboard/layout.js
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react'; // Added useEffect import
 import PropTypes from 'prop-types';
+import Cookies from 'js-cookie'; // Added Cookies import
 import Sidebar from '../components/DashboardSidebar';
 import DashboardNavbar from '../components/DashboardNavbar';
-import withAuth from '../components/withAuth'; // Ensure correct path
+import withAuth from '../components/withAuth';
 import '../../app/globals.css';
-
-useEffect(() => {
-  const handleBeforeUnload = () => {
-    console.log('Cleaning up session before unload');
-    Cookies.remove('lastActivity');
-  };
-
-  window.addEventListener('beforeunload', handleBeforeUnload);
-  return () => {
-    window.removeEventListener('beforeunload', handleBeforeUnload);
-  };
-}, []);
 
 function DashboardLayout({ children, isAuthenticated }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Added useEffect for cleanup
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      console.log('Cleaning up session before unload');
+      Cookies.remove('lastActivity');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   const toggleDashboardSidebar = useCallback(() => {
     setIsSidebarOpen((prev) => !prev);
@@ -49,4 +51,4 @@ DashboardLayout.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
 };
 
-export default withAuth(DashboardLayout, 'admin'); // Pass 'admin' as the required role
+export default withAuth(DashboardLayout, 'admin');
