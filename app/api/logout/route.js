@@ -6,7 +6,7 @@ import sendTelegramAlert from '../../../lib/telegramAlert';
 import { query } from '../../../lib/db';
 
 // Format alert message for Telegram
-const formatAlertMessage = (userType, email, ipAddress, idValue, eidValue, userAgent, timeString) => {
+const formatAlertMessage = (userType, email, ipAddress, idValue, eidValue, userAgent, timeString, reason) => {
   const getTitle = () => {
     switch (userType) {
       case 'admin':
@@ -26,14 +26,21 @@ const formatAlertMessage = (userType, email, ipAddress, idValue, eidValue, userA
   }
   // For admin, no ID line
 
-  return `${getTitle()}\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-         `📧 Email       : ${email || 'N/A'}\n` +
-         `${idLine}` +
-         `🌐 IP Address  : ${ipAddress}\n` +
-         `🖥️ Device Info : ${userAgent}\n` +
-         `🔖 EID         : ${eidValue || 'N/A'}\n` +
-         `🕒 Time        : ${timeString}\n` +
-         `📌 Status      : Successful`;
+  let message = `${getTitle()}\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+    `📧 Email       : ${email || 'N/A'}\n` +
+    `${idLine}` +
+    `🌐 IP Address  : ${ipAddress}\n` +
+    `🖥️ Device Info : ${userAgent}\n` +
+    `🔖 EID         : ${eidValue || 'N/A'}\n` +
+    `🕒 Time        : ${timeString}\n` +
+    `📌 Status      : Successful`;
+    
+  // Add session timeout note
+  if (reason === 'session_timeout') {
+    message += '\n\nN:B: Session Time Out';
+  }
+
+  return message;
 };
 
 // Update status for each user type
@@ -70,12 +77,19 @@ export async function POST(request) {
   let userType = 'member';
   const ipAddress = request.headers.get('x-forwarded-for') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown Device';
+  let reason = 'normal';
 
   // Format time in America/New_York (EST/EDT)
   const now = DateTime.now().setZone('America/New_York');
   const timeString = `${now.toFormat("yyyy-LL-dd hh:mm:ss a")} (${now.offsetNameShort})`;
 
   try {
+    // Parse request body for logout reason
+    const contentType = request.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      const body = await request.json();
+      reason = body.reason || 'normal';
+    }
     // Read cookies BEFORE clearing
     email = request.cookies.get('email')?.value || '';
     const sessionId = request.cookies.get('sessionId')?.value || '';
@@ -119,7 +133,8 @@ export async function POST(request) {
       idValue,
       eidValue,
       userAgent,
-      timeString
+      timeString,
+      reason
     );
     await sendTelegramAlert(`\`\`\`\n${alertMessage}\n\`\`\``);
 

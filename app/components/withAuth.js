@@ -59,7 +59,7 @@ const withAuth = (WrappedComponent, requiredRole) => {
           const now = new Date();
           const lastActivityDate = new Date(lastActivity);
           const diff = now - lastActivityDate;
-          if (diff > 10 * 60 * 1000) { // 10 minutes
+          if (diff > 1 * 60 * 1000) { // 10 minutes
             handleSessionExpiration(router);
           }
         }
