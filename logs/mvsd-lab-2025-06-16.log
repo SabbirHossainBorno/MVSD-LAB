@@ -17,3 +17,11 @@
 2025-06-16 00:52:08-EID[325804-MVSDLAB]-SID[46b87a1d-a658-4142-81a3-c1536dfdaa28]-[INFO] TASK[Fetch Chart Data]-Fetched chart data for the past 7 days from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
 2025-06-16 00:54:03-EID[]-SID[]-[INFO] TASK[Logout]-Successful logout at 2025-06-16 12:54:02 AM (EDT)
 2025-06-16 00:54:03-EID[]-SID[]-[INFO] TASK[Logout]-Successful logout at 2025-06-16 12:54:03 AM (EDT)
+2025-06-16 01:32:37-EID[]-SID[26402c3c-a1b3-4270-a3b8-9b9a5359ee0e]-[INFO] TASK[Login]-Login attempt for phd.mvsdlab@gmail.com from IP 123.200.7.106
+2025-06-16 01:32:37-EID[]-SID[26402c3c-a1b3-4270-a3b8-9b9a5359ee0e]-[INFO] TASK[DBCheck]-Looking for phd.mvsdlab@gmail.com in member
+2025-06-16 01:32:37-EID[594587-MVSDLAB]-SID[26402c3c-a1b3-4270-a3b8-9b9a5359ee0e]-[INFO] TASK[Generate EID]-Generated EID 594587-MVSDLAB for user phd.mvsdlab@gmail.com
+2025-06-16 01:32:37-EID[594587-MVSDLAB]-SID[26402c3c-a1b3-4270-a3b8-9b9a5359ee0e]-[INFO] TASK[AuthSuccess]-Successful user login for phd.mvsdlab@gmail.com
+2025-06-16 01:32:48-EID[594587-MVSDLAB]-SID[26402c3c-a1b3-4270-a3b8-9b9a5359ee0e]-[INFO] TASK[Auth Check]-User type : PhD Candidate (member)
+2025-06-16 01:32:50-EID[594587-MVSDLAB]-SID[26402c3c-a1b3-4270-a3b8-9b9a5359ee0e]-[INFO] TASK[DashboardData]-Fetched data for phd.mvsdlab@gmail.com
+2025-06-16 01:32:50-EID[594587-MVSDLAB]-SID[26402c3c-a1b3-4270-a3b8-9b9a5359ee0e]-[INFO] TASK[DashboardData]-Fetched data for phd.mvsdlab@gmail.com
+2025-06-16 01:33:51-EID[]-SID[]-[INFO] TASK[Logout]-Successful logout at 2025-06-16 01:33:50 AM (EDT)
