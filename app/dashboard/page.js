@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
-import withAuth from '../components/withAuth'; // Ensure correct path
 import LoadingSpinner from '../components/LoadingSpinner'; // Add a loading spinner component
 import DashboardMessageChart from '../components/DashboardMessage_chart'; // Add a loading spinner component
 import DashboardMemberChart from '../components/DashboardMember_chart'; // Add a loading spinner component
@@ -700,4 +699,4 @@ const Dashboard = () => {
   );
 }
 
-export default withAuth(Dashboard, 'admin'); // Pass 'admin' as the required role
+export default Dashboard;

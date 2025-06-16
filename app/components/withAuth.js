@@ -16,7 +16,6 @@ const withAuth = (WrappedComponent, requiredRole) => {
     const [unauthorized, setUnauthorized] = useState(false); // State to handle unauthorized access
     const router = useRouter();
     const hasShownUnauthorizedToast = useRef(false);
-    const TIMEOUT_DURATION = 1 * 60 * 1000; // 1 minute
 
     const handleUnauthorizedAccess = useCallback(async () => {
       if (!hasShownUnauthorizedToast.current) {
@@ -60,9 +59,7 @@ const withAuth = (WrappedComponent, requiredRole) => {
           const now = new Date();
           const lastActivityDate = new Date(lastActivity);
           const diff = now - lastActivityDate;
-          
-          // Use temporary timeout duration
-          if (diff > TIMEOUT_DURATION) {
+          if (diff > 10 * 60 * 1000) { // 10 minutes
             handleSessionExpiration(router);
           }
         }

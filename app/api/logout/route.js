@@ -5,13 +5,8 @@ import logger from '../../../lib/logger';
 import sendTelegramAlert from '../../../lib/telegramAlert';
 import { query } from '../../../lib/db';
 
-const formatTimeoutNote = (timeoutReason) => {
-  if (!timeoutReason) return '';
-  return `\n📝 N:B: ${timeoutReason}`;
-};
-
 // Format alert message for Telegram
-const formatAlertMessage = (userType, email, ipAddress, idValue, eidValue, userAgent, timeString, timeoutReason) => {
+const formatAlertMessage = (userType, email, ipAddress, idValue, eidValue, userAgent, timeString) => {
   const getTitle = () => {
     switch (userType) {
       case 'admin':
@@ -38,8 +33,7 @@ const formatAlertMessage = (userType, email, ipAddress, idValue, eidValue, userA
          `🖥️ Device Info : ${userAgent}\n` +
          `🔖 EID         : ${eidValue || 'N/A'}\n` +
          `🕒 Time        : ${timeString}\n` +
-         `📌 Status      : Successful` +
-         formatTimeoutNote(timeoutReason);
+         `📌 Status      : Successful`;
 };
 
 // Update status for each user type
@@ -80,7 +74,6 @@ export async function POST(request) {
   // Format time in America/New_York (EST/EDT)
   const now = DateTime.now().setZone('America/New_York');
   const timeString = `${now.toFormat("yyyy-LL-dd hh:mm:ss a")} (${now.offsetNameShort})`;
-  const timeoutReason = request.nextUrl.searchParams.get('timeoutReason') || null;
 
   try {
     // Read cookies BEFORE clearing
@@ -126,8 +119,7 @@ export async function POST(request) {
       idValue,
       eidValue,
       userAgent,
-      timeString,
-      timeoutReason
+      timeString
     );
     await sendTelegramAlert(`\`\`\`\n${alertMessage}\n\`\`\``);
 
