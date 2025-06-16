@@ -5,6 +5,8 @@ import logger from '../../../lib/logger';
 import sendTelegramAlert from '../../../lib/telegramAlert';
 import { query } from '../../../lib/db';
 
+let isProcessing = false;
+
 // Format alert message for Telegram
 const formatAlertMessage = (userType, email, ipAddress, idValue, eidValue, userAgent, timeString, reason) => {
   const getTitle = () => {
@@ -37,7 +39,8 @@ const formatAlertMessage = (userType, email, ipAddress, idValue, eidValue, userA
     
   // Add session timeout note
   if (reason === 'session_timeout') {
-    message += '\n\nN:B: Session Time Out';
+    message += '\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+    message += '🚨 N:B: Session Time Out - Auto Logout';
   }
 
   return message;
@@ -82,6 +85,15 @@ export async function POST(request) {
   // Format time in America/New_York (EST/EDT)
   const now = DateTime.now().setZone('America/New_York');
   const timeString = `${now.toFormat("yyyy-LL-dd hh:mm:ss a")} (${now.offsetNameShort})`;
+
+  if (isProcessing) {
+    return NextResponse.json(
+      { message: 'Logout already in progress' },
+      { status: 429 }
+    );
+  }
+  
+  isProcessing = true;
 
   try {
     // Parse request body for logout reason
@@ -178,5 +190,7 @@ export async function POST(request) {
       { message: 'Logout Failed' },
       { status: 500 }
     );
+  } finally {
+    isProcessing = false;
   }
 }

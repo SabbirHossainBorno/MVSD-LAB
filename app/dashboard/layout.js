@@ -8,6 +8,18 @@ import DashboardNavbar from '../components/DashboardNavbar';
 import withAuth from '../components/withAuth'; // Ensure correct path
 import '../../app/globals.css';
 
+useEffect(() => {
+  const handleBeforeUnload = () => {
+    console.log('Cleaning up session before unload');
+    Cookies.remove('lastActivity');
+  };
+
+  window.addEventListener('beforeunload', handleBeforeUnload);
+  return () => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+  };
+}, []);
+
 function DashboardLayout({ children, isAuthenticated }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 

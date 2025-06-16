@@ -47,29 +47,56 @@ const withAuth = (WrappedComponent, requiredRole) => {
     }, [handleUnauthorizedAccess]);
 
     useEffect(() => {
-      setIsClient(true);
-      const handleActivity = () => {
-        Cookies.set('lastActivity', new Date().toISOString());
-      };
-      window.addEventListener('mousemove', handleActivity);
-      window.addEventListener('keydown', handleActivity);
-      const interval = setInterval(() => {
-        const lastActivity = Cookies.get('lastActivity');
-        if (lastActivity) {
-          const now = new Date();
-          const lastActivityDate = new Date(lastActivity);
-          const diff = now - lastActivityDate;
-          if (diff > 1 * 60 * 1000) { // 10 minutes
-            handleSessionExpiration(router);
-          }
+    setIsClient(true);
+    const handleActivity = () => {
+      Cookies.set('lastActivity', new Date().toISOString());
+    };
+
+    // Add debounce to prevent rapid firing
+    const debouncedActivity = debounce(handleActivity, 1000);
+    
+    window.addEventListener('mousemove', debouncedActivity);
+    window.addEventListener('keydown', debouncedActivity);
+    
+    // Use a ref to track session expiration state
+    const isHandlingExpiration = useRef(false);
+    
+    const interval = setInterval(() => {
+      const lastActivity = Cookies.get('lastActivity');
+      if (lastActivity && !isHandlingExpiration.current) {
+        const now = new Date();
+        const lastActivityDate = new Date(lastActivity);
+        const diff = now - lastActivityDate;
+        
+        if (diff > 1 * 60 * 1000) { // 1 minute for testing
+          isHandlingExpiration.current = true;
+          console.log('Session expired - handling expiration');
+          handleSessionExpiration(router).finally(() => {
+            isHandlingExpiration.current = false;
+          });
         }
-      }, 60000);
-      return () => {
-        clearInterval(interval);
-        window.removeEventListener('mousemove', handleActivity);
-        window.removeEventListener('keydown', handleActivity);
+      }
+    }, 30000); // Check every 30 seconds instead of 60
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('mousemove', debouncedActivity);
+      window.removeEventListener('keydown', debouncedActivity);
+    };
+  }, [router]);
+
+  // Add debounce utility function
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
       };
-    }, [router]);
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
 
     useEffect(() => {
       if (isClient) {
