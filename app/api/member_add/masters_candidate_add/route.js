@@ -30,7 +30,7 @@ const saveProfilePhoto = async (file, mastersCandidateId) => {
   try {
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
-    return `/Storage/Images/PhD_Candidate/${filename}`;
+    return `/Storage/Images/Master's_Candidate/${filename}`;
   } catch (error) {
     throw new Error(`Failed to save profile photo: ${error.message}`);
   }
@@ -61,7 +61,7 @@ export async function POST(req) {
     const short_bio = formData.get('short_bio');
     const admission_date = formData.get('admission_date');
     const completion_date = formData.get('completion_date') || null;
-    const type = formData.get('type') || 'PhD Candidate';
+    const type = formData.get('type') || "Master's Candidate";
     const socialMedia = JSON.parse(formData.get('socialMedia') || '[]');
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
@@ -101,7 +101,10 @@ export async function POST(req) {
       age--;
     }
     if (age < 18) {
-      return NextResponse.json({ message: 'PhD Candidate must be at least 18 years old.' }, { status: 400 });
+      return NextResponse.json(
+        { message: "Master's Candidate must be at least 18 years old." },
+        { status: 400 }
+      );
     }
 
     // Admission date validation
@@ -126,7 +129,7 @@ export async function POST(req) {
       FROM (
         SELECT id, email, ARRAY[]::TEXT[] AS other_emails FROM member
         UNION ALL
-        SELECT id, email, COALESCE(other_emails, ARRAY[]::TEXT[]) FROM phd_candidate_basic_info
+        SELECT id, email, COALESCE(other_emails, ARRAY[]::TEXT[]) FROM masters_candidate_basic_info
       ) AS combined
       WHERE 
         email = $1 
@@ -182,7 +185,7 @@ export async function POST(req) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Add PhD Candidate',
+          taskName: "Add Master's Candidate",
           details: {
             message: errorMessage,
             attemptedEmail: email,
@@ -204,8 +207,8 @@ export async function POST(req) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Add PhD Candidate',
-          details: `Attempt to add PhD Candidate failed - Phone No : ${phone} already exists.`
+          taskName: "Add Master's Candidate",
+          details: `Attempt to add Master's Candidate failed - Phone No : ${phone} already exists.`,
         }
       });
 
@@ -221,8 +224,8 @@ export async function POST(req) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Add PhD Candidate',
-          details: `Attempt to add PhD Candidate failed - ID number ${idNumber} already exists.`
+          taskName: "Add Master's Candidate",
+          details: `Attempt to add Master's Candidate failed - ID number ${idNumber} already exists.`
         }
       });
 
@@ -238,8 +241,8 @@ export async function POST(req) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Add PhD Candidate',
-          details: `Attempt to add PhD Candidate failed - Passport number ${passport_number} already exists.`
+          taskName: "Add Master's Candidate",
+          details: `Attempt to add Master's Candidate failed - Passport number ${passport_number} already exists.`
         }
       });
 
@@ -276,7 +279,7 @@ export async function POST(req) {
       await query('BEGIN');
 
       const insertMastersCandidateQuery = `
-        INSERT INTO phd_candidate_basic_info 
+        INSERT INTO masters_candidate_basic_info 
         (id, first_name, last_name, phone, gender, "blood_group", country, dob, email, password, short_bio, admission_date, completion_date, photo, status, type, passport_number, "id_number", other_emails)
         VALUES 
         ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'Active', $15, $16, $17, $18)
@@ -304,8 +307,8 @@ export async function POST(req) {
         finalOtherEmails
       ]);
 
-      // Insert into phd_candidate_socialmedia_info
-      const insertSocialMediaQuery = `INSERT INTO phd_candidate_socialmedia_info (phd_candidate_id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
+      // Insert into masters_candidate_socialmedia_info
+      const insertSocialMediaQuery = `INSERT INTO masters_candidate_socialmedia_info (masters_candidate_id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
       for (const sm of socialMedia) {
         await query(insertSocialMediaQuery, [mastersCandidateId, sm.socialMedia_name, sm.link]);
       }
@@ -335,69 +338,80 @@ export async function POST(req) {
         idNumber
       ]);
 
-      // Insert into phd_candidate_education_info
-      const insertEducationQuery = `INSERT INTO phd_candidate_education_info (phd_candidate_id, degree, institution, passing_year) VALUES ($1, $2, $3, $4) RETURNING *;`;
+      // Insert into masters_candidate_education_info
+      const insertEducationQuery = `INSERT INTO masters_candidate_education_info (masters_candidate_id, degree, institution, passing_year) VALUES ($1, $2, $3, $4) RETURNING *;`;
       for (const edu of education) {
         await query(insertEducationQuery, [mastersCandidateId, edu.degree, edu.institution, edu.passing_year]);
       }
 
-      // Insert into phd_candidate_career_info
-      const insertCareerQuery = `INSERT INTO phd_candidate_career_info (phd_candidate_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
+      // Insert into masters_candidate_career_info
+      const insertCareerQuery = `INSERT INTO masters_candidate_career_info (masters_candidate_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
       for (const car of career) {
         await query(insertCareerQuery, [mastersCandidateId, car.position, car.organization_name, car.joining_year, car.leaving_year]);
       }
 
       const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
       const Id = `${mastersCandidateId}`; 
-      const notificationTitle = `A New PhD Candidate Added [${mastersCandidateId}] By ${adminEmail}`;
+      const notificationTitle = `A New Master's Candidate Added [${mastersCandidateId}] By ${adminEmail}`;
       const notificationStatus = 'Unread';
       await query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
 
       await query('COMMIT');
 
       // Send Telegram alert for success
-      const successMessage = formatAlertMessage('A New PhD Candidate Added Successfully', `ID : ${mastersCandidateId}\nAdded By : ${adminEmail}\nDate : ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`);
+      const successMessage = formatAlertMessage(
+        "A New Master's Candidate Added Successfully",
+        `ID : ${mastersCandidateId}\nAdded By : ${adminEmail}\nDate : ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`
+      );
+
       await sendTelegramAlert(successMessage);
 
       // Log success
-      logger.info('PhD Candidate Added Successfully', {
+      logger.info("Master's Candidate Added Successfully", {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Add PhD Candidate',
-          details: `A new PhD Candidate added successfully with ID ${mastersCandidateId} by ${adminEmail} from IP ${ipAddress} with User-Agent ${userAgent}`
+          taskName: "Add Master's Candidate",
+          details: `A new Master's Candidate added successfully with ID ${mastersCandidateId} by ${adminEmail} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
 
-      return NextResponse.json({ message: 'PhD Candidate information added successfully' }, { status: 200 });
+      return NextResponse.json(
+        { message: "Master's Candidate information added successfully" },
+        { status: 200 }
+      );
 
     } catch (error) {
       await query('ROLLBACK');
 
-      const errorMessage = formatAlertMessage('Error Adding PhD Candidate', `ID : ${mastersCandidateId}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
+      const errorMessage = formatAlertMessage(
+        "Error Adding Master's Candidate",
+        `ID : ${mastersCandidateId}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`
+      );
+
       await sendTelegramAlert(errorMessage);
 
-      logger.error('Error Adding PhD Candidate', {
+      logger.error("Error Adding Master's Candidate", {
         meta: {
           eid,
           sid: sessionId,
-          taskName: 'Add PhD Candidate',
-          details: `Error adding PhD Candidate with ID ${mastersCandidateId} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+          taskName: "Add Master's Candidate",
+          details: `Error adding Master's Candidate with ID ${mastersCandidateId} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
         }
       });
 
-      return NextResponse.json({ message: `Error adding PhD Candidate: ${error.message}` }, { status: 500 });
+      return NextResponse.json({ message: `Error adding Master's Candidate: ${error.message}` }, { status: 500 });
     }
 
   } catch (error) {
-    const errorMessage = formatAlertMessage('Error Handling PhD Candidate Request', `IP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
+    const errorMessage = formatAlertMessage("Error Handling Master's Candidate Request", `IP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
     await sendTelegramAlert(errorMessage);
 
     logger.error('Error Processing Form Data', {
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Add PhD Candidate',
+        taskName: "Add Master's Candidate",
         details: `Error processing form data from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
       }
     });

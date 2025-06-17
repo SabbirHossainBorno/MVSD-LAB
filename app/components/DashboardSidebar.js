@@ -293,17 +293,17 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
                     icon: <FiAward className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                   },
                   { 
-                    path: '/dashboard/add_member/post_doc_candidate_add', 
+                    path: '/dashboard/member_add/post_doc_candidate_add', 
                     label: 'Post Doc',
                     icon: <FiBook className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                   },
                   { 
-                    path: '/dashboard/add_member/masters_candidate_add', 
+                    path: '/dashboard/member_add/masters_candidate_add', 
                     label: "Master's",
                     icon: <GiArchiveResearch className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                   },
                   { 
-                    path: '/dashboard/add_member/staff_member_add', 
+                    path: '/dashboard/member_add/staff_member_add', 
                     label: 'Staff',
                     icon: <FiBriefcase className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                   }

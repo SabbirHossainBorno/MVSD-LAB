@@ -34,7 +34,7 @@ const AddMastersCandidate = () => {
     admission_date: '',
     completion_date: '',
     photo: '',
-    type: 'Master's Candidate',
+    type: "Master's Candidate",
     status: 'Active',
   });
   const [socialMedia, setSocialMedia] = useState([{ socialMedia_name: '', link: '' }]);
@@ -147,7 +147,7 @@ const AddMastersCandidate = () => {
     data.append('career', JSON.stringify(formattedCareer));
   
     try {
-      const response = await fetch('/api/member_add/phd_candidate_add', {
+      const response = await fetch('/api/member_add/masters_candidate_add', {
         method: 'POST',
         body: data,
       });
@@ -162,7 +162,7 @@ const AddMastersCandidate = () => {
       console.log('API response:', result);
     
       if (response.ok) {
-        toast.success('PhD Candidate Added Successfully!');
+        toast.success("Master's Candidate Added Successfully!");
         setTimeout(() => {
           router.push('/dashboard');
         }, 2000);
@@ -177,11 +177,11 @@ const AddMastersCandidate = () => {
         } else if (result.message?.includes('Passport number already exists')) {
           toast.error('This passport number is already registered.');
         } else {
-          toast.error(result.message || 'An error occurred while adding the PhD Candidate.');
+          toast.error(result.message || "An error occurred while adding the Master's Candidate.");
         }
       }
     } catch (error) {
-      toast.error(error.message || 'Failed To Add PhD Candidate');
+      toast.error(error.message || "Failed To Add Master's Candidate");
     } finally {
       setLoading(false);
     }    
@@ -203,7 +203,7 @@ const AddMastersCandidate = () => {
             Back to Dashboard
           </button>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Add PhD Candidate
+            Add Master&apos;s Candidate
           </h1>
         </div>
 
@@ -795,7 +795,7 @@ const AddMastersCandidate = () => {
                   Processing...
                 </span>
               ) : (
-                'Add PhD Candidate'
+                'Add Master\'s Candidate'
               )}
             </button>
           </div>
