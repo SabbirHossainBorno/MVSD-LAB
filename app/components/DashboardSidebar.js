@@ -293,7 +293,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
                     icon: <FiAward className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                   },
                   { 
-                    path: '/dashboard/member_add/post_doc_candidate_add', 
+                    path: '/dashboard/member_add/postdoc_candidate_add', 
                     label: 'Post Doc',
                     icon: <FiBook className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                   },
@@ -359,7 +359,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
                     icon: <FiAward className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                   },
                   {
-                    path: '/dashboard/member_list/post_doc_candidate_list',
+                    path: '/dashboard/member_list/postdoc_candidate_list',
                     label: 'Post Docs',
                     icon: <FiBook className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                   },
