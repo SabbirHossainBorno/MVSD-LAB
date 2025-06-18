@@ -293,14 +293,14 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
                     icon: <FiAward className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                   },
                   { 
-                    path: '/dashboard/member_add/postdoc_candidate_add', 
-                    label: 'Post Doc',
-                    icon: <FiBook className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
-                  },
-                  { 
                     path: '/dashboard/member_add/masters_candidate_add', 
                     label: "Master's",
                     icon: <GiArchiveResearch className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
+                  },
+                  { 
+                    path: '/dashboard/member_add/postdoc_candidate_add', 
+                    label: 'Post Doc',
+                    icon: <FiBook className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                   },
                   { 
                     path: '/dashboard/member_add/staff_member_add', 
@@ -359,14 +359,14 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
                     icon: <FiAward className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                   },
                   {
-                    path: '/dashboard/member_list/postdoc_candidate_list',
-                    label: 'Post Docs',
-                    icon: <FiBook className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
-                  },
-                  {
                     path: '/dashboard/member_list/masters_candidate_list',
                     label: "Master's",
                     icon: <GiArchiveResearch className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
+                  },
+                  {
+                    path: '/dashboard/member_list/postdoc_candidate_list',
+                    label: 'Post Docs',
+                    icon: <FiBook className="w-4 h-4 text-gray-300 hover:text-indigo-400" />
                   },
                   {
                     path: '/dashboard/member_list/staff_member_list',
