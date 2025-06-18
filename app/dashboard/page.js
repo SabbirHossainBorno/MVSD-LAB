@@ -20,6 +20,7 @@ const Dashboard = () => {
   const [phdCandidatesCount, setPhdCandidatesCount] = useState(0);
   const [mastersCandidatesCount, setMastersCandidatesCount] = useState(0);
   const [postdocCandidatesCount, setPostDocCandidatesCount] = useState(0);
+  const [alumnisCount, setAlumnisCount] = useState(0);
   const [messageCount, setMessagesCount] = useState(0);
   const [recentProfessors, setRecentProfessors] = useState([]);
   const [recentSubscribers, setRecentSubscribers] = useState([]);
@@ -44,6 +45,7 @@ const Dashboard = () => {
           setPhdCandidatesCount(result.phdCandidateCount);
           setMastersCandidatesCount(result.mastersCandidateCount);
           setPostDocCandidatesCount(result.postdocCandidateCount);
+          setAlumnisCount(result.alumniCount);
           setMessagesCount(result.messageCount);
           setRecentSubscribers(result.recentSubscribers);
           setAdmins(result.admins); // Set admin data
@@ -157,6 +159,27 @@ const Dashboard = () => {
             <div className="flex flex-col items-start">
               <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Directors</p>
               <p className="text-3xl font-extrabold text-black mt-1">{directorsCount}</p>
+            </div>
+          </div>
+
+          {/* Total Alumni Card */}
+          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
+            {/* Icon Section */}
+            <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
+              <Image 
+                src="/icons/total_alumni.svg" // Image path
+                alt="Total Alumni Icon" // Alt text for accessibility
+                width={64} // 16 * 4 = 64px width
+                height={64} // 16 * 4 = 64px height
+                className="w-16 h-16 md:w-20 md:h-20" // Tailwind classes for sizing
+                quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
+              />
+            </div>
+
+            {/* Content Section */}
+            <div className="flex flex-col items-start">
+              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Alumni</p>
+              <p className="text-3xl font-extrabold text-black mt-1">{alumnisCount}</p>
             </div>
           </div>
 

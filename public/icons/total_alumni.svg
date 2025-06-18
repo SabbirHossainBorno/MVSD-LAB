@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+	 viewBox="0 0 512 512" xml:space="preserve">
+<polygon style="fill:#78B9EB;" points="256,161.309 136.793,42.1 163.283,15.61 256,108.327 348.717,15.61 375.207,42.1 "/>
+<path style="fill:#FFD6A0;" d="M512,496.39H0V146.732h512V496.39z"/>
+<path style="fill:#FFC170;" d="M512,496.39H256V146.732h256V496.39z"/>
+<path style="fill:#3C5D76;" d="M274.732,191.196h-37.463V91.293h37.463V191.196z"/>
+<circle style="fill:#FF9811;" cx="131.122" cy="334.049" r="56.195"/>
+<g>
+	<path style="fill:#FFFFFF;" d="M131.122,408.976c-41.315,0-74.927-33.612-74.927-74.927s33.612-74.927,74.927-74.927
+		s74.927,33.612,74.927,74.927S172.437,408.976,131.122,408.976z M131.122,296.585c-20.657,0-37.463,16.806-37.463,37.463
+		s16.806,37.463,37.463,37.463s37.463-16.806,37.463-37.463S151.779,296.585,131.122,296.585z"/>
+	<rect x="293.463" y="284.098" style="fill:#FFFFFF;" width="162.341" height="37.463"/>
+	<rect x="293.463" y="346.537" style="fill:#FFFFFF;" width="99.902" height="37.463"/>
+</g>
+</svg>
