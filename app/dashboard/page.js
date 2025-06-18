@@ -16,7 +16,10 @@ const Dashboard = () => {
   const [subscribers, setSubscribers] = useState(0);
   const [membersCount, setMembersCount] = useState(0);
   const [professorsCount, setProfessorsCount] = useState(0);
+  const [directorsCount, setDirectorsCount] = useState(0);
   const [phdCandidatesCount, setPhdCandidatesCount] = useState(0);
+  const [mastersCandidatesCount, setMastersCandidatesCount] = useState(0);
+  const [postdocCandidatesCount, setPostDocCandidatesCount] = useState(0);
   const [messageCount, setMessagesCount] = useState(0);
   const [recentProfessors, setRecentProfessors] = useState([]);
   const [recentSubscribers, setRecentSubscribers] = useState([]);
@@ -37,7 +40,10 @@ const Dashboard = () => {
           setSubscribers(result.subscribers);
           setMembersCount(result.memberCount);
           setProfessorsCount(result.professorCount);
+          setDirectorsCount(result.directorCount);
           setPhdCandidatesCount(result.phdCandidateCount);
+          setMastersCandidatesCount(result.mastersCandidateCount);
+          setPostDocCandidatesCount(result.postdocCandidateCount);
           setMessagesCount(result.messageCount);
           setRecentSubscribers(result.recentSubscribers);
           setAdmins(result.admins); // Set admin data
@@ -67,7 +73,7 @@ const Dashboard = () => {
       <main className="flex-1 p-3 md:p-4 lg:p-6">
 
         {/* ------------------------Summary Cards------------------------ */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
 
           {/* Total Members Card */}
           <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
@@ -130,6 +136,27 @@ const Dashboard = () => {
             <div className="flex flex-col items-start">
               <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Professors</p>
               <p className="text-3xl font-extrabold text-black mt-1">{professorsCount}</p>
+            </div>
+          </div>
+
+          {/* Total Director Card */}
+          <div className="bg-white p-4 rounded shadow-xl text-center flex items-center justify-start transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-4 border-blue-500">
+            {/* Icon Section */}
+            <div className="w-16 h-16 mr-3 flex items-center justify-center md:w-20 md:h-20">
+              <Image 
+                src="/icons/boss.svg" // Image path
+                alt="Total Directors Icon" // Alt text for accessibility
+                width={64} // 16 * 4 = 64px width
+                height={64} // 16 * 4 = 64px height
+                className="w-16 h-16 md:w-20 md:h-20" // Tailwind classes for sizing
+                quality={100} // Ensures maximum quality, by default Next.js optimizes images for performance but this ensures no compression
+              />
+            </div>
+
+            {/* Content Section */}
+            <div className="flex flex-col items-start">
+              <p className="text-sm text-left font-medium text-gray-700 uppercase tracking-widest">Total Directors</p>
+              <p className="text-3xl font-extrabold text-black mt-1">{directorsCount}</p>
             </div>
           </div>
 
@@ -204,7 +231,7 @@ const Dashboard = () => {
           </div>
 
           {/* Repeat the card structure for other cards */}
-          {/* Total PhD Candidate Card */}
+          {/* Total Master's Candidate Card */}
           <div className="bg-white p-2 rounded shadow-md flex items-center justify-between transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-2 border-blue-500">
             {/* Icon Section */}
             <div className="w-8 h-8 flex items-center justify-center md:w-10 md:h-10">
@@ -221,11 +248,11 @@ const Dashboard = () => {
 
             {/* Content Section */}
             <div className="flex items-center gap-2">
-              <p className="text-xs font-bold text-gray-700 uppercase tracking-widest">PhD Candidate</p>
-              <p className="text-2xl font-extrabold text-black">{phdCandidatesCount}</p>
+              <p className="text-xs font-bold text-gray-700 uppercase tracking-widest">Master's Candidate</p>
+              <p className="text-2xl font-extrabold text-black">{mastersCandidatesCount}</p>
             </div>
           </div>
-          {/* Total PhD Candidate Card */}
+          {/* Total Post Doc Candidate Card */}
           <div className="bg-white p-2 rounded shadow-md flex items-center justify-between transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-2 border-blue-500">
             {/* Icon Section */}
             <div className="w-8 h-8 flex items-center justify-center md:w-10 md:h-10">
@@ -242,8 +269,8 @@ const Dashboard = () => {
 
             {/* Content Section */}
             <div className="flex items-center gap-2">
-              <p className="text-xs font-bold text-gray-700 uppercase tracking-widest">PhD Candidate</p>
-              <p className="text-2xl font-extrabold text-black">{phdCandidatesCount}</p>
+              <p className="text-xs font-bold text-gray-700 uppercase tracking-widest">Post Doc Candidate</p>
+              <p className="text-2xl font-extrabold text-black">{postdocCandidatesCount}</p>
             </div>
           </div>
           {/* Total PhD Candidate Card */}

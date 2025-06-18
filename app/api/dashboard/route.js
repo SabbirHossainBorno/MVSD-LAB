@@ -55,7 +55,10 @@ export async function GET(request) {
     const subscriberCountQuery = 'SELECT COUNT(*) FROM subscriber';
     const memberDetailsQuery = 'SELECT COUNT(*) AS count FROM member';
     const professorDetailsQuery = 'SELECT COUNT(*) AS count FROM professor_basic_info';
+    const directorDetailsQuery = 'SELECT COUNT(*) AS count FROM director_basic_info';
     const phdCandidateDetailsQuery = 'SELECT COUNT(*) AS count FROM phd_candidate_basic_info';
+    const mastersCandidateDetailsQuery = 'SELECT COUNT(*) AS count FROM masters_candidate_basic_info';
+    const postdocCandidateDetailsQuery = 'SELECT COUNT(*) AS count FROM postdoc_candidate_basic_info';
     const messageDetailsQuery = 'SELECT COUNT(*) AS count FROM home_contact_us';
     const recentProfessorsQuery = 'SELECT id, first_name, last_name, phone, dob, email, short_bio, joining_date, leaving_date, photo, status, type FROM professor_basic_info ORDER BY id DESC LIMIT 5';
     const recentSubscribersQuery = 'SELECT * FROM subscriber ORDER BY date DESC LIMIT 7';
@@ -63,11 +66,14 @@ export async function GET(request) {
     const currentLoginCountQuery = 'SELECT COUNT(*) AS count FROM admin WHERE status = \'Active\''; // Add query for current login count
     const memberLoginInfoTrackerQuery = 'SELECT * FROM member_login_info_tracker'; // Add query for admin data
 
-    const [subscriberCount, memberDetails, professorDetails, phdCandidateDetails, messageDetails, recentSubscribers, recentProfessors, adminDetails, currentLoginCount, memberLoginInfoTracker] = await Promise.all([
+    const [subscriberCount, memberDetails, professorDetails, directorDetails, phdCandidateDetails, mastersCandidateDetails, postdocCandidateDetails, messageDetails, recentSubscribers, recentProfessors, adminDetails, currentLoginCount, memberLoginInfoTracker] = await Promise.all([
       query(subscriberCountQuery),
       query(memberDetailsQuery),
       query(professorDetailsQuery),
+      query(directorDetailsQuery),
       query(phdCandidateDetailsQuery),
+      query(mastersCandidateDetailsQuery),
+      query(postdocCandidateDetailsQuery),
       query(messageDetailsQuery),
       query(recentSubscribersQuery),
       query(recentProfessorsQuery),
@@ -93,7 +99,10 @@ export async function GET(request) {
       subscribers: subscriberCount.rows[0].count,
       memberCount: memberDetails.rows[0].count,
       professorCount: professorDetails.rows[0].count,
+      directorCount: directorDetails.rows[0].count,
       phdCandidateCount: phdCandidateDetails.rows[0].count,
+      mastersCandidateCount: mastersCandidateDetails.rows[0].count,
+      postdocCandidateCount: postdocCandidateDetails.rows[0].count,
       messageCount: messageDetails.rows[0].count,
       recentSubscribers: recentSubscribers.rows,
       recentProfessors: recentProfessors.rows,
