@@ -84,7 +84,7 @@ const DashboardMemberChart = () => {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={controls}
-      className="w-full mx-auto p-4 bg-gradient-to-br from-gray-900 to-gray-800 rounded shadow-2xl space-y-4 overflow-hidden relative"
+      className="w-full mx-auto pl-4 pr-4 pb-4 bg-gradient-to-br from-gray-900 to-gray-800 rounded shadow-2xl space-y-4 overflow-hidden relative"
     >
       {/* Glowing Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
@@ -97,10 +97,10 @@ const DashboardMemberChart = () => {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2 }}
-        className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10"
+        className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 relative z-10"
       >
-        <div className="space-y-1">
-          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
+        <div className="space-y-2">
+          <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
             Member Analytics
           </h2>
           <p className="text-sm text-gray-400 font-medium">
@@ -155,7 +155,7 @@ const DashboardMemberChart = () => {
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 relative z-10"
+        className="grid gap-2 sm:grid-cols-1 lg:grid-cols-3 relative z-10"
       >
         {chartData.labels?.map((label, index) => {
           const percentage = Math.round(chartData.datasets[0].data[index] / totalMembers * 100);
