@@ -271,7 +271,7 @@ const Dashboard = () => {
 
             {/* Content Section */}
             <div className="flex items-center gap-2">
-              <p className="text-xs font-bold text-gray-700 uppercase tracking-widest">Master's Candidate</p>
+              <p className="text-xs font-bold text-gray-700 uppercase tracking-widest">Master&apos;s Candidate</p>
               <p className="text-2xl font-extrabold text-black">{mastersCandidatesCount}</p>
             </div>
           </div>
