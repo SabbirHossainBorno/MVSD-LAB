@@ -19,7 +19,7 @@ const DashboardMemberChart = () => {
         const response = await fetch('/api/chart');
         const data = await response.json();
         if (response.ok) {
-          const labels = data.memberCounts.map(item => item.type);
+          const labels = data.memberCounts.map(item => item.type.replace(/Candidate\s*/gi, '').trim());
           const counts = data.memberCounts.map(item => item.count);
           setTotalMembers(data.totalMembers);
           
@@ -99,7 +99,7 @@ const DashboardMemberChart = () => {
         transition={{ delay: 0.2 }}
         className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10"
       >
-        <div className="space-y-2">
+        <div className="space-y-1">
           <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
             Member Analytics
           </h2>
@@ -107,15 +107,6 @@ const DashboardMemberChart = () => {
             Dynamic Membership Distribution Overview
           </p>
         </div>
-        <motion.div 
-          whileHover={{ scale: 1.05 }}
-          className="bg-gray-800/50 px-6 py-3 rounded border border-gray-700 backdrop-blur-sm shadow-lg"
-        >
-          <p className="text-sm text-gray-300 font-medium">Total Members</p>
-          <p className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            {totalMembers}
-          </p>
-        </motion.div>
       </motion.div>
 
       {/* Chart Container */}
@@ -180,7 +171,7 @@ const DashboardMemberChart = () => {
                 y: -5,
                 transition: { type: 'spring', stiffness: 300 }
               }}
-              className="p-5 bg-gray-800/50 rounded border border-gray-700 backdrop-blur-sm hover:border-blue-400/30 transition-all relative overflow-hidden group"
+              className="p-2 bg-gray-800/50 rounded border border-gray-700 backdrop-blur-sm hover:border-blue-400/30 transition-all relative overflow-hidden group"
               style={{
                 borderLeft: `4px solid ${color}`,
                 boxShadow: `0 4px 30px -15px ${color}33`
@@ -192,63 +183,46 @@ const DashboardMemberChart = () => {
                 style={{ backgroundColor: color }}
               />
               
-              <div className="flex items-center justify-between gap-4 relative">
-                <div className="flex items-center gap-3">
-                  {/* Animated Color Dot */}
-                  <motion.div 
-                    animate={{ 
-                      scale: [1, 1.2, 1],
-                      rotate: [0, 20, -20, 0],
-                      boxShadow: `0 0 12px ${color}`
-                    }}
-                    transition={{ 
-                      repeat: Infinity,
-                      duration: 4,
-                      delay: index * 0.3
-                    }}
-                    className="w-3 h-3 rounded-full relative"
-                    style={{ backgroundColor: color }}
-                  >
-                    <div className="absolute inset-0 bg-white/10 rounded-full blur-[1px]" />
-                  </motion.div>
-                  
-                  <div>
-                    <span className="text-sm font-semibold text-gray-200 block">{label}</span>
-                    <span 
-                      className="text-xs font-medium text-gray-400 block mt-1"
-                      style={{ color: `${color}dd` }}
-                    >
-                      {chartData.datasets[0].data[index]} Members
-                    </span>
-                  </div>
-                </div>
-                
-                {/* Percentage Badge */}
-                <motion.div 
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="px-2 py-1 rounded-full text-xs font-bold backdrop-blur-sm"
-                  style={{
-                    backgroundColor: `${color}15`,
-                    color: color
-                  }}
-                >
-                  {percentage}%
-                </motion.div>
-              </div>
+              <div className="flex items-center justify-between gap-2 sm:gap-3 relative flex-wrap sm:flex-nowrap">
+  <div className="flex items-center gap-1 sm:gap-3">
+    <div className="leading-tight">
+      <span className="text-xs sm:text-sm font-semibold text-gray-200 block">{label}</span>
+      <span 
+        className="text-[10px] sm:text-xs font-medium text-gray-400 block mt-[2px]"
+        style={{ color: `${color}dd` }}
+      >
+        {chartData.datasets[0].data[index]} Members
+      </span>
+    </div>
+  </div>
+  
+  {/* Percentage Badge */}
+  <motion.div 
+    initial={{ scale: 0 }}
+    animate={{ scale: 1 }}
+    className="px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold backdrop-blur-sm"
+    style={{
+      backgroundColor: `${color}15`,
+      color: color
+    }}
+  >
+    {percentage}%
+  </motion.div>
+</div>
 
-              {/* Animated Progress Bar */}
-              <div className="mt-4 h-1.5 bg-gray-700/50 rounded-full overflow-hidden">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${percentage}%` }}
-                  transition={{ duration: 1.5, delay: 0.3 }}
-                  className="h-full rounded-full relative"
-                  style={{ backgroundColor: color }}
-                >
-                  <div className="absolute inset-0 bg-white/20 blur-[2px]" />
-                </motion.div>
-              </div>
+{/* Animated Progress Bar */}
+<div className="mt-3 sm:mt-4 h-1 bg-gray-700/50 rounded-full overflow-hidden">
+  <motion.div
+    initial={{ width: 0 }}
+    animate={{ width: `${percentage}%` }}
+    transition={{ duration: 1.5, delay: 0.3 }}
+    className="h-full rounded-full relative"
+    style={{ backgroundColor: color }}
+  >
+    <div className="absolute inset-0 bg-white/20 blur-[2px]" />
+  </motion.div>
+</div>
+
             </motion.div>
           )
         })}
