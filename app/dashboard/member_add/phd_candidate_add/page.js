@@ -39,7 +39,12 @@ const AddPhdCandidate = () => {
   });
   const [socialMedia, setSocialMedia] = useState([{ socialMedia_name: '', link: '' }]);
   const [education, setEducation] = useState([{ degree: '', institution: '', passing_year: '' }]);
-  const [career, setCareer] = useState([{ position: '', organization: '', joining_year: '', leaving_year: '' }]);
+  const [career, setCareer] = useState([{ 
+    position: '', 
+    organization_name: '',   // ✅ Correct key (matches your JSX)
+    joining_year: '', 
+    leaving_year: '' 
+  }]);
   const [otherEmails, setOtherEmails] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -64,6 +69,30 @@ const AddPhdCandidate = () => {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
   }, []);
+
+  const handleSocialMediaChange = useCallback((index, field, value) => {
+  const updatedSocialMedia = [...socialMedia];
+  updatedSocialMedia[index] = { 
+    ...updatedSocialMedia[index], 
+    [field]: value 
+  };
+  
+  setSocialMedia(updatedSocialMedia);
+  
+  // Check for duplicates after state update
+  const currentItem = updatedSocialMedia[index];
+  if (currentItem.socialMedia_name && currentItem.link) {
+    const duplicates = updatedSocialMedia.filter(
+      (sm, i) => i !== index && 
+      sm.socialMedia_name === currentItem.socialMedia_name &&
+      sm.link === currentItem.link
+    );
+    
+    if (duplicates.length > 0) {
+      toast.warning('Duplicate social media entry detected');
+    }
+  }
+}, [socialMedia]);
 
   const addOtherEmail = useCallback(() => {
     setOtherEmails(prev => [...prev, { id: Date.now(), value: '' }]);
@@ -559,71 +588,71 @@ const AddPhdCandidate = () => {
           </section>
 
           {/* Social Media Section */}
-          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
-            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-purple-300">
-              <FiLinkedin className="w-6 h-6" /> Social Profiles
-            </h2>
-            
-            {socialMedia.map((sm, index) => (
-              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="relative">
-                  <select
-                    name="socialMedia_name"
-                    value={sm.socialMedia_name}
-                    onChange={(e) => handleArrayChange(setSocialMedia, index, 'socialMedia_name', e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-                    required
-                  >
-                    <option value="">Select Platform</option>
-                    <option value="Linkedin">LinkedIn</option>
-                    <option value="GitHub">GitHub</option>
-                    <option value="Facebook">Facebook</option>
-                    <option value="X">X (Twitter)</option>
-                    <option value="Instagram">Instagram</option>
-                    <option value="Website">Personal Website</option>
-                    <option value="Other">Other</option>
-                  </select>
-                  <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                </div>
-                
-                <div className="relative">
-                  <input
-                    type="url"
-                    placeholder="Profile URL"
-                    value={sm.link}
-                    onChange={(e) => handleArrayChange(setSocialMedia, index, 'link', e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
-                    required
-                  />
-                  {sm.socialMedia_name === 'GitHub' ? (
-                    <FiGithub className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  ) : (
-                    <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  )}
-                </div>
+<section className="bg-gray-700/30 rounded p-6 shadow-inner">
+  <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-purple-300">
+    <FiLinkedin className="w-6 h-6" /> Social Profiles
+  </h2>
+  
+  {socialMedia.map((sm, index) => (
+    <div key={index} className="group relative grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div className="relative">
+        <select
+          name="socialMedia_name"
+          value={sm.socialMedia_name}
+          onChange={(e) => handleSocialMediaChange(index, 'socialMedia_name', e.target.value)}
+          className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+          required
+        >
+          <option value="">Select Platform</option>
+          <option value="Linkedin">LinkedIn</option>
+          <option value="GitHub">GitHub</option>
+          <option value="Facebook">Facebook</option>
+          <option value="X">X (Twitter)</option>
+          <option value="Instagram">Instagram</option>
+          <option value="Website">Personal Website</option>
+          <option value="Other">Other</option>
+        </select>
+        <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+      </div>
+      
+      <div className="relative">
+        <input
+          type="url"
+          placeholder="Profile URL"
+          value={sm.link}
+          onChange={(e) => handleSocialMediaChange(index, 'link', e.target.value)}
+          className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+          required
+        />
+        {sm.socialMedia_name === 'GitHub' ? (
+          <FiGithub className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        ) : (
+          <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        )}
+      </div>
 
-                {socialMedia.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeField(setSocialMedia, index)}
-                    className="absolute -right-4 -top-4 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <FiX className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-            ))}
+      {socialMedia.length > 1 && (
+        <button
+          type="button"
+          onClick={() => removeField(setSocialMedia, index)}
+          className="absolute -right-4 -top-4 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+          <FiX className="w-4 h-4" />
+        </button>
+      )}
+    </div>
+  ))}
 
-            <button
-              type="button"
-              onClick={() => addNewField(setSocialMedia, { socialMedia_name: '', link: '' })}
-              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-            >
-              <FiPlus className="w-5 h-5" />
-              <span>Add Social Profile</span>
-            </button>
-          </section>
+  <button
+    type="button"
+    onClick={() => addNewField(setSocialMedia, { socialMedia_name: '', link: '' })}
+    className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+  >
+    <FiPlus className="w-5 h-5" />
+    <span>Add Social Profile</span>
+  </button>
+</section>
 
           {/* Education Section */}
           <section className="bg-gray-700/30 rounded p-6 shadow-inner">
@@ -775,8 +804,12 @@ const AddPhdCandidate = () => {
 
             <button
               type="button"
-              onClick={() => addNewField(setCareer, { position: '', organization: '', joining_year: '', leaving_year: '' })}
-              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+              onClick={() => addNewField(setCareer, { 
+                position: '', 
+                organization_name: '',  // ✅ Use correct key
+                joining_year: '', 
+                leaving_year: '' 
+              })}
             >
               <FiPlus className="w-5 h-5" />
               <span>Add Experience</span>

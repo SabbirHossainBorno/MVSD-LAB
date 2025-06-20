@@ -305,7 +305,6 @@ export async function POST(req) {
       ]);
 
       // Insert into phd_candidate_socialmedia_info
-      const insertSocialMediaQuery = `INSERT INTO phd_candidate_socialmedia_info (phd_candidate_id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
       for (const sm of socialMedia) {
         const insertSocialMediaQuery = `
           INSERT INTO phd_candidate_socialmedia_info 
@@ -313,7 +312,7 @@ export async function POST(req) {
           VALUES ($1, $2, $3)
           ON CONFLICT (phd_candidate_id, socialmedia_name, link) DO NOTHING
         `;
-        await query(insertSocialMediaQuery, [id, sm.socialMedia_name, sm.link]);
+        await query(insertSocialMediaQuery, [phdCandidateId, sm.socialMedia_name, sm.link]); // ✅ Use phdCandidateId
       }
 
       const insertMemberQuery = `
