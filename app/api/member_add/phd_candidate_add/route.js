@@ -76,6 +76,7 @@ export async function POST(req) {
     if (!passwordRegex.test(password)) {
       return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
     }
+    
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -88,6 +89,14 @@ export async function POST(req) {
       console.error('Validation failed: Invalid secondary email(s)');
       return NextResponse.json({ message: 'One or more secondary emails have invalid format' }, { status: 400 });
     }
+
+    if (completion_date && new Date(completion_date) < new Date(admission_date)) {
+      return NextResponse.json({ 
+        success: false,
+        message: 'Graduation date cannot be before enrollment date' 
+      }, { status: 400 });
+    }
+
 
     // Hash password before storing
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -306,14 +315,14 @@ export async function POST(req) {
 
       // Insert into phd_candidate_socialmedia_info
       for (const sm of socialMedia) {
-        const insertSocialMediaQuery = `
-          INSERT INTO phd_candidate_socialmedia_info 
-          (phd_candidate_id, socialmedia_name, link)
-          VALUES ($1, $2, $3)
-          ON CONFLICT (phd_candidate_id, socialmedia_name, link) DO NOTHING
-        `;
-        await query(insertSocialMediaQuery, [phdCandidateId, sm.socialMedia_name, sm.link]); // ✅ Use phdCandidateId
-      }
+          const insertSocialMediaQuery = `
+            INSERT INTO phd_candidate_socialmedia_info 
+            (id, phd_candidate_id, socialmedia_name, link)
+            VALUES (nextval('phd_candidate_socialmedia_info_id_seq'), $1, $2, $3)
+            ON CONFLICT (phd_candidate_id, socialmedia_name, link) DO NOTHING
+          `;
+          await query(insertSocialMediaQuery, [phdCandidateId, sm.socialMedia_name, sm.link]);
+        }
 
       const insertMemberQuery = `
         INSERT INTO member (id, first_name, last_name, phone, gender, "blood_group", country, dob, passport_number, email, password, short_bio, joining_date, leaving_date, photo, status, type, "id_number")
