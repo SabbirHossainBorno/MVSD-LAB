@@ -581,6 +581,7 @@ const AddPhdCandidate = () => {
                     <option value="X">X (Twitter)</option>
                     <option value="Instagram">Instagram</option>
                     <option value="Website">Personal Website</option>
+                    <option value="Other">Other</option>
                   </select>
                   <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
