@@ -13,6 +13,7 @@ import {
   FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
   FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo,
 } from 'react-icons/fi';
+import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 
 const AddPhdCandidate = () => {
@@ -588,71 +589,81 @@ const AddPhdCandidate = () => {
           </section>
 
           {/* Social Media Section */}
-<section className="bg-gray-700/30 rounded p-6 shadow-inner">
-  <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-purple-300">
-    <FiLinkedin className="w-6 h-6" /> Social Profiles
-  </h2>
-  
-  {socialMedia.map((sm, index) => (
-    <div key={index} className="group relative grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-      <div className="relative">
-        <select
-          name="socialMedia_name"
-          value={sm.socialMedia_name}
-          onChange={(e) => handleSocialMediaChange(index, 'socialMedia_name', e.target.value)}
-          className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-          required
-        >
-          <option value="">Select Platform</option>
-          <option value="Linkedin">LinkedIn</option>
-          <option value="GitHub">GitHub</option>
-          <option value="Facebook">Facebook</option>
-          <option value="X">X (Twitter)</option>
-          <option value="Instagram">Instagram</option>
-          <option value="Website">Personal Website</option>
-          <option value="Other">Other</option>
-        </select>
-        <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-        <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-      </div>
-      
-      <div className="relative">
-        <input
-          type="url"
-          placeholder="Profile URL"
-          value={sm.link}
-          onChange={(e) => handleSocialMediaChange(index, 'link', e.target.value)}
-          className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
-          required
-        />
-        {sm.socialMedia_name === 'GitHub' ? (
-          <FiGithub className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-        ) : (
-          <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-        )}
-      </div>
+          <section className="bg-gray-700/30 rounded p-6 shadow-inner">
+            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3 text-purple-300">
+              <FiLinkedin className="w-6 h-6" /> Social Profiles
+            </h2>
+            
+            {socialMedia.map((sm, index) => (
+              <div key={index} className="group relative grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="relative">
+                  <select
+                    name="socialMedia_name"
+                    value={sm.socialMedia_name}
+                    onChange={(e) => handleSocialMediaChange(index, 'socialMedia_name', e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                    required
+                  >
+                    <option value="">Select Platform</option>
+                    <option value="Linkedin">LinkedIn</option>
+                    <option value="GitHub">GitHub</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="X">X (Twitter)</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="Website">Personal Website</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                </div>
+                
+                <div className="relative">
+                  <input
+                    type="url"
+                    placeholder="Profile URL"
+                    value={sm.link}
+                    onChange={(e) => handleSocialMediaChange(index, 'link', e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
+                    required
+                  />
+                  {sm.socialMedia_name === 'GitHub' ? (
+                    <FiGithub className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialMedia_name === 'Linkedin' ? (
+                    <FiLinkedin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialMedia_name === 'Facebook' ? (
+                    <FaFacebookF className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialMedia_name === 'X' ? (
+                    <FaTwitter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialMedia_name === 'Instagram' ? (
+                    <FaInstagram className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialMedia_name === 'Website' ? (
+                    <FiGlobe className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : (
+                    <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  )}
+                </div>
 
-      {socialMedia.length > 1 && (
-        <button
-          type="button"
-          onClick={() => removeField(setSocialMedia, index)}
-          className="absolute -right-4 -top-4 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-        >
-          <FiX className="w-4 h-4" />
-        </button>
-      )}
-    </div>
-  ))}
+                {socialMedia.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeField(setSocialMedia, index)}
+                    className="absolute -right-4 -top-4 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <FiX className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            ))}
 
-  <button
-    type="button"
-    onClick={() => addNewField(setSocialMedia, { socialMedia_name: '', link: '' })}
-    className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-  >
-    <FiPlus className="w-5 h-5" />
-    <span>Add Social Profile</span>
-  </button>
-</section>
+            <button
+              type="button"
+              onClick={() => addNewField(setSocialMedia, { socialMedia_name: '', link: '' })}
+              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+            >
+              <FiPlus className="w-5 h-5" />
+              <span>Add Social Profile</span>
+            </button>
+          </section>
 
           {/* Education Section */}
           <section className="bg-gray-700/30 rounded p-6 shadow-inner">
@@ -806,10 +817,11 @@ const AddPhdCandidate = () => {
               type="button"
               onClick={() => addNewField(setCareer, { 
                 position: '', 
-                organization_name: '',  // ✅ Use correct key
+                organization_name: '', 
                 joining_year: '', 
                 leaving_year: '' 
               })}
+              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
               <FiPlus className="w-5 h-5" />
               <span>Add Experience</span>
