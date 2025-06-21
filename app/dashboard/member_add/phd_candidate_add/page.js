@@ -192,13 +192,11 @@ const AddPhdCandidate = () => {
       console.log('API response:', result);
     
       if (response.ok) {
-        toast.success('PhD Candidate Added Successfully!', {
-          autoClose: 3000,  // Show for 3 seconds
-          onClose: () => {   // Redirect AFTER toast closes
-            router.push('/dashboard');
-          }
-        });
-      } else {
+        toast.success('PhD Candidate Added Successfully!');
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 2000);
+       } else {
           if (result.message?.includes('Email already exists')) {
             toast.error('This email is already registered. Please use a different one.');
           } else if (result.message?.includes('Phone Number already exists')) {
@@ -846,12 +844,7 @@ const AddPhdCandidate = () => {
           </div>
         </form>
       </div>
-      <ToastContainer 
-        position="bottom-right"
-        theme="dark"
-        closeOnClick={false}  // Prevent closing when clicking on toast
-        pauseOnHover
-      />
+      <ToastContainer position="bottom-right" theme="dark" />
     </div>
   );
 };
