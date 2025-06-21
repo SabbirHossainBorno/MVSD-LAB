@@ -202,8 +202,13 @@ const PhdCandidatesList = () => {
                   <div className="relative w-20 h-20 flex-shrink-0">
                     {phdCandidate.photo ? (
                       <Image
-                        src={`/Storage/Images/PhD_Candidate/${phdCandidate.photo.split('/').pop()}`}
-                        alt={phdCandidate.first_name}
+                        src={
+                          // Handle default photo path differently
+                          phdCandidate.photo.includes('default_DP.png') 
+                            ? phdCandidate.photo
+                            : `/Storage/Images/PhD_Candidate/${phdCandidate.photo.split('/').pop()}`
+                        }
+                        alt={`${phdCandidate.first_name} ${phdCandidate.last_name}`}
                         width={80}
                         height={80}
                         className="rounded border-2 border-blue-500/50 object-cover w-full h-full"
