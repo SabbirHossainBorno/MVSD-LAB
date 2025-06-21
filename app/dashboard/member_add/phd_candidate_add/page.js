@@ -34,7 +34,7 @@ const AddPhdCandidate = () => {
     short_bio: '',
     admission_date: '',
     completion_date: '',
-    photo: '',
+    photo: '/Storage/Images/default_DP.png', // Default photo path
     type: 'PhD Candidate',
     status: 'Active',
   });
@@ -192,11 +192,13 @@ const AddPhdCandidate = () => {
       console.log('API response:', result);
     
       if (response.ok) {
-        toast.success('PhD Candidate Added Successfully!');
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 2000);
-       } else {
+        toast.success('PhD Candidate Added Successfully!', {
+          autoClose: 3000,  // Show for 3 seconds
+          onClose: () => {   // Redirect AFTER toast closes
+            router.push('/dashboard');
+          }
+        });
+      } else {
           if (result.message?.includes('Email already exists')) {
             toast.error('This email is already registered. Please use a different one.');
           } else if (result.message?.includes('Phone Number already exists')) {
@@ -414,7 +416,6 @@ const AddPhdCandidate = () => {
                     value={formData.bloodGroup}
                     onChange={handleChange}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-                    required
                   >
                     <option value="">Select Blood Group</option>
                     <option value="A+">A+</option>
@@ -457,7 +458,6 @@ const AddPhdCandidate = () => {
                     value={formData.passport_number}
                     onChange={handleChange}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
-                    required
                   />
                   <FiGlobe className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
@@ -603,7 +603,6 @@ const AddPhdCandidate = () => {
                     value={sm.socialMedia_name}
                     onChange={(e) => handleSocialMediaChange(index, 'socialMedia_name', e.target.value)}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-                    required
                   >
                     <option value="">Select Platform</option>
                     <option value="Linkedin">LinkedIn</option>
@@ -625,7 +624,6 @@ const AddPhdCandidate = () => {
                     value={sm.link}
                     onChange={(e) => handleSocialMediaChange(index, 'link', e.target.value)}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
-                    required
                   />
                   {sm.socialMedia_name === 'GitHub' ? (
                     <FiGithub className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -848,7 +846,12 @@ const AddPhdCandidate = () => {
           </div>
         </form>
       </div>
-      <ToastContainer position="bottom-right" theme="dark" />
+      <ToastContainer 
+        position="bottom-right"
+        theme="dark"
+        closeOnClick={false}  // Prevent closing when clicking on toast
+        pauseOnHover
+      />
     </div>
   );
 };

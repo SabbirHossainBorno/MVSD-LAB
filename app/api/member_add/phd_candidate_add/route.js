@@ -53,7 +53,8 @@ export async function POST(req) {
     const bloodGroup = formData.get('bloodGroup');
     const country = formData.get('country');
     const idNumber = formData.get('idNumber');
-    const passport_number = formData.get('passport_number');
+    const rawPassport = formData.get('passport_number');
+    const passport_number = rawPassport && rawPassport.trim() !== '' ? rawPassport : null;
     const dob = formData.get('dob');
     const email = formData.get('email');
     const otherEmails = JSON.parse(formData.get('otherEmails') || []);
@@ -67,7 +68,7 @@ export async function POST(req) {
     const career = JSON.parse(formData.get('career') || '[]');
 
     // Validation
-    if (!first_name || !last_name || !phone || !gender || !bloodGroup || !country || !idNumber || !passport_number || !dob || !email || !password || !short_bio || !admission_date) {
+    if (!first_name || !last_name || !phone || !gender || !country || !idNumber || !dob || !email || !password || !short_bio || !admission_date) {
       return NextResponse.json({ message: 'All required fields must be filled.' }, { status: 400 });
     }
 
@@ -241,15 +242,15 @@ export async function POST(req) {
       }, { status: 400 });
     }
 
-    const passportNumberCheckResult = await query('SELECT id FROM member WHERE passport_number = $1', [passport_number]);
+    if (passport_number && passport_number.trim() !== '') {
+    const passportNumberCheckResult = await query(
+      'SELECT id FROM member WHERE passport_number = $1', 
+      [passport_number]
+    );
+    
     if (passportNumberCheckResult.rows.length > 0) {
       logger.warn('Validation Error: Passport number already exists', {
-        meta: {
-          eid,
-          sid: sessionId,
-          taskName: 'Add PhD Candidate',
-          details: `Attempt to add PhD Candidate failed - Passport number ${passport_number} already exists.`
-        }
+        // ... your existing log content ...
       });
 
       return NextResponse.json({ 
@@ -257,15 +258,28 @@ export async function POST(req) {
         message: 'Passport number already exists. Please try with a different passport number.' 
       }, { status: 400 });
     }
+  }
 
       
     const phdCandidateId = await generatePhdCandidateId();
 
     // Save profile photo
-    let photoUrl = null;
+    let photoUrl = '/Storage/Images/default_DP.png'; // Default photo path
     const photoFile = formData.get('photo');
-    if (photoFile) {
+
+    // Only process if a valid file is uploaded
+    if (photoFile && photoFile.size > 0) {
       try {
+        // Maintain your existing validation logic
+        if (photoFile.size > 5 * 1024 * 1024) {
+          return NextResponse.json({ message: 'File size exceeds 5 MB.' }, { status: 400 });
+        }
+        
+        if (!['image/jpeg', 'image/png'].includes(photoFile.type)) {
+          return NextResponse.json({ message: 'Invalid file type. Only JPG, JPEG, and PNG are allowed.' }, { status: 400 });
+        }
+        
+        // Save using your existing function
         photoUrl = await saveProfilePhoto(photoFile, phdCandidateId);
       } catch (error) {
         return NextResponse.json({ message: `Failed to save profile photo: ${error.message}` }, { status: 500 });
@@ -314,15 +328,19 @@ export async function POST(req) {
       ]);
 
       // Insert into phd_candidate_socialmedia_info
+      const insertSocialMediaQuery = `
+          INSERT INTO phd_candidate_socialmedia_info 
+          (id, phd_candidate_id, socialmedia_name, link)
+          VALUES (nextval('phd_candidate_socialmedia_info_id_seq'), $1, $2, $3)
+          ON CONFLICT (phd_candidate_id, socialmedia_name, link) DO NOTHING
+      `;
+
       for (const sm of socialMedia) {
-          const insertSocialMediaQuery = `
-            INSERT INTO phd_candidate_socialmedia_info 
-            (id, phd_candidate_id, socialmedia_name, link)
-            VALUES (nextval('phd_candidate_socialmedia_info_id_seq'), $1, $2, $3)
-            ON CONFLICT (phd_candidate_id, socialmedia_name, link) DO NOTHING
-          `;
-          await query(insertSocialMediaQuery, [phdCandidateId, sm.socialMedia_name, sm.link]);
-        }
+          // Only insert if both fields are filled
+          if (sm.socialMedia_name && sm.link && sm.socialMedia_name.trim() !== '' && sm.link.trim() !== '') {
+              await query(insertSocialMediaQuery, [phdCandidateId, sm.socialMedia_name, sm.link]);
+          }
+      }
 
       const insertMemberQuery = `
         INSERT INTO member (id, first_name, last_name, phone, gender, "blood_group", country, dob, passport_number, email, password, short_bio, joining_date, leaving_date, photo, status, type, "id_number")
@@ -358,7 +376,7 @@ export async function POST(req) {
       // Insert into phd_candidate_career_info
       const insertCareerQuery = `INSERT INTO phd_candidate_career_info (phd_candidate_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
       for (const car of career) {
-        await query(insertCareerQuery, [phdCandidateId, car.position, car.organization_name, car.joining_year, car.leaving_year]);
+        await query(insertCareerQuery, [phdCandidateId, car.position, car.organization_name, car.joining_year, car.leaving_year || null]);
       }
 
       const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
