@@ -12,6 +12,7 @@ import {
   FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
   FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo, FiRefreshCcw, FiMail, FiXCircle, FiCheckCircle,
 } from 'react-icons/fi';
+import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 const EditPhdCandidate = () => {
   const [formData, setFormData] = useState({
@@ -540,6 +541,7 @@ const handleChange = useCallback((e) => {
                     <option value="X">X (Twitter)</option>
                     <option value="Instagram">Instagram</option>
                     <option value="Website">Personal Website</option>
+                    <option value="Other">Other</option>
                   </select>
                   <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
@@ -553,8 +555,19 @@ const handleChange = useCallback((e) => {
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
                     required
                   />
+                  {/* CORRECTED: Changed socialMedia_name to socialmedia_name */}
                   {sm.socialmedia_name === 'GitHub' ? (
                     <FiGithub className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialmedia_name === 'Linkedin' ? (
+                    <FiLinkedin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialmedia_name === 'Facebook' ? (
+                    <FaFacebookF className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialmedia_name === 'X' ? (
+                    <FaTwitter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialmedia_name === 'Instagram' ? (
+                    <FaInstagram className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialmedia_name === 'Website' ? (
+                    <FiGlobe className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   ) : (
                     <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   )}
@@ -571,22 +584,22 @@ const handleChange = useCallback((e) => {
               </div>
             ))}
             <div className="mt-4 flex items-center space-x-4">
-            <button
-              type="button"
-              onClick={() => addNewField(setSocialMedia, { socialmedia_name: '', link: '' })}
-              className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-            >
-              <FiPlus className="w-5 h-5" />
-              <span>Add Social Profile</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSubmit('socialMedia')}
-              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
-            >
-              <FiRefreshCcw className="w-4 h-4" />
-              <span>Update Social Media</span>
-            </button>
+              <button
+                type="button"
+                onClick={() => addNewField(setSocialMedia, { socialmedia_name: '', link: '' })}
+                className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+              >
+                <FiPlus className="w-5 h-5" />
+                <span>Add Social Profile</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSubmit('socialMedia')}
+                className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
+              >
+                <FiRefreshCcw className="w-4 h-4" />
+                <span>Update Social Media</span>
+              </button>
             </div>
           </section>
           

@@ -377,6 +377,15 @@ export async function POST(req, { params }) {
           WHERE id = $2
         `;
         await query(updateMemberPassportQuery, [passport_number, id]);
+
+        logger.info('Passport Number Updated', {
+          meta: {
+            eid,
+            sid: sessionId,
+            taskName: 'Edit PhD Candidate Data',
+            details: `Passport number set for phd candidate ID: ${id}`
+          }
+        });
       }
 
       // NEW: Only update blood group if not already set
@@ -394,6 +403,14 @@ export async function POST(req, { params }) {
           WHERE id = $2
         `;
         await query(updateMemberBloodGroupQuery, [bloodGroup, id]);
+          logger.info('Blood Group Updated', {
+          meta: {
+            eid,
+            sid: sessionId,
+            taskName: 'Edit PhD Candidate Data',
+            details: `Blood group set to ${bloodGroup} for phd candidate ID: ${id}`
+          }
+        });
       }
     }
 
