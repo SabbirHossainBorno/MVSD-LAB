@@ -22,7 +22,12 @@ const EditPhdCandidate = () => {
     status: 'Active',
     leaving_date: '',
     other_emails: [],
+    // NEW: Add passport and blood group fields
+    passport_number: '',
+    bloodGroup: '',
   });
+  const [passportExists, setPassportExists] = useState(false);
+  const [bloodGroupExists, setBloodGroupExists] = useState(false);
   const [photo, setPhoto] = useState(null);
   const [socialMedia, setSocialMedia] = useState([]);
   const [education, setEducation] = useState([]);
@@ -44,7 +49,14 @@ const EditPhdCandidate = () => {
           status: data.status, // Directly use the status from the database
           other_emails: data.other_emails || [],
           leaving_date: data.completion_date || '', // Only leaving_date can be null
+          // NEW: Only set if not exists
+          passport_number: data.passport_exists ? '' : data.passport_number || '',
+          bloodGroup: data.blood_group_exists ? '' : data.blood_group || '',
         });
+        // NEW: Set existence flags
+        setPassportExists(data.passport_exists);
+        setBloodGroupExists(data.blood_group_exists);
+
         setPhoto(data.photo || null);
         setSocialMedia(data.socialMedia || []);
         setEducation(data.education || []);
@@ -355,6 +367,49 @@ const handleChange = useCallback((e) => {
                   <FiPlus className="mr-1" /> Add Email
                 </button>
               </div>
+              {/* NEW: Passport Number - Only show if doesn't exist */}
+              {!passportExists && (
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-300">Passport Number</label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="passport_number"
+                      value={formData.passport_number}
+                      onChange={handleChange}
+                      className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+                    />
+                    <FiGlobe className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  </div>
+                </div>
+              )}
+              
+              {/* NEW: Blood Group - Only show if doesn't exist */}
+              {!bloodGroupExists && (
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-300">Blood Group</label>
+                  <div className="relative">
+                    <select
+                      name="bloodGroup"
+                      value={formData.bloodGroup}
+                      onChange={handleChange}
+                      className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
+                    >
+                      <option value="">Select Blood Group</option>
+                      <option value="A+">A+</option>
+                      <option value="A-">A-</option>
+                      <option value="B+">B+</option>
+                      <option value="B-">B-</option>
+                      <option value="O+">O+</option>
+                      <option value="O-">O-</option>
+                      <option value="AB+">AB+</option>
+                      <option value="AB-">AB-</option>
+                    </select>
+                    <FiActivity className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                  </div>
+                </div>
+              )}
               {/* Short Bio */}
               <div className="space-y-2 col-span-full">
                 <label className="block text-sm font-medium text-gray-300">Short Bio</label>

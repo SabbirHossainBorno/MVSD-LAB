@@ -62,12 +62,18 @@ export async function GET(req, { params }) {
       }
     });
 
+    
+
+    // NEW: Add existence checks to the query
     const phdCandidateQuery = `SELECT 
         *,
-        TO_CHAR(completion_date, 'YYYY-MM-DD') as completion_date 
+        TO_CHAR(completion_date, 'YYYY-MM-DD') as completion_date,
+        (passport_number IS NOT NULL AND passport_number != '') as passport_exists,
+        (blood_group IS NOT NULL AND blood_group != '') as blood_group_exists
       FROM phd_candidate_basic_info 
       WHERE id = $1
     `;
+
     const phdCandidateResult = await query(phdCandidateQuery, [id]);
 
     if (phdCandidateResult.rows.length === 0) {
@@ -98,6 +104,9 @@ export async function GET(req, { params }) {
 
     const responseData = {
       ...phdCandidate,
+      passport_exists: phdCandidate.passport_exists,
+      blood_group_exists: phdCandidate.blood_group_exists,
+
       socialMedia: socialMediaResult.rows,
       education: educationResult.rows,
       career: careerResult.rows,
@@ -172,6 +181,10 @@ export async function POST(req, { params }) {
     const alumni_status = status === 'Graduate' ? 'Valid' : 'Invalid';
     
     const password = formData.get('password');
+
+    // NEW: Extract passport and blood group
+    const passport_number = formData.get('passport_number') || null;
+    const bloodGroup = formData.get('bloodGroup') || null;
 
     await query('BEGIN');
 
@@ -286,6 +299,16 @@ export async function POST(req, { params }) {
       }
     }
 
+    // NEW: Fetch current passport and blood group status
+    const currentPhd = await query(
+      `SELECT passport_number, blood_group 
+       FROM phd_candidate_basic_info 
+       WHERE id = $1 FOR UPDATE`,
+      [id]
+    );
+    const currentPassport = currentPhd.rows[0]?.passport_number;
+    const currentBloodGroup = currentPhd.rows[0]?.blood_group;
+
     // Update basic info
     if (first_name || last_name || phone || short_bio || status || leaving_date) {
       // Validate Graduate status
@@ -338,6 +361,40 @@ export async function POST(req, { params }) {
           details: `Basic info updated for phd candidate ID: ${id} from IP ${ipAddress} with User-Agent ${userAgent}, Emails: ${other_emails.join(', ')}`
         }
       });
+
+      // NEW: Only update passport if not already set
+      if (passport_number && !currentPassport) {
+        const updatePassportQuery = `
+          UPDATE phd_candidate_basic_info
+          SET passport_number = $1
+          WHERE id = $2
+        `;
+        await query(updatePassportQuery, [passport_number, id]);
+
+        const updateMemberPassportQuery = `
+          UPDATE member
+          SET passport_number = $1
+          WHERE id = $2
+        `;
+        await query(updateMemberPassportQuery, [passport_number, id]);
+      }
+
+      // NEW: Only update blood group if not already set
+      if (bloodGroup && !currentBloodGroup) {
+        const updateBloodGroupQuery = `
+          UPDATE phd_candidate_basic_info
+          SET blood_group = $1
+          WHERE id = $2
+        `;
+        await query(updateBloodGroupQuery, [bloodGroup, id]);
+
+        const updateMemberBloodGroupQuery = `
+          UPDATE member
+          SET blood_group = $1
+          WHERE id = $2
+        `;
+        await query(updateMemberBloodGroupQuery, [bloodGroup, id]);
+      }
     }
 
     // Update social media
