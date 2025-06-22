@@ -719,7 +719,11 @@ const handleChange = useCallback((e) => {
                     type="number"
                     placeholder="End Year"
                     value={job.leaving_year}
-                    onChange={(e) => handleArrayChange(setCareer, index, 'leaving_year', parseInt(e.target.value, 10))}
+                    onChange={(e) => {
+                      // Convert empty string to null
+                      const value = e.target.value === '' ? null : e.target.value;
+                      handleArrayChange(setCareer, index, 'leaving_year', value);
+                    }}
                     className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 outline-none py-2 pl-3 pr-10"
                     min="1900"
                     max={new Date().getFullYear()}

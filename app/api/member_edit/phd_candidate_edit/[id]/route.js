@@ -460,7 +460,22 @@ export async function POST(req, { params }) {
         VALUES ($1, $2, $3, $4, $5)
       `;
       for (const job of career) {
-        await query(insertCareerQuery, [id, job.position, job.organization_name, job.joining_year, job.leaving_year]);
+        // Convert empty strings to null for integer fields
+        const joining_year = job.joining_year || job.joining_year === 0 
+          ? parseInt(job.joining_year, 10) 
+          : null;
+        
+        const leaving_year = job.leaving_year || job.leaving_year === 0 
+          ? parseInt(job.leaving_year, 10) 
+          : null;
+
+        await query(insertCareerQuery, [
+          id, 
+          job.position, 
+          job.organization_name, 
+          joining_year, 
+          leaving_year  // Now properly null if empty
+        ]);
       }
       logger.info('Career INFO Updated', {
         meta: {
