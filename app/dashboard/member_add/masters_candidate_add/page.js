@@ -13,6 +13,7 @@ import {
   FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
   FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo,
 } from 'react-icons/fi';
+import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 
 const AddMastersCandidate = () => {
@@ -33,13 +34,18 @@ const AddMastersCandidate = () => {
     short_bio: '',
     admission_date: '',
     completion_date: '',
-    photo: '',
+    photo: '/Storage/Images/default_DP.png', // Default photo path
     type: "Master's Candidate",
     status: 'Active',
   });
   const [socialMedia, setSocialMedia] = useState([{ socialMedia_name: '', link: '' }]);
   const [education, setEducation] = useState([{ degree: '', institution: '', passing_year: '' }]);
-  const [career, setCareer] = useState([{ position: '', organization: '', joining_year: '', leaving_year: '' }]);
+  const [career, setCareer] = useState([{ 
+    position: '', 
+    organization_name: '',   // ✅ Correct key (matches your JSX)
+    joining_year: '', 
+    leaving_year: '' 
+  }]);
   const [otherEmails, setOtherEmails] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -64,6 +70,30 @@ const AddMastersCandidate = () => {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
   }, []);
+
+  const handleSocialMediaChange = useCallback((index, field, value) => {
+  const updatedSocialMedia = [...socialMedia];
+  updatedSocialMedia[index] = { 
+    ...updatedSocialMedia[index], 
+    [field]: value 
+  };
+  
+  setSocialMedia(updatedSocialMedia);
+  
+  // Check for duplicates after state update
+  const currentItem = updatedSocialMedia[index];
+  if (currentItem.socialMedia_name && currentItem.link) {
+    const duplicates = updatedSocialMedia.filter(
+      (sm, i) => i !== index && 
+      sm.socialMedia_name === currentItem.socialMedia_name &&
+      sm.link === currentItem.link
+    );
+    
+    if (duplicates.length > 0) {
+      toast.warning('Duplicate social media entry detected');
+    }
+  }
+}, [socialMedia]);
 
   const addOtherEmail = useCallback(() => {
     setOtherEmails(prev => [...prev, { id: Date.now(), value: '' }]);
@@ -166,20 +196,21 @@ const AddMastersCandidate = () => {
         setTimeout(() => {
           router.push('/dashboard');
         }, 2000);
-      } else {
-        // ✅ Better error handling for duplicate email
-        if (result.message?.includes('Email already exists')) {
-          toast.error('This email is already registered. Please use a different one.');
-        } else if (result.message?.includes('Phone Number already exists')) {
-          toast.error('This phone number is already registered.');
-        } else if (result.message?.includes('ID number already exists')) {
-          toast.error('This ID number is already registered.');
-        } else if (result.message?.includes('Passport number already exists')) {
-          toast.error('This passport number is already registered.');
-        } else {
-          toast.error(result.message || "An error occurred while adding the Master's Candidate.");
+       } else {
+          if (result.message?.includes('Email already exists')) {
+            toast.error('This email is already registered. Please use a different one.');
+          } else if (result.message?.includes('Phone Number already exists')) {
+            toast.error('This phone number is already registered.');
+          } else if (result.message?.includes('ID number already exists')) {
+            toast.error('This ID number is already registered.');
+          } else if (result.message?.includes('Passport number already exists')) {
+            toast.error('This passport number is already registered.');
+          } else if (result.message?.includes('Graduation date cannot be before enrollment date')) {
+            toast.error('Graduation date cannot be before enrollment date');
+          } else {
+            toast.error(result.message || "An error occurred while adding the Master's Candidate.");
+          }
         }
-      }
     } catch (error) {
       toast.error(error.message || "Failed To Add Master's Candidate");
     } finally {
@@ -383,7 +414,6 @@ const AddMastersCandidate = () => {
                     value={formData.bloodGroup}
                     onChange={handleChange}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-                    required
                   >
                     <option value="">Select Blood Group</option>
                     <option value="A+">A+</option>
@@ -426,7 +456,6 @@ const AddMastersCandidate = () => {
                     value={formData.passport_number}
                     onChange={handleChange}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
-                    required
                   />
                   <FiGlobe className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
@@ -570,9 +599,8 @@ const AddMastersCandidate = () => {
                   <select
                     name="socialMedia_name"
                     value={sm.socialMedia_name}
-                    onChange={(e) => handleArrayChange(setSocialMedia, index, 'socialMedia_name', e.target.value)}
+                    onChange={(e) => handleSocialMediaChange(index, 'socialMedia_name', e.target.value)}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-                    required
                   >
                     <option value="">Select Platform</option>
                     <option value="Linkedin">LinkedIn</option>
@@ -581,6 +609,7 @@ const AddMastersCandidate = () => {
                     <option value="X">X (Twitter)</option>
                     <option value="Instagram">Instagram</option>
                     <option value="Website">Personal Website</option>
+                    <option value="Other">Other</option>
                   </select>
                   <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
@@ -591,12 +620,21 @@ const AddMastersCandidate = () => {
                     type="url"
                     placeholder="Profile URL"
                     value={sm.link}
-                    onChange={(e) => handleArrayChange(setSocialMedia, index, 'link', e.target.value)}
+                    onChange={(e) => handleSocialMediaChange(index, 'link', e.target.value)}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
-                    required
                   />
                   {sm.socialMedia_name === 'GitHub' ? (
                     <FiGithub className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialMedia_name === 'Linkedin' ? (
+                    <FiLinkedin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialMedia_name === 'Facebook' ? (
+                    <FaFacebookF className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialMedia_name === 'X' ? (
+                    <FaTwitter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialMedia_name === 'Instagram' ? (
+                    <FaInstagram className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialMedia_name === 'Website' ? (
+                    <FiGlobe className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   ) : (
                     <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   )}
@@ -774,7 +812,12 @@ const AddMastersCandidate = () => {
 
             <button
               type="button"
-              onClick={() => addNewField(setCareer, { position: '', organization: '', joining_year: '', leaving_year: '' })}
+              onClick={() => addNewField(setCareer, { 
+                position: '', 
+                organization_name: '', 
+                joining_year: '', 
+                leaving_year: '' 
+              })}
               className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
               <FiPlus className="w-5 h-5" />

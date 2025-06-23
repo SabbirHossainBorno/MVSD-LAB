@@ -8,7 +8,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Image from 'next/image';
 import LoadingSpinner from '../components/LoadingSpinner';
-import withAuth from './withAuth';
 
 function DashboardNavbar({ toggleDashboardSidebar }) {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -234,11 +233,12 @@ const toggleTimezone = () => {
 
 
 
-      <div className="flex items-center justify-center flex-1 text-transparent text-3xl lg:text-4xl font-bold tracking-tight md:text-4xl">
+      <div className="flex items-center justify-center flex-1 text-transparent text-3xl lg:text-4xl font-bold tracking-tight md:text-4xl md:ml-16">
         <span className="uppercase bg-clip-text bg-gradient-to-r from-pink-500 via-purple-600 to-blue-500 animate-textGlow">
           Dashboard
         </span>
       </div>
+
       
 
       {/* Current Time Area */}
@@ -426,4 +426,4 @@ const toggleTimezone = () => {
     </>
   );
 }
-export default withAuth(DashboardNavbar, 'admin'); // Specify required role here
+export default DashboardNavbar;
