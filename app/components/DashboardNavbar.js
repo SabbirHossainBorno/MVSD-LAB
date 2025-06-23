@@ -242,27 +242,32 @@ const toggleTimezone = () => {
       
 
       {/* Current Time Area */}
-      <div className="relative flex items-center space-x-2 md:space-x-4">
-        <div className="flex flex-col items-center bg-gray-900 p-2 rounded shadow border border-gray-700 min-w-[170px]">
-        {/* Time + Timezone */}
-        <div className="flex items-center space-x-2">
-          <span className="font-mono text-lg text-white tracking-wide">
-            {currentTime}
-          </span>
-          <button
-            onClick={toggleTimezone}
-            className="text-xs font-semibold bg-blue-600 text-white px-2 py-0.5 rounded hover:bg-blue-700 transition-all"
-            title="Click to switch timezone"
-          >
-            {getAbbreviation()}
-          </button>
-        </div>
+      <div className="relative flex items-center space-x-4 md:space-x-6">
 
-        {/* Date */}
-        <div className="text-xs text-gray-400 tracking-wide">
-          {currentDate}
+
+        <div className="relative hidden md:flex items-center justify-center h-12">
+          {/* Animated Gradient Background */}
+          <div className="flex inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-gradient rounded blur opacity-40"></div>
+
+          {/* Main Content */}
+          <div className="relative z-10 flex items-center space-x-2 bg-gray-900 p-2 rounded shadow border border-gray-700">
+            <div className="text-center leading-tight">
+              <span className="font-mono text-lg text-white tracking-wide">
+                {currentTime}
+              </span>
+              <div className="text-[10px] text-gray-400">{currentDate}</div>
+            </div>
+            <button
+              onClick={toggleTimezone}
+              className="text-xs font-semibold bg-blue-600 text-white px-2 py-0.5 rounded hover:bg-blue-700 transition-all"
+              title="Click to switch timezone"
+            >
+              {getAbbreviation()}
+            </button>
+            {/* Animated Pulse Dot */}
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
+          </div>
         </div>
-      </div>
 
 
 
