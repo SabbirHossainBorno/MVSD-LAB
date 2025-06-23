@@ -76,7 +76,7 @@ const handleChange = useCallback((e) => {
   const { name, value, files } = e.target;
   
   if (name === 'photo' && files.length > 0) {
-    // Existing photo handling
+    setPhoto(files[0]);
   } else {
     setFormData(prev => {
       const newState = { ...prev };
@@ -167,6 +167,13 @@ const handleChange = useCallback((e) => {
         data.append('status', formData.status);
         data.append('leaving_date', formData.leaving_date);
         data.append('other_emails', JSON.stringify(formData.other_emails));
+        // ADD THESE LINES: Include passport and blood group in basicInfo submission
+        if (!passportExists) {
+          data.append('passport_number', formData.passport_number);
+        }
+        if (!bloodGroupExists) {
+          data.append('bloodGroup', formData.bloodGroup);
+        }
         break;
       case 'photo':
         data.append('photo', photo);

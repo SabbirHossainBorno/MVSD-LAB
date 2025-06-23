@@ -19,6 +19,15 @@ function DashboardNavbar({ toggleDashboardSidebar }) {
   const [profile, setProfile] = useState(null); // Add profile state
   const notificationRef = useRef(null);
 
+  const getESTAbbreviation = () => {
+    const date = new Date();
+    const timeZone = Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      timeZoneName: 'short',
+    }).formatToParts(date).find(part => part.type === 'timeZoneName');
+    return timeZone?.value || 'EST';
+  };
+
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -64,14 +73,22 @@ function DashboardNavbar({ toggleDashboardSidebar }) {
   // Update current time
   useEffect(() => {
     const updateTime = () => {
-      setCurrentTime(new Date().toLocaleTimeString());
+      const now = new Date();
+      const estTime = now.toLocaleTimeString('en-US', {
+        timeZone: 'America/New_York',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      });
+
+      setCurrentTime(estTime);
     };
 
     updateTime();
     const interval = setInterval(updateTime, 1000);
-
     return () => clearInterval(interval);
   }, []);
+
 
 
   // Handle click outside
@@ -214,6 +231,10 @@ function DashboardNavbar({ toggleDashboardSidebar }) {
                 {currentTime}
               </span>
             </div>
+            {/* EST/EDT Badge */}
+            <span className="text-xs font-semibold bg-blue-600 text-white px-2 py-0.5 rounded">
+              {getESTAbbreviation()}
+            </span>
             {/* Animated Pulse Dot */}
             <div className="w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
           </div>
@@ -265,7 +286,7 @@ function DashboardNavbar({ toggleDashboardSidebar }) {
                 {notifications.length > 0 ? (
                   notifications.map((notification) => (
                     <li
-                      key={`${notification.id}-${notification.created_at}`}
+                      key={notification.serial}
                       className={`p-4 hover:bg-gray-700 cursor-pointer flex justify-between items-center transition-all ${
                         notification.status === 'Unread' ? 'bg-gray-800' : 'bg-gray-900'
                       }`}

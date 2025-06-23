@@ -186,6 +186,21 @@ export async function POST(req, { params }) {
     const passport_number = formData.get('passport_number') || null;
     const bloodGroup = formData.get('bloodGroup') || null;
 
+
+    // NEW: Log the received form data for debugging
+    console.log(`Received form data for PhD Candidate ${id}:`);
+    console.log({
+      first_name: formData.get('first_name'),
+      last_name: formData.get('last_name'),
+      phone: formData.get('phone'),
+      short_bio: formData.get('short_bio'),
+      status: formData.get('status'),
+      leaving_date: formData.get('leaving_date'),
+      passport_number: formData.get('passport_number'),
+      bloodGroup: formData.get('bloodGroup'),
+      other_emails: JSON.parse(formData.get('other_emails') || '[]'),
+    });
+
     await query('BEGIN');
 
     // Update profile photo
@@ -309,6 +324,9 @@ export async function POST(req, { params }) {
     const currentPassport = currentPhd.rows[0]?.passport_number;
     const currentBloodGroup = currentPhd.rows[0]?.blood_group;
 
+    console.log(`Current passport for PhD ${id}:`, currentPassport);
+    console.log(`Current blood group for PhD ${id}:`, currentBloodGroup);
+
     // Update basic info
     if (first_name || last_name || phone || short_bio || status || leaving_date) {
       // Validate Graduate status
@@ -364,6 +382,7 @@ export async function POST(req, { params }) {
 
       // NEW: Only update passport if not already set
       if (passport_number && !currentPassport) {
+        console.log(`Updating passport for PhD ${id} to:`, passport_number);
         const updatePassportQuery = `
           UPDATE phd_candidate_basic_info
           SET passport_number = $1
@@ -378,6 +397,13 @@ export async function POST(req, { params }) {
         `;
         await query(updateMemberPassportQuery, [passport_number, id]);
 
+        // NEW: Verify update
+      const verifyPassport = await query(
+        'SELECT passport_number FROM phd_candidate_basic_info WHERE id = $1',
+        [id]
+      );
+      console.log(`Passport after update:`, verifyPassport.rows[0]?.passport_number);
+
         logger.info('Passport Number Updated', {
           meta: {
             eid,
@@ -386,10 +412,16 @@ export async function POST(req, { params }) {
             details: `Passport number set for phd candidate ID: ${id}`
           }
         });
+      }else {
+        console.log(`Passport not updated for PhD ${id}. Reason:`, 
+          currentPassport ? 'Already exists' : 'No value provided'
+        );
       }
 
-      // NEW: Only update blood group if not already set
+      // NEW: Only update blood group if not already set - with logging
       if (bloodGroup && !currentBloodGroup) {
+        console.log(`Updating blood group for PhD ${id} to:`, bloodGroup);
+        
         const updateBloodGroupQuery = `
           UPDATE phd_candidate_basic_info
           SET blood_group = $1
@@ -403,14 +435,19 @@ export async function POST(req, { params }) {
           WHERE id = $2
         `;
         await query(updateMemberBloodGroupQuery, [bloodGroup, id]);
-          logger.info('Blood Group Updated', {
-          meta: {
-            eid,
-            sid: sessionId,
-            taskName: 'Edit PhD Candidate Data',
-            details: `Blood group set to ${bloodGroup} for phd candidate ID: ${id}`
-          }
-        });
+
+        // NEW: Verify update
+        const verifyBlood = await query(
+          'SELECT blood_group FROM phd_candidate_basic_info WHERE id = $1',
+          [id]
+        );
+        console.log(`Blood group after update:`, verifyBlood.rows[0]?.blood_group);
+
+        logger.info('Blood Group Updated', { /* ... */ });
+      } else {
+        console.log(`Blood group not updated for PhD ${id}. Reason:`, 
+          currentBloodGroup ? 'Already exists' : 'No value provided'
+        );
       }
     }
 
