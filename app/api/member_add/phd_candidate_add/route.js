@@ -6,6 +6,7 @@ import sendTelegramAlert from '../../../../lib/telegramAlert';
 import path from 'path';
 import fs from 'fs';
 import bcrypt from 'bcryptjs';
+import nodemailer from 'nodemailer';
 
 const formatAlertMessage = (title, details) => {
   return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\n${details}`;
@@ -391,14 +392,12 @@ export async function POST(req) {
       const directorNotificationQuery = `
         INSERT INTO director_notification_details (
           mvsdlab_id,
-          phd_candidate_id,
           title
-        ) VALUES ($1, $2, $3)
+        ) VALUES ($1, $2)
       `;
 
       await query(directorNotificationQuery, [
-        adminEmail, // Who added the candidate
-        phdCandidateId, // New candidate ID
+        phdCandidateId,  // The candidate's ID
         `New PhD Candidate Added: ${first_name} ${last_name} (${phdCandidateId}) By ${adminEmail}`
       ]);
 

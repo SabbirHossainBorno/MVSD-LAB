@@ -13,6 +13,7 @@ import {
   FiAward, FiLink, FiX, FiPlus, FiTrash2, FiGlobe, FiLinkedin, FiGithub,
   FiChevronDown, FiLoader, FiUpload, FiAlertCircle, FiActivity, FiInfo,
 } from 'react-icons/fi';
+import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 
 const AddPostDocCandidate = () => {
@@ -33,13 +34,18 @@ const AddPostDocCandidate = () => {
     short_bio: '',
     admission_date: '',
     completion_date: '',
-    photo: '',
+    photo: '/Storage/Images/default_DP.png', // Default photo path
     type: 'Post Doc Candidate',
     status: 'Active',
   });
   const [socialMedia, setSocialMedia] = useState([{ socialMedia_name: '', link: '' }]);
   const [education, setEducation] = useState([{ degree: '', institution: '', passing_year: '' }]);
-  const [career, setCareer] = useState([{ position: '', organization: '', joining_year: '', leaving_year: '' }]);
+  const [career, setCareer] = useState([{ 
+    position: '', 
+    organization_name: '',   // ✅ Correct key (matches your JSX)
+    joining_year: '', 
+    leaving_year: ''
+  }]);
   const [otherEmails, setOtherEmails] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -64,6 +70,30 @@ const AddPostDocCandidate = () => {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
   }, []);
+
+  const handleSocialMediaChange = useCallback((index, field, value) => {
+  const updatedSocialMedia = [...socialMedia];
+  updatedSocialMedia[index] = { 
+    ...updatedSocialMedia[index], 
+    [field]: value 
+  };
+  
+  setSocialMedia(updatedSocialMedia);
+  
+  // Check for duplicates after state update
+  const currentItem = updatedSocialMedia[index];
+  if (currentItem.socialMedia_name && currentItem.link) {
+    const duplicates = updatedSocialMedia.filter(
+      (sm, i) => i !== index && 
+      sm.socialMedia_name === currentItem.socialMedia_name &&
+      sm.link === currentItem.link
+    );
+    
+    if (duplicates.length > 0) {
+      toast.warning('Duplicate social media entry detected');
+    }
+  }
+}, [socialMedia]);
 
   const addOtherEmail = useCallback(() => {
     setOtherEmails(prev => [...prev, { id: Date.now(), value: '' }]);
@@ -167,19 +197,20 @@ const AddPostDocCandidate = () => {
           router.push('/dashboard');
         }, 2000);
       } else {
-        // ✅ Better error handling for duplicate email
-        if (result.message?.includes('Email already exists')) {
-          toast.error('This email is already registered. Please use a different one.');
-        } else if (result.message?.includes('Phone Number already exists')) {
-          toast.error('This phone number is already registered.');
-        } else if (result.message?.includes('ID number already exists')) {
-          toast.error('This ID number is already registered.');
-        } else if (result.message?.includes('Passport number already exists')) {
-          toast.error('This passport number is already registered.');
-        } else {
-          toast.error(result.message || 'An error occurred while adding the Post Doc Candidate.');
+          if (result.message?.includes('Email already exists')) {
+            toast.error('This email is already registered. Please use a different one.');
+          } else if (result.message?.includes('Phone Number already exists')) {
+            toast.error('This phone number is already registered.');
+          } else if (result.message?.includes('ID number already exists')) {
+            toast.error('This ID number is already registered.');
+          } else if (result.message?.includes('Passport number already exists')) {
+            toast.error('This passport number is already registered.');
+          } else if (result.message?.includes('Graduation date cannot be before enrollment date')) {
+            toast.error('Graduation date cannot be before enrollment date');
+          } else {
+            toast.error(result.message || 'An error occurred while adding the PhD Candidate.');
+          }
         }
-      }
     } catch (error) {
       toast.error(error.message || 'Failed To Add Post Doc Candidate');
     } finally {
