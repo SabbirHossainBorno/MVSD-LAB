@@ -414,7 +414,6 @@ const AddPostDocCandidate = () => {
                     value={formData.bloodGroup}
                     onChange={handleChange}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-                    required
                   >
                     <option value="">Select Blood Group</option>
                     <option value="A+">A+</option>
@@ -457,7 +456,6 @@ const AddPostDocCandidate = () => {
                     value={formData.passport_number}
                     onChange={handleChange}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
-                    required
                   />
                   <FiGlobe className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
@@ -601,9 +599,8 @@ const AddPostDocCandidate = () => {
                   <select
                     name="socialMedia_name"
                     value={sm.socialMedia_name}
-                    onChange={(e) => handleArrayChange(setSocialMedia, index, 'socialMedia_name', e.target.value)}
+                    onChange={(e) => handleSocialMediaChange(index, 'socialMedia_name', e.target.value)}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 appearance-none outline-none"
-                    required
                   >
                     <option value="">Select Platform</option>
                     <option value="Linkedin">LinkedIn</option>
@@ -623,12 +620,21 @@ const AddPostDocCandidate = () => {
                     type="url"
                     placeholder="Profile URL"
                     value={sm.link}
-                    onChange={(e) => handleArrayChange(setSocialMedia, index, 'link', e.target.value)}
+                    onChange={(e) => handleSocialMediaChange(index, 'link', e.target.value)}
                     className="w-full pl-10 pr-4 py-3 bg-gray-800 rounded border border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 outline-none"
-                    required
                   />
                   {sm.socialMedia_name === 'GitHub' ? (
                     <FiGithub className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialMedia_name === 'Linkedin' ? (
+                    <FiLinkedin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialMedia_name === 'Facebook' ? (
+                    <FaFacebookF className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialMedia_name === 'X' ? (
+                    <FaTwitter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialMedia_name === 'Instagram' ? (
+                    <FaInstagram className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  ) : sm.socialMedia_name === 'Website' ? (
+                    <FiGlobe className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   ) : (
                     <FiLink className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                   )}
@@ -806,7 +812,12 @@ const AddPostDocCandidate = () => {
 
             <button
               type="button"
-              onClick={() => addNewField(setCareer, { position: '', organization: '', joining_year: '', leaving_year: '' })}
+              onClick={() => addNewField(setCareer, { 
+                position: '', 
+                organization_name: '', 
+                joining_year: '', 
+                leaving_year: '' 
+              })}
               className="flex items-center justify-center w-full md:w-auto space-x-2 bg-blue-600/90 hover:bg-blue-700 text-white px-4 py-2 rounded transition-all"
             >
               <FiPlus className="w-5 h-5" />

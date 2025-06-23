@@ -377,7 +377,7 @@ export async function POST(req) {
       // Insert into masters_candidate_career_info
       const insertCareerQuery = `INSERT INTO masters_candidate_career_info (masters_candidate_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
       for (const car of career) {
-        await query(insertCareerQuery, [mastersCandidateId, car.position, car.organization_name, car.joining_year, car.leaving_year]);
+        await query(insertCareerQuery, [mastersCandidateId, car.position, car.organization_name, car.joining_year, car.leaving_year || null]);
       }
 
       const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;

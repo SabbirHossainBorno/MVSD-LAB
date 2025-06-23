@@ -6,6 +6,7 @@ import sendTelegramAlert from '../../../../lib/telegramAlert';
 import path from 'path';
 import fs from 'fs';
 import bcrypt from 'bcryptjs';
+import nodemailer from 'nodemailer';
 
 const formatAlertMessage = (title, details) => {
   return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\n${details}`;
@@ -53,7 +54,8 @@ export async function POST(req) {
     const bloodGroup = formData.get('bloodGroup');
     const country = formData.get('country');
     const idNumber = formData.get('idNumber');
-    const passport_number = formData.get('passport_number');
+    const rawPassport = formData.get('passport_number');
+    const passport_number = rawPassport && rawPassport.trim() !== '' ? rawPassport : null;
     const dob = formData.get('dob');
     const email = formData.get('email');
     const otherEmails = JSON.parse(formData.get('otherEmails') || []);
@@ -67,7 +69,7 @@ export async function POST(req) {
     const career = JSON.parse(formData.get('career') || '[]');
 
     // Validation
-    if (!first_name || !last_name || !phone || !gender || !bloodGroup || !country || !idNumber || !passport_number || !dob || !email || !password || !short_bio || !admission_date) {
+    if (!first_name || !last_name || !phone || !gender || !country || !idNumber || !dob || !email || !password || !short_bio || !admission_date) {
       return NextResponse.json({ message: 'All required fields must be filled.' }, { status: 400 });
     }
 
@@ -87,6 +89,13 @@ export async function POST(req) {
     if (otherEmails.some(e => !emailRegex.test(e))) {
       console.error('Validation failed: Invalid secondary email(s)');
       return NextResponse.json({ message: 'One or more secondary emails have invalid format' }, { status: 400 });
+    }
+
+    if (completion_date && new Date(completion_date) < new Date(admission_date)) {
+      return NextResponse.json({ 
+        success: false,
+        message: 'Graduation date cannot be before enrollment date' 
+      }, { status: 400 });
     }
 
     // Hash password before storing
@@ -232,31 +241,48 @@ export async function POST(req) {
       }, { status: 400 });
     }
 
-    const passportNumberCheckResult = await query('SELECT id FROM member WHERE passport_number = $1', [passport_number]);
-    if (passportNumberCheckResult.rows.length > 0) {
-      logger.warn('Validation Error: Passport number already exists', {
-        meta: {
-          eid,
-          sid: sessionId,
-          taskName: 'Add Post Doc Candidate',
-          details: `Attempt to add Post Doc Candidate failed - Passport number ${passport_number} already exists.`
-        }
-      });
+    if (passport_number && passport_number.trim() !== '') {
+      const passportNumberCheckResult = await query(
+        'SELECT id FROM member WHERE passport_number = $1', 
+        [passport_number]
+      );
 
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Passport number already exists. Please try with a different passport number.' 
-      }, { status: 400 });
+      if (passportNumberCheckResult.rows.length > 0) {
+        logger.warn('Validation Error: Passport number already exists', {
+          meta: {
+            eid,
+            sid: sessionId,
+            taskName: "Add Post Doc Candidate",
+            details: `Attempt to add Post Doc Candidate failed - Passport number ${passport_number} already exists.`
+          }
+        });
+
+        return NextResponse.json({ 
+          success: false, 
+          message: 'Passport number already exists. Please try with a different passport number.' 
+        }, { status: 400 });
+      }
     }
-
       
     const postdocCandidateId = await generatePostDocCandidateId();
 
     // Save profile photo
-    let photoUrl = null;
+    let photoUrl = '/Storage/Images/default_DP.png'; // Default photo path
     const photoFile = formData.get('photo');
-    if (photoFile) {
+
+    // Only process if a valid file is uploaded
+    if (photoFile && photoFile.size > 0) {
       try {
+        // Maintain your existing validation logic
+        if (photoFile.size > 5 * 1024 * 1024) {
+          return NextResponse.json({ message: 'File size exceeds 5 MB.' }, { status: 400 });
+        }
+        
+        if (!['image/jpeg', 'image/png'].includes(photoFile.type)) {
+          return NextResponse.json({ message: 'Invalid file type. Only JPG, JPEG, and PNG are allowed.' }, { status: 400 });
+        }
+        
+        // Save using your existing function
         photoUrl = await saveProfilePhoto(photoFile, postdocCandidateId);
       } catch (error) {
         return NextResponse.json({ message: `Failed to save profile photo: ${error.message}` }, { status: 500 });
@@ -267,8 +293,6 @@ export async function POST(req) {
     const finalOtherEmails = otherEmails.length > 0 ? otherEmails : null;
     console.log('Final other emails:', finalOtherEmails);
 
-
-    
     // Database transaction
     console.log('Starting database transaction...');
 
@@ -305,9 +329,18 @@ export async function POST(req) {
       ]);
 
       // Insert into postdoc_candidate_socialmedia_info
-      const insertSocialMediaQuery = `INSERT INTO postdoc_candidate_socialmedia_info (postdoc_candidate_id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
+      const insertSocialMediaQuery = `
+          INSERT INTO postdoc_candidate_socialmedia_info 
+          (id, postdoc_candidate_id, socialmedia_name, link)
+          VALUES (nextval('postdoc_candidate_socialmedia_info_id_seq'), $1, $2, $3)
+          ON CONFLICT (postdoc_candidate_id, socialmedia_name, link) DO NOTHING
+      `;
+
       for (const sm of socialMedia) {
-        await query(insertSocialMediaQuery, [postdocCandidateId, sm.socialMedia_name, sm.link]);
+          // Only insert if both fields are filled
+          if (sm.socialMedia_name && sm.link && sm.socialMedia_name.trim() !== '' && sm.link.trim() !== '') {
+              await query(insertSocialMediaQuery, [postdocCandidateId, sm.socialMedia_name, sm.link]);
+          }
       }
 
       const insertMemberQuery = `
@@ -344,7 +377,7 @@ export async function POST(req) {
       // Insert into postdoc_candidate_career_info
       const insertCareerQuery = `INSERT INTO postdoc_candidate_career_info (postdoc_candidate_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
       for (const car of career) {
-        await query(insertCareerQuery, [postdocCandidateId, car.position, car.organization_name, car.joining_year, car.leaving_year]);
+        await query(insertCareerQuery, [postdocCandidateId, car.position, car.organization_name, car.joining_year, car.leaving_year || null]);
       }
 
       const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
@@ -353,10 +386,161 @@ export async function POST(req) {
       const notificationStatus = 'Unread';
       await query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
 
+      
+      // Insert into director_notification_details
+      console.log('[DIRECTOR NOTIFICATION] Creating notification entry');
+      const directorNotificationQuery = `
+        INSERT INTO director_notification_details (
+          mvsdlab_id,
+          title
+        ) VALUES ($1, $2)
+      `;
+
+      await query(directorNotificationQuery, [
+        postdocCandidateId,  // The candidate's ID
+        `New Post Doc Candidate Added: ${first_name} ${last_name} (${postdocCandidateId}) By ${adminEmail}`
+      ]);
+
       await query('COMMIT');
 
+      // Email notification section
+      try {
+        console.log('[Email Notification] Preparing to send notifications');
+        
+        // 1. Get director's email
+        const directorResult = await query(
+          `SELECT email FROM director_basic_info`
+        );
+        const directorEmails = directorResult.rows.map(row => row.email);
+        
+        // 2. New candidate's email
+        const candidateEmail = email;
+
+        if (directorEmails.length === 0 && !candidateEmail) {
+          console.log('[Email Notification] No emails to send');
+        } else {
+          // Create email transporter
+          const transporter = nodemailer.createTransport({
+            host: process.env.EMAIL_HOST,
+            port: parseInt(process.env.EMAIL_PORT),
+            secure: true,
+            auth: {
+              user: process.env.EMAIL_USER,
+              pass: process.env.EMAIL_PASS,
+            },
+          });
+
+          const emailPromises = [];
+
+          // Director emails
+          if (directorEmails.length > 0) {
+            const directorEmailHTML = `
+              <p>Dear Director,</p>
+              
+              <p>A <strong>new Post Doc Candidate</strong> has been onboarded by <strong>${adminEmail}</strong>.</p>
+              
+              <p>Candidate Details:</p>
+              <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">Candidate ID</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${postdocCandidateId}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Name</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${first_name} ${last_name}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Email</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${email}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Admission Date</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${new Date(admission_date).toLocaleDateString()}</td>
+                </tr>
+              </table>
+              
+              <p>You can view the candidate's profile in the <a href="https://www.mvsdlab.com/login">MVSD LAB Director Portal</a>.</p>
+              
+              <p>Sincerely,<br>
+              <strong>MVSD LAB</strong></p>
+            `;
+
+            directorEmails.forEach(directorEmail => {
+              emailPromises.push(
+                transporter.sendMail({
+                  from: process.env.EMAIL_FROM,
+                  to: directorEmail,
+                  subject: `New Post Doc Candidate Onboarded - ${postdocCandidateId}`,
+                  html: directorEmailHTML
+                })
+              );
+            });
+          }
+
+          // New candidate welcome email
+          if (candidateEmail) {
+            const candidateEmailHTML = `
+              <p>Dear ${first_name} ${last_name},</p>
+              
+              <p>Welcome to MVSD LAB! Your Post Doc candidate account has been successfully created.</p>
+              
+              <p>Your account details:</p>
+              <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">Candidate ID</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${postdocCandidateId}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Email</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${email}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Password</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${password} (temporary)</td>
+                </tr>
+              </table>
+              
+              <p>Please log in to the <a href="https://www.mvsdlab.com/login">MVSD LAB Portal</a> and change your password immediately.</p>
+              
+              <p>Best Regards,<br>
+              <strong>MVSD LAB</strong></p>
+              
+              <p style="margin-top: 20px; font-size: 12px; color: #666;">
+                <strong>Security Note:</strong> This email contains sensitive information. Do not share your credentials.
+              </p>
+            `;
+            
+            emailPromises.push(
+              transporter.sendMail({
+                from: process.env.EMAIL_FROM,
+                to: candidateEmail,
+                subject: `Welcome to MVSD LAB - ${postdocCandidateId}`,
+                html: candidateEmailHTML
+              })
+            );
+          }
+
+          // Send all emails
+          await Promise.all(emailPromises);
+          console.log('[Email Notification] Emails sent successfully');
+        }
+      } catch (emailError) {
+        console.error('[Email Notification Failed]', emailError.message);
+        logger.error('Email sending failed', {
+          meta: {
+            postdocCandidateId,
+            error: emailError.message,
+            taskName: 'Add Post Doc Candidate Email'
+          }
+        });
+      }
+
       // Send Telegram alert for success
-      const successMessage = formatAlertMessage('A New Post Doc Candidate Added Successfully', `ID : ${postdocCandidateId}\nAdded By : ${adminEmail}\nDate : ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`);
+      const successMessage = formatAlertMessage(
+        'A New Post Doc Candidate Added Successfully', 
+        `ID : ${postdocCandidateId}\nAdded By : ${adminEmail}\nDate : ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`
+      );
+
       await sendTelegramAlert(successMessage);
 
       // Log success
@@ -369,7 +553,10 @@ export async function POST(req) {
         }
       });
 
-      return NextResponse.json({ message: 'Post Doc Candidate information added successfully' }, { status: 200 });
+      return NextResponse.json(
+        { message: 'Post Doc Candidate information added successfully' }, 
+        { status: 200 }
+      );
 
     } catch (error) {
       await query('ROLLBACK');
@@ -390,7 +577,11 @@ export async function POST(req) {
     }
 
   } catch (error) {
-    const errorMessage = formatAlertMessage('Error Handling Post Doc Candidate Request', `IP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
+    const errorMessage = formatAlertMessage(
+      'Error Handling Post Doc Candidate Request', 
+      `IP : ${ipAddress}\nError : ${error.message}\nStatus : 500`
+    );
+
     await sendTelegramAlert(errorMessage);
 
     logger.error('Error Processing Form Data', {

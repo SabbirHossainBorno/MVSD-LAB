@@ -16,7 +16,7 @@ import {
 import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 
-const AddMastersCandidate = () => {
+const AddStaffMember = () => {
   const countries = countryList().getLabels(); // Get country names
   const [formData, setFormData] = useState({
     first_name: '',
@@ -35,7 +35,7 @@ const AddMastersCandidate = () => {
     admission_date: '',
     completion_date: '',
     photo: '/Storage/Images/default_DP.png', // Default photo path
-    type: "Master's Candidate",
+    type: 'Staff Member',
     status: 'Active',
   });
   const [socialMedia, setSocialMedia] = useState([{ socialMedia_name: '', link: '' }]);
@@ -44,7 +44,7 @@ const AddMastersCandidate = () => {
     position: '', 
     organization_name: '',   // ✅ Correct key (matches your JSX)
     joining_year: '', 
-    leaving_year: '' 
+    leaving_year: ''
   }]);
   const [otherEmails, setOtherEmails] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -177,7 +177,7 @@ const AddMastersCandidate = () => {
     data.append('career', JSON.stringify(formattedCareer));
   
     try {
-      const response = await fetch('/api/member_add/masters_candidate_add', {
+      const response = await fetch('/api/member_add/staff_member_add', {
         method: 'POST',
         body: data,
       });
@@ -192,11 +192,11 @@ const AddMastersCandidate = () => {
       console.log('API response:', result);
     
       if (response.ok) {
-        toast.success("Master's Candidate Added Successfully!");
+        toast.success('Staff Member Added Successfully!');
         setTimeout(() => {
           router.push('/dashboard');
         }, 2000);
-       } else {
+      } else {
           if (result.message?.includes('Email already exists')) {
             toast.error('This email is already registered. Please use a different one.');
           } else if (result.message?.includes('Phone Number already exists')) {
@@ -208,11 +208,11 @@ const AddMastersCandidate = () => {
           } else if (result.message?.includes('Graduation date cannot be before enrollment date')) {
             toast.error('Graduation date cannot be before enrollment date');
           } else {
-            toast.error(result.message || "An error occurred while adding the Master's Candidate.");
+            toast.error(result.message || 'An error occurred while adding the Staff Member.');
           }
         }
     } catch (error) {
-      toast.error(error.message || "Failed To Add Master's Candidate");
+      toast.error(error.message || 'Failed To Add Staff Member');
     } finally {
       setLoading(false);
     }    
@@ -234,7 +234,7 @@ const AddMastersCandidate = () => {
             Back to Dashboard
           </button>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Add Master&apos;s Candidate
+            Add Staff Member
           </h1>
         </div>
 
@@ -838,7 +838,7 @@ const AddMastersCandidate = () => {
                   Processing...
                 </span>
               ) : (
-                'Add Master\'s Candidate'
+                'Add Staff Member'
               )}
             </button>
           </div>
@@ -849,4 +849,4 @@ const AddMastersCandidate = () => {
   );
 };
 
-export default withAuth(AddMastersCandidate);
+export default withAuth(AddStaffMember);

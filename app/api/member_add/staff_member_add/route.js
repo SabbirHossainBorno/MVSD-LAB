@@ -6,31 +6,32 @@ import sendTelegramAlert from '../../../../lib/telegramAlert';
 import path from 'path';
 import fs from 'fs';
 import bcrypt from 'bcryptjs';
+import nodemailer from 'nodemailer';
 
 const formatAlertMessage = (title, details) => {
   return `MVSD LAB DASHBOARD\n------------------------------------\n${title}\n${details}`;
 };
 
-const generateMastersCandidateId = async () => {
-    try {
-    const result = await query('SELECT MAX(id) AS max_id FROM masters_candidate_basic_info');
-    const maxId = result.rows[0]?.max_id || 'MASTC00MVSD';
-    const numericPart = parseInt(maxId.substring(5, maxId.length - 4), 10) || 0;
+const generateStaffMemberId = async () => {
+  try {
+    const result = await query('SELECT MAX(id) AS max_id FROM staff_member_basic_info');
+    const maxId = result.rows[0]?.max_id || 'STAFFM00MVSD';
+    const numericPart = parseInt(maxId.substring(6, maxId.length - 4), 10) || 0;
     const nextId = numericPart + 1;
-    const newId = `MASTC${String(nextId).padStart(2, '0')}MVSD`;
+    const newId = `STAFFM${String(nextId).padStart(2, '0')}MVSD`;
     return newId;
   } catch (error) {
-    throw new Error(`Error generating Master's Candidate ID: ${error.message}`);
+    throw new Error(`Error generating Staff Member ID: ${error.message}`);
   }
 };
 
-const saveProfilePhoto = async (file, mastersCandidateId) => {
-  const filename = `${mastersCandidateId}_DP${path.extname(file.name)}`;
-  const targetPath = path.join("/home/mvsd-lab/public/Storage/Images/Master's_Candidate", filename);
+const saveProfilePhoto = async (file, staffMemberId) => {
+  const filename = `${staffMemberId}_DP${path.extname(file.name)}`;
+  const targetPath = path.join('/home/mvsd-lab/public/Storage/Images/Staff_Member', filename);
   try {
     const buffer = await file.arrayBuffer();
     fs.writeFileSync(targetPath, Buffer.from(buffer));
-    return `/Storage/Images/Master's_Candidate/${filename}`;
+    return `/Storage/Images/Staff_Member/${filename}`;
   } catch (error) {
     throw new Error(`Failed to save profile photo: ${error.message}`);
   }
@@ -62,7 +63,7 @@ export async function POST(req) {
     const short_bio = formData.get('short_bio');
     const admission_date = formData.get('admission_date');
     const completion_date = formData.get('completion_date') || null;
-    const type = formData.get('type') || "Master's Candidate";
+    const type = formData.get('type') || 'Staff Member';
     const socialMedia = JSON.parse(formData.get('socialMedia') || '[]');
     const education = JSON.parse(formData.get('education') || '[]');
     const career = JSON.parse(formData.get('career') || '[]');
@@ -109,7 +110,7 @@ export async function POST(req) {
       age--;
     }
     if (age < 18) {
-      return NextResponse.json({ message: "Master's Candidate must be at least 18 years old." }, { status: 400 });
+      return NextResponse.json({ message: 'Staff Member must be at least 18 years old.' }, { status: 400 });
     }
 
     // Admission date validation
@@ -134,7 +135,7 @@ export async function POST(req) {
       FROM (
         SELECT id, email, ARRAY[]::TEXT[] AS other_emails FROM member
         UNION ALL
-        SELECT id, email, COALESCE(other_emails, ARRAY[]::TEXT[]) FROM masters_candidate_basic_info
+        SELECT id, email, COALESCE(other_emails, ARRAY[]::TEXT[]) FROM staff_member_basic_info
       ) AS combined
       WHERE 
         email = $1 
@@ -190,7 +191,7 @@ export async function POST(req) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: "Add Master's Candidate",
+          taskName: 'Add Staff Member',
           details: {
             message: errorMessage,
             attemptedEmail: email,
@@ -212,8 +213,8 @@ export async function POST(req) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: "Add Master's Candidate",
-          details: `Attempt to add Master's Candidate failed - Phone No : ${phone} already exists.`,
+          taskName: 'Add Staff Member',
+          details: `Attempt to add Staff Member failed - Phone No : ${phone} already exists.`
         }
       });
 
@@ -229,8 +230,8 @@ export async function POST(req) {
         meta: {
           eid,
           sid: sessionId,
-          taskName: "Add Master's Candidate",
-          details: `Attempt to add Master's Candidate failed - ID number ${idNumber} already exists.`
+          taskName: 'Add Staff Member',
+          details: `Attempt to add Staff Member failed - ID number ${idNumber} already exists.`
         }
       });
 
@@ -251,8 +252,8 @@ export async function POST(req) {
           meta: {
             eid,
             sid: sessionId,
-            taskName: "Add Master's Candidate",
-            details: `Attempt to add Master's Candidate failed - Passport number ${passport_number} already exists.`
+            taskName: "Add Staff Member",
+            details: `Attempt to add Staff Member failed - Passport number ${passport_number} already exists.`
           }
         });
 
@@ -262,8 +263,8 @@ export async function POST(req) {
         }, { status: 400 });
       }
     }
-
-    const mastersCandidateId = await generateMastersCandidateId();
+      
+    const staffMemberId = await generateStaffMemberId();
 
     // Save profile photo
     let photoUrl = '/Storage/Images/default_DP.png'; // Default photo path
@@ -282,7 +283,7 @@ export async function POST(req) {
         }
         
         // Save using your existing function
-        photoUrl = await saveProfilePhoto(photoFile, phdCandidateId);
+        photoUrl = await saveProfilePhoto(photoFile, staffMemberId);
       } catch (error) {
         return NextResponse.json({ message: `Failed to save profile photo: ${error.message}` }, { status: 500 });
       }
@@ -291,23 +292,23 @@ export async function POST(req) {
     // Prepare other emails (convert empty array to NULL)
     const finalOtherEmails = otherEmails.length > 0 ? otherEmails : null;
     console.log('Final other emails:', finalOtherEmails);
-    
+
     // Database transaction
     console.log('Starting database transaction...');
 
     try {
       await query('BEGIN');
 
-      const insertMastersCandidateQuery = `
-        INSERT INTO masters_candidate_basic_info 
+      const insertStaffMemberQuery = `
+        INSERT INTO staff_member_basic_info 
         (id, first_name, last_name, phone, gender, "blood_group", country, dob, email, password, short_bio, admission_date, completion_date, photo, status, type, passport_number, "id_number", other_emails)
         VALUES 
         ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'Active', $15, $16, $17, $18)
         RETURNING *;
       `;
 
-      await query(insertMastersCandidateQuery, [
-        mastersCandidateId,
+      await query(insertStaffMemberQuery, [
+        staffMemberId,
         first_name,
         last_name,
         phone,
@@ -327,18 +328,18 @@ export async function POST(req) {
         finalOtherEmails
       ]);
 
-      // Insert into phd_candidate_socialmedia_info
+      // Insert into staff_member_socialmedia_info
       const insertSocialMediaQuery = `
-          INSERT INTO masters_candidate_socialmedia_info 
-          (id, masters_candidate_id, socialmedia_name, link)
-          VALUES (nextval('masters_candidate_socialmedia_info_id_seq'), $1, $2, $3)
-          ON CONFLICT (masters_candidate_id, socialmedia_name, link) DO NOTHING
+          INSERT INTO staff_member_socialmedia_info 
+          (id, staff_member_id, socialmedia_name, link)
+          VALUES (nextval('staff_member_socialmedia_info_id_seq'), $1, $2, $3)
+          ON CONFLICT (staff_member_id, socialmedia_name, link) DO NOTHING
       `;
 
       for (const sm of socialMedia) {
           // Only insert if both fields are filled
           if (sm.socialMedia_name && sm.link && sm.socialMedia_name.trim() !== '' && sm.link.trim() !== '') {
-              await query(insertSocialMediaQuery, [mastersCandidateId, sm.socialMedia_name, sm.link]);
+              await query(insertSocialMediaQuery, [staffMemberId, sm.socialMedia_name, sm.link]);
           }
       }
 
@@ -348,11 +349,11 @@ export async function POST(req) {
         RETURNING *;
       `;
       await query(insertMemberQuery, [
-        mastersCandidateId,  
+        staffMemberId,  
         first_name,      
         last_name,       
         phone,           
-        gender,
+        gender,          
         bloodGroup,      
         country,         
         dob,             
@@ -367,80 +368,227 @@ export async function POST(req) {
         idNumber
       ]);
 
-      // Insert into masters_candidate_education_info
-      const insertEducationQuery = `INSERT INTO masters_candidate_education_info (masters_candidate_id, degree, institution, passing_year) VALUES ($1, $2, $3, $4) RETURNING *;`;
+      // Insert into staff_member_education_info
+      const insertEducationQuery = `INSERT INTO staff_member_education_info (staff_member_id, degree, institution, passing_year) VALUES ($1, $2, $3, $4) RETURNING *;`;
       for (const edu of education) {
-        await query(insertEducationQuery, [mastersCandidateId, edu.degree, edu.institution, edu.passing_year]);
+        await query(insertEducationQuery, [staffMemberId, edu.degree, edu.institution, edu.passing_year]);
       }
 
-      // Insert into masters_candidate_career_info
-      const insertCareerQuery = `INSERT INTO masters_candidate_career_info (masters_candidate_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
+      // Insert into staff_member_career_info
+      const insertCareerQuery = `INSERT INTO staff_member_career_info (staff_member_id, position, organization_name, joining_year, leaving_year) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
       for (const car of career) {
-        await query(insertCareerQuery, [mastersCandidateId, car.position, car.organization_name, car.joining_year, car.leaving_year]);
+        await query(insertCareerQuery, [staffMemberId, car.position, car.organization_name, car.joining_year, car.leaving_year || null]);
       }
 
       const insertNotificationQuery = `INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3) RETURNING *;`;
-      const Id = `${mastersCandidateId}`; 
-      const notificationTitle = `A New Master's Candidate Added [${mastersCandidateId}] By ${adminEmail}`;
+      const Id = `${staffMemberId}`; 
+      const notificationTitle = `A New Staff Member Added [${staffMemberId}] By ${adminEmail}`;
       const notificationStatus = 'Unread';
       await query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
 
+      
+      // Insert into director_notification_details
+      console.log('[DIRECTOR NOTIFICATION] Creating notification entry');
+      const directorNotificationQuery = `
+        INSERT INTO director_notification_details (
+          mvsdlab_id,
+          title
+        ) VALUES ($1, $2)
+      `;
+
+      await query(directorNotificationQuery, [
+        staffMemberId,  // The candidate's ID
+        `New Staff Member Added: ${first_name} ${last_name} (${staffMemberId}) By ${adminEmail}`
+      ]);
+
       await query('COMMIT');
+
+      // Email notification section
+      try {
+        console.log('[Email Notification] Preparing to send notifications');
+        
+        // 1. Get director's email
+        const directorResult = await query(
+          `SELECT email FROM director_basic_info`
+        );
+        const directorEmails = directorResult.rows.map(row => row.email);
+        
+        // 2. New candidate's email
+        const candidateEmail = email;
+
+        if (directorEmails.length === 0 && !candidateEmail) {
+          console.log('[Email Notification] No emails to send');
+        } else {
+          // Create email transporter
+          const transporter = nodemailer.createTransport({
+            host: process.env.EMAIL_HOST,
+            port: parseInt(process.env.EMAIL_PORT),
+            secure: true,
+            auth: {
+              user: process.env.EMAIL_USER,
+              pass: process.env.EMAIL_PASS,
+            },
+          });
+
+          const emailPromises = [];
+
+          // Director emails
+          if (directorEmails.length > 0) {
+            const directorEmailHTML = `
+              <p>Dear Director,</p>
+              
+              <p>A <strong>new Staff Member</strong> has been onboarded by <strong>${adminEmail}</strong>.</p>
+              
+              <p>Candidate Details:</p>
+              <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">Candidate ID</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${staffMemberId}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Name</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${first_name} ${last_name}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Email</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${email}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Admission Date</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${new Date(admission_date).toLocaleDateString()}</td>
+                </tr>
+              </table>
+              
+              <p>You can view the candidate's profile in the <a href="https://www.mvsdlab.com/login">MVSD LAB Director Portal</a>.</p>
+              
+              <p>Sincerely,<br>
+              <strong>MVSD LAB</strong></p>
+            `;
+
+            directorEmails.forEach(directorEmail => {
+              emailPromises.push(
+                transporter.sendMail({
+                  from: process.env.EMAIL_FROM,
+                  to: directorEmail,
+                  subject: `New Staff Member Onboarded - ${staffMemberId}`,
+                  html: directorEmailHTML
+                })
+              );
+            });
+          }
+
+          // New candidate welcome email
+          if (candidateEmail) {
+            const candidateEmailHTML = `
+              <p>Dear ${first_name} ${last_name},</p>
+              
+              <p>Welcome to MVSD LAB! Your Staff Member account has been successfully created.</p>
+              
+              <p>Your account details:</p>
+              <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">Candidate ID</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${staffMemberId}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Email</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${email}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Password</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${password} (temporary)</td>
+                </tr>
+              </table>
+              
+              <p>Please log in to the <a href="https://www.mvsdlab.com/login">MVSD LAB Portal</a> and change your password immediately.</p>
+              
+              <p>Best Regards,<br>
+              <strong>MVSD LAB</strong></p>
+              
+              <p style="margin-top: 20px; font-size: 12px; color: #666;">
+                <strong>Security Note:</strong> This email contains sensitive information. Do not share your credentials.
+              </p>
+            `;
+            
+            emailPromises.push(
+              transporter.sendMail({
+                from: process.env.EMAIL_FROM,
+                to: candidateEmail,
+                subject: `Welcome to MVSD LAB - ${staffMemberId}`,
+                html: candidateEmailHTML
+              })
+            );
+          }
+
+          // Send all emails
+          await Promise.all(emailPromises);
+          console.log('[Email Notification] Emails sent successfully');
+        }
+      } catch (emailError) {
+        console.error('[Email Notification Failed]', emailError.message);
+        logger.error('Email sending failed', {
+          meta: {
+            staffMemberId,
+            error: emailError.message,
+            taskName: 'Add Staff Member Email'
+          }
+        });
+      }
 
       // Send Telegram alert for success
       const successMessage = formatAlertMessage(
-        "A New Master's Candidate Added Successfully",
-        `ID : ${mastersCandidateId}\nAdded By : ${adminEmail}\nDate : ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`
+        'A New Staff Member Added Successfully', 
+        `ID : ${staffMemberId}\nAdded By : ${adminEmail}\nDate : ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`
       );
 
       await sendTelegramAlert(successMessage);
 
       // Log success
-      logger.info("Master's Candidate Added Successfully", {
+      logger.info('Staff Member Added Successfully', {
         meta: {
           eid,
           sid: sessionId,
-          taskName: "Add Master's Candidate",
-          details: `A new Master's Candidate added successfully with ID ${mastersCandidateId} by ${adminEmail} from IP ${ipAddress} with User-Agent ${userAgent}`
+          taskName: 'Add Staff Member',
+          details: `A new Staff Member added successfully with ID ${staffMemberId} by ${adminEmail} from IP ${ipAddress} with User-Agent ${userAgent}`
         }
       });
 
       return NextResponse.json(
-        { message: "Master's Candidate information added successfully" },
+        { message: 'Staff Member information added successfully' }, 
         { status: 200 }
       );
 
     } catch (error) {
       await query('ROLLBACK');
 
-      const errorMessage = formatAlertMessage(
-        "Error Adding Master's Candidate",
-        `ID : ${mastersCandidateId}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`
-      );
-
+      const errorMessage = formatAlertMessage('Error Adding Staff Member', `ID : ${staffMemberId}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
       await sendTelegramAlert(errorMessage);
 
-      logger.error("Error Adding Master's Candidate", {
+      logger.error('Error Adding Staff Member', {
         meta: {
           eid,
           sid: sessionId,
-          taskName: "Add Master's Candidate",
-          details: `Error adding Master's Candidate with ID ${mastersCandidateId} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
+          taskName: 'Add Staff Member',
+          details: `Error adding Staff Member with ID ${staffMemberId} from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
         }
       });
 
-      return NextResponse.json({ message: `Error adding Master's Candidate: ${error.message}` }, { status: 500 });
+      return NextResponse.json({ message: `Error adding Staff Member: ${error.message}` }, { status: 500 });
     }
 
   } catch (error) {
-    const errorMessage = formatAlertMessage("Error Handling Master's Candidate Request", `IP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
+    const errorMessage = formatAlertMessage(
+      'Error Handling Staff Member Request', 
+      `IP : ${ipAddress}\nError : ${error.message}\nStatus : 500`
+    );
+    
     await sendTelegramAlert(errorMessage);
 
     logger.error('Error Processing Form Data', {
       meta: {
         eid,
         sid: sessionId,
-        taskName: "Add Master's Candidate",
+        taskName: 'Add Staff Member',
         details: `Error processing form data from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`
       }
     });

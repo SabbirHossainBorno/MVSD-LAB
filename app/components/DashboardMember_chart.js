@@ -32,7 +32,8 @@ const DashboardMemberChart = () => {
                 'hsl(160, 84%, 39%)',  // Green
                 'hsl(38, 92%, 50%)',   // Amber
                 'hsl(0, 84%, 60%)',     // Red
-                'hsl(301, 86.10%, 45.30%)'     // purple
+                'hsl(257, 61.00%, 45.30%)',     // purple
+                'hsl(321, 87.00%, 30.20%)'     // pink
               ],
               borderWidth: 0,
               spacing: 2,
