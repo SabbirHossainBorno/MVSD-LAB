@@ -239,35 +239,36 @@ const toggleTimezone = () => {
           Dashboard
         </span>
       </div>
-
       
 
       {/* Current Time Area */}
-      <div className="relative flex items-center space-x-4 md:space-x-6">
+      <div className="relative flex items-center space-x-2 md:space-x-4">
         <div className="flex flex-col items-center bg-gray-900 p-2 rounded shadow border border-gray-700 min-w-[170px]">
-  {/* Time + Timezone */}
-  <div className="flex items-center space-x-2">
-    <span className="font-mono text-lg text-white tracking-wide">
-      {currentTime}
-    </span>
-    <button
-      onClick={toggleTimezone}
-      className="text-xs font-semibold bg-blue-600 text-white px-2 py-0.5 rounded hover:bg-blue-700 transition-all"
-      title="Click to switch timezone"
-    >
-      {getAbbreviation()}
-    </button>
-  </div>
-  {/* Date */}
-  <div className="text-xs text-gray-400 tracking-wide">
-    {currentDate}
-  </div>
-</div>
+        {/* Time + Timezone */}
+        <div className="flex items-center space-x-2">
+          <span className="font-mono text-lg text-white tracking-wide">
+            {currentTime}
+          </span>
+          <button
+            onClick={toggleTimezone}
+            className="text-xs font-semibold bg-blue-600 text-white px-2 py-0.5 rounded hover:bg-blue-700 transition-all"
+            title="Click to switch timezone"
+          >
+            {getAbbreviation()}
+          </button>
+        </div>
+
+        {/* Date */}
+        <div className="text-xs text-gray-400 tracking-wide">
+          {currentDate}
+        </div>
+      </div>
 
 
 
 
 
+      
 
       <div className="relative flex items-center space-x-4 md:space-x-6">
       {/* Notification Area */}
