@@ -247,7 +247,7 @@ const toggleTimezone = () => {
 
         <div className="relative hidden md:flex items-center justify-center h-12">
           {/* Animated Gradient Background */}
-          <div className="flex inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-gradient rounded blur opacity-40"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-gradient rounded blur opacity-40"></div>
 
           {/* Main Content */}
           <div className="relative z-10 flex items-center space-x-2 bg-gray-900 p-2 rounded shadow border border-gray-700">
@@ -259,7 +259,7 @@ const toggleTimezone = () => {
             </div>
             <button
               onClick={toggleTimezone}
-              className="text-xs font-semibold bg-blue-600 text-white px-2 py-0.5 rounded hover:bg-blue-700 transition-all"
+              className="text-xs font-semibold bg-blue-600 text-white px-2 py-0.5 rounded hover:bg-blue-700 transition-all min-w-[40px] text-center"
               title="Click to switch timezone"
             >
               {getAbbreviation()}
@@ -269,11 +269,6 @@ const toggleTimezone = () => {
           </div>
         </div>
 
-
-
-
-
-      
 
       <div className="relative flex items-center space-x-4 md:space-x-6">
       {/* Notification Area */}

@@ -76,7 +76,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
     >
       {/* Logo Section */}
-      <div className="p-6 border-b border-gray-700/50 relative group">
+      <div className="p-3 border-b border-gray-700/50 relative group">
         <motion.div
           initial={{ scale: 0.95 }}
           animate={{ scale: 1 }}
@@ -87,7 +87,7 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
             alt="MVSD Lab Logo" 
             width={240} 
             height={160}
-            className="hover:scale-105 transition-transform duration-300"
+            className="w-40 sm:w-44 md:w-48 h-auto hover:scale-105 transition-transform duration-300"
           />
         </motion.div>
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-indigo-600 opacity-30 group-hover:opacity-100 transition-opacity" />
