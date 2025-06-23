@@ -59,6 +59,7 @@ export async function GET(request) {
     const phdCandidateDetailsQuery = 'SELECT COUNT(*) AS count FROM phd_candidate_basic_info';
     const mastersCandidateDetailsQuery = 'SELECT COUNT(*) AS count FROM masters_candidate_basic_info';
     const postdocCandidateDetailsQuery = 'SELECT COUNT(*) AS count FROM postdoc_candidate_basic_info';
+    const staffMemberDetailsQuery = 'SELECT COUNT(*) AS count FROM staff_member_basic_info';
     const alumniDetailsQuery = `
       SELECT 
         (SELECT COUNT(*) FROM phd_candidate_basic_info WHERE alumni_status = 'Valid') +
@@ -72,7 +73,7 @@ export async function GET(request) {
     const currentLoginCountQuery = 'SELECT COUNT(*) AS count FROM admin WHERE status = \'Active\''; // Add query for current login count
     const memberLoginInfoTrackerQuery = 'SELECT * FROM member_login_info_tracker'; // Add query for admin data
 
-    const [subscriberCount, memberDetails, professorDetails, directorDetails, phdCandidateDetails, mastersCandidateDetails, postdocCandidateDetails, alumniDetails, messageDetails, recentSubscribers, recentProfessors, adminDetails, currentLoginCount, memberLoginInfoTracker] = await Promise.all([
+    const [subscriberCount, memberDetails, professorDetails, directorDetails, phdCandidateDetails, mastersCandidateDetails, postdocCandidateDetails, staffMemberDetails, alumniDetails, messageDetails, recentSubscribers, recentProfessors, adminDetails, currentLoginCount, memberLoginInfoTracker] = await Promise.all([
       query(subscriberCountQuery),
       query(memberDetailsQuery),
       query(professorDetailsQuery),
@@ -80,6 +81,7 @@ export async function GET(request) {
       query(phdCandidateDetailsQuery),
       query(mastersCandidateDetailsQuery),
       query(postdocCandidateDetailsQuery),
+      query(staffMemberDetailsQuery),
       query(alumniDetailsQuery),
       query(messageDetailsQuery),
       query(recentSubscribersQuery),
@@ -110,6 +112,7 @@ export async function GET(request) {
       phdCandidateCount: phdCandidateDetails.rows[0].count,
       mastersCandidateCount: mastersCandidateDetails.rows[0].count,
       postdocCandidateCount: postdocCandidateDetails.rows[0].count,
+      staffMemberCount: staffMemberDetails.rows[0].count,
       alumniCount: alumniDetails.rows[0].count,
       messageCount: messageDetails.rows[0].count,
       recentSubscribers: recentSubscribers.rows,

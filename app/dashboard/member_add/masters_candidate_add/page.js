@@ -461,7 +461,7 @@ const AddMastersCandidate = () => {
                 </div>
               </div>
 
-              {/* Admission Date */}
+              {/* Enrollment Date */}
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300">Enrollment Date</label>
                 <div className="relative">

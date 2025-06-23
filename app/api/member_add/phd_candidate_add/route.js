@@ -113,10 +113,10 @@ export async function POST(req) {
       return NextResponse.json({ message: 'PhD Candidate must be at least 18 years old.' }, { status: 400 });
     }
 
-    // Admission date validation
+    // Enrollment Date validation
     const admissionYear = new Date(admission_date).getFullYear();
     if (admissionYear > currentDate.getFullYear()) {
-      return NextResponse.json({ message: 'Admission date cannot be greater than the current year.' }, { status: 400 });
+      return NextResponse.json({ message: 'Enrollment Date cannot be greater than the current year.' }, { status: 400 });
     }
 
     // Education and Career Year validation
@@ -454,7 +454,7 @@ export async function POST(req) {
                   <td style="padding: 8px; border: 1px solid #ddd;">${email}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Admission Date</td>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Enrollment Date</td>
                   <td style="padding: 8px; border: 1px solid #ddd;">${new Date(admission_date).toLocaleDateString()}</td>
                 </tr>
               </table>

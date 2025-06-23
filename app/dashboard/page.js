@@ -20,6 +20,7 @@ const Dashboard = () => {
   const [phdCandidatesCount, setPhdCandidatesCount] = useState(0);
   const [mastersCandidatesCount, setMastersCandidatesCount] = useState(0);
   const [postdocCandidatesCount, setPostDocCandidatesCount] = useState(0);
+  const [staffMembersCount, setStaffMembersCount] = useState(0);
   const [alumnisCount, setAlumnisCount] = useState(0);
   const [messageCount, setMessagesCount] = useState(0);
   const [recentProfessors, setRecentProfessors] = useState([]);
@@ -45,6 +46,7 @@ const Dashboard = () => {
           setPhdCandidatesCount(result.phdCandidateCount);
           setMastersCandidatesCount(result.mastersCandidateCount);
           setPostDocCandidatesCount(result.postdocCandidateCount);
+          setStaffMembersCount(result.postdocCandidateCount);
           setAlumnisCount(result.alumniCount);
           setMessagesCount(result.messageCount);
           setRecentSubscribers(result.recentSubscribers);
@@ -260,7 +262,7 @@ const Dashboard = () => {
             <div className="w-8 h-8 flex items-center justify-center md:w-10 md:h-10">
               <Image 
                 src="/icons/phd_candidate.svg" 
-                alt="Total PhD Candidate Icon"
+                alt="Total Master's Candidate Icon"
                 width={32} 
                 height={32} 
                 className="w-8 h-8 md:w-10 md:h-10"
@@ -281,7 +283,7 @@ const Dashboard = () => {
             <div className="w-8 h-8 flex items-center justify-center md:w-10 md:h-10">
               <Image 
                 src="/icons/phd_candidate.svg" 
-                alt="Total PhD Candidate Icon"
+                alt="Total Post Doc Candidate Icon"
                 width={32} 
                 height={32} 
                 className="w-8 h-8 md:w-10 md:h-10"
@@ -296,13 +298,13 @@ const Dashboard = () => {
               <p className="text-2xl font-extrabold text-black">{postdocCandidatesCount}</p>
             </div>
           </div>
-          {/* Total PhD Candidate Card */}
+          {/* Total Staff Member Card */}
           <div className="bg-white p-2 rounded shadow-md flex items-center justify-between transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-2 border-blue-500">
             {/* Icon Section */}
             <div className="w-8 h-8 flex items-center justify-center md:w-10 md:h-10">
               <Image 
                 src="/icons/phd_candidate.svg" 
-                alt="Total PhD Candidate Icon"
+                alt="Total Staff Member Icon"
                 width={32} 
                 height={32} 
                 className="w-8 h-8 md:w-10 md:h-10"
@@ -313,10 +315,14 @@ const Dashboard = () => {
 
             {/* Content Section */}
             <div className="flex items-center gap-2">
-              <p className="text-xs font-bold text-gray-700 uppercase tracking-widest">PhD Candidate</p>
-              <p className="text-2xl font-extrabold text-black">{phdCandidatesCount}</p>
+              <p className="text-xs font-bold text-gray-700 uppercase tracking-widest">Staff Member</p>
+              <p className="text-2xl font-extrabold text-black">{staffMembersCount}</p>
             </div>
           </div>
+
+
+
+
           {/* Total PhD Candidate Card */}
           <div className="bg-white p-2 rounded shadow-md flex items-center justify-between transform hover:scale-105 transition-transform duration-300 ease-in-out w-full border-2 border-blue-500">
             {/* Icon Section */}
