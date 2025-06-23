@@ -15,18 +15,28 @@ function DashboardNavbar({ toggleDashboardSidebar }) {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [currentTime, setCurrentTime] = useState('');
+  const [currentDate, setCurrentDate] = useState('');
+  const [timezone, setTimezone] = useState('America/New_York');
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState(null); // Add profile state
   const notificationRef = useRef(null);
 
-  const getESTAbbreviation = () => {
-    const date = new Date();
-    const timeZone = Intl.DateTimeFormat('en-US', {
-      timeZone: 'America/New_York',
-      timeZoneName: 'short',
-    }).formatToParts(date).find(part => part.type === 'timeZoneName');
-    return timeZone?.value || 'EST';
-  };
+  const getAbbreviation = () => {
+  if (timezone === 'Asia/Dhaka') return 'BDT'; // Force BDT for Dhaka
+  const date = new Date();
+  const timeZonePart = Intl.DateTimeFormat('en-US', {
+    timeZone: timezone,
+    timeZoneName: 'short',
+  }).formatToParts(date).find(part => part.type === 'timeZoneName');
+  return timeZonePart?.value || '';
+};
+
+
+const toggleTimezone = () => {
+  setTimezone((prev) =>
+    prev === 'America/New_York' ? 'Asia/Dhaka' : 'America/New_York'
+  );
+};
 
 
   useEffect(() => {
@@ -72,22 +82,34 @@ function DashboardNavbar({ toggleDashboardSidebar }) {
 
   // Update current time
   useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const estTime = now.toLocaleTimeString('en-US', {
-        timeZone: 'America/New_York',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-      });
+  const updateTime = () => {
+    const now = new Date();
 
-      setCurrentTime(estTime);
-    };
+    // Format time for selected timezone
+    const formattedTime = now.toLocaleTimeString('en-US', {
+      timeZone: timezone,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+    setCurrentTime(formattedTime);
 
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
+    // Format full date (e.g., 23 June, 2025)
+    const formattedDate = now.toLocaleDateString('en-GB', {
+      timeZone: timezone,
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    });
+    setCurrentDate(formattedDate);
+  };
+
+  updateTime();
+  const interval = setInterval(updateTime, 1000);
+  return () => clearInterval(interval);
+}, [timezone]);
+
+
 
 
 
@@ -218,27 +240,34 @@ function DashboardNavbar({ toggleDashboardSidebar }) {
         </span>
       </div>
 
+      
+
       {/* Current Time Area */}
       <div className="relative flex items-center space-x-4 md:space-x-6">
-        <div className="relative hidden md:flex items-center justify-center h-12">
-          {/* Animated Gradient Background */}
-          <div className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-gradient rounded blur opacity-40"></div>
+        <div className="flex flex-col items-center bg-gray-900 p-2 rounded shadow border border-gray-700 min-w-[170px]">
+  {/* Time + Timezone */}
+  <div className="flex items-center space-x-2">
+    <span className="font-mono text-lg text-white tracking-wide">
+      {currentTime}
+    </span>
+    <button
+      onClick={toggleTimezone}
+      className="text-xs font-semibold bg-blue-600 text-white px-2 py-0.5 rounded hover:bg-blue-700 transition-all"
+      title="Click to switch timezone"
+    >
+      {getAbbreviation()}
+    </button>
+  </div>
+  {/* Date */}
+  <div className="text-xs text-gray-400 tracking-wide">
+    {currentDate}
+  </div>
+</div>
 
-          {/* Main Content */}
-          <div className="relative z-10 flex items-center space-x-2 bg-gray-900 p-2 rounded shadow border border-gray-700">
-            <div className="text-center">
-              <span className="font-mono text-lg text-white tracking-wide">
-                {currentTime}
-              </span>
-            </div>
-            {/* EST/EDT Badge */}
-            <span className="text-xs font-semibold bg-blue-600 text-white px-2 py-0.5 rounded">
-              {getESTAbbreviation()}
-            </span>
-            {/* Animated Pulse Dot */}
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
-          </div>
-      </div>
+
+
+
+
 
       <div className="relative flex items-center space-x-4 md:space-x-6">
       {/* Notification Area */}
