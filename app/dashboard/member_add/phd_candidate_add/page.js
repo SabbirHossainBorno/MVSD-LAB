@@ -44,7 +44,7 @@ const AddPhdCandidate = () => {
     position: '', 
     organization_name: '',   // ✅ Correct key (matches your JSX)
     joining_year: '', 
-    leaving_year: '' 
+    leaving_year: ''
   }]);
   const [otherEmails, setOtherEmails] = useState([]);
   const [loading, setLoading] = useState(false);

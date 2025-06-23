@@ -53,7 +53,8 @@ export async function POST(req) {
     const bloodGroup = formData.get('bloodGroup');
     const country = formData.get('country');
     const idNumber = formData.get('idNumber');
-    const passport_number = formData.get('passport_number');
+    const rawPassport = formData.get('passport_number');
+    const passport_number = rawPassport && rawPassport.trim() !== '' ? rawPassport : null;
     const dob = formData.get('dob');
     const email = formData.get('email');
     const otherEmails = JSON.parse(formData.get('otherEmails') || []);
@@ -67,7 +68,7 @@ export async function POST(req) {
     const career = JSON.parse(formData.get('career') || '[]');
 
     // Validation
-    if (!first_name || !last_name || !phone || !gender || !bloodGroup || !country || !idNumber || !passport_number || !dob || !email || !password || !short_bio || !admission_date) {
+    if (!first_name || !last_name || !phone || !gender || !country || !idNumber || !dob || !email || !password || !short_bio || !admission_date) {
       return NextResponse.json({ message: 'All required fields must be filled.' }, { status: 400 });
     }
 
@@ -89,6 +90,13 @@ export async function POST(req) {
       return NextResponse.json({ message: 'One or more secondary emails have invalid format' }, { status: 400 });
     }
 
+    if (completion_date && new Date(completion_date) < new Date(admission_date)) {
+      return NextResponse.json({ 
+        success: false,
+        message: 'Graduation date cannot be before enrollment date' 
+      }, { status: 400 });
+    }
+
     // Hash password before storing
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -101,10 +109,7 @@ export async function POST(req) {
       age--;
     }
     if (age < 18) {
-      return NextResponse.json(
-        { message: "Master's Candidate must be at least 18 years old." },
-        { status: 400 }
-      );
+      return NextResponse.json({ message: "Master's Candidate must be at least 18 years old." }, { status: 400 });
     }
 
     // Admission date validation
@@ -235,32 +240,49 @@ export async function POST(req) {
       }, { status: 400 });
     }
 
-    const passportNumberCheckResult = await query('SELECT id FROM member WHERE passport_number = $1', [passport_number]);
-    if (passportNumberCheckResult.rows.length > 0) {
-      logger.warn('Validation Error: Passport number already exists', {
-        meta: {
-          eid,
-          sid: sessionId,
-          taskName: "Add Master's Candidate",
-          details: `Attempt to add Master's Candidate failed - Passport number ${passport_number} already exists.`
-        }
-      });
+    if (passport_number && passport_number.trim() !== '') {
+      const passportNumberCheckResult = await query(
+        'SELECT id FROM member WHERE passport_number = $1', 
+        [passport_number]
+      );
 
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Passport number already exists. Please try with a different passport number.' 
-      }, { status: 400 });
+      if (passportNumberCheckResult.rows.length > 0) {
+        logger.warn('Validation Error: Passport number already exists', {
+          meta: {
+            eid,
+            sid: sessionId,
+            taskName: "Add Master's Candidate",
+            details: `Attempt to add Master's Candidate failed - Passport number ${passport_number} already exists.`
+          }
+        });
+
+        return NextResponse.json({ 
+          success: false, 
+          message: 'Passport number already exists. Please try with a different passport number.' 
+        }, { status: 400 });
+      }
     }
 
-      
     const mastersCandidateId = await generateMastersCandidateId();
 
     // Save profile photo
-    let photoUrl = null;
+    let photoUrl = '/Storage/Images/default_DP.png'; // Default photo path
     const photoFile = formData.get('photo');
-    if (photoFile) {
+
+    // Only process if a valid file is uploaded
+    if (photoFile && photoFile.size > 0) {
       try {
-        photoUrl = await saveProfilePhoto(photoFile, mastersCandidateId);
+        // Maintain your existing validation logic
+        if (photoFile.size > 5 * 1024 * 1024) {
+          return NextResponse.json({ message: 'File size exceeds 5 MB.' }, { status: 400 });
+        }
+        
+        if (!['image/jpeg', 'image/png'].includes(photoFile.type)) {
+          return NextResponse.json({ message: 'Invalid file type. Only JPG, JPEG, and PNG are allowed.' }, { status: 400 });
+        }
+        
+        // Save using your existing function
+        photoUrl = await saveProfilePhoto(photoFile, phdCandidateId);
       } catch (error) {
         return NextResponse.json({ message: `Failed to save profile photo: ${error.message}` }, { status: 500 });
       }
@@ -269,8 +291,6 @@ export async function POST(req) {
     // Prepare other emails (convert empty array to NULL)
     const finalOtherEmails = otherEmails.length > 0 ? otherEmails : null;
     console.log('Final other emails:', finalOtherEmails);
-
-
     
     // Database transaction
     console.log('Starting database transaction...');
@@ -307,10 +327,19 @@ export async function POST(req) {
         finalOtherEmails
       ]);
 
-      // Insert into masters_candidate_socialmedia_info
-      const insertSocialMediaQuery = `INSERT INTO masters_candidate_socialmedia_info (masters_candidate_id, socialMedia_name, link) VALUES ($1, $2, $3) RETURNING *;`;
+      // Insert into phd_candidate_socialmedia_info
+      const insertSocialMediaQuery = `
+          INSERT INTO masters_candidate_socialmedia_info 
+          (id, masters_candidate_id, socialmedia_name, link)
+          VALUES (nextval('masters_candidate_socialmedia_info_id_seq'), $1, $2, $3)
+          ON CONFLICT (masters_candidate_id, socialmedia_name, link) DO NOTHING
+      `;
+
       for (const sm of socialMedia) {
-        await query(insertSocialMediaQuery, [mastersCandidateId, sm.socialMedia_name, sm.link]);
+          // Only insert if both fields are filled
+          if (sm.socialMedia_name && sm.link && sm.socialMedia_name.trim() !== '' && sm.link.trim() !== '') {
+              await query(insertSocialMediaQuery, [mastersCandidateId, sm.socialMedia_name, sm.link]);
+          }
       }
 
       const insertMemberQuery = `
@@ -323,7 +352,7 @@ export async function POST(req) {
         first_name,      
         last_name,       
         phone,           
-        gender,          
+        gender,
         bloodGroup,      
         country,         
         dob,             

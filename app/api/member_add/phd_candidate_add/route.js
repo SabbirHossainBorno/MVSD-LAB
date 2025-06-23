@@ -78,7 +78,6 @@ export async function POST(req) {
       return NextResponse.json({ message: 'Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.' }, { status: 400 });
     }
     
-
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -97,7 +96,6 @@ export async function POST(req) {
         message: 'Graduation date cannot be before enrollment date' 
       }, { status: 400 });
     }
-
 
     // Hash password before storing
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -243,23 +241,27 @@ export async function POST(req) {
     }
 
     if (passport_number && passport_number.trim() !== '') {
-    const passportNumberCheckResult = await query(
-      'SELECT id FROM member WHERE passport_number = $1', 
-      [passport_number]
-    );
-    
-    if (passportNumberCheckResult.rows.length > 0) {
-      logger.warn('Validation Error: Passport number already exists', {
-        // ... your existing log content ...
-      });
+      const passportNumberCheckResult = await query(
+        'SELECT id FROM member WHERE passport_number = $1', 
+        [passport_number]
+      );
 
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Passport number already exists. Please try with a different passport number.' 
-      }, { status: 400 });
+      if (passportNumberCheckResult.rows.length > 0) {
+        logger.warn('Validation Error: Passport number already exists', {
+          meta: {
+            eid,
+            sid: sessionId,
+            taskName: "Add Master's Candidate",
+            details: `Attempt to add Master's Candidate failed - Passport number ${passport_number} already exists.`
+          }
+        });
+
+        return NextResponse.json({ 
+          success: false, 
+          message: 'Passport number already exists. Please try with a different passport number.' 
+        }, { status: 400 });
+      }
     }
-  }
-
       
     const phdCandidateId = await generatePhdCandidateId();
 
@@ -289,8 +291,6 @@ export async function POST(req) {
     // Prepare other emails (convert empty array to NULL)
     const finalOtherEmails = otherEmails.length > 0 ? otherEmails : null;
     console.log('Final other emails:', finalOtherEmails);
-
-
     
     // Database transaction
     console.log('Starting database transaction...');
@@ -388,7 +388,11 @@ export async function POST(req) {
       await query('COMMIT');
 
       // Send Telegram alert for success
-      const successMessage = formatAlertMessage('A New PhD Candidate Added Successfully', `ID : ${phdCandidateId}\nAdded By : ${adminEmail}\nDate : ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`);
+      const successMessage = formatAlertMessage(
+        "A New PhD Candidate Added Successfully",
+        `ID : ${phdCandidateId}\nAdded By : ${adminEmail}\nDate : ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`
+      );
+
       await sendTelegramAlert(successMessage);
 
       // Log success
@@ -401,12 +405,19 @@ export async function POST(req) {
         }
       });
 
-      return NextResponse.json({ message: 'PhD Candidate information added successfully' }, { status: 200 });
+      return NextResponse.json(
+        { message: 'PhD Candidate information added successfully' },
+        { status: 200 }
+        );
 
     } catch (error) {
       await query('ROLLBACK');
 
-      const errorMessage = formatAlertMessage('Error Adding PhD Candidate', `ID : ${phdCandidateId}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
+      const errorMessage = formatAlertMessage(
+        'Error Adding PhD Candidate',
+        `ID : ${phdCandidateId}\nIP : ${ipAddress}\nError : ${error.message}\nStatus : 500`
+      );
+
       await sendTelegramAlert(errorMessage);
 
       logger.error('Error Adding PhD Candidate', {
