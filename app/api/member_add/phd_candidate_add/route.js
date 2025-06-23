@@ -385,7 +385,156 @@ export async function POST(req) {
       const notificationStatus = 'Unread';
       await query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
 
+
+      // Insert into director_notification_details
+      console.log('[DIRECTOR NOTIFICATION] Creating notification entry');
+      const directorNotificationQuery = `
+        INSERT INTO director_notification_details (
+          mvsdlab_id,
+          phd_candidate_id,
+          title
+        ) VALUES ($1, $2, $3)
+      `;
+
+      await query(directorNotificationQuery, [
+        adminEmail, // Who added the candidate
+        phdCandidateId, // New candidate ID
+        `New PhD Candidate Added: ${first_name} ${last_name} (${phdCandidateId}) By ${adminEmail}`
+      ]);
+
       await query('COMMIT');
+
+      // Email notification section
+    try {
+      console.log('[Email Notification] Preparing to send notifications');
+      
+      // 1. Get director's email
+      const directorResult = await query(
+        `SELECT email FROM director_basic_info`
+      );
+      const directorEmails = directorResult.rows.map(row => row.email);
+      
+      // 2. New PhD candidate's email
+      const candidateEmail = email;
+
+      if (directorEmails.length === 0 && !candidateEmail) {
+        console.log('[Email Notification] No emails to send');
+      } else {
+        // Create email transporter
+        const transporter = nodemailer.createTransport({
+          host: process.env.EMAIL_HOST,
+          port: parseInt(process.env.EMAIL_PORT),
+          secure: true,
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+          },
+        });
+
+        const emailPromises = [];
+
+        // Director emails
+        if (directorEmails.length > 0) {
+          const directorEmailHTML = `
+            <p>Dear Director,</p>
+            
+            <p>A <strong>new PhD Candidate</strong> has been onboarded by <strong>${adminEmail}</strong>.</p>
+            
+            <p>Candidate Details:</p>
+            <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">Candidate ID</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${phdCandidateId}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Name</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${first_name} ${last_name}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Email</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${email}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Admission Date</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${new Date(admission_date).toLocaleDateString()}</td>
+              </tr>
+            </table>
+            
+            <p>You can view the candidate's profile in the <a href="https://www.mvsdlab.com/login">MVSD LAB Director Portal</a>.</p>
+            
+            <p>Sincerely,<br>
+            <strong>MVSD LAB</strong></p>
+          `;
+
+          directorEmails.forEach(directorEmail => {
+            emailPromises.push(
+              transporter.sendMail({
+                from: process.env.EMAIL_FROM,
+                to: directorEmail,
+                subject: `New PhD Candidate Onboarded - ${phdCandidateId}`,
+                html: directorEmailHTML
+              })
+            );
+          });
+        }
+
+        // New candidate welcome email
+        if (candidateEmail) {
+          const candidateEmailHTML = `
+            <p>Dear ${first_name} ${last_name},</p>
+            
+            <p>Welcome to MVSD LAB! Your account has been successfully created.</p>
+            
+            <p>Your account details:</p>
+            <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">Candidate ID</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${phdCandidateId}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Email</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${email}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Password</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${password} (temporary)</td>
+              </tr>
+            </table>
+            
+            <p>Please log in to the <a href="https://www.mvsdlab.com/login">MVSD LAB Portal</a> and change your password immediately.</p>
+            
+            <p>Best Regards,<br>
+            <strong>MVSD LAB</strong></p>
+            
+            <p style="margin-top: 20px; font-size: 12px; color: #666;">
+              <strong>Security Note:</strong> This email contains sensitive information. Do not share your credentials.
+            </p>
+          `;
+          
+          emailPromises.push(
+            transporter.sendMail({
+              from: process.env.EMAIL_FROM,
+              to: candidateEmail,
+              subject: `Welcome to MVSD LAB - ${phdCandidateId}`,
+              html: candidateEmailHTML
+            })
+          );
+        }
+
+        // Send all emails
+        await Promise.all(emailPromises);
+        console.log('[Email Notification] Emails sent successfully');
+      }
+    } catch (emailError) {
+      console.error('[Email Notification Failed]', emailError.message);
+      logger.error('Email sending failed', {
+        meta: {
+          phdCandidateId,
+          error: emailError.message,
+          taskName: 'Add PhD Candidate Email'
+        }
+      });
+    }
 
       // Send Telegram alert for success
       const successMessage = formatAlertMessage(

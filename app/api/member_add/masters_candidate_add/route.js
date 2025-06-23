@@ -282,7 +282,7 @@ export async function POST(req) {
         }
         
         // Save using your existing function
-        photoUrl = await saveProfilePhoto(photoFile, phdCandidateId);
+        photoUrl = await saveProfilePhoto(photoFile, mastersCandidateId);
       } catch (error) {
         return NextResponse.json({ message: `Failed to save profile photo: ${error.message}` }, { status: 500 });
       }
@@ -327,7 +327,7 @@ export async function POST(req) {
         finalOtherEmails
       ]);
 
-      // Insert into phd_candidate_socialmedia_info
+      // Insert into masters_candidate_socialmedia_info
       const insertSocialMediaQuery = `
           INSERT INTO masters_candidate_socialmedia_info 
           (id, masters_candidate_id, socialmedia_name, link)
@@ -385,7 +385,155 @@ export async function POST(req) {
       const notificationStatus = 'Unread';
       await query(insertNotificationQuery, [Id, notificationTitle, notificationStatus]);
 
+      // Insert into director_notification_details
+      console.log('[DIRECTOR NOTIFICATION] Creating notification entry');
+      const directorNotificationQuery = `
+        INSERT INTO director_notification_details (
+          mvsdlab_id,
+          masters_candidate_id,
+          title
+        ) VALUES ($1, $2, $3)
+      `;
+
+      await query(directorNotificationQuery, [
+        adminEmail, // Who added the candidate
+        mastersCandidateId, // New candidate ID
+        `New Master's Candidate Added: ${first_name} ${last_name} (${mastersCandidateId}) By ${adminEmail}`
+      ]);
+
       await query('COMMIT');
+
+      // Email notification section
+      try {
+        console.log('[Email Notification] Preparing to send notifications');
+        
+        // 1. Get director's email
+        const directorResult = await query(
+          `SELECT email FROM director_basic_info`
+        );
+        const directorEmails = directorResult.rows.map(row => row.email);
+        
+        // 2. New candidate's email
+        const candidateEmail = email;
+
+        if (directorEmails.length === 0 && !candidateEmail) {
+          console.log('[Email Notification] No emails to send');
+        } else {
+          // Create email transporter
+          const transporter = nodemailer.createTransport({
+            host: process.env.EMAIL_HOST,
+            port: parseInt(process.env.EMAIL_PORT),
+            secure: true,
+            auth: {
+              user: process.env.EMAIL_USER,
+              pass: process.env.EMAIL_PASS,
+            },
+          });
+
+          const emailPromises = [];
+
+          // Director emails
+          if (directorEmails.length > 0) {
+            const directorEmailHTML = `
+              <p>Dear Director,</p>
+              
+              <p>A <strong>new Master's Candidate</strong> has been onboarded by <strong>${adminEmail}</strong>.</p>
+              
+              <p>Candidate Details:</p>
+              <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">Candidate ID</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${mastersCandidateId}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Name</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${first_name} ${last_name}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Email</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${email}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Admission Date</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${new Date(admission_date).toLocaleDateString()}</td>
+                </tr>
+              </table>
+              
+              <p>You can view the candidate's profile in the <a href="https://www.mvsdlab.com/login">MVSD LAB Director Portal</a>.</p>
+              
+              <p>Sincerely,<br>
+              <strong>MVSD LAB</strong></p>
+            `;
+
+            directorEmails.forEach(directorEmail => {
+              emailPromises.push(
+                transporter.sendMail({
+                  from: process.env.EMAIL_FROM,
+                  to: directorEmail,
+                  subject: `New Master's Candidate Onboarded - ${mastersCandidateId}`,
+                  html: directorEmailHTML
+                })
+              );
+            });
+          }
+
+          // New candidate welcome email
+          if (candidateEmail) {
+            const candidateEmailHTML = `
+              <p>Dear ${first_name} ${last_name},</p>
+              
+              <p>Welcome to MVSD LAB! Your Master's candidate account has been successfully created.</p>
+              
+              <p>Your account details:</p>
+              <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold; width: 30%;">Candidate ID</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${mastersCandidateId}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Email</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${email}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Password</td>
+                  <td style="padding: 8px; border: 1px solid #ddd;">${password} (temporary)</td>
+                </tr>
+              </table>
+              
+              <p>Please log in to the <a href="https://www.mvsdlab.com/login">MVSD LAB Portal</a> and change your password immediately.</p>
+              
+              <p>Best Regards,<br>
+              <strong>MVSD LAB</strong></p>
+              
+              <p style="margin-top: 20px; font-size: 12px; color: #666;">
+                <strong>Security Note:</strong> This email contains sensitive information. Do not share your credentials.
+              </p>
+            `;
+            
+            emailPromises.push(
+              transporter.sendMail({
+                from: process.env.EMAIL_FROM,
+                to: candidateEmail,
+                subject: `Welcome to MVSD LAB - ${mastersCandidateId}`,
+                html: candidateEmailHTML
+              })
+            );
+          }
+
+          // Send all emails
+          await Promise.all(emailPromises);
+          console.log('[Email Notification] Emails sent successfully');
+        }
+      } catch (emailError) {
+        console.error('[Email Notification Failed]', emailError.message);
+        logger.error('Email sending failed', {
+          meta: {
+            mastersCandidateId,
+            error: emailError.message,
+            taskName: "Add Master's Candidate Email"
+          }
+        });
+      }
 
       // Send Telegram alert for success
       const successMessage = formatAlertMessage(
