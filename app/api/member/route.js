@@ -1,4 +1,3 @@
-///app/api/member/route.js
 import { NextResponse } from 'next/server';
 import { query } from '../../../lib/db';
 import logger from '../../../lib/logger';
@@ -22,14 +21,52 @@ export async function GET(request) {
       }
     });
 
-    const memberResult = await query(
-      `SELECT m.*, json_agg(json_build_object('socialmedia_name', s.socialmedia_name, 'link', s.link)) AS socialmedia
-       FROM member m
-       LEFT JOIN professor_socialmedia_info s ON m.id = s.professor_id
-       WHERE m.status = 'Active'
-       GROUP BY m.id
-       ORDER BY m.id`
-    );
+    const memberResult = await query(`
+      SELECT 
+        m.*, 
+        COALESCE(sm.socialmedia, '[]') AS socialmedia,
+        COALESCE(
+          p.alumni_status, 
+          mc.alumni_status, 
+          pc.alumni_status,
+          'Invalid'
+        ) AS alumni_status
+      FROM 
+        member m
+      LEFT JOIN LATERAL (
+        SELECT json_agg(json_build_object('socialmedia_name', s.socialmedia_name, 'link', s.link)) AS socialmedia
+        FROM (
+          SELECT socialmedia_name, link FROM professor_socialmedia_info WHERE professor_id = m.id
+          UNION ALL
+          SELECT socialmedia_name, link FROM director_socialmedia_info WHERE director_id = m.id
+          UNION ALL
+          SELECT socialmedia_name, link FROM phd_candidate_socialmedia_info WHERE phd_candidate_id = m.id
+          UNION ALL
+          SELECT socialmedia_name, link FROM masters_candidate_socialmedia_info WHERE masters_candidate_id = m.id
+          UNION ALL
+          SELECT socialmedia_name, link FROM postdoc_candidate_socialmedia_info WHERE postdoc_candidate_id = m.id
+          UNION ALL
+          SELECT socialmedia_name, link FROM staff_member_socialmedia_info WHERE staff_member_id = m.id
+        ) s
+      ) sm ON TRUE
+      LEFT JOIN phd_candidate_basic_info p ON m.id = p.id
+      LEFT JOIN masters_candidate_basic_info mc ON m.id = mc.id
+      LEFT JOIN postdoc_candidate_basic_info pc ON m.id = pc.id
+      WHERE 
+        m.status = 'Active'
+      ORDER BY 
+        CASE 
+          WHEN m.type = 'Director' THEN 1
+          WHEN m.type = 'Professor' THEN 2
+          WHEN m.type = 'PhD Candidate' THEN 3
+          WHEN m.type = 'Master''s Candidate' THEN 4
+          WHEN m.type = 'Post Doc Candidate' THEN 5
+          WHEN m.type = 'Staff Member' THEN 6
+          ELSE 7
+        END,
+        m.id;
+    `);
+    
     const members = memberResult.rows;
 
     logger.info('Successfully fetched member details', {
