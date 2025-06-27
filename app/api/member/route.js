@@ -52,8 +52,6 @@ export async function GET(request) {
       LEFT JOIN phd_candidate_basic_info p ON m.id = p.id
       LEFT JOIN masters_candidate_basic_info mc ON m.id = mc.id
       LEFT JOIN postdoc_candidate_basic_info pc ON m.id = pc.id
-      WHERE 
-        m.status = 'Active'
       ORDER BY 
         CASE 
           WHEN m.type = 'Director' THEN 1
@@ -68,6 +66,11 @@ export async function GET(request) {
     `);
     
     const members = memberResult.rows;
+    
+    // Debugging: Log alumni count
+    const alumni = members.filter(m => m.alumni_status === 'Valid');
+    console.log(`API Response: Found ${members.length} members, ${alumni.length} alumni`);
+    console.log('Alumni IDs:', alumni.map(a => a.id));
 
     logger.info('Successfully fetched member details', {
       meta: {

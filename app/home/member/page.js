@@ -1,3 +1,4 @@
+// app/members/page.js
 'use client';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -52,17 +53,37 @@ export default function Member() {
         const response = await axios.get('/api/member');
         const allMembers = response.data;
         
+        // Debug: Log API response
+        console.log('API Response:', allMembers);
+        
         // Categorize members
         const categorized = {
-          director: allMembers.filter(m => m.type === 'Director'),
-          professor: allMembers.filter(m => m.type === 'Professor'),
-          phd: allMembers.filter(m => m.type === 'PhD Candidate' && m.alumni_status !== 'Valid'),
-          masters: allMembers.filter(m => m.type === 'Master\'s Candidate' && m.alumni_status !== 'Valid'),
-          postdoc: allMembers.filter(m => m.type === 'Post Doc Candidate' && m.alumni_status !== 'Valid'),
-          staff: allMembers.filter(m => m.type === 'Staff Member'),
+          director: allMembers.filter(m => 
+            m.type === 'Director' && m.status === 'Active' && m.alumni_status !== 'Valid'
+          ),
+          professor: allMembers.filter(m => 
+            m.type === 'Professor' && m.status === 'Active' && m.alumni_status !== 'Valid'
+          ),
+          phd: allMembers.filter(m => 
+            m.type === 'PhD Candidate' && m.status === 'Active' && m.alumni_status !== 'Valid'
+          ),
+          masters: allMembers.filter(m => 
+            m.type === 'Master\'s Candidate' && m.status === 'Active' && m.alumni_status !== 'Valid'
+          ),
+          postdoc: allMembers.filter(m => 
+            m.type === 'Post Doc Candidate' && m.status === 'Active' && m.alumni_status !== 'Valid'
+          ),
+          staff: allMembers.filter(m => 
+            m.type === 'Staff Member' && m.status === 'Active' && m.alumni_status !== 'Valid'
+          ),
           alumni: allMembers.filter(m => m.alumni_status === 'Valid')
         };
 
+        // Debug: Log categorized data
+        console.log('Categorized Members:', categorized);
+        console.log(`Alumni Count: ${categorized.alumni.length}`);
+        console.log('Alumni Members:', categorized.alumni);
+        
         setMembers(categorized);
       } catch (error) {
         console.error('Error fetching member data:', error);
@@ -107,7 +128,6 @@ export default function Member() {
   };
 
   const MemberCard = ({ member, type = 'normal' }) => {
-    const isDirector = type === 'director';
     const isAlumni = type === 'alumni';
     
     return (
@@ -115,20 +135,19 @@ export default function Member() {
         variants={itemVariants}
         whileHover="hover"
         className={`bg-white rounded-xl overflow-hidden shadow-lg 
-          ${isDirector ? 'border-t-4 border-blue-600' : ''}
           ${isAlumni ? 'border-t-4 border-purple-600' : ''}
           transition-all duration-300 h-full flex flex-col`}
       >
-        <div className={`p-6 flex-grow ${isDirector ? 'bg-gradient-to-r from-blue-50 to-indigo-50' : ''}`}>
+        <div className="p-6 flex-grow">
           <div className="flex flex-col items-center">
-            <div className="relative mb-4">
-              <div className="rounded-full overflow-hidden border-4 border-white shadow-lg">
+            <div className="relative w-32 h-32 mb-4">
+              <div className="rounded-full overflow-hidden border-4 border-white shadow-lg w-full h-full">
                 <Image 
                   src={member.photo || '/images/placeholder-avatar.jpg'}
                   alt={`${member.first_name} ${member.last_name}`}
-                  width={isDirector ? 160 : 120}
-                  height={isDirector ? 160 : 120}
-                  className="object-cover"
+                  width={128}
+                  height={128}
+                  className="object-cover w-full h-full"
                 />
               </div>
               {isAlumni && (
@@ -139,12 +158,11 @@ export default function Member() {
             </div>
             
             <div className="text-center">
-              <h3 className={`font-bold ${isDirector ? 'text-2xl' : 'text-xl'} text-gray-900`}>
+              <h3 className={`font-bold text-xl text-gray-900`}>
                 {member.first_name} {member.last_name}
               </h3>
               <p className="text-gray-600 mt-1">{member.designation || member.type}</p>
-              <p className="text-sm text-gray-500 mt-1">{member.email}</p>
-              <p className="text-xs text-blue-600 mt-1 font-mono">ID: {member.id}</p>
+              <p className="text-sm text-gray-500 mt-1 truncate max-w-xs mx-auto">{member.email}</p>
               
               {member.short_bio && (
                 <p className="mt-3 text-gray-700 text-sm">{member.short_bio}</p>
@@ -152,6 +170,63 @@ export default function Member() {
               
               <div className="flex justify-center space-x-3 mt-4">
                 {member.socialmedia && renderSocialMediaIcons(member.socialmedia)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    );
+  };
+
+  const DirectorCard = ({ director }) => {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl overflow-hidden shadow-xl"
+      >
+        <div className="flex flex-col md:flex-row">
+          <div className="md:w-2/5 flex items-center justify-center p-8 bg-gradient-to-r from-blue-100 to-indigo-100">
+            <div className="relative w-64 h-64 rounded-full overflow-hidden border-8 border-white shadow-2xl">
+              <Image 
+                src={director.photo || '/images/placeholder-avatar.jpg'}
+                alt={`${director.first_name} ${director.last_name}`}
+                width={256}
+                height={256}
+                className="object-cover w-full h-full"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent"></div>
+            </div>
+          </div>
+          
+          <div className="md:w-3/5 p-8 flex flex-col justify-center">
+            <div className="text-center md:text-left">
+              <div className="inline-block bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-4">
+                LAB DIRECTOR
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+                {director.first_name} {director.last_name}
+              </h2>
+              
+              <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-6">
+                {director.socialmedia && renderSocialMediaIcons(director.socialmedia)}
+              </div>
+              
+              <p className="text-gray-600 text-lg mb-6">
+                {director.short_bio || "Leading innovation in automotive technologies and AI research"}
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="bg-white p-4 rounded-lg shadow-sm flex-1">
+                  <h4 className="font-bold text-gray-900 mb-2">Contact</h4>
+                  <p className="text-blue-600 text-sm">{director.email}</p>
+                </div>
+                
+                <div className="bg-white p-4 rounded-lg shadow-sm flex-1">
+                  <h4 className="font-bold text-gray-900 mb-2">Research Focus</h4>
+                  <p className="text-gray-600 text-sm">Autonomous Vehicles, AI Systems, Sensor Fusion</p>
+                </div>
               </div>
             </div>
           </div>
@@ -189,21 +264,27 @@ export default function Member() {
           initial="hidden"
           animate="show"
           className={`grid gap-8 ${
-            type === 'director' ? 'md:grid-cols-1 max-w-2xl mx-auto' : 
+            type === 'director' ? 'md:grid-cols-1 max-w-4xl mx-auto' : 
             'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
           }`}
         >
-          {members.map(member => (
-            <motion.div
-              key={member.id}
-              variants={cardVariants}
-            >
-              <MemberCard 
-                member={member} 
-                type={type === 'director' ? 'director' : type === 'alumni' ? 'alumni' : 'normal'} 
-              />
-            </motion.div>
-          ))}
+          {type === 'director' ? (
+            members.map(director => (
+              <DirectorCard key={director.id} director={director} />
+            ))
+          ) : (
+            members.map(member => (
+              <motion.div
+                key={member.id}
+                variants={cardVariants}
+              >
+                <MemberCard 
+                  member={member} 
+                  type={type === 'alumni' ? 'alumni' : 'normal'} 
+                />
+              </motion.div>
+            ))
+          )}
         </motion.div>
       </section>
     );
@@ -226,33 +307,41 @@ export default function Member() {
 
       {/* Main Content */}
       <main>
-        <section className="relative flex items-center justify-center h-[35vh] md:h-[45vh] bg-cover bg-center">
+        <section className="relative flex items-center justify-center h-[40vh] md:h-[50vh] bg-cover bg-center">
           <div
             className="absolute inset-0 bg-[url('/images/hero-bg3.png')] bg-cover bg-center"
             style={{ opacity: 0.5 }}
           ></div>
+          
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/30 to-blue-900/70"></div>
 
-          <div className="relative z-10 text-center p-6 md:p-8 max-w-2xl mx-auto">
+          <div className="relative z-10 text-center p-6 md:p-8 max-w-3xl mx-auto">
             <motion.h1 
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 mt-10 leading-tight"
+              className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 mt-10 leading-tight"
             >
-              Members of MVSD LAB
+              MVSD LAB Members
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-base md:text-lg lg:text-xl text-gray-800 mb-4"
+              className="text-xl md:text-2xl text-blue-100 mb-6"
             >
-              Meet our talented team driving innovation in automotive technologies and AI
+              Driving innovation in automotive technologies and AI
             </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="w-20 h-1 bg-blue-400 mx-auto"
+            ></motion.div>
           </div>
         </section>
 
-        <section className="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 py-4">
+        <section className="bg-gradient-to-r from-gray-50 via-white to-gray-50 py-4 shadow-sm">
           <div className="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
             <nav className="text-sm font-medium text-gray-800 mb-2 md:mb-0">
               <ol className="list-reset flex items-center space-x-2">
@@ -261,16 +350,16 @@ export default function Member() {
                     Home
                   </Link>
                 </li>
-                <li>/</li>
-                <li className="text-gray-600">Member</li>
+                <li className="text-gray-400">›</li>
+                <li className="text-gray-600">Members</li>
               </ol>
             </nav>
 
             <div className="relative flex-grow md:max-w-xs">
               <input
                 type="text"
-                placeholder="Search by name, ID, email..."
-                className="w-full pl-10 pr-4 py-2 rounded-lg bg-white placeholder-gray-400 text-gray-700 border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Search by name, email..."
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white placeholder-gray-400 text-gray-700 border border-gray-200 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -285,7 +374,7 @@ export default function Member() {
 
         {/* Members Section */}
         <div className="max-w-screen-xl mx-auto px-4 py-8">
-          {renderSection("Lab Director", members.director, 'director')}
+          {renderSection("Lab Leadership", members.director, 'director')}
           {renderSection("Professors", members.professor)}
           {renderSection("PhD Candidates", members.phd)}
           {renderSection("Master's Candidates", members.masters)}
