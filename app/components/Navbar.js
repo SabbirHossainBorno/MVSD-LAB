@@ -130,7 +130,7 @@ export default function Navbar() {
           <li className="relative group">
             <button
               className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded ${
-                pathname.includes('/member') ? 'text-blue-500' : ''
+                pathname.includes('/home/member') ? 'text-blue-500' : ''
               }`}
               onClick={() => handleDropdown('member')}
             >
@@ -156,9 +156,9 @@ export default function Navbar() {
               <ul className="rounded">
               <li>
                   <Link
-                    href="/member"
+                    href="/home/member"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/member' ? 'text-blue-500' : ''
+                      pathname === '/home/member' ? 'text-blue-500' : ''
                     }`}
                   >
                     All
@@ -167,49 +167,64 @@ export default function Navbar() {
 
                 <li>
                   <Link
-                    href="/member/professor"
+                    href="/home/member/director"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/member/professor' ? 'text-blue-500' : ''
+                      pathname === '/home/member/director' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Director
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/home/member/professor"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/home/member/professor' ? 'text-blue-500' : ''
                     }`}
                   >
                     Professor
                   </Link>
                 </li>
+
                 <li>
                   <Link
-                    href="/member/post_doc_researcher"
+                    href="/home/member/phd_candidate"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/member/post_doc_researcher' ? 'text-blue-500' : ''
+                      pathname === '/home/member/phd_candidate' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Post Doc
+                    PhD
                   </Link>
                 </li>
+                
                 <li>
                   <Link
-                    href="/member/phd_candidate"
+                    href="/home/member/masters_candidate"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/member/phd_candidate' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Ph.D
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/member/masc_candidate"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/member/masc_candidate' ? 'text-blue-500' : ''
+                      pathname === '/home/member/masc_candidate' ? 'text-blue-500' : ''
                     }`}
                   >
                     Master&#39;s
                   </Link>
                 </li>
+
                 <li>
                   <Link
-                    href="/member/staff"
+                    href="/home/member/postdoc_candidate"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/member/staff' ? 'text-blue-500' : ''
+                      pathname === '/home/member/postdoc_candidate' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Post Doc
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/home/member/staff"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/home/member/staff' ? 'text-blue-500' : ''
                     }`}
                   >
                     Staff
@@ -217,9 +232,9 @@ export default function Navbar() {
                 </li>
                 <li>
                   <Link
-                    href="/member/alumni"
+                    href="/home/member/alumni"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/member/alumni' ? 'text-blue-500' : ''
+                      pathname === '/home/member/alumni' ? 'text-blue-500' : ''
                     }`}
                   >
                     Alumni
@@ -584,14 +599,7 @@ export default function Navbar() {
               </ul>
             </div>
           </li>
-
-
           
-
-
-
-
-
           </ul>
         </div>
       </div>

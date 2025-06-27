@@ -1,8 +1,8 @@
 //app/members/page.js
 'use client';
-import Navbar from '../components/Navbar'; // Adjust the path as needed
-import Footer from '../components/Footer'; // Adjust the path as needed
-import ScrollToTop from '../components/ScrollToTop';
+import Navbar from '../../components/Navbar'; // Adjust the path as needed
+import Footer from '../../components/Footer'; // Adjust the path as needed
+import ScrollToTop from '../../components/ScrollToTop';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Slider from 'react-slick';
@@ -136,6 +136,7 @@ export default function Member() {
       Linkedin: '/images/social_icon/linkedin.png',
       GitHub: '/images/social_icon/github.png',
       Website: '/images/social_icon/website.png',
+      Other: '/images/social_icon/other.png',
     };
 
     return socialmedia.map((media) => (
