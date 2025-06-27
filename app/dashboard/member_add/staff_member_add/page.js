@@ -844,7 +844,7 @@ const AddStaffMember = () => {
           </div>
         </form>
       </div>
-      <ToastContainer position="bottom-right" theme="dark" />
+      <ToastContainer/>
     </div>
   );
 };
