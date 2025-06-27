@@ -25,23 +25,23 @@ export async function GET(req) {
     const resultsPerPage = 12; // Set to 12 results per page
     const offset = (page - 1) * resultsPerPage;
 
-    // Fetch total counts for all PhD candidates
+    // Fetch total counts for all Staff Members
     const totalCountsQuery = `
       SELECT COUNT(*) AS total, 
              COUNT(*) FILTER (WHERE status ILIKE 'Active') AS active_count,
              COUNT(*) FILTER (WHERE status ILIKE 'Inactive') AS inactive_count,
              COUNT(*) FILTER (WHERE status ILIKE 'Graduate') AS graduate_count
-      FROM phd_candidate_basic_info
+      FROM staff_member_basic_info
     `;
     const totalCountsResult = await query(totalCountsQuery);
-    const totalPhdCandidates = parseInt(totalCountsResult.rows[0].total, 10);
-    const activePhdCandidates = parseInt(totalCountsResult.rows[0].active_count, 10);
-    const inactivePhdCandidates = parseInt(totalCountsResult.rows[0].inactive_count, 10);
-    const graduatePhdCandidates = parseInt(totalCountsResult.rows[0].graduate_count, 10);
+    const totalStaffMembers = parseInt(totalCountsResult.rows[0].total, 10);
+    const activeStaffMembers = parseInt(totalCountsResult.rows[0].active_count, 10);
+    const inactiveStaffMembers = parseInt(totalCountsResult.rows[0].inactive_count, 10);
+    const graduateStaffMembers = parseInt(totalCountsResult.rows[0].graduate_count, 10);
 
-    // Fetch filtered list of PhD candidates
+    // Fetch filtered list of Staff Members
     let searchQuery = `
-      SELECT * FROM phd_candidate_basic_info
+      SELECT * FROM staff_member_basic_info
       WHERE (first_name ILIKE $1 OR last_name ILIKE $1 OR email ILIKE $1)
     `;
     const queryParams = [`%${search}%`];
@@ -55,43 +55,43 @@ export async function GET(req) {
     queryParams.push(resultsPerPage, offset); // Add pagination parameters
 
     // Execute queries
-    const phdCandidatesResult = await query(searchQuery, queryParams);
-    const totalPages = Math.ceil(totalPhdCandidates / resultsPerPage);
+    const StaffMembersResult = await query(searchQuery, queryParams);
+    const totalPages = Math.ceil(totalStaffMembers / resultsPerPage);
 
-    const apiCallMessage = formatAlertMessage('PhD Candidate List - API', `IP : ${ipAddress}\nStatus : 200`);
+    const apiCallMessage = formatAlertMessage('Staff Member List - API', `IP : ${ipAddress}\nStatus : 200`);
     await sendTelegramAlert(apiCallMessage);
 
-    logger.info('Fetched PhD candidates list successfully', {
+    logger.info('Fetched Staff Members list successfully', {
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Fetch PhD Candidates List',
-        details: `Fetched PhD candidates list successfully from IP ${ipAddress} with User-Agent ${userAgent}`
+        taskName: 'Fetch Staff Members List',
+        details: `Fetched Staff Members list successfully from IP ${ipAddress} with User-Agent ${userAgent}`
       }
     });
 
     return NextResponse.json({
-      phd_candidates: phdCandidatesResult.rows,
-      totalPhdCandidates,
-      activePhdCandidates,
-      inactivePhdCandidates,
-      graduatePhdCandidates,
+      staff_members: StaffMembersResult.rows,
+      totalStaffMembers,
+      activeStaffMembers,
+      inactiveStaffMembers,
+      graduateStaffMembers,
       totalPages,
     });
   } catch (error) {
-    const errorMessage = formatAlertMessage('PhD Candidate List - API', `IP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
+    const errorMessage = formatAlertMessage('Staff Member List - API', `IP : ${ipAddress}\nError : ${error.message}\nStatus : 500`);
     await sendTelegramAlert(errorMessage);
 
-    logger.error('Error fetching PhD candidates list', {
+    logger.error('Error fetching Staff Members list', {
       meta: {
         eid,
         sid: sessionId,
-        taskName: 'Fetch PhD Candidates List',
-        details: `Error fetching PhD candidates list from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`,
+        taskName: 'Fetch Staff Members List',
+        details: `Error fetching Staff Members list from IP ${ipAddress} with User-Agent ${userAgent}: ${error.message}`,
         stack: error.stack
       }
     });
 
-    return NextResponse.json({ message: 'Error fetching PhD candidates' }, { status: 500 });
+    return NextResponse.json({ message: 'Error fetching Staff Members' }, { status: 500 });
   }
 }

@@ -30,10 +30,10 @@ const StaffMembersList = () => {
     const fetchStaffMembers = async () => {
       setLoading(true); 
       try {
-        const res = await fetch(`/api/member_list/phd_candidate_list?page=${currentPage}&search=${searchTerm}&filter=${filter}&sortOrder=${sortOrder}`);
+        const res = await fetch(`/api/member_list/staff_member_list?page=${currentPage}&search=${searchTerm}&filter=${filter}&sortOrder=${sortOrder}`);
         const data = await res.json();
         if (res.ok) {
-          setStaffMembers(data.phd_candidates || []);
+          setStaffMembers(data.staff_members || []);
           setTotalPages(data.totalPages || 1);
           setTotalStaffMembers(data.totalStaffMembers ?? 0);
           setActiveStaffMembers(data.activeStaffMembers ?? 0);
@@ -43,7 +43,7 @@ const StaffMembersList = () => {
           toast.error(data.message);
         }
       } catch (error) {
-        toast.error('Failed to fetch PhD candidates');
+        toast.error('Failed to fetch Staff Members');
       } finally {
         setLoading(false);
       }
@@ -55,11 +55,11 @@ const StaffMembersList = () => {
   }, [currentPage, searchTerm, filter, sortOrder]);
 
   const handleEdit = (id) => {
-    router.push(`/dashboard/member_edit/phd_candidate_edit/${id}`);
+    router.push(`/dashboard/member_edit/staff_member_edit/${id}`);
   };
 
   const handleView = (id) => {
-    router.push(`/dashboard/member_details/phd_candidate_details/${id}`);
+    router.push(`/dashboard/member_details/staff_member_details/${id}`);
   };
 
   const handleSearch = (e) => {
@@ -92,7 +92,7 @@ const StaffMembersList = () => {
           <div className="absolute left-0 right-0 inset-y-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
           <div className="relative bg-gray-800/50 backdrop-blur-lg rounded shadow-2xl p-6 md:p-8 w-full mx-auto">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-300 text-center mb-4 md:mb-6">
-              PhD Candidates Directory
+              Staff Members Directory
             </h1>
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 md:gap-4 max-w-2xl mx-auto">
               <div className="bg-blue-600/20 px-3 py-2 md:px-4 md:py-2 rounded flex items-center justify-center sm:justify-start w-full">
@@ -133,7 +133,7 @@ const StaffMembersList = () => {
             <div className="relative flex-[3] min-w-[240px]">
               <input
                 type="text"
-                placeholder="Search PhD candidates..."
+                placeholder="Search Staff Members..."
                 value={searchTerm}
                 onChange={handleSearch}
                 className="w-full pl-14 pr-4 py-3 bg-gray-800 rounded border-2 border-gray-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all text-sm"
@@ -147,7 +147,7 @@ const StaffMembersList = () => {
                 className="w-full pl-10 sm:pl-14 pr-8 py-2.5 sm:py-3 bg-gray-800 rounded border-2 border-gray-700 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all text-xs sm:text-sm appearance-none"
               >
                 <option value="all" className="text-gray-300 bg-gray-800 hover:bg-blue-600">
-                  All PhD Candidates
+                  All Staff Members
                 </option>
                 <option value="active" className="text-gray-300 bg-gray-800 hover:bg-blue-600">
                   Active
@@ -186,12 +186,12 @@ const StaffMembersList = () => {
           </div>
         </motion.div>
 
-        {/* PhD Candidates Grid */}
+        {/* Staff Members Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {staffMembers.length > 0 ? (
-            staffMembers.map((phdCandidate) => (
+            staffMembers.map((staffMember) => (
               <motion.div 
-                key={phdCandidate.id}
+                key={staffMember.id}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="bg-gray-800/50 backdrop-blur-lg rounded shadow-2xl p-6 transition-all hover:shadow-3xl hover:-translate-y-1 relative group"
@@ -200,15 +200,15 @@ const StaffMembersList = () => {
                 
                 <div className="flex items-start space-x-4">
                   <div className="relative w-20 h-20 flex-shrink-0">
-                    {phdCandidate.photo ? (
+                    {staffMember.photo ? (
                       <Image
                         src={
                           // Handle default photo path differently
-                          phdCandidate.photo.includes('default_DP.png') 
-                            ? phdCandidate.photo
-                            : `/Storage/Images/PhD_Candidate/${phdCandidate.photo.split('/').pop()}`
+                          staffMember.photo.includes('default_DP.png') 
+                            ? staffMember.photo
+                            : `/Storage/Images/Staff_Member/${staffMember.photo.split('/').pop()}`
                         }
-                        alt={`${phdCandidate.first_name} ${phdCandidate.last_name}`}
+                        alt={`${staffMember.first_name} ${staffMember.last_name}`}
                         width={80}
                         height={80}
                         className="rounded border-2 border-blue-500/50 object-cover w-full h-full"
@@ -220,9 +220,9 @@ const StaffMembersList = () => {
                     )}
                     <div
                       className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-gray-800 ${
-                        phdCandidate.status === 'Active'
+                        staffMember.status === 'Active'
                           ? 'bg-green-500'
-                          : phdCandidate.status === 'Graduate'
+                          : staffMember.status === 'Graduate'
                           ? 'bg-yellow-500'
                           : 'bg-red-500'
                       }`}
@@ -231,22 +231,22 @@ const StaffMembersList = () => {
 
                   <div className="flex-1 min-w-0">
                   <h2 className="text-xl font-semibold truncate">
-                      {phdCandidate.first_name} {phdCandidate.last_name}
+                      {staffMember.first_name} {staffMember.last_name}
                     </h2>
-                    <p className="text-gray-400 text-sm truncate mb-2">{phdCandidate.email}</p>
+                    <p className="text-gray-400 text-sm truncate mb-2">{staffMember.email}</p>
                     <div className="flex flex-wrap gap-2">
                     <span className="px-2 py-1.5 bg-blue-600/20 text-blue-300 text-xs rounded inline-flex items-center gap-1 border border-blue-500/10">
                         <FiUser className="text-xs shrink-0" />
-                        <span>{phdCandidate.id}</span>
+                        <span>{staffMember.id}</span>
                       </span>
                       <span className="px-2 py-1.5 bg-green-600/20 text-green-300 text-xs rounded inline-flex items-center gap-1 border border-green-500/10">
                         <FiArrowUp className="text-xs shrink-0" />
-                        <span>{format(new Date(phdCandidate.admission_date), "d MMM yyyy")}</span>
+                        <span>{format(new Date(staffMember.admission_date), "d MMM yyyy")}</span>
                       </span>
-                      {phdCandidate.completion_date && (
+                      {staffMember.completion_date && (
                         <span className="px-2 py-1.5 bg-red-600/20 text-red-300 text-xs rounded inline-flex items-center gap-1 border border-red-500/10">
                           <FiArrowDown className="text-xs shrink-0" />
-                          <span>{format(new Date(phdCandidate.completion_date), "d MMM yyyy")}</span>
+                          <span>{format(new Date(staffMember.completion_date), "d MMM yyyy")}</span>
                         </span>
                       )}
                     </div>
@@ -255,14 +255,14 @@ const StaffMembersList = () => {
 
                 <div className="flex justify-end space-x-3 mt-6">
                   <button
-                    onClick={() => handleView(phdCandidate.id)}
+                    onClick={() => handleView(staffMember.id)}
                     className="flex items-center space-x-2 bg-gray-700/50 hover:bg-blue-600/30 px-4 py-2 rounded transition-all border border-gray-600 hover:border-blue-500"
                   >
                     <FiEye className="w-5 h-5" />
                     <span>View</span>
                   </button>
                   <button
-                    onClick={() => handleEdit(phdCandidate.id)}
+                    onClick={() => handleEdit(staffMember.id)}
                     className="flex items-center space-x-2 bg-blue-600/50 hover:bg-blue-600 px-4 py-2 rounded transition-all"
                   >
                     <FiEdit className="w-5 h-5" />
@@ -273,7 +273,7 @@ const StaffMembersList = () => {
             ))
           ) : (
             <div className="col-span-full text-center py-16 bg-gray-800/50 rounded">
-              <p className="text-2xl text-gray-400 mb-4">No PhD candidates found</p>
+              <p className="text-2xl text-gray-400 mb-4">No Staff Members found</p>
             </div>
           )}
         </div>
