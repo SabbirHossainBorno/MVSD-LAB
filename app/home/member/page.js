@@ -447,18 +447,24 @@ const MemberCard = ({ member, type = 'normal' }) => {
 
     {/* Main Content */}
     <main>
-<section className="relative flex items-center justify-center h-[30vh] md:h-[40vh] bg-cover bg-center">
+      {/* Hero Section */}
+      <section className="relative flex flex-col items-center justify-center h-[40vh] md:h-[50vh] bg-cover bg-center overflow-hidden">
+  {/* Background with reduced opacity */}
   <div
     className="absolute inset-0 bg-[url('/images/hero-bg3.png')] bg-cover bg-center"
     style={{ opacity: 0.5 }}
   ></div>
+  
+  {/* Content overlay with semi-transparent background */}
+  <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/30"></div>
 
+  {/* Content */}
   <div className="relative z-10 text-center p-6 md:p-8 max-w-2xl mx-auto">
     <motion.h1 
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 mt-10 leading-tight"
+      className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4 mt-10 leading-tight"
     >
       Members of MVSD LAB
     </motion.h1>
@@ -466,91 +472,91 @@ const MemberCard = ({ member, type = 'normal' }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="text-base md:text-lg lg:text-xl text-gray-800 mb-2"
+      className="text-base md:text-lg lg:text-xl text-white/90 mb-8"
     >
       Meet our talented team driving innovation in automotive technologies and AI
     </motion.p>
   </div>
   
-  {/* Compact Summary Cards */}
-  <div className="absolute bottom-0 left-0 right-0 transform translate-y-1/2 z-20">
+  {/* Summary Cards - Positioned at bottom with full width background */}
+  <div className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-blue-900/70 to-transparent pt-16 pb-4">
     <div className="max-w-screen-xl mx-auto px-4">
-      <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 gap-3">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white rounded-lg shadow-sm p-2 text-center border border-blue-100"
+          className="bg-white/90 backdrop-blur-sm rounded-xl shadow-md p-3 text-center border border-white/30"
         >
           <div className="text-lg md:text-xl font-bold text-blue-600">{totalMembers}</div>
-          <div className="text-[10px] xs:text-xs text-gray-600 truncate">Total</div>
+          <div className="text-xs text-gray-700 mt-1">Total</div>
         </motion.div>
         
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-lg shadow-sm p-2 text-center border border-amber-100"
+          className="bg-white/90 backdrop-blur-sm rounded-xl shadow-md p-3 text-center border border-white/30"
         >
           <div className="text-lg md:text-xl font-bold text-amber-600">{directorCount}</div>
-          <div className="text-[10px] xs:text-xs text-gray-600 truncate">Director</div>
+          <div className="text-xs text-gray-700 mt-1">Director</div>
         </motion.div>
         
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-white rounded-lg shadow-sm p-2 text-center border border-emerald-100"
+          className="bg-white/90 backdrop-blur-sm rounded-xl shadow-md p-3 text-center border border-white/30"
         >
           <div className="text-lg md:text-xl font-bold text-emerald-600">{professorCount}</div>
-          <div className="text-[10px] xs:text-xs text-gray-600 truncate">Professors</div>
+          <div className="text-xs text-gray-700 mt-1">Professors</div>
         </motion.div>
         
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-white rounded-lg shadow-sm p-2 text-center border border-cyan-100"
+          className="bg-white/90 backdrop-blur-sm rounded-xl shadow-md p-3 text-center border border-white/30"
         >
           <div className="text-lg md:text-xl font-bold text-cyan-600">{phdCount}</div>
-          <div className="text-[10px] xs:text-xs text-gray-600 truncate">PhD</div>
+          <div className="text-xs text-gray-700 mt-1">PhD</div>
         </motion.div>
         
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="bg-white rounded-lg shadow-sm p-2 text-center border border-violet-100"
+          className="bg-white/90 backdrop-blur-sm rounded-xl shadow-md p-3 text-center border border-white/30"
         >
           <div className="text-lg md:text-xl font-bold text-violet-600">{mastersCount}</div>
-          <div className="text-[10px] xs:text-xs text-gray-600 truncate">Masters</div>
+          <div className="text-xs text-gray-700 mt-1">Masters</div>
         </motion.div>
         
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="bg-white rounded-lg shadow-sm p-2 text-center border border-rose-100"
+          className="bg-white/90 backdrop-blur-sm rounded-xl shadow-md p-3 text-center border border-white/30"
         >
           <div className="text-lg md:text-xl font-bold text-rose-600">{postdocCount}</div>
-          <div className="text-[10px] xs:text-xs text-gray-600 truncate">Post Doc</div>
+          <div className="text-xs text-gray-700 mt-1">Post Doc</div>
         </motion.div>
         
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
-          className="bg-white rounded-lg shadow-sm p-2 text-center border border-indigo-100"
+          className="bg-white/90 backdrop-blur-sm rounded-xl shadow-md p-3 text-center border border-white/30"
         >
           <div className="text-lg md:text-xl font-bold text-indigo-600">{alumniCount}</div>
-          <div className="text-[10px] xs:text-xs text-gray-600 truncate">Alumni</div>
+          <div className="text-xs text-gray-700 mt-1">Alumni</div>
         </motion.div>
       </div>
     </div>
   </div>
 </section>
 
-      {/* Modern Filter and Search Section */}
+      {/* Filter and Search Section */}
       <section className="bg-gradient-to-r from-blue-50 to-indigo-50 py-6 border-b border-gray-200">
         <div className="max-w-screen-xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
