@@ -3,6 +3,7 @@
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import ScrollToTop from '../../components/ScrollToTop';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -290,15 +291,8 @@ export default function Member() {
     );
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="flex flex-col items-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-gray-600">Loading our talented team...</p>
-        </div>
-      </div>
-    );
+  if (loading) {if (loading) {
+    return <LoadingSpinner/>;
   }
 
   return (

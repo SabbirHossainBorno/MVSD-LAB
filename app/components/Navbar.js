@@ -252,7 +252,7 @@ export default function Navbar() {
               }`}
               onClick={() => handleDropdown('publication')}
             >
-              Publication
+              Publication/Research
               <svg
                 className={`w-4 h-4 ml-1 transition-transform duration-300 ${
                   openDropdown === 'publication' ? 'rotate-180' : ''
