@@ -127,122 +127,15 @@ export default function Navbar() {
             </Link>
           </li>
 
-          {/* Member Dropdown */}
-          <li className="relative group">
-            <button
-              className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded ${
-                pathname.includes('/home/member') ? 'text-blue-500' : ''
+          <li>
+            <Link
+              href="/home/member"
+              className={`py-2 px-3 block hover:text-blue-700 font-medium ${
+                pathname === '/home/member' ? 'text-blue-500 font-medium' : ''
               }`}
-              onClick={() => handleDropdown('member')}
             >
               Member
-              <svg
-                className={`w-4 h-4 ml-1 transition-transform duration-300 ${
-                  openDropdown === 'member' ? 'rotate-180' : ''
-                }`}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            <div
-              className={`${
-                openDropdown === 'member' ? 'block' : 'hidden'
-              } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded md:mt-2 md:left-0 w-full rounded transition-all duration-300`}
-            >
-              <ul className="rounded">
-              <li>
-                  <Link
-                    href="/home/member"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/home/member' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    All
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href="/home/member/director"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/home/member/director' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Director
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href="/home/member/professor"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/home/member/professor' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Professor
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href="/home/member/phd_candidate"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/home/member/phd_candidate' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    PhD
-                  </Link>
-                </li>
-                
-                <li>
-                  <Link
-                    href="/home/member/masters_candidate"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/home/member/masc_candidate' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Master&#39;s
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href="/home/member/postdoc_candidate"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/home/member/postdoc_candidate' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Post Doc
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href="/home/member/staff"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/home/member/staff' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Staff
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/home/member/alumni"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/home/member/alumni' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Alumni
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            </Link>
           </li>
 
           {/* Publication Dropdown */}

@@ -36,6 +36,7 @@ const cardVariants = {
 
 export default function Member() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState('all');
   const [members, setMembers] = useState({
     director: [],
     professor: [],
@@ -46,6 +47,18 @@ export default function Member() {
     alumni: []
   });
   const [loading, setLoading] = useState(true);
+
+  // Filter options
+  const filterOptions = [
+    { key: 'all', label: 'All Members' },
+    { key: 'director', label: 'Directors' },
+    { key: 'professor', label: 'Professors' },
+    { key: 'phd', label: 'PhD Candidates' },
+    { key: 'masters', label: 'Master Candidates' },
+    { key: 'postdoc', label: 'Post Doc' },
+    { key: 'staff', label: 'Staff' },
+    { key: 'alumni', label: 'Alumni' },
+  ];
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -95,6 +108,41 @@ export default function Member() {
 
     fetchMembers();
   }, []);
+
+  // Function to filter members in a category by search query
+  const getFilteredMembers = (category) => {
+    let list = members[category] || [];
+    
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      list = list.filter(member => 
+        (member.first_name && member.first_name.toLowerCase().includes(query)) ||
+        (member.last_name && member.last_name.toLowerCase().includes(query)) ||
+        (member.email && member.email.toLowerCase().includes(query))
+      );
+    }
+    
+    return list;
+  };
+
+  // Get the members to display based on active filter
+  const getMembersToDisplay = () => {
+    if (activeFilter === 'all') {
+      return {
+        director: getFilteredMembers('director'),
+        professor: getFilteredMembers('professor'),
+        phd: getFilteredMembers('phd'),
+        masters: getFilteredMembers('masters'),
+        postdoc: getFilteredMembers('postdoc'),
+        staff: getFilteredMembers('staff'),
+        // Note: alumni are handled separately in a special section
+      };
+    } else {
+      return {
+        [activeFilter]: getFilteredMembers(activeFilter)
+      };
+    }
+  };
 
   const renderSocialMediaIcons = (socialmedia) => {
     const iconMap = {
@@ -405,32 +453,57 @@ const MemberCard = ({ member, type = 'normal' }) => {
           </div>
         </section>
 
-        <section className="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 py-4">
-          <div className="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
-            <nav className="text-sm font-medium text-gray-800 mb-2 md:mb-0">
-              <ol className="list-reset flex items-center space-x-2">
-                <li>
-                  <Link href="/home" className="text-blue-600 hover:text-blue-700 transition-colors duration-300 ease-in-out">
-                    Home
-                  </Link>
-                </li>
-                <li>/</li>
-                <li className="text-gray-600">Member</li>
-              </ol>
-            </nav>
-
-            <div className="relative flex-grow md:max-w-xs">
-              <input
-                type="text"
-                placeholder="Search by name, email..."
-                className="w-full pl-10 pr-4 py-2 rounded-lg bg-white placeholder-gray-400 text-gray-700 border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35M16.65 11.65a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z"></path>
-                </svg>
+        {/* Modern Filter and Search Section */}
+        <section className="bg-gradient-to-r from-blue-50 to-indigo-50 py-6 border-b border-gray-200">
+          <div className="max-w-screen-xl mx-auto px-4">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              {/* Breadcrumb */}
+              <nav className="text-sm font-medium text-gray-800">
+                <ol className="flex items-center space-x-2">
+                  <li>
+                    <Link href="/home" className="text-blue-600 hover:text-blue-700 transition-colors duration-300 ease-in-out">
+                      Home
+                    </Link>
+                  </li>
+                  <li className="text-gray-400">/</li>
+                  <li className="text-gray-600">Members</li>
+                </ol>
+              </nav>
+              
+              {/* Modern Filter Bar */}
+              <div className="flex flex-wrap justify-center gap-2">
+                {filterOptions.map((option) => (
+                  <motion.button
+                    key={option.key}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                      activeFilter === option.key
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg'
+                        : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+                    }`}
+                    onClick={() => setActiveFilter(option.key)}
+                  >
+                    {option.label}
+                  </motion.button>
+                ))}
+              </div>
+              
+              {/* Modern Search Bar */}
+              <div className="relative w-full md:w-auto">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35M16.65 11.65a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z"></path>
+                  </svg>
+                </div>
+                <motion.input
+                  whileFocus={{ boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.5)" }}
+                  type="text"
+                  placeholder="Search by name, email..."
+                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-white placeholder-gray-400 text-gray-700 border border-gray-300 shadow-sm focus:outline-none transition-all duration-300"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
               </div>
             </div>
           </div>
@@ -438,15 +511,30 @@ const MemberCard = ({ member, type = 'normal' }) => {
 
         {/* Members Section */}
         <div className="max-w-screen-xl mx-auto px-4 py-8">
-          {renderSection("Lab Leadership", members.director, 'director')}
-          {renderSection("Professors", members.professor)}
-          {renderSection("PhD Candidates", members.phd)}
-          {renderSection("Master's Candidates", members.masters)}
-          {renderSection("Post Doc Researchers", members.postdoc)}
-          {renderSection("Staff Members", members.staff)}
+          {/* Render each section based on the active filter and search */}
+          {Object.entries(getMembersToDisplay()).map(([category, memberList]) => {
+            if (!memberList || memberList.length === 0) return null;
+
+            switch (category) {
+              case 'director':
+                return renderSection("Lab Leadership", memberList, 'director');
+              case 'professor':
+                return renderSection("Professors", memberList);
+              case 'phd':
+                return renderSection("PhD Candidates", memberList);
+              case 'masters':
+                return renderSection("Master's Candidates", memberList);
+              case 'postdoc':
+                return renderSection("Post Doc Researchers", memberList);
+              case 'staff':
+                return renderSection("Staff Members", memberList);
+              default:
+                return null;
+            }
+          })}
           
-          {/* Alumni Section */}
-          {members.alumni.length > 0 && (
+          {/* Alumni Section - only shown when all or alumni is selected */}
+          {(activeFilter === 'all' || activeFilter === 'alumni') && getFilteredMembers('alumni').length > 0 && (
             <motion.section 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -484,7 +572,7 @@ const MemberCard = ({ member, type = 'normal' }) => {
                 animate="show"
                 className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
               >
-                {members.alumni.map(alumni => (
+                {getFilteredMembers('alumni').map(alumni => (
                   <motion.div
                     key={alumni.id}
                     variants={cardVariants}
