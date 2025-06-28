@@ -142,7 +142,7 @@ export default function Navbar() {
           <li className="relative group">
             <button
               className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded ${
-                pathname.includes('/home/publication') ? 'text-blue-500' : ''
+                pathname.includes('/home/publication_research') ? 'text-blue-500' : ''
               }`}
               onClick={() => handleDropdown('publication')}
             >
@@ -168,9 +168,9 @@ export default function Navbar() {
               <ul className="rounded">
               <li>
                   <Link
-                    href="/home/publication"
+                    href="/home/publication_research"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/home/publication' ? 'text-blue-500' : ''
+                      pathname === '/home/publication_research' ? 'text-blue-500' : ''
                     }`}
                   >
                     Summary
@@ -179,9 +179,9 @@ export default function Navbar() {
 
                 <li>
                   <Link
-                    href="/publication/international_journals"
+                    href="/publication_research/international_journals"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/publication/international_journals' ? 'text-blue-500' : ''
+                      pathname === '/publication_research/international_journals' ? 'text-blue-500' : ''
                     }`}
                   >
                     Conference Paper
@@ -189,9 +189,9 @@ export default function Navbar() {
                 </li>
                 <li>
                   <Link
-                    href="/publication/domestic_journals"
+                    href="/publication_research/domestic_journals"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/publication/domestic_journals' ? 'text-blue-500' : ''
+                      pathname === '/publication_research/domestic_journals' ? 'text-blue-500' : ''
                     }`}
                   >
                     Journal Paper
@@ -199,9 +199,9 @@ export default function Navbar() {
                 </li>
                 <li>
                   <Link
-                    href="/publication/international_conferences"
+                    href="/publication_research/international_conferences"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/publication/international_conferences' ? 'text-blue-500' : ''
+                      pathname === '/publication_research/international_conferences' ? 'text-blue-500' : ''
                     }`}
                   >
                     Book/Chapter
@@ -209,9 +209,9 @@ export default function Navbar() {
                 </li>
                 <li>
                   <Link
-                    href="/publication/domestic_conferences"
+                    href="/publication_research/domestic_conferences"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/publication/domestic_conferences' ? 'text-blue-500' : ''
+                      pathname === '/publication_research/domestic_conferences' ? 'text-blue-500' : ''
                     }`}
                   >
                     Patent
@@ -220,9 +220,9 @@ export default function Navbar() {
 
                 <li>
                   <Link
-                    href="/publication/domestic_conferences"
+                    href="/publication_research/domestic_conferences"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/publication/domestic_conferences' ? 'text-blue-500' : ''
+                      pathname === '/publication_research/domestic_conferences' ? 'text-blue-500' : ''
                     }`}
                   >
                     Project
