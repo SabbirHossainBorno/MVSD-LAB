@@ -1,3 +1,4 @@
+//app/home/publication/page.js
 'use client';
 import { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
@@ -5,11 +6,32 @@ import Footer from '../../components/Footer';
 import ScrollToTop from '../../components/ScrollToTop';
 import Link from 'next/link';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 export default function Publication() {
   const [loading, setLoading] = useState(true);
   const [summaryData, setSummaryData] = useState(null);
   const [error, setError] = useState(null);
+  const [activeTimeframe, setActiveTimeframe] = useState('overall');
 
   // Fetch publication summary data
   useEffect(() => {
@@ -65,6 +87,107 @@ export default function Publication() {
     );
   }
 
+  // Chart options
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          font: {
+            size: 14,
+            family: "'Inter', sans-serif"
+          },
+          color: '#4b5563'
+        }
+      },
+      title: {
+        display: true,
+        text: 'Publication Distribution by Type',
+        font: {
+          size: 18,
+          weight: 'bold',
+          family: "'Inter', sans-serif"
+        },
+        color: '#111827',
+        padding: {
+          top: 10,
+          bottom: 20
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        titleColor: '#1f2937',
+        bodyColor: '#1f2937',
+        titleFont: {
+          size: 14,
+          weight: 'bold'
+        },
+        bodyFont: {
+          size: 13
+        },
+        padding: 12,
+        borderColor: '#e5e7eb',
+        borderWidth: 1,
+        displayColors: true,
+        callbacks: {
+          label: function(context) {
+            return `${context.dataset.label || ''}: ${context.parsed.y || 0}`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          font: {
+            size: 13,
+            family: "'Inter', sans-serif"
+          },
+          color: '#4b5563'
+        }
+      },
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: 'rgba(229, 231, 235, 0.5)'
+        },
+        ticks: {
+          font: {
+            size: 13,
+            family: "'Inter', sans-serif"
+          },
+          color: '#4b5563',
+          callback: function(value) {
+            if (value % 1 === 0) {
+              return value;
+            }
+          }
+        }
+      }
+    },
+    animation: {
+      duration: 1000,
+      easing: 'easeOutQuart'
+    }
+  };
+
+  // Filter chart data based on active timeframe
+  const getFilteredChartData = () => {
+    if (!summaryData) return null;
+    
+    return {
+      labels: summaryData.chartData.labels,
+      datasets: [summaryData.chartData.datasets.find(d => d.label.toLowerCase() === activeTimeframe)]
+    };
+  };
+
+  const filteredChartData = getFilteredChartData();
+
   return (
     <div className="bg-white text-gray-900 min-h-screen">        
       <Navbar />
@@ -111,62 +234,116 @@ export default function Publication() {
               </h1>
               
               {summaryData ? (
-                <div className="overflow-x-auto shadow rounded border border-gray-300">
-                  <table className="min-w-full table-auto border-collapse">
-                    <thead className="bg-gradient-to-r from-blue-500 to-teal-500 text-white">
-                      <tr>
-                        <th rowSpan="5" className="py-4 px-6 text-center border text-m font-bold border-gray-300">Summary</th>
-                        <th className="py-4 px-6 text-center border text-m font-bold border-gray-300">Conference Paper</th>
-                        <th className="py-4 px-6 text-center border text-m font-bold border-gray-300">Journal Paper</th>
-                        <th className="py-4 px-6 text-center border text-m font-bold border-gray-300">Book/Chapter</th>
-                        <th className="py-4 px-6 text-center border text-m font-bold border-gray-300">Patent</th>
-                        <th className="py-4 px-6 text-center border text-m font-bold border-gray-300">Project</th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-m text-gray-800">
-                      <tr>
-                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">Last Week</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastWeek['Conference Paper']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastWeek['Journal Paper']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastWeek['Book/Chapter']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastWeek['Patent']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastWeek['Project']}</td>
-                      </tr>
-                      <tr>
-                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">Last Month</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastMonth['Conference Paper']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastMonth['Journal Paper']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastMonth['Book/Chapter']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastMonth['Patent']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastMonth['Project']}</td>
-                      </tr>
-                      <tr>
-                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">Last Year</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastYear['Conference Paper']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastYear['Journal Paper']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastYear['Book/Chapter']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastYear['Patent']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastYear['Project']}</td>
-                      </tr>
-                      <tr>
-                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">Last 5 Years</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.last5Years['Conference Paper']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.last5Years['Journal Paper']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.last5Years['Book/Chapter']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.last5Years['Patent']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300">{summaryData.last5Years['Project']}</td>
-                      </tr>
-                      <tr className="bg-gray-100">
-                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">Overall</td>
-                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">{summaryData.overall['Conference Paper']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">{summaryData.overall['Journal Paper']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">{summaryData.overall['Book/Chapter']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">{summaryData.overall['Patent']}</td>
-                        <td className="py-4 px-6 text-center border border-gray-300 font-bold">{summaryData.overall['Project']}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                <>
+                  <div className="overflow-x-auto shadow rounded border border-gray-300">
+                    <table className="min-w-full table-auto border-collapse">
+                      <thead className="bg-gradient-to-r from-blue-500 to-teal-500 text-white">
+                        <tr>
+                          <th rowSpan="5" className="py-4 px-6 text-center border text-m font-bold border-gray-300">Summary</th>
+                          <th className="py-4 px-6 text-center border text-m font-bold border-gray-300">Conference Paper</th>
+                          <th className="py-4 px-6 text-center border text-m font-bold border-gray-300">Journal Paper</th>
+                          <th className="py-4 px-6 text-center border text-m font-bold border-gray-300">Book/Chapter</th>
+                          <th className="py-4 px-6 text-center border text-m font-bold border-gray-300">Patent</th>
+                          <th className="py-4 px-6 text-center border text-m font-bold border-gray-300">Project</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-m text-gray-800">
+                        <tr>
+                          <td className="py-4 px-6 text-center border border-gray-300 font-bold">Last Week</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastWeek['Conference Paper']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastWeek['Journal Paper']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastWeek['Book/Chapter']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastWeek['Patent']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastWeek['Project']}</td>
+                        </tr>
+                        <tr>
+                          <td className="py-4 px-6 text-center border border-gray-300 font-bold">Last Month</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastMonth['Conference Paper']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastMonth['Journal Paper']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastMonth['Book/Chapter']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastMonth['Patent']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastMonth['Project']}</td>
+                        </tr>
+                        <tr>
+                          <td className="py-4 px-6 text-center border border-gray-300 font-bold">Last Year</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastYear['Conference Paper']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastYear['Journal Paper']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastYear['Book/Chapter']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastYear['Patent']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.lastYear['Project']}</td>
+                        </tr>
+                        <tr>
+                          <td className="py-4 px-6 text-center border border-gray-300 font-bold">Last 5 Years</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.last5Years['Conference Paper']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.last5Years['Journal Paper']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.last5Years['Book/Chapter']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.last5Years['Patent']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300">{summaryData.last5Years['Project']}</td>
+                        </tr>
+                        <tr className="bg-gray-100">
+                          <td className="py-4 px-6 text-center border border-gray-300 font-bold">Overall</td>
+                          <td className="py-4 px-6 text-center border border-gray-300 font-bold">{summaryData.overall['Conference Paper']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300 font-bold">{summaryData.overall['Journal Paper']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300 font-bold">{summaryData.overall['Book/Chapter']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300 font-bold">{summaryData.overall['Patent']}</td>
+                          <td className="py-4 px-6 text-center border border-gray-300 font-bold">{summaryData.overall['Project']}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Chart Visualization Section */}
+                  <div className="mt-12">
+                    <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+                      <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-0">
+                        Publication Distribution Visualization
+                      </h2>
+                      <div className="flex flex-wrap gap-2">
+                        {['last week', 'last month', 'last year', 'last 5 years', 'overall'].map((timeframe) => (
+                          <button
+                            key={timeframe}
+                            onClick={() => setActiveTimeframe(timeframe.replace(' ', ''))}
+                            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                              activeTimeframe === timeframe.replace(' ', '')
+                                ? 'bg-gradient-to-r from-blue-500 to-teal-500 text-white shadow-md'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            }`}
+                          >
+                            {timeframe.charAt(0).toUpperCase() + timeframe.slice(1)}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
+                      <div className="h-[400px]">
+                        {filteredChartData && (
+                          <Bar data={filteredChartData} options={chartOptions} />
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="mt-6 grid grid-cols-1 md:grid-cols-5 gap-4">
+                      {['Conference Paper', 'Journal Paper', 'Book/Chapter', 'Patent', 'Project'].map((type, index) => (
+                        <div key={type} className="flex items-center p-3 bg-gray-50 rounded-lg">
+                          <div 
+                            className="w-4 h-4 rounded-full mr-2" 
+                            style={{ 
+                              backgroundColor: `rgba(${
+                                index === 0 ? '54, 162, 235' : 
+                                index === 1 ? '75, 192, 192' : 
+                                index === 2 ? '153, 102, 255' : 
+                                index === 3 ? '255, 159, 64' : 
+                                '255, 99, 132'
+                              }, 0.8)` 
+                            }}
+                          ></div>
+                          <span className="text-sm text-gray-700">{type}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
               ) : (
                 <div className="text-center py-8">
                   <p className="text-red-500">No publication data available</p>

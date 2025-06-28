@@ -58,7 +58,11 @@ export async function GET(request) {
       lastMonth: { 'Conference Paper': 0, 'Journal Paper': 0, 'Book/Chapter': 0, 'Patent': 0, 'Project': 0 },
       lastYear: { 'Conference Paper': 0, 'Journal Paper': 0, 'Book/Chapter': 0, 'Patent': 0, 'Project': 0 },
       last5Years: { 'Conference Paper': 0, 'Journal Paper': 0, 'Book/Chapter': 0, 'Patent': 0, 'Project': 0 },
-      overall: { 'Conference Paper': 0, 'Journal Paper': 0, 'Book/Chapter': 0, 'Patent': 0, 'Project': 0 }
+      overall: { 'Conference Paper': 0, 'Journal Paper': 0, 'Book/Chapter': 0, 'Patent': 0, 'Project': 0 },
+      chartData: {
+        labels: ['Conference Paper', 'Journal Paper', 'Book/Chapter', 'Patent', 'Project'],
+        datasets: []
+      }
     };
 
     // Process each table sequentially
@@ -99,6 +103,102 @@ export async function GET(request) {
         }
       }
     }
+
+    // Prepare chart data
+    const chartColors = [
+      'rgba(54, 162, 235, 0.8)',   // Conference Paper - blue
+      'rgba(75, 192, 192, 0.8)',   // Journal Paper - teal
+      'rgba(153, 102, 255, 0.8)',  // Book/Chapter - purple
+      'rgba(255, 159, 64, 0.8)',   // Patent - orange
+      'rgba(255, 99, 132, 0.8)'    // Project - red
+    ];
+    
+    const hoverColors = [
+      'rgba(54, 162, 235, 1)',
+      'rgba(75, 192, 192, 1)',
+      'rgba(153, 102, 255, 1)',
+      'rgba(255, 159, 64, 1)',
+      'rgba(255, 99, 132, 1)'
+    ];
+    
+    // Add datasets for each time period
+    result.chartData.datasets = [
+      {
+        label: 'Last Week',
+        data: [
+          result.lastWeek['Conference Paper'],
+          result.lastWeek['Journal Paper'],
+          result.lastWeek['Book/Chapter'],
+          result.lastWeek['Patent'],
+          result.lastWeek['Project']
+        ],
+        backgroundColor: chartColors,
+        borderColor: hoverColors,
+        borderWidth: 1,
+        barPercentage: 0.7,
+        categoryPercentage: 0.6
+      },
+      {
+        label: 'Last Month',
+        data: [
+          result.lastMonth['Conference Paper'],
+          result.lastMonth['Journal Paper'],
+          result.lastMonth['Book/Chapter'],
+          result.lastMonth['Patent'],
+          result.lastMonth['Project']
+        ],
+        backgroundColor: chartColors,
+        borderColor: hoverColors,
+        borderWidth: 1,
+        barPercentage: 0.7,
+        categoryPercentage: 0.6
+      },
+      {
+        label: 'Last Year',
+        data: [
+          result.lastYear['Conference Paper'],
+          result.lastYear['Journal Paper'],
+          result.lastYear['Book/Chapter'],
+          result.lastYear['Patent'],
+          result.lastYear['Project']
+        ],
+        backgroundColor: chartColors,
+        borderColor: hoverColors,
+        borderWidth: 1,
+        barPercentage: 0.7,
+        categoryPercentage: 0.6
+      },
+      {
+        label: 'Last 5 Years',
+        data: [
+          result.last5Years['Conference Paper'],
+          result.last5Years['Journal Paper'],
+          result.last5Years['Book/Chapter'],
+          result.last5Years['Patent'],
+          result.last5Years['Project']
+        ],
+        backgroundColor: chartColors,
+        borderColor: hoverColors,
+        borderWidth: 1,
+        barPercentage: 0.7,
+        categoryPercentage: 0.6
+      },
+      {
+        label: 'Overall',
+        data: [
+          result.overall['Conference Paper'],
+          result.overall['Journal Paper'],
+          result.overall['Book/Chapter'],
+          result.overall['Patent'],
+          result.overall['Project']
+        ],
+        backgroundColor: chartColors,
+        borderColor: hoverColors,
+        borderWidth: 1,
+        barPercentage: 0.7,
+        categoryPercentage: 0.6
+      }
+    ];
 
     logger.info('Successfully fetched publication summary data', {
       meta: {

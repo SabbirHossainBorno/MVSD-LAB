@@ -743,7 +743,7 @@ const MemberCard = ({ member, type = 'normal' }) => {
             </div>
             <h3 className="text-2xl font-bold text-gray-800 mb-2">No Members Found</h3>
             <p className="text-gray-600 max-w-md mx-auto">
-              We couldn't find any members matching your search. Try adjusting your filters or search terms.
+              We couldn&apos;t find any members matching your search. Try adjusting your filters or search terms.
             </p>
             <button
               onClick={() => {
