@@ -144,9 +144,9 @@ const MemberCard = ({ member, type = 'normal' }) => {
                   member.type === 'Professor' ? 'professor' : 'normal';
   
   // Determine if bio needs truncation
-  const bioNeedsTruncation = member.short_bio && member.short_bio.length > 120;
+  const bioNeedsTruncation = member.short_bio && member.short_bio.length > 180;
   const displayBio = bioNeedsTruncation && !expanded 
-    ? `${member.short_bio.substring(0, 120)}...` 
+    ? `${member.short_bio.substring(0, 180)}...` 
     : member.short_bio;
 
   return (
