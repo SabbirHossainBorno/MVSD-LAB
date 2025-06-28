@@ -307,41 +307,33 @@ export default function Member() {
 
       {/* Main Content */}
       <main>
-        <section className="relative flex items-center justify-center h-[40vh] md:h-[50vh] bg-cover bg-center">
+        <section className="relative flex items-center justify-center h-[35vh] md:h-[45vh] bg-cover bg-center">
           <div
             className="absolute inset-0 bg-[url('/images/hero-bg3.png')] bg-cover bg-center"
             style={{ opacity: 0.5 }}
           ></div>
-          
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/30 to-blue-900/70"></div>
 
-          <div className="relative z-10 text-center p-6 md:p-8 max-w-3xl mx-auto">
+          <div className="relative z-10 text-center p-6 md:p-8 max-w-2xl mx-auto">
             <motion.h1 
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 mt-10 leading-tight"
+              className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 mt-10 leading-tight"
             >
-              MVSD LAB Members
+              Members of MVSD LAB
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-xl md:text-2xl text-blue-100 mb-6"
+              className="text-base md:text-lg lg:text-xl text-gray-800 mb-4"
             >
-              Driving innovation in automotive technologies and AI
+              Meet our talented team driving innovation in automotive technologies and AI
             </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="w-20 h-1 bg-blue-400 mx-auto"
-            ></motion.div>
           </div>
         </section>
 
-        <section className="bg-gradient-to-r from-gray-50 via-white to-gray-50 py-4 shadow-sm">
+        <section className="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 py-4">
           <div className="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
             <nav className="text-sm font-medium text-gray-800 mb-2 md:mb-0">
               <ol className="list-reset flex items-center space-x-2">
@@ -350,8 +342,8 @@ export default function Member() {
                     Home
                   </Link>
                 </li>
-                <li className="text-gray-400">›</li>
-                <li className="text-gray-600">Members</li>
+                <li>/</li>
+                <li className="text-gray-600">Member</li>
               </ol>
             </nav>
 
@@ -359,7 +351,7 @@ export default function Member() {
               <input
                 type="text"
                 placeholder="Search by name, email..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white placeholder-gray-400 text-gray-700 border border-gray-200 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full pl-10 pr-4 py-2 rounded-lg bg-white placeholder-gray-400 text-gray-700 border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
