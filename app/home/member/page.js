@@ -1,4 +1,4 @@
-// app/members/page.js
+// app/home/members/page.js
 'use client';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -128,57 +128,135 @@ export default function Member() {
     ));
   };
 
-  const MemberCard = ({ member, type = 'normal' }) => {
-    const isAlumni = type === 'alumni';
-    
-    return (
-      <motion.div
-        variants={itemVariants}
-        whileHover="hover"
-        className={`bg-white rounded-xl overflow-hidden shadow-lg 
-          ${isAlumni ? 'border-t-4 border-purple-600' : ''}
-          transition-all duration-300 h-full flex flex-col`}
-      >
-        <div className="p-6 flex-grow">
-          <div className="flex flex-col items-center">
-            <div className="relative w-32 h-32 mb-4">
-              <div className="rounded-full overflow-hidden border-4 border-white shadow-lg w-full h-full">
+const MemberCard = ({ member, type = 'normal' }) => {
+  const isAlumni = type === 'alumni';
+  const [expanded, setExpanded] = useState(false);
+  
+  const colors = {
+    normal: { accent: 'from-blue-500 to-cyan-500' },
+    alumni: { accent: 'from-purple-500 to-indigo-600' },
+    director: { accent: 'from-amber-500 to-orange-500' },
+    professor: { accent: 'from-emerald-500 to-teal-600' }
+  };
+  
+  const cardType = isAlumni ? 'alumni' : 
+                  member.type === 'Director' ? 'director' : 
+                  member.type === 'Professor' ? 'professor' : 'normal';
+  
+  // Determine if bio needs truncation
+  const bioNeedsTruncation = member.short_bio && member.short_bio.length > 120;
+  const displayBio = bioNeedsTruncation && !expanded 
+    ? `${member.short_bio.substring(0, 120)}...` 
+    : member.short_bio;
+
+  return (
+    <motion.div
+      variants={itemVariants}
+      whileHover={{ y: -8, boxShadow: "0 15px 30px rgba(0, 0, 0, 0.08)" }}
+      className={`bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 
+                  transition-all duration-300 flex flex-col relative group
+                  ${expanded ? 'min-h-[420px]' : 'h-[400px]'}`}
+    >
+      {/* Top accent bar */}
+      <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${colors[cardType].accent}`}></div>
+      
+      <div className="p-6 flex flex-col h-full">
+        <div className="flex flex-col items-center relative z-10">
+          {/* Avatar with gradient border */}
+          <div className="relative mb-5">
+            <div className={`relative w-28 h-28 rounded-full p-1 bg-gradient-to-r ${colors[cardType].accent}`}>
+              <div className="rounded-full overflow-hidden border-4 border-white w-full h-full">
                 <Image 
                   src={member.photo || '/images/placeholder-avatar.jpg'}
                   alt={`${member.first_name} ${member.last_name}`}
-                  width={128}
-                  height={128}
-                  className="object-cover w-full h-full"
+                  width={112}
+                  height={112}
+                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
-              {isAlumni && (
-                <div className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
-                  Alumni
+            </div>
+            
+            {/* Alumni badge */}
+            {isAlumni && (
+              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">
+                Alumni
+              </div>
+            )}
+            
+            {/* Role badge */}
+            {!isAlumni && (
+              <div className={`absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r ${colors[cardType].accent} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow`}>
+                {member.type.split(' ')[0]}
+              </div>
+            )}
+          </div>
+          
+          {/* Name with gradient text */}
+          <h3 className={`font-bold text-xl text-center mb-1 bg-gradient-to-r ${colors[cardType].accent} bg-clip-text text-transparent`}>
+            {member.first_name} <span className="font-extrabold">{member.last_name}</span>
+          </h3>
+          
+          {/* Designation */}
+          <p className="text-gray-600 text-center font-medium mb-2">
+            {member.designation || member.type}
+          </p>
+          
+          {/* Email with tooltip */}
+          <div className="relative group/email mb-3">
+            <p className="text-xs text-gray-500 truncate max-w-[180px] cursor-help">
+              {member.email}
+            </p>
+            {member.email && member.email.length > 22 && (
+              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover/email:block bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+                {member.email}
+              </div>
+            )}
+          </div>
+        </div>
+        
+        {/* Bio section with expandable functionality */}
+        <div className="mt-2 flex-grow overflow-hidden">
+          {member.short_bio && (
+            <div className="h-full flex flex-col">
+              <div className={`flex-grow ${expanded ? 'overflow-y-auto' : 'overflow-hidden'}`}>
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  {displayBio}
+                </p>
+              </div>
+              
+              {/* See More/Less button */}
+              {bioNeedsTruncation && (
+                <div className="pt-2 mt-auto">
+                  <button 
+                    onClick={() => setExpanded(!expanded)}
+                    className={`text-sm font-medium w-full py-1 rounded-md transition-colors
+                      ${expanded 
+                        ? 'text-blue-600 hover:text-blue-800' 
+                        : 'text-blue-500 hover:text-blue-700'}`}
+                  >
+                    {expanded ? 'See Less' : 'See More'}
+                  </button>
                 </div>
               )}
             </div>
-            
-            <div className="text-center">
-              <h3 className={`font-bold text-xl text-gray-900`}>
-                {member.first_name} {member.last_name}
-              </h3>
-              <p className="text-gray-600 mt-1">{member.designation || member.type}</p>
-              <p className="text-sm text-gray-500 mt-1 truncate max-w-xs mx-auto">{member.email}</p>
-              
-              {member.short_bio && (
-                <p className="mt-3 text-gray-700 text-sm">{member.short_bio}</p>
-              )}
-              
-              <div className="flex justify-center space-x-3 mt-4">
-                {member.socialmedia && renderSocialMediaIcons(member.socialmedia)}
-              </div>
+          )}
+        </div>
+        
+        {/* Social media icons */}
+        {member.socialmedia && member.socialmedia.length > 0 && (
+          <div className="mt-4 pt-3 border-t border-gray-100">
+            <div className="flex justify-center space-x-3">
+              {renderSocialMediaIcons(member.socialmedia)}
             </div>
           </div>
-        </div>
-      </motion.div>
-    );
-  };
-
+        )}
+      </div>
+      
+      {/* Hover effect background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-gray-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
+    </motion.div>
+  );
+};
   const DirectorCard = ({ director }) => {
     return (
       <motion.div
@@ -291,7 +369,7 @@ export default function Member() {
     );
   };
 
-  if (loading) {if (loading) {
+  if (loading) {
     return <LoadingSpinner/>;
   }
 

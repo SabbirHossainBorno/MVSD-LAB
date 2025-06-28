@@ -1,3 +1,4 @@
+//app/components/Navbar.js
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -248,7 +249,7 @@ export default function Navbar() {
           <li className="relative group">
             <button
               className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded ${
-                pathname.includes('/publication') ? 'text-blue-500' : ''
+                pathname.includes('/home/publication') ? 'text-blue-500' : ''
               }`}
               onClick={() => handleDropdown('publication')}
             >
@@ -274,9 +275,9 @@ export default function Navbar() {
               <ul className="rounded">
               <li>
                   <Link
-                    href="/publication"
+                    href="/home/publication"
                     className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/publication' ? 'text-blue-500' : ''
+                      pathname === '/home/publication' ? 'text-blue-500' : ''
                     }`}
                   >
                     Summary
@@ -290,7 +291,7 @@ export default function Navbar() {
                       pathname === '/publication/international_journals' ? 'text-blue-500' : ''
                     }`}
                   >
-                    International Journal
+                    Conference Paper
                   </Link>
                 </li>
                 <li>
@@ -300,7 +301,7 @@ export default function Navbar() {
                       pathname === '/publication/domestic_journals' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Domestic Journal
+                    Journal Paper
                   </Link>
                 </li>
                 <li>
@@ -310,7 +311,7 @@ export default function Navbar() {
                       pathname === '/publication/international_conferences' ? 'text-blue-500' : ''
                     }`}
                   >
-                    International Conference
+                    Book/Chapter
                   </Link>
                 </li>
                 <li>
@@ -320,132 +321,24 @@ export default function Navbar() {
                       pathname === '/publication/domestic_conferences' ? 'text-blue-500' : ''
                     }`}
                   >
-                    Domestic Conference
+                    Patent
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/publication/domestic_conferences"
+                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                      pathname === '/publication/domestic_conferences' ? 'text-blue-500' : ''
+                    }`}
+                  >
+                    Project
                   </Link>
                 </li>
 
               </ul>
             </div>
           </li>
-
-
-          {/* Patent Dropdown */}
-          <li className="relative group">
-            <button
-              className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded ${
-                pathname.includes('/patent') ? 'text-blue-500' : ''
-              }`}
-              onClick={() => handleDropdown('patent')}
-            >
-              Patent
-              <svg
-                className={`w-4 h-4 ml-1 transition-transform duration-300 ${
-                  openDropdown === 'patent' ? 'rotate-180' : ''
-                }`}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            <div
-              className={`${
-                openDropdown === 'patent' ? 'block' : 'hidden'
-              } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded md:mt-2 md:left-0 w-full rounded transition-all duration-300`}
-            >
-              <ul className="rounded">
-              <li>
-                  <Link
-                    href="/patent"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/patent' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Summary
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href="/patent/registered_patent"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/patent/registered_patent' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Registered
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </li>
-
-
-          {/* Project Dropdown */}
-          <li className="relative group">
-            <button
-              className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded ${
-                pathname.includes('/project') ? 'text-blue-500' : ''
-              }`}
-              onClick={() => handleDropdown('project')}
-            >
-              Project
-              <svg
-                className={`w-4 h-4 ml-1 transition-transform duration-300 ${
-                  openDropdown === 'project' ? 'rotate-180' : ''
-                }`}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            <div
-              className={`${
-                openDropdown === 'project' ? 'block' : 'hidden'
-              } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded md:mt-2 md:left-0 w-full rounded transition-all duration-300`}
-            >
-              <ul className="rounded">
-              <li>
-                  <Link
-                    href="/project"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/project' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    All
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href="/project/ongoing_project"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/project/ongoing_project' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Ongoing
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/project/completed_project"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/project/completed_project' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Completed
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </li>
-
 
           {/* Course Dropdown */}
           <li className="relative group">

@@ -1,3 +1,4 @@
+//app/api/member/route.js
 import { NextResponse } from 'next/server';
 import { query } from '../../../lib/db';
 import logger from '../../../lib/logger';
