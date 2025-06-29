@@ -62,6 +62,10 @@ export async function GET(request) {
       chartData: {
         labels: ['Conference Paper', 'Journal Paper', 'Book/Chapter', 'Patent', 'Project'],
         datasets: []
+      },
+      trendData: {
+        labels: [],
+        datasets: []
       }
     };
 
@@ -104,7 +108,7 @@ export async function GET(request) {
       }
     }
 
-    // Prepare chart data
+    // Prepare bar chart data
     const chartColors = [
       'rgba(54, 162, 235, 0.8)',   // Conference Paper - blue
       'rgba(75, 192, 192, 0.8)',   // Journal Paper - teal
@@ -197,6 +201,95 @@ export async function GET(request) {
         borderWidth: 1,
         barPercentage: 0.7,
         categoryPercentage: 0.6
+      }
+    ];
+
+    // Prepare trend data (last 5 years)
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: 5 }, (_, i) => currentYear - i).reverse();
+    result.trendData.labels = years.map(year => year.toString());
+    
+    // Initialize yearly data
+    const yearlyData = {
+      'Conference Paper': Array(5).fill(0),
+      'Journal Paper': Array(5).fill(0),
+      'Book/Chapter': Array(5).fill(0),
+      'Patent': Array(5).fill(0),
+      'Project': Array(5).fill(0)
+    };
+
+    // Fetch yearly data
+    for (const table of tables) {
+      const trendQuery = `
+        SELECT 
+          EXTRACT(YEAR FROM created_at)::INTEGER AS year,
+          type,
+          COUNT(*) AS count
+        FROM ${table}
+        WHERE EXTRACT(YEAR FROM created_at) BETWEEN $1 AND $2
+          AND type = ANY($3)
+        GROUP BY year, type
+      `;
+
+      const trendParams = [
+        currentYear - 4,
+        currentYear,
+        validTypes
+      ];
+
+      const { rows: trendRows } = await query(trendQuery, trendParams);
+      
+      // Aggregate yearly data
+      for (const row of trendRows) {
+        const { year, type, count } = row;
+        const yearIndex = years.indexOf(year);
+        if (yearIndex !== -1 && yearlyData[type]) {
+          yearlyData[type][yearIndex] += count;
+        }
+      }
+    }
+
+    // Prepare trend datasets
+    result.trendData.datasets = [
+      {
+        label: 'Conference Paper',
+        data: yearlyData['Conference Paper'],
+        borderColor: 'rgba(54, 162, 235, 1)',
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        tension: 0.3,
+        fill: false
+      },
+      {
+        label: 'Journal Paper',
+        data: yearlyData['Journal Paper'],
+        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        tension: 0.3,
+        fill: false
+      },
+      {
+        label: 'Book/Chapter',
+        data: yearlyData['Book/Chapter'],
+        borderColor: 'rgba(153, 102, 255, 1)',
+        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+        tension: 0.3,
+        fill: false
+      },
+      {
+        label: 'Patent',
+        data: yearlyData['Patent'],
+        borderColor: 'rgba(255, 159, 64, 1)',
+        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+        tension: 0.3,
+        fill: false
+      },
+      {
+        label: 'Project',
+        data: yearlyData['Project'],
+        borderColor: 'rgba(255, 99, 132, 1)',
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        tension: 0.3,
+        fill: false
       }
     ];
 
