@@ -6,12 +6,14 @@ import Footer from '../../components/Footer';
 import ScrollToTop from '../../components/ScrollToTop';
 import Link from 'next/link';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend
@@ -22,10 +24,17 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend
 );
+
+// Fix for font rendering issues
+ChartJS.defaults.font.family = "'Inter', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif";
+ChartJS.defaults.font.size = 13;
+ChartJS.defaults.color = '#4b5563';
 
 export default function Publication() {
   const [loading, setLoading] = useState(true);
@@ -88,18 +97,18 @@ export default function Publication() {
   }
 
   // Chart options
-  const chartOptions = {
+  const barChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top',
         labels: {
+          usePointStyle: true,
+          padding: 20,
           font: {
             size: 14,
-            family: "'Inter', sans-serif"
-          },
-          color: '#4b5563'
+          }
         }
       },
       title: {
@@ -108,7 +117,6 @@ export default function Publication() {
         font: {
           size: 18,
           weight: 'bold',
-          family: "'Inter', sans-serif"
         },
         color: '#111827',
         padding: {
@@ -117,7 +125,7 @@ export default function Publication() {
         }
       },
       tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
         titleColor: '#1f2937',
         bodyColor: '#1f2937',
         titleFont: {
@@ -144,11 +152,8 @@ export default function Publication() {
           display: false
         },
         ticks: {
-          font: {
-            size: 13,
-            family: "'Inter', sans-serif"
-          },
-          color: '#4b5563'
+          maxRotation: 45,
+          minRotation: 45
         }
       },
       y: {
@@ -157,18 +162,84 @@ export default function Publication() {
           color: 'rgba(229, 231, 235, 0.5)'
         },
         ticks: {
+          precision: 0
+        }
+      }
+    },
+    animation: {
+      duration: 1000,
+      easing: 'easeOutQuart'
+    }
+  };
+
+  const lineChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          usePointStyle: true,
+          padding: 20,
           font: {
-            size: 13,
-            family: "'Inter', sans-serif"
-          },
-          color: '#4b5563',
-          callback: function(value) {
-            if (value % 1 === 0) {
-              return value;
-            }
+            size: 14,
+          }
+        }
+      },
+      title: {
+        display: true,
+        text: 'Publication Trend Over the Last 5 Years',
+        font: {
+          size: 18,
+          weight: 'bold',
+        },
+        color: '#111827',
+        padding: {
+          top: 10,
+          bottom: 20
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        titleColor: '#1f2937',
+        bodyColor: '#1f2937',
+        titleFont: {
+          size: 14,
+          weight: 'bold'
+        },
+        bodyFont: {
+          size: 13
+        },
+        padding: 12,
+        borderColor: '#e5e7eb',
+        borderWidth: 1,
+        displayColors: false,
+        callbacks: {
+          label: function(context) {
+            return `${context.dataset.label}: ${context.parsed.y}`;
           }
         }
       }
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false
+        }
+      },
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: 'rgba(229, 231, 235, 0.5)'
+        },
+        ticks: {
+          precision: 0
+        }
+      }
+    },
+    interaction: {
+      mode: 'index',
+      intersect: false
     },
     animation: {
       duration: 1000,
@@ -180,9 +251,14 @@ export default function Publication() {
   const getFilteredChartData = () => {
     if (!summaryData) return null;
     
+    // Find the dataset for the active timeframe
+    const dataset = summaryData.chartData.datasets.find(d => 
+      d.label.toLowerCase().replace(/\s+/g, '') === activeTimeframe
+    );
+    
     return {
       labels: summaryData.chartData.labels,
-      datasets: [summaryData.chartData.datasets.find(d => d.label.toLowerCase() === activeTimeframe)]
+      datasets: [dataset || summaryData.chartData.datasets[4]] // Fallback to Overall
     };
   };
 
@@ -194,17 +270,11 @@ export default function Publication() {
 
       {/* Main Content */}
       <main>
-        {/* Hero Section */}
-        <section className="relative flex items-center justify-center h-[35vh] md:h-[45vh] bg-cover bg-center"
-          style={{ backgroundImage: "url('/images/hero-bg3.png')" }}
-        >
-          {/* Semi-transparent image overlay (not black) */}
+        <section className="relative flex items-center justify-center h-[35vh] md:h-[45vh] bg-cover bg-center">
           <div
             className="absolute inset-0 bg-[url('/images/hero-bg3.png')] bg-cover bg-center"
-            style={{ opacity: 0.5 }}
+            style={{ opacity: 0.5 }} 
           ></div>
-
-          {/* Content */}
           <div className="relative z-10 text-center p-6 md:p-8 max-w-2xl mx-auto">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 mt-10 leading-tight">
               Publication/Research Summary Of MVSD LAB
@@ -215,24 +285,22 @@ export default function Publication() {
           </div>
         </section>
 
-        {/* Breadcrumb Section */}
         <section className="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 py-4">
           <div className="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
-            <nav className="text-sm font-medium text-gray-800 mb-2 md:mb-0">
+            <nav className="text-m font-medium text-gray-800 mb-2 md:mb-0">
               <ol className="list-reset flex items-center space-x-2">
                 <li>
                   <Link href="/home" className="text-blue-600 hover:text-blue-700 transition-colors duration-300 ease-in-out">
                     Home
                   </Link>
                 </li>
-                <li className="text-gray-500">/</li>
+                <li>/</li>
                 <li className="text-gray-600">Publication/Research</li>
                 <li className="text-gray-600">[ Summary ]</li>
               </ol>
             </nav>
           </div>
         </section>
-
         
         <section id="publication-summary" className="publication-summary section py-8 bg-gray-50">
           <div className="container mx-auto max-w-7xl px-4">
@@ -307,17 +375,21 @@ export default function Publication() {
                         Publication Distribution Visualization
                       </h2>
                       <div className="flex flex-wrap gap-2">
-                        {['last week', 'last month', 'last year', 'last 5 years', 'overall'].map((timeframe) => (
+                        {['lastweek', 'lastmonth', 'lastyear', 'last5years', 'overall'].map((timeframe) => (
                           <button
                             key={timeframe}
-                            onClick={() => setActiveTimeframe(timeframe.replace(' ', ''))}
+                            onClick={() => setActiveTimeframe(timeframe)}
                             className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                              activeTimeframe === timeframe.replace(' ', '')
+                              activeTimeframe === timeframe
                                 ? 'bg-gradient-to-r from-blue-500 to-teal-500 text-white shadow-md'
                                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                             }`}
                           >
-                            {timeframe.charAt(0).toUpperCase() + timeframe.slice(1)}
+                            {timeframe === 'lastweek' && 'Last Week'}
+                            {timeframe === 'lastmonth' && 'Last Month'}
+                            {timeframe === 'lastyear' && 'Last Year'}
+                            {timeframe === 'last5years' && 'Last 5 Years'}
+                            {timeframe === 'overall' && 'Overall'}
                           </button>
                         ))}
                       </div>
@@ -326,7 +398,7 @@ export default function Publication() {
                     <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
                       <div className="h-[400px]">
                         {filteredChartData && (
-                          <Bar data={filteredChartData} options={chartOptions} />
+                          <Bar data={filteredChartData} options={barChartOptions} />
                         )}
                       </div>
                     </div>
@@ -347,6 +419,37 @@ export default function Publication() {
                             }}
                           ></div>
                           <span className="text-sm text-gray-700">{type}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Trend Line Chart */}
+                  <div className="mt-12">
+                    <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-6">
+                      Publication Trend Over Time
+                    </h2>
+                    <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
+                      <div className="h-[400px]">
+                        {summaryData.trendData && summaryData.trendData.labels.length > 0 && (
+                          <Line 
+                            data={{
+                              labels: summaryData.trendData.labels,
+                              datasets: summaryData.trendData.datasets
+                            }} 
+                            options={lineChartOptions} 
+                          />
+                        )}
+                      </div>
+                    </div>
+                    <div className="mt-6 flex flex-wrap justify-center gap-4">
+                      {summaryData.trendData.datasets.map((dataset, index) => (
+                        <div key={index} className="flex items-center">
+                          <div 
+                            className="w-4 h-4 rounded-full mr-2" 
+                            style={{ backgroundColor: dataset.borderColor }}
+                          ></div>
+                          <span className="text-sm text-gray-700">{dataset.label}</span>
                         </div>
                       ))}
                     </div>
