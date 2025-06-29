@@ -194,11 +194,17 @@ export default function Publication() {
 
       {/* Main Content */}
       <main>
-        <section className="relative flex items-center justify-center h-[35vh] md:h-[45vh] bg-cover bg-center">
+        {/* Hero Section */}
+        <section className="relative flex items-center justify-center h-[35vh] md:h-[45vh] bg-cover bg-center"
+          style={{ backgroundImage: "url('/images/hero-bg3.png')" }}
+        >
+          {/* Semi-transparent image overlay (not black) */}
           <div
             className="absolute inset-0 bg-[url('/images/hero-bg3.png')] bg-cover bg-center"
-            style={{ opacity: 0.5 }} 
+            style={{ opacity: 0.5 }}
           ></div>
+
+          {/* Content */}
           <div className="relative z-10 text-center p-6 md:p-8 max-w-2xl mx-auto">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 mt-10 leading-tight">
               Publication/Research Summary Of MVSD LAB
@@ -209,22 +215,24 @@ export default function Publication() {
           </div>
         </section>
 
+        {/* Breadcrumb Section */}
         <section className="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 py-4">
           <div className="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
-            <nav className="text-m font-medium text-gray-800 mb-2 md:mb-0">
+            <nav className="text-sm font-medium text-gray-800 mb-2 md:mb-0">
               <ol className="list-reset flex items-center space-x-2">
                 <li>
                   <Link href="/home" className="text-blue-600 hover:text-blue-700 transition-colors duration-300 ease-in-out">
                     Home
                   </Link>
                 </li>
-                <li>/</li>
+                <li className="text-gray-500">/</li>
                 <li className="text-gray-600">Publication/Research</li>
                 <li className="text-gray-600">[ Summary ]</li>
               </ol>
             </nav>
           </div>
         </section>
+
         
         <section id="publication-summary" className="publication-summary section py-8 bg-gray-50">
           <div className="container mx-auto max-w-7xl px-4">

@@ -447,112 +447,63 @@ const MemberCard = ({ member, type = 'normal' }) => {
 
     {/* Main Content */}
     <main>
-      {/* Hero Section */}
-      <section className="relative flex items-center justify-center h-[35vh] md:h-[45vh] bg-cover bg-center" 
-        style={{ backgroundImage: "url('/images/hero-bg3.png')" }}>
-        {/* Background overlay */}
-        <div
-            className="absolute inset-0 bg-[url('/images/hero-bg3.png')] bg-cover bg-center"
-            style={{ opacity: 0.5 }} 
-          ></div>
-        
-        {/* Content - Fixed positioning for small screens */}
-         <div className="relative z-10 text-center p-6 md:p-8 max-w-2xl mx-auto">
-          <div className="text-center p-6 md:p-8 max-w-2xl mx-auto">
-            <motion.h1 
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 leading-tight"
-            >
-              Members of MVSD LAB
-            </motion.h1>
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-base md:text-lg lg:text-xl text-gray-800 mb-4"
-            >
-              Meet our talented team driving innovation in automotive technologies and AI
-            </motion.p>
-          </div>
-        </div>
-        
-        {/* Summary Cards - Moved below the text */}
-        <div className="relative z-10 w-full max-w-screen-xl mx-auto px-4 pb-4 mt-auto">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 gap-3">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
-            >
-              <div className="text-lg font-bold text-blue-600">{totalMembers}</div>
-              <div className="text-xs text-gray-600 mt-1">Total</div>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
-            >
-              <div className="text-lg font-bold text-amber-600">{directorCount}</div>
-              <div className="text-xs text-gray-600 mt-1">Director</div>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
-            >
-              <div className="text-lg font-bold text-emerald-600">{professorCount}</div>
-              <div className="text-xs text-gray-600 mt-1">Professors</div>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
-            >
-              <div className="text-lg font-bold text-cyan-600">{phdCount}</div>
-              <div className="text-xs text-gray-600 mt-1">PhD</div>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
-            >
-              <div className="text-lg font-bold text-violet-600">{mastersCount}</div>
-              <div className="text-xs text-gray-600 mt-1">Masters</div>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
-            >
-              <div className="text-lg font-bold text-rose-600">{postdocCount}</div>
-              <div className="text-xs text-gray-600 mt-1">Post Doc</div>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
-            >
-              <div className="text-lg font-bold text-indigo-600">{alumniCount}</div>
-              <div className="text-xs text-gray-600 mt-1">Alumni</div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      <section
+  className="relative bg-cover bg-center"
+  style={{ backgroundImage: "url('/images/hero-bg3.png')" }}
+>
+  {/* Overlay using the same image */}
+  <div
+    className="absolute inset-0 bg-[url('/images/hero-bg3.png')] bg-cover bg-center"
+    style={{ opacity: 0.5 }}
+  ></div>
+
+  <div className="relative z-10 max-w-screen-xl mx-auto px-4 py-10 md:py-16 text-center">
+    {/* Hero Text */}
+    <motion.h1
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 mt-10 leading-tight"
+    >
+      Members of MVSD LAB
+    </motion.h1>
+    <motion.p
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+      className="text-base md:text-lg lg:text-xl text-gray-800 mb-4"
+    >
+      Meet our talented team driving innovation in automotive technologies and AI
+    </motion.p>
+
+    {/* Summary Cards */}
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
+  {[
+    { label: 'Total', count: totalMembers, color: 'text-blue-500' },
+    { label: 'Director', count: directorCount, color: 'text-amber-500' },
+    { label: 'Professors', count: professorCount, color: 'text-emerald-500' },
+    { label: 'PhD', count: phdCount, color: 'text-cyan-500' },
+    { label: 'Masters', count: mastersCount, color: 'text-violet-500' },
+    { label: 'Post Doc', count: postdocCount, color: 'text-rose-500' },
+    { label: 'Alumni', count: alumniCount, color: 'text-indigo-500' },
+  ].map((item, i) => (
+    <motion.div
+      key={item.label}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1 * (i + 1) }}
+      className="rounded-2xl p-4 text-center border border-white/30 bg-white/20 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.2)]"
+    >
+      <div className={`text-2xl font-semibold ${item.color}`}>{item.count}</div>
+      <div className="text-xs text-white/80 mt-1 tracking-wide">{item.label}</div>
+    </motion.div>
+  ))}
+</div>
+
+  </div>
+</section>
+
+
 
       {/* Filter and Search Section */}
       <section className="bg-gradient-to-r from-blue-50 to-indigo-50 py-6 border-b border-gray-200">
