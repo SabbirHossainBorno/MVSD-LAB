@@ -448,13 +448,16 @@ const MemberCard = ({ member, type = 'normal' }) => {
     {/* Main Content */}
     <main>
       {/* Hero Section */}
-      <section className="relative flex flex-col items-center justify-end h-[40vh] md:h-[50vh] bg-cover bg-center" 
+      <section className="relative flex items-center justify-center h-[35vh] md:h-[45vh] bg-cover bg-center" 
         style={{ backgroundImage: "url('/images/hero-bg3.png')" }}>
         {/* Background overlay */}
-        <div className="absolute inset-0 bg-white/70"></div>
+        <div
+            className="absolute inset-0 bg-[url('/images/hero-bg3.png')] bg-cover bg-center"
+            style={{ opacity: 0.5 }} 
+          ></div>
         
-        {/* Content */}
-        <div className="relative z-10 w-full">
+        {/* Content - Fixed positioning for small screens */}
+         <div className="relative z-10 text-center p-6 md:p-8 max-w-2xl mx-auto">
           <div className="text-center p-6 md:p-8 max-w-2xl mx-auto">
             <motion.h1 
               initial={{ opacity: 0, y: -20 }}
@@ -468,85 +471,85 @@ const MemberCard = ({ member, type = 'normal' }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-base md:text-lg lg:text-xl text-gray-800 mb-2"
+              className="text-base md:text-lg lg:text-xl text-gray-800 mb-4"
             >
               Meet our talented team driving innovation in automotive technologies and AI
             </motion.p>
           </div>
-          
-          {/* Summary Cards */}
-          <div className="max-w-screen-xl mx-auto px-4 pb-6">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 gap-3">
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
-              >
-                <div className="text-lg font-bold text-blue-600">{totalMembers}</div>
-                <div className="text-xs text-gray-600 mt-1">Total</div>
-              </motion.div>
-              
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
-              >
-                <div className="text-lg font-bold text-amber-600">{directorCount}</div>
-                <div className="text-xs text-gray-600 mt-1">Director</div>
-              </motion.div>
-              
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
-              >
-                <div className="text-lg font-bold text-emerald-600">{professorCount}</div>
-                <div className="text-xs text-gray-600 mt-1">Professors</div>
-              </motion.div>
-              
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
-              >
-                <div className="text-lg font-bold text-cyan-600">{phdCount}</div>
-                <div className="text-xs text-gray-600 mt-1">PhD</div>
-              </motion.div>
-              
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
-              >
-                <div className="text-lg font-bold text-violet-600">{mastersCount}</div>
-                <div className="text-xs text-gray-600 mt-1">Masters</div>
-              </motion.div>
-              
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
-              >
-                <div className="text-lg font-bold text-rose-600">{postdocCount}</div>
-                <div className="text-xs text-gray-600 mt-1">Post Doc</div>
-              </motion.div>
-              
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
-                className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
-              >
-                <div className="text-lg font-bold text-indigo-600">{alumniCount}</div>
-                <div className="text-xs text-gray-600 mt-1">Alumni</div>
-              </motion.div>
-            </div>
+        </div>
+        
+        {/* Summary Cards - Moved below the text */}
+        <div className="relative z-10 w-full max-w-screen-xl mx-auto px-4 pb-4 mt-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 gap-3">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
+            >
+              <div className="text-lg font-bold text-blue-600">{totalMembers}</div>
+              <div className="text-xs text-gray-600 mt-1">Total</div>
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
+            >
+              <div className="text-lg font-bold text-amber-600">{directorCount}</div>
+              <div className="text-xs text-gray-600 mt-1">Director</div>
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
+            >
+              <div className="text-lg font-bold text-emerald-600">{professorCount}</div>
+              <div className="text-xs text-gray-600 mt-1">Professors</div>
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
+            >
+              <div className="text-lg font-bold text-cyan-600">{phdCount}</div>
+              <div className="text-xs text-gray-600 mt-1">PhD</div>
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
+            >
+              <div className="text-lg font-bold text-violet-600">{mastersCount}</div>
+              <div className="text-xs text-gray-600 mt-1">Masters</div>
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
+            >
+              <div className="text-lg font-bold text-rose-600">{postdocCount}</div>
+              <div className="text-xs text-gray-600 mt-1">Post Doc</div>
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+              className="bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-2 text-center border border-gray-200"
+            >
+              <div className="text-lg font-bold text-indigo-600">{alumniCount}</div>
+              <div className="text-xs text-gray-600 mt-1">Alumni</div>
+            </motion.div>
           </div>
         </div>
       </section>
