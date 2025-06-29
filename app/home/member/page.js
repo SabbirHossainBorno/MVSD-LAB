@@ -479,36 +479,55 @@ const MemberCard = ({ member, type = 'normal' }) => {
     {/* Summary Cards */}
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
   {[
-    { label: 'Total', count: totalMembers, color: 'text-blue-500' },
-    { label: 'Director', count: directorCount, color: 'text-amber-500' },
-    { label: 'Professors', count: professorCount, color: 'text-emerald-500' },
-    { label: 'PhD', count: phdCount, color: 'text-cyan-500' },
-    { label: 'Masters', count: mastersCount, color: 'text-violet-500' },
-    { label: 'Post Doc', count: postdocCount, color: 'text-rose-500' },
-    { label: 'Alumni', count: alumniCount, color: 'text-indigo-500' },
+    { label: 'Total', count: totalMembers },
+    { label: 'Director', count: directorCount },
+    { label: 'Professors', count: professorCount },
+    { label: 'PhD', count: phdCount },
+    { label: 'Masters', count: mastersCount },
+    { label: 'Post Doc', count: postdocCount },
+    { label: 'Alumni', count: alumniCount },
   ].map((item, i) => (
     <motion.div
       key={item.label}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 * (i + 1) }}
-      className="rounded-2xl p-4 text-center border border-white/30 bg-white/20 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.2)]"
+      className="
+        backdrop-blur-2xl
+        bg-white/10
+        rounded-xl
+        p-3
+        text-center
+        border
+        border-white/20
+        shadow-[0_4px_30px_rgba(0,0,0,0.1)]
+        hover:shadow-[0_6px_36px_rgba(0,0,0,0.2)]
+        transition-all
+        duration-300
+        ease-in-out
+      "
+      style={{
+        minHeight: '80px',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+      }}
     >
-      <div className={`text-2xl font-semibold ${item.color}`}>{item.count}</div>
-      <div className="text-xs text-white/80 mt-1 tracking-wide">{item.label}</div>
+      <div className="text-lg font-bold text-blue-900">{item.count}</div>
+      <div className="text-xs font-bold text-blue-800 mt-1 tracking-wide">{item.label}</div>
     </motion.div>
   ))}
 </div>
+
 
   </div>
 </section>
 
 
 
-      {/* Filter and Search Section */}
-      <section className="bg-gradient-to-r from-blue-50 to-indigo-50 py-6 border-b border-gray-200">
+      <section className="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 py-4 border-b border-gray-200">
         <div className="max-w-screen-xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-3">
+
             {/* Breadcrumb */}
             <nav className="text-sm font-medium text-gray-800">
               <ol className="flex items-center space-x-2">
@@ -521,48 +540,43 @@ const MemberCard = ({ member, type = 'normal' }) => {
                 <li className="text-gray-600">Members</li>
               </ol>
             </nav>
-            
-            <div className="flex flex-col sm:flex-row w-full max-w-3xl gap-3">
-              {/* Modern Glass Dropdown Filter */}
-              <div className="relative w-full" ref={dropdownRef}>
+
+            {/* Filter & Search */}
+            <div className="flex flex-col sm:flex-row w-full md:w-auto max-w-3xl gap-2">
+
+              {/* Filter Dropdown */}
+              <div className="relative w-full sm:w-56 md:w-64" ref={dropdownRef}>
                 <button
                   onClick={() => setIsFilterOpen(!isFilterOpen)}
-                  className="flex items-center justify-between w-full pl-4 pr-3 py-3 rounded-xl bg-white border border-gray-300 shadow-sm hover:bg-gray-50 transition-colors duration-300 text-gray-700 font-medium"
+                  className="flex items-center justify-between w-full px-3 py-2 rounded-md bg-white border border-gray-300 shadow-sm hover:bg-gray-50 transition text-sm text-gray-700 font-medium"
                 >
-                  <div className="flex items-center">
-                    <span className="mr-2">
-                      <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                      </svg>
-                    </span>
+                  <div className="flex items-center gap-2">
+                    <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h18M3 10h14M3 16h10" />
+                    </svg>
                     {currentFilter.label}
                   </div>
-                  <svg 
-                    className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${isFilterOpen ? 'rotate-180' : ''}`}
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                  <svg className={`w-4 h-4 text-gray-500 transition-transform ${isFilterOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                
-                {/* Glass Dropdown Options */}
+
+                {/* Dropdown Menu */}
                 <AnimatePresence>
                   {isFilterOpen && (
                     <motion.div
-                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                      transition={{ duration: 0.2, ease: "easeOut" }}
-                      className="absolute z-20 mt-2 w-full"
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute z-20 mt-1 w-full"
                     >
-                      <div className="bg-white/90 backdrop-blur-xl rounded-xl shadow-2xl border border-white/50 overflow-hidden">
-                        <ul className="py-2 max-h-[360px] overflow-y-auto">
+                      <div className="bg-white/90 backdrop-blur-md rounded-md shadow-md border border-gray-200 overflow-hidden">
+                        <ul className="py-1 max-h-56 overflow-y-auto">
                           {filterOptions.map((option) => (
                             <li key={option.key}>
                               <button
-                                className={`flex items-center w-full px-4 py-3 text-left text-gray-700 hover:bg-blue-50/80 transition-colors duration-200 ${
+                                className={`w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-blue-50 ${
                                   activeFilter === option.key ? 'bg-blue-50 font-semibold' : ''
                                 }`}
                                 onClick={() => {
@@ -570,12 +584,7 @@ const MemberCard = ({ member, type = 'normal' }) => {
                                   setIsFilterOpen(false);
                                 }}
                               >
-                                <span className="flex-1">{option.label}</span>
-                                {activeFilter === option.key && (
-                                  <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                  </svg>
-                                )}
+                                {option.label}
                               </button>
                             </li>
                           ))}
@@ -585,19 +594,19 @@ const MemberCard = ({ member, type = 'normal' }) => {
                   )}
                 </AnimatePresence>
               </div>
-              
-              {/* Modern Glass Search Bar */}
+
+              {/* Search Input */}
               <div className="relative w-full">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35M16.65 11.65a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z"></path>
+                <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35M16.65 11.65a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z" />
                   </svg>
                 </div>
                 <motion.input
-                  whileFocus={{ boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.3)" }}
+                  whileFocus={{ boxShadow: "0 0 0 2px rgba(59, 130, 246, 0.3)" }}
                   type="text"
                   placeholder="Search by name, email..."
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/90 backdrop-blur-sm placeholder-gray-400 text-gray-700 border border-gray-300 shadow-sm focus:outline-none transition-all duration-300"
+                  className="w-full pl-10 pr-3 py-2 rounded-md bg-white/90 backdrop-blur-sm text-sm placeholder-gray-400 text-gray-700 border border-gray-300 shadow-sm focus:outline-none transition duration-300"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -606,6 +615,7 @@ const MemberCard = ({ member, type = 'normal' }) => {
           </div>
         </div>
       </section>
+
 
       {/* Members Section */}
       <div className="max-w-screen-xl mx-auto px-4 py-8">
