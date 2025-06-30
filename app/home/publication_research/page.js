@@ -379,7 +379,7 @@ export default function Publication() {
                           <button
                             key={timeframe}
                             onClick={() => setActiveTimeframe(timeframe)}
-                            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                            className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
                               activeTimeframe === timeframe
                                 ? 'bg-gradient-to-r from-blue-500 to-teal-500 text-white shadow-md'
                                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -395,7 +395,7 @@ export default function Publication() {
                       </div>
                     </div>
 
-                    <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
+                    <div className="bg-white p-4 rounded shadow border border-gray-200">
                       <div className="h-[400px]">
                         {filteredChartData && (
                           <Bar data={filteredChartData} options={barChartOptions} />
@@ -405,7 +405,7 @@ export default function Publication() {
 
                     <div className="mt-6 grid grid-cols-1 md:grid-cols-5 gap-4">
                       {['Conference Paper', 'Journal Paper', 'Book/Chapter', 'Patent', 'Project'].map((type, index) => (
-                        <div key={type} className="flex items-center p-3 bg-gray-50 rounded-lg">
+                        <div key={type} className="flex items-center p-3 bg-gray-50 rounded">
                           <div 
                             className="w-4 h-4 rounded-full mr-2" 
                             style={{ 
@@ -429,7 +429,7 @@ export default function Publication() {
                     <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-6">
                       Publication Trend Over Time
                     </h2>
-                    <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
+                    <div className="bg-white p-4 rounded shadow border border-gray-200">
                       <div className="h-[400px]">
                         {summaryData.trendData && summaryData.trendData.labels.length > 0 && (
                           <Line 

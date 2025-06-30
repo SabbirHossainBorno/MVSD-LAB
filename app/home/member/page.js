@@ -66,7 +66,7 @@ export default function Member() {
     { key: 'director', label: 'Directors' },
     { key: 'professor', label: 'Professors' },
     { key: 'phd', label: 'PhD Candidates' },
-    { key: 'masters', label: 'Master Candidates' },
+    { key: 'masters', label: "Master's Candidates" },
     { key: 'postdoc', label: 'Post Doc' },
     { key: 'staff', label: 'Staff' },
     { key: 'alumni', label: 'Alumni' },
@@ -251,7 +251,7 @@ export default function Member() {
       <motion.div
         variants={itemVariants}
         whileHover={{ y: -8, boxShadow: "0 15px 30px rgba(0, 0, 0, 0.08)" }}
-        className={`bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 
+        className={`bg-white rounded overflow-hidden shadow-lg border border-gray-100 
                     transition-all duration-300 flex flex-col relative group
                     ${expanded ? 'min-h-[420px]' : 'h-[400px]'}`}
       >
@@ -317,7 +317,7 @@ export default function Member() {
             {member.short_bio && (
               <div className="h-full flex flex-col">
                 <div className={`flex-grow ${expanded ? 'overflow-y-auto' : 'overflow-hidden'}`}>
-                  <p className="text-gray-700 text-sm leading-relaxed">
+                  <p className="text-gray-700 text-sm leading-relaxed text-justify">
                     {displayBio}
                   </p>
                 </div>
@@ -327,7 +327,7 @@ export default function Member() {
                   <div className="pt-2 mt-auto">
                     <button 
                       onClick={() => setExpanded(!expanded)}
-                      className={`text-sm font-medium w-full py-1 rounded-md transition-colors
+                      className={`text-sm font-medium w-full py-1 rounded transition-colors
                         ${expanded 
                           ? 'text-blue-600 hover:text-blue-800' 
                           : 'text-blue-500 hover:text-blue-700'}`}
@@ -351,7 +351,7 @@ export default function Member() {
         </div>
         
         {/* Hover effect background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-gray-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-gray-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded"></div>
       </motion.div>
     );
   };
@@ -362,7 +362,7 @@ export default function Member() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl overflow-hidden shadow-xl"
+        className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded overflow-hidden shadow-xl"
       >
         <div className="flex flex-col md:flex-row">
           <div className="md:w-2/5 flex items-center justify-center p-8 bg-gradient-to-r from-blue-100 to-indigo-100">
@@ -380,7 +380,7 @@ export default function Member() {
           
           <div className="md:w-3/5 p-8 flex flex-col justify-center">
             <div className="text-center md:text-left">
-              <div className="inline-block bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-4">
+              <div className="inline-block bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded mb-4">
                 LAB DIRECTOR
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
@@ -391,17 +391,17 @@ export default function Member() {
                 {director.socialmedia && renderSocialMediaIcons(director.socialmedia)}
               </div>
               
-              <p className="text-gray-600 text-lg mb-6">
+              <p className="text-gray-600 text-lg mb-6 text-justify">
                 {director.short_bio || "Leading innovation in automotive technologies and AI research"}
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <div className="bg-white p-4 rounded-lg shadow-sm flex-1">
+                <div className="bg-white p-4 rounded shadow-sm flex-1">
                   <h4 className="font-bold text-gray-900 mb-2">Contact</h4>
                   <p className="text-blue-600 text-sm">{director.email}</p>
                 </div>
                 
-                <div className="bg-white p-4 rounded-lg shadow-sm flex-1">
+                <div className="bg-white p-4 rounded shadow-sm flex-1">
                   <h4 className="font-bold text-gray-900 mb-2">Research Focus</h4>
                   <p className="text-gray-600 text-sm">Autonomous Vehicles, AI Systems, Sensor Fusion</p>
                 </div>
@@ -476,7 +476,7 @@ export default function Member() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => showMoreMembers(categoryKey)}
-              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-xl font-medium hover:opacity-90 transition-opacity"
+              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded font-medium hover:opacity-90 transition-opacity"
             >
               Show More {title} ({members.length - visibleMembers.length} more)
             </motion.button>
@@ -489,6 +489,10 @@ export default function Member() {
   if (loading) {
     return <LoadingSpinner/>;
   }
+
+  // Get visible alumni data before JSX render
+  const visibleAlumni = getFilteredMembers('alumni').slice(0, visibleCounts.alumni);
+  const hasMoreAlumni = getFilteredMembers('alumni').length > visibleCounts.alumni;
 
   return (
     <div className="bg-white text-gray-900 min-h-screen">
@@ -531,7 +535,7 @@ export default function Member() {
                 { label: 'Director', count: directorCount },
                 { label: 'Professors', count: professorCount },
                 { label: 'PhD', count: phdCount },
-                { label: 'Masters', count: mastersCount },
+                { label: "Master's", count: mastersCount },
                 { label: 'Post Doc', count: postdocCount },
                 { label: 'Alumni', count: alumniCount },
                 { label: 'Staff', count: staffCount },
@@ -544,7 +548,7 @@ export default function Member() {
                   className="
                     backdrop-blur-2xl
                     bg-white/10
-                    rounded-xl
+                    rounded
                     p-3
                     text-center
                     border
@@ -593,7 +597,7 @@ export default function Member() {
                 <div className="relative w-full sm:w-56 md:w-64" ref={dropdownRef}>
                   <button
                     onClick={() => setIsFilterOpen(!isFilterOpen)}
-                    className="flex items-center justify-between w-full px-3 py-2 rounded-md bg-white border border-gray-300 shadow-sm hover:bg-gray-50 transition text-sm text-gray-700 font-medium"
+                    className="flex items-center justify-between w-full px-3 py-2 rounded bg-white border border-gray-300 shadow-sm hover:bg-gray-50 transition text-sm text-gray-700 font-medium"
                   >
                     <div className="flex items-center gap-2">
                       <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -616,7 +620,7 @@ export default function Member() {
                         transition={{ duration: 0.2 }}
                         className="absolute z-20 mt-1 w-full"
                       >
-                        <div className="bg-white/90 backdrop-blur-md rounded-md shadow-md border border-gray-200 overflow-hidden">
+                        <div className="bg-white/90 backdrop-blur-md rounded shadow-md border border-gray-200 overflow-hidden">
                           <ul className="py-1 max-h-56 overflow-y-auto">
                             {filterOptions.map((option) => (
                               <li key={option.key}>
@@ -640,22 +644,35 @@ export default function Member() {
                   </AnimatePresence>
                 </div>
 
-                {/* Search Input */}
                 <div className="relative w-full">
-                  <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35M16.65 11.65a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z" />
-                    </svg>
-                  </div>
-                  <motion.input
-                    whileFocus={{ boxShadow: "0 0 0 2px rgba(59, 130, 246, 0.3)" }}
-                    type="text"
-                    placeholder="Search by name, email..."
-                    className="w-full pl-10 pr-3 py-2 rounded-md bg-white/90 backdrop-blur-sm text-sm placeholder-gray-400 text-gray-700 border border-gray-300 shadow-sm focus:outline-none transition duration-300"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                </div>
+  {/* Search Icon */}
+  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+    <svg
+      className="w-5 h-5 text-gray-500"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M21 21l-4.35-4.35M16.65 11.65a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z"
+      />
+    </svg>
+  </div>
+
+  {/* Search Input */}
+  <motion.input
+    whileFocus={{ boxShadow: "0 0 0 2px rgba(59, 130, 246, 0.3)" }}
+    type="text"
+    placeholder="Search by name, email..."
+    className="w-full pl-10 pr-3 py-2 rounded-md bg-white/95 backdrop-blur-sm text-sm placeholder-gray-400 text-gray-800 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300"
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+  />
+</div>
+
               </div>
             </div>
           </div>
@@ -691,7 +708,7 @@ export default function Member() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="py-16 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-3xl px-6 my-16 shadow-inner"
+              className="py-16 bg-gradient-to-br from-purple-50 to-indigo-50 rounded px-6 my-16 shadow-inner"
             >
               <div className="text-center mb-12">
                 <motion.h2 
@@ -718,9 +735,6 @@ export default function Member() {
                 ></motion.div>
               </div>
               
-              {/* Get visible alumni */}
-              const visibleAlumni = getFilteredMembers('alumni').slice(0, visibleCounts.alumni);
-              const hasMoreAlumni = getFilteredMembers('alumni').length > visibleCounts.alumni;
               
               <motion.div
                 variants={containerVariants}
@@ -745,7 +759,7 @@ export default function Member() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => showMoreMembers('alumni')}
-                    className="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-700 text-white rounded-xl font-medium hover:opacity-90 transition-opacity"
+                    className="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-700 text-white rounded font-medium hover:opacity-90 transition-opacity"
                   >
                     Show More Alumni ({getFilteredMembers('alumni').length - visibleAlumni.length} more)
                   </motion.button>
@@ -776,7 +790,7 @@ export default function Member() {
                   setSearchQuery('');
                   setActiveFilter('all');
                 }}
-                className="mt-6 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-xl font-medium hover:opacity-90 transition-opacity"
+                className="mt-6 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded font-medium hover:opacity-90 transition-opacity"
               >
                 Reset Filters
               </button>
