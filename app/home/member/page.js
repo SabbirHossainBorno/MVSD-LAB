@@ -49,6 +49,16 @@ export default function Member() {
   });
   const [loading, setLoading] = useState(true);
   const dropdownRef = useRef(null);
+  
+  // Pagination state for each category
+  const [visibleCounts, setVisibleCounts] = useState({
+    professor: 10,
+    phd: 10,
+    masters: 10,
+    postdoc: 10,
+    staff: 10,
+    alumni: 10
+  });
 
   // Filter options
   const filterOptions = [
@@ -85,6 +95,18 @@ export default function Member() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  // Reset visible counts when filter or search changes
+  useEffect(() => {
+    setVisibleCounts({
+      professor: 10,
+      phd: 10,
+      masters: 10,
+      postdoc: 10,
+      staff: 10,
+      alumni: 10
+    });
+  }, [activeFilter, searchQuery]);
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -164,6 +186,14 @@ export default function Member() {
   // Get current filter label
   const currentFilter = filterOptions.find(opt => opt.key === activeFilter) || filterOptions[0];
 
+  // Function to show more members for a specific category
+  const showMoreMembers = (category) => {
+    setVisibleCounts(prev => ({
+      ...prev,
+      [category]: prev[category] + 10
+    }));
+  };
+
   const renderSocialMediaIcons = (socialmedia) => {
     const iconMap = {
       Facebook: '/images/social_icon/facebook.png',
@@ -196,135 +226,136 @@ export default function Member() {
     ));
   };
 
-const MemberCard = ({ member, type = 'normal' }) => {
-  const isAlumni = type === 'alumni';
-  const [expanded, setExpanded] = useState(false);
-  
-  const colors = {
-    normal: { accent: 'from-blue-500 to-cyan-500' },
-    alumni: { accent: 'from-purple-500 to-indigo-600' },
-    director: { accent: 'from-amber-500 to-orange-500' },
-    professor: { accent: 'from-emerald-500 to-teal-600' }
-  };
-  
-  const cardType = isAlumni ? 'alumni' : 
-                  member.type === 'Director' ? 'director' : 
-                  member.type === 'Professor' ? 'professor' : 'normal';
-  
-  // Determine if bio needs truncation
-  const bioNeedsTruncation = member.short_bio && member.short_bio.length > 180;
-  const displayBio = bioNeedsTruncation && !expanded 
-    ? `${member.short_bio.substring(0, 180)}...` 
-    : member.short_bio;
+  const MemberCard = ({ member, type = 'normal' }) => {
+    const isAlumni = type === 'alumni';
+    const [expanded, setExpanded] = useState(false);
+    
+    const colors = {
+      normal: { accent: 'from-blue-500 to-cyan-500' },
+      alumni: { accent: 'from-purple-500 to-indigo-600' },
+      director: { accent: 'from-amber-500 to-orange-500' },
+      professor: { accent: 'from-emerald-500 to-teal-600' }
+    };
+    
+    const cardType = isAlumni ? 'alumni' : 
+                    member.type === 'Director' ? 'director' : 
+                    member.type === 'Professor' ? 'professor' : 'normal';
+    
+    // Determine if bio needs truncation
+    const bioNeedsTruncation = member.short_bio && member.short_bio.length > 180;
+    const displayBio = bioNeedsTruncation && !expanded 
+      ? `${member.short_bio.substring(0, 180)}...` 
+      : member.short_bio;
 
-  return (
-    <motion.div
-      variants={itemVariants}
-      whileHover={{ y: -8, boxShadow: "0 15px 30px rgba(0, 0, 0, 0.08)" }}
-      className={`bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 
-                  transition-all duration-300 flex flex-col relative group
-                  ${expanded ? 'min-h-[420px]' : 'h-[400px]'}`}
-    >
-      {/* Top accent bar */}
-      <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${colors[cardType].accent}`}></div>
-      
-      <div className="p-6 flex flex-col h-full">
-        <div className="flex flex-col items-center relative z-10">
-          {/* Avatar with gradient border */}
-          <div className="relative mb-5">
-            <div className={`relative w-28 h-28 rounded-full p-1 bg-gradient-to-r ${colors[cardType].accent}`}>
-              <div className="rounded-full overflow-hidden border-4 border-white w-full h-full">
-                <Image 
-                  src={member.photo || '/images/placeholder-avatar.jpg'}
-                  alt={`${member.first_name} ${member.last_name}`}
-                  width={112}
-                  height={112}
-                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
-            </div>
-            
-            {/* Alumni badge */}
-            {isAlumni && (
-              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">
-                Alumni
-              </div>
-            )}
-            
-            {/* Role badge */}
-            {!isAlumni && (
-              <div className={`absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r ${colors[cardType].accent} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow`}>
-                {member.type.split(' ')[0]}
-              </div>
-            )}
-          </div>
-          
-          {/* Name with gradient text */}
-          <h3 className={`font-bold text-xl text-center mb-1 bg-gradient-to-r ${colors[cardType].accent} bg-clip-text text-transparent`}>
-            {member.first_name} <span className="font-extrabold">{member.last_name}</span>
-          </h3>
-          
-          {/* Designation */}
-          <p className="text-gray-600 text-center font-medium mb-2">
-            {member.designation || member.type}
-          </p>
-          
-          {/* Email with tooltip */}
-          <div className="relative group/email mb-3">
-            <p className="text-xs text-gray-500 truncate max-w-[180px] cursor-help">
-              {member.email}
-            </p>
-            {member.email && member.email.length > 22 && (
-              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover/email:block bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
-                {member.email}
-              </div>
-            )}
-          </div>
-        </div>
+    return (
+      <motion.div
+        variants={itemVariants}
+        whileHover={{ y: -8, boxShadow: "0 15px 30px rgba(0, 0, 0, 0.08)" }}
+        className={`bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 
+                    transition-all duration-300 flex flex-col relative group
+                    ${expanded ? 'min-h-[420px]' : 'h-[400px]'}`}
+      >
+        {/* Top accent bar */}
+        <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${colors[cardType].accent}`}></div>
         
-        {/* Bio section with expandable functionality */}
-        <div className="mt-2 flex-grow overflow-hidden">
-          {member.short_bio && (
-            <div className="h-full flex flex-col">
-              <div className={`flex-grow ${expanded ? 'overflow-y-auto' : 'overflow-hidden'}`}>
-                <p className="text-gray-700 text-sm leading-relaxed">
-                  {displayBio}
-                </p>
+        <div className="p-6 flex flex-col h-full">
+          <div className="flex flex-col items-center relative z-10">
+            {/* Avatar with gradient border */}
+            <div className="relative mb-5">
+              <div className={`relative w-28 h-28 rounded-full p-1 bg-gradient-to-r ${colors[cardType].accent}`}>
+                <div className="rounded-full overflow-hidden border-4 border-white w-full h-full">
+                  <Image 
+                    src={member.photo || '/images/placeholder-avatar.jpg'}
+                    alt={`${member.first_name} ${member.last_name}`}
+                    width={112}
+                    height={112}
+                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
               </div>
               
-              {/* See More/Less button */}
-              {bioNeedsTruncation && (
-                <div className="pt-2 mt-auto">
-                  <button 
-                    onClick={() => setExpanded(!expanded)}
-                    className={`text-sm font-medium w-full py-1 rounded-md transition-colors
-                      ${expanded 
-                        ? 'text-blue-600 hover:text-blue-800' 
-                        : 'text-blue-500 hover:text-blue-700'}`}
-                  >
-                    {expanded ? 'See Less' : 'See More'}
-                  </button>
+              {/* Alumni badge */}
+              {isAlumni && (
+                <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow">
+                  Alumni
                 </div>
               )}
+              
+              {/* Role badge */}
+              {!isAlumni && (
+                <div className={`absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r ${colors[cardType].accent} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow`}>
+                  {member.type.split(' ')[0]}
+                </div>
+              )}
+            </div>
+            
+            {/* Name with gradient text */}
+            <h3 className={`font-bold text-xl text-center mb-1 bg-gradient-to-r ${colors[cardType].accent} bg-clip-text text-transparent`}>
+              {member.first_name} <span className="font-extrabold">{member.last_name}</span>
+            </h3>
+            
+            {/* Designation */}
+            <p className="text-gray-600 text-center font-medium mb-2">
+              {member.designation || member.type}
+            </p>
+            
+            {/* Email with tooltip */}
+            <div className="relative group/email mb-3">
+              <p className="text-xs text-gray-500 truncate max-w-[180px] cursor-help">
+                {member.email}
+              </p>
+              {member.email && member.email.length > 22 && (
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover/email:block bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+                  {member.email}
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {/* Bio section with expandable functionality */}
+          <div className="mt-2 flex-grow overflow-hidden">
+            {member.short_bio && (
+              <div className="h-full flex flex-col">
+                <div className={`flex-grow ${expanded ? 'overflow-y-auto' : 'overflow-hidden'}`}>
+                  <p className="text-gray-700 text-sm leading-relaxed">
+                    {displayBio}
+                  </p>
+                </div>
+                
+                {/* See More/Less button */}
+                {bioNeedsTruncation && (
+                  <div className="pt-2 mt-auto">
+                    <button 
+                      onClick={() => setExpanded(!expanded)}
+                      className={`text-sm font-medium w-full py-1 rounded-md transition-colors
+                        ${expanded 
+                          ? 'text-blue-600 hover:text-blue-800' 
+                          : 'text-blue-500 hover:text-blue-700'}`}
+                    >
+                      {expanded ? 'See Less' : 'See More'}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+          
+          {/* Social media icons */}
+          {member.socialmedia && member.socialmedia.length > 0 && (
+            <div className="mt-4 pt-3 border-t border-gray-100">
+              <div className="flex justify-center space-x-3">
+                {renderSocialMediaIcons(member.socialmedia)}
+              </div>
             </div>
           )}
         </div>
         
-        {/* Social media icons */}
-        {member.socialmedia && member.socialmedia.length > 0 && (
-          <div className="mt-4 pt-3 border-t border-gray-100">
-            <div className="flex justify-center space-x-3">
-              {renderSocialMediaIcons(member.socialmedia)}
-            </div>
-          </div>
-        )}
-      </div>
-      
-      {/* Hover effect background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-gray-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
-    </motion.div>
-  );
-};
+        {/* Hover effect background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-gray-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
+      </motion.div>
+    );
+  };
+
   const DirectorCard = ({ director }) => {
     return (
       <motion.div
@@ -382,11 +413,15 @@ const MemberCard = ({ member, type = 'normal' }) => {
     );
   };
 
-  const renderSection = (title, members, type = 'normal', key) => {
+  const renderSection = (title, members, type = 'normal', categoryKey) => {
     if (!members || members.length === 0) return null;
     
+    // Get visible members for this category
+    const visibleMembers = members.slice(0, visibleCounts[categoryKey]);
+    const hasMore = members.length > visibleCounts[categoryKey];
+    
     return (
-      <section key={key} className="py-10">
+      <section key={categoryKey} className="py-10">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -416,11 +451,11 @@ const MemberCard = ({ member, type = 'normal' }) => {
           }`}
         >
           {type === 'director' ? (
-            members.map(director => (
+            visibleMembers.map(director => (
               <DirectorCard key={director.id} director={director} />
             ))
           ) : (
-            members.map(member => (
+            visibleMembers.map(member => (
               <motion.div
                 key={member.id}
                 variants={cardVariants}
@@ -433,6 +468,20 @@ const MemberCard = ({ member, type = 'normal' }) => {
             ))
           )}
         </motion.div>
+        
+        {/* Show More button */}
+        {hasMore && (
+          <div className="flex justify-center mt-10">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => showMoreMembers(categoryKey)}
+              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-xl font-medium hover:opacity-90 transition-opacity"
+            >
+              Show More {title} ({members.length - visibleMembers.length} more)
+            </motion.button>
+          </div>
+        )}
       </section>
     );
   };
@@ -442,289 +491,302 @@ const MemberCard = ({ member, type = 'normal' }) => {
   }
 
   return (
-  <div className="bg-white text-gray-900 min-h-screen">
-    <Navbar />
+    <div className="bg-white text-gray-900 min-h-screen">
+      <Navbar />
 
-    {/* Main Content */}
-    <main>
-      <section
-  className="relative bg-cover bg-center"
-  style={{ backgroundImage: "url('/images/hero-bg3.png')" }}
->
-  {/* Overlay using the same image */}
-  <div
-    className="absolute inset-0 bg-[url('/images/hero-bg3.png')] bg-cover bg-center"
-    style={{ opacity: 0.5 }}
-  ></div>
+      {/* Main Content */}
+      <main>
+        <section
+          className="relative bg-cover bg-center"
+        >
+          {/* Overlay using the same image */}
+          <div
+            className="absolute inset-0 bg-[url('/images/hero-bg3.png')] bg-cover bg-center"
+            style={{ opacity: 0.5 }}
+          ></div>
 
-  <div className="relative z-10 max-w-screen-xl mx-auto px-4 py-10 md:py-16 text-center">
-    {/* Hero Text */}
-    <motion.h1
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 mt-10 leading-tight"
-    >
-      Members of MVSD LAB
-    </motion.h1>
-    <motion.p
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
-      className="text-base md:text-lg lg:text-xl text-gray-800 mb-4"
-    >
-      Meet our talented team driving innovation in automotive technologies and AI
-    </motion.p>
+          <div className="relative z-10 max-w-screen-xl mx-auto px-4 py-10 md:py-16 text-center">
+            {/* Hero Text */}
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 mt-10 leading-tight"
+            >
+              Members of MVSD LAB
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-base md:text-lg lg:text-xl text-gray-800 mb-4"
+            >
+              Meet our talented team driving innovation in automotive technologies and AI
+            </motion.p>
 
-    {/* Summary Cards */}
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
-  {[
-    { label: 'Total', count: totalMembers },
-    { label: 'Director', count: directorCount },
-    { label: 'Professors', count: professorCount },
-    { label: 'PhD', count: phdCount },
-    { label: 'Masters', count: mastersCount },
-    { label: 'Post Doc', count: postdocCount },
-    { label: 'Alumni', count: alumniCount },
-  ].map((item, i) => (
-    <motion.div
-      key={item.label}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1 * (i + 1) }}
-      className="
-        backdrop-blur-2xl
-        bg-white/10
-        rounded-xl
-        p-3
-        text-center
-        border
-        border-white/20
-        shadow-[0_4px_30px_rgba(0,0,0,0.1)]
-        hover:shadow-[0_6px_36px_rgba(0,0,0,0.2)]
-        transition-all
-        duration-300
-        ease-in-out
-      "
-      style={{
-        minHeight: '80px',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-      }}
-    >
-      <div className="text-lg font-bold text-blue-900">{item.count}</div>
-      <div className="text-xs font-bold text-blue-800 mt-1 tracking-wide">{item.label}</div>
-    </motion.div>
-  ))}
-</div>
-
-
-  </div>
-</section>
-
-
-
-      <section className="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 py-4 border-b border-gray-200">
-        <div className="max-w-screen-xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-3">
-
-            {/* Breadcrumb */}
-            <nav className="text-sm font-medium text-gray-800">
-              <ol className="flex items-center space-x-2">
-                <li>
-                  <Link href="/home" className="text-blue-600 hover:text-blue-700 transition-colors duration-300 ease-in-out">
-                    Home
-                  </Link>
-                </li>
-                <li className="text-gray-400">/</li>
-                <li className="text-gray-600">Members</li>
-              </ol>
-            </nav>
-
-            {/* Filter & Search */}
-            <div className="flex flex-col sm:flex-row w-full md:w-auto max-w-3xl gap-2">
-
-              {/* Filter Dropdown */}
-              <div className="relative w-full sm:w-56 md:w-64" ref={dropdownRef}>
-                <button
-                  onClick={() => setIsFilterOpen(!isFilterOpen)}
-                  className="flex items-center justify-between w-full px-3 py-2 rounded-md bg-white border border-gray-300 shadow-sm hover:bg-gray-50 transition text-sm text-gray-700 font-medium"
+            {/* Summary Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
+              {[
+                { label: 'Total', count: totalMembers },
+                { label: 'Director', count: directorCount },
+                { label: 'Professors', count: professorCount },
+                { label: 'PhD', count: phdCount },
+                { label: 'Masters', count: mastersCount },
+                { label: 'Post Doc', count: postdocCount },
+                { label: 'Alumni', count: alumniCount },
+                { label: 'Staff', count: staffCount },
+              ].map((item, i) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * (i + 1) }}
+                  className="
+                    backdrop-blur-2xl
+                    bg-white/10
+                    rounded-xl
+                    p-3
+                    text-center
+                    border
+                    border-white/20
+                    shadow-[0_4px_30px_rgba(0,0,0,0.1)]
+                    hover:shadow-[0_6px_36px_rgba(0,0,0,0.2)]
+                    transition-all
+                    duration-300
+                    ease-in-out
+                  "
+                  style={{
+                    minHeight: '80px',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
+                  }}
                 >
-                  <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h18M3 10h14M3 16h10" />
+                  <div className="text-lg font-bold text-blue-900">{item.count}</div>
+                  <div className="text-xs font-bold text-blue-800 mt-1 tracking-wide">{item.label}</div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 py-4 border-b border-gray-200">
+          <div className="max-w-screen-xl mx-auto px-4">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-3">
+
+              {/* Breadcrumb */}
+              <nav className="text-sm font-medium text-gray-800">
+                <ol className="flex items-center space-x-2">
+                  <li>
+                    <Link href="/home" className="text-blue-600 hover:text-blue-700 transition-colors duration-300 ease-in-out">
+                      Home
+                    </Link>
+                  </li>
+                  <li className="text-gray-400">/</li>
+                  <li className="text-gray-600">Members</li>
+                </ol>
+              </nav>
+
+              {/* Filter & Search */}
+              <div className="flex flex-col sm:flex-row w-full md:w-auto max-w-3xl gap-2">
+
+                {/* Filter Dropdown */}
+                <div className="relative w-full sm:w-56 md:w-64" ref={dropdownRef}>
+                  <button
+                    onClick={() => setIsFilterOpen(!isFilterOpen)}
+                    className="flex items-center justify-between w-full px-3 py-2 rounded-md bg-white border border-gray-300 shadow-sm hover:bg-gray-50 transition text-sm text-gray-700 font-medium"
+                  >
+                    <div className="flex items-center gap-2">
+                      <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h18M3 10h14M3 16h10" />
+                      </svg>
+                      {currentFilter.label}
+                    </div>
+                    <svg className={`w-4 h-4 text-gray-500 transition-transform ${isFilterOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                     </svg>
-                    {currentFilter.label}
-                  </div>
-                  <svg className={`w-4 h-4 text-gray-500 transition-transform ${isFilterOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
+                  </button>
 
-                {/* Dropdown Menu */}
-                <AnimatePresence>
-                  {isFilterOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -6 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute z-20 mt-1 w-full"
-                    >
-                      <div className="bg-white/90 backdrop-blur-md rounded-md shadow-md border border-gray-200 overflow-hidden">
-                        <ul className="py-1 max-h-56 overflow-y-auto">
-                          {filterOptions.map((option) => (
-                            <li key={option.key}>
-                              <button
-                                className={`w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-blue-50 ${
-                                  activeFilter === option.key ? 'bg-blue-50 font-semibold' : ''
-                                }`}
-                                onClick={() => {
-                                  setActiveFilter(option.key);
-                                  setIsFilterOpen(false);
-                                }}
-                              >
-                                {option.label}
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Search Input */}
-              <div className="relative w-full">
-                <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35M16.65 11.65a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z" />
-                  </svg>
+                  {/* Dropdown Menu */}
+                  <AnimatePresence>
+                    {isFilterOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute z-20 mt-1 w-full"
+                      >
+                        <div className="bg-white/90 backdrop-blur-md rounded-md shadow-md border border-gray-200 overflow-hidden">
+                          <ul className="py-1 max-h-56 overflow-y-auto">
+                            {filterOptions.map((option) => (
+                              <li key={option.key}>
+                                <button
+                                  className={`w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-blue-50 ${
+                                    activeFilter === option.key ? 'bg-blue-50 font-semibold' : ''
+                                  }`}
+                                  onClick={() => {
+                                    setActiveFilter(option.key);
+                                    setIsFilterOpen(false);
+                                  }}
+                                >
+                                  {option.label}
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-                <motion.input
-                  whileFocus={{ boxShadow: "0 0 0 2px rgba(59, 130, 246, 0.3)" }}
-                  type="text"
-                  placeholder="Search by name, email..."
-                  className="w-full pl-10 pr-3 py-2 rounded-md bg-white/90 backdrop-blur-sm text-sm placeholder-gray-400 text-gray-700 border border-gray-300 shadow-sm focus:outline-none transition duration-300"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+
+                {/* Search Input */}
+                <div className="relative w-full">
+                  <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35M16.65 11.65a5.5 5.5 0 11-11 0 5.5 5.5 0 0111 0z" />
+                    </svg>
+                  </div>
+                  <motion.input
+                    whileFocus={{ boxShadow: "0 0 0 2px rgba(59, 130, 246, 0.3)" }}
+                    type="text"
+                    placeholder="Search by name, email..."
+                    className="w-full pl-10 pr-3 py-2 rounded-md bg-white/90 backdrop-blur-sm text-sm placeholder-gray-400 text-gray-700 border border-gray-300 shadow-sm focus:outline-none transition duration-300"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
+        {/* Members Section */}
+        <div className="max-w-screen-xl mx-auto px-4 py-8">
+          {/* Render each section based on the active filter and search */}
+          {Object.entries(getMembersToDisplay()).map(([category, memberList]) => {
+            if (!memberList || memberList.length === 0) return null;
 
-      {/* Members Section */}
-      <div className="max-w-screen-xl mx-auto px-4 py-8">
-        {/* Render each section based on the active filter and search */}
-        {Object.entries(getMembersToDisplay()).map(([category, memberList]) => {
-          if (!memberList || memberList.length === 0) return null;
-
-          switch (category) {
-            case 'director':
-              return renderSection("Lab Leadership", memberList, 'director', category); // Add key
-            case 'professor':
-              return renderSection("Professors", memberList, 'normal', category); // Add key
-            case 'phd':
-              return renderSection("PhD Candidates", memberList, 'normal', category); // Add key
-            case 'masters':
-              return renderSection("Master's Candidates", memberList, 'normal', category); // Add key
-            case 'postdoc':
-              return renderSection("Post Doc Researchers", memberList, 'normal', category); // Add key
-            case 'staff':
-              return renderSection("Staff Members", memberList, 'normal', category); // Add key
-            default:
-              return null;
-          }
-        })}
-        
-        {/* Alumni Section - only shown when all or alumni is selected */}
-        {(activeFilter === 'all' || activeFilter === 'alumni') && getFilteredMembers('alumni').length > 0 && (
-          <motion.section 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="py-16 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-3xl px-6 my-16 shadow-inner"
-          >
-            <div className="text-center mb-12">
-              <motion.h2 
-                initial={{ scale: 0.9 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 300 }}
-                className="text-3xl font-bold text-gray-900 mb-4"
-              >
-                Our Esteemed Alumni
-              </motion.h2>
-              <motion.p 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="text-gray-600 max-w-2xl mx-auto"
-              >
-                Where they are now: Discover the career paths of our former lab members
-              </motion.p>
-              <motion.div 
-                initial={{ width: 0 }}
-                animate={{ width: 100 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="h-1 bg-purple-600 rounded-full mx-auto mt-4"
-              ></motion.div>
-            </div>
-            
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="show"
-              className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+            switch (category) {
+              case 'director':
+                return renderSection("Lab Leadership", memberList, 'director', category);
+              case 'professor':
+                return renderSection("Professors", memberList, 'normal', category);
+              case 'phd':
+                return renderSection("PhD Candidates", memberList, 'normal', category);
+              case 'masters':
+                return renderSection("Master's Candidates", memberList, 'normal', category);
+              case 'postdoc':
+                return renderSection("Post Doc Researchers", memberList, 'normal', category);
+              case 'staff':
+                return renderSection("Staff Members", memberList, 'normal', category);
+              default:
+                return null;
+            }
+          })}
+          
+          {/* Alumni Section */}
+          {(activeFilter === 'all' || activeFilter === 'alumni') && getFilteredMembers('alumni').length > 0 && (
+            <motion.section 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="py-16 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-3xl px-6 my-16 shadow-inner"
             >
-              {getFilteredMembers('alumni').map(alumni => (
-                <motion.div
-                  key={alumni.id}
-                  variants={cardVariants}
+              <div className="text-center mb-12">
+                <motion.h2 
+                  initial={{ scale: 0.9 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className="text-3xl font-bold text-gray-900 mb-4"
                 >
-                  <MemberCard member={alumni} type="alumni" />
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.section>
-        )}
-        
-        {/* Empty State */}
-        {Object.values(getMembersToDisplay()).every(arr => !arr || arr.length === 0) && 
-         (activeFilter !== 'alumni' || getFilteredMembers('alumni').length === 0) && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="py-20 text-center"
-          >
-            <div className="inline-block p-6 bg-blue-50 rounded-full mb-6">
-              <svg className="w-16 h-16 mx-auto text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-            </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-2">No Members Found</h3>
-            <p className="text-gray-600 max-w-md mx-auto">
-              We couldn&apos;t find any members matching your search. Try adjusting your filters or search terms.
-            </p>
-            <button
-              onClick={() => {
-                setSearchQuery('');
-                setActiveFilter('all');
-              }}
-              className="mt-6 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-xl font-medium hover:opacity-90 transition-opacity"
+                  Our Esteemed Alumni
+                </motion.h2>
+                <motion.p 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-gray-600 max-w-2xl mx-auto"
+                >
+                  Where they are now: Discover the career paths of our former lab members
+                </motion.p>
+                <motion.div 
+                  initial={{ width: 0 }}
+                  animate={{ width: 100 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="h-1 bg-purple-600 rounded-full mx-auto mt-4"
+                ></motion.div>
+              </div>
+              
+              {/* Get visible alumni */}
+              const visibleAlumni = getFilteredMembers('alumni').slice(0, visibleCounts.alumni);
+              const hasMoreAlumni = getFilteredMembers('alumni').length > visibleCounts.alumni;
+              
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+                className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+              >
+                {visibleAlumni.map(alumni => (
+                  <motion.div
+                    key={alumni.id}
+                    variants={cardVariants}
+                  >
+                    <MemberCard member={alumni} type="alumni" />
+                  </motion.div>
+                ))}
+              </motion.div>
+              
+              {/* See More button for alumni */}
+              {hasMoreAlumni && (
+                <div className="flex justify-center mt-10">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => showMoreMembers('alumni')}
+                    className="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-700 text-white rounded-xl font-medium hover:opacity-90 transition-opacity"
+                  >
+                    Show More Alumni ({getFilteredMembers('alumni').length - visibleAlumni.length} more)
+                  </motion.button>
+                </div>
+              )}
+            </motion.section>
+          )}
+          
+          {/* Empty State */}
+          {Object.values(getMembersToDisplay()).every(arr => !arr || arr.length === 0) && 
+          (activeFilter !== 'alumni' || getFilteredMembers('alumni').length === 0) && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="py-20 text-center"
             >
-              Reset Filters
-            </button>
-          </motion.div>
-        )}
-      </div>
-    </main>
-    
-    <ScrollToTop />
-    <Footer />
-  </div>
-);
+              <div className="inline-block p-6 bg-blue-50 rounded-full mb-6">
+                <svg className="w-16 h-16 mx-auto text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">No Members Found</h3>
+              <p className="text-gray-600 max-w-md mx-auto">
+                We couldn&apos;t find any members matching your search. Try adjusting your filters or search terms.
+              </p>
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setActiveFilter('all');
+                }}
+                className="mt-6 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-xl font-medium hover:opacity-90 transition-opacity"
+              >
+                Reset Filters
+              </button>
+            </motion.div>
+          )}
+        </div>
+      </main>
+      
+      <ScrollToTop />
+      <Footer />
+    </div>
+  );
 }
