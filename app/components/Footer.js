@@ -4,32 +4,43 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Image from 'next/image';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
-  const [isSubscribed, setIsSubscribed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
+
+    if (!email) {
+      toast.error('Please enter your email address');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      setIsSubscribed(true);
-      toast.success('Subscription Successful!');
-      setEmail('');
+      const response = await axios.post('/api/subscribe', { email });
+
+      if (response.data.success) {
+        toast.success('Subscription Successful!');
+        setEmail('');
+      } else {
+        toast.error(response.data.message || 'Subscription failed. Please try again.');
+      }
     } catch (error) {
-      toast.error('An error occurred. Please try again.');
+      const errorMessage =
+        error.response?.data?.message || 'An error occurred. Please try again.';
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
   };
+
 
   // Social media links data
   const socialLinks = [
@@ -89,6 +100,20 @@ export default function Footer() {
 
   return (
     <footer className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white pt-16 pb-8 px-4 overflow-hidden">
+      {/* Toast Container for notifications */}
+      <ToastContainer 
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+      
       {/* Decorative elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-32 h-32 bg-blue-500 rounded-full mix-blend-soft-light opacity-20 blur-3xl animate-pulse-slow"></div>
@@ -191,7 +216,7 @@ export default function Footer() {
                 <svg className="w-5 h-5 text-blue-400 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                 </svg>
-                <span className="text-gray-300">contact@mvsdlab.com</span>
+                <span className="text-gray-300">labmvsd@gmail.com</span>
               </li>
               <li className="flex items-start">
                 <svg className="w-5 h-5 text-blue-400 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -236,19 +261,16 @@ export default function Footer() {
               </div>
               <button
                 type="submit"
-                className={`w-full py-3 px-6 rounded font-semibold transition-all duration-300 ${
-                  isSubscribed 
-                    ? 'bg-green-600 hover:bg-green-700' 
-                    : 'bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700'
-                }`}
-                disabled={isLoading || isSubscribed}
+                className="w-full py-3 px-6 rounded font-semibold transition-all duration-300 bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700"
+                disabled={isLoading}
               >
-                {isSubscribed ? (
+                {isLoading ? (
                   <span className="flex items-center justify-center">
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Subscribed
+                    Subscribing...
                   </span>
                 ) : (
                   'Subscribe'
@@ -261,7 +283,7 @@ export default function Footer() {
         {/* Footer bottom */}
         <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between">
           <div className="text-gray-400 text-sm mb-4 md:mb-0">
-            <Link href="https://mvsdlab.com" className="hover:text-white">
+            <Link href="https://www.mvsdlab.com" className="hover:text-white">
               © MVSD LAB {new Date().getFullYear()}, All rights reserved.
             </Link>
           </div>
