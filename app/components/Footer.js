@@ -73,12 +73,14 @@ export default function Footer() {
       ),
       url: 'https://linkedin.com/company/mvsdlab'
     },
-    { 
-      name: 'YouTube', 
+    {
+      name: 'YouTube',
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 72 72" fill="none">
-          <path d="M63 22.5C63 20.2909 61.2091 18.5 59 18.5H13C10.7909 18.5 9 20.2909 9 22.5V49.5C9 51.7091 10.7909 53.5 13 53.5H59C61.2091 53.5 63 51.7091 63 49.5V22.5ZM42 37L29 30V44L42 37Z" 
-                fill="currentColor" />
+          <path 
+            d="M63 22.5C63 20.2909 61.2091 18.5 59 18.5H13C10.7909 18.5 9 20.2909 9 22.5V49.5C9 51.7091 10.7909 53.5 13 53.5H59C61.2091 53.5 63 51.7091 63 49.5V22.5ZM42 37L29 30V44L42 37Z" 
+            fill="currentColor" 
+          />
         </svg>
       ),
       url: 'https://youtube.com/mvsdlab'
@@ -207,14 +209,14 @@ export default function Footer() {
             <p className="text-gray-300 mb-4">
               Subscribe to our newsletter for the latest updates and insights.
             </p>
-            <form onSubmit={handleSubscribe} className="bg-gray-800 p-5 rounded-xl shadow-lg">
+            <form onSubmit={handleSubscribe} className="bg-gray-800 p-5 rounded shadow-lg">
               <div className="mb-4">
                 <label className="block text-gray-300 mb-2">Email</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 text-base font-medium shadow-md text-white bg-gray-900 border border-gray-700 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 text-base font-medium shadow-md text-white bg-gray-900 border border-gray-700 rounded placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="your-email@example.com"
                   required
                   disabled={isLoading}
@@ -234,7 +236,7 @@ export default function Footer() {
               </div>
               <button
                 type="submit"
-                className={`w-full py-3 px-6 rounded-lg font-semibold transition-all duration-300 ${
+                className={`w-full py-3 px-6 rounded font-semibold transition-all duration-300 ${
                   isSubscribed 
                     ? 'bg-green-600 hover:bg-green-700' 
                     : 'bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700'
