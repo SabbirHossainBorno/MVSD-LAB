@@ -39,3 +39,55 @@
 2025-07-10 11:41:00-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
 2025-07-10 11:46:13-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Journal Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
 2025-07-10 11:46:14-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 5 publications of type Journal Paper
+2025-07-10 12:01:47-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Journal Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:01:47-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 5 publications of type Journal Paper
+2025-07-10 12:03:48-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Journal Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:03:48-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 5 publications of type Journal Paper
+2025-07-10 12:04:17-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Patent publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:04:17-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 1 publications of type Patent
+2025-07-10 12:04:29-EID[]-SID[]-[INFO] TASK[Publication - Summary]-Fetching publication summary from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:04:29-EID[]-SID[]-[INFO] TASK[Publication - Summary]-Successfully fetched publication summary from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:09:31-EID[]-SID[]-[INFO] TASK[Publication - Summary]-Fetching publication summary from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:09:31-EID[]-SID[]-[INFO] TASK[Publication - Summary]-Successfully fetched publication summary from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:13:34-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:13:34-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
+2025-07-10 12:13:34-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:13:34-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
+2025-07-10 12:17:00-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:17:00-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
+2025-07-10 12:17:39-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:17:39-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
+2025-07-10 12:26:12-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:26:12-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
+2025-07-10 12:30:52-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:30:52-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
+2025-07-10 12:41:32-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:41:32-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
+2025-07-10 12:42:04-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Journal Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:42:04-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 5 publications of type Journal Paper
+2025-07-10 12:44:14-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Journal Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:44:14-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 5 publications of type Journal Paper
+2025-07-10 12:48:03-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Journal Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:48:03-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 5 publications of type Journal Paper
+2025-07-10 12:50:13-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Journal Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:50:13-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 5 publications of type Journal Paper
+2025-07-10 12:51:06-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:51:06-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
+2025-07-10 12:53:21-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:53:21-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
+2025-07-10 12:53:31-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Journal Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:53:31-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 5 publications of type Journal Paper
+2025-07-10 12:53:42-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Book/Chapter publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:53:42-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 4 publications of type Book/Chapter
+2025-07-10 12:53:45-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Patent publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:53:45-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 1 publications of type Patent
+2025-07-10 12:53:53-EID[]-SID[]-[INFO] TASK[Publication - Summary]-Fetching publication summary from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:53:53-EID[]-SID[]-[INFO] TASK[Publication - Summary]-Successfully fetched publication summary from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:54:16-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:54:16-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
+2025-07-10 12:54:16-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:54:16-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
+2025-07-10 12:54:24-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:54:24-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
+2025-07-10 12:55:19-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-10 12:55:19-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
