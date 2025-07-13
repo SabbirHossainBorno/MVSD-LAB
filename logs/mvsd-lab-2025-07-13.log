@@ -36,3 +36,29 @@
 2025-07-13 02:46:00-EID[]-SID[]-[INFO] TASK[Home - Member]-Successfully fetched member details from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
 2025-07-13 02:47:13-EID[]-SID[]-[INFO] TASK[Home - Stats]-Request initiated from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
 2025-07-13 02:47:13-EID[]-SID[]-[INFO] TASK[Home - Stats]-Fetched professor count from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-13 06:56:02-EID[]-SID[]-[INFO] TASK[Home - Stats]-Request initiated from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-13 06:56:02-EID[]-SID[]-[INFO] TASK[Home - Stats]-Fetched professor count from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-13 06:56:46-EID[]-SID[]-[INFO] TASK[Home - Stats]-Request initiated from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-13 06:56:46-EID[]-SID[]-[INFO] TASK[Home - Stats]-Fetched professor count from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-13 06:57:01-EID[]-SID[]-[INFO] TASK[Home - Stats]-Request initiated from IP 20.212.201.123 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.7204.97 Safari/537.36
+2025-07-13 06:57:01-EID[]-SID[]-[INFO] TASK[Home - Stats]-Fetched professor count from IP 20.212.201.123 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.7204.97 Safari/537.36
+2025-07-13 06:57:14-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications
+2025-07-13 06:57:14-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
+2025-07-13 06:57:30-EID[]-SID[]-[INFO] TASK[Publication - Summary]-Fetching publication summary from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-13 06:57:30-EID[]-SID[]-[INFO] TASK[Publication - Summary]-Successfully fetched publication summary from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-13 06:57:42-EID[]-SID[]-[INFO] TASK[Home - Stats]-Request initiated from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-13 06:57:42-EID[]-SID[]-[INFO] TASK[Home - Stats]-Fetched professor count from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-13 06:58:01-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications
+2025-07-13 06:58:01-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
+2025-07-13 06:58:19-EID[]-SID[]-[INFO] TASK[Home - Stats]-Request initiated from IP 20.212.201.123 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.7204.96 Safari/537.36
+2025-07-13 06:58:19-EID[]-SID[]-[INFO] TASK[Home - Stats]-Fetched professor count from IP 20.212.201.123 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.7204.96 Safari/537.36
+2025-07-13 06:58:23-EID[]-SID[]-[INFO] TASK[Home - Stats]-Request initiated from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-13 06:58:23-EID[]-SID[]-[INFO] TASK[Home - Stats]-Fetched professor count from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-13 06:58:31-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Project publications
+2025-07-13 06:58:31-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 0 publications of type Project
+2025-07-13 06:58:35-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Journal Paper publications
+2025-07-13 06:58:35-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 5 publications of type Journal Paper
+2025-07-13 06:58:42-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetching Conference Paper publications
+2025-07-13 06:58:42-EID[]-SID[]-[INFO] TASK[Publication - Details]-Fetched 3 publications of type Conference Paper
+2025-07-13 06:58:49-EID[]-SID[]-[INFO] TASK[Home - Stats]-Request initiated from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-13 06:58:49-EID[]-SID[]-[INFO] TASK[Home - Stats]-Fetched professor count from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
