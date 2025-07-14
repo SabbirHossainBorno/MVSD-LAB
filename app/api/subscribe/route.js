@@ -18,6 +18,12 @@ const generateSubscriberId = async () => {
     const formattedId = `SUB${String(nextId).padStart(2, '0')}MVSD`;
     return formattedId;
   } catch (error) {
+    logger.error('Subscriber ID generation failed', {
+      meta: {
+        taskName: 'Home - Subscribe',
+        details: `Database error while generating subscriber ID: ${error.message}`
+      }
+    });
     throw new Error(`Error generating Subscriber ID: ${error.message}`);
   }
 };
@@ -37,34 +43,52 @@ export async function POST(request) {
     // Validate email format
     if (!email || !validateEmail(email)) {
       const message = 'Please enter a valid email address';
-      await sendTelegramAlert(formatAlertMessage('Invalid Email', `IP: ${ipAddress}\nAttempted: ${email}`));
-      logger.warn('Subscription error', {
+
+      await sendTelegramAlert(formatAlertMessage('Invalid Email Attempt', `IP: ${ipAddress}\nUser Agent: ${userAgent}\nEmail: ${email}`));
+      logger.warn('Email validation failed', {
         meta: {
           taskName: 'Home - Subscribe',
-          details: `Invalid email format: ${email} from IP ${ipAddress}`
+          details: `Invalid email format attempted from IP: ${ipAddress}, Email: ${email}`
         }
       });
+
       return NextResponse.json({ success: false, message }, { status: 400 });
     }
 
+    // Check for existing email
     const checkResult = await query('SELECT email FROM subscriber WHERE email = $1', [email]);
-
     if (checkResult.rows.length > 0) {
       const userMessage = 'You are already a subscriber.';
+
+      logger.info('Duplicate subscription attempt', {
+        meta: {
+          taskName: 'Home - Subscribe',
+          details: `Existing subscriber tried to re-subscribe from IP: ${ipAddress}, Email: ${email}`
+        }
+      });
+
       return NextResponse.json({ success: false, message: userMessage }, { status: 400 });
     }
 
+    // Generate new subscriber ID
     const subscriberId = await generateSubscriberId();
+
+    // Insert subscriber into database
     const result = await query(
       'INSERT INTO subscriber (id, email, date) VALUES ($1, $2, NOW()) RETURNING serial',
       [subscriberId, email]
     );
-
     const { serial } = result.rows[0];
-    
-    let emailSent = false;
-    let emailError = null;
 
+    logger.info('Subscriber added to database', {
+      meta: {
+        taskName: 'Home - Subscribe',
+        details: `New subscriber added: ${subscriberId}, Email: ${email}, IP: ${ipAddress}`
+      }
+    });
+
+    // Send confirmation email
+    let emailSent = false;
     try {
       const transporter = nodemailer.createTransport({
         host: process.env.EMAIL_HOST,
@@ -82,19 +106,17 @@ export async function POST(request) {
             <h1 style="margin: 0;">Welcome to MVSD LAB</h1>
             <p>You're now part of our exclusive community</p>
           </div>
-          
           <div style="padding: 30px; background-color: #ffffff;">
             <h2 style="color: #1e293b;">Subscription Confirmed!</h2>
             <p>Thank you for subscribing to MVSD LAB updates.</p>
             <div style="background-color: #f1f5f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
               <p style="margin: 0;"><strong>Subscriber ID:</strong> ${subscriberId}</p>
             </div>
-            <p>We'll notify you about our groundbreaking innovations in automotive engineering and AI research.</p>
+            <p>We'll notify you about our innovations in automotive engineering and AI research.</p>
             <div style="text-align: center; margin-top: 30px;">
               <a href="https://www.mvsdlab.com" style="display: inline-block; background: #0ea5e9; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; font-weight: bold;">Visit Our Website</a>
             </div>
           </div>
-          
           <div style="padding: 20px; background-color: #f1f5f9; text-align: center; color: #64748b; font-size: 14px;">
             <p>© ${new Date().getFullYear()} MVSD LAB. All rights reserved.</p>
           </div>
@@ -109,26 +131,32 @@ export async function POST(request) {
       });
 
       emailSent = true;
+      logger.info('Confirmation email sent', {
+        meta: {
+          taskName: 'Home - Subscribe',
+          details: `Email sent successfully to ${email}`
+        }
+      });
     } catch (emailError) {
-      // Log email error but don't fail the subscription
       logger.error('Email sending failed', {
         meta: {
           taskName: 'Home - Subscribe',
-          details: `Email error: ${emailError.message} for ${email}`
+          details: `Failed to send email to ${email}. Error: ${emailError.message}`
         }
       });
     }
 
-    // Always send notification to admin
+    // Send admin notification
     const notificationTitle = `MVSD LAB Got New Subscriber [${subscriberId}]`;
     const notificationStatus = 'Unread';
     await query('INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3)', [subscriberId, notificationTitle, notificationStatus]);
 
-    await sendTelegramAlert(formatAlertMessage('New Subscriber', `ID: ${subscriberId}\nEmail: ${email}\nConfirmation: ${emailSent ? 'Sent' : 'Failed'}`));
-    logger.info('New subscriber added', {
+    await sendTelegramAlert(formatAlertMessage('New Subscriber', `ID: ${subscriberId}\nEmail: ${email}\nEmail Sent: ${emailSent ? 'Yes' : 'No'}`));
+
+    logger.info('Admin alerted via Telegram', {
       meta: {
         taskName: 'Home - Subscribe',
-        details: `New subscriber: ${subscriberId} (${email}) from IP ${ipAddress}. Email ${emailSent ? 'sent' : 'failed'}`
+        details: `Telegram alert sent for new subscriber ${subscriberId}`
       }
     });
 
@@ -136,18 +164,19 @@ export async function POST(request) {
       success: true, 
       message: emailSent 
         ? 'Subscription Successful! Confirmation Email Sent.' 
-        : 'Subscription successful! But We Encountered An Issue Sending Your Confirmation Email.',
+        : 'Subscription successful! But we encountered an issue sending your confirmation email.',
       serial 
     });
   } catch (error) {
     const errorMessage = `Server error: ${error.message}`;
     await sendTelegramAlert(formatAlertMessage('Subscription Error', `IP: ${ipAddress}\nError: ${errorMessage}`));
-    logger.error('Database error', {
+    logger.error('Unexpected server error', {
       meta: {
         taskName: 'Home - Subscribe',
-        details: `Error: ${error.message} from IP ${ipAddress}`
+        details: `Unhandled exception: ${error.message}, IP: ${ipAddress}`
       }
     });
-    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
+
+    return NextResponse.json({ success: false, message: 'Server error. Please try again later.' }, { status: 500 });
   }
 }

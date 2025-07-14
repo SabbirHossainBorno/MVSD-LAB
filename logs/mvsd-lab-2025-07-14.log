@@ -1,2 +1,7 @@
 2025-07-14 00:58:39-EID[]-SID[]-[INFO] TASK[Home - Member]-Fetching member details from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
 2025-07-14 00:58:40-EID[]-SID[]-[INFO] TASK[Home - Member]-Successfully fetched member details from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-14 03:55:49-EID[]-SID[]-[INFO] TASK[Home - Subscribe]-New subscriber: SUB35MVSD (adadawdasa@gmail.com) from IP 123.200.7.106. Email sent
+2025-07-14 03:58:09-EID[]-SID[]-[INFO] TASK[Home - Subscribe]-New subscriber added: SUB36MVSD, Email: dasdsaaa@gmail.com, IP: 123.200.7.106
+2025-07-14 03:58:10-EID[]-SID[]-[INFO] TASK[Home - Subscribe]-Email sent successfully to dasdsaaa@gmail.com
+2025-07-14 03:58:10-EID[]-SID[]-[INFO] TASK[Home - Subscribe]-Telegram alert sent for new subscriber SUB36MVSD
+2025-07-14 03:58:37-EID[]-SID[]-[INFO] TASK[Home - Subscribe]-Existing subscriber tried to re-subscribe from IP: 123.200.7.106, Email: dada@gmail.com
