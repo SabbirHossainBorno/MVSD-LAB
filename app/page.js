@@ -231,7 +231,7 @@ export default function HomePage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            We're at the forefront of <span className="font-semibold text-cyan-300">AI-driven automotive innovation</span>, developing intelligent systems that power the autonomous vehicles of tomorrow.
+            We&apos;re at the forefront of <span className="font-semibold text-cyan-300">AI-driven automotive innovation</span>, developing intelligent systems that power the autonomous vehicles of tomorrow.
           </motion.p>
 
           <motion.div 
