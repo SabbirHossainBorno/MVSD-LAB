@@ -6,7 +6,7 @@ import sendTelegramAlert from '../../../lib/telegramAlert';
 import nodemailer from 'nodemailer';
 
 const formatAlertMessage = (title, details) => {
-  return `MVSD LAB HOME\n--------------------------\n${title}\n${details}`;
+  return `📢 *MVSD LAB HOME ALERT*\n━━━━━━━━━━━━━━━━━━\n*${title}*\n${details}`;
 };
 
 const generateSubscriberId = async () => {
@@ -44,7 +44,7 @@ export async function POST(request) {
     if (!email || !validateEmail(email)) {
       const message = 'Please enter a valid email address';
 
-      await sendTelegramAlert(formatAlertMessage('Invalid Email Attempt', `IP: ${ipAddress}\nUser Agent: ${userAgent}\nEmail: ${email}`));
+      await sendTelegramAlert(formatAlertMessage('🚫 Invalid Email Attempt', `🔹 IP: ${ipAddress}\n🔹 User Agent: ${userAgent}\n🔹 Email: ${email}`));
       logger.warn('Email validation failed', {
         meta: {
           taskName: 'Home - Subscribe',
@@ -59,6 +59,8 @@ export async function POST(request) {
     const checkResult = await query('SELECT email FROM subscriber WHERE email = $1', [email]);
     if (checkResult.rows.length > 0) {
       const userMessage = 'You are already a subscriber.';
+
+      await sendTelegramAlert(formatAlertMessage('🔁 Duplicate Subscription Attempt', `🔹 Email: ${email}\n🔹 IP: ${ipAddress}`));
 
       logger.info('Duplicate subscription attempt', {
         meta: {
@@ -151,7 +153,7 @@ export async function POST(request) {
     const notificationStatus = 'Unread';
     await query('INSERT INTO notification_details (id, title, status) VALUES ($1, $2, $3)', [subscriberId, notificationTitle, notificationStatus]);
 
-    await sendTelegramAlert(formatAlertMessage('New Subscriber', `ID: ${subscriberId}\nEmail: ${email}\nEmail Sent: ${emailSent ? 'Yes' : 'No'}`));
+    await sendTelegramAlert(formatAlertMessage('🎉 New Subscriber', `🆔 ID: ${subscriberId}\n📧 Email: ${email}\n📨 Email Sent: ${emailSent ? '✅ Yes' : '❌ No'}`));
 
     logger.info('Admin alerted via Telegram', {
       meta: {
@@ -169,7 +171,7 @@ export async function POST(request) {
     });
   } catch (error) {
     const errorMessage = `Server error: ${error.message}`;
-    await sendTelegramAlert(formatAlertMessage('Subscription Error', `IP: ${ipAddress}\nError: ${errorMessage}`));
+    await sendTelegramAlert(formatAlertMessage('❗ Subscription Error', `🔹 IP: ${ipAddress}\n❌ Error: ${errorMessage}`));
     logger.error('Unexpected server error', {
       meta: {
         taskName: 'Home - Subscribe',

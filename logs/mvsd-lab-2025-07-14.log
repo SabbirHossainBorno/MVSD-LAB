@@ -5,3 +5,9 @@
 2025-07-14 03:58:10-EID[]-SID[]-[INFO] TASK[Home - Subscribe]-Email sent successfully to dasdsaaa@gmail.com
 2025-07-14 03:58:10-EID[]-SID[]-[INFO] TASK[Home - Subscribe]-Telegram alert sent for new subscriber SUB36MVSD
 2025-07-14 03:58:37-EID[]-SID[]-[INFO] TASK[Home - Subscribe]-Existing subscriber tried to re-subscribe from IP: 123.200.7.106, Email: dada@gmail.com
+2025-07-14 04:02:41-EID[]-SID[]-[INFO] TASK[Home - Subscribe]-Existing subscriber tried to re-subscribe from IP: 123.200.7.106, Email: sabbir.borno@nagad.com.bd
+2025-07-14 04:03:04-EID[]-SID[]-[INFO] TASK[Home - Subscribe]-New subscriber added: SUB37MVSD, Email: siam.chowdhury@nagad.com.bd, IP: 123.200.7.106
+2025-07-14 04:03:05-EID[]-SID[]-[INFO] TASK[Home - Subscribe]-Email sent successfully to siam.chowdhury@nagad.com.bd
+2025-07-14 04:03:05-EID[]-SID[]-[INFO] TASK[Home - Subscribe]-Telegram alert sent for new subscriber SUB37MVSD
+2025-07-14 04:04:42-EID[]-SID[]-[INFO] TASK[Home - Member]-Fetching member details from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-14 04:04:42-EID[]-SID[]-[INFO] TASK[Home - Member]-Successfully fetched member details from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
