@@ -177,135 +177,84 @@ export default function Navbar() {
                   </Link>
                 </li>
 
-                <li>
-                  <Link
-                    href="/publication_research/international_journals"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/publication_research/international_journals' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Conference Paper
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/publication_research/domestic_journals"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/publication_research/domestic_journals' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Journal Paper
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/publication_research/international_conferences"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/publication_research/international_conferences' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Book/Chapter
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/publication_research/domestic_conferences"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/publication_research/domestic_conferences' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Patent
-                  </Link>
-                </li>
+              <li>
+                <Link
+                  href={`/home/publication_research/details?type=Conference%20Paper`}
+                  className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                    pathname.includes('Conference%20Paper') ? 'text-blue-500' : ''
+                  }`}
+                >
+                  Conference Paper
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`/home/publication_research/details?type=Journal%20Paper`}
+                  className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                    pathname.includes('Journal%20Paper') ? 'text-blue-500' : ''
+                  }`}
+                >
+                  Journal Paper
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`/home/publication_research/details?type=Book%2FChapter`}
+                  className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                    pathname.includes('Book%2FChapter') ? 'text-blue-500' : ''
+                  }`}
+                >
+                  Book/Chapter
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`/home/publication_research/details?type=Patent`}
+                  className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                    pathname.includes('Patent') ? 'text-blue-500' : ''
+                  }`}
+                >
+                  Patent
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`/home/publication_research/details?type=Project`}
+                  className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
+                    pathname.includes('Project') ? 'text-blue-500' : ''
+                  }`}
+                >
+                  Project
+                </Link>
+              </li>
 
-                <li>
-                  <Link
-                    href="/publication_research/domestic_conferences"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/publication_research/domestic_conferences' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Project
-                  </Link>
-                </li>
 
               </ul>
             </div>
           </li>
-
-          {/* Course Dropdown */}
-          <li className="relative group">
-            <button
-              className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded ${
-                pathname.includes('/course') ? 'text-blue-500' : ''
+          
+          {/* Course */}
+          <li>
+            <Link
+              href="/home/course"
+              className={`py-2 px-3 block hover:text-blue-700 font-medium ${
+                pathname === '/home/course' ? 'text-blue-500 font-medium' : ''
               }`}
-              onClick={() => handleDropdown('course')}
             >
               Course
-              <svg
-                className={`w-4 h-4 ml-1 transition-transform duration-300 ${
-                  openDropdown === 'course' ? 'rotate-180' : ''
-                }`}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            <div
-              className={`${
-                openDropdown === 'course' ? 'block' : 'hidden'
-              } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded md:mt-2 md:left-0 w-full rounded transition-all duration-300`}
-            >
-              <ul className="rounded">
-              <li>
-                  <Link
-                    href="/course"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/course' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    All
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href="/course/undergraduate_course"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/course/undergraduate_course' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Undergraduate
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/course/graduate_course"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/course/graduate_course' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Graduate
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            </Link>
           </li>
 
 
           {/* Video */}
           <li>
             <Link
-              href="/video"
+              href="/home/video"
               className={`py-2 px-3 block hover:text-blue-700 font-medium ${
-                pathname === '/video' ? 'text-blue-500 font-medium' : ''
+                pathname === '/home/video' ? 'text-blue-500 font-medium' : ''
               }`}
             >
-              Video
+              Video Library
             </Link>
           </li>
 
@@ -313,9 +262,9 @@ export default function Navbar() {
           {/* Gallery */}
           <li>
             <Link
-              href="/gallery"
+              href="/home/gallery"
               className={`py-2 px-3 block hover:text-blue-700 font-medium ${
-                pathname === '/gallery' ? 'text-blue-500 font-medium' : ''
+                pathname === '/home/gallery' ? 'text-blue-500 font-medium' : ''
               }`}
             >
               Gallery
@@ -323,67 +272,16 @@ export default function Navbar() {
           </li>
 
 
-          {/* Software Dropdown */}
-          <li className="relative group">
-            <button
-              className={`flex items-center justify-between py-2 px-3 w-full hover:text-blue-700 font-medium rounded ${
-                pathname.includes('/software') ? 'text-blue-500' : ''
+          {/* Software */}
+          <li>
+            <Link
+              href="/home/software"
+              className={`py-2 px-3 block hover:text-blue-700 font-medium ${
+                pathname === '/home/Software' ? 'text-blue-500 font-medium' : ''
               }`}
-              onClick={() => handleDropdown('software')}
             >
               Software
-              <svg
-                className={`w-4 h-4 ml-1 transition-transform duration-300 ${
-                  openDropdown === 'software' ? 'rotate-180' : ''
-                }`}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            <div
-              className={`${
-                openDropdown === 'software' ? 'block' : 'hidden'
-              } md:absolute md:w-48 bg-gray-100 md:shadow-lg md:rounded md:mt-2 md:left-0 w-full rounded transition-all duration-300`}
-            >
-              <ul className="rounded">
-              <li>
-                  <Link
-                    href="/software"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/software' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    All
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href="/software/software_noma_simulator"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/software/software_noma_simulator' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Noma Simulator
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/software/software_massive_mimo_noma_simulator"
-                    className={`block px-4 py-2 hover:bg-gray-200 font-medium rounded ${
-                      pathname === '/software/software_massive_mimo_noma_simulator' ? 'text-blue-500' : ''
-                    }`}
-                  >
-                    Massive Mimo-Noma Simulator
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            </Link>
           </li>
           
           </ul>

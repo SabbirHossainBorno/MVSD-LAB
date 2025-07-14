@@ -255,8 +255,6 @@ export default function Member() {
                     transition-all duration-300 flex flex-col relative group
                     ${expanded ? 'min-h-[420px]' : 'h-[400px]'}`}
       >
-        {/* Top accent bar */}
-        <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${colors[cardType].accent}`}></div>
         
         <div className="p-6 flex flex-col h-full">
           <div className="flex flex-col items-center relative z-10">

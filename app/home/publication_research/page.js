@@ -1,4 +1,4 @@
-  //app/home/publication/page.js
+//app/home/publication_research/page.js
 'use client';
 import { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
