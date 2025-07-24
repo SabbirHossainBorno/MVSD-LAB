@@ -18,3 +18,19 @@
 2025-07-24 08:01:33-EID[746458-MVSDLAB]-SID[adbda89f-ccb4-4330-bb05-20dbcc9ebd8e]-[INFO] TASK[Fetch Chart Data]-Fetched chart data for the past 7 days from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
 2025-07-24 08:01:33-EID[746458-MVSDLAB]-SID[adbda89f-ccb4-4330-bb05-20dbcc9ebd8e]-[INFO] TASK[Fetch Chart Data]-Fetched chart data for the past 7 days from IP 123.200.7.106 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
 2025-07-24 08:01:35-EID[]-SID[]-[INFO] TASK[Logout]-Successful logout at 2025-07-24 08:01:35 AM (EDT)
+2025-07-24 10:23:40-EID[]-SID[e5851f23-44a2-42d6-8d16-0d50926b509e]-[INFO] TASK[Login]-Login attempt for admin@mvsdlab.com from IP 123.200.7.106
+2025-07-24 10:23:40-EID[]-SID[e5851f23-44a2-42d6-8d16-0d50926b509e]-[INFO] TASK[DBCheck]-Looking for admin@mvsdlab.com in admin
+2025-07-24 10:23:42-EID[201791-MVSDLAB]-SID[e5851f23-44a2-42d6-8d16-0d50926b509e]-[INFO] TASK[Generate EID]-Generated EID 201791-MVSDLAB for admin admin@mvsdlab.com
+2025-07-24 10:23:42-EID[201791-MVSDLAB]-SID[e5851f23-44a2-42d6-8d16-0d50926b509e]-[INFO] TASK[AuthSuccess]-Successful admin login for admin@mvsdlab.com
+2025-07-24 10:46:29-EID[]-SID[164e4cc7-6f19-490f-93dd-bfdc10b0acfd]-[INFO] TASK[Login]-Login attempt for admin@mvsdlab.com from IP 123.200.7.106
+2025-07-24 10:46:29-EID[]-SID[164e4cc7-6f19-490f-93dd-bfdc10b0acfd]-[INFO] TASK[DBCheck]-Looking for admin@mvsdlab.com in admin
+2025-07-24 10:46:29-EID[788804-MVSDLAB]-SID[164e4cc7-6f19-490f-93dd-bfdc10b0acfd]-[INFO] TASK[Generate EID]-Generated EID 788804-MVSDLAB for admin admin@mvsdlab.com
+2025-07-24 10:46:29-EID[788804-MVSDLAB]-SID[164e4cc7-6f19-490f-93dd-bfdc10b0acfd]-[INFO] TASK[AuthSuccess]-Successful admin login for admin@mvsdlab.com
+2025-07-24 10:47:12-EID[]-SID[9e8c309b-f441-4d02-9b23-a5afc0cedee7]-[INFO] TASK[Login]-Login attempt for admin@mvsdlab.com from IP 123.200.7.106
+2025-07-24 10:47:12-EID[]-SID[9e8c309b-f441-4d02-9b23-a5afc0cedee7]-[INFO] TASK[DBCheck]-Looking for admin@mvsdlab.com in admin
+2025-07-24 10:47:12-EID[558110-MVSDLAB]-SID[9e8c309b-f441-4d02-9b23-a5afc0cedee7]-[INFO] TASK[Generate EID]-Generated EID 558110-MVSDLAB for admin admin@mvsdlab.com
+2025-07-24 10:47:12-EID[558110-MVSDLAB]-SID[9e8c309b-f441-4d02-9b23-a5afc0cedee7]-[INFO] TASK[AuthSuccess]-Successful admin login for admin@mvsdlab.com
+2025-07-24 10:59:51-EID[]-SID[5b06217d-c48c-4f29-8a23-5d58658cf45a]-[INFO] TASK[Login]-Login attempt for admin@mvsdlab.com from IP 123.200.7.106
+2025-07-24 10:59:51-EID[]-SID[5b06217d-c48c-4f29-8a23-5d58658cf45a]-[INFO] TASK[DBCheck]-Looking for admin@mvsdlab.com in admin
+2025-07-24 10:59:51-EID[177840-MVSDLAB]-SID[5b06217d-c48c-4f29-8a23-5d58658cf45a]-[INFO] TASK[Generate EID]-Generated EID 177840-MVSDLAB for admin admin@mvsdlab.com
+2025-07-24 10:59:51-EID[177840-MVSDLAB]-SID[5b06217d-c48c-4f29-8a23-5d58658cf45a]-[INFO] TASK[AuthSuccess]-Successful admin login for admin@mvsdlab.com
