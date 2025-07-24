@@ -164,3 +164,4 @@
 2025-07-24 15:52:36-EID[764884-MVSDLAB]-SID[a13971bc-feb8-4467-ab2e-ba74dd5d743c]-[INFO] TASK[Fetch Chart Data]-Fetched chart data for the past 7 days from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
 2025-07-24 15:52:46-EID[764884-MVSDLAB]-SID[a13971bc-feb8-4467-ab2e-ba74dd5d743c]-[INFO] TASK[Auth Check]-User type : admin (admin)
 2025-07-24 15:52:47-EID[764884-MVSDLAB]-SID[a13971bc-feb8-4467-ab2e-ba74dd5d743c]-[INFO] TASK[Fetch Subscribers List]-Fetched 39 subscribers with filters: {"search":"","sortField":"date","sortOrder":"DESC","dateRange":""}
+2025-07-24 16:05:17-EID[]-SID[]-[INFO] TASK[Logout]-Successful logout at 2025-07-24 04:05:17 PM (EDT)
