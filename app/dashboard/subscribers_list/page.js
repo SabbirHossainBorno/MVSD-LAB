@@ -103,63 +103,86 @@ function SubscribersList() {
         </motion.h1>
 
         <motion.div 
-          className="bg-gray-800/50 backdrop-blur-lg border border-gray-700/30 rounded shadow-2xl p-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          {/* Filter Controls */}
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+        className="bg-gray-800/50 backdrop-blur-lg border border-gray-700/30 rounded shadow-2xl p-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        {/* Filter Controls - Two Row Design */}
+        <div className="flex flex-col gap-3 mb-6">
+          {/* First Row: Full-width Search */}
+          <div className="w-full">
             <motion.input
               type="text"
               placeholder="Search ID, email..."
-              className="p-3 bg-gray-700/50 border border-gray-600/30 rounded text-gray-100 placeholder-gray-400"
+              className="w-full p-2 bg-gray-700/50 border border-gray-600/30 rounded text-gray-100 placeholder-gray-400 text-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               whileFocus={{ scale: 1.02 }}
             />
+          </div>
 
-            <motion.select
-              className="p-3 bg-gray-700/50 border border-gray-600/30 rounded text-gray-100"
-              value={sortConfig.field}
-              onChange={(e) => handleSort(e.target.value)}
-              whileHover={{ scale: 1.03 }}
-            >
-              <option value="date">Sort by Date</option>
-              <option value="id">Sort by ID</option>
-              <option value="email">Sort by Email</option>
-            </motion.select>
+          {/* Second Row: All Other Controls */}
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
+            {/* Sort Controls */}
+            <div className="sm:col-span-2 grid grid-cols-2 gap-3">
+              <motion.select
+                className="p-2 bg-gray-700/50 border border-gray-600/30 rounded text-gray-100 text-sm"
+                value={sortConfig.field}
+                onChange={(e) => handleSort(e.target.value)}
+                whileHover={{ scale: 1.03 }}
+              >
+                <option value="date">Sort by Date</option>
+                <option value="id">Sort by ID</option>
+                <option value="email">Sort by Email</option>
+              </motion.select>
 
-            <motion.select
-              className="p-3 bg-gray-700/50 border border-gray-600/30 rounded text-gray-100"
-              value={sortConfig.order}
-              onChange={(e) => setSortConfig(prev => ({ ...prev, order: e.target.value }))}
-              whileHover={{ scale: 1.03 }}
-            >
-              <option value="DESC">Descending</option>
-              <option value="ASC">Ascending</option>
-            </motion.select>
+              <motion.select
+                className="p-2 bg-gray-700/50 border border-gray-600/30 rounded text-gray-100 text-sm"
+                value={sortConfig.order}
+                onChange={(e) => setSortConfig(prev => ({ ...prev, order: e.target.value }))}
+                whileHover={{ scale: 1.03 }}
+              >
+                <option value="DESC">Descending</option>
+                <option value="ASC">Ascending</option>
+              </motion.select>
+            </div>
 
-            <motion.div className="flex gap-2">
+            {/* Date Filters */}
+            <div className="sm:col-span-2 grid grid-cols-3 gap-3">
               <button
                 onClick={() => handleDateFilter(7)}
-                className="px-4 py-2 bg-blue-600/30 text-blue-400 rounded border border-blue-400/20 hover:bg-blue-500/20"
+                className="p-2 bg-blue-600/30 text-blue-400 rounded border border-blue-400/20 hover:bg-blue-500/20 text-sm"
               >
                 7 Days
               </button>
               <button
                 onClick={() => handleDateFilter(30)}
-                className="px-4 py-2 bg-purple-600/30 text-purple-400 rounded border border-purple-400/20 hover:bg-purple-500/20"
+                className="p-2 bg-purple-600/30 text-purple-400 rounded border border-purple-400/20 hover:bg-purple-500/20 text-sm"
               >
                 30 Days
               </button>
               <button
                 onClick={() => setDateRange('')}
-                className="px-4 py-2 bg-gray-600/30 text-gray-400 rounded border border-gray-400/20 hover:bg-gray-500/20"
+                className="p-2 bg-gray-600/30 text-gray-400 rounded border border-gray-400/20 hover:bg-gray-500/20 text-sm"
               >
-                Clear Dates
+                Clear
               </button>
-            </motion.div>
+            </div>
+
+            {/* Send Email Button */}
+            <motion.button
+              className="p-2 bg-green-600/30 text-green-400 rounded border border-green-400/20 hover:bg-green-500/20 text-sm flex items-center justify-center gap-2"
+              whileHover={{ scale: 1.05 }}
+              onClick={() => toast.info("Send email functionality will be implemented")}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+              </svg>
+              Send Email
+            </motion.button>
           </div>
+        </div>
 
           {/* Data Table */}
           <div className="overflow-x-auto rounded">
