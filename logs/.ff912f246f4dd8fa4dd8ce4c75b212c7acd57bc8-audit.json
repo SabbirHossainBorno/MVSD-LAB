@@ -6,51 +6,6 @@
     "auditLog": "logs/.ff912f246f4dd8fa4dd8ce4c75b212c7acd57bc8-audit.json",
     "files": [
         {
-            "date": 1749887357471,
-            "name": "logs/mvsd-lab-2025-06-14.log",
-            "hash": "4a8a961131fc6f3a521e92bc3aa321f91146e95a5207ddce09587b6049e10017"
-        },
-        {
-            "date": 1750004343449,
-            "name": "logs/mvsd-lab-2025-06-15.log",
-            "hash": "169f49a658f5db3d5eb51ec1075be60931a22fd6aec1e8ba427d6fc17e3a353b"
-        },
-        {
-            "date": 1750047939424,
-            "name": "logs/mvsd-lab-2025-06-16.log",
-            "hash": "6c8d66d94d4e4afbb47b33f6d33a94f3363b7e8b99c00c69e1e89c80736eb91b"
-        },
-        {
-            "date": 1750135294345,
-            "name": "logs/mvsd-lab-2025-06-17.log",
-            "hash": "2cda6f820024653958decfc38be9ea1cefd4323bc58f585959e40193185fe4f8"
-        },
-        {
-            "date": 1750219898577,
-            "name": "logs/mvsd-lab-2025-06-18.log",
-            "hash": "ff9dc2ffe65274f071afc222002622236e7aabe7fad566cfc379fb5fdebb2246"
-        },
-        {
-            "date": 1750407257887,
-            "name": "logs/mvsd-lab-2025-06-20.log",
-            "hash": "575ed2760dd56d9a67f98bb585d60a9c2f10067b49806c2174b18ba58a9b3265"
-        },
-        {
-            "date": 1750478554945,
-            "name": "logs/mvsd-lab-2025-06-21.log",
-            "hash": "d8bf14e49c41fabeb91030710c2db08faa3132a968b02f9e7115a7748155d559"
-        },
-        {
-            "date": 1750579122041,
-            "name": "logs/mvsd-lab-2025-06-22.log",
-            "hash": "68afb00fe7e5bed2bfe5f63dbe1dadd12db3870f64cb650f87153854ac4a6852"
-        },
-        {
-            "date": 1750651329165,
-            "name": "logs/mvsd-lab-2025-06-23.log",
-            "hash": "e905a2f6cf61c854329ec4d889ac77b572bfa8792ee3541b7ccd87205a61b5f2"
-        },
-        {
             "date": 1751028785022,
             "name": "logs/mvsd-lab-2025-06-27.log",
             "hash": "20404de05a84d76239c19f90eebae0c6df8fe7314384f4480a7e4dd78db66375"
@@ -109,6 +64,11 @@
             "date": 1752469119860,
             "name": "logs/mvsd-lab-2025-07-14.log",
             "hash": "cadff56657b76ec0c7cb6877f3f3adf3323038d0955ad59bf7d49d423c9da872"
+        },
+        {
+            "date": 1753348427339,
+            "name": "logs/mvsd-lab-2025-07-24.log",
+            "hash": "a8eb15c7b6c83cff86fec57a84cc0f3aadfa4273216915faddc57ceb15310d85"
         }
     ],
     "hashType": "sha256"
