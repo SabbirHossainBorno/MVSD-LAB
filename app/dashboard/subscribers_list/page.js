@@ -1,14 +1,13 @@
 // app/dashboard/subscribe_list/page.js
 'use client';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { format } from 'date-fns';
 import withAuth from '../../components/withAuth';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { useCallback } from 'react';
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -32,6 +31,7 @@ const debounce = (func, delay) => {
 
 function SubscribersList() {
   const [subscribers, setSubscribers] = useState([]);
+  const [totalCount, setTotalCount] = useState(0); // NEW: Total count
   const [searchTerm, setSearchTerm] = useState('');
   const [dateRange, setDateRange] = useState('');
   const [sortConfig, setSortConfig] = useState({ field: 'date', order: 'DESC' });
@@ -39,6 +39,13 @@ function SubscribersList() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  
+  // NEW: Email modal state
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [emailSubject, setEmailSubject] = useState('');
+  const [emailCC, setEmailCC] = useState('');
+  const [emailBody, setEmailBody] = useState('');
+  const [isSending, setIsSending] = useState(false);
 
   // Detect mobile devices
   useEffect(() => {
@@ -69,6 +76,7 @@ function SubscribersList() {
 
       if (response.ok) {
         setSubscribers(result.subscribers);
+        setTotalCount(result.totalCount); // NEW: Set total count
       } else {
         toast.error(result.message);
       }
@@ -119,6 +127,46 @@ function SubscribersList() {
       : format(date, 'MMM dd, yyyy - hh:mm a');
   };
 
+  // NEW: Send bulk email
+  const sendBulkEmail = async () => {
+    if (!emailSubject.trim() || !emailBody.trim()) {
+      toast.error('Subject and body are required');
+      return;
+    }
+
+    setIsSending(true);
+    
+    try {
+      const response = await fetch('/api/send_bulk_email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          subject: emailSubject,
+          cc: emailCC,
+          body: emailBody
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        toast.success(result.message);
+        setIsEmailModalOpen(false);
+        // Reset form
+        setEmailSubject('');
+        setEmailCC('');
+        setEmailBody('');
+      } else {
+        toast.error(result.message || 'Failed to send email');
+      }
+    } catch (error) {
+      toast.error('Error sending email');
+    } finally {
+      setIsSending(false);
+    }
+  };
 
   // Render table on desktop, cards on mobile
   const renderSubscribers = () => {
@@ -383,7 +431,7 @@ function SubscribersList() {
               {/* Send Email Button */}
               <button
                 className="md:col-span-2 p-3 bg-green-600/30 text-green-300 rounded-lg border border-green-500/30 hover:bg-green-500/30 text-sm flex items-center justify-center gap-2 transition-colors"
-                onClick={() => toast.info("Send email functionality will be implemented")}
+                onClick={() => setIsEmailModalOpen(true)}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
@@ -457,6 +505,119 @@ function SubscribersList() {
           )}
         </motion.div>
       </motion.div>
+
+      {/* NEW: Email Modal */}
+      <AnimatePresence>
+        {isEmailModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => !isSending && setIsEmailModalOpen(false)}
+          >
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 20, opacity: 0 }}
+              className="bg-gray-800 border border-gray-700/30 rounded-xl shadow-2xl w-full max-w-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-bold text-blue-300">Send Email to Subscribers</h2>
+                  <button 
+                    onClick={() => setIsEmailModalOpen(false)}
+                    disabled={isSending}
+                    className="text-gray-400 hover:text-gray-200"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div className="mb-6 p-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-white">{totalCount}</div>
+                    <div className="text-gray-300">Total Subscribers</div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-gray-300 text-sm mb-2">Subject *</label>
+                    <input
+                      type="text"
+                      value={emailSubject}
+                      onChange={(e) => setEmailSubject(e.target.value)}
+                      className="w-full p-3 bg-gray-700/50 border border-gray-600/30 rounded-lg text-gray-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      placeholder="Email subject"
+                      disabled={isSending}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-gray-300 text-sm mb-2">CC (optional)</label>
+                    <input
+                      type="text"
+                      value={emailCC}
+                      onChange={(e) => setEmailCC(e.target.value)}
+                      className="w-full p-3 bg-gray-700/50 border border-gray-600/30 rounded-lg text-gray-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      placeholder="Comma separated emails"
+                      disabled={isSending}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-gray-300 text-sm mb-2">Body *</label>
+                    <textarea
+                      value={emailBody}
+                      onChange={(e) => setEmailBody(e.target.value)}
+                      className="w-full h-40 p-3 bg-gray-700/50 border border-gray-600/30 rounded-lg text-gray-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      placeholder="Your email content (supports HTML)"
+                      disabled={isSending}
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-6 flex justify-end gap-3">
+                  <button
+                    onClick={() => setIsEmailModalOpen(false)}
+                    disabled={isSending}
+                    className="px-4 py-2 bg-gray-700/50 hover:bg-gray-700/70 rounded-lg text-gray-300 border border-gray-600/30 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={sendBulkEmail}
+                    disabled={isSending}
+                    className="px-4 py-2 bg-green-600/50 hover:bg-green-600/70 rounded-lg text-green-300 border border-green-500/30 flex items-center gap-2 transition-colors"
+                  >
+                    {isSending ? (
+                      <>
+                        <svg className="animate-spin h-4 w-4 text-green-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                          <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                        </svg>
+                        Send Email
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {loading && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">

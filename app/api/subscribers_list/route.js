@@ -1,4 +1,4 @@
-// /app/api/subscribers_list/route.js
+// app/api/subscribers_list/route.js
 import { NextResponse } from 'next/server';
 import { query } from '../../../lib/db';
 import logger from '../../../lib/logger';
@@ -59,6 +59,10 @@ export async function GET(request) {
     `;
 
     const result = await query(queryText, params);
+    
+    // NEW: Get total count
+    const countResult = await query('SELECT COUNT(*) AS total_count FROM subscriber');
+    const totalCount = countResult.rows[0]?.total_count || 0;
 
     const successMessage = formatAlertMessage('Subscribers List - API', ipAddress, 200);
     await sendTelegramAlert(successMessage);
@@ -77,7 +81,11 @@ export async function GET(request) {
       }
     });
 
-    return NextResponse.json({ subscribers: result.rows });
+    // NEW: Return count along with subscribers
+    return NextResponse.json({ 
+      subscribers: result.rows,
+      totalCount 
+    });
   } catch (error) {
     const errorMessage = formatAlertMessage('Subscribers List - API', ipAddress, 500);
     await sendTelegramAlert(errorMessage);
