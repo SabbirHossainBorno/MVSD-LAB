@@ -113,10 +113,167 @@ function SubscribersList() {
 
   // Format date based on screen size
   const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return isMobile
+      ? format(date, 'MM/dd hh:mm a') // Show both date and time on mobile
+      : format(date, 'MMM dd, yyyy - hh:mm a');
+  };
+
+
+  // Render table on desktop, cards on mobile
+  const renderSubscribers = () => {
     if (isMobile) {
-      return format(new Date(dateString), 'MMM dd');
+      return (
+        <div className="space-y-3">
+          <AnimatePresence>
+            {subscribers.length > 0 ? (
+              subscribers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((subscriber, index) => (
+                <motion.div
+                  key={subscriber.email}
+                  variants={itemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                  transition={{ delay: index * 0.03 }}
+                  whileHover="hover"
+                  className="bg-gray-700/30 border border-gray-600/30 rounded-xl p-4"
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="font-medium text-blue-400 text-sm">ID: {subscriber.id}</div>
+                      <div className="text-gray-200 text-sm mt-1 truncate">{subscriber.email}</div>
+                    </div>
+                    <div className="text-gray-400 text-xs">{formatDate(subscriber.date)}</div>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="border border-gray-700/50 rounded-xl p-8 text-center"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <h3 className="mt-4 text-lg font-medium text-gray-300">
+                  {loading ? 'Loading subscribers...' : 'No subscribers found'}
+                </h3>
+                <p className="mt-2 text-gray-500 text-xs">
+                  {!loading && 'Try adjusting your search or filter criteria'}
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      );
     }
-    return format(new Date(dateString), 'MMM dd, yyyy - hh:mm a');
+
+    // Desktop table view
+    return (
+      <div className="overflow-x-auto rounded-lg">
+        <table className="w-full min-w-[700px]">
+          <thead>
+            <tr className="bg-gradient-to-r from-blue-500/20 to-purple-500/20">
+              <th 
+                className="p-3 text-left text-blue-300 font-semibold cursor-pointer text-sm"
+                onClick={() => handleSort('id')}
+              >
+                <div className="flex items-center gap-1">
+                  ID 
+                  {sortConfig.field === 'id' && (
+                    sortConfig.order === 'ASC' ? 
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                    </svg> : 
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  )}
+                </div>
+              </th>
+              <th 
+                className="p-3 text-left text-blue-300 font-semibold cursor-pointer text-sm"
+                onClick={() => handleSort('email')}
+              >
+                <div className="flex items-center gap-1">
+                  Email 
+                  {sortConfig.field === 'email' && (
+                    sortConfig.order === 'ASC' ? 
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                    </svg> : 
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  )}
+                </div>
+              </th>
+              <th 
+                className="p-3 text-left text-blue-300 font-semibold cursor-pointer text-sm"
+                onClick={() => handleSort('date')}
+              >
+                <div className="flex items-center gap-1">
+                  Join Date 
+                  {sortConfig.field === 'date' && (
+                    sortConfig.order === 'ASC' ? 
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                    </svg> : 
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  )}
+                </div>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <AnimatePresence>
+              {subscribers.length > 0 ? (
+                subscribers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((subscriber, index) => (
+                  <motion.tr
+                    key={subscriber.email}
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    transition={{ delay: index * 0.03 }}
+                    whileHover="hover"
+                    className="border-b border-gray-700/50"
+                  >
+                    <td className="p-3 font-mono text-blue-400 text-sm">{subscriber.id}</td>
+                    <td className="p-3 text-gray-200 text-sm truncate max-w-[200px] sm:max-w-none">{subscriber.email}</td>
+                    <td className="p-3 text-gray-400 text-sm">{formatDate(subscriber.date)}</td>
+                  </motion.tr>
+                ))
+              ) : (
+                <motion.tr
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="border-b border-gray-700/50"
+                >
+                  <td colSpan="3" className="p-8 text-center">
+                    <div className="flex flex-col items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                      <h3 className="mt-4 text-lg font-medium text-gray-300">
+                        {loading ? 'Loading subscribers...' : 'No subscribers found'}
+                      </h3>
+                      <p className="mt-2 text-gray-500 text-sm">
+                        {!loading && 'Try adjusting your search or filter criteria'}
+                      </p>
+                    </div>
+                  </td>
+                </motion.tr>
+              )}
+            </AnimatePresence>
+          </tbody>
+        </table>
+      </div>
+    );
   };
 
   return (
@@ -237,105 +394,8 @@ function SubscribersList() {
             </div>
           </div>
 
-          {/* Responsive Table */}
-          {subscribers.length > 0 ? (
-            <div className="overflow-x-auto rounded-lg">
-              <table className="w-full min-w-[600px]">
-                <thead>
-                  <tr className="bg-gradient-to-r from-blue-500/20 to-purple-500/20">
-                    <th 
-                      className="p-3 text-left text-blue-300 font-semibold cursor-pointer text-sm"
-                      onClick={() => handleSort('id')}
-                    >
-                      <div className="flex items-center gap-1">
-                        ID 
-                        {sortConfig.field === 'id' && (
-                          sortConfig.order === 'ASC' ? 
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                          </svg> : 
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        )}
-                      </div>
-                    </th>
-                    <th 
-                      className="p-3 text-left text-blue-300 font-semibold cursor-pointer text-sm"
-                      onClick={() => handleSort('email')}
-                    >
-                      <div className="flex items-center gap-1">
-                        Email 
-                        {sortConfig.field === 'email' && (
-                          sortConfig.order === 'ASC' ? 
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                          </svg> : 
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        )}
-                      </div>
-                    </th>
-                    <th 
-                      className="p-3 text-left text-blue-300 font-semibold cursor-pointer text-sm"
-                      onClick={() => handleSort('date')}
-                    >
-                      <div className="flex items-center gap-1">
-                        Join Date 
-                        {sortConfig.field === 'date' && (
-                          sortConfig.order === 'ASC' ? 
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                          </svg> : 
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        )}
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  <AnimatePresence>
-                    {subscribers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((subscriber, index) => (
-                      <motion.tr
-                        key={subscriber.email}
-                        variants={itemVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="hidden"
-                        transition={{ delay: index * 0.03 }}
-                        whileHover="hover"
-                        className="border-b border-gray-700/50"
-                      >
-                        <td className="p-3 font-mono text-blue-400 text-sm">{subscriber.id}</td>
-                        <td className="p-3 text-gray-200 text-sm truncate max-w-[200px] sm:max-w-none">{subscriber.email}</td>
-                        <td className="p-3 text-gray-400 text-sm">{formatDate(subscriber.date)}</td>
-                      </motion.tr>
-                    ))}
-                  </AnimatePresence>
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="border border-gray-700/50 rounded-lg p-8 text-center"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              <h3 className="mt-4 text-xl font-medium text-gray-300">
-                {loading ? 'Loading subscribers...' : 'No subscribers found'}
-              </h3>
-              <p className="mt-2 text-gray-500 text-sm">
-                {!loading && 'Try adjusting your search or filter criteria'}
-              </p>
-            </motion.div>
-          )}
+          {/* Responsive Subscribers List */}
+          {renderSubscribers()}
 
           {/* Pagination */}
           {subscribers.length > 0 && (
