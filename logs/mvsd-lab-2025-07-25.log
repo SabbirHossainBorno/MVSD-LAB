@@ -168,3 +168,5 @@
 2025-07-25 07:01:01-EID[653567-MVSDLAB]-SID[1a27b891-ba67-470f-ad2f-952928daf6f6]-[ERROR] TASK[Send Bulk Email]-Error: ENOENT: no such file or directory, open '/home/mvsd-lab/temp/fbc80691-796c-433a-b483-0e32e48be971-ChatGPT Image Jul 25, 2025, 04_54_47 PM.png'
 2025-07-25 07:06:49-EID[653567-MVSDLAB]-SID[1a27b891-ba67-470f-ad2f-952928daf6f6]-[INFO] TASK[Send Bulk Email]-Sent to 39 subscribers. Subject: Test 2
 2025-07-25 07:13:30-EID[653567-MVSDLAB]-SID[1a27b891-ba67-470f-ad2f-952928daf6f6]-[INFO] TASK[Send Bulk Email]-Sent to 39 subscribers. Subject: Test 3
+2025-07-25 12:24:25-EID[]-SID[]-[INFO] TASK[Home - Stats]-Request initiated from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
+2025-07-25 12:24:25-EID[]-SID[]-[INFO] TASK[Home - Stats]-Fetched professor count from IP 103.180.244.251 with User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0
