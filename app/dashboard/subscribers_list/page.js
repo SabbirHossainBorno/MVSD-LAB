@@ -13,7 +13,7 @@ import { useCallback } from 'react';
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
-  hover: { backgroundColor: 'rgba(55, 65, 81, 0.4)' } // Subtle background change only
+  hover: { backgroundColor: 'rgba(55, 65, 81, 0.4)' }
 };
 
 const debounce = (func, delay) => {
@@ -38,6 +38,21 @@ function SubscribersList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile devices
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
 
   const fetchSubscribers = useCallback(async () => {
     try {
@@ -85,133 +100,206 @@ function SubscribersList() {
     setDateRange(`${start.toISOString().split('T')[0]}_${end.toISOString().split('T')[0]}`);
   };
 
+  const clearFilters = () => {
+    setSearchTerm('');
+    setDateRange('');
+    setSortConfig({ field: 'date', order: 'DESC' });
+  };
+
   // Calculate pagination
   const totalPages = Math.ceil(subscribers.length / itemsPerPage);
   const startItem = (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, subscribers.length);
 
+  // Format date based on screen size
+  const formatDate = (dateString) => {
+    if (isMobile) {
+      return format(new Date(dateString), 'MMM dd');
+    }
+    return format(new Date(dateString), 'MMM dd, yyyy - hh:mm a');
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 sm:p-6 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 sm:p-6">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="max-w-7xl mx-auto"
       >
-        <motion.h1 
-          className="text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"
-          initial={{ y: -20 }}
-          animate={{ y: 0 }}
-        >
-          Subscriber Analytics
-        </motion.h1>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+          <motion.h1 
+            className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"
+            initial={{ y: -20 }}
+            animate={{ y: 0 }}
+          >
+            Subscriber Analytics
+          </motion.h1>
+          
+          <Link 
+            href="/dashboard" 
+            className="px-4 py-2 bg-gray-700/50 hover:bg-gray-700/70 rounded-lg text-blue-300 border border-gray-600/30 transition-colors text-sm flex items-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Dashboard
+          </Link>
+        </div>
 
         <motion.div 
-          className="bg-gray-800/50 backdrop-blur-lg border border-gray-700/30 rounded shadow-2xl p-4 sm:p-6"
+          className="bg-gray-800/50 backdrop-blur-lg border border-gray-700/30 rounded-xl shadow-2xl p-4 sm:p-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          {/* Filter Controls - Responsive Design */}
-          <div className="flex flex-col gap-3 mb-6">
+          {/* Filter Controls */}
+          <div className="flex flex-col gap-4 mb-6">
             {/* Search Field */}
-            <div className="w-full">
-              <motion.input
+            <div className="relative">
+              <input
                 type="text"
                 placeholder="Search ID, email..."
-                className="w-full p-3 bg-gray-700/50 border border-gray-600/30 rounded text-gray-100 placeholder-gray-400 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full p-3 pl-10 bg-gray-700/50 border border-gray-600/30 rounded-lg text-gray-100 placeholder-gray-400 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
             </div>
 
             {/* Controls Row */}
-            <div className="grid grid-cols-1 md:grid-cols-9 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-3">
               {/* Sort Controls */}
-              <div className="md:col-span-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <select
-                  className="p-3 bg-gray-700/50 border border-gray-600/30 rounded text-gray-100 text-sm cursor-pointer"
-                  value={sortConfig.field}
-                  onChange={(e) => handleSort(e.target.value)}
-                >
-                  <option value="date">Sort by Date</option>
-                  <option value="id">Sort by ID</option>
-                  <option value="email">Sort by Email</option>
-                </select>
-
-                <select
-                  className="p-3 bg-gray-700/50 border border-gray-600/30 rounded text-gray-100 text-sm cursor-pointer"
-                  value={sortConfig.order}
-                  onChange={(e) => setSortConfig(prev => ({ ...prev, order: e.target.value }))}
-                >
-                  <option value="DESC">Descending</option>
-                  <option value="ASC">Ascending</option>
-                </select>
+              <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="relative">
+                  <select
+                    className="w-full p-3 pl-10 bg-gray-700/50 border border-gray-600/30 rounded-lg text-gray-100 text-sm cursor-pointer appearance-none"
+                    value={sortConfig.field}
+                    onChange={(e) => handleSort(e.target.value)}
+                  >
+                    <option value="date">Date</option>
+                    <option value="id">ID</option>
+                    <option value="email">Email</option>
+                  </select>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+                  </svg>
+                </div>
+                
+                <div className="relative">
+                  <select
+                    className="w-full p-3 pl-10 bg-gray-700/50 border border-gray-600/30 rounded-lg text-gray-100 text-sm cursor-pointer appearance-none"
+                    value={sortConfig.order}
+                    onChange={(e) => setSortConfig(prev => ({ ...prev, order: e.target.value }))}
+                  >
+                    <option value="DESC">Descending</option>
+                    <option value="ASC">Ascending</option>
+                  </select>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+                  </svg>
+                </div>
               </div>
 
               {/* Date Filters */}
-              <div className="md:col-span-3 grid grid-cols-3 gap-3">
+              <div className="md:col-span-2 grid grid-cols-3 gap-3">
                 <button
                   onClick={() => handleDateFilter(7)}
-                  className="p-2 bg-blue-600/30 text-blue-300 rounded border border-blue-500/30 hover:bg-blue-500/30 text-xs sm:text-sm transition-colors"
+                  className="p-2 bg-blue-600/30 text-blue-300 rounded-lg border border-blue-500/30 hover:bg-blue-500/30 text-xs sm:text-sm transition-colors flex items-center justify-center"
                 >
-                  7 Days
+                  {isMobile ? '7D' : '7 Days'}
                 </button>
                 <button
                   onClick={() => handleDateFilter(30)}
-                  className="p-2 bg-purple-600/30 text-purple-300 rounded border border-purple-500/30 hover:bg-purple-500/30 text-xs sm:text-sm transition-colors"
+                  className="p-2 bg-purple-600/30 text-purple-300 rounded-lg border border-purple-500/30 hover:bg-purple-500/30 text-xs sm:text-sm transition-colors flex items-center justify-center"
                 >
-                  30 Days
+                  {isMobile ? '30D' : '30 Days'}
                 </button>
                 <button
-                  onClick={() => setDateRange('')}
-                  className="p-2 bg-gray-600/30 text-gray-300 rounded border border-gray-500/30 hover:bg-gray-500/30 text-xs sm:text-sm transition-colors"
+                  onClick={clearFilters}
+                  className="p-2 bg-gray-600/30 text-gray-300 rounded-lg border border-gray-500/30 hover:bg-gray-500/30 text-xs sm:text-sm transition-colors flex items-center justify-center"
                 >
-                  Clear
+                  {isMobile ? '×' : 'Clear'}
                 </button>
               </div>
 
               {/* Send Email Button */}
               <button
-                className="md:col-span-2 p-3 bg-green-600/30 text-green-300 rounded border border-green-500/30 hover:bg-green-500/30 text-sm flex items-center justify-center gap-2 transition-colors"
+                className="md:col-span-2 p-3 bg-green-600/30 text-green-300 rounded-lg border border-green-500/30 hover:bg-green-500/30 text-sm flex items-center justify-center gap-2 transition-colors"
                 onClick={() => toast.info("Send email functionality will be implemented")}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                 </svg>
-                Send Email
+                {isMobile ? 'Email' : 'Send Email'}
               </button>
             </div>
           </div>
 
-          <div className="overflow-x-auto rounded-lg">
-            <table className="w-full min-w-[600px]">
-              <thead>
-                <tr className="bg-gradient-to-r from-blue-500/20 to-purple-500/20">
-                  <th 
-                    className="p-3 text-left text-blue-300 font-semibold cursor-pointer text-sm align-middle"
-                    onClick={() => handleSort('id')}
-                  >
-                    ID {sortConfig.field === 'id' && (sortConfig.order === 'ASC' ? '↑' : '↓')}
-                  </th>
-                  <th 
-                    className="p-3 text-left text-blue-300 font-semibold cursor-pointer text-sm align-middle"
-                    onClick={() => handleSort('email')}
-                  >
-                    Email {sortConfig.field === 'email' && (sortConfig.order === 'ASC' ? '↑' : '↓')}
-                  </th>
-                  <th 
-                    className="p-3 text-left text-blue-300 font-semibold cursor-pointer text-sm align-middle"
-                    onClick={() => handleSort('date')}
-                  >
-                    Join Date {sortConfig.field === 'date' && (sortConfig.order === 'ASC' ? '↑' : '↓')}
-                  </th>
-                </tr>
-              </thead>
+          {/* Responsive Table */}
+          {subscribers.length > 0 ? (
+            <div className="overflow-x-auto rounded-lg">
+              <table className="w-full min-w-[600px]">
+                <thead>
+                  <tr className="bg-gradient-to-r from-blue-500/20 to-purple-500/20">
+                    <th 
+                      className="p-3 text-left text-blue-300 font-semibold cursor-pointer text-sm"
+                      onClick={() => handleSort('id')}
+                    >
+                      <div className="flex items-center gap-1">
+                        ID 
+                        {sortConfig.field === 'id' && (
+                          sortConfig.order === 'ASC' ? 
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                          </svg> : 
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        )}
+                      </div>
+                    </th>
+                    <th 
+                      className="p-3 text-left text-blue-300 font-semibold cursor-pointer text-sm"
+                      onClick={() => handleSort('email')}
+                    >
+                      <div className="flex items-center gap-1">
+                        Email 
+                        {sortConfig.field === 'email' && (
+                          sortConfig.order === 'ASC' ? 
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                          </svg> : 
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        )}
+                      </div>
+                    </th>
+                    <th 
+                      className="p-3 text-left text-blue-300 font-semibold cursor-pointer text-sm"
+                      onClick={() => handleSort('date')}
+                    >
+                      <div className="flex items-center gap-1">
+                        Join Date 
+                        {sortConfig.field === 'date' && (
+                          sortConfig.order === 'ASC' ? 
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                          </svg> : 
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        )}
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
 
-              <tbody>
-                <AnimatePresence>
-                  {subscribers.length > 0 ? (
-                    subscribers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((subscriber, index) => (
+                <tbody>
+                  <AnimatePresence>
+                    {subscribers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((subscriber, index) => (
                       <motion.tr
                         key={subscriber.email}
                         variants={itemVariants}
@@ -222,80 +310,91 @@ function SubscribersList() {
                         whileHover="hover"
                         className="border-b border-gray-700/50"
                       >
-                        <td className="p-3 font-mono text-blue-400 text-sm align-middle">{subscriber.id}</td>
-                        <td className="p-3 text-gray-200 text-sm truncate max-w-[200px] align-middle">{subscriber.email}</td>
-                        <td className="p-3 text-gray-400 text-sm align-middle">
-                          {format(new Date(subscriber.date), 'MMM dd, yyyy - hh:mm a')}
-                        </td>
+                        <td className="p-3 font-mono text-blue-400 text-sm">{subscriber.id}</td>
+                        <td className="p-3 text-gray-200 text-sm truncate max-w-[200px] sm:max-w-none">{subscriber.email}</td>
+                        <td className="p-3 text-gray-400 text-sm">{formatDate(subscriber.date)}</td>
                       </motion.tr>
-                    ))
-                  ) : (
-                    <motion.tr
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="border-b border-gray-700/50"
-                    >
-                      <td colSpan="3" className="p-4 text-center text-gray-400 align-middle">
-                        {loading ? 'Loading subscribers...' : 'No subscribers found'}
-                      </td>
-                    </motion.tr>
-                  )}
-                </AnimatePresence>
-              </tbody>
-            </table>
-          </div>
+                    ))}
+                  </AnimatePresence>
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="border border-gray-700/50 rounded-lg p-8 text-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <h3 className="mt-4 text-xl font-medium text-gray-300">
+                {loading ? 'Loading subscribers...' : 'No subscribers found'}
+              </h3>
+              <p className="mt-2 text-gray-500 text-sm">
+                {!loading && 'Try adjusting your search or filter criteria'}
+              </p>
+            </motion.div>
+          )}
 
           {/* Pagination */}
-          <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
-            <div className="flex items-center gap-4 flex-wrap">
-              <select
-                className="p-2 bg-gray-700/50 border border-gray-600/30 rounded-lg text-gray-100 text-sm"
-                value={itemsPerPage}
-                onChange={(e) => setItemsPerPage(Number(e.target.value))}
-              >
-                {[10, 20, 50, 100].map(size => (
-                  <option key={size} value={size}>{size} per page</option>
-                ))}
-              </select>
-              <span className="text-gray-400 text-sm">
-                Showing {startItem} - {endItem} of {subscribers.length}
-              </span>
-            </div>
+          {subscribers.length > 0 && (
+            <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
+              <div className="flex items-center gap-4 flex-wrap">
+                <div className="relative">
+                  <select
+                    className="p-2 pl-10 bg-gray-700/50 border border-gray-600/30 rounded-lg text-gray-100 text-sm appearance-none"
+                    value={itemsPerPage}
+                    onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                  >
+                    {[10, 20, 50, 100].map(size => (
+                      <option key={size} value={size}>{size} per page</option>
+                    ))}
+                  </select>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 absolute left-3 top-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+                  </svg>
+                </div>
+                <span className="text-gray-400 text-sm">
+                  Showing {startItem} - {endItem} of {subscribers.length}
+                </span>
+              </div>
 
-            <div className="flex gap-2">
-              <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                className={`px-4 py-2 rounded-lg border text-sm ${
-                  currentPage === 1 
-                    ? 'bg-gray-700/30 text-gray-500 border-gray-500/30' 
-                    : 'bg-blue-600/30 text-blue-300 border-blue-500/30 hover:bg-blue-500/30'
-                }`}
-                disabled={currentPage === 1}
-              >
-                Previous
-              </button>
-              <button
-                onClick={() => setCurrentPage(prev => prev + 1)}
-                className={`px-4 py-2 rounded-lg border text-sm ${
-                  currentPage === totalPages 
-                    ? 'bg-gray-700/30 text-gray-500 border-gray-500/30' 
-                    : 'bg-blue-600/30 text-blue-300 border-blue-500/30 hover:bg-blue-500/30'
-                }`}
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  className={`px-4 py-2 rounded-lg border text-sm flex items-center gap-1 ${
+                    currentPage === 1 
+                      ? 'bg-gray-700/30 text-gray-500 border-gray-500/30' 
+                      : 'bg-blue-600/30 text-blue-300 border-blue-500/30 hover:bg-blue-500/30'
+                  }`}
+                  disabled={currentPage === 1}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  {!isMobile && 'Previous'}
+                </button>
+                <div className="bg-gray-700/30 rounded-lg border border-gray-600/30 px-3 py-2 text-sm text-gray-300">
+                  Page {currentPage} of {totalPages}
+                </div>
+                <button
+                  onClick={() => setCurrentPage(prev => prev + 1)}
+                  className={`px-4 py-2 rounded-lg border text-sm flex items-center gap-1 ${
+                    currentPage === totalPages 
+                      ? 'bg-gray-700/30 text-gray-500 border-gray-500/30' 
+                      : 'bg-blue-600/30 text-blue-300 border-blue-500/30 hover:bg-blue-500/30'
+                  }`}
+                  disabled={currentPage === totalPages}
+                >
+                  {!isMobile && 'Next'}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
-          </div>
-
-          <div className="mt-6 text-center">
-            <Link 
-              href="/dashboard" 
-              className="inline-block px-5 py-2 bg-gray-700/50 hover:bg-gray-700/70 rounded-lg text-blue-300 border border-gray-600/30 transition-colors text-sm"
-            >
-              ← Back to Dashboard
-            </Link>
-          </div>
+          )}
         </motion.div>
       </motion.div>
 
