@@ -4,19 +4,28 @@ import { query } from '../../../lib/db';
 import logger from '../../../lib/logger';
 import sendTelegramAlert from '../../../lib/telegramAlert';
 import nodemailer from 'nodemailer';
+import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
+import path from 'path';
 
 const formatAlertMessage = (title, details) => {
-  return `📢 *MVSD LAB BULK EMAIL*\n━━━━━━━━━━━━━━\n*${title}*\n${details}`;
+  return `📢 *MVSD LAB BULK EMAIL*\n━━━━━━━━━━━━━━━━━━\n*${title}*\n${details}`;
 };
 
 export async function POST(request) {
   const sessionId = request.cookies.get('sessionId')?.value || 'Unknown Session';
   const eid = request.cookies.get('eid')?.value || 'Unknown EID';
   const ipAddress = request.headers.get('x-forwarded-for') || 'Unknown IP';
-  const userAgent = request.headers.get('user-agent') || 'Unknown User-Agent';
 
   try {
-    const { subject, cc, body } = await request.json();
+    const formData = await request.formData();
+    
+    const subject = formData.get('subject');
+    const cc = formData.get('cc');
+    const body = formData.get('body');
+    
+    // Convert newlines to <br> for proper HTML formatting
+    const formattedBody = body.replace(/\n/g, '<br>');
 
     // Get all subscribers
     const result = await query('SELECT email FROM subscriber');
@@ -45,7 +54,7 @@ export async function POST(request) {
       from: `"MVSD LAB" <${process.env.EMAIL_FROM}>`,
       to: emails.join(','),
       subject: subject,
-      html: body,
+      html: formattedBody,
     };
 
     // Add CC if provided
@@ -53,8 +62,38 @@ export async function POST(request) {
       mailOptions.cc = cc;
     }
 
+    // Process attachments
+    const attachments = [];
+    const attachmentPromises = [];
+    
+    for (const [name, file] of formData.entries()) {
+      if (name === 'attachments') {
+        const buffer = await file.arrayBuffer();
+        const fileName = `${uuidv4()}-${file.name}`;
+        const tempPath = path.join(process.cwd(), 'temp', fileName);
+        
+        // Write to temp file
+        fs.writeFileSync(tempPath, Buffer.from(buffer));
+        
+        attachments.push({
+          filename: file.name,
+          path: tempPath,
+          contentType: file.type
+        });
+      }
+    }
+    
+    if (attachments.length > 0) {
+      mailOptions.attachments = attachments;
+    }
+
     // Send email
     const info = await transporter.sendMail(mailOptions);
+    
+    // Cleanup temp files
+    attachments.forEach(attachment => {
+      fs.unlinkSync(attachment.path);
+    });
 
     // Log success
     logger.info('Bulk email sent successfully', {
@@ -69,7 +108,7 @@ export async function POST(request) {
     // Send Telegram alert
     await sendTelegramAlert(formatAlertMessage(
       '📧 Bulk Email Sent',
-      `🔹 Subject: ${subject}\n🔹 Recipients: ${emails.length}\n🔹 CC: ${cc || 'None'}`
+      `🔹 Subject: ${subject}\n🔹 Recipients: ${emails.length}\n🔹 CC: ${cc || 'None'}\n🔹 Attachments: ${attachments.length}`
     ));
 
     return NextResponse.json({ 
