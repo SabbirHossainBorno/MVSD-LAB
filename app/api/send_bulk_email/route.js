@@ -17,6 +17,12 @@ export async function POST(request) {
   const eid = request.cookies.get('eid')?.value || 'Unknown EID';
   const ipAddress = request.headers.get('x-forwarded-for') || 'Unknown IP';
 
+  // Create temp directory if it doesn't exist
+  const tempDir = path.join(process.cwd(), 'temp');
+  if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir, { recursive: true });
+  }
+
   try {
     const formData = await request.formData();
     
@@ -51,10 +57,13 @@ export async function POST(request) {
 
     // Prepare email options
     const mailOptions = {
-      from: `"MVSD LAB" <${process.env.EMAIL_FROM}>`,
-      to: emails.join(','),
-      subject: subject,
-      html: formattedBody,
+    from: {
+        name: "MVSD LAB",
+        address: process.env.EMAIL_FROM
+    },
+    to: emails.join(','),
+    subject: subject,
+    html: formattedBody,
     };
 
     // Add CC if provided
@@ -64,13 +73,12 @@ export async function POST(request) {
 
     // Process attachments
     const attachments = [];
-    const attachmentPromises = [];
     
     for (const [name, file] of formData.entries()) {
       if (name === 'attachments') {
         const buffer = await file.arrayBuffer();
         const fileName = `${uuidv4()}-${file.name}`;
-        const tempPath = path.join(process.cwd(), 'temp', fileName);
+        const tempPath = path.join(tempDir, fileName);
         
         // Write to temp file
         fs.writeFileSync(tempPath, Buffer.from(buffer));
@@ -92,7 +100,9 @@ export async function POST(request) {
     
     // Cleanup temp files
     attachments.forEach(attachment => {
-      fs.unlinkSync(attachment.path);
+      if (fs.existsSync(attachment.path)) {
+        fs.unlinkSync(attachment.path);
+      }
     });
 
     // Log success
