@@ -31,6 +31,11 @@ const formatAlertMessage = (userType, email, ipAddress, userAgent, additionalInf
       idLine = `🆔 Director ID : ${additionalInfo.memberId || 'N/A'}\n`;
       break;
 
+    case 'professor':
+      title = '🟩 [ MVSD LAB | PROFESSOR LOGIN ]';
+      idLine = `🆔 Professor ID : ${additionalInfo.memberId || 'N/A'}\n`;
+      break;
+
     default:
       title = '🟩 [ MVSD LAB | MEMBER LOGIN ]';
       idLine = `🆔 Member ID   : ${additionalInfo.memberId || 'N/A'}\n`;
@@ -199,13 +204,15 @@ const createLoginResponse = async (user, userType, table, sessionId, email, ipAd
     sameSite: 'Lax'
   });
 
-  // Redirect path based on user type
   let redirectPath = '/home';
+
   if (userType === 'admin') {
     redirectPath = '/dashboard';
   } else if (userType === 'director') {
     redirectPath = '/director_dashboard';
-  } else if (['PhD Candidate', 'Professor'].includes(user.type)) {
+  } else if (user.type === 'Professor') {
+    redirectPath = '/professor_dashboard';
+  } else if (['PhD Candidate', 'Post Doc Candidate', 'Master\'s Candidate'].includes(user.type)) {
     redirectPath = '/member_dashboard';
   }
 
