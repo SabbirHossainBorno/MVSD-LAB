@@ -330,7 +330,7 @@ const Dashboard = () => {
           <div className="bg-gray-800 p-4 rounded shadow-lg">
           <div className="relative flex flex-col items-center">
             <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-orange-500 text-center">
-              Login Information
+              Admin Login Activity
             </h2>
             <hr className="border-0 h-1 bg-gradient-to-r from-teal-400 to-orange-500 rounded w-full mb-6" />
           </div>
