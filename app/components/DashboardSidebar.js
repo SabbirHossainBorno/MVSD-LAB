@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdOutlineAddCircleOutline, MdList } from 'react-icons/md';
-import { FiAward, FiBook, FiBriefcase } from 'react-icons/fi';
+import { FiAward, FiBook, FiBriefcase, FiBookOpen, FiImage, FiVideo, FiCode } from 'react-icons/fi';
 import { GiArchiveResearch } from "react-icons/gi";
 
 export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
@@ -413,6 +413,50 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
             </div>
           </Link>
         </motion.div>
+        {/* NEW: Under Development Section */}
+        <div className="pt-4 border-t border-gray-700/50 mt-2">
+          <p className="text-xs uppercase text-gray-400 tracking-wider pl-2 mb-2">Under Development</p>
+          
+          {/* Publication/Research */}
+          <motion.div variants={navItemVariants} whileHover="hover" className="group">
+            <div className={`flex items-center p-2 rounded space-x-2 cursor-not-allowed transition-all opacity-50`}>
+              <FiBookOpen className="w-5 h-5 text-gray-400" />
+              <span className="font-medium">Publication/Research</span>
+            </div>
+          </motion.div>
+
+          {/* Gallery */}
+          <motion.div variants={navItemVariants} whileHover="hover" className="group">
+            <div className={`flex items-center p-2 rounded space-x-2 cursor-not-allowed transition-all opacity-50`}>
+              <FiImage className="w-5 h-5 text-gray-400" />
+              <span className="font-medium">Gallery</span>
+            </div>
+          </motion.div>
+
+          {/* Course */}
+          <motion.div variants={navItemVariants} whileHover="hover" className="group">
+            <div className={`flex items-center p-2 rounded space-x-2 cursor-not-allowed transition-all opacity-50`}>
+              <FiBook className="w-5 h-5 text-gray-400" />
+              <span className="font-medium">Course</span>
+            </div>
+          </motion.div>
+
+          {/* Video */}
+          <motion.div variants={navItemVariants} whileHover="hover" className="group">
+            <div className={`flex items-center p-2 rounded space-x-2 cursor-not-allowed transition-all opacity-50`}>
+              <FiVideo className="w-5 h-5 text-gray-400" />
+              <span className="font-medium">Video</span>
+            </div>
+          </motion.div>
+
+          {/* Software */}
+          <motion.div variants={navItemVariants} whileHover="hover" className="group">
+            <div className={`flex items-center p-2 rounded space-x-2 cursor-not-allowed transition-all opacity-50`}>
+              <FiCode className="w-5 h-5 text-gray-400" />
+              <span className="font-medium">Software</span>
+            </div>
+          </motion.div>
+        </div>
       </nav>
 
       {/* Footer */}
