@@ -1,3 +1,4 @@
+//app/components/DashboardSidebar.js
 'use client';
 
 import Link from 'next/link';
@@ -419,42 +420,62 @@ export default function DashboardSidebar({ isOpen, toggleDashboardSidebar }) {
           
           {/* Publication/Research */}
           <motion.div variants={navItemVariants} whileHover="hover" className="group">
-            <div className={`flex items-center p-2 rounded space-x-2 cursor-not-allowed transition-all opacity-50`}>
-              <FiBookOpen className="w-5 h-5 text-gray-400" />
-              <span className="font-medium">Publication/Research</span>
-            </div>
+            <Link href="/dashboard/publication_research">
+              <div className={`flex items-center p-2 rounded space-x-2 cursor-pointer transition-all ${
+                isActive('/dashboard/publication_research') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
+              }`}>
+                <FiBookOpen className="w-5 h-5 text-gray-400 group-hover:text-indigo-400" />
+                <span className="font-medium">Publication/Research</span>
+              </div>
+            </Link>
           </motion.div>
 
           {/* Gallery */}
           <motion.div variants={navItemVariants} whileHover="hover" className="group">
-            <div className={`flex items-center p-2 rounded space-x-2 cursor-not-allowed transition-all opacity-50`}>
-              <FiImage className="w-5 h-5 text-gray-400" />
-              <span className="font-medium">Gallery</span>
-            </div>
+            <Link href="/dashboard/gallery">
+              <div className={`flex items-center p-2 rounded space-x-2 cursor-pointer transition-all ${
+                isActive('/dashboard/gallery') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
+              }`}>
+                <FiImage className="w-5 h-5 text-gray-400 group-hover:text-indigo-400" />
+                <span className="font-medium">Gallery</span>
+              </div>
+            </Link>
           </motion.div>
 
           {/* Course */}
           <motion.div variants={navItemVariants} whileHover="hover" className="group">
-            <div className={`flex items-center p-2 rounded space-x-2 cursor-not-allowed transition-all opacity-50`}>
-              <FiBook className="w-5 h-5 text-gray-400" />
-              <span className="font-medium">Course</span>
-            </div>
+            <Link href="/dashboard/course">
+              <div className={`flex items-center p-2 rounded space-x-2 cursor-pointer transition-all ${
+                isActive('/dashboard/course') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
+              }`}>
+                <FiBook className="w-5 h-5 text-gray-400 group-hover:text-indigo-400" />
+                <span className="font-medium">Course</span>
+              </div>
+            </Link>
           </motion.div>
 
           {/* Video */}
           <motion.div variants={navItemVariants} whileHover="hover" className="group">
-            <div className={`flex items-center p-2 rounded space-x-2 cursor-not-allowed transition-all opacity-50`}>
-              <FiVideo className="w-5 h-5 text-gray-400" />
-              <span className="font-medium">Video</span>
-            </div>
+            <Link href="/dashboard/video">
+              <div className={`flex items-center p-2 rounded space-x-2 cursor-pointer transition-all ${
+                isActive('/dashboard/video') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
+              }`}>
+                <FiVideo className="w-5 h-5 text-gray-400 group-hover:text-indigo-400" />
+                <span className="font-medium">Video</span>
+              </div>
+            </Link>
           </motion.div>
 
           {/* Software */}
           <motion.div variants={navItemVariants} whileHover="hover" className="group">
-            <div className={`flex items-center p-2 rounded space-x-2 cursor-not-allowed transition-all opacity-50`}>
-              <FiCode className="w-5 h-5 text-gray-400" />
-              <span className="font-medium">Software</span>
-            </div>
+            <Link href="/dashboard/software">
+              <div className={`flex items-center p-2 rounded space-x-2 cursor-pointer transition-all ${
+                isActive('/dashboard/software') ? 'bg-indigo-600/30 text-indigo-400' : 'hover:bg-gray-800/50'
+              }`}>
+                <FiCode className="w-5 h-5 text-gray-400 group-hover:text-indigo-400" />
+                <span className="font-medium">Software</span>
+              </div>
+            </Link>
           </motion.div>
         </div>
       </nav>
