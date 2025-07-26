@@ -70,10 +70,19 @@ export async function GET(request) {
     const recentProfessorsQuery = 'SELECT id, first_name, last_name, phone, dob, email, short_bio, joining_date, leaving_date, photo, status, type FROM professor_basic_info ORDER BY id DESC LIMIT 5';
     const recentSubscribersQuery = 'SELECT * FROM subscriber ORDER BY date DESC LIMIT 7';
     const adminDetailsQuery = 'SELECT * FROM admin'; // Add query for admin data
-    const currentLoginCountQuery = 'SELECT COUNT(*) AS count FROM admin WHERE status = \'Active\''; // Add query for current login count
+    const currentLoginCountQuery = `
+      SELECT SUM(active_users) AS count FROM (
+        SELECT COUNT(*) AS active_users FROM admin WHERE status = 'Active'
+        UNION ALL
+        SELECT COUNT(*) FROM member_login_info_tracker WHERE login_state = 'Active'
+        UNION ALL
+        SELECT COUNT(*) FROM director_login_info_tracker WHERE login_state = 'Active'
+      ) AS active_login_summary
+    `;
     const memberLoginInfoTrackerQuery = 'SELECT * FROM member_login_info_tracker'; // Add query for admin data
+    const directorLoginInfoTrackerQuery = 'SELECT * FROM director_login_info_tracker';
 
-    const [subscriberCount, memberDetails, professorDetails, directorDetails, phdCandidateDetails, mastersCandidateDetails, postdocCandidateDetails, staffMemberDetails, alumniDetails, messageDetails, recentSubscribers, recentProfessors, adminDetails, currentLoginCount, memberLoginInfoTracker] = await Promise.all([
+    const [subscriberCount, memberDetails, professorDetails, directorDetails, phdCandidateDetails, mastersCandidateDetails, postdocCandidateDetails, staffMemberDetails, alumniDetails, messageDetails, recentSubscribers, recentProfessors, adminDetails, currentLoginCount, memberLoginInfoTracker, directorLoginInfoTracker ] = await Promise.all([
       query(subscriberCountQuery),
       query(memberDetailsQuery),
       query(professorDetailsQuery),
@@ -89,6 +98,7 @@ export async function GET(request) {
       query(adminDetailsQuery), // Fetch admin data
       query(currentLoginCountQuery), // Fetch current login count
       query(memberLoginInfoTrackerQuery),
+      query(directorLoginInfoTrackerQuery),
     ]);
 
     // Log and alert successful data fetch
@@ -120,6 +130,7 @@ export async function GET(request) {
       admins: adminDetails.rows, // Include admin data in the response
       currentLoginCount: currentLoginCount.rows[0].count, // Include current login count in the response
       memberLoginInfoTrackers: memberLoginInfoTracker.rows,
+      directorLoginInfoTrackers: directorLoginInfoTracker.rows,
     });
   } catch (error) {
     const errorMessage = formatAlertMessage('Error Fetching Dashboard Data', email, ip, `\nError: ${error.message}`);
