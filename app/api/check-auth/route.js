@@ -5,7 +5,7 @@ import sendTelegramAlert from '../../../lib/telegramAlert';
 import { query } from '../../../lib/db';
 
 const formatAlertMessage = (title, email, ipAddress, additionalInfo = '') => {
-  return `SOC PORTAL AUTH-CHECKER\n----------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}${additionalInfo}`;
+  return `MVSD LAB AUTH-CHECKER\n----------------------------------------\n${title}\nEmail : ${email}\nIP : ${ipAddress}${additionalInfo}`;
 };
 
 // Security headers configuration
@@ -24,11 +24,10 @@ export async function GET(request) {
   const ip = request.headers.get('x-forwarded-for') || 'Unknown IP';
   const userAgent = request.headers.get('user-agent') || 'Unknown UA';
   const email = request.cookies.get('email')?.value;
-  const socPortalId = request.cookies.get('socPortalId')?.value;
 
   // Immediate response for missing credentials
   if (!email || !sessionId) {
-    const alertMessage = `SOC PORTAL AUTH-CHECKER\n----------------------------------------\n🚨 Unauthorized Access Attempt!\nIP : ${ip}\nUA : ${userAgent}`;
+    const alertMessage = `MVSD LAB AUTH-CHECKER\n----------------------------------------\n🚨 Unauthorized Access Attempt!\nIP : ${ip}\nUA : ${userAgent}`;
     await sendTelegramAlert(alertMessage);
 
     logger.warn('Unauthorized access attempt', {
@@ -100,66 +99,30 @@ export async function GET(request) {
         // Clear authentication cookies
         response.cookies.delete('sessionId');
         response.cookies.delete('email');
-        response.cookies.delete('socPortalId');
         return response;
       }
     }
 
     // Role verification
-    let roleType = null;
     let userType = null;
+    let userTable = null;
 
-    // Check admin_info table
-    const adminRes = await query(
-      `SELECT status, role_type 
-       FROM admin_info 
-       WHERE email = $1`,
-      [email]
-    );
-    
-    if (adminRes.rows.length > 0) {
-      const admin = adminRes.rows[0];
-      
-      if (admin.status !== 'Active') {
-        logger.warn('Inactive admin login attempt', {
-          meta: {
-            email,
-            eid,
-            sid: sessionId,
-            taskName: 'Auth Check',
-            details: 'Admin account not active',
-            severity: 'HIGH'
-          }
-        });
-        return NextResponse.json(
-          { authenticated: false, message: 'Account inactive' },
-          { status: 403, headers: securityHeaders }
-        );
-      }
-      
-      roleType = admin.role_type;
-      userType = 'admin';
-    } 
-    // If not found in admin_info, check user_info
-    else {
-      const userRes = await query(
-        `SELECT status, role_type 
-         FROM user_info 
-         WHERE email = $1`,
+    // Check admin table for organizational emails
+    if (email.endsWith('@mvsdlab.com')) {
+      const adminRes = await query(
+        'SELECT type, status FROM admin WHERE email = $1',
         [email]
       );
       
-      if (userRes.rows.length > 0) {
-        const user = userRes.rows[0];
-        
-        if (user.status !== 'Active') {
-          logger.warn('Inactive user login attempt', {
+      if (adminRes.rows.length > 0) {
+        if (adminRes.rows[0].status !== 'Active') {
+          logger.warn('Inactive admin login attempt', {
             meta: {
               email,
               eid,
               sid: sessionId,
               taskName: 'Auth Check',
-              details: 'User account not active',
+              details: 'Admin account not active',
               severity: 'HIGH'
             }
           });
@@ -168,13 +131,37 @@ export async function GET(request) {
             { status: 403, headers: securityHeaders }
           );
         }
-        
-        roleType = user.role_type;
-        userType = 'user';
+        userType = adminRes.rows[0].type;
+        userTable = 'admin';
+      }
+    }else { // Explicit member check for non-admin emails
+      const memberRes = await query(
+        `SELECT type, status FROM member 
+         WHERE email = $1 AND status = 'Active'`,
+        [email]
+      );
+      
+      if (memberRes.rows.length > 0) {
+        userType = memberRes.rows[0].type;
+        userTable = 'member';
       }
     }
 
-    if (!roleType) {
+    // Check member table if not admin
+    if (!userType) {
+      const memberRes = await query(
+        `SELECT type, status FROM member 
+         WHERE email = $1 AND status = 'Active'`,
+        [email]
+      );
+      
+      if (memberRes.rows.length > 0) {
+        userType = memberRes.rows[0].type;
+        userTable = 'member';
+      }
+    }
+
+    if (!userType) {
       logger.warn('No valid user found', {
         meta: {
           email,
@@ -191,64 +178,19 @@ export async function GET(request) {
       );
     }
 
-    // Verify socPortalId if present
-    if (socPortalId) {
-      let isValidId = false;
-      
-      if (userType === 'admin') {
-        const idCheck = await query(
-          `SELECT 1 FROM admin_info 
-           WHERE email = $1 AND soc_portal_id = $2`,
-          [email, socPortalId]
-        );
-        isValidId = idCheck.rows.length > 0;
-      } else {
-        const idCheck = await query(
-          `SELECT 1 FROM user_info 
-           WHERE email = $1 AND soc_portal_id = $2`,
-          [email, socPortalId]
-        );
-        isValidId = idCheck.rows.length > 0;
-      }
-      
-      if (!isValidId) {
-        logger.warn('Invalid SOC Portal ID', {
-          meta: {
-            email,
-            socPortalId,
-            eid,
-            sid: sessionId,
-            taskName: 'Auth Check',
-            details: 'Provided ID does not match account',
-            severity: 'HIGH'
-          }
-        });
-        return NextResponse.json(
-          { authenticated: false, message: 'Invalid credentials' },
-          { status: 403, headers: securityHeaders }
-        );
-      }
-    }
-
     logger.info('Authentication successful', {
       meta: {
         email,
-        socPortalId,
         eid,
         sid: sessionId,
         taskName: 'Auth Check',
-        details: `Role type: ${roleType} (${userType})`,
+        details: `User type : ${userType} (${userTable})`,
         severity: 'LOW'
       }
     });
 
     return NextResponse.json(
-      { 
-        authenticated: true, 
-        role: roleType,
-        userType: userType,
-        socPortalId: socPortalId || 'Unknown'
-      },
+      { authenticated: true, role: userType },
       { headers: securityHeaders }
     );
 
